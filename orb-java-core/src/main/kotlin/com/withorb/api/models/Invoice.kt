@@ -1547,6 +1547,7 @@ private constructor(
         private val nextAttemptAt: JsonField<OffsetDateTime>,
         private val previouslyAttemptedAt: JsonField<OffsetDateTime>,
         private val enabled: JsonField<Boolean>,
+        private val numAttempts: JsonField<Long>,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
@@ -1576,6 +1577,10 @@ private constructor(
         /** True only if auto-collection is enabled for this invoice. */
         fun enabled(): Optional<Boolean> = Optional.ofNullable(enabled.getNullable("enabled"))
 
+        /** Number of auto-collection payment attempts. */
+        fun numAttempts(): Optional<Long> =
+            Optional.ofNullable(numAttempts.getNullable("num_attempts"))
+
         /**
          * If the invoice is scheduled for auto-collection, this field will reflect when the next
          * attempt will occur. If dunning has been exhausted, or auto-collection is not enabled for
@@ -1598,6 +1603,9 @@ private constructor(
         /** True only if auto-collection is enabled for this invoice. */
         @JsonProperty("enabled") @ExcludeMissing fun _enabled() = enabled
 
+        /** Number of auto-collection payment attempts. */
+        @JsonProperty("num_attempts") @ExcludeMissing fun _numAttempts() = numAttempts
+
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -1607,6 +1615,7 @@ private constructor(
                 nextAttemptAt()
                 previouslyAttemptedAt()
                 enabled()
+                numAttempts()
                 validated = true
             }
         }
@@ -1622,6 +1631,7 @@ private constructor(
                 this.nextAttemptAt == other.nextAttemptAt &&
                 this.previouslyAttemptedAt == other.previouslyAttemptedAt &&
                 this.enabled == other.enabled &&
+                this.numAttempts == other.numAttempts &&
                 this.additionalProperties == other.additionalProperties
         }
 
@@ -1632,6 +1642,7 @@ private constructor(
                         nextAttemptAt,
                         previouslyAttemptedAt,
                         enabled,
+                        numAttempts,
                         additionalProperties,
                     )
             }
@@ -1639,7 +1650,7 @@ private constructor(
         }
 
         override fun toString() =
-            "AutoCollection{nextAttemptAt=$nextAttemptAt, previouslyAttemptedAt=$previouslyAttemptedAt, enabled=$enabled, additionalProperties=$additionalProperties}"
+            "AutoCollection{nextAttemptAt=$nextAttemptAt, previouslyAttemptedAt=$previouslyAttemptedAt, enabled=$enabled, numAttempts=$numAttempts, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -1651,6 +1662,7 @@ private constructor(
             private var nextAttemptAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var previouslyAttemptedAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var enabled: JsonField<Boolean> = JsonMissing.of()
+            private var numAttempts: JsonField<Long> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -1658,6 +1670,7 @@ private constructor(
                 this.nextAttemptAt = autoCollection.nextAttemptAt
                 this.previouslyAttemptedAt = autoCollection.previouslyAttemptedAt
                 this.enabled = autoCollection.enabled
+                this.numAttempts = autoCollection.numAttempts
                 additionalProperties(autoCollection.additionalProperties)
             }
 
@@ -1713,6 +1726,14 @@ private constructor(
             @ExcludeMissing
             fun enabled(enabled: JsonField<Boolean>) = apply { this.enabled = enabled }
 
+            /** Number of auto-collection payment attempts. */
+            fun numAttempts(numAttempts: Long) = numAttempts(JsonField.of(numAttempts))
+
+            /** Number of auto-collection payment attempts. */
+            @JsonProperty("num_attempts")
+            @ExcludeMissing
+            fun numAttempts(numAttempts: JsonField<Long>) = apply { this.numAttempts = numAttempts }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 this.additionalProperties.putAll(additionalProperties)
@@ -1732,6 +1753,7 @@ private constructor(
                     nextAttemptAt,
                     previouslyAttemptedAt,
                     enabled,
+                    numAttempts,
                     additionalProperties.toUnmodifiable(),
                 )
         }

@@ -1148,6 +1148,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
 
+                @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+
                 @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
 
                 @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
@@ -1157,6 +1159,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
             }
 
@@ -1164,6 +1167,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 _UNKNOWN,
             }
@@ -1173,6 +1177,7 @@ private constructor(
                     ONE_TIME -> Value.ONE_TIME
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     else -> Value._UNKNOWN
                 }
@@ -1182,6 +1187,7 @@ private constructor(
                     ONE_TIME -> Known.ONE_TIME
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     else -> throw OrbInvalidDataException("Unknown Cadence: $value")
                 }
@@ -2492,6 +2498,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
 
+                @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+
                 @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
 
                 @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
@@ -2501,6 +2509,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
             }
 
@@ -2508,6 +2517,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 _UNKNOWN,
             }
@@ -2517,6 +2527,7 @@ private constructor(
                     ONE_TIME -> Value.ONE_TIME
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     else -> Value._UNKNOWN
                 }
@@ -2526,6 +2537,7 @@ private constructor(
                     ONE_TIME -> Known.ONE_TIME
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     else -> throw OrbInvalidDataException("Unknown Cadence: $value")
                 }
@@ -3878,6 +3890,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
 
+                @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+
                 @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
 
                 @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
@@ -3887,6 +3901,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
             }
 
@@ -3894,6 +3909,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 _UNKNOWN,
             }
@@ -3903,6 +3919,7 @@ private constructor(
                     ONE_TIME -> Value.ONE_TIME
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     else -> Value._UNKNOWN
                 }
@@ -3912,6 +3929,7 @@ private constructor(
                     ONE_TIME -> Known.ONE_TIME
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     else -> throw OrbInvalidDataException("Unknown Cadence: $value")
                 }
@@ -5429,6 +5447,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
 
+                @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+
                 @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
 
                 @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
@@ -5438,6 +5458,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
             }
 
@@ -5445,6 +5466,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 _UNKNOWN,
             }
@@ -5454,6 +5476,7 @@ private constructor(
                     ONE_TIME -> Value.ONE_TIME
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     else -> Value._UNKNOWN
                 }
@@ -5463,6 +5486,7 @@ private constructor(
                     ONE_TIME -> Known.ONE_TIME
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     else -> throw OrbInvalidDataException("Unknown Cadence: $value")
                 }
@@ -6923,6 +6947,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
 
+                @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+
                 @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
 
                 @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
@@ -6932,6 +6958,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
             }
 
@@ -6939,6 +6966,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 _UNKNOWN,
             }
@@ -6948,6 +6976,7 @@ private constructor(
                     ONE_TIME -> Value.ONE_TIME
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     else -> Value._UNKNOWN
                 }
@@ -6957,6 +6986,7 @@ private constructor(
                     ONE_TIME -> Known.ONE_TIME
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     else -> throw OrbInvalidDataException("Unknown Cadence: $value")
                 }
@@ -8580,6 +8610,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
 
+                @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+
                 @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
 
                 @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
@@ -8589,6 +8621,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
             }
 
@@ -8596,6 +8629,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 _UNKNOWN,
             }
@@ -8605,6 +8639,7 @@ private constructor(
                     ONE_TIME -> Value.ONE_TIME
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     else -> Value._UNKNOWN
                 }
@@ -8614,6 +8649,7 @@ private constructor(
                     ONE_TIME -> Known.ONE_TIME
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     else -> throw OrbInvalidDataException("Unknown Cadence: $value")
                 }
@@ -10091,6 +10127,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
 
+                @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+
                 @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
 
                 @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
@@ -10100,6 +10138,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
             }
 
@@ -10107,6 +10146,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 _UNKNOWN,
             }
@@ -10116,6 +10156,7 @@ private constructor(
                     ONE_TIME -> Value.ONE_TIME
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     else -> Value._UNKNOWN
                 }
@@ -10125,6 +10166,7 @@ private constructor(
                     ONE_TIME -> Known.ONE_TIME
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     else -> throw OrbInvalidDataException("Unknown Cadence: $value")
                 }
@@ -11564,6 +11606,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
 
+                @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+
                 @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
 
                 @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
@@ -11573,6 +11617,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
             }
 
@@ -11580,6 +11625,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 _UNKNOWN,
             }
@@ -11589,6 +11635,7 @@ private constructor(
                     ONE_TIME -> Value.ONE_TIME
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     else -> Value._UNKNOWN
                 }
@@ -11598,6 +11645,7 @@ private constructor(
                     ONE_TIME -> Known.ONE_TIME
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     else -> throw OrbInvalidDataException("Unknown Cadence: $value")
                 }
@@ -12816,6 +12864,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
 
+                @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+
                 @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
 
                 @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
@@ -12825,6 +12875,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
             }
 
@@ -12832,6 +12883,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 _UNKNOWN,
             }
@@ -12841,6 +12893,7 @@ private constructor(
                     ONE_TIME -> Value.ONE_TIME
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     else -> Value._UNKNOWN
                 }
@@ -12850,6 +12903,7 @@ private constructor(
                     ONE_TIME -> Known.ONE_TIME
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     else -> throw OrbInvalidDataException("Unknown Cadence: $value")
                 }
@@ -14143,6 +14197,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
 
+                @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+
                 @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
 
                 @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
@@ -14152,6 +14208,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
             }
 
@@ -14159,6 +14216,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 _UNKNOWN,
             }
@@ -14168,6 +14226,7 @@ private constructor(
                     ONE_TIME -> Value.ONE_TIME
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     else -> Value._UNKNOWN
                 }
@@ -14177,6 +14236,7 @@ private constructor(
                     ONE_TIME -> Known.ONE_TIME
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     else -> throw OrbInvalidDataException("Unknown Cadence: $value")
                 }
@@ -15469,6 +15529,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
 
+                @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+
                 @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
 
                 @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
@@ -15478,6 +15540,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
             }
 
@@ -15485,6 +15548,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 _UNKNOWN,
             }
@@ -15494,6 +15558,7 @@ private constructor(
                     ONE_TIME -> Value.ONE_TIME
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     else -> Value._UNKNOWN
                 }
@@ -15503,6 +15568,7 @@ private constructor(
                     ONE_TIME -> Known.ONE_TIME
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     else -> throw OrbInvalidDataException("Unknown Cadence: $value")
                 }
@@ -16796,6 +16862,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
 
+                @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+
                 @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
 
                 @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
@@ -16805,6 +16873,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
             }
 
@@ -16812,6 +16881,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 _UNKNOWN,
             }
@@ -16821,6 +16891,7 @@ private constructor(
                     ONE_TIME -> Value.ONE_TIME
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     else -> Value._UNKNOWN
                 }
@@ -16830,6 +16901,7 @@ private constructor(
                     ONE_TIME -> Known.ONE_TIME
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     else -> throw OrbInvalidDataException("Unknown Cadence: $value")
                 }
@@ -18126,6 +18198,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
 
+                @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+
                 @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
 
                 @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
@@ -18135,6 +18209,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
             }
 
@@ -18142,6 +18217,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 _UNKNOWN,
             }
@@ -18151,6 +18227,7 @@ private constructor(
                     ONE_TIME -> Value.ONE_TIME
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     else -> Value._UNKNOWN
                 }
@@ -18160,6 +18237,7 @@ private constructor(
                     ONE_TIME -> Known.ONE_TIME
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     else -> throw OrbInvalidDataException("Unknown Cadence: $value")
                 }
@@ -19458,6 +19536,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
 
+                @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+
                 @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
 
                 @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
@@ -19467,6 +19547,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
             }
 
@@ -19474,6 +19555,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 _UNKNOWN,
             }
@@ -19483,6 +19565,7 @@ private constructor(
                     ONE_TIME -> Value.ONE_TIME
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     else -> Value._UNKNOWN
                 }
@@ -19492,6 +19575,7 @@ private constructor(
                     ONE_TIME -> Known.ONE_TIME
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     else -> throw OrbInvalidDataException("Unknown Cadence: $value")
                 }
@@ -20787,6 +20871,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
 
+                @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+
                 @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
 
                 @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
@@ -20796,6 +20882,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
             }
 
@@ -20803,6 +20890,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 _UNKNOWN,
             }
@@ -20812,6 +20900,7 @@ private constructor(
                     ONE_TIME -> Value.ONE_TIME
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     else -> Value._UNKNOWN
                 }
@@ -20821,6 +20910,7 @@ private constructor(
                     ONE_TIME -> Known.ONE_TIME
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     else -> throw OrbInvalidDataException("Unknown Cadence: $value")
                 }
@@ -22115,6 +22205,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
 
+                @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+
                 @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
 
                 @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
@@ -22124,6 +22216,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
             }
 
@@ -22131,6 +22224,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 _UNKNOWN,
             }
@@ -22140,6 +22234,7 @@ private constructor(
                     ONE_TIME -> Value.ONE_TIME
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     else -> Value._UNKNOWN
                 }
@@ -22149,6 +22244,7 @@ private constructor(
                     ONE_TIME -> Known.ONE_TIME
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     else -> throw OrbInvalidDataException("Unknown Cadence: $value")
                 }
@@ -23695,6 +23791,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
 
+                @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+
                 @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
 
                 @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
@@ -23704,6 +23802,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
             }
 
@@ -23711,6 +23810,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 _UNKNOWN,
             }
@@ -23720,6 +23820,7 @@ private constructor(
                     ONE_TIME -> Value.ONE_TIME
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     else -> Value._UNKNOWN
                 }
@@ -23729,6 +23830,7 @@ private constructor(
                     ONE_TIME -> Known.ONE_TIME
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     else -> throw OrbInvalidDataException("Unknown Cadence: $value")
                 }
@@ -25023,6 +25125,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
 
+                @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+
                 @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
 
                 @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
@@ -25032,6 +25136,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
             }
 
@@ -25039,6 +25144,7 @@ private constructor(
                 ONE_TIME,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 _UNKNOWN,
             }
@@ -25048,6 +25154,7 @@ private constructor(
                     ONE_TIME -> Value.ONE_TIME
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     else -> Value._UNKNOWN
                 }
@@ -25057,6 +25164,7 @@ private constructor(
                     ONE_TIME -> Known.ONE_TIME
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     else -> throw OrbInvalidDataException("Unknown Cadence: $value")
                 }

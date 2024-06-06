@@ -27,6 +27,7 @@ constructor(
     private val lineItems: List<LineItem>,
     private val netTerms: Long,
     private val customerId: String?,
+    private val discount: Discount?,
     private val externalCustomerId: String?,
     private val memo: String?,
     private val metadata: Metadata?,
@@ -46,6 +47,8 @@ constructor(
 
     fun customerId(): Optional<String> = Optional.ofNullable(customerId)
 
+    fun discount(): Optional<Discount> = Optional.ofNullable(discount)
+
     fun externalCustomerId(): Optional<String> = Optional.ofNullable(externalCustomerId)
 
     fun memo(): Optional<String> = Optional.ofNullable(memo)
@@ -62,6 +65,7 @@ constructor(
             lineItems,
             netTerms,
             customerId,
+            discount,
             externalCustomerId,
             memo,
             metadata,
@@ -83,6 +87,7 @@ constructor(
         private val lineItems: List<LineItem>?,
         private val netTerms: Long?,
         private val customerId: String?,
+        private val discount: Discount?,
         private val externalCustomerId: String?,
         private val memo: String?,
         private val metadata: Metadata?,
@@ -117,6 +122,9 @@ constructor(
          * `external_customer_id` are required.
          */
         @JsonProperty("customer_id") fun customerId(): String? = customerId
+
+        /** An optional discount to attach to the invoice. */
+        @JsonProperty("discount") fun discount(): Discount? = discount
 
         /**
          * The `external_customer_id` of the `Customer` to create this invoice for. One of
@@ -157,6 +165,7 @@ constructor(
                 this.lineItems == other.lineItems &&
                 this.netTerms == other.netTerms &&
                 this.customerId == other.customerId &&
+                this.discount == other.discount &&
                 this.externalCustomerId == other.externalCustomerId &&
                 this.memo == other.memo &&
                 this.metadata == other.metadata &&
@@ -173,6 +182,7 @@ constructor(
                         lineItems,
                         netTerms,
                         customerId,
+                        discount,
                         externalCustomerId,
                         memo,
                         metadata,
@@ -184,7 +194,7 @@ constructor(
         }
 
         override fun toString() =
-            "InvoiceCreateBody{currency=$currency, invoiceDate=$invoiceDate, lineItems=$lineItems, netTerms=$netTerms, customerId=$customerId, externalCustomerId=$externalCustomerId, memo=$memo, metadata=$metadata, willAutoIssue=$willAutoIssue, additionalProperties=$additionalProperties}"
+            "InvoiceCreateBody{currency=$currency, invoiceDate=$invoiceDate, lineItems=$lineItems, netTerms=$netTerms, customerId=$customerId, discount=$discount, externalCustomerId=$externalCustomerId, memo=$memo, metadata=$metadata, willAutoIssue=$willAutoIssue, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -198,6 +208,7 @@ constructor(
             private var lineItems: List<LineItem>? = null
             private var netTerms: Long? = null
             private var customerId: String? = null
+            private var discount: Discount? = null
             private var externalCustomerId: String? = null
             private var memo: String? = null
             private var metadata: Metadata? = null
@@ -211,6 +222,7 @@ constructor(
                 this.lineItems = invoiceCreateBody.lineItems
                 this.netTerms = invoiceCreateBody.netTerms
                 this.customerId = invoiceCreateBody.customerId
+                this.discount = invoiceCreateBody.discount
                 this.externalCustomerId = invoiceCreateBody.externalCustomerId
                 this.memo = invoiceCreateBody.memo
                 this.metadata = invoiceCreateBody.metadata
@@ -250,6 +262,10 @@ constructor(
              */
             @JsonProperty("customer_id")
             fun customerId(customerId: String) = apply { this.customerId = customerId }
+
+            /** An optional discount to attach to the invoice. */
+            @JsonProperty("discount")
+            fun discount(discount: Discount) = apply { this.discount = discount }
 
             /**
              * The `external_customer_id` of the `Customer` to create this invoice for. One of
@@ -300,6 +316,7 @@ constructor(
                         .toUnmodifiable(),
                     checkNotNull(netTerms) { "`netTerms` is required but was not set" },
                     customerId,
+                    discount,
                     externalCustomerId,
                     memo,
                     metadata,
@@ -326,6 +343,7 @@ constructor(
             this.lineItems == other.lineItems &&
             this.netTerms == other.netTerms &&
             this.customerId == other.customerId &&
+            this.discount == other.discount &&
             this.externalCustomerId == other.externalCustomerId &&
             this.memo == other.memo &&
             this.metadata == other.metadata &&
@@ -342,6 +360,7 @@ constructor(
             lineItems,
             netTerms,
             customerId,
+            discount,
             externalCustomerId,
             memo,
             metadata,
@@ -353,7 +372,7 @@ constructor(
     }
 
     override fun toString() =
-        "InvoiceCreateParams{currency=$currency, invoiceDate=$invoiceDate, lineItems=$lineItems, netTerms=$netTerms, customerId=$customerId, externalCustomerId=$externalCustomerId, memo=$memo, metadata=$metadata, willAutoIssue=$willAutoIssue, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+        "InvoiceCreateParams{currency=$currency, invoiceDate=$invoiceDate, lineItems=$lineItems, netTerms=$netTerms, customerId=$customerId, discount=$discount, externalCustomerId=$externalCustomerId, memo=$memo, metadata=$metadata, willAutoIssue=$willAutoIssue, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -370,6 +389,7 @@ constructor(
         private var lineItems: MutableList<LineItem> = mutableListOf()
         private var netTerms: Long? = null
         private var customerId: String? = null
+        private var discount: Discount? = null
         private var externalCustomerId: String? = null
         private var memo: String? = null
         private var metadata: Metadata? = null
@@ -385,6 +405,7 @@ constructor(
             this.lineItems(invoiceCreateParams.lineItems)
             this.netTerms = invoiceCreateParams.netTerms
             this.customerId = invoiceCreateParams.customerId
+            this.discount = invoiceCreateParams.discount
             this.externalCustomerId = invoiceCreateParams.externalCustomerId
             this.memo = invoiceCreateParams.memo
             this.metadata = invoiceCreateParams.metadata
@@ -424,6 +445,29 @@ constructor(
          * `external_customer_id` are required.
          */
         fun customerId(customerId: String) = apply { this.customerId = customerId }
+
+        /** An optional discount to attach to the invoice. */
+        fun discount(discount: Discount) = apply { this.discount = discount }
+
+        /** An optional discount to attach to the invoice. */
+        fun discount(percentageDiscount: Discount.PercentageDiscount) = apply {
+            this.discount = Discount.ofPercentageDiscount(percentageDiscount)
+        }
+
+        /** An optional discount to attach to the invoice. */
+        fun discount(trialDiscount: Discount.TrialDiscount) = apply {
+            this.discount = Discount.ofTrialDiscount(trialDiscount)
+        }
+
+        /** An optional discount to attach to the invoice. */
+        fun discount(usageDiscount: Discount.UsageDiscount) = apply {
+            this.discount = Discount.ofUsageDiscount(usageDiscount)
+        }
+
+        /** An optional discount to attach to the invoice. */
+        fun discount(amountDiscount: Discount.AmountDiscount) = apply {
+            this.discount = Discount.ofAmountDiscount(amountDiscount)
+        }
 
         /**
          * The `external_customer_id` of the `Customer` to create this invoice for. One of
@@ -511,6 +555,7 @@ constructor(
                     .toUnmodifiable(),
                 checkNotNull(netTerms) { "`netTerms` is required but was not set" },
                 customerId,
+                discount,
                 externalCustomerId,
                 memo,
                 metadata,
