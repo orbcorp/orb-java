@@ -1491,6 +1491,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = DurationUnit(JsonField.of("quarterly"))
 
+                @JvmField val SEMI_ANNUAL = DurationUnit(JsonField.of("semi_annual"))
+
                 @JvmField val ANNUAL = DurationUnit(JsonField.of("annual"))
 
                 @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
@@ -1500,6 +1502,7 @@ private constructor(
                 DAILY,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
             }
 
@@ -1507,6 +1510,7 @@ private constructor(
                 DAILY,
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 _UNKNOWN,
             }
@@ -1516,6 +1520,7 @@ private constructor(
                     DAILY -> Value.DAILY
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     else -> Value._UNKNOWN
                 }
@@ -1525,6 +1530,7 @@ private constructor(
                     DAILY -> Known.DAILY
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
                 }
