@@ -33,6 +33,15 @@ import java.util.Optional
 class InvoiceFetchUpcomingResponse
 private constructor(
     private val metadata: JsonField<Metadata>,
+    private val voidedAt: JsonField<OffsetDateTime>,
+    private val paidAt: JsonField<OffsetDateTime>,
+    private val issuedAt: JsonField<OffsetDateTime>,
+    private val scheduledIssueAt: JsonField<OffsetDateTime>,
+    private val autoCollection: JsonField<AutoCollection>,
+    private val issueFailedAt: JsonField<OffsetDateTime>,
+    private val syncFailedAt: JsonField<OffsetDateTime>,
+    private val paymentFailedAt: JsonField<OffsetDateTime>,
+    private val paymentStartedAt: JsonField<OffsetDateTime>,
     private val amountDue: JsonField<String>,
     private val createdAt: JsonField<OffsetDateTime>,
     private val currency: JsonField<String>,
@@ -60,16 +69,7 @@ private constructor(
     private val willAutoIssue: JsonField<Boolean>,
     private val eligibleToIssueAt: JsonField<OffsetDateTime>,
     private val customerTaxId: JsonField<CustomerTaxId>,
-    private val voidedAt: JsonField<OffsetDateTime>,
-    private val paidAt: JsonField<OffsetDateTime>,
-    private val issuedAt: JsonField<OffsetDateTime>,
-    private val scheduledIssueAt: JsonField<OffsetDateTime>,
-    private val autoCollection: JsonField<AutoCollection>,
     private val memo: JsonField<String>,
-    private val issueFailedAt: JsonField<OffsetDateTime>,
-    private val syncFailedAt: JsonField<OffsetDateTime>,
-    private val paymentFailedAt: JsonField<OffsetDateTime>,
-    private val paymentStartedAt: JsonField<OffsetDateTime>,
     private val creditNotes: JsonField<List<CreditNote>>,
     private val targetDate: JsonField<OffsetDateTime>,
     private val additionalProperties: Map<String, JsonValue>,
@@ -85,6 +85,60 @@ private constructor(
      * metadata mapping can be cleared by setting `metadata` to `null`.
      */
     fun metadata(): Metadata = metadata.getRequired("metadata")
+
+    /**
+     * If the invoice has a status of `void`, this gives a timestamp when the invoice was voided.
+     */
+    fun voidedAt(): Optional<OffsetDateTime> =
+        Optional.ofNullable(voidedAt.getNullable("voided_at"))
+
+    /** If the invoice has a status of `paid`, this gives a timestamp when the invoice was paid. */
+    fun paidAt(): Optional<OffsetDateTime> = Optional.ofNullable(paidAt.getNullable("paid_at"))
+
+    /**
+     * If the invoice has been issued, this will be the time it transitioned to `issued` (even if it
+     * is now in a different state.)
+     */
+    fun issuedAt(): Optional<OffsetDateTime> =
+        Optional.ofNullable(issuedAt.getNullable("issued_at"))
+
+    /**
+     * If the invoice is in draft, this timestamp will reflect when the invoice is scheduled to be
+     * issued.
+     */
+    fun scheduledIssueAt(): Optional<OffsetDateTime> =
+        Optional.ofNullable(scheduledIssueAt.getNullable("scheduled_issue_at"))
+
+    fun autoCollection(): AutoCollection = autoCollection.getRequired("auto_collection")
+
+    /**
+     * If the invoice failed to issue, this will be the last time it failed to issue (even if it is
+     * now in a different state.)
+     */
+    fun issueFailedAt(): Optional<OffsetDateTime> =
+        Optional.ofNullable(issueFailedAt.getNullable("issue_failed_at"))
+
+    /**
+     * If the invoice failed to sync, this will be the last time an external invoicing provider sync
+     * was attempted. This field will always be `null` for invoices using Orb Invoicing.
+     */
+    fun syncFailedAt(): Optional<OffsetDateTime> =
+        Optional.ofNullable(syncFailedAt.getNullable("sync_failed_at"))
+
+    /**
+     * If payment was attempted on this invoice but failed, this will be the time of the most recent
+     * attempt.
+     */
+    fun paymentFailedAt(): Optional<OffsetDateTime> =
+        Optional.ofNullable(paymentFailedAt.getNullable("payment_failed_at"))
+
+    /**
+     * If payment was attempted on this invoice, this will be the start time of the most recent
+     * attempt. This field is especially useful for delayed-notification payment mechanisms (like
+     * bank transfers), where payment can take 3 days or more.
+     */
+    fun paymentStartedAt(): Optional<OffsetDateTime> =
+        Optional.ofNullable(paymentStartedAt.getNullable("payment_started_at"))
 
     /**
      * This is the final amount required to be charged to the customer and reflects the application
@@ -279,62 +333,8 @@ private constructor(
     fun customerTaxId(): Optional<CustomerTaxId> =
         Optional.ofNullable(customerTaxId.getNullable("customer_tax_id"))
 
-    /**
-     * If the invoice has a status of `void`, this gives a timestamp when the invoice was voided.
-     */
-    fun voidedAt(): Optional<OffsetDateTime> =
-        Optional.ofNullable(voidedAt.getNullable("voided_at"))
-
-    /** If the invoice has a status of `paid`, this gives a timestamp when the invoice was paid. */
-    fun paidAt(): Optional<OffsetDateTime> = Optional.ofNullable(paidAt.getNullable("paid_at"))
-
-    /**
-     * If the invoice has been issued, this will be the time it transitioned to `issued` (even if it
-     * is now in a different state.)
-     */
-    fun issuedAt(): Optional<OffsetDateTime> =
-        Optional.ofNullable(issuedAt.getNullable("issued_at"))
-
-    /**
-     * If the invoice is in draft, this timestamp will reflect when the invoice is scheduled to be
-     * issued.
-     */
-    fun scheduledIssueAt(): Optional<OffsetDateTime> =
-        Optional.ofNullable(scheduledIssueAt.getNullable("scheduled_issue_at"))
-
-    fun autoCollection(): AutoCollection = autoCollection.getRequired("auto_collection")
-
     /** Free-form text which is available on the invoice PDF and the Orb invoice portal. */
     fun memo(): Optional<String> = Optional.ofNullable(memo.getNullable("memo"))
-
-    /**
-     * If the invoice failed to issue, this will be the last time it failed to issue (even if it is
-     * now in a different state.)
-     */
-    fun issueFailedAt(): Optional<OffsetDateTime> =
-        Optional.ofNullable(issueFailedAt.getNullable("issue_failed_at"))
-
-    /**
-     * If the invoice failed to sync, this will be the last time an external invoicing provider sync
-     * was attempted. This field will always be `null` for invoices using Orb Invoicing.
-     */
-    fun syncFailedAt(): Optional<OffsetDateTime> =
-        Optional.ofNullable(syncFailedAt.getNullable("sync_failed_at"))
-
-    /**
-     * If payment was attempted on this invoice but failed, this will be the time of the most recent
-     * attempt.
-     */
-    fun paymentFailedAt(): Optional<OffsetDateTime> =
-        Optional.ofNullable(paymentFailedAt.getNullable("payment_failed_at"))
-
-    /**
-     * If payment was attempted on this invoice, this will be the start time of the most recent
-     * attempt. This field is especially useful for delayed-notification payment mechanisms (like
-     * bank transfers), where payment can take 3 days or more.
-     */
-    fun paymentStartedAt(): Optional<OffsetDateTime> =
-        Optional.ofNullable(paymentStartedAt.getNullable("payment_started_at"))
 
     /** A list of credit notes associated with the invoice */
     fun creditNotes(): List<CreditNote> = creditNotes.getRequired("credit_notes")
@@ -348,6 +348,53 @@ private constructor(
      * metadata mapping can be cleared by setting `metadata` to `null`.
      */
     @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
+
+    /**
+     * If the invoice has a status of `void`, this gives a timestamp when the invoice was voided.
+     */
+    @JsonProperty("voided_at") @ExcludeMissing fun _voidedAt() = voidedAt
+
+    /** If the invoice has a status of `paid`, this gives a timestamp when the invoice was paid. */
+    @JsonProperty("paid_at") @ExcludeMissing fun _paidAt() = paidAt
+
+    /**
+     * If the invoice has been issued, this will be the time it transitioned to `issued` (even if it
+     * is now in a different state.)
+     */
+    @JsonProperty("issued_at") @ExcludeMissing fun _issuedAt() = issuedAt
+
+    /**
+     * If the invoice is in draft, this timestamp will reflect when the invoice is scheduled to be
+     * issued.
+     */
+    @JsonProperty("scheduled_issue_at") @ExcludeMissing fun _scheduledIssueAt() = scheduledIssueAt
+
+    @JsonProperty("auto_collection") @ExcludeMissing fun _autoCollection() = autoCollection
+
+    /**
+     * If the invoice failed to issue, this will be the last time it failed to issue (even if it is
+     * now in a different state.)
+     */
+    @JsonProperty("issue_failed_at") @ExcludeMissing fun _issueFailedAt() = issueFailedAt
+
+    /**
+     * If the invoice failed to sync, this will be the last time an external invoicing provider sync
+     * was attempted. This field will always be `null` for invoices using Orb Invoicing.
+     */
+    @JsonProperty("sync_failed_at") @ExcludeMissing fun _syncFailedAt() = syncFailedAt
+
+    /**
+     * If payment was attempted on this invoice but failed, this will be the time of the most recent
+     * attempt.
+     */
+    @JsonProperty("payment_failed_at") @ExcludeMissing fun _paymentFailedAt() = paymentFailedAt
+
+    /**
+     * If payment was attempted on this invoice, this will be the start time of the most recent
+     * attempt. This field is especially useful for delayed-notification payment mechanisms (like
+     * bank transfers), where payment can take 3 days or more.
+     */
+    @JsonProperty("payment_started_at") @ExcludeMissing fun _paymentStartedAt() = paymentStartedAt
 
     /**
      * This is the final amount required to be charged to the customer and reflects the application
@@ -537,55 +584,8 @@ private constructor(
      */
     @JsonProperty("customer_tax_id") @ExcludeMissing fun _customerTaxId() = customerTaxId
 
-    /**
-     * If the invoice has a status of `void`, this gives a timestamp when the invoice was voided.
-     */
-    @JsonProperty("voided_at") @ExcludeMissing fun _voidedAt() = voidedAt
-
-    /** If the invoice has a status of `paid`, this gives a timestamp when the invoice was paid. */
-    @JsonProperty("paid_at") @ExcludeMissing fun _paidAt() = paidAt
-
-    /**
-     * If the invoice has been issued, this will be the time it transitioned to `issued` (even if it
-     * is now in a different state.)
-     */
-    @JsonProperty("issued_at") @ExcludeMissing fun _issuedAt() = issuedAt
-
-    /**
-     * If the invoice is in draft, this timestamp will reflect when the invoice is scheduled to be
-     * issued.
-     */
-    @JsonProperty("scheduled_issue_at") @ExcludeMissing fun _scheduledIssueAt() = scheduledIssueAt
-
-    @JsonProperty("auto_collection") @ExcludeMissing fun _autoCollection() = autoCollection
-
     /** Free-form text which is available on the invoice PDF and the Orb invoice portal. */
     @JsonProperty("memo") @ExcludeMissing fun _memo() = memo
-
-    /**
-     * If the invoice failed to issue, this will be the last time it failed to issue (even if it is
-     * now in a different state.)
-     */
-    @JsonProperty("issue_failed_at") @ExcludeMissing fun _issueFailedAt() = issueFailedAt
-
-    /**
-     * If the invoice failed to sync, this will be the last time an external invoicing provider sync
-     * was attempted. This field will always be `null` for invoices using Orb Invoicing.
-     */
-    @JsonProperty("sync_failed_at") @ExcludeMissing fun _syncFailedAt() = syncFailedAt
-
-    /**
-     * If payment was attempted on this invoice but failed, this will be the time of the most recent
-     * attempt.
-     */
-    @JsonProperty("payment_failed_at") @ExcludeMissing fun _paymentFailedAt() = paymentFailedAt
-
-    /**
-     * If payment was attempted on this invoice, this will be the start time of the most recent
-     * attempt. This field is especially useful for delayed-notification payment mechanisms (like
-     * bank transfers), where payment can take 3 days or more.
-     */
-    @JsonProperty("payment_started_at") @ExcludeMissing fun _paymentStartedAt() = paymentStartedAt
 
     /** A list of credit notes associated with the invoice */
     @JsonProperty("credit_notes") @ExcludeMissing fun _creditNotes() = creditNotes
@@ -600,6 +600,15 @@ private constructor(
     fun validate(): InvoiceFetchUpcomingResponse = apply {
         if (!validated) {
             metadata().validate()
+            voidedAt()
+            paidAt()
+            issuedAt()
+            scheduledIssueAt()
+            autoCollection().validate()
+            issueFailedAt()
+            syncFailedAt()
+            paymentFailedAt()
+            paymentStartedAt()
             amountDue()
             createdAt()
             currency()
@@ -627,16 +636,7 @@ private constructor(
             willAutoIssue()
             eligibleToIssueAt()
             customerTaxId().map { it.validate() }
-            voidedAt()
-            paidAt()
-            issuedAt()
-            scheduledIssueAt()
-            autoCollection().validate()
             memo()
-            issueFailedAt()
-            syncFailedAt()
-            paymentFailedAt()
-            paymentStartedAt()
             creditNotes().forEach { it.validate() }
             targetDate()
             validated = true
@@ -652,6 +652,15 @@ private constructor(
 
         return other is InvoiceFetchUpcomingResponse &&
             this.metadata == other.metadata &&
+            this.voidedAt == other.voidedAt &&
+            this.paidAt == other.paidAt &&
+            this.issuedAt == other.issuedAt &&
+            this.scheduledIssueAt == other.scheduledIssueAt &&
+            this.autoCollection == other.autoCollection &&
+            this.issueFailedAt == other.issueFailedAt &&
+            this.syncFailedAt == other.syncFailedAt &&
+            this.paymentFailedAt == other.paymentFailedAt &&
+            this.paymentStartedAt == other.paymentStartedAt &&
             this.amountDue == other.amountDue &&
             this.createdAt == other.createdAt &&
             this.currency == other.currency &&
@@ -679,16 +688,7 @@ private constructor(
             this.willAutoIssue == other.willAutoIssue &&
             this.eligibleToIssueAt == other.eligibleToIssueAt &&
             this.customerTaxId == other.customerTaxId &&
-            this.voidedAt == other.voidedAt &&
-            this.paidAt == other.paidAt &&
-            this.issuedAt == other.issuedAt &&
-            this.scheduledIssueAt == other.scheduledIssueAt &&
-            this.autoCollection == other.autoCollection &&
             this.memo == other.memo &&
-            this.issueFailedAt == other.issueFailedAt &&
-            this.syncFailedAt == other.syncFailedAt &&
-            this.paymentFailedAt == other.paymentFailedAt &&
-            this.paymentStartedAt == other.paymentStartedAt &&
             this.creditNotes == other.creditNotes &&
             this.targetDate == other.targetDate &&
             this.additionalProperties == other.additionalProperties
@@ -699,6 +699,15 @@ private constructor(
             hashCode =
                 Objects.hash(
                     metadata,
+                    voidedAt,
+                    paidAt,
+                    issuedAt,
+                    scheduledIssueAt,
+                    autoCollection,
+                    issueFailedAt,
+                    syncFailedAt,
+                    paymentFailedAt,
+                    paymentStartedAt,
                     amountDue,
                     createdAt,
                     currency,
@@ -726,16 +735,7 @@ private constructor(
                     willAutoIssue,
                     eligibleToIssueAt,
                     customerTaxId,
-                    voidedAt,
-                    paidAt,
-                    issuedAt,
-                    scheduledIssueAt,
-                    autoCollection,
                     memo,
-                    issueFailedAt,
-                    syncFailedAt,
-                    paymentFailedAt,
-                    paymentStartedAt,
                     creditNotes,
                     targetDate,
                     additionalProperties,
@@ -745,7 +745,7 @@ private constructor(
     }
 
     override fun toString() =
-        "InvoiceFetchUpcomingResponse{metadata=$metadata, amountDue=$amountDue, createdAt=$createdAt, currency=$currency, customer=$customer, discount=$discount, discounts=$discounts, dueDate=$dueDate, id=$id, invoicePdf=$invoicePdf, invoiceNumber=$invoiceNumber, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, lineItems=$lineItems, subscription=$subscription, subtotal=$subtotal, total=$total, customerBalanceTransactions=$customerBalanceTransactions, status=$status, invoiceSource=$invoiceSource, shippingAddress=$shippingAddress, billingAddress=$billingAddress, hostedInvoiceUrl=$hostedInvoiceUrl, willAutoIssue=$willAutoIssue, eligibleToIssueAt=$eligibleToIssueAt, customerTaxId=$customerTaxId, voidedAt=$voidedAt, paidAt=$paidAt, issuedAt=$issuedAt, scheduledIssueAt=$scheduledIssueAt, autoCollection=$autoCollection, memo=$memo, issueFailedAt=$issueFailedAt, syncFailedAt=$syncFailedAt, paymentFailedAt=$paymentFailedAt, paymentStartedAt=$paymentStartedAt, creditNotes=$creditNotes, targetDate=$targetDate, additionalProperties=$additionalProperties}"
+        "InvoiceFetchUpcomingResponse{metadata=$metadata, voidedAt=$voidedAt, paidAt=$paidAt, issuedAt=$issuedAt, scheduledIssueAt=$scheduledIssueAt, autoCollection=$autoCollection, issueFailedAt=$issueFailedAt, syncFailedAt=$syncFailedAt, paymentFailedAt=$paymentFailedAt, paymentStartedAt=$paymentStartedAt, amountDue=$amountDue, createdAt=$createdAt, currency=$currency, customer=$customer, discount=$discount, discounts=$discounts, dueDate=$dueDate, id=$id, invoicePdf=$invoicePdf, invoiceNumber=$invoiceNumber, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, lineItems=$lineItems, subscription=$subscription, subtotal=$subtotal, total=$total, customerBalanceTransactions=$customerBalanceTransactions, status=$status, invoiceSource=$invoiceSource, shippingAddress=$shippingAddress, billingAddress=$billingAddress, hostedInvoiceUrl=$hostedInvoiceUrl, willAutoIssue=$willAutoIssue, eligibleToIssueAt=$eligibleToIssueAt, customerTaxId=$customerTaxId, memo=$memo, creditNotes=$creditNotes, targetDate=$targetDate, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -755,6 +755,15 @@ private constructor(
     class Builder {
 
         private var metadata: JsonField<Metadata> = JsonMissing.of()
+        private var voidedAt: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var paidAt: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var issuedAt: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var scheduledIssueAt: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var autoCollection: JsonField<AutoCollection> = JsonMissing.of()
+        private var issueFailedAt: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var syncFailedAt: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var paymentFailedAt: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var paymentStartedAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var amountDue: JsonField<String> = JsonMissing.of()
         private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var currency: JsonField<String> = JsonMissing.of()
@@ -783,16 +792,7 @@ private constructor(
         private var willAutoIssue: JsonField<Boolean> = JsonMissing.of()
         private var eligibleToIssueAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var customerTaxId: JsonField<CustomerTaxId> = JsonMissing.of()
-        private var voidedAt: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var paidAt: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var issuedAt: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var scheduledIssueAt: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var autoCollection: JsonField<AutoCollection> = JsonMissing.of()
         private var memo: JsonField<String> = JsonMissing.of()
-        private var issueFailedAt: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var syncFailedAt: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var paymentFailedAt: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var paymentStartedAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var creditNotes: JsonField<List<CreditNote>> = JsonMissing.of()
         private var targetDate: JsonField<OffsetDateTime> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -800,6 +800,15 @@ private constructor(
         @JvmSynthetic
         internal fun from(invoiceFetchUpcomingResponse: InvoiceFetchUpcomingResponse) = apply {
             this.metadata = invoiceFetchUpcomingResponse.metadata
+            this.voidedAt = invoiceFetchUpcomingResponse.voidedAt
+            this.paidAt = invoiceFetchUpcomingResponse.paidAt
+            this.issuedAt = invoiceFetchUpcomingResponse.issuedAt
+            this.scheduledIssueAt = invoiceFetchUpcomingResponse.scheduledIssueAt
+            this.autoCollection = invoiceFetchUpcomingResponse.autoCollection
+            this.issueFailedAt = invoiceFetchUpcomingResponse.issueFailedAt
+            this.syncFailedAt = invoiceFetchUpcomingResponse.syncFailedAt
+            this.paymentFailedAt = invoiceFetchUpcomingResponse.paymentFailedAt
+            this.paymentStartedAt = invoiceFetchUpcomingResponse.paymentStartedAt
             this.amountDue = invoiceFetchUpcomingResponse.amountDue
             this.createdAt = invoiceFetchUpcomingResponse.createdAt
             this.currency = invoiceFetchUpcomingResponse.currency
@@ -828,16 +837,7 @@ private constructor(
             this.willAutoIssue = invoiceFetchUpcomingResponse.willAutoIssue
             this.eligibleToIssueAt = invoiceFetchUpcomingResponse.eligibleToIssueAt
             this.customerTaxId = invoiceFetchUpcomingResponse.customerTaxId
-            this.voidedAt = invoiceFetchUpcomingResponse.voidedAt
-            this.paidAt = invoiceFetchUpcomingResponse.paidAt
-            this.issuedAt = invoiceFetchUpcomingResponse.issuedAt
-            this.scheduledIssueAt = invoiceFetchUpcomingResponse.scheduledIssueAt
-            this.autoCollection = invoiceFetchUpcomingResponse.autoCollection
             this.memo = invoiceFetchUpcomingResponse.memo
-            this.issueFailedAt = invoiceFetchUpcomingResponse.issueFailedAt
-            this.syncFailedAt = invoiceFetchUpcomingResponse.syncFailedAt
-            this.paymentFailedAt = invoiceFetchUpcomingResponse.paymentFailedAt
-            this.paymentStartedAt = invoiceFetchUpcomingResponse.paymentStartedAt
             this.creditNotes = invoiceFetchUpcomingResponse.creditNotes
             this.targetDate = invoiceFetchUpcomingResponse.targetDate
             additionalProperties(invoiceFetchUpcomingResponse.additionalProperties)
@@ -858,6 +858,141 @@ private constructor(
         @JsonProperty("metadata")
         @ExcludeMissing
         fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
+
+        /**
+         * If the invoice has a status of `void`, this gives a timestamp when the invoice was
+         * voided.
+         */
+        fun voidedAt(voidedAt: OffsetDateTime) = voidedAt(JsonField.of(voidedAt))
+
+        /**
+         * If the invoice has a status of `void`, this gives a timestamp when the invoice was
+         * voided.
+         */
+        @JsonProperty("voided_at")
+        @ExcludeMissing
+        fun voidedAt(voidedAt: JsonField<OffsetDateTime>) = apply { this.voidedAt = voidedAt }
+
+        /**
+         * If the invoice has a status of `paid`, this gives a timestamp when the invoice was paid.
+         */
+        fun paidAt(paidAt: OffsetDateTime) = paidAt(JsonField.of(paidAt))
+
+        /**
+         * If the invoice has a status of `paid`, this gives a timestamp when the invoice was paid.
+         */
+        @JsonProperty("paid_at")
+        @ExcludeMissing
+        fun paidAt(paidAt: JsonField<OffsetDateTime>) = apply { this.paidAt = paidAt }
+
+        /**
+         * If the invoice has been issued, this will be the time it transitioned to `issued` (even
+         * if it is now in a different state.)
+         */
+        fun issuedAt(issuedAt: OffsetDateTime) = issuedAt(JsonField.of(issuedAt))
+
+        /**
+         * If the invoice has been issued, this will be the time it transitioned to `issued` (even
+         * if it is now in a different state.)
+         */
+        @JsonProperty("issued_at")
+        @ExcludeMissing
+        fun issuedAt(issuedAt: JsonField<OffsetDateTime>) = apply { this.issuedAt = issuedAt }
+
+        /**
+         * If the invoice is in draft, this timestamp will reflect when the invoice is scheduled to
+         * be issued.
+         */
+        fun scheduledIssueAt(scheduledIssueAt: OffsetDateTime) =
+            scheduledIssueAt(JsonField.of(scheduledIssueAt))
+
+        /**
+         * If the invoice is in draft, this timestamp will reflect when the invoice is scheduled to
+         * be issued.
+         */
+        @JsonProperty("scheduled_issue_at")
+        @ExcludeMissing
+        fun scheduledIssueAt(scheduledIssueAt: JsonField<OffsetDateTime>) = apply {
+            this.scheduledIssueAt = scheduledIssueAt
+        }
+
+        fun autoCollection(autoCollection: AutoCollection) =
+            autoCollection(JsonField.of(autoCollection))
+
+        @JsonProperty("auto_collection")
+        @ExcludeMissing
+        fun autoCollection(autoCollection: JsonField<AutoCollection>) = apply {
+            this.autoCollection = autoCollection
+        }
+
+        /**
+         * If the invoice failed to issue, this will be the last time it failed to issue (even if it
+         * is now in a different state.)
+         */
+        fun issueFailedAt(issueFailedAt: OffsetDateTime) =
+            issueFailedAt(JsonField.of(issueFailedAt))
+
+        /**
+         * If the invoice failed to issue, this will be the last time it failed to issue (even if it
+         * is now in a different state.)
+         */
+        @JsonProperty("issue_failed_at")
+        @ExcludeMissing
+        fun issueFailedAt(issueFailedAt: JsonField<OffsetDateTime>) = apply {
+            this.issueFailedAt = issueFailedAt
+        }
+
+        /**
+         * If the invoice failed to sync, this will be the last time an external invoicing provider
+         * sync was attempted. This field will always be `null` for invoices using Orb Invoicing.
+         */
+        fun syncFailedAt(syncFailedAt: OffsetDateTime) = syncFailedAt(JsonField.of(syncFailedAt))
+
+        /**
+         * If the invoice failed to sync, this will be the last time an external invoicing provider
+         * sync was attempted. This field will always be `null` for invoices using Orb Invoicing.
+         */
+        @JsonProperty("sync_failed_at")
+        @ExcludeMissing
+        fun syncFailedAt(syncFailedAt: JsonField<OffsetDateTime>) = apply {
+            this.syncFailedAt = syncFailedAt
+        }
+
+        /**
+         * If payment was attempted on this invoice but failed, this will be the time of the most
+         * recent attempt.
+         */
+        fun paymentFailedAt(paymentFailedAt: OffsetDateTime) =
+            paymentFailedAt(JsonField.of(paymentFailedAt))
+
+        /**
+         * If payment was attempted on this invoice but failed, this will be the time of the most
+         * recent attempt.
+         */
+        @JsonProperty("payment_failed_at")
+        @ExcludeMissing
+        fun paymentFailedAt(paymentFailedAt: JsonField<OffsetDateTime>) = apply {
+            this.paymentFailedAt = paymentFailedAt
+        }
+
+        /**
+         * If payment was attempted on this invoice, this will be the start time of the most recent
+         * attempt. This field is especially useful for delayed-notification payment mechanisms
+         * (like bank transfers), where payment can take 3 days or more.
+         */
+        fun paymentStartedAt(paymentStartedAt: OffsetDateTime) =
+            paymentStartedAt(JsonField.of(paymentStartedAt))
+
+        /**
+         * If payment was attempted on this invoice, this will be the start time of the most recent
+         * attempt. This field is especially useful for delayed-notification payment mechanisms
+         * (like bank transfers), where payment can take 3 days or more.
+         */
+        @JsonProperty("payment_started_at")
+        @ExcludeMissing
+        fun paymentStartedAt(paymentStartedAt: JsonField<OffsetDateTime>) = apply {
+            this.paymentStartedAt = paymentStartedAt
+        }
 
         /**
          * This is the final amount required to be charged to the customer and reflects the
@@ -1311,72 +1446,6 @@ private constructor(
             this.customerTaxId = customerTaxId
         }
 
-        /**
-         * If the invoice has a status of `void`, this gives a timestamp when the invoice was
-         * voided.
-         */
-        fun voidedAt(voidedAt: OffsetDateTime) = voidedAt(JsonField.of(voidedAt))
-
-        /**
-         * If the invoice has a status of `void`, this gives a timestamp when the invoice was
-         * voided.
-         */
-        @JsonProperty("voided_at")
-        @ExcludeMissing
-        fun voidedAt(voidedAt: JsonField<OffsetDateTime>) = apply { this.voidedAt = voidedAt }
-
-        /**
-         * If the invoice has a status of `paid`, this gives a timestamp when the invoice was paid.
-         */
-        fun paidAt(paidAt: OffsetDateTime) = paidAt(JsonField.of(paidAt))
-
-        /**
-         * If the invoice has a status of `paid`, this gives a timestamp when the invoice was paid.
-         */
-        @JsonProperty("paid_at")
-        @ExcludeMissing
-        fun paidAt(paidAt: JsonField<OffsetDateTime>) = apply { this.paidAt = paidAt }
-
-        /**
-         * If the invoice has been issued, this will be the time it transitioned to `issued` (even
-         * if it is now in a different state.)
-         */
-        fun issuedAt(issuedAt: OffsetDateTime) = issuedAt(JsonField.of(issuedAt))
-
-        /**
-         * If the invoice has been issued, this will be the time it transitioned to `issued` (even
-         * if it is now in a different state.)
-         */
-        @JsonProperty("issued_at")
-        @ExcludeMissing
-        fun issuedAt(issuedAt: JsonField<OffsetDateTime>) = apply { this.issuedAt = issuedAt }
-
-        /**
-         * If the invoice is in draft, this timestamp will reflect when the invoice is scheduled to
-         * be issued.
-         */
-        fun scheduledIssueAt(scheduledIssueAt: OffsetDateTime) =
-            scheduledIssueAt(JsonField.of(scheduledIssueAt))
-
-        /**
-         * If the invoice is in draft, this timestamp will reflect when the invoice is scheduled to
-         * be issued.
-         */
-        @JsonProperty("scheduled_issue_at")
-        @ExcludeMissing
-        fun scheduledIssueAt(scheduledIssueAt: JsonField<OffsetDateTime>) = apply {
-            this.scheduledIssueAt = scheduledIssueAt
-        }
-
-        fun autoCollection(autoCollection: AutoCollection) =
-            autoCollection(JsonField.of(autoCollection))
-
-        @JsonProperty("auto_collection")
-        @ExcludeMissing
-        fun autoCollection(autoCollection: JsonField<AutoCollection>) = apply {
-            this.autoCollection = autoCollection
-        }
-
         /** Free-form text which is available on the invoice PDF and the Orb invoice portal. */
         fun memo(memo: String) = memo(JsonField.of(memo))
 
@@ -1384,75 +1453,6 @@ private constructor(
         @JsonProperty("memo")
         @ExcludeMissing
         fun memo(memo: JsonField<String>) = apply { this.memo = memo }
-
-        /**
-         * If the invoice failed to issue, this will be the last time it failed to issue (even if it
-         * is now in a different state.)
-         */
-        fun issueFailedAt(issueFailedAt: OffsetDateTime) =
-            issueFailedAt(JsonField.of(issueFailedAt))
-
-        /**
-         * If the invoice failed to issue, this will be the last time it failed to issue (even if it
-         * is now in a different state.)
-         */
-        @JsonProperty("issue_failed_at")
-        @ExcludeMissing
-        fun issueFailedAt(issueFailedAt: JsonField<OffsetDateTime>) = apply {
-            this.issueFailedAt = issueFailedAt
-        }
-
-        /**
-         * If the invoice failed to sync, this will be the last time an external invoicing provider
-         * sync was attempted. This field will always be `null` for invoices using Orb Invoicing.
-         */
-        fun syncFailedAt(syncFailedAt: OffsetDateTime) = syncFailedAt(JsonField.of(syncFailedAt))
-
-        /**
-         * If the invoice failed to sync, this will be the last time an external invoicing provider
-         * sync was attempted. This field will always be `null` for invoices using Orb Invoicing.
-         */
-        @JsonProperty("sync_failed_at")
-        @ExcludeMissing
-        fun syncFailedAt(syncFailedAt: JsonField<OffsetDateTime>) = apply {
-            this.syncFailedAt = syncFailedAt
-        }
-
-        /**
-         * If payment was attempted on this invoice but failed, this will be the time of the most
-         * recent attempt.
-         */
-        fun paymentFailedAt(paymentFailedAt: OffsetDateTime) =
-            paymentFailedAt(JsonField.of(paymentFailedAt))
-
-        /**
-         * If payment was attempted on this invoice but failed, this will be the time of the most
-         * recent attempt.
-         */
-        @JsonProperty("payment_failed_at")
-        @ExcludeMissing
-        fun paymentFailedAt(paymentFailedAt: JsonField<OffsetDateTime>) = apply {
-            this.paymentFailedAt = paymentFailedAt
-        }
-
-        /**
-         * If payment was attempted on this invoice, this will be the start time of the most recent
-         * attempt. This field is especially useful for delayed-notification payment mechanisms
-         * (like bank transfers), where payment can take 3 days or more.
-         */
-        fun paymentStartedAt(paymentStartedAt: OffsetDateTime) =
-            paymentStartedAt(JsonField.of(paymentStartedAt))
-
-        /**
-         * If payment was attempted on this invoice, this will be the start time of the most recent
-         * attempt. This field is especially useful for delayed-notification payment mechanisms
-         * (like bank transfers), where payment can take 3 days or more.
-         */
-        @JsonProperty("payment_started_at")
-        @ExcludeMissing
-        fun paymentStartedAt(paymentStartedAt: JsonField<OffsetDateTime>) = apply {
-            this.paymentStartedAt = paymentStartedAt
-        }
 
         /** A list of credit notes associated with the invoice */
         fun creditNotes(creditNotes: List<CreditNote>) = creditNotes(JsonField.of(creditNotes))
@@ -1491,6 +1491,15 @@ private constructor(
         fun build(): InvoiceFetchUpcomingResponse =
             InvoiceFetchUpcomingResponse(
                 metadata,
+                voidedAt,
+                paidAt,
+                issuedAt,
+                scheduledIssueAt,
+                autoCollection,
+                issueFailedAt,
+                syncFailedAt,
+                paymentFailedAt,
+                paymentStartedAt,
                 amountDue,
                 createdAt,
                 currency,
@@ -1518,16 +1527,7 @@ private constructor(
                 willAutoIssue,
                 eligibleToIssueAt,
                 customerTaxId,
-                voidedAt,
-                paidAt,
-                issuedAt,
-                scheduledIssueAt,
-                autoCollection,
                 memo,
-                issueFailedAt,
-                syncFailedAt,
-                paymentFailedAt,
-                paymentStartedAt,
                 creditNotes.map { it.toUnmodifiable() },
                 targetDate,
                 additionalProperties.toUnmodifiable(),
