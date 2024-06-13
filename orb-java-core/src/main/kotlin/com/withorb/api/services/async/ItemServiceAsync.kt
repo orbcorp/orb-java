@@ -22,7 +22,7 @@ interface ItemServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none()
     ): CompletableFuture<Item>
 
-    /** Update items */
+    /** This endpoint can be used to update properties on the Item. */
     @JvmOverloads
     fun update(
         params: ItemUpdateParams,
