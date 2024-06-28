@@ -22,6 +22,7 @@ class ItemUpdateParams
 constructor(
     private val itemId: String,
     private val externalConnections: List<ExternalConnection>?,
+    private val name: String?,
     private val additionalQueryParams: Map<String, List<String>>,
     private val additionalHeaders: Map<String, List<String>>,
     private val additionalBodyProperties: Map<String, JsonValue>,
@@ -32,9 +33,15 @@ constructor(
     fun externalConnections(): Optional<List<ExternalConnection>> =
         Optional.ofNullable(externalConnections)
 
+    fun name(): Optional<String> = Optional.ofNullable(name)
+
     @JvmSynthetic
     internal fun getBody(): ItemUpdateBody {
-        return ItemUpdateBody(externalConnections, additionalBodyProperties)
+        return ItemUpdateBody(
+            externalConnections,
+            name,
+            additionalBodyProperties,
+        )
     }
 
     @JvmSynthetic internal fun getQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -58,6 +65,7 @@ constructor(
     class ItemUpdateBody
     internal constructor(
         private val externalConnections: List<ExternalConnection>?,
+        private val name: String?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
@@ -65,6 +73,8 @@ constructor(
 
         @JsonProperty("external_connections")
         fun externalConnections(): List<ExternalConnection>? = externalConnections
+
+        @JsonProperty("name") fun name(): String? = name
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -79,18 +89,24 @@ constructor(
 
             return other is ItemUpdateBody &&
                 this.externalConnections == other.externalConnections &&
+                this.name == other.name &&
                 this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode = Objects.hash(externalConnections, additionalProperties)
+                hashCode =
+                    Objects.hash(
+                        externalConnections,
+                        name,
+                        additionalProperties,
+                    )
             }
             return hashCode
         }
 
         override fun toString() =
-            "ItemUpdateBody{externalConnections=$externalConnections, additionalProperties=$additionalProperties}"
+            "ItemUpdateBody{externalConnections=$externalConnections, name=$name, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -100,11 +116,13 @@ constructor(
         class Builder {
 
             private var externalConnections: List<ExternalConnection>? = null
+            private var name: String? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(itemUpdateBody: ItemUpdateBody) = apply {
                 this.externalConnections = itemUpdateBody.externalConnections
+                this.name = itemUpdateBody.name
                 additionalProperties(itemUpdateBody.additionalProperties)
             }
 
@@ -112,6 +130,8 @@ constructor(
             fun externalConnections(externalConnections: List<ExternalConnection>) = apply {
                 this.externalConnections = externalConnections
             }
+
+            @JsonProperty("name") fun name(name: String) = apply { this.name = name }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -130,7 +150,8 @@ constructor(
             fun build(): ItemUpdateBody =
                 ItemUpdateBody(
                     externalConnections?.toUnmodifiable(),
-                    additionalProperties.toUnmodifiable()
+                    name,
+                    additionalProperties.toUnmodifiable(),
                 )
         }
     }
@@ -149,6 +170,7 @@ constructor(
         return other is ItemUpdateParams &&
             this.itemId == other.itemId &&
             this.externalConnections == other.externalConnections &&
+            this.name == other.name &&
             this.additionalQueryParams == other.additionalQueryParams &&
             this.additionalHeaders == other.additionalHeaders &&
             this.additionalBodyProperties == other.additionalBodyProperties
@@ -158,6 +180,7 @@ constructor(
         return Objects.hash(
             itemId,
             externalConnections,
+            name,
             additionalQueryParams,
             additionalHeaders,
             additionalBodyProperties,
@@ -165,7 +188,7 @@ constructor(
     }
 
     override fun toString() =
-        "ItemUpdateParams{itemId=$itemId, externalConnections=$externalConnections, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+        "ItemUpdateParams{itemId=$itemId, externalConnections=$externalConnections, name=$name, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -179,6 +202,7 @@ constructor(
 
         private var itemId: String? = null
         private var externalConnections: MutableList<ExternalConnection> = mutableListOf()
+        private var name: String? = null
         private var additionalQueryParams: MutableMap<String, MutableList<String>> = mutableMapOf()
         private var additionalHeaders: MutableMap<String, MutableList<String>> = mutableMapOf()
         private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -187,6 +211,7 @@ constructor(
         internal fun from(itemUpdateParams: ItemUpdateParams) = apply {
             this.itemId = itemUpdateParams.itemId
             this.externalConnections(itemUpdateParams.externalConnections ?: listOf())
+            this.name = itemUpdateParams.name
             additionalQueryParams(itemUpdateParams.additionalQueryParams)
             additionalHeaders(itemUpdateParams.additionalHeaders)
             additionalBodyProperties(itemUpdateParams.additionalBodyProperties)
@@ -202,6 +227,8 @@ constructor(
         fun addExternalConnection(externalConnection: ExternalConnection) = apply {
             this.externalConnections.add(externalConnection)
         }
+
+        fun name(name: String) = apply { this.name = name }
 
         fun additionalQueryParams(additionalQueryParams: Map<String, List<String>>) = apply {
             this.additionalQueryParams.clear()
@@ -261,6 +288,7 @@ constructor(
             ItemUpdateParams(
                 checkNotNull(itemId) { "`itemId` is required but was not set" },
                 if (externalConnections.size == 0) null else externalConnections.toUnmodifiable(),
+                name,
                 additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
                 additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
                 additionalBodyProperties.toUnmodifiable(),
