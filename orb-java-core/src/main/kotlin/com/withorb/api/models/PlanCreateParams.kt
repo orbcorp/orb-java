@@ -37,6 +37,7 @@ constructor(
     private val externalPlanId: String?,
     private val metadata: Metadata?,
     private val netTerms: Long?,
+    private val status: Status?,
     private val additionalQueryParams: Map<String, List<String>>,
     private val additionalHeaders: Map<String, List<String>>,
     private val additionalBodyProperties: Map<String, JsonValue>,
@@ -56,6 +57,8 @@ constructor(
 
     fun netTerms(): Optional<Long> = Optional.ofNullable(netTerms)
 
+    fun status(): Optional<Status> = Optional.ofNullable(status)
+
     @JvmSynthetic
     internal fun getBody(): PlanCreateBody {
         return PlanCreateBody(
@@ -66,6 +69,7 @@ constructor(
             externalPlanId,
             metadata,
             netTerms,
+            status,
             additionalBodyProperties,
         )
     }
@@ -85,6 +89,7 @@ constructor(
         private val externalPlanId: String?,
         private val metadata: Metadata?,
         private val netTerms: Long?,
+        private val status: Status?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
@@ -119,6 +124,12 @@ constructor(
          */
         @JsonProperty("net_terms") fun netTerms(): Long? = netTerms
 
+        /**
+         * The status of the plan to create (either active or draft). If not specified, this
+         * defaults to active.
+         */
+        @JsonProperty("status") fun status(): Status? = status
+
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -138,6 +149,7 @@ constructor(
                 this.externalPlanId == other.externalPlanId &&
                 this.metadata == other.metadata &&
                 this.netTerms == other.netTerms &&
+                this.status == other.status &&
                 this.additionalProperties == other.additionalProperties
         }
 
@@ -152,6 +164,7 @@ constructor(
                         externalPlanId,
                         metadata,
                         netTerms,
+                        status,
                         additionalProperties,
                     )
             }
@@ -159,7 +172,7 @@ constructor(
         }
 
         override fun toString() =
-            "PlanCreateBody{currency=$currency, name=$name, prices=$prices, defaultInvoiceMemo=$defaultInvoiceMemo, externalPlanId=$externalPlanId, metadata=$metadata, netTerms=$netTerms, additionalProperties=$additionalProperties}"
+            "PlanCreateBody{currency=$currency, name=$name, prices=$prices, defaultInvoiceMemo=$defaultInvoiceMemo, externalPlanId=$externalPlanId, metadata=$metadata, netTerms=$netTerms, status=$status, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -175,6 +188,7 @@ constructor(
             private var externalPlanId: String? = null
             private var metadata: Metadata? = null
             private var netTerms: Long? = null
+            private var status: Status? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -186,6 +200,7 @@ constructor(
                 this.externalPlanId = planCreateBody.externalPlanId
                 this.metadata = planCreateBody.metadata
                 this.netTerms = planCreateBody.netTerms
+                this.status = planCreateBody.status
                 additionalProperties(planCreateBody.additionalProperties)
             }
 
@@ -227,6 +242,12 @@ constructor(
             @JsonProperty("net_terms")
             fun netTerms(netTerms: Long) = apply { this.netTerms = netTerms }
 
+            /**
+             * The status of the plan to create (either active or draft). If not specified, this
+             * defaults to active.
+             */
+            @JsonProperty("status") fun status(status: Status) = apply { this.status = status }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 this.additionalProperties.putAll(additionalProperties)
@@ -251,6 +272,7 @@ constructor(
                     externalPlanId,
                     metadata,
                     netTerms,
+                    status,
                     additionalProperties.toUnmodifiable(),
                 )
         }
@@ -275,6 +297,7 @@ constructor(
             this.externalPlanId == other.externalPlanId &&
             this.metadata == other.metadata &&
             this.netTerms == other.netTerms &&
+            this.status == other.status &&
             this.additionalQueryParams == other.additionalQueryParams &&
             this.additionalHeaders == other.additionalHeaders &&
             this.additionalBodyProperties == other.additionalBodyProperties
@@ -289,6 +312,7 @@ constructor(
             externalPlanId,
             metadata,
             netTerms,
+            status,
             additionalQueryParams,
             additionalHeaders,
             additionalBodyProperties,
@@ -296,7 +320,7 @@ constructor(
     }
 
     override fun toString() =
-        "PlanCreateParams{currency=$currency, name=$name, prices=$prices, defaultInvoiceMemo=$defaultInvoiceMemo, externalPlanId=$externalPlanId, metadata=$metadata, netTerms=$netTerms, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+        "PlanCreateParams{currency=$currency, name=$name, prices=$prices, defaultInvoiceMemo=$defaultInvoiceMemo, externalPlanId=$externalPlanId, metadata=$metadata, netTerms=$netTerms, status=$status, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -315,6 +339,7 @@ constructor(
         private var externalPlanId: String? = null
         private var metadata: Metadata? = null
         private var netTerms: Long? = null
+        private var status: Status? = null
         private var additionalQueryParams: MutableMap<String, MutableList<String>> = mutableMapOf()
         private var additionalHeaders: MutableMap<String, MutableList<String>> = mutableMapOf()
         private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -328,6 +353,7 @@ constructor(
             this.externalPlanId = planCreateParams.externalPlanId
             this.metadata = planCreateParams.metadata
             this.netTerms = planCreateParams.netTerms
+            this.status = planCreateParams.status
             additionalQueryParams(planCreateParams.additionalQueryParams)
             additionalHeaders(planCreateParams.additionalHeaders)
             additionalBodyProperties(planCreateParams.additionalBodyProperties)
@@ -372,6 +398,12 @@ constructor(
          * the invoice. If you intend the invoice to be due on issue, set this to 0.
          */
         fun netTerms(netTerms: Long) = apply { this.netTerms = netTerms }
+
+        /**
+         * The status of the plan to create (either active or draft). If not specified, this
+         * defaults to active.
+         */
+        fun status(status: Status) = apply { this.status = status }
 
         fun additionalQueryParams(additionalQueryParams: Map<String, List<String>>) = apply {
             this.additionalQueryParams.clear()
@@ -436,6 +468,7 @@ constructor(
                 externalPlanId,
                 metadata,
                 netTerms,
+                status,
                 additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
                 additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
                 additionalBodyProperties.toUnmodifiable(),
@@ -11356,5 +11389,62 @@ constructor(
 
             fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
         }
+    }
+
+    class Status
+    @JsonCreator
+    private constructor(
+        private val value: JsonField<String>,
+    ) : Enum {
+
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Status && this.value == other.value
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+
+        companion object {
+
+            @JvmField val ACTIVE = Status(JsonField.of("active"))
+
+            @JvmField val DRAFT = Status(JsonField.of("draft"))
+
+            @JvmStatic fun of(value: String) = Status(JsonField.of(value))
+        }
+
+        enum class Known {
+            ACTIVE,
+            DRAFT,
+        }
+
+        enum class Value {
+            ACTIVE,
+            DRAFT,
+            _UNKNOWN,
+        }
+
+        fun value(): Value =
+            when (this) {
+                ACTIVE -> Value.ACTIVE
+                DRAFT -> Value.DRAFT
+                else -> Value._UNKNOWN
+            }
+
+        fun known(): Known =
+            when (this) {
+                ACTIVE -> Known.ACTIVE
+                DRAFT -> Known.DRAFT
+                else -> throw OrbInvalidDataException("Unknown Status: $value")
+            }
+
+        fun asString(): String = _value().asStringOrThrow()
     }
 }
