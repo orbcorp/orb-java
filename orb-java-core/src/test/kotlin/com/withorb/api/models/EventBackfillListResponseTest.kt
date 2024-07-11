@@ -12,10 +12,10 @@ class EventBackfillListResponseTest {
     fun createEventBackfillListResponse() {
         val eventBackfillListResponse =
             EventBackfillListResponse.builder()
-                .id("string")
+                .id("id")
                 .closeTime(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .customerId("string")
+                .customerId("customer_id")
                 .eventsIngested(123L)
                 .revertedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .status(EventBackfillListResponse.Status.PENDING)
@@ -23,12 +23,12 @@ class EventBackfillListResponseTest {
                 .timeframeStart(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()
         assertThat(eventBackfillListResponse).isNotNull
-        assertThat(eventBackfillListResponse.id()).isEqualTo("string")
+        assertThat(eventBackfillListResponse.id()).isEqualTo("id")
         assertThat(eventBackfillListResponse.closeTime())
             .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(eventBackfillListResponse.createdAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(eventBackfillListResponse.customerId()).contains("string")
+        assertThat(eventBackfillListResponse.customerId()).contains("customer_id")
         assertThat(eventBackfillListResponse.eventsIngested()).isEqualTo(123L)
         assertThat(eventBackfillListResponse.revertedAt())
             .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
