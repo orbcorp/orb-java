@@ -12,7 +12,7 @@ The Orb Java SDK is similar to the Orb Kotlin SDK but with minor differences tha
 
 ## Documentation
 
-The REST API documentation can be found [on docs.withorb.com](https://docs.withorb.com/reference/api-reference).
+The REST API documentation can be found on [docs.withorb.com](https://docs.withorb.com/reference/api-reference).
 
 ---
 
