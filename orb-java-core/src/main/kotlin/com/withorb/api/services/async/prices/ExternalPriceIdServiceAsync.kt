@@ -7,9 +7,20 @@ package com.withorb.api.services.async.prices
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.models.Price
 import com.withorb.api.models.PriceExternalPriceIdFetchParams
+import com.withorb.api.models.PriceExternalPriceIdUpdateParams
 import java.util.concurrent.CompletableFuture
 
 interface ExternalPriceIdServiceAsync {
+
+    /**
+     * This endpoint allows you to update the `metadata` property on a price. If you pass null for
+     * the metadata value, it will clear any existing metadata for that price.
+     */
+    @JvmOverloads
+    fun update(
+        params: PriceExternalPriceIdUpdateParams,
+        requestOptions: RequestOptions = RequestOptions.none()
+    ): CompletableFuture<Price>
 
     /**
      * This endpoint returns a price given an external price id. See the

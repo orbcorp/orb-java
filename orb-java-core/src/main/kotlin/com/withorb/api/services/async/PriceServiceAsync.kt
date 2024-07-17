@@ -12,6 +12,7 @@ import com.withorb.api.models.PriceEvaluateResponse
 import com.withorb.api.models.PriceFetchParams
 import com.withorb.api.models.PriceListPageAsync
 import com.withorb.api.models.PriceListParams
+import com.withorb.api.models.PriceUpdateParams
 import com.withorb.api.services.async.prices.ExternalPriceIdServiceAsync
 import java.util.concurrent.CompletableFuture
 
@@ -33,6 +34,16 @@ interface PriceServiceAsync {
     @JvmOverloads
     fun create(
         params: PriceCreateParams,
+        requestOptions: RequestOptions = RequestOptions.none()
+    ): CompletableFuture<Price>
+
+    /**
+     * This endpoint allows you to update the `metadata` property on a price. If you pass null for
+     * the metadata value, it will clear any existing metadata for that price.
+     */
+    @JvmOverloads
+    fun update(
+        params: PriceUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none()
     ): CompletableFuture<Price>
 

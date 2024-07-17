@@ -14,6 +14,7 @@ import com.withorb.api.models.InvoiceIssueParams
 import com.withorb.api.models.InvoiceListPageAsync
 import com.withorb.api.models.InvoiceListParams
 import com.withorb.api.models.InvoiceMarkPaidParams
+import com.withorb.api.models.InvoiceUpdateParams
 import com.withorb.api.models.InvoiceVoidParams
 import java.util.concurrent.CompletableFuture
 
@@ -23,6 +24,18 @@ interface InvoiceServiceAsync {
     @JvmOverloads
     fun create(
         params: InvoiceCreateParams,
+        requestOptions: RequestOptions = RequestOptions.none()
+    ): CompletableFuture<Invoice>
+
+    /**
+     * This endpoint allows you to update the `metadata` property on an invoice. If you pass null
+     * for the metadata value, it will clear any existing metadata for that invoice.
+     *
+     * `metadata` can be modified regardless of invoice state.
+     */
+    @JvmOverloads
+    fun update(
+        params: InvoiceUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none()
     ): CompletableFuture<Invoice>
 
