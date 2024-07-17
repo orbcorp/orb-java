@@ -3083,7 +3083,7 @@ private constructor(
 
                 companion object {
 
-                    @JvmField val NULL = Type(JsonField.of("\'null\'"))
+                    @JvmField val NULL = Type(JsonField.of("'null'"))
 
                     @JvmStatic fun of(value: String) = Type(JsonField.of(value))
                 }
