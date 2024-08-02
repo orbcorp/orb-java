@@ -585,6 +585,7 @@ private constructor(
         private val modelType: JsonField<ModelType>,
         private val createdAt: JsonField<OffsetDateTime>,
         private val cadence: JsonField<Cadence>,
+        private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val billableMetric: JsonField<BillableMetric>,
         private val fixedPriceQuantity: JsonField<Double>,
         private val planPhaseOrder: JsonField<Long>,
@@ -626,6 +627,11 @@ private constructor(
         fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+            Optional.ofNullable(
+                billingCycleConfiguration.getNullable("billing_cycle_configuration")
+            )
 
         fun billableMetric(): Optional<BillableMetric> =
             Optional.ofNullable(billableMetric.getNullable("billable_metric"))
@@ -681,6 +687,10 @@ private constructor(
 
         @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
+        @JsonProperty("billing_cycle_configuration")
+        @ExcludeMissing
+        fun _billingCycleConfiguration() = billingCycleConfiguration
+
         @JsonProperty("billable_metric") @ExcludeMissing fun _billableMetric() = billableMetric
 
         @JsonProperty("fixed_price_quantity")
@@ -725,6 +735,7 @@ private constructor(
                 modelType()
                 createdAt()
                 cadence()
+                billingCycleConfiguration().map { it.validate() }
                 billableMetric().map { it.validate() }
                 fixedPriceQuantity()
                 planPhaseOrder()
@@ -758,6 +769,7 @@ private constructor(
                 this.modelType == other.modelType &&
                 this.createdAt == other.createdAt &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
                 this.billableMetric == other.billableMetric &&
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.planPhaseOrder == other.planPhaseOrder &&
@@ -786,6 +798,7 @@ private constructor(
                         modelType,
                         createdAt,
                         cadence,
+                        billingCycleConfiguration,
                         billableMetric,
                         fixedPriceQuantity,
                         planPhaseOrder,
@@ -806,7 +819,7 @@ private constructor(
         }
 
         override fun toString() =
-            "UnitPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, unitConfig=$unitConfig, additionalProperties=$additionalProperties}"
+            "UnitPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, unitConfig=$unitConfig, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -823,6 +836,8 @@ private constructor(
             private var modelType: JsonField<ModelType> = JsonMissing.of()
             private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var cadence: JsonField<Cadence> = JsonMissing.of()
+            private var billingCycleConfiguration: JsonField<BillingCycleConfiguration> =
+                JsonMissing.of()
             private var billableMetric: JsonField<BillableMetric> = JsonMissing.of()
             private var fixedPriceQuantity: JsonField<Double> = JsonMissing.of()
             private var planPhaseOrder: JsonField<Long> = JsonMissing.of()
@@ -848,6 +863,7 @@ private constructor(
                 this.modelType = unitPrice.modelType
                 this.createdAt = unitPrice.createdAt
                 this.cadence = unitPrice.cadence
+                this.billingCycleConfiguration = unitPrice.billingCycleConfiguration
                 this.billableMetric = unitPrice.billableMetric
                 this.fixedPriceQuantity = unitPrice.fixedPriceQuantity
                 this.planPhaseOrder = unitPrice.planPhaseOrder
@@ -926,6 +942,15 @@ private constructor(
             @JsonProperty("cadence")
             @ExcludeMissing
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                billingCycleConfiguration(JsonField.of(billingCycleConfiguration))
+
+            @JsonProperty("billing_cycle_configuration")
+            @ExcludeMissing
+            fun billingCycleConfiguration(
+                billingCycleConfiguration: JsonField<BillingCycleConfiguration>
+            ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
 
             fun billableMetric(billableMetric: BillableMetric) =
                 billableMetric(JsonField.of(billableMetric))
@@ -1049,6 +1074,7 @@ private constructor(
                     modelType,
                     createdAt,
                     cadence,
+                    billingCycleConfiguration,
                     billableMetric,
                     fixedPriceQuantity,
                     planPhaseOrder,
@@ -1154,6 +1180,181 @@ private constructor(
 
                 fun build(): BillableMetric =
                     BillableMetric(id, additionalProperties.toUnmodifiable())
+            }
+        }
+
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: JsonField<Long>,
+            private val durationUnit: JsonField<DurationUnit>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            fun duration(): Long = duration.getRequired("duration")
+
+            fun durationUnit(): DurationUnit = durationUnit.getRequired("duration_unit")
+
+            @JsonProperty("duration") @ExcludeMissing fun _duration() = duration
+
+            @JsonProperty("duration_unit") @ExcludeMissing fun _durationUnit() = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): BillingCycleConfiguration = apply {
+                if (!validated) {
+                    duration()
+                    durationUnit()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: JsonField<Long> = JsonMissing.of()
+                private var durationUnit: JsonField<DurationUnit> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                fun duration(duration: Long) = duration(JsonField.of(duration))
+
+                @JsonProperty("duration")
+                @ExcludeMissing
+                fun duration(duration: JsonField<Long>) = apply { this.duration = duration }
+
+                fun durationUnit(durationUnit: DurationUnit) =
+                    durationUnit(JsonField.of(durationUnit))
+
+                @JsonProperty("duration_unit")
+                @ExcludeMissing
+                fun durationUnit(durationUnit: JsonField<DurationUnit>) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        duration,
+                        durationUnit,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
             }
         }
 
@@ -2055,6 +2256,7 @@ private constructor(
         private val modelType: JsonField<ModelType>,
         private val createdAt: JsonField<OffsetDateTime>,
         private val cadence: JsonField<Cadence>,
+        private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val billableMetric: JsonField<BillableMetric>,
         private val fixedPriceQuantity: JsonField<Double>,
         private val planPhaseOrder: JsonField<Long>,
@@ -2096,6 +2298,11 @@ private constructor(
         fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+            Optional.ofNullable(
+                billingCycleConfiguration.getNullable("billing_cycle_configuration")
+            )
 
         fun billableMetric(): Optional<BillableMetric> =
             Optional.ofNullable(billableMetric.getNullable("billable_metric"))
@@ -2151,6 +2358,10 @@ private constructor(
 
         @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
+        @JsonProperty("billing_cycle_configuration")
+        @ExcludeMissing
+        fun _billingCycleConfiguration() = billingCycleConfiguration
+
         @JsonProperty("billable_metric") @ExcludeMissing fun _billableMetric() = billableMetric
 
         @JsonProperty("fixed_price_quantity")
@@ -2195,6 +2406,7 @@ private constructor(
                 modelType()
                 createdAt()
                 cadence()
+                billingCycleConfiguration().map { it.validate() }
                 billableMetric().map { it.validate() }
                 fixedPriceQuantity()
                 planPhaseOrder()
@@ -2228,6 +2440,7 @@ private constructor(
                 this.modelType == other.modelType &&
                 this.createdAt == other.createdAt &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
                 this.billableMetric == other.billableMetric &&
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.planPhaseOrder == other.planPhaseOrder &&
@@ -2256,6 +2469,7 @@ private constructor(
                         modelType,
                         createdAt,
                         cadence,
+                        billingCycleConfiguration,
                         billableMetric,
                         fixedPriceQuantity,
                         planPhaseOrder,
@@ -2276,7 +2490,7 @@ private constructor(
         }
 
         override fun toString() =
-            "PackagePrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, packageConfig=$packageConfig, additionalProperties=$additionalProperties}"
+            "PackagePrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, packageConfig=$packageConfig, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -2293,6 +2507,8 @@ private constructor(
             private var modelType: JsonField<ModelType> = JsonMissing.of()
             private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var cadence: JsonField<Cadence> = JsonMissing.of()
+            private var billingCycleConfiguration: JsonField<BillingCycleConfiguration> =
+                JsonMissing.of()
             private var billableMetric: JsonField<BillableMetric> = JsonMissing.of()
             private var fixedPriceQuantity: JsonField<Double> = JsonMissing.of()
             private var planPhaseOrder: JsonField<Long> = JsonMissing.of()
@@ -2318,6 +2534,7 @@ private constructor(
                 this.modelType = packagePrice.modelType
                 this.createdAt = packagePrice.createdAt
                 this.cadence = packagePrice.cadence
+                this.billingCycleConfiguration = packagePrice.billingCycleConfiguration
                 this.billableMetric = packagePrice.billableMetric
                 this.fixedPriceQuantity = packagePrice.fixedPriceQuantity
                 this.planPhaseOrder = packagePrice.planPhaseOrder
@@ -2396,6 +2613,15 @@ private constructor(
             @JsonProperty("cadence")
             @ExcludeMissing
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                billingCycleConfiguration(JsonField.of(billingCycleConfiguration))
+
+            @JsonProperty("billing_cycle_configuration")
+            @ExcludeMissing
+            fun billingCycleConfiguration(
+                billingCycleConfiguration: JsonField<BillingCycleConfiguration>
+            ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
 
             fun billableMetric(billableMetric: BillableMetric) =
                 billableMetric(JsonField.of(billableMetric))
@@ -2520,6 +2746,7 @@ private constructor(
                     modelType,
                     createdAt,
                     cadence,
+                    billingCycleConfiguration,
                     billableMetric,
                     fixedPriceQuantity,
                     planPhaseOrder,
@@ -2625,6 +2852,181 @@ private constructor(
 
                 fun build(): BillableMetric =
                     BillableMetric(id, additionalProperties.toUnmodifiable())
+            }
+        }
+
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: JsonField<Long>,
+            private val durationUnit: JsonField<DurationUnit>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            fun duration(): Long = duration.getRequired("duration")
+
+            fun durationUnit(): DurationUnit = durationUnit.getRequired("duration_unit")
+
+            @JsonProperty("duration") @ExcludeMissing fun _duration() = duration
+
+            @JsonProperty("duration_unit") @ExcludeMissing fun _durationUnit() = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): BillingCycleConfiguration = apply {
+                if (!validated) {
+                    duration()
+                    durationUnit()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: JsonField<Long> = JsonMissing.of()
+                private var durationUnit: JsonField<DurationUnit> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                fun duration(duration: Long) = duration(JsonField.of(duration))
+
+                @JsonProperty("duration")
+                @ExcludeMissing
+                fun duration(duration: JsonField<Long>) = apply { this.duration = duration }
+
+                fun durationUnit(durationUnit: DurationUnit) =
+                    durationUnit(JsonField.of(durationUnit))
+
+                @JsonProperty("duration_unit")
+                @ExcludeMissing
+                fun durationUnit(durationUnit: JsonField<DurationUnit>) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        duration,
+                        durationUnit,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
             }
         }
 
@@ -3569,6 +3971,7 @@ private constructor(
         private val modelType: JsonField<ModelType>,
         private val createdAt: JsonField<OffsetDateTime>,
         private val cadence: JsonField<Cadence>,
+        private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val billableMetric: JsonField<BillableMetric>,
         private val fixedPriceQuantity: JsonField<Double>,
         private val planPhaseOrder: JsonField<Long>,
@@ -3610,6 +4013,11 @@ private constructor(
         fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+            Optional.ofNullable(
+                billingCycleConfiguration.getNullable("billing_cycle_configuration")
+            )
 
         fun billableMetric(): Optional<BillableMetric> =
             Optional.ofNullable(billableMetric.getNullable("billable_metric"))
@@ -3665,6 +4073,10 @@ private constructor(
 
         @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
+        @JsonProperty("billing_cycle_configuration")
+        @ExcludeMissing
+        fun _billingCycleConfiguration() = billingCycleConfiguration
+
         @JsonProperty("billable_metric") @ExcludeMissing fun _billableMetric() = billableMetric
 
         @JsonProperty("fixed_price_quantity")
@@ -3709,6 +4121,7 @@ private constructor(
                 modelType()
                 createdAt()
                 cadence()
+                billingCycleConfiguration().map { it.validate() }
                 billableMetric().map { it.validate() }
                 fixedPriceQuantity()
                 planPhaseOrder()
@@ -3742,6 +4155,7 @@ private constructor(
                 this.modelType == other.modelType &&
                 this.createdAt == other.createdAt &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
                 this.billableMetric == other.billableMetric &&
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.planPhaseOrder == other.planPhaseOrder &&
@@ -3770,6 +4184,7 @@ private constructor(
                         modelType,
                         createdAt,
                         cadence,
+                        billingCycleConfiguration,
                         billableMetric,
                         fixedPriceQuantity,
                         planPhaseOrder,
@@ -3790,7 +4205,7 @@ private constructor(
         }
 
         override fun toString() =
-            "MatrixPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, matrixConfig=$matrixConfig, additionalProperties=$additionalProperties}"
+            "MatrixPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, matrixConfig=$matrixConfig, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -3807,6 +4222,8 @@ private constructor(
             private var modelType: JsonField<ModelType> = JsonMissing.of()
             private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var cadence: JsonField<Cadence> = JsonMissing.of()
+            private var billingCycleConfiguration: JsonField<BillingCycleConfiguration> =
+                JsonMissing.of()
             private var billableMetric: JsonField<BillableMetric> = JsonMissing.of()
             private var fixedPriceQuantity: JsonField<Double> = JsonMissing.of()
             private var planPhaseOrder: JsonField<Long> = JsonMissing.of()
@@ -3832,6 +4249,7 @@ private constructor(
                 this.modelType = matrixPrice.modelType
                 this.createdAt = matrixPrice.createdAt
                 this.cadence = matrixPrice.cadence
+                this.billingCycleConfiguration = matrixPrice.billingCycleConfiguration
                 this.billableMetric = matrixPrice.billableMetric
                 this.fixedPriceQuantity = matrixPrice.fixedPriceQuantity
                 this.planPhaseOrder = matrixPrice.planPhaseOrder
@@ -3910,6 +4328,15 @@ private constructor(
             @JsonProperty("cadence")
             @ExcludeMissing
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                billingCycleConfiguration(JsonField.of(billingCycleConfiguration))
+
+            @JsonProperty("billing_cycle_configuration")
+            @ExcludeMissing
+            fun billingCycleConfiguration(
+                billingCycleConfiguration: JsonField<BillingCycleConfiguration>
+            ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
 
             fun billableMetric(billableMetric: BillableMetric) =
                 billableMetric(JsonField.of(billableMetric))
@@ -4033,6 +4460,7 @@ private constructor(
                     modelType,
                     createdAt,
                     cadence,
+                    billingCycleConfiguration,
                     billableMetric,
                     fixedPriceQuantity,
                     planPhaseOrder,
@@ -4138,6 +4566,181 @@ private constructor(
 
                 fun build(): BillableMetric =
                     BillableMetric(id, additionalProperties.toUnmodifiable())
+            }
+        }
+
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: JsonField<Long>,
+            private val durationUnit: JsonField<DurationUnit>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            fun duration(): Long = duration.getRequired("duration")
+
+            fun durationUnit(): DurationUnit = durationUnit.getRequired("duration_unit")
+
+            @JsonProperty("duration") @ExcludeMissing fun _duration() = duration
+
+            @JsonProperty("duration_unit") @ExcludeMissing fun _durationUnit() = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): BillingCycleConfiguration = apply {
+                if (!validated) {
+                    duration()
+                    durationUnit()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: JsonField<Long> = JsonMissing.of()
+                private var durationUnit: JsonField<DurationUnit> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                fun duration(duration: Long) = duration(JsonField.of(duration))
+
+                @JsonProperty("duration")
+                @ExcludeMissing
+                fun duration(duration: JsonField<Long>) = apply { this.duration = duration }
+
+                fun durationUnit(durationUnit: DurationUnit) =
+                    durationUnit(JsonField.of(durationUnit))
+
+                @JsonProperty("duration_unit")
+                @ExcludeMissing
+                fun durationUnit(durationUnit: JsonField<DurationUnit>) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        duration,
+                        durationUnit,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
             }
         }
 
@@ -5247,6 +5850,7 @@ private constructor(
         private val modelType: JsonField<ModelType>,
         private val createdAt: JsonField<OffsetDateTime>,
         private val cadence: JsonField<Cadence>,
+        private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val billableMetric: JsonField<BillableMetric>,
         private val fixedPriceQuantity: JsonField<Double>,
         private val planPhaseOrder: JsonField<Long>,
@@ -5288,6 +5892,11 @@ private constructor(
         fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+            Optional.ofNullable(
+                billingCycleConfiguration.getNullable("billing_cycle_configuration")
+            )
 
         fun billableMetric(): Optional<BillableMetric> =
             Optional.ofNullable(billableMetric.getNullable("billable_metric"))
@@ -5343,6 +5952,10 @@ private constructor(
 
         @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
+        @JsonProperty("billing_cycle_configuration")
+        @ExcludeMissing
+        fun _billingCycleConfiguration() = billingCycleConfiguration
+
         @JsonProperty("billable_metric") @ExcludeMissing fun _billableMetric() = billableMetric
 
         @JsonProperty("fixed_price_quantity")
@@ -5387,6 +6000,7 @@ private constructor(
                 modelType()
                 createdAt()
                 cadence()
+                billingCycleConfiguration().map { it.validate() }
                 billableMetric().map { it.validate() }
                 fixedPriceQuantity()
                 planPhaseOrder()
@@ -5420,6 +6034,7 @@ private constructor(
                 this.modelType == other.modelType &&
                 this.createdAt == other.createdAt &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
                 this.billableMetric == other.billableMetric &&
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.planPhaseOrder == other.planPhaseOrder &&
@@ -5448,6 +6063,7 @@ private constructor(
                         modelType,
                         createdAt,
                         cadence,
+                        billingCycleConfiguration,
                         billableMetric,
                         fixedPriceQuantity,
                         planPhaseOrder,
@@ -5468,7 +6084,7 @@ private constructor(
         }
 
         override fun toString() =
-            "TieredPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, tieredConfig=$tieredConfig, additionalProperties=$additionalProperties}"
+            "TieredPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, tieredConfig=$tieredConfig, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -5485,6 +6101,8 @@ private constructor(
             private var modelType: JsonField<ModelType> = JsonMissing.of()
             private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var cadence: JsonField<Cadence> = JsonMissing.of()
+            private var billingCycleConfiguration: JsonField<BillingCycleConfiguration> =
+                JsonMissing.of()
             private var billableMetric: JsonField<BillableMetric> = JsonMissing.of()
             private var fixedPriceQuantity: JsonField<Double> = JsonMissing.of()
             private var planPhaseOrder: JsonField<Long> = JsonMissing.of()
@@ -5510,6 +6128,7 @@ private constructor(
                 this.modelType = tieredPrice.modelType
                 this.createdAt = tieredPrice.createdAt
                 this.cadence = tieredPrice.cadence
+                this.billingCycleConfiguration = tieredPrice.billingCycleConfiguration
                 this.billableMetric = tieredPrice.billableMetric
                 this.fixedPriceQuantity = tieredPrice.fixedPriceQuantity
                 this.planPhaseOrder = tieredPrice.planPhaseOrder
@@ -5588,6 +6207,15 @@ private constructor(
             @JsonProperty("cadence")
             @ExcludeMissing
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                billingCycleConfiguration(JsonField.of(billingCycleConfiguration))
+
+            @JsonProperty("billing_cycle_configuration")
+            @ExcludeMissing
+            fun billingCycleConfiguration(
+                billingCycleConfiguration: JsonField<BillingCycleConfiguration>
+            ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
 
             fun billableMetric(billableMetric: BillableMetric) =
                 billableMetric(JsonField.of(billableMetric))
@@ -5711,6 +6339,7 @@ private constructor(
                     modelType,
                     createdAt,
                     cadence,
+                    billingCycleConfiguration,
                     billableMetric,
                     fixedPriceQuantity,
                     planPhaseOrder,
@@ -5816,6 +6445,181 @@ private constructor(
 
                 fun build(): BillableMetric =
                     BillableMetric(id, additionalProperties.toUnmodifiable())
+            }
+        }
+
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: JsonField<Long>,
+            private val durationUnit: JsonField<DurationUnit>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            fun duration(): Long = duration.getRequired("duration")
+
+            fun durationUnit(): DurationUnit = durationUnit.getRequired("duration_unit")
+
+            @JsonProperty("duration") @ExcludeMissing fun _duration() = duration
+
+            @JsonProperty("duration_unit") @ExcludeMissing fun _durationUnit() = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): BillingCycleConfiguration = apply {
+                if (!validated) {
+                    duration()
+                    durationUnit()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: JsonField<Long> = JsonMissing.of()
+                private var durationUnit: JsonField<DurationUnit> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                fun duration(duration: Long) = duration(JsonField.of(duration))
+
+                @JsonProperty("duration")
+                @ExcludeMissing
+                fun duration(duration: JsonField<Long>) = apply { this.duration = duration }
+
+                fun durationUnit(durationUnit: DurationUnit) =
+                    durationUnit(JsonField.of(durationUnit))
+
+                @JsonProperty("duration_unit")
+                @ExcludeMissing
+                fun durationUnit(durationUnit: JsonField<DurationUnit>) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        duration,
+                        durationUnit,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
             }
         }
 
@@ -6867,6 +7671,7 @@ private constructor(
         private val modelType: JsonField<ModelType>,
         private val createdAt: JsonField<OffsetDateTime>,
         private val cadence: JsonField<Cadence>,
+        private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val billableMetric: JsonField<BillableMetric>,
         private val fixedPriceQuantity: JsonField<Double>,
         private val planPhaseOrder: JsonField<Long>,
@@ -6908,6 +7713,11 @@ private constructor(
         fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+            Optional.ofNullable(
+                billingCycleConfiguration.getNullable("billing_cycle_configuration")
+            )
 
         fun billableMetric(): Optional<BillableMetric> =
             Optional.ofNullable(billableMetric.getNullable("billable_metric"))
@@ -6963,6 +7773,10 @@ private constructor(
 
         @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
+        @JsonProperty("billing_cycle_configuration")
+        @ExcludeMissing
+        fun _billingCycleConfiguration() = billingCycleConfiguration
+
         @JsonProperty("billable_metric") @ExcludeMissing fun _billableMetric() = billableMetric
 
         @JsonProperty("fixed_price_quantity")
@@ -7007,6 +7821,7 @@ private constructor(
                 modelType()
                 createdAt()
                 cadence()
+                billingCycleConfiguration().map { it.validate() }
                 billableMetric().map { it.validate() }
                 fixedPriceQuantity()
                 planPhaseOrder()
@@ -7040,6 +7855,7 @@ private constructor(
                 this.modelType == other.modelType &&
                 this.createdAt == other.createdAt &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
                 this.billableMetric == other.billableMetric &&
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.planPhaseOrder == other.planPhaseOrder &&
@@ -7068,6 +7884,7 @@ private constructor(
                         modelType,
                         createdAt,
                         cadence,
+                        billingCycleConfiguration,
                         billableMetric,
                         fixedPriceQuantity,
                         planPhaseOrder,
@@ -7088,7 +7905,7 @@ private constructor(
         }
 
         override fun toString() =
-            "TieredBpsPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, tieredBpsConfig=$tieredBpsConfig, additionalProperties=$additionalProperties}"
+            "TieredBpsPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, tieredBpsConfig=$tieredBpsConfig, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -7105,6 +7922,8 @@ private constructor(
             private var modelType: JsonField<ModelType> = JsonMissing.of()
             private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var cadence: JsonField<Cadence> = JsonMissing.of()
+            private var billingCycleConfiguration: JsonField<BillingCycleConfiguration> =
+                JsonMissing.of()
             private var billableMetric: JsonField<BillableMetric> = JsonMissing.of()
             private var fixedPriceQuantity: JsonField<Double> = JsonMissing.of()
             private var planPhaseOrder: JsonField<Long> = JsonMissing.of()
@@ -7130,6 +7949,7 @@ private constructor(
                 this.modelType = tieredBpsPrice.modelType
                 this.createdAt = tieredBpsPrice.createdAt
                 this.cadence = tieredBpsPrice.cadence
+                this.billingCycleConfiguration = tieredBpsPrice.billingCycleConfiguration
                 this.billableMetric = tieredBpsPrice.billableMetric
                 this.fixedPriceQuantity = tieredBpsPrice.fixedPriceQuantity
                 this.planPhaseOrder = tieredBpsPrice.planPhaseOrder
@@ -7208,6 +8028,15 @@ private constructor(
             @JsonProperty("cadence")
             @ExcludeMissing
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                billingCycleConfiguration(JsonField.of(billingCycleConfiguration))
+
+            @JsonProperty("billing_cycle_configuration")
+            @ExcludeMissing
+            fun billingCycleConfiguration(
+                billingCycleConfiguration: JsonField<BillingCycleConfiguration>
+            ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
 
             fun billableMetric(billableMetric: BillableMetric) =
                 billableMetric(JsonField.of(billableMetric))
@@ -7332,6 +8161,7 @@ private constructor(
                     modelType,
                     createdAt,
                     cadence,
+                    billingCycleConfiguration,
                     billableMetric,
                     fixedPriceQuantity,
                     planPhaseOrder,
@@ -7437,6 +8267,181 @@ private constructor(
 
                 fun build(): BillableMetric =
                     BillableMetric(id, additionalProperties.toUnmodifiable())
+            }
+        }
+
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: JsonField<Long>,
+            private val durationUnit: JsonField<DurationUnit>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            fun duration(): Long = duration.getRequired("duration")
+
+            fun durationUnit(): DurationUnit = durationUnit.getRequired("duration_unit")
+
+            @JsonProperty("duration") @ExcludeMissing fun _duration() = duration
+
+            @JsonProperty("duration_unit") @ExcludeMissing fun _durationUnit() = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): BillingCycleConfiguration = apply {
+                if (!validated) {
+                    duration()
+                    durationUnit()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: JsonField<Long> = JsonMissing.of()
+                private var durationUnit: JsonField<DurationUnit> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                fun duration(duration: Long) = duration(JsonField.of(duration))
+
+                @JsonProperty("duration")
+                @ExcludeMissing
+                fun duration(duration: JsonField<Long>) = apply { this.duration = duration }
+
+                fun durationUnit(durationUnit: DurationUnit) =
+                    durationUnit(JsonField.of(durationUnit))
+
+                @JsonProperty("duration_unit")
+                @ExcludeMissing
+                fun durationUnit(durationUnit: JsonField<DurationUnit>) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        duration,
+                        durationUnit,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
             }
         }
 
@@ -8527,6 +9532,7 @@ private constructor(
         private val modelType: JsonField<ModelType>,
         private val createdAt: JsonField<OffsetDateTime>,
         private val cadence: JsonField<Cadence>,
+        private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val billableMetric: JsonField<BillableMetric>,
         private val fixedPriceQuantity: JsonField<Double>,
         private val planPhaseOrder: JsonField<Long>,
@@ -8568,6 +9574,11 @@ private constructor(
         fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+            Optional.ofNullable(
+                billingCycleConfiguration.getNullable("billing_cycle_configuration")
+            )
 
         fun billableMetric(): Optional<BillableMetric> =
             Optional.ofNullable(billableMetric.getNullable("billable_metric"))
@@ -8623,6 +9634,10 @@ private constructor(
 
         @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
+        @JsonProperty("billing_cycle_configuration")
+        @ExcludeMissing
+        fun _billingCycleConfiguration() = billingCycleConfiguration
+
         @JsonProperty("billable_metric") @ExcludeMissing fun _billableMetric() = billableMetric
 
         @JsonProperty("fixed_price_quantity")
@@ -8667,6 +9682,7 @@ private constructor(
                 modelType()
                 createdAt()
                 cadence()
+                billingCycleConfiguration().map { it.validate() }
                 billableMetric().map { it.validate() }
                 fixedPriceQuantity()
                 planPhaseOrder()
@@ -8700,6 +9716,7 @@ private constructor(
                 this.modelType == other.modelType &&
                 this.createdAt == other.createdAt &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
                 this.billableMetric == other.billableMetric &&
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.planPhaseOrder == other.planPhaseOrder &&
@@ -8728,6 +9745,7 @@ private constructor(
                         modelType,
                         createdAt,
                         cadence,
+                        billingCycleConfiguration,
                         billableMetric,
                         fixedPriceQuantity,
                         planPhaseOrder,
@@ -8748,7 +9766,7 @@ private constructor(
         }
 
         override fun toString() =
-            "BpsPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, bpsConfig=$bpsConfig, additionalProperties=$additionalProperties}"
+            "BpsPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, bpsConfig=$bpsConfig, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -8765,6 +9783,8 @@ private constructor(
             private var modelType: JsonField<ModelType> = JsonMissing.of()
             private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var cadence: JsonField<Cadence> = JsonMissing.of()
+            private var billingCycleConfiguration: JsonField<BillingCycleConfiguration> =
+                JsonMissing.of()
             private var billableMetric: JsonField<BillableMetric> = JsonMissing.of()
             private var fixedPriceQuantity: JsonField<Double> = JsonMissing.of()
             private var planPhaseOrder: JsonField<Long> = JsonMissing.of()
@@ -8790,6 +9810,7 @@ private constructor(
                 this.modelType = bpsPrice.modelType
                 this.createdAt = bpsPrice.createdAt
                 this.cadence = bpsPrice.cadence
+                this.billingCycleConfiguration = bpsPrice.billingCycleConfiguration
                 this.billableMetric = bpsPrice.billableMetric
                 this.fixedPriceQuantity = bpsPrice.fixedPriceQuantity
                 this.planPhaseOrder = bpsPrice.planPhaseOrder
@@ -8868,6 +9889,15 @@ private constructor(
             @JsonProperty("cadence")
             @ExcludeMissing
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                billingCycleConfiguration(JsonField.of(billingCycleConfiguration))
+
+            @JsonProperty("billing_cycle_configuration")
+            @ExcludeMissing
+            fun billingCycleConfiguration(
+                billingCycleConfiguration: JsonField<BillingCycleConfiguration>
+            ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
 
             fun billableMetric(billableMetric: BillableMetric) =
                 billableMetric(JsonField.of(billableMetric))
@@ -8989,6 +10019,7 @@ private constructor(
                     modelType,
                     createdAt,
                     cadence,
+                    billingCycleConfiguration,
                     billableMetric,
                     fixedPriceQuantity,
                     planPhaseOrder,
@@ -9094,6 +10125,181 @@ private constructor(
 
                 fun build(): BillableMetric =
                     BillableMetric(id, additionalProperties.toUnmodifiable())
+            }
+        }
+
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: JsonField<Long>,
+            private val durationUnit: JsonField<DurationUnit>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            fun duration(): Long = duration.getRequired("duration")
+
+            fun durationUnit(): DurationUnit = durationUnit.getRequired("duration_unit")
+
+            @JsonProperty("duration") @ExcludeMissing fun _duration() = duration
+
+            @JsonProperty("duration_unit") @ExcludeMissing fun _durationUnit() = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): BillingCycleConfiguration = apply {
+                if (!validated) {
+                    duration()
+                    durationUnit()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: JsonField<Long> = JsonMissing.of()
+                private var durationUnit: JsonField<DurationUnit> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                fun duration(duration: Long) = duration(JsonField.of(duration))
+
+                @JsonProperty("duration")
+                @ExcludeMissing
+                fun duration(duration: JsonField<Long>) = apply { this.duration = duration }
+
+                fun durationUnit(durationUnit: DurationUnit) =
+                    durationUnit(JsonField.of(durationUnit))
+
+                @JsonProperty("duration_unit")
+                @ExcludeMissing
+                fun durationUnit(durationUnit: JsonField<DurationUnit>) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        duration,
+                        durationUnit,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
             }
         }
 
@@ -10025,6 +11231,7 @@ private constructor(
         private val modelType: JsonField<ModelType>,
         private val createdAt: JsonField<OffsetDateTime>,
         private val cadence: JsonField<Cadence>,
+        private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val billableMetric: JsonField<BillableMetric>,
         private val fixedPriceQuantity: JsonField<Double>,
         private val planPhaseOrder: JsonField<Long>,
@@ -10066,6 +11273,11 @@ private constructor(
         fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+            Optional.ofNullable(
+                billingCycleConfiguration.getNullable("billing_cycle_configuration")
+            )
 
         fun billableMetric(): Optional<BillableMetric> =
             Optional.ofNullable(billableMetric.getNullable("billable_metric"))
@@ -10121,6 +11333,10 @@ private constructor(
 
         @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
+        @JsonProperty("billing_cycle_configuration")
+        @ExcludeMissing
+        fun _billingCycleConfiguration() = billingCycleConfiguration
+
         @JsonProperty("billable_metric") @ExcludeMissing fun _billableMetric() = billableMetric
 
         @JsonProperty("fixed_price_quantity")
@@ -10165,6 +11381,7 @@ private constructor(
                 modelType()
                 createdAt()
                 cadence()
+                billingCycleConfiguration().map { it.validate() }
                 billableMetric().map { it.validate() }
                 fixedPriceQuantity()
                 planPhaseOrder()
@@ -10198,6 +11415,7 @@ private constructor(
                 this.modelType == other.modelType &&
                 this.createdAt == other.createdAt &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
                 this.billableMetric == other.billableMetric &&
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.planPhaseOrder == other.planPhaseOrder &&
@@ -10226,6 +11444,7 @@ private constructor(
                         modelType,
                         createdAt,
                         cadence,
+                        billingCycleConfiguration,
                         billableMetric,
                         fixedPriceQuantity,
                         planPhaseOrder,
@@ -10246,7 +11465,7 @@ private constructor(
         }
 
         override fun toString() =
-            "BulkBpsPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, bulkBpsConfig=$bulkBpsConfig, additionalProperties=$additionalProperties}"
+            "BulkBpsPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, bulkBpsConfig=$bulkBpsConfig, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -10263,6 +11482,8 @@ private constructor(
             private var modelType: JsonField<ModelType> = JsonMissing.of()
             private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var cadence: JsonField<Cadence> = JsonMissing.of()
+            private var billingCycleConfiguration: JsonField<BillingCycleConfiguration> =
+                JsonMissing.of()
             private var billableMetric: JsonField<BillableMetric> = JsonMissing.of()
             private var fixedPriceQuantity: JsonField<Double> = JsonMissing.of()
             private var planPhaseOrder: JsonField<Long> = JsonMissing.of()
@@ -10288,6 +11509,7 @@ private constructor(
                 this.modelType = bulkBpsPrice.modelType
                 this.createdAt = bulkBpsPrice.createdAt
                 this.cadence = bulkBpsPrice.cadence
+                this.billingCycleConfiguration = bulkBpsPrice.billingCycleConfiguration
                 this.billableMetric = bulkBpsPrice.billableMetric
                 this.fixedPriceQuantity = bulkBpsPrice.fixedPriceQuantity
                 this.planPhaseOrder = bulkBpsPrice.planPhaseOrder
@@ -10366,6 +11588,15 @@ private constructor(
             @JsonProperty("cadence")
             @ExcludeMissing
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                billingCycleConfiguration(JsonField.of(billingCycleConfiguration))
+
+            @JsonProperty("billing_cycle_configuration")
+            @ExcludeMissing
+            fun billingCycleConfiguration(
+                billingCycleConfiguration: JsonField<BillingCycleConfiguration>
+            ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
 
             fun billableMetric(billableMetric: BillableMetric) =
                 billableMetric(JsonField.of(billableMetric))
@@ -10490,6 +11721,7 @@ private constructor(
                     modelType,
                     createdAt,
                     cadence,
+                    billingCycleConfiguration,
                     billableMetric,
                     fixedPriceQuantity,
                     planPhaseOrder,
@@ -10595,6 +11827,181 @@ private constructor(
 
                 fun build(): BillableMetric =
                     BillableMetric(id, additionalProperties.toUnmodifiable())
+            }
+        }
+
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: JsonField<Long>,
+            private val durationUnit: JsonField<DurationUnit>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            fun duration(): Long = duration.getRequired("duration")
+
+            fun durationUnit(): DurationUnit = durationUnit.getRequired("duration_unit")
+
+            @JsonProperty("duration") @ExcludeMissing fun _duration() = duration
+
+            @JsonProperty("duration_unit") @ExcludeMissing fun _durationUnit() = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): BillingCycleConfiguration = apply {
+                if (!validated) {
+                    duration()
+                    durationUnit()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: JsonField<Long> = JsonMissing.of()
+                private var durationUnit: JsonField<DurationUnit> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                fun duration(duration: Long) = duration(JsonField.of(duration))
+
+                @JsonProperty("duration")
+                @ExcludeMissing
+                fun duration(duration: JsonField<Long>) = apply { this.duration = duration }
+
+                fun durationUnit(durationUnit: DurationUnit) =
+                    durationUnit(JsonField.of(durationUnit))
+
+                @JsonProperty("duration_unit")
+                @ExcludeMissing
+                fun durationUnit(durationUnit: JsonField<DurationUnit>) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        duration,
+                        durationUnit,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
             }
         }
 
@@ -11663,6 +13070,7 @@ private constructor(
         private val modelType: JsonField<ModelType>,
         private val createdAt: JsonField<OffsetDateTime>,
         private val cadence: JsonField<Cadence>,
+        private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val billableMetric: JsonField<BillableMetric>,
         private val fixedPriceQuantity: JsonField<Double>,
         private val planPhaseOrder: JsonField<Long>,
@@ -11704,6 +13112,11 @@ private constructor(
         fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+            Optional.ofNullable(
+                billingCycleConfiguration.getNullable("billing_cycle_configuration")
+            )
 
         fun billableMetric(): Optional<BillableMetric> =
             Optional.ofNullable(billableMetric.getNullable("billable_metric"))
@@ -11759,6 +13172,10 @@ private constructor(
 
         @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
+        @JsonProperty("billing_cycle_configuration")
+        @ExcludeMissing
+        fun _billingCycleConfiguration() = billingCycleConfiguration
+
         @JsonProperty("billable_metric") @ExcludeMissing fun _billableMetric() = billableMetric
 
         @JsonProperty("fixed_price_quantity")
@@ -11803,6 +13220,7 @@ private constructor(
                 modelType()
                 createdAt()
                 cadence()
+                billingCycleConfiguration().map { it.validate() }
                 billableMetric().map { it.validate() }
                 fixedPriceQuantity()
                 planPhaseOrder()
@@ -11836,6 +13254,7 @@ private constructor(
                 this.modelType == other.modelType &&
                 this.createdAt == other.createdAt &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
                 this.billableMetric == other.billableMetric &&
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.planPhaseOrder == other.planPhaseOrder &&
@@ -11864,6 +13283,7 @@ private constructor(
                         modelType,
                         createdAt,
                         cadence,
+                        billingCycleConfiguration,
                         billableMetric,
                         fixedPriceQuantity,
                         planPhaseOrder,
@@ -11884,7 +13304,7 @@ private constructor(
         }
 
         override fun toString() =
-            "BulkPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, bulkConfig=$bulkConfig, additionalProperties=$additionalProperties}"
+            "BulkPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, bulkConfig=$bulkConfig, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -11901,6 +13321,8 @@ private constructor(
             private var modelType: JsonField<ModelType> = JsonMissing.of()
             private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var cadence: JsonField<Cadence> = JsonMissing.of()
+            private var billingCycleConfiguration: JsonField<BillingCycleConfiguration> =
+                JsonMissing.of()
             private var billableMetric: JsonField<BillableMetric> = JsonMissing.of()
             private var fixedPriceQuantity: JsonField<Double> = JsonMissing.of()
             private var planPhaseOrder: JsonField<Long> = JsonMissing.of()
@@ -11926,6 +13348,7 @@ private constructor(
                 this.modelType = bulkPrice.modelType
                 this.createdAt = bulkPrice.createdAt
                 this.cadence = bulkPrice.cadence
+                this.billingCycleConfiguration = bulkPrice.billingCycleConfiguration
                 this.billableMetric = bulkPrice.billableMetric
                 this.fixedPriceQuantity = bulkPrice.fixedPriceQuantity
                 this.planPhaseOrder = bulkPrice.planPhaseOrder
@@ -12004,6 +13427,15 @@ private constructor(
             @JsonProperty("cadence")
             @ExcludeMissing
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                billingCycleConfiguration(JsonField.of(billingCycleConfiguration))
+
+            @JsonProperty("billing_cycle_configuration")
+            @ExcludeMissing
+            fun billingCycleConfiguration(
+                billingCycleConfiguration: JsonField<BillingCycleConfiguration>
+            ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
 
             fun billableMetric(billableMetric: BillableMetric) =
                 billableMetric(JsonField.of(billableMetric))
@@ -12127,6 +13559,7 @@ private constructor(
                     modelType,
                     createdAt,
                     cadence,
+                    billingCycleConfiguration,
                     billableMetric,
                     fixedPriceQuantity,
                     planPhaseOrder,
@@ -12232,6 +13665,181 @@ private constructor(
 
                 fun build(): BillableMetric =
                     BillableMetric(id, additionalProperties.toUnmodifiable())
+            }
+        }
+
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: JsonField<Long>,
+            private val durationUnit: JsonField<DurationUnit>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            fun duration(): Long = duration.getRequired("duration")
+
+            fun durationUnit(): DurationUnit = durationUnit.getRequired("duration_unit")
+
+            @JsonProperty("duration") @ExcludeMissing fun _duration() = duration
+
+            @JsonProperty("duration_unit") @ExcludeMissing fun _durationUnit() = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): BillingCycleConfiguration = apply {
+                if (!validated) {
+                    duration()
+                    durationUnit()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: JsonField<Long> = JsonMissing.of()
+                private var durationUnit: JsonField<DurationUnit> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                fun duration(duration: Long) = duration(JsonField.of(duration))
+
+                @JsonProperty("duration")
+                @ExcludeMissing
+                fun duration(duration: JsonField<Long>) = apply { this.duration = duration }
+
+                fun durationUnit(durationUnit: DurationUnit) =
+                    durationUnit(JsonField.of(durationUnit))
+
+                @JsonProperty("duration_unit")
+                @ExcludeMissing
+                fun durationUnit(durationUnit: JsonField<DurationUnit>) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        duration,
+                        durationUnit,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
             }
         }
 
@@ -13263,6 +14871,7 @@ private constructor(
         private val modelType: JsonField<ModelType>,
         private val createdAt: JsonField<OffsetDateTime>,
         private val cadence: JsonField<Cadence>,
+        private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val billableMetric: JsonField<BillableMetric>,
         private val fixedPriceQuantity: JsonField<Double>,
         private val planPhaseOrder: JsonField<Long>,
@@ -13304,6 +14913,11 @@ private constructor(
         fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+            Optional.ofNullable(
+                billingCycleConfiguration.getNullable("billing_cycle_configuration")
+            )
 
         fun billableMetric(): Optional<BillableMetric> =
             Optional.ofNullable(billableMetric.getNullable("billable_metric"))
@@ -13360,6 +14974,10 @@ private constructor(
 
         @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
+        @JsonProperty("billing_cycle_configuration")
+        @ExcludeMissing
+        fun _billingCycleConfiguration() = billingCycleConfiguration
+
         @JsonProperty("billable_metric") @ExcludeMissing fun _billableMetric() = billableMetric
 
         @JsonProperty("fixed_price_quantity")
@@ -13406,6 +15024,7 @@ private constructor(
                 modelType()
                 createdAt()
                 cadence()
+                billingCycleConfiguration().map { it.validate() }
                 billableMetric().map { it.validate() }
                 fixedPriceQuantity()
                 planPhaseOrder()
@@ -13439,6 +15058,7 @@ private constructor(
                 this.modelType == other.modelType &&
                 this.createdAt == other.createdAt &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
                 this.billableMetric == other.billableMetric &&
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.planPhaseOrder == other.planPhaseOrder &&
@@ -13467,6 +15087,7 @@ private constructor(
                         modelType,
                         createdAt,
                         cadence,
+                        billingCycleConfiguration,
                         billableMetric,
                         fixedPriceQuantity,
                         planPhaseOrder,
@@ -13487,7 +15108,7 @@ private constructor(
         }
 
         override fun toString() =
-            "ThresholdTotalAmountPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, thresholdTotalAmountConfig=$thresholdTotalAmountConfig, additionalProperties=$additionalProperties}"
+            "ThresholdTotalAmountPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, thresholdTotalAmountConfig=$thresholdTotalAmountConfig, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -13504,6 +15125,8 @@ private constructor(
             private var modelType: JsonField<ModelType> = JsonMissing.of()
             private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var cadence: JsonField<Cadence> = JsonMissing.of()
+            private var billingCycleConfiguration: JsonField<BillingCycleConfiguration> =
+                JsonMissing.of()
             private var billableMetric: JsonField<BillableMetric> = JsonMissing.of()
             private var fixedPriceQuantity: JsonField<Double> = JsonMissing.of()
             private var planPhaseOrder: JsonField<Long> = JsonMissing.of()
@@ -13530,6 +15153,7 @@ private constructor(
                 this.modelType = thresholdTotalAmountPrice.modelType
                 this.createdAt = thresholdTotalAmountPrice.createdAt
                 this.cadence = thresholdTotalAmountPrice.cadence
+                this.billingCycleConfiguration = thresholdTotalAmountPrice.billingCycleConfiguration
                 this.billableMetric = thresholdTotalAmountPrice.billableMetric
                 this.fixedPriceQuantity = thresholdTotalAmountPrice.fixedPriceQuantity
                 this.planPhaseOrder = thresholdTotalAmountPrice.planPhaseOrder
@@ -13609,6 +15233,15 @@ private constructor(
             @JsonProperty("cadence")
             @ExcludeMissing
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                billingCycleConfiguration(JsonField.of(billingCycleConfiguration))
+
+            @JsonProperty("billing_cycle_configuration")
+            @ExcludeMissing
+            fun billingCycleConfiguration(
+                billingCycleConfiguration: JsonField<BillingCycleConfiguration>
+            ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
 
             fun billableMetric(billableMetric: BillableMetric) =
                 billableMetric(JsonField.of(billableMetric))
@@ -13733,6 +15366,7 @@ private constructor(
                     modelType,
                     createdAt,
                     cadence,
+                    billingCycleConfiguration,
                     billableMetric,
                     fixedPriceQuantity,
                     planPhaseOrder,
@@ -13838,6 +15472,181 @@ private constructor(
 
                 fun build(): BillableMetric =
                     BillableMetric(id, additionalProperties.toUnmodifiable())
+            }
+        }
+
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: JsonField<Long>,
+            private val durationUnit: JsonField<DurationUnit>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            fun duration(): Long = duration.getRequired("duration")
+
+            fun durationUnit(): DurationUnit = durationUnit.getRequired("duration_unit")
+
+            @JsonProperty("duration") @ExcludeMissing fun _duration() = duration
+
+            @JsonProperty("duration_unit") @ExcludeMissing fun _durationUnit() = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): BillingCycleConfiguration = apply {
+                if (!validated) {
+                    duration()
+                    durationUnit()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: JsonField<Long> = JsonMissing.of()
+                private var durationUnit: JsonField<DurationUnit> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                fun duration(duration: Long) = duration(JsonField.of(duration))
+
+                @JsonProperty("duration")
+                @ExcludeMissing
+                fun duration(duration: JsonField<Long>) = apply { this.duration = duration }
+
+                fun durationUnit(durationUnit: DurationUnit) =
+                    durationUnit(JsonField.of(durationUnit))
+
+                @JsonProperty("duration_unit")
+                @ExcludeMissing
+                fun durationUnit(durationUnit: JsonField<DurationUnit>) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        duration,
+                        durationUnit,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
             }
         }
 
@@ -14719,6 +16528,7 @@ private constructor(
         private val modelType: JsonField<ModelType>,
         private val createdAt: JsonField<OffsetDateTime>,
         private val cadence: JsonField<Cadence>,
+        private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val billableMetric: JsonField<BillableMetric>,
         private val fixedPriceQuantity: JsonField<Double>,
         private val planPhaseOrder: JsonField<Long>,
@@ -14760,6 +16570,11 @@ private constructor(
         fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+            Optional.ofNullable(
+                billingCycleConfiguration.getNullable("billing_cycle_configuration")
+            )
 
         fun billableMetric(): Optional<BillableMetric> =
             Optional.ofNullable(billableMetric.getNullable("billable_metric"))
@@ -14816,6 +16631,10 @@ private constructor(
 
         @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
+        @JsonProperty("billing_cycle_configuration")
+        @ExcludeMissing
+        fun _billingCycleConfiguration() = billingCycleConfiguration
+
         @JsonProperty("billable_metric") @ExcludeMissing fun _billableMetric() = billableMetric
 
         @JsonProperty("fixed_price_quantity")
@@ -14862,6 +16681,7 @@ private constructor(
                 modelType()
                 createdAt()
                 cadence()
+                billingCycleConfiguration().map { it.validate() }
                 billableMetric().map { it.validate() }
                 fixedPriceQuantity()
                 planPhaseOrder()
@@ -14895,6 +16715,7 @@ private constructor(
                 this.modelType == other.modelType &&
                 this.createdAt == other.createdAt &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
                 this.billableMetric == other.billableMetric &&
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.planPhaseOrder == other.planPhaseOrder &&
@@ -14923,6 +16744,7 @@ private constructor(
                         modelType,
                         createdAt,
                         cadence,
+                        billingCycleConfiguration,
                         billableMetric,
                         fixedPriceQuantity,
                         planPhaseOrder,
@@ -14943,7 +16765,7 @@ private constructor(
         }
 
         override fun toString() =
-            "TieredPackagePrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, tieredPackageConfig=$tieredPackageConfig, additionalProperties=$additionalProperties}"
+            "TieredPackagePrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, tieredPackageConfig=$tieredPackageConfig, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -14960,6 +16782,8 @@ private constructor(
             private var modelType: JsonField<ModelType> = JsonMissing.of()
             private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var cadence: JsonField<Cadence> = JsonMissing.of()
+            private var billingCycleConfiguration: JsonField<BillingCycleConfiguration> =
+                JsonMissing.of()
             private var billableMetric: JsonField<BillableMetric> = JsonMissing.of()
             private var fixedPriceQuantity: JsonField<Double> = JsonMissing.of()
             private var planPhaseOrder: JsonField<Long> = JsonMissing.of()
@@ -14985,6 +16809,7 @@ private constructor(
                 this.modelType = tieredPackagePrice.modelType
                 this.createdAt = tieredPackagePrice.createdAt
                 this.cadence = tieredPackagePrice.cadence
+                this.billingCycleConfiguration = tieredPackagePrice.billingCycleConfiguration
                 this.billableMetric = tieredPackagePrice.billableMetric
                 this.fixedPriceQuantity = tieredPackagePrice.fixedPriceQuantity
                 this.planPhaseOrder = tieredPackagePrice.planPhaseOrder
@@ -15063,6 +16888,15 @@ private constructor(
             @JsonProperty("cadence")
             @ExcludeMissing
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                billingCycleConfiguration(JsonField.of(billingCycleConfiguration))
+
+            @JsonProperty("billing_cycle_configuration")
+            @ExcludeMissing
+            fun billingCycleConfiguration(
+                billingCycleConfiguration: JsonField<BillingCycleConfiguration>
+            ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
 
             fun billableMetric(billableMetric: BillableMetric) =
                 billableMetric(JsonField.of(billableMetric))
@@ -15187,6 +17021,7 @@ private constructor(
                     modelType,
                     createdAt,
                     cadence,
+                    billingCycleConfiguration,
                     billableMetric,
                     fixedPriceQuantity,
                     planPhaseOrder,
@@ -15292,6 +17127,181 @@ private constructor(
 
                 fun build(): BillableMetric =
                     BillableMetric(id, additionalProperties.toUnmodifiable())
+            }
+        }
+
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: JsonField<Long>,
+            private val durationUnit: JsonField<DurationUnit>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            fun duration(): Long = duration.getRequired("duration")
+
+            fun durationUnit(): DurationUnit = durationUnit.getRequired("duration_unit")
+
+            @JsonProperty("duration") @ExcludeMissing fun _duration() = duration
+
+            @JsonProperty("duration_unit") @ExcludeMissing fun _durationUnit() = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): BillingCycleConfiguration = apply {
+                if (!validated) {
+                    duration()
+                    durationUnit()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: JsonField<Long> = JsonMissing.of()
+                private var durationUnit: JsonField<DurationUnit> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                fun duration(duration: Long) = duration(JsonField.of(duration))
+
+                @JsonProperty("duration")
+                @ExcludeMissing
+                fun duration(duration: JsonField<Long>) = apply { this.duration = duration }
+
+                fun durationUnit(durationUnit: DurationUnit) =
+                    durationUnit(JsonField.of(durationUnit))
+
+                @JsonProperty("duration_unit")
+                @ExcludeMissing
+                fun durationUnit(durationUnit: JsonField<DurationUnit>) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        duration,
+                        durationUnit,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
             }
         }
 
@@ -16172,6 +18182,7 @@ private constructor(
         private val modelType: JsonField<ModelType>,
         private val createdAt: JsonField<OffsetDateTime>,
         private val cadence: JsonField<Cadence>,
+        private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val billableMetric: JsonField<BillableMetric>,
         private val fixedPriceQuantity: JsonField<Double>,
         private val planPhaseOrder: JsonField<Long>,
@@ -16213,6 +18224,11 @@ private constructor(
         fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+            Optional.ofNullable(
+                billingCycleConfiguration.getNullable("billing_cycle_configuration")
+            )
 
         fun billableMetric(): Optional<BillableMetric> =
             Optional.ofNullable(billableMetric.getNullable("billable_metric"))
@@ -16269,6 +18285,10 @@ private constructor(
 
         @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
+        @JsonProperty("billing_cycle_configuration")
+        @ExcludeMissing
+        fun _billingCycleConfiguration() = billingCycleConfiguration
+
         @JsonProperty("billable_metric") @ExcludeMissing fun _billableMetric() = billableMetric
 
         @JsonProperty("fixed_price_quantity")
@@ -16315,6 +18335,7 @@ private constructor(
                 modelType()
                 createdAt()
                 cadence()
+                billingCycleConfiguration().map { it.validate() }
                 billableMetric().map { it.validate() }
                 fixedPriceQuantity()
                 planPhaseOrder()
@@ -16348,6 +18369,7 @@ private constructor(
                 this.modelType == other.modelType &&
                 this.createdAt == other.createdAt &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
                 this.billableMetric == other.billableMetric &&
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.planPhaseOrder == other.planPhaseOrder &&
@@ -16376,6 +18398,7 @@ private constructor(
                         modelType,
                         createdAt,
                         cadence,
+                        billingCycleConfiguration,
                         billableMetric,
                         fixedPriceQuantity,
                         planPhaseOrder,
@@ -16396,7 +18419,7 @@ private constructor(
         }
 
         override fun toString() =
-            "GroupedTieredPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, groupedTieredConfig=$groupedTieredConfig, additionalProperties=$additionalProperties}"
+            "GroupedTieredPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, groupedTieredConfig=$groupedTieredConfig, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -16413,6 +18436,8 @@ private constructor(
             private var modelType: JsonField<ModelType> = JsonMissing.of()
             private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var cadence: JsonField<Cadence> = JsonMissing.of()
+            private var billingCycleConfiguration: JsonField<BillingCycleConfiguration> =
+                JsonMissing.of()
             private var billableMetric: JsonField<BillableMetric> = JsonMissing.of()
             private var fixedPriceQuantity: JsonField<Double> = JsonMissing.of()
             private var planPhaseOrder: JsonField<Long> = JsonMissing.of()
@@ -16438,6 +18463,7 @@ private constructor(
                 this.modelType = groupedTieredPrice.modelType
                 this.createdAt = groupedTieredPrice.createdAt
                 this.cadence = groupedTieredPrice.cadence
+                this.billingCycleConfiguration = groupedTieredPrice.billingCycleConfiguration
                 this.billableMetric = groupedTieredPrice.billableMetric
                 this.fixedPriceQuantity = groupedTieredPrice.fixedPriceQuantity
                 this.planPhaseOrder = groupedTieredPrice.planPhaseOrder
@@ -16516,6 +18542,15 @@ private constructor(
             @JsonProperty("cadence")
             @ExcludeMissing
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                billingCycleConfiguration(JsonField.of(billingCycleConfiguration))
+
+            @JsonProperty("billing_cycle_configuration")
+            @ExcludeMissing
+            fun billingCycleConfiguration(
+                billingCycleConfiguration: JsonField<BillingCycleConfiguration>
+            ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
 
             fun billableMetric(billableMetric: BillableMetric) =
                 billableMetric(JsonField.of(billableMetric))
@@ -16640,6 +18675,7 @@ private constructor(
                     modelType,
                     createdAt,
                     cadence,
+                    billingCycleConfiguration,
                     billableMetric,
                     fixedPriceQuantity,
                     planPhaseOrder,
@@ -16745,6 +18781,181 @@ private constructor(
 
                 fun build(): BillableMetric =
                     BillableMetric(id, additionalProperties.toUnmodifiable())
+            }
+        }
+
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: JsonField<Long>,
+            private val durationUnit: JsonField<DurationUnit>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            fun duration(): Long = duration.getRequired("duration")
+
+            fun durationUnit(): DurationUnit = durationUnit.getRequired("duration_unit")
+
+            @JsonProperty("duration") @ExcludeMissing fun _duration() = duration
+
+            @JsonProperty("duration_unit") @ExcludeMissing fun _durationUnit() = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): BillingCycleConfiguration = apply {
+                if (!validated) {
+                    duration()
+                    durationUnit()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: JsonField<Long> = JsonMissing.of()
+                private var durationUnit: JsonField<DurationUnit> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                fun duration(duration: Long) = duration(JsonField.of(duration))
+
+                @JsonProperty("duration")
+                @ExcludeMissing
+                fun duration(duration: JsonField<Long>) = apply { this.duration = duration }
+
+                fun durationUnit(durationUnit: DurationUnit) =
+                    durationUnit(JsonField.of(durationUnit))
+
+                @JsonProperty("duration_unit")
+                @ExcludeMissing
+                fun durationUnit(durationUnit: JsonField<DurationUnit>) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        duration,
+                        durationUnit,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
             }
         }
 
@@ -17625,6 +19836,7 @@ private constructor(
         private val modelType: JsonField<ModelType>,
         private val createdAt: JsonField<OffsetDateTime>,
         private val cadence: JsonField<Cadence>,
+        private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val billableMetric: JsonField<BillableMetric>,
         private val fixedPriceQuantity: JsonField<Double>,
         private val planPhaseOrder: JsonField<Long>,
@@ -17666,6 +19878,11 @@ private constructor(
         fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+            Optional.ofNullable(
+                billingCycleConfiguration.getNullable("billing_cycle_configuration")
+            )
 
         fun billableMetric(): Optional<BillableMetric> =
             Optional.ofNullable(billableMetric.getNullable("billable_metric"))
@@ -17722,6 +19939,10 @@ private constructor(
 
         @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
+        @JsonProperty("billing_cycle_configuration")
+        @ExcludeMissing
+        fun _billingCycleConfiguration() = billingCycleConfiguration
+
         @JsonProperty("billable_metric") @ExcludeMissing fun _billableMetric() = billableMetric
 
         @JsonProperty("fixed_price_quantity")
@@ -17768,6 +19989,7 @@ private constructor(
                 modelType()
                 createdAt()
                 cadence()
+                billingCycleConfiguration().map { it.validate() }
                 billableMetric().map { it.validate() }
                 fixedPriceQuantity()
                 planPhaseOrder()
@@ -17801,6 +20023,7 @@ private constructor(
                 this.modelType == other.modelType &&
                 this.createdAt == other.createdAt &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
                 this.billableMetric == other.billableMetric &&
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.planPhaseOrder == other.planPhaseOrder &&
@@ -17829,6 +20052,7 @@ private constructor(
                         modelType,
                         createdAt,
                         cadence,
+                        billingCycleConfiguration,
                         billableMetric,
                         fixedPriceQuantity,
                         planPhaseOrder,
@@ -17849,7 +20073,7 @@ private constructor(
         }
 
         override fun toString() =
-            "TieredWithMinimumPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, tieredWithMinimumConfig=$tieredWithMinimumConfig, additionalProperties=$additionalProperties}"
+            "TieredWithMinimumPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, tieredWithMinimumConfig=$tieredWithMinimumConfig, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -17866,6 +20090,8 @@ private constructor(
             private var modelType: JsonField<ModelType> = JsonMissing.of()
             private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var cadence: JsonField<Cadence> = JsonMissing.of()
+            private var billingCycleConfiguration: JsonField<BillingCycleConfiguration> =
+                JsonMissing.of()
             private var billableMetric: JsonField<BillableMetric> = JsonMissing.of()
             private var fixedPriceQuantity: JsonField<Double> = JsonMissing.of()
             private var planPhaseOrder: JsonField<Long> = JsonMissing.of()
@@ -17892,6 +20118,7 @@ private constructor(
                 this.modelType = tieredWithMinimumPrice.modelType
                 this.createdAt = tieredWithMinimumPrice.createdAt
                 this.cadence = tieredWithMinimumPrice.cadence
+                this.billingCycleConfiguration = tieredWithMinimumPrice.billingCycleConfiguration
                 this.billableMetric = tieredWithMinimumPrice.billableMetric
                 this.fixedPriceQuantity = tieredWithMinimumPrice.fixedPriceQuantity
                 this.planPhaseOrder = tieredWithMinimumPrice.planPhaseOrder
@@ -17970,6 +20197,15 @@ private constructor(
             @JsonProperty("cadence")
             @ExcludeMissing
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                billingCycleConfiguration(JsonField.of(billingCycleConfiguration))
+
+            @JsonProperty("billing_cycle_configuration")
+            @ExcludeMissing
+            fun billingCycleConfiguration(
+                billingCycleConfiguration: JsonField<BillingCycleConfiguration>
+            ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
 
             fun billableMetric(billableMetric: BillableMetric) =
                 billableMetric(JsonField.of(billableMetric))
@@ -18094,6 +20330,7 @@ private constructor(
                     modelType,
                     createdAt,
                     cadence,
+                    billingCycleConfiguration,
                     billableMetric,
                     fixedPriceQuantity,
                     planPhaseOrder,
@@ -18199,6 +20436,181 @@ private constructor(
 
                 fun build(): BillableMetric =
                     BillableMetric(id, additionalProperties.toUnmodifiable())
+            }
+        }
+
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: JsonField<Long>,
+            private val durationUnit: JsonField<DurationUnit>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            fun duration(): Long = duration.getRequired("duration")
+
+            fun durationUnit(): DurationUnit = durationUnit.getRequired("duration_unit")
+
+            @JsonProperty("duration") @ExcludeMissing fun _duration() = duration
+
+            @JsonProperty("duration_unit") @ExcludeMissing fun _durationUnit() = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): BillingCycleConfiguration = apply {
+                if (!validated) {
+                    duration()
+                    durationUnit()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: JsonField<Long> = JsonMissing.of()
+                private var durationUnit: JsonField<DurationUnit> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                fun duration(duration: Long) = duration(JsonField.of(duration))
+
+                @JsonProperty("duration")
+                @ExcludeMissing
+                fun duration(duration: JsonField<Long>) = apply { this.duration = duration }
+
+                fun durationUnit(durationUnit: DurationUnit) =
+                    durationUnit(JsonField.of(durationUnit))
+
+                @JsonProperty("duration_unit")
+                @ExcludeMissing
+                fun durationUnit(durationUnit: JsonField<DurationUnit>) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        duration,
+                        durationUnit,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
             }
         }
 
@@ -19079,6 +21491,7 @@ private constructor(
         private val modelType: JsonField<ModelType>,
         private val createdAt: JsonField<OffsetDateTime>,
         private val cadence: JsonField<Cadence>,
+        private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val billableMetric: JsonField<BillableMetric>,
         private val fixedPriceQuantity: JsonField<Double>,
         private val planPhaseOrder: JsonField<Long>,
@@ -19120,6 +21533,11 @@ private constructor(
         fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+            Optional.ofNullable(
+                billingCycleConfiguration.getNullable("billing_cycle_configuration")
+            )
 
         fun billableMetric(): Optional<BillableMetric> =
             Optional.ofNullable(billableMetric.getNullable("billable_metric"))
@@ -19176,6 +21594,10 @@ private constructor(
 
         @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
+        @JsonProperty("billing_cycle_configuration")
+        @ExcludeMissing
+        fun _billingCycleConfiguration() = billingCycleConfiguration
+
         @JsonProperty("billable_metric") @ExcludeMissing fun _billableMetric() = billableMetric
 
         @JsonProperty("fixed_price_quantity")
@@ -19222,6 +21644,7 @@ private constructor(
                 modelType()
                 createdAt()
                 cadence()
+                billingCycleConfiguration().map { it.validate() }
                 billableMetric().map { it.validate() }
                 fixedPriceQuantity()
                 planPhaseOrder()
@@ -19255,6 +21678,7 @@ private constructor(
                 this.modelType == other.modelType &&
                 this.createdAt == other.createdAt &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
                 this.billableMetric == other.billableMetric &&
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.planPhaseOrder == other.planPhaseOrder &&
@@ -19283,6 +21707,7 @@ private constructor(
                         modelType,
                         createdAt,
                         cadence,
+                        billingCycleConfiguration,
                         billableMetric,
                         fixedPriceQuantity,
                         planPhaseOrder,
@@ -19303,7 +21728,7 @@ private constructor(
         }
 
         override fun toString() =
-            "TieredPackageWithMinimumPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, tieredPackageWithMinimumConfig=$tieredPackageWithMinimumConfig, additionalProperties=$additionalProperties}"
+            "TieredPackageWithMinimumPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, tieredPackageWithMinimumConfig=$tieredPackageWithMinimumConfig, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -19320,6 +21745,8 @@ private constructor(
             private var modelType: JsonField<ModelType> = JsonMissing.of()
             private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var cadence: JsonField<Cadence> = JsonMissing.of()
+            private var billingCycleConfiguration: JsonField<BillingCycleConfiguration> =
+                JsonMissing.of()
             private var billableMetric: JsonField<BillableMetric> = JsonMissing.of()
             private var fixedPriceQuantity: JsonField<Double> = JsonMissing.of()
             private var planPhaseOrder: JsonField<Long> = JsonMissing.of()
@@ -19347,6 +21774,8 @@ private constructor(
                     this.modelType = tieredPackageWithMinimumPrice.modelType
                     this.createdAt = tieredPackageWithMinimumPrice.createdAt
                     this.cadence = tieredPackageWithMinimumPrice.cadence
+                    this.billingCycleConfiguration =
+                        tieredPackageWithMinimumPrice.billingCycleConfiguration
                     this.billableMetric = tieredPackageWithMinimumPrice.billableMetric
                     this.fixedPriceQuantity = tieredPackageWithMinimumPrice.fixedPriceQuantity
                     this.planPhaseOrder = tieredPackageWithMinimumPrice.planPhaseOrder
@@ -19426,6 +21855,15 @@ private constructor(
             @JsonProperty("cadence")
             @ExcludeMissing
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                billingCycleConfiguration(JsonField.of(billingCycleConfiguration))
+
+            @JsonProperty("billing_cycle_configuration")
+            @ExcludeMissing
+            fun billingCycleConfiguration(
+                billingCycleConfiguration: JsonField<BillingCycleConfiguration>
+            ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
 
             fun billableMetric(billableMetric: BillableMetric) =
                 billableMetric(JsonField.of(billableMetric))
@@ -19551,6 +21989,7 @@ private constructor(
                     modelType,
                     createdAt,
                     cadence,
+                    billingCycleConfiguration,
                     billableMetric,
                     fixedPriceQuantity,
                     planPhaseOrder,
@@ -19656,6 +22095,181 @@ private constructor(
 
                 fun build(): BillableMetric =
                     BillableMetric(id, additionalProperties.toUnmodifiable())
+            }
+        }
+
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: JsonField<Long>,
+            private val durationUnit: JsonField<DurationUnit>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            fun duration(): Long = duration.getRequired("duration")
+
+            fun durationUnit(): DurationUnit = durationUnit.getRequired("duration_unit")
+
+            @JsonProperty("duration") @ExcludeMissing fun _duration() = duration
+
+            @JsonProperty("duration_unit") @ExcludeMissing fun _durationUnit() = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): BillingCycleConfiguration = apply {
+                if (!validated) {
+                    duration()
+                    durationUnit()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: JsonField<Long> = JsonMissing.of()
+                private var durationUnit: JsonField<DurationUnit> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                fun duration(duration: Long) = duration(JsonField.of(duration))
+
+                @JsonProperty("duration")
+                @ExcludeMissing
+                fun duration(duration: JsonField<Long>) = apply { this.duration = duration }
+
+                fun durationUnit(durationUnit: DurationUnit) =
+                    durationUnit(JsonField.of(durationUnit))
+
+                @JsonProperty("duration_unit")
+                @ExcludeMissing
+                fun durationUnit(durationUnit: JsonField<DurationUnit>) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        duration,
+                        durationUnit,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
             }
         }
 
@@ -20539,6 +23153,7 @@ private constructor(
         private val modelType: JsonField<ModelType>,
         private val createdAt: JsonField<OffsetDateTime>,
         private val cadence: JsonField<Cadence>,
+        private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val billableMetric: JsonField<BillableMetric>,
         private val fixedPriceQuantity: JsonField<Double>,
         private val planPhaseOrder: JsonField<Long>,
@@ -20580,6 +23195,11 @@ private constructor(
         fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+            Optional.ofNullable(
+                billingCycleConfiguration.getNullable("billing_cycle_configuration")
+            )
 
         fun billableMetric(): Optional<BillableMetric> =
             Optional.ofNullable(billableMetric.getNullable("billable_metric"))
@@ -20636,6 +23256,10 @@ private constructor(
 
         @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
+        @JsonProperty("billing_cycle_configuration")
+        @ExcludeMissing
+        fun _billingCycleConfiguration() = billingCycleConfiguration
+
         @JsonProperty("billable_metric") @ExcludeMissing fun _billableMetric() = billableMetric
 
         @JsonProperty("fixed_price_quantity")
@@ -20682,6 +23306,7 @@ private constructor(
                 modelType()
                 createdAt()
                 cadence()
+                billingCycleConfiguration().map { it.validate() }
                 billableMetric().map { it.validate() }
                 fixedPriceQuantity()
                 planPhaseOrder()
@@ -20715,6 +23340,7 @@ private constructor(
                 this.modelType == other.modelType &&
                 this.createdAt == other.createdAt &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
                 this.billableMetric == other.billableMetric &&
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.planPhaseOrder == other.planPhaseOrder &&
@@ -20743,6 +23369,7 @@ private constructor(
                         modelType,
                         createdAt,
                         cadence,
+                        billingCycleConfiguration,
                         billableMetric,
                         fixedPriceQuantity,
                         planPhaseOrder,
@@ -20763,7 +23390,7 @@ private constructor(
         }
 
         override fun toString() =
-            "PackageWithAllocationPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, packageWithAllocationConfig=$packageWithAllocationConfig, additionalProperties=$additionalProperties}"
+            "PackageWithAllocationPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, packageWithAllocationConfig=$packageWithAllocationConfig, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -20780,6 +23407,8 @@ private constructor(
             private var modelType: JsonField<ModelType> = JsonMissing.of()
             private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var cadence: JsonField<Cadence> = JsonMissing.of()
+            private var billingCycleConfiguration: JsonField<BillingCycleConfiguration> =
+                JsonMissing.of()
             private var billableMetric: JsonField<BillableMetric> = JsonMissing.of()
             private var fixedPriceQuantity: JsonField<Double> = JsonMissing.of()
             private var planPhaseOrder: JsonField<Long> = JsonMissing.of()
@@ -20806,6 +23435,8 @@ private constructor(
                 this.modelType = packageWithAllocationPrice.modelType
                 this.createdAt = packageWithAllocationPrice.createdAt
                 this.cadence = packageWithAllocationPrice.cadence
+                this.billingCycleConfiguration =
+                    packageWithAllocationPrice.billingCycleConfiguration
                 this.billableMetric = packageWithAllocationPrice.billableMetric
                 this.fixedPriceQuantity = packageWithAllocationPrice.fixedPriceQuantity
                 this.planPhaseOrder = packageWithAllocationPrice.planPhaseOrder
@@ -20885,6 +23516,15 @@ private constructor(
             @JsonProperty("cadence")
             @ExcludeMissing
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                billingCycleConfiguration(JsonField.of(billingCycleConfiguration))
+
+            @JsonProperty("billing_cycle_configuration")
+            @ExcludeMissing
+            fun billingCycleConfiguration(
+                billingCycleConfiguration: JsonField<BillingCycleConfiguration>
+            ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
 
             fun billableMetric(billableMetric: BillableMetric) =
                 billableMetric(JsonField.of(billableMetric))
@@ -21010,6 +23650,7 @@ private constructor(
                     modelType,
                     createdAt,
                     cadence,
+                    billingCycleConfiguration,
                     billableMetric,
                     fixedPriceQuantity,
                     planPhaseOrder,
@@ -21115,6 +23756,181 @@ private constructor(
 
                 fun build(): BillableMetric =
                     BillableMetric(id, additionalProperties.toUnmodifiable())
+            }
+        }
+
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: JsonField<Long>,
+            private val durationUnit: JsonField<DurationUnit>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            fun duration(): Long = duration.getRequired("duration")
+
+            fun durationUnit(): DurationUnit = durationUnit.getRequired("duration_unit")
+
+            @JsonProperty("duration") @ExcludeMissing fun _duration() = duration
+
+            @JsonProperty("duration_unit") @ExcludeMissing fun _durationUnit() = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): BillingCycleConfiguration = apply {
+                if (!validated) {
+                    duration()
+                    durationUnit()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: JsonField<Long> = JsonMissing.of()
+                private var durationUnit: JsonField<DurationUnit> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                fun duration(duration: Long) = duration(JsonField.of(duration))
+
+                @JsonProperty("duration")
+                @ExcludeMissing
+                fun duration(duration: JsonField<Long>) = apply { this.duration = duration }
+
+                fun durationUnit(durationUnit: DurationUnit) =
+                    durationUnit(JsonField.of(durationUnit))
+
+                @JsonProperty("duration_unit")
+                @ExcludeMissing
+                fun durationUnit(durationUnit: JsonField<DurationUnit>) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        duration,
+                        durationUnit,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
             }
         }
 
@@ -21997,6 +24813,7 @@ private constructor(
         private val modelType: JsonField<ModelType>,
         private val createdAt: JsonField<OffsetDateTime>,
         private val cadence: JsonField<Cadence>,
+        private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val billableMetric: JsonField<BillableMetric>,
         private val fixedPriceQuantity: JsonField<Double>,
         private val planPhaseOrder: JsonField<Long>,
@@ -22038,6 +24855,11 @@ private constructor(
         fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+            Optional.ofNullable(
+                billingCycleConfiguration.getNullable("billing_cycle_configuration")
+            )
 
         fun billableMetric(): Optional<BillableMetric> =
             Optional.ofNullable(billableMetric.getNullable("billable_metric"))
@@ -22094,6 +24916,10 @@ private constructor(
 
         @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
+        @JsonProperty("billing_cycle_configuration")
+        @ExcludeMissing
+        fun _billingCycleConfiguration() = billingCycleConfiguration
+
         @JsonProperty("billable_metric") @ExcludeMissing fun _billableMetric() = billableMetric
 
         @JsonProperty("fixed_price_quantity")
@@ -22140,6 +24966,7 @@ private constructor(
                 modelType()
                 createdAt()
                 cadence()
+                billingCycleConfiguration().map { it.validate() }
                 billableMetric().map { it.validate() }
                 fixedPriceQuantity()
                 planPhaseOrder()
@@ -22173,6 +25000,7 @@ private constructor(
                 this.modelType == other.modelType &&
                 this.createdAt == other.createdAt &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
                 this.billableMetric == other.billableMetric &&
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.planPhaseOrder == other.planPhaseOrder &&
@@ -22201,6 +25029,7 @@ private constructor(
                         modelType,
                         createdAt,
                         cadence,
+                        billingCycleConfiguration,
                         billableMetric,
                         fixedPriceQuantity,
                         planPhaseOrder,
@@ -22221,7 +25050,7 @@ private constructor(
         }
 
         override fun toString() =
-            "UnitWithPercentPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, unitWithPercentConfig=$unitWithPercentConfig, additionalProperties=$additionalProperties}"
+            "UnitWithPercentPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, unitWithPercentConfig=$unitWithPercentConfig, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -22238,6 +25067,8 @@ private constructor(
             private var modelType: JsonField<ModelType> = JsonMissing.of()
             private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var cadence: JsonField<Cadence> = JsonMissing.of()
+            private var billingCycleConfiguration: JsonField<BillingCycleConfiguration> =
+                JsonMissing.of()
             private var billableMetric: JsonField<BillableMetric> = JsonMissing.of()
             private var fixedPriceQuantity: JsonField<Double> = JsonMissing.of()
             private var planPhaseOrder: JsonField<Long> = JsonMissing.of()
@@ -22263,6 +25094,7 @@ private constructor(
                 this.modelType = unitWithPercentPrice.modelType
                 this.createdAt = unitWithPercentPrice.createdAt
                 this.cadence = unitWithPercentPrice.cadence
+                this.billingCycleConfiguration = unitWithPercentPrice.billingCycleConfiguration
                 this.billableMetric = unitWithPercentPrice.billableMetric
                 this.fixedPriceQuantity = unitWithPercentPrice.fixedPriceQuantity
                 this.planPhaseOrder = unitWithPercentPrice.planPhaseOrder
@@ -22341,6 +25173,15 @@ private constructor(
             @JsonProperty("cadence")
             @ExcludeMissing
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                billingCycleConfiguration(JsonField.of(billingCycleConfiguration))
+
+            @JsonProperty("billing_cycle_configuration")
+            @ExcludeMissing
+            fun billingCycleConfiguration(
+                billingCycleConfiguration: JsonField<BillingCycleConfiguration>
+            ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
 
             fun billableMetric(billableMetric: BillableMetric) =
                 billableMetric(JsonField.of(billableMetric))
@@ -22466,6 +25307,7 @@ private constructor(
                     modelType,
                     createdAt,
                     cadence,
+                    billingCycleConfiguration,
                     billableMetric,
                     fixedPriceQuantity,
                     planPhaseOrder,
@@ -22571,6 +25413,181 @@ private constructor(
 
                 fun build(): BillableMetric =
                     BillableMetric(id, additionalProperties.toUnmodifiable())
+            }
+        }
+
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: JsonField<Long>,
+            private val durationUnit: JsonField<DurationUnit>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            fun duration(): Long = duration.getRequired("duration")
+
+            fun durationUnit(): DurationUnit = durationUnit.getRequired("duration_unit")
+
+            @JsonProperty("duration") @ExcludeMissing fun _duration() = duration
+
+            @JsonProperty("duration_unit") @ExcludeMissing fun _durationUnit() = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): BillingCycleConfiguration = apply {
+                if (!validated) {
+                    duration()
+                    durationUnit()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: JsonField<Long> = JsonMissing.of()
+                private var durationUnit: JsonField<DurationUnit> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                fun duration(duration: Long) = duration(JsonField.of(duration))
+
+                @JsonProperty("duration")
+                @ExcludeMissing
+                fun duration(duration: JsonField<Long>) = apply { this.duration = duration }
+
+                fun durationUnit(durationUnit: DurationUnit) =
+                    durationUnit(JsonField.of(durationUnit))
+
+                @JsonProperty("duration_unit")
+                @ExcludeMissing
+                fun durationUnit(durationUnit: JsonField<DurationUnit>) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        duration,
+                        durationUnit,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
             }
         }
 
@@ -23451,6 +26468,7 @@ private constructor(
         private val modelType: JsonField<ModelType>,
         private val createdAt: JsonField<OffsetDateTime>,
         private val cadence: JsonField<Cadence>,
+        private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val billableMetric: JsonField<BillableMetric>,
         private val fixedPriceQuantity: JsonField<Double>,
         private val planPhaseOrder: JsonField<Long>,
@@ -23492,6 +26510,11 @@ private constructor(
         fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+            Optional.ofNullable(
+                billingCycleConfiguration.getNullable("billing_cycle_configuration")
+            )
 
         fun billableMetric(): Optional<BillableMetric> =
             Optional.ofNullable(billableMetric.getNullable("billable_metric"))
@@ -23548,6 +26571,10 @@ private constructor(
 
         @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
+        @JsonProperty("billing_cycle_configuration")
+        @ExcludeMissing
+        fun _billingCycleConfiguration() = billingCycleConfiguration
+
         @JsonProperty("billable_metric") @ExcludeMissing fun _billableMetric() = billableMetric
 
         @JsonProperty("fixed_price_quantity")
@@ -23594,6 +26621,7 @@ private constructor(
                 modelType()
                 createdAt()
                 cadence()
+                billingCycleConfiguration().map { it.validate() }
                 billableMetric().map { it.validate() }
                 fixedPriceQuantity()
                 planPhaseOrder()
@@ -23627,6 +26655,7 @@ private constructor(
                 this.modelType == other.modelType &&
                 this.createdAt == other.createdAt &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
                 this.billableMetric == other.billableMetric &&
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.planPhaseOrder == other.planPhaseOrder &&
@@ -23655,6 +26684,7 @@ private constructor(
                         modelType,
                         createdAt,
                         cadence,
+                        billingCycleConfiguration,
                         billableMetric,
                         fixedPriceQuantity,
                         planPhaseOrder,
@@ -23675,7 +26705,7 @@ private constructor(
         }
 
         override fun toString() =
-            "MatrixWithAllocationPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, matrixWithAllocationConfig=$matrixWithAllocationConfig, additionalProperties=$additionalProperties}"
+            "MatrixWithAllocationPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, matrixWithAllocationConfig=$matrixWithAllocationConfig, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -23692,6 +26722,8 @@ private constructor(
             private var modelType: JsonField<ModelType> = JsonMissing.of()
             private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var cadence: JsonField<Cadence> = JsonMissing.of()
+            private var billingCycleConfiguration: JsonField<BillingCycleConfiguration> =
+                JsonMissing.of()
             private var billableMetric: JsonField<BillableMetric> = JsonMissing.of()
             private var fixedPriceQuantity: JsonField<Double> = JsonMissing.of()
             private var planPhaseOrder: JsonField<Long> = JsonMissing.of()
@@ -23718,6 +26750,7 @@ private constructor(
                 this.modelType = matrixWithAllocationPrice.modelType
                 this.createdAt = matrixWithAllocationPrice.createdAt
                 this.cadence = matrixWithAllocationPrice.cadence
+                this.billingCycleConfiguration = matrixWithAllocationPrice.billingCycleConfiguration
                 this.billableMetric = matrixWithAllocationPrice.billableMetric
                 this.fixedPriceQuantity = matrixWithAllocationPrice.fixedPriceQuantity
                 this.planPhaseOrder = matrixWithAllocationPrice.planPhaseOrder
@@ -23797,6 +26830,15 @@ private constructor(
             @JsonProperty("cadence")
             @ExcludeMissing
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                billingCycleConfiguration(JsonField.of(billingCycleConfiguration))
+
+            @JsonProperty("billing_cycle_configuration")
+            @ExcludeMissing
+            fun billingCycleConfiguration(
+                billingCycleConfiguration: JsonField<BillingCycleConfiguration>
+            ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
 
             fun billableMetric(billableMetric: BillableMetric) =
                 billableMetric(JsonField.of(billableMetric))
@@ -23921,6 +26963,7 @@ private constructor(
                     modelType,
                     createdAt,
                     cadence,
+                    billingCycleConfiguration,
                     billableMetric,
                     fixedPriceQuantity,
                     planPhaseOrder,
@@ -24026,6 +27069,181 @@ private constructor(
 
                 fun build(): BillableMetric =
                     BillableMetric(id, additionalProperties.toUnmodifiable())
+            }
+        }
+
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: JsonField<Long>,
+            private val durationUnit: JsonField<DurationUnit>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            fun duration(): Long = duration.getRequired("duration")
+
+            fun durationUnit(): DurationUnit = durationUnit.getRequired("duration_unit")
+
+            @JsonProperty("duration") @ExcludeMissing fun _duration() = duration
+
+            @JsonProperty("duration_unit") @ExcludeMissing fun _durationUnit() = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): BillingCycleConfiguration = apply {
+                if (!validated) {
+                    duration()
+                    durationUnit()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: JsonField<Long> = JsonMissing.of()
+                private var durationUnit: JsonField<DurationUnit> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                fun duration(duration: Long) = duration(JsonField.of(duration))
+
+                @JsonProperty("duration")
+                @ExcludeMissing
+                fun duration(duration: JsonField<Long>) = apply { this.duration = duration }
+
+                fun durationUnit(durationUnit: DurationUnit) =
+                    durationUnit(JsonField.of(durationUnit))
+
+                @JsonProperty("duration_unit")
+                @ExcludeMissing
+                fun durationUnit(durationUnit: JsonField<DurationUnit>) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        duration,
+                        durationUnit,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
             }
         }
 
@@ -25159,6 +28377,7 @@ private constructor(
         private val modelType: JsonField<ModelType>,
         private val createdAt: JsonField<OffsetDateTime>,
         private val cadence: JsonField<Cadence>,
+        private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val billableMetric: JsonField<BillableMetric>,
         private val fixedPriceQuantity: JsonField<Double>,
         private val planPhaseOrder: JsonField<Long>,
@@ -25200,6 +28419,11 @@ private constructor(
         fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+            Optional.ofNullable(
+                billingCycleConfiguration.getNullable("billing_cycle_configuration")
+            )
 
         fun billableMetric(): Optional<BillableMetric> =
             Optional.ofNullable(billableMetric.getNullable("billable_metric"))
@@ -25256,6 +28480,10 @@ private constructor(
 
         @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
+        @JsonProperty("billing_cycle_configuration")
+        @ExcludeMissing
+        fun _billingCycleConfiguration() = billingCycleConfiguration
+
         @JsonProperty("billable_metric") @ExcludeMissing fun _billableMetric() = billableMetric
 
         @JsonProperty("fixed_price_quantity")
@@ -25302,6 +28530,7 @@ private constructor(
                 modelType()
                 createdAt()
                 cadence()
+                billingCycleConfiguration().map { it.validate() }
                 billableMetric().map { it.validate() }
                 fixedPriceQuantity()
                 planPhaseOrder()
@@ -25335,6 +28564,7 @@ private constructor(
                 this.modelType == other.modelType &&
                 this.createdAt == other.createdAt &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
                 this.billableMetric == other.billableMetric &&
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.planPhaseOrder == other.planPhaseOrder &&
@@ -25363,6 +28593,7 @@ private constructor(
                         modelType,
                         createdAt,
                         cadence,
+                        billingCycleConfiguration,
                         billableMetric,
                         fixedPriceQuantity,
                         planPhaseOrder,
@@ -25383,7 +28614,7 @@ private constructor(
         }
 
         override fun toString() =
-            "TieredWithProrationPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, tieredWithProrationConfig=$tieredWithProrationConfig, additionalProperties=$additionalProperties}"
+            "TieredWithProrationPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, tieredWithProrationConfig=$tieredWithProrationConfig, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -25400,6 +28631,8 @@ private constructor(
             private var modelType: JsonField<ModelType> = JsonMissing.of()
             private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var cadence: JsonField<Cadence> = JsonMissing.of()
+            private var billingCycleConfiguration: JsonField<BillingCycleConfiguration> =
+                JsonMissing.of()
             private var billableMetric: JsonField<BillableMetric> = JsonMissing.of()
             private var fixedPriceQuantity: JsonField<Double> = JsonMissing.of()
             private var planPhaseOrder: JsonField<Long> = JsonMissing.of()
@@ -25426,6 +28659,7 @@ private constructor(
                 this.modelType = tieredWithProrationPrice.modelType
                 this.createdAt = tieredWithProrationPrice.createdAt
                 this.cadence = tieredWithProrationPrice.cadence
+                this.billingCycleConfiguration = tieredWithProrationPrice.billingCycleConfiguration
                 this.billableMetric = tieredWithProrationPrice.billableMetric
                 this.fixedPriceQuantity = tieredWithProrationPrice.fixedPriceQuantity
                 this.planPhaseOrder = tieredWithProrationPrice.planPhaseOrder
@@ -25504,6 +28738,15 @@ private constructor(
             @JsonProperty("cadence")
             @ExcludeMissing
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                billingCycleConfiguration(JsonField.of(billingCycleConfiguration))
+
+            @JsonProperty("billing_cycle_configuration")
+            @ExcludeMissing
+            fun billingCycleConfiguration(
+                billingCycleConfiguration: JsonField<BillingCycleConfiguration>
+            ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
 
             fun billableMetric(billableMetric: BillableMetric) =
                 billableMetric(JsonField.of(billableMetric))
@@ -25628,6 +28871,7 @@ private constructor(
                     modelType,
                     createdAt,
                     cadence,
+                    billingCycleConfiguration,
                     billableMetric,
                     fixedPriceQuantity,
                     planPhaseOrder,
@@ -25733,6 +28977,181 @@ private constructor(
 
                 fun build(): BillableMetric =
                     BillableMetric(id, additionalProperties.toUnmodifiable())
+            }
+        }
+
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: JsonField<Long>,
+            private val durationUnit: JsonField<DurationUnit>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            fun duration(): Long = duration.getRequired("duration")
+
+            fun durationUnit(): DurationUnit = durationUnit.getRequired("duration_unit")
+
+            @JsonProperty("duration") @ExcludeMissing fun _duration() = duration
+
+            @JsonProperty("duration_unit") @ExcludeMissing fun _durationUnit() = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): BillingCycleConfiguration = apply {
+                if (!validated) {
+                    duration()
+                    durationUnit()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: JsonField<Long> = JsonMissing.of()
+                private var durationUnit: JsonField<DurationUnit> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                fun duration(duration: Long) = duration(JsonField.of(duration))
+
+                @JsonProperty("duration")
+                @ExcludeMissing
+                fun duration(duration: JsonField<Long>) = apply { this.duration = duration }
+
+                fun durationUnit(durationUnit: DurationUnit) =
+                    durationUnit(JsonField.of(durationUnit))
+
+                @JsonProperty("duration_unit")
+                @ExcludeMissing
+                fun durationUnit(durationUnit: JsonField<DurationUnit>) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        duration,
+                        durationUnit,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
             }
         }
 
@@ -26614,6 +30033,7 @@ private constructor(
         private val modelType: JsonField<ModelType>,
         private val createdAt: JsonField<OffsetDateTime>,
         private val cadence: JsonField<Cadence>,
+        private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val billableMetric: JsonField<BillableMetric>,
         private val fixedPriceQuantity: JsonField<Double>,
         private val planPhaseOrder: JsonField<Long>,
@@ -26655,6 +30075,11 @@ private constructor(
         fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+            Optional.ofNullable(
+                billingCycleConfiguration.getNullable("billing_cycle_configuration")
+            )
 
         fun billableMetric(): Optional<BillableMetric> =
             Optional.ofNullable(billableMetric.getNullable("billable_metric"))
@@ -26711,6 +30136,10 @@ private constructor(
 
         @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
+        @JsonProperty("billing_cycle_configuration")
+        @ExcludeMissing
+        fun _billingCycleConfiguration() = billingCycleConfiguration
+
         @JsonProperty("billable_metric") @ExcludeMissing fun _billableMetric() = billableMetric
 
         @JsonProperty("fixed_price_quantity")
@@ -26757,6 +30186,7 @@ private constructor(
                 modelType()
                 createdAt()
                 cadence()
+                billingCycleConfiguration().map { it.validate() }
                 billableMetric().map { it.validate() }
                 fixedPriceQuantity()
                 planPhaseOrder()
@@ -26790,6 +30220,7 @@ private constructor(
                 this.modelType == other.modelType &&
                 this.createdAt == other.createdAt &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
                 this.billableMetric == other.billableMetric &&
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.planPhaseOrder == other.planPhaseOrder &&
@@ -26818,6 +30249,7 @@ private constructor(
                         modelType,
                         createdAt,
                         cadence,
+                        billingCycleConfiguration,
                         billableMetric,
                         fixedPriceQuantity,
                         planPhaseOrder,
@@ -26838,7 +30270,7 @@ private constructor(
         }
 
         override fun toString() =
-            "UnitWithProrationPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, unitWithProrationConfig=$unitWithProrationConfig, additionalProperties=$additionalProperties}"
+            "UnitWithProrationPrice{metadata=$metadata, id=$id, name=$name, externalPriceId=$externalPriceId, priceType=$priceType, modelType=$modelType, createdAt=$createdAt, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, billableMetric=$billableMetric, fixedPriceQuantity=$fixedPriceQuantity, planPhaseOrder=$planPhaseOrder, currency=$currency, conversionRate=$conversionRate, item=$item, creditAllocation=$creditAllocation, discount=$discount, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, unitWithProrationConfig=$unitWithProrationConfig, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -26855,6 +30287,8 @@ private constructor(
             private var modelType: JsonField<ModelType> = JsonMissing.of()
             private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var cadence: JsonField<Cadence> = JsonMissing.of()
+            private var billingCycleConfiguration: JsonField<BillingCycleConfiguration> =
+                JsonMissing.of()
             private var billableMetric: JsonField<BillableMetric> = JsonMissing.of()
             private var fixedPriceQuantity: JsonField<Double> = JsonMissing.of()
             private var planPhaseOrder: JsonField<Long> = JsonMissing.of()
@@ -26881,6 +30315,7 @@ private constructor(
                 this.modelType = unitWithProrationPrice.modelType
                 this.createdAt = unitWithProrationPrice.createdAt
                 this.cadence = unitWithProrationPrice.cadence
+                this.billingCycleConfiguration = unitWithProrationPrice.billingCycleConfiguration
                 this.billableMetric = unitWithProrationPrice.billableMetric
                 this.fixedPriceQuantity = unitWithProrationPrice.fixedPriceQuantity
                 this.planPhaseOrder = unitWithProrationPrice.planPhaseOrder
@@ -26959,6 +30394,15 @@ private constructor(
             @JsonProperty("cadence")
             @ExcludeMissing
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                billingCycleConfiguration(JsonField.of(billingCycleConfiguration))
+
+            @JsonProperty("billing_cycle_configuration")
+            @ExcludeMissing
+            fun billingCycleConfiguration(
+                billingCycleConfiguration: JsonField<BillingCycleConfiguration>
+            ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
 
             fun billableMetric(billableMetric: BillableMetric) =
                 billableMetric(JsonField.of(billableMetric))
@@ -27083,6 +30527,7 @@ private constructor(
                     modelType,
                     createdAt,
                     cadence,
+                    billingCycleConfiguration,
                     billableMetric,
                     fixedPriceQuantity,
                     planPhaseOrder,
@@ -27188,6 +30633,181 @@ private constructor(
 
                 fun build(): BillableMetric =
                     BillableMetric(id, additionalProperties.toUnmodifiable())
+            }
+        }
+
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: JsonField<Long>,
+            private val durationUnit: JsonField<DurationUnit>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            fun duration(): Long = duration.getRequired("duration")
+
+            fun durationUnit(): DurationUnit = durationUnit.getRequired("duration_unit")
+
+            @JsonProperty("duration") @ExcludeMissing fun _duration() = duration
+
+            @JsonProperty("duration_unit") @ExcludeMissing fun _durationUnit() = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): BillingCycleConfiguration = apply {
+                if (!validated) {
+                    duration()
+                    durationUnit()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: JsonField<Long> = JsonMissing.of()
+                private var durationUnit: JsonField<DurationUnit> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                fun duration(duration: Long) = duration(JsonField.of(duration))
+
+                @JsonProperty("duration")
+                @ExcludeMissing
+                fun duration(duration: JsonField<Long>) = apply { this.duration = duration }
+
+                fun durationUnit(durationUnit: DurationUnit) =
+                    durationUnit(JsonField.of(durationUnit))
+
+                @JsonProperty("duration_unit")
+                @ExcludeMissing
+                fun durationUnit(durationUnit: JsonField<DurationUnit>) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        duration,
+                        durationUnit,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
             }
         }
 
