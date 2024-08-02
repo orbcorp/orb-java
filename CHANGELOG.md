@@ -1,5 +1,40 @@
 # Changelog
 
+## 0.1.0-alpha.3 (2024-08-02)
+
+Full Changelog: [v0.1.0-alpha.2...v0.1.0-alpha.3](https://github.com/orbcorp/orb-java/compare/v0.1.0-alpha.2...v0.1.0-alpha.3)
+
+### ⚠ BREAKING CHANGES
+
+* **api:** remove methods 'customers.usage.create' and 'customers.usage.update_by_external_id' ([#30](https://github.com/orbcorp/orb-java/issues/30))
+
+### Features
+
+* **api:** add 'status' to plan creation params ([#14](https://github.com/orbcorp/orb-java/issues/14)) ([02ccf47](https://github.com/orbcorp/orb-java/commit/02ccf47af0f4af169c64181f8c2a429c3bd806d5))
+* **api:** add cadence enum value 'custom' ([#25](https://github.com/orbcorp/orb-java/issues/25)) ([61cf205](https://github.com/orbcorp/orb-java/commit/61cf205b1471425231e68a84f6fd09aafce2906a))
+* **api:** add methods to prices and invoices ([#21](https://github.com/orbcorp/orb-java/issues/21)) ([5dbd997](https://github.com/orbcorp/orb-java/commit/5dbd9976b888c451807d1bc89e4a6648b262ada3))
+* **api:** deprecate methods 'customers.usage.create' and 'customers.usage.update_by_external_id' ([#29](https://github.com/orbcorp/orb-java/issues/29)) ([756a150](https://github.com/orbcorp/orb-java/commit/756a1508b262870be8ebccef56e5485655296494))
+* **api:** remove methods 'customers.usage.create' and 'customers.usage.update_by_external_id' ([#30](https://github.com/orbcorp/orb-java/issues/30)) ([988218e](https://github.com/orbcorp/orb-java/commit/988218ee7687b8864ebc9efcffd7d790db2cd193))
+* **client:** improve binary return values ([#27](https://github.com/orbcorp/orb-java/issues/27)) ([e5abbb9](https://github.com/orbcorp/orb-java/commit/e5abbb9aed50ce44038e3fb3e305283c550411e0))
+
+
+### Chores
+
+* **ci:** also run workflows for PRs targeting `next` ([#17](https://github.com/orbcorp/orb-java/issues/17)) ([9f47531](https://github.com/orbcorp/orb-java/commit/9f47531a64cd4e8a53d209e4e5b151de480c3fd8))
+* **ci:** limit release doctor target branches ([#22](https://github.com/orbcorp/orb-java/issues/22)) ([92f41a2](https://github.com/orbcorp/orb-java/commit/92f41a24e12e4296f8413aa91f754c35bb09eecc))
+* **ci:** run tests in CI ([#28](https://github.com/orbcorp/orb-java/issues/28)) ([e4c2eb6](https://github.com/orbcorp/orb-java/commit/e4c2eb6ff95f34422415bf3fb54535da2fdc3d82))
+* **docs:** document minimum Java version (Java 8) in README ([#16](https://github.com/orbcorp/orb-java/issues/16)) ([3630a08](https://github.com/orbcorp/orb-java/commit/3630a08e5894b62f238e9531dadcee4a20670cb2))
+* **docs:** minor update to formatting of API link in README ([#19](https://github.com/orbcorp/orb-java/issues/19)) ([65f8385](https://github.com/orbcorp/orb-java/commit/65f8385253f16aec74d69690829ce3f3e2c05ca3))
+* **internal:** refactor release doctor script ([#23](https://github.com/orbcorp/orb-java/issues/23)) ([c039b0e](https://github.com/orbcorp/orb-java/commit/c039b0ea8b1643d7bcd8d4dc1553bdc6e041f7fe))
+* **internal:** remove unused test file ([#26](https://github.com/orbcorp/orb-java/issues/26)) ([71b39db](https://github.com/orbcorp/orb-java/commit/71b39dbe04efeed6d9c20363f00950334266d93e))
+* minor updates ([#20](https://github.com/orbcorp/orb-java/issues/20)) ([42c2a5c](https://github.com/orbcorp/orb-java/commit/42c2a5c9bca4a2af016fa724ce78197fc6a05549))
+* **tests:** update prism version ([#24](https://github.com/orbcorp/orb-java/issues/24)) ([b14155d](https://github.com/orbcorp/orb-java/commit/b14155d55ee6c312d415037fccce9a90ccd0b58f))
+
+
+### Documentation
+
+* **examples:** update example values ([#18](https://github.com/orbcorp/orb-java/issues/18)) ([7943f58](https://github.com/orbcorp/orb-java/commit/7943f58bb9615f95d33dba70040c2cfcc4edb7db))
+
 ## 0.1.0-alpha.2 (2024-06-28)
 
 Full Changelog: [v0.1.0-alpha.1...v0.1.0-alpha.2](https://github.com/orbcorp/orb-java/compare/v0.1.0-alpha.1...v0.1.0-alpha.2)
