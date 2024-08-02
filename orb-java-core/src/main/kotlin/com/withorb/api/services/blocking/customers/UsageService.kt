@@ -100,6 +100,9 @@ interface UsageService {
      * multiple calls with small adjacent (e.g. every hour) timeframes.
      */
     @JvmOverloads
+    @Deprecated(
+        "This method will be removed in a future release. Please use the 'events.backfills.create' instead."
+    )
     fun update(
         params: CustomerUsageUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none()
@@ -193,6 +196,9 @@ interface UsageService {
      * multiple calls with small adjacent (e.g. every hour) timeframes.
      */
     @JvmOverloads
+    @Deprecated(
+        "This method will be removed in a future release. Please use the 'events.backfills.create' instead."
+    )
     fun updateByExternalId(
         params: CustomerUsageUpdateByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none()
