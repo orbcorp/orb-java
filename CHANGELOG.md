@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-alpha.4 (2024-08-14)
+
+Full Changelog: [v0.1.0-alpha.3...v0.1.0-alpha.4](https://github.com/orbcorp/orb-java/compare/v0.1.0-alpha.3...v0.1.0-alpha.4)
+
+### Features
+
+* **api:** OpenAPI spec update via Stainless API ([#31](https://github.com/orbcorp/orb-java/issues/31)) ([aec4e89](https://github.com/orbcorp/orb-java/commit/aec4e89c811c7704b68ca6acbe2c81f1f2dbfd8c))
+
 ## 0.1.0-alpha.3 (2024-08-02)
 
 Full Changelog: [v0.1.0-alpha.2...v0.1.0-alpha.3](https://github.com/orbcorp/orb-java/compare/v0.1.0-alpha.2...v0.1.0-alpha.3)
