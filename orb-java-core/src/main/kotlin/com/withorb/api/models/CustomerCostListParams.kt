@@ -18,6 +18,7 @@ import java.util.Optional
 class CustomerCostListParams
 constructor(
     private val customerId: String,
+    private val currency: String?,
     private val timeframeEnd: OffsetDateTime?,
     private val timeframeStart: OffsetDateTime?,
     private val viewMode: ViewMode?,
@@ -28,6 +29,8 @@ constructor(
 
     fun customerId(): String = customerId
 
+    fun currency(): Optional<String> = Optional.ofNullable(currency)
+
     fun timeframeEnd(): Optional<OffsetDateTime> = Optional.ofNullable(timeframeEnd)
 
     fun timeframeStart(): Optional<OffsetDateTime> = Optional.ofNullable(timeframeStart)
@@ -37,6 +40,7 @@ constructor(
     @JvmSynthetic
     internal fun getQueryParams(): Map<String, List<String>> {
         val params = mutableMapOf<String, List<String>>()
+        this.currency?.let { params.put("currency", listOf(it.toString())) }
         this.timeframeEnd?.let {
             params.put("timeframe_end", listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it)))
         }
@@ -70,6 +74,7 @@ constructor(
 
         return other is CustomerCostListParams &&
             this.customerId == other.customerId &&
+            this.currency == other.currency &&
             this.timeframeEnd == other.timeframeEnd &&
             this.timeframeStart == other.timeframeStart &&
             this.viewMode == other.viewMode &&
@@ -81,6 +86,7 @@ constructor(
     override fun hashCode(): Int {
         return Objects.hash(
             customerId,
+            currency,
             timeframeEnd,
             timeframeStart,
             viewMode,
@@ -91,7 +97,7 @@ constructor(
     }
 
     override fun toString() =
-        "CustomerCostListParams{customerId=$customerId, timeframeEnd=$timeframeEnd, timeframeStart=$timeframeStart, viewMode=$viewMode, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+        "CustomerCostListParams{customerId=$customerId, currency=$currency, timeframeEnd=$timeframeEnd, timeframeStart=$timeframeStart, viewMode=$viewMode, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -104,6 +110,7 @@ constructor(
     class Builder {
 
         private var customerId: String? = null
+        private var currency: String? = null
         private var timeframeEnd: OffsetDateTime? = null
         private var timeframeStart: OffsetDateTime? = null
         private var viewMode: ViewMode? = null
@@ -114,6 +121,7 @@ constructor(
         @JvmSynthetic
         internal fun from(customerCostListParams: CustomerCostListParams) = apply {
             this.customerId = customerCostListParams.customerId
+            this.currency = customerCostListParams.currency
             this.timeframeEnd = customerCostListParams.timeframeEnd
             this.timeframeStart = customerCostListParams.timeframeStart
             this.viewMode = customerCostListParams.viewMode
@@ -123,6 +131,9 @@ constructor(
         }
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
+
+        /** The currency or custom pricing unit to use. */
+        fun currency(currency: String) = apply { this.currency = currency }
 
         /** Costs returned are exclusive of `timeframe_end`. */
         fun timeframeEnd(timeframeEnd: OffsetDateTime) = apply { this.timeframeEnd = timeframeEnd }
@@ -196,6 +207,7 @@ constructor(
         fun build(): CustomerCostListParams =
             CustomerCostListParams(
                 checkNotNull(customerId) { "`customerId` is required but was not set" },
+                currency,
                 timeframeEnd,
                 timeframeStart,
                 viewMode,
