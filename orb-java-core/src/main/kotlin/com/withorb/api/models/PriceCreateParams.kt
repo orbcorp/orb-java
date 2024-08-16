@@ -47,6 +47,7 @@ constructor(
     private val newFloatingUnitWithPercentPrice: NewFloatingUnitWithPercentPrice?,
     private val newFloatingTieredWithProrationPrice: NewFloatingTieredWithProrationPrice?,
     private val newFloatingUnitWithProrationPrice: NewFloatingUnitWithProrationPrice?,
+    private val newFloatingGroupedAllocationPrice: NewFloatingGroupedAllocationPrice?,
     private val additionalQueryParams: Map<String, List<String>>,
     private val additionalHeaders: Map<String, List<String>>,
 ) {
@@ -106,6 +107,9 @@ constructor(
     fun newFloatingUnitWithProrationPrice(): Optional<NewFloatingUnitWithProrationPrice> =
         Optional.ofNullable(newFloatingUnitWithProrationPrice)
 
+    fun newFloatingGroupedAllocationPrice(): Optional<NewFloatingGroupedAllocationPrice> =
+        Optional.ofNullable(newFloatingGroupedAllocationPrice)
+
     @JvmSynthetic
     internal fun getBody(): PriceCreateBody {
         return PriceCreateBody(
@@ -127,6 +131,7 @@ constructor(
             newFloatingUnitWithPercentPrice,
             newFloatingTieredWithProrationPrice,
             newFloatingUnitWithProrationPrice,
+            newFloatingGroupedAllocationPrice,
         )
     }
 
@@ -162,6 +167,7 @@ constructor(
         private val newFloatingTieredWithProrationPrice: NewFloatingTieredWithProrationPrice? =
             null,
         private val newFloatingUnitWithProrationPrice: NewFloatingUnitWithProrationPrice? = null,
+        private val newFloatingGroupedAllocationPrice: NewFloatingGroupedAllocationPrice? = null,
         private val _json: JsonValue? = null,
     ) {
 
@@ -221,6 +227,9 @@ constructor(
         fun newFloatingUnitWithProrationPrice(): Optional<NewFloatingUnitWithProrationPrice> =
             Optional.ofNullable(newFloatingUnitWithProrationPrice)
 
+        fun newFloatingGroupedAllocationPrice(): Optional<NewFloatingGroupedAllocationPrice> =
+            Optional.ofNullable(newFloatingGroupedAllocationPrice)
+
         fun isNewFloatingUnitPrice(): Boolean = newFloatingUnitPrice != null
 
         fun isNewFloatingPackagePrice(): Boolean = newFloatingPackagePrice != null
@@ -263,6 +272,9 @@ constructor(
 
         fun isNewFloatingUnitWithProrationPrice(): Boolean =
             newFloatingUnitWithProrationPrice != null
+
+        fun isNewFloatingGroupedAllocationPrice(): Boolean =
+            newFloatingGroupedAllocationPrice != null
 
         fun asNewFloatingUnitPrice(): NewFloatingUnitPrice =
             newFloatingUnitPrice.getOrThrow("newFloatingUnitPrice")
@@ -322,6 +334,9 @@ constructor(
         fun asNewFloatingUnitWithProrationPrice(): NewFloatingUnitWithProrationPrice =
             newFloatingUnitWithProrationPrice.getOrThrow("newFloatingUnitWithProrationPrice")
 
+        fun asNewFloatingGroupedAllocationPrice(): NewFloatingGroupedAllocationPrice =
+            newFloatingGroupedAllocationPrice.getOrThrow("newFloatingGroupedAllocationPrice")
+
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
         fun <T> accept(visitor: Visitor<T>): T {
@@ -375,6 +390,10 @@ constructor(
                     visitor.visitNewFloatingUnitWithProrationPrice(
                         newFloatingUnitWithProrationPrice
                     )
+                newFloatingGroupedAllocationPrice != null ->
+                    visitor.visitNewFloatingGroupedAllocationPrice(
+                        newFloatingGroupedAllocationPrice
+                    )
                 else -> visitor.unknown(_json)
             }
         }
@@ -407,7 +426,8 @@ constructor(
                 this.newFloatingUnitWithPercentPrice == other.newFloatingUnitWithPercentPrice &&
                 this.newFloatingTieredWithProrationPrice ==
                     other.newFloatingTieredWithProrationPrice &&
-                this.newFloatingUnitWithProrationPrice == other.newFloatingUnitWithProrationPrice
+                this.newFloatingUnitWithProrationPrice == other.newFloatingUnitWithProrationPrice &&
+                this.newFloatingGroupedAllocationPrice == other.newFloatingGroupedAllocationPrice
         }
 
         override fun hashCode(): Int {
@@ -430,6 +450,7 @@ constructor(
                 newFloatingUnitWithPercentPrice,
                 newFloatingTieredWithProrationPrice,
                 newFloatingUnitWithProrationPrice,
+                newFloatingGroupedAllocationPrice,
             )
         }
 
@@ -471,6 +492,8 @@ constructor(
                     "PriceCreateBody{newFloatingTieredWithProrationPrice=$newFloatingTieredWithProrationPrice}"
                 newFloatingUnitWithProrationPrice != null ->
                     "PriceCreateBody{newFloatingUnitWithProrationPrice=$newFloatingUnitWithProrationPrice}"
+                newFloatingGroupedAllocationPrice != null ->
+                    "PriceCreateBody{newFloatingGroupedAllocationPrice=$newFloatingGroupedAllocationPrice}"
                 _json != null -> "PriceCreateBody{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid PriceCreateBody")
             }
@@ -581,6 +604,14 @@ constructor(
                 PriceCreateBody(
                     newFloatingUnitWithProrationPrice = newFloatingUnitWithProrationPrice
                 )
+
+            @JvmStatic
+            fun ofNewFloatingGroupedAllocationPrice(
+                newFloatingGroupedAllocationPrice: NewFloatingGroupedAllocationPrice
+            ) =
+                PriceCreateBody(
+                    newFloatingGroupedAllocationPrice = newFloatingGroupedAllocationPrice
+                )
         }
 
         interface Visitor<out T> {
@@ -641,6 +672,10 @@ constructor(
 
             fun visitNewFloatingUnitWithProrationPrice(
                 newFloatingUnitWithProrationPrice: NewFloatingUnitWithProrationPrice
+            ): T
+
+            fun visitNewFloatingGroupedAllocationPrice(
+                newFloatingGroupedAllocationPrice: NewFloatingGroupedAllocationPrice
             ): T
 
             fun unknown(json: JsonValue?): T {
@@ -710,6 +745,9 @@ constructor(
                 tryDeserialize(node, jacksonTypeRef<NewFloatingUnitWithProrationPrice>())?.let {
                     return PriceCreateBody(newFloatingUnitWithProrationPrice = it, _json = json)
                 }
+                tryDeserialize(node, jacksonTypeRef<NewFloatingGroupedAllocationPrice>())?.let {
+                    return PriceCreateBody(newFloatingGroupedAllocationPrice = it, _json = json)
+                }
 
                 return PriceCreateBody(_json = json)
             }
@@ -759,6 +797,8 @@ constructor(
                         generator.writeObject(value.newFloatingTieredWithProrationPrice)
                     value.newFloatingUnitWithProrationPrice != null ->
                         generator.writeObject(value.newFloatingUnitWithProrationPrice)
+                    value.newFloatingGroupedAllocationPrice != null ->
+                        generator.writeObject(value.newFloatingGroupedAllocationPrice)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid PriceCreateBody")
                 }
@@ -798,6 +838,7 @@ constructor(
             this.newFloatingUnitWithPercentPrice == other.newFloatingUnitWithPercentPrice &&
             this.newFloatingTieredWithProrationPrice == other.newFloatingTieredWithProrationPrice &&
             this.newFloatingUnitWithProrationPrice == other.newFloatingUnitWithProrationPrice &&
+            this.newFloatingGroupedAllocationPrice == other.newFloatingGroupedAllocationPrice &&
             this.additionalQueryParams == other.additionalQueryParams &&
             this.additionalHeaders == other.additionalHeaders
     }
@@ -822,13 +863,14 @@ constructor(
             newFloatingUnitWithPercentPrice,
             newFloatingTieredWithProrationPrice,
             newFloatingUnitWithProrationPrice,
+            newFloatingGroupedAllocationPrice,
             additionalQueryParams,
             additionalHeaders,
         )
     }
 
     override fun toString() =
-        "PriceCreateParams{newFloatingUnitPrice=$newFloatingUnitPrice, newFloatingPackagePrice=$newFloatingPackagePrice, newFloatingMatrixPrice=$newFloatingMatrixPrice, newFloatingMatrixWithAllocationPrice=$newFloatingMatrixWithAllocationPrice, newFloatingTieredPrice=$newFloatingTieredPrice, newFloatingTieredBpsPrice=$newFloatingTieredBpsPrice, newFloatingBpsPrice=$newFloatingBpsPrice, newFloatingBulkBpsPrice=$newFloatingBulkBpsPrice, newFloatingBulkPrice=$newFloatingBulkPrice, newFloatingThresholdTotalAmountPrice=$newFloatingThresholdTotalAmountPrice, newFloatingTieredPackagePrice=$newFloatingTieredPackagePrice, newFloatingGroupedTieredPrice=$newFloatingGroupedTieredPrice, newFloatingTieredWithMinimumPrice=$newFloatingTieredWithMinimumPrice, newFloatingPackageWithAllocationPrice=$newFloatingPackageWithAllocationPrice, newFloatingTieredPackageWithMinimumPrice=$newFloatingTieredPackageWithMinimumPrice, newFloatingUnitWithPercentPrice=$newFloatingUnitWithPercentPrice, newFloatingTieredWithProrationPrice=$newFloatingTieredWithProrationPrice, newFloatingUnitWithProrationPrice=$newFloatingUnitWithProrationPrice, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders}"
+        "PriceCreateParams{newFloatingUnitPrice=$newFloatingUnitPrice, newFloatingPackagePrice=$newFloatingPackagePrice, newFloatingMatrixPrice=$newFloatingMatrixPrice, newFloatingMatrixWithAllocationPrice=$newFloatingMatrixWithAllocationPrice, newFloatingTieredPrice=$newFloatingTieredPrice, newFloatingTieredBpsPrice=$newFloatingTieredBpsPrice, newFloatingBpsPrice=$newFloatingBpsPrice, newFloatingBulkBpsPrice=$newFloatingBulkBpsPrice, newFloatingBulkPrice=$newFloatingBulkPrice, newFloatingThresholdTotalAmountPrice=$newFloatingThresholdTotalAmountPrice, newFloatingTieredPackagePrice=$newFloatingTieredPackagePrice, newFloatingGroupedTieredPrice=$newFloatingGroupedTieredPrice, newFloatingTieredWithMinimumPrice=$newFloatingTieredWithMinimumPrice, newFloatingPackageWithAllocationPrice=$newFloatingPackageWithAllocationPrice, newFloatingTieredPackageWithMinimumPrice=$newFloatingTieredPackageWithMinimumPrice, newFloatingUnitWithPercentPrice=$newFloatingUnitWithPercentPrice, newFloatingTieredWithProrationPrice=$newFloatingTieredWithProrationPrice, newFloatingUnitWithProrationPrice=$newFloatingUnitWithProrationPrice, newFloatingGroupedAllocationPrice=$newFloatingGroupedAllocationPrice, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -863,6 +905,7 @@ constructor(
         private var newFloatingUnitWithPercentPrice: NewFloatingUnitWithPercentPrice? = null
         private var newFloatingTieredWithProrationPrice: NewFloatingTieredWithProrationPrice? = null
         private var newFloatingUnitWithProrationPrice: NewFloatingUnitWithProrationPrice? = null
+        private var newFloatingGroupedAllocationPrice: NewFloatingGroupedAllocationPrice? = null
         private var additionalQueryParams: MutableMap<String, MutableList<String>> = mutableMapOf()
         private var additionalHeaders: MutableMap<String, MutableList<String>> = mutableMapOf()
 
@@ -893,6 +936,8 @@ constructor(
                 priceCreateParams.newFloatingTieredWithProrationPrice
             this.newFloatingUnitWithProrationPrice =
                 priceCreateParams.newFloatingUnitWithProrationPrice
+            this.newFloatingGroupedAllocationPrice =
+                priceCreateParams.newFloatingGroupedAllocationPrice
             additionalQueryParams(priceCreateParams.additionalQueryParams)
             additionalHeaders(priceCreateParams.additionalHeaders)
         }
@@ -916,6 +961,7 @@ constructor(
             this.newFloatingUnitWithPercentPrice = null
             this.newFloatingTieredWithProrationPrice = null
             this.newFloatingUnitWithProrationPrice = null
+            this.newFloatingGroupedAllocationPrice = null
         }
 
         fun forNewFloatingPackagePrice(newFloatingPackagePrice: NewFloatingPackagePrice) = apply {
@@ -937,6 +983,7 @@ constructor(
             this.newFloatingUnitWithPercentPrice = null
             this.newFloatingTieredWithProrationPrice = null
             this.newFloatingUnitWithProrationPrice = null
+            this.newFloatingGroupedAllocationPrice = null
         }
 
         fun forNewFloatingMatrixPrice(newFloatingMatrixPrice: NewFloatingMatrixPrice) = apply {
@@ -958,6 +1005,7 @@ constructor(
             this.newFloatingUnitWithPercentPrice = null
             this.newFloatingTieredWithProrationPrice = null
             this.newFloatingUnitWithProrationPrice = null
+            this.newFloatingGroupedAllocationPrice = null
         }
 
         fun forNewFloatingMatrixWithAllocationPrice(
@@ -981,6 +1029,7 @@ constructor(
             this.newFloatingUnitWithPercentPrice = null
             this.newFloatingTieredWithProrationPrice = null
             this.newFloatingUnitWithProrationPrice = null
+            this.newFloatingGroupedAllocationPrice = null
         }
 
         fun forNewFloatingTieredPrice(newFloatingTieredPrice: NewFloatingTieredPrice) = apply {
@@ -1002,6 +1051,7 @@ constructor(
             this.newFloatingUnitWithPercentPrice = null
             this.newFloatingTieredWithProrationPrice = null
             this.newFloatingUnitWithProrationPrice = null
+            this.newFloatingGroupedAllocationPrice = null
         }
 
         fun forNewFloatingTieredBpsPrice(newFloatingTieredBpsPrice: NewFloatingTieredBpsPrice) =
@@ -1024,6 +1074,7 @@ constructor(
                 this.newFloatingUnitWithPercentPrice = null
                 this.newFloatingTieredWithProrationPrice = null
                 this.newFloatingUnitWithProrationPrice = null
+                this.newFloatingGroupedAllocationPrice = null
             }
 
         fun forNewFloatingBpsPrice(newFloatingBpsPrice: NewFloatingBpsPrice) = apply {
@@ -1045,6 +1096,7 @@ constructor(
             this.newFloatingUnitWithPercentPrice = null
             this.newFloatingTieredWithProrationPrice = null
             this.newFloatingUnitWithProrationPrice = null
+            this.newFloatingGroupedAllocationPrice = null
         }
 
         fun forNewFloatingBulkBpsPrice(newFloatingBulkBpsPrice: NewFloatingBulkBpsPrice) = apply {
@@ -1066,6 +1118,7 @@ constructor(
             this.newFloatingUnitWithPercentPrice = null
             this.newFloatingTieredWithProrationPrice = null
             this.newFloatingUnitWithProrationPrice = null
+            this.newFloatingGroupedAllocationPrice = null
         }
 
         fun forNewFloatingBulkPrice(newFloatingBulkPrice: NewFloatingBulkPrice) = apply {
@@ -1087,6 +1140,7 @@ constructor(
             this.newFloatingUnitWithPercentPrice = null
             this.newFloatingTieredWithProrationPrice = null
             this.newFloatingUnitWithProrationPrice = null
+            this.newFloatingGroupedAllocationPrice = null
         }
 
         fun forNewFloatingThresholdTotalAmountPrice(
@@ -1110,6 +1164,7 @@ constructor(
             this.newFloatingUnitWithPercentPrice = null
             this.newFloatingTieredWithProrationPrice = null
             this.newFloatingUnitWithProrationPrice = null
+            this.newFloatingGroupedAllocationPrice = null
         }
 
         fun forNewFloatingTieredPackagePrice(
@@ -1133,6 +1188,7 @@ constructor(
             this.newFloatingUnitWithPercentPrice = null
             this.newFloatingTieredWithProrationPrice = null
             this.newFloatingUnitWithProrationPrice = null
+            this.newFloatingGroupedAllocationPrice = null
         }
 
         fun forNewFloatingGroupedTieredPrice(
@@ -1156,6 +1212,7 @@ constructor(
             this.newFloatingUnitWithPercentPrice = null
             this.newFloatingTieredWithProrationPrice = null
             this.newFloatingUnitWithProrationPrice = null
+            this.newFloatingGroupedAllocationPrice = null
         }
 
         fun forNewFloatingTieredWithMinimumPrice(
@@ -1179,6 +1236,7 @@ constructor(
             this.newFloatingUnitWithPercentPrice = null
             this.newFloatingTieredWithProrationPrice = null
             this.newFloatingUnitWithProrationPrice = null
+            this.newFloatingGroupedAllocationPrice = null
         }
 
         fun forNewFloatingPackageWithAllocationPrice(
@@ -1202,6 +1260,7 @@ constructor(
             this.newFloatingUnitWithPercentPrice = null
             this.newFloatingTieredWithProrationPrice = null
             this.newFloatingUnitWithProrationPrice = null
+            this.newFloatingGroupedAllocationPrice = null
         }
 
         fun forNewFloatingTieredPackageWithMinimumPrice(
@@ -1225,6 +1284,7 @@ constructor(
             this.newFloatingUnitWithPercentPrice = null
             this.newFloatingTieredWithProrationPrice = null
             this.newFloatingUnitWithProrationPrice = null
+            this.newFloatingGroupedAllocationPrice = null
         }
 
         fun forNewFloatingUnitWithPercentPrice(
@@ -1248,6 +1308,7 @@ constructor(
             this.newFloatingUnitWithPercentPrice = newFloatingUnitWithPercentPrice
             this.newFloatingTieredWithProrationPrice = null
             this.newFloatingUnitWithProrationPrice = null
+            this.newFloatingGroupedAllocationPrice = null
         }
 
         fun forNewFloatingTieredWithProrationPrice(
@@ -1271,6 +1332,7 @@ constructor(
             this.newFloatingUnitWithPercentPrice = null
             this.newFloatingTieredWithProrationPrice = newFloatingTieredWithProrationPrice
             this.newFloatingUnitWithProrationPrice = null
+            this.newFloatingGroupedAllocationPrice = null
         }
 
         fun forNewFloatingUnitWithProrationPrice(
@@ -1294,6 +1356,31 @@ constructor(
             this.newFloatingUnitWithPercentPrice = null
             this.newFloatingTieredWithProrationPrice = null
             this.newFloatingUnitWithProrationPrice = newFloatingUnitWithProrationPrice
+            this.newFloatingGroupedAllocationPrice = null
+        }
+
+        fun forNewFloatingGroupedAllocationPrice(
+            newFloatingGroupedAllocationPrice: NewFloatingGroupedAllocationPrice
+        ) = apply {
+            this.newFloatingUnitPrice = null
+            this.newFloatingPackagePrice = null
+            this.newFloatingMatrixPrice = null
+            this.newFloatingMatrixWithAllocationPrice = null
+            this.newFloatingTieredPrice = null
+            this.newFloatingTieredBpsPrice = null
+            this.newFloatingBpsPrice = null
+            this.newFloatingBulkBpsPrice = null
+            this.newFloatingBulkPrice = null
+            this.newFloatingThresholdTotalAmountPrice = null
+            this.newFloatingTieredPackagePrice = null
+            this.newFloatingGroupedTieredPrice = null
+            this.newFloatingTieredWithMinimumPrice = null
+            this.newFloatingPackageWithAllocationPrice = null
+            this.newFloatingTieredPackageWithMinimumPrice = null
+            this.newFloatingUnitWithPercentPrice = null
+            this.newFloatingTieredWithProrationPrice = null
+            this.newFloatingUnitWithProrationPrice = null
+            this.newFloatingGroupedAllocationPrice = newFloatingGroupedAllocationPrice
         }
 
         fun additionalQueryParams(additionalQueryParams: Map<String, List<String>>) = apply {
@@ -1356,6 +1443,7 @@ constructor(
                 newFloatingUnitWithPercentPrice,
                 newFloatingTieredWithProrationPrice,
                 newFloatingUnitWithProrationPrice,
+                newFloatingGroupedAllocationPrice,
                 additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
                 additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
             )
@@ -11983,6 +12071,549 @@ constructor(
                 fun build(): UnitWithProrationConfig =
                     UnitWithProrationConfig(additionalProperties.toUnmodifiable())
             }
+        }
+
+        /**
+         * User-specified key/value pairs for the resource. Individual keys can be removed by
+         * setting the value to `null`, and the entire metadata mapping can be cleared by setting
+         * `metadata` to `null`.
+         */
+        @JsonDeserialize(builder = Metadata.Builder::class)
+        @NoAutoDetect
+        class Metadata
+        private constructor(
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Metadata && this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = Objects.hash(additionalProperties)
+                }
+                return hashCode
+            }
+
+            override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(metadata: Metadata) = apply {
+                    additionalProperties(metadata.additionalProperties)
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+            }
+        }
+    }
+
+    @JsonDeserialize(builder = NewFloatingGroupedAllocationPrice.Builder::class)
+    @NoAutoDetect
+    class NewFloatingGroupedAllocationPrice
+    private constructor(
+        private val metadata: Metadata?,
+        private val externalPriceId: String?,
+        private val name: String?,
+        private val billableMetricId: String?,
+        private val itemId: String?,
+        private val billedInAdvance: Boolean?,
+        private val fixedPriceQuantity: Double?,
+        private val invoiceGroupingKey: String?,
+        private val cadence: Cadence?,
+        private val conversionRate: Double?,
+        private val modelType: ModelType?,
+        private val groupedAllocationConfig: GroupedAllocationConfig?,
+        private val currency: String?,
+        private val additionalProperties: Map<String, JsonValue>,
+    ) {
+
+        private var hashCode: Int = 0
+
+        /**
+         * User-specified key/value pairs for the resource. Individual keys can be removed by
+         * setting the value to `null`, and the entire metadata mapping can be cleared by setting
+         * `metadata` to `null`.
+         */
+        @JsonProperty("metadata") fun metadata(): Metadata? = metadata
+
+        /** An alias for the price. */
+        @JsonProperty("external_price_id") fun externalPriceId(): String? = externalPriceId
+
+        /** The name of the price. */
+        @JsonProperty("name") fun name(): String? = name
+
+        /** The id of the billable metric for the price. Only needed if the price is usage-based. */
+        @JsonProperty("billable_metric_id") fun billableMetricId(): String? = billableMetricId
+
+        /** The id of the item the plan will be associated with. */
+        @JsonProperty("item_id") fun itemId(): String? = itemId
+
+        /**
+         * If the Price represents a fixed cost, the price will be billed in-advance if this is
+         * true, and in-arrears if this is false.
+         */
+        @JsonProperty("billed_in_advance") fun billedInAdvance(): Boolean? = billedInAdvance
+
+        /** If the Price represents a fixed cost, this represents the quantity of units applied. */
+        @JsonProperty("fixed_price_quantity") fun fixedPriceQuantity(): Double? = fixedPriceQuantity
+
+        /** The property used to group this price on an invoice */
+        @JsonProperty("invoice_grouping_key") fun invoiceGroupingKey(): String? = invoiceGroupingKey
+
+        /** The cadence to bill for this price on. */
+        @JsonProperty("cadence") fun cadence(): Cadence? = cadence
+
+        /** The per unit conversion rate of the price currency to the invoicing currency. */
+        @JsonProperty("conversion_rate") fun conversionRate(): Double? = conversionRate
+
+        @JsonProperty("model_type") fun modelType(): ModelType? = modelType
+
+        @JsonProperty("grouped_allocation_config")
+        fun groupedAllocationConfig(): GroupedAllocationConfig? = groupedAllocationConfig
+
+        /** An ISO 4217 currency string for which this price is billed in. */
+        @JsonProperty("currency") fun currency(): String? = currency
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is NewFloatingGroupedAllocationPrice &&
+                this.metadata == other.metadata &&
+                this.externalPriceId == other.externalPriceId &&
+                this.name == other.name &&
+                this.billableMetricId == other.billableMetricId &&
+                this.itemId == other.itemId &&
+                this.billedInAdvance == other.billedInAdvance &&
+                this.fixedPriceQuantity == other.fixedPriceQuantity &&
+                this.invoiceGroupingKey == other.invoiceGroupingKey &&
+                this.cadence == other.cadence &&
+                this.conversionRate == other.conversionRate &&
+                this.modelType == other.modelType &&
+                this.groupedAllocationConfig == other.groupedAllocationConfig &&
+                this.currency == other.currency &&
+                this.additionalProperties == other.additionalProperties
+        }
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode =
+                    Objects.hash(
+                        metadata,
+                        externalPriceId,
+                        name,
+                        billableMetricId,
+                        itemId,
+                        billedInAdvance,
+                        fixedPriceQuantity,
+                        invoiceGroupingKey,
+                        cadence,
+                        conversionRate,
+                        modelType,
+                        groupedAllocationConfig,
+                        currency,
+                        additionalProperties,
+                    )
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "NewFloatingGroupedAllocationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, groupedAllocationConfig=$groupedAllocationConfig, currency=$currency, additionalProperties=$additionalProperties}"
+
+        companion object {
+
+            @JvmStatic fun builder() = Builder()
+        }
+
+        class Builder {
+
+            private var metadata: Metadata? = null
+            private var externalPriceId: String? = null
+            private var name: String? = null
+            private var billableMetricId: String? = null
+            private var itemId: String? = null
+            private var billedInAdvance: Boolean? = null
+            private var fixedPriceQuantity: Double? = null
+            private var invoiceGroupingKey: String? = null
+            private var cadence: Cadence? = null
+            private var conversionRate: Double? = null
+            private var modelType: ModelType? = null
+            private var groupedAllocationConfig: GroupedAllocationConfig? = null
+            private var currency: String? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(
+                newFloatingGroupedAllocationPrice: NewFloatingGroupedAllocationPrice
+            ) = apply {
+                this.metadata = newFloatingGroupedAllocationPrice.metadata
+                this.externalPriceId = newFloatingGroupedAllocationPrice.externalPriceId
+                this.name = newFloatingGroupedAllocationPrice.name
+                this.billableMetricId = newFloatingGroupedAllocationPrice.billableMetricId
+                this.itemId = newFloatingGroupedAllocationPrice.itemId
+                this.billedInAdvance = newFloatingGroupedAllocationPrice.billedInAdvance
+                this.fixedPriceQuantity = newFloatingGroupedAllocationPrice.fixedPriceQuantity
+                this.invoiceGroupingKey = newFloatingGroupedAllocationPrice.invoiceGroupingKey
+                this.cadence = newFloatingGroupedAllocationPrice.cadence
+                this.conversionRate = newFloatingGroupedAllocationPrice.conversionRate
+                this.modelType = newFloatingGroupedAllocationPrice.modelType
+                this.groupedAllocationConfig =
+                    newFloatingGroupedAllocationPrice.groupedAllocationConfig
+                this.currency = newFloatingGroupedAllocationPrice.currency
+                additionalProperties(newFloatingGroupedAllocationPrice.additionalProperties)
+            }
+
+            /**
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
+             */
+            @JsonProperty("metadata")
+            fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+
+            /** An alias for the price. */
+            @JsonProperty("external_price_id")
+            fun externalPriceId(externalPriceId: String) = apply {
+                this.externalPriceId = externalPriceId
+            }
+
+            /** The name of the price. */
+            @JsonProperty("name") fun name(name: String) = apply { this.name = name }
+
+            /**
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
+             */
+            @JsonProperty("billable_metric_id")
+            fun billableMetricId(billableMetricId: String) = apply {
+                this.billableMetricId = billableMetricId
+            }
+
+            /** The id of the item the plan will be associated with. */
+            @JsonProperty("item_id") fun itemId(itemId: String) = apply { this.itemId = itemId }
+
+            /**
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
+             */
+            @JsonProperty("billed_in_advance")
+            fun billedInAdvance(billedInAdvance: Boolean) = apply {
+                this.billedInAdvance = billedInAdvance
+            }
+
+            /**
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
+             */
+            @JsonProperty("fixed_price_quantity")
+            fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
+                this.fixedPriceQuantity = fixedPriceQuantity
+            }
+
+            /** The property used to group this price on an invoice */
+            @JsonProperty("invoice_grouping_key")
+            fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
+                this.invoiceGroupingKey = invoiceGroupingKey
+            }
+
+            /** The cadence to bill for this price on. */
+            @JsonProperty("cadence")
+            fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
+
+            /** The per unit conversion rate of the price currency to the invoicing currency. */
+            @JsonProperty("conversion_rate")
+            fun conversionRate(conversionRate: Double) = apply {
+                this.conversionRate = conversionRate
+            }
+
+            @JsonProperty("model_type")
+            fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
+
+            @JsonProperty("grouped_allocation_config")
+            fun groupedAllocationConfig(groupedAllocationConfig: GroupedAllocationConfig) = apply {
+                this.groupedAllocationConfig = groupedAllocationConfig
+            }
+
+            /** An ISO 4217 currency string for which this price is billed in. */
+            @JsonProperty("currency")
+            fun currency(currency: String) = apply { this.currency = currency }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            @JsonAnySetter
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                this.additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun build(): NewFloatingGroupedAllocationPrice =
+                NewFloatingGroupedAllocationPrice(
+                    metadata,
+                    externalPriceId,
+                    checkNotNull(name) { "`name` is required but was not set" },
+                    billableMetricId,
+                    checkNotNull(itemId) { "`itemId` is required but was not set" },
+                    billedInAdvance,
+                    fixedPriceQuantity,
+                    invoiceGroupingKey,
+                    checkNotNull(cadence) { "`cadence` is required but was not set" },
+                    conversionRate,
+                    checkNotNull(modelType) { "`modelType` is required but was not set" },
+                    checkNotNull(groupedAllocationConfig) {
+                        "`groupedAllocationConfig` is required but was not set"
+                    },
+                    checkNotNull(currency) { "`currency` is required but was not set" },
+                    additionalProperties.toUnmodifiable(),
+                )
+        }
+
+        class Cadence
+        @JsonCreator
+        private constructor(
+            private val value: JsonField<String>,
+        ) : Enum {
+
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Cadence && this.value == other.value
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+
+            companion object {
+
+                @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
+
+                @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+
+                @JvmField val MONTHLY = Cadence(JsonField.of("monthly"))
+
+                @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
+
+                @JvmField val ONE_TIME = Cadence(JsonField.of("one_time"))
+
+                @JvmField val CUSTOM = Cadence(JsonField.of("custom"))
+
+                @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
+            }
+
+            enum class Known {
+                ANNUAL,
+                SEMI_ANNUAL,
+                MONTHLY,
+                QUARTERLY,
+                ONE_TIME,
+                CUSTOM,
+            }
+
+            enum class Value {
+                ANNUAL,
+                SEMI_ANNUAL,
+                MONTHLY,
+                QUARTERLY,
+                ONE_TIME,
+                CUSTOM,
+                _UNKNOWN,
+            }
+
+            fun value(): Value =
+                when (this) {
+                    ANNUAL -> Value.ANNUAL
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
+                    MONTHLY -> Value.MONTHLY
+                    QUARTERLY -> Value.QUARTERLY
+                    ONE_TIME -> Value.ONE_TIME
+                    CUSTOM -> Value.CUSTOM
+                    else -> Value._UNKNOWN
+                }
+
+            fun known(): Known =
+                when (this) {
+                    ANNUAL -> Known.ANNUAL
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
+                    MONTHLY -> Known.MONTHLY
+                    QUARTERLY -> Known.QUARTERLY
+                    ONE_TIME -> Known.ONE_TIME
+                    CUSTOM -> Known.CUSTOM
+                    else -> throw OrbInvalidDataException("Unknown Cadence: $value")
+                }
+
+            fun asString(): String = _value().asStringOrThrow()
+        }
+
+        @JsonDeserialize(builder = GroupedAllocationConfig.Builder::class)
+        @NoAutoDetect
+        class GroupedAllocationConfig
+        private constructor(
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is GroupedAllocationConfig &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = Objects.hash(additionalProperties)
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "GroupedAllocationConfig{additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(groupedAllocationConfig: GroupedAllocationConfig) = apply {
+                    additionalProperties(groupedAllocationConfig.additionalProperties)
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): GroupedAllocationConfig =
+                    GroupedAllocationConfig(additionalProperties.toUnmodifiable())
+            }
+        }
+
+        class ModelType
+        @JsonCreator
+        private constructor(
+            private val value: JsonField<String>,
+        ) : Enum {
+
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is ModelType && this.value == other.value
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+
+            companion object {
+
+                @JvmField val GROUPED_ALLOCATION = ModelType(JsonField.of("grouped_allocation"))
+
+                @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
+            }
+
+            enum class Known {
+                GROUPED_ALLOCATION,
+            }
+
+            enum class Value {
+                GROUPED_ALLOCATION,
+                _UNKNOWN,
+            }
+
+            fun value(): Value =
+                when (this) {
+                    GROUPED_ALLOCATION -> Value.GROUPED_ALLOCATION
+                    else -> Value._UNKNOWN
+                }
+
+            fun known(): Known =
+                when (this) {
+                    GROUPED_ALLOCATION -> Known.GROUPED_ALLOCATION
+                    else -> throw OrbInvalidDataException("Unknown ModelType: $value")
+                }
+
+            fun asString(): String = _value().asStringOrThrow()
         }
 
         /**
