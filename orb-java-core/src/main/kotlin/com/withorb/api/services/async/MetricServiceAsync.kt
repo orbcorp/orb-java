@@ -5,12 +5,12 @@
 package com.withorb.api.services.async
 
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.models.BillableMetric
 import com.withorb.api.models.MetricCreateParams
-import com.withorb.api.models.MetricCreateResponse
 import com.withorb.api.models.MetricFetchParams
-import com.withorb.api.models.MetricFetchResponse
 import com.withorb.api.models.MetricListPageAsync
 import com.withorb.api.models.MetricListParams
+import com.withorb.api.models.MetricUpdateParams
 import java.util.concurrent.CompletableFuture
 
 interface MetricServiceAsync {
@@ -24,7 +24,17 @@ interface MetricServiceAsync {
     fun create(
         params: MetricCreateParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<MetricCreateResponse>
+    ): CompletableFuture<BillableMetric>
+
+    /**
+     * This endpoint allows you to update the `metadata` property on a metric. If you pass `null`
+     * for the metadata value, it will clear any existing metadata for that invoice.
+     */
+    @JvmOverloads
+    fun update(
+        params: MetricUpdateParams,
+        requestOptions: RequestOptions = RequestOptions.none()
+    ): CompletableFuture<BillableMetric>
 
     /**
      * This endpoint is used to fetch [metric](../guides/concepts#metric) details given a metric
@@ -45,5 +55,5 @@ interface MetricServiceAsync {
     fun fetch(
         params: MetricFetchParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<MetricFetchResponse>
+    ): CompletableFuture<BillableMetric>
 }
