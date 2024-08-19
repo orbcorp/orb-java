@@ -14,6 +14,7 @@ import com.withorb.api.models.AlertEnableParams
 import com.withorb.api.models.AlertListPageAsync
 import com.withorb.api.models.AlertListParams
 import com.withorb.api.models.AlertRetrieveParams
+import com.withorb.api.models.AlertUpdateParams
 import java.util.concurrent.CompletableFuture
 
 interface AlertServiceAsync {
@@ -22,6 +23,13 @@ interface AlertServiceAsync {
     @JvmOverloads
     fun retrieve(
         params: AlertRetrieveParams,
+        requestOptions: RequestOptions = RequestOptions.none()
+    ): CompletableFuture<Alert>
+
+    /** This endpoint updates the thresholds of an alert. */
+    @JvmOverloads
+    fun update(
+        params: AlertUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none()
     ): CompletableFuture<Alert>
 
