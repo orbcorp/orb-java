@@ -5,50 +5,42 @@ package com.withorb.api.models
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.ObjectCodec
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
-import org.apache.hc.core5.http.ContentType
-import java.time.LocalDate
-import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Objects
-import java.util.Optional
-import java.util.UUID
 import com.withorb.api.core.BaseDeserializer
 import com.withorb.api.core.BaseSerializer
-import com.withorb.api.core.getOrThrow
+import com.withorb.api.core.Enum
 import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
-import com.withorb.api.core.MultipartFormValue
-import com.withorb.api.core.toUnmodifiable
 import com.withorb.api.core.NoAutoDetect
-import com.withorb.api.core.Enum
-import com.withorb.api.core.ContentTypes
+import com.withorb.api.core.getOrThrow
+import com.withorb.api.core.toUnmodifiable
 import com.withorb.api.errors.OrbInvalidDataException
 import com.withorb.api.models.*
+import java.util.Objects
+import java.util.Optional
 
-class PlanCreateParams constructor(
-  private val currency: String,
-  private val name: String,
-  private val prices: List<Price>,
-  private val defaultInvoiceMemo: String?,
-  private val externalPlanId: String?,
-  private val metadata: Metadata?,
-  private val netTerms: Long?,
-  private val status: Status?,
-  private val additionalQueryParams: Map<String, List<String>>,
-  private val additionalHeaders: Map<String, List<String>>,
-  private val additionalBodyProperties: Map<String, JsonValue>,
-
+class PlanCreateParams
+constructor(
+    private val currency: String,
+    private val name: String,
+    private val prices: List<Price>,
+    private val defaultInvoiceMemo: String?,
+    private val externalPlanId: String?,
+    private val metadata: Metadata?,
+    private val netTerms: Long?,
+    private val status: Status?,
+    private val additionalQueryParams: Map<String, List<String>>,
+    private val additionalHeaders: Map<String, List<String>>,
+    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
     fun currency(): String = currency
@@ -69,88 +61,74 @@ class PlanCreateParams constructor(
 
     @JvmSynthetic
     internal fun getBody(): PlanCreateBody {
-      return PlanCreateBody(
-          currency,
-          name,
-          prices,
-          defaultInvoiceMemo,
-          externalPlanId,
-          metadata,
-          netTerms,
-          status,
-          additionalBodyProperties,
-      )
+        return PlanCreateBody(
+            currency,
+            name,
+            prices,
+            defaultInvoiceMemo,
+            externalPlanId,
+            metadata,
+            netTerms,
+            status,
+            additionalBodyProperties,
+        )
     }
 
-    @JvmSynthetic
-    internal fun getQueryParams(): Map<String, List<String>> = additionalQueryParams
+    @JvmSynthetic internal fun getQueryParams(): Map<String, List<String>> = additionalQueryParams
 
-    @JvmSynthetic
-    internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
+    @JvmSynthetic internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
 
     @JsonDeserialize(builder = PlanCreateBody.Builder::class)
     @NoAutoDetect
-    class PlanCreateBody internal constructor(
-      private val currency: String?,
-      private val name: String?,
-      private val prices: List<Price>?,
-      private val defaultInvoiceMemo: String?,
-      private val externalPlanId: String?,
-      private val metadata: Metadata?,
-      private val netTerms: Long?,
-      private val status: Status?,
-      private val additionalProperties: Map<String, JsonValue>,
-
+    class PlanCreateBody
+    internal constructor(
+        private val currency: String?,
+        private val name: String?,
+        private val prices: List<Price>?,
+        private val defaultInvoiceMemo: String?,
+        private val externalPlanId: String?,
+        private val metadata: Metadata?,
+        private val netTerms: Long?,
+        private val status: Status?,
+        private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         private var hashCode: Int = 0
 
-        /**
-         * An ISO 4217 currency string for invoices generated by subscriptions on this
-         * plan.
-         */
-        @JsonProperty("currency")
-        fun currency(): String? = currency
+        /** An ISO 4217 currency string for invoices generated by subscriptions on this plan. */
+        @JsonProperty("currency") fun currency(): String? = currency
 
-        @JsonProperty("name")
-        fun name(): String? = name
+        @JsonProperty("name") fun name(): String? = name
 
         /**
-         * Prices for this plan. If the plan has phases, this includes prices across all
-         * phases of the plan.
+         * Prices for this plan. If the plan has phases, this includes prices across all phases of
+         * the plan.
          */
-        @JsonProperty("prices")
-        fun prices(): List<Price>? = prices
+        @JsonProperty("prices") fun prices(): List<Price>? = prices
 
         /** Free-form text which is available on the invoice PDF and the Orb invoice portal. */
-        @JsonProperty("default_invoice_memo")
-        fun defaultInvoiceMemo(): String? = defaultInvoiceMemo
+        @JsonProperty("default_invoice_memo") fun defaultInvoiceMemo(): String? = defaultInvoiceMemo
 
-        @JsonProperty("external_plan_id")
-        fun externalPlanId(): String? = externalPlanId
+        @JsonProperty("external_plan_id") fun externalPlanId(): String? = externalPlanId
 
         /**
-         * User-specified key/value pairs for the resource. Individual keys can be removed
-         * by setting the value to `null`, and the entire metadata mapping can be cleared
-         * by setting `metadata` to `null`.
+         * User-specified key/value pairs for the resource. Individual keys can be removed by
+         * setting the value to `null`, and the entire metadata mapping can be cleared by setting
+         * `metadata` to `null`.
          */
-        @JsonProperty("metadata")
-        fun metadata(): Metadata? = metadata
+        @JsonProperty("metadata") fun metadata(): Metadata? = metadata
 
         /**
-         * The net terms determines the difference between the invoice date and the issue
-         * date for the invoice. If you intend the invoice to be due on issue, set this
-         * to 0.
+         * The net terms determines the difference between the invoice date and the issue date for
+         * the invoice. If you intend the invoice to be due on issue, set this to 0.
          */
-        @JsonProperty("net_terms")
-        fun netTerms(): Long? = netTerms
+        @JsonProperty("net_terms") fun netTerms(): Long? = netTerms
 
         /**
-         * The status of the plan to create (either active or draft). If not specified,
-         * this defaults to active.
+         * The status of the plan to create (either active or draft). If not specified, this
+         * defaults to active.
          */
-        @JsonProperty("status")
-        fun status(): Status? = status
+        @JsonProperty("status") fun status(): Status? = status
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -159,45 +137,46 @@ class PlanCreateParams constructor(
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is PlanCreateBody &&
-              this.currency == other.currency &&
-              this.name == other.name &&
-              this.prices == other.prices &&
-              this.defaultInvoiceMemo == other.defaultInvoiceMemo &&
-              this.externalPlanId == other.externalPlanId &&
-              this.metadata == other.metadata &&
-              this.netTerms == other.netTerms &&
-              this.status == other.status &&
-              this.additionalProperties == other.additionalProperties
+            return other is PlanCreateBody &&
+                this.currency == other.currency &&
+                this.name == other.name &&
+                this.prices == other.prices &&
+                this.defaultInvoiceMemo == other.defaultInvoiceMemo &&
+                this.externalPlanId == other.externalPlanId &&
+                this.metadata == other.metadata &&
+                this.netTerms == other.netTerms &&
+                this.status == other.status &&
+                this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-          if (hashCode == 0) {
-            hashCode = Objects.hash(
-                currency,
-                name,
-                prices,
-                defaultInvoiceMemo,
-                externalPlanId,
-                metadata,
-                netTerms,
-                status,
-                additionalProperties,
-            )
-          }
-          return hashCode
+            if (hashCode == 0) {
+                hashCode =
+                    Objects.hash(
+                        currency,
+                        name,
+                        prices,
+                        defaultInvoiceMemo,
+                        externalPlanId,
+                        metadata,
+                        netTerms,
+                        status,
+                        additionalProperties,
+                    )
+            }
+            return hashCode
         }
 
-        override fun toString() = "PlanCreateBody{currency=$currency, name=$name, prices=$prices, defaultInvoiceMemo=$defaultInvoiceMemo, externalPlanId=$externalPlanId, metadata=$metadata, netTerms=$netTerms, status=$status, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "PlanCreateBody{currency=$currency, name=$name, prices=$prices, defaultInvoiceMemo=$defaultInvoiceMemo, externalPlanId=$externalPlanId, metadata=$metadata, netTerms=$netTerms, status=$status, additionalProperties=$additionalProperties}"
 
         companion object {
 
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         class Builder {
@@ -225,28 +204,17 @@ class PlanCreateParams constructor(
                 additionalProperties(planCreateBody.additionalProperties)
             }
 
-            /**
-             * An ISO 4217 currency string for invoices generated by subscriptions on this
-             * plan.
-             */
+            /** An ISO 4217 currency string for invoices generated by subscriptions on this plan. */
             @JsonProperty("currency")
-            fun currency(currency: String) = apply {
-                this.currency = currency
-            }
+            fun currency(currency: String) = apply { this.currency = currency }
 
-            @JsonProperty("name")
-            fun name(name: String) = apply {
-                this.name = name
-            }
+            @JsonProperty("name") fun name(name: String) = apply { this.name = name }
 
             /**
-             * Prices for this plan. If the plan has phases, this includes prices across all
-             * phases of the plan.
+             * Prices for this plan. If the plan has phases, this includes prices across all phases
+             * of the plan.
              */
-            @JsonProperty("prices")
-            fun prices(prices: List<Price>) = apply {
-                this.prices = prices
-            }
+            @JsonProperty("prices") fun prices(prices: List<Price>) = apply { this.prices = prices }
 
             /** Free-form text which is available on the invoice PDF and the Orb invoice portal. */
             @JsonProperty("default_invoice_memo")
@@ -260,33 +228,25 @@ class PlanCreateParams constructor(
             }
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
             @JsonProperty("metadata")
-            fun metadata(metadata: Metadata) = apply {
-                this.metadata = metadata
-            }
+            fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
             /**
-             * The net terms determines the difference between the invoice date and the issue
-             * date for the invoice. If you intend the invoice to be due on issue, set this
-             * to 0.
+             * The net terms determines the difference between the invoice date and the issue date
+             * for the invoice. If you intend the invoice to be due on issue, set this to 0.
              */
             @JsonProperty("net_terms")
-            fun netTerms(netTerms: Long) = apply {
-                this.netTerms = netTerms
-            }
+            fun netTerms(netTerms: Long) = apply { this.netTerms = netTerms }
 
             /**
-             * The status of the plan to create (either active or draft). If not specified,
-             * this defaults to active.
+             * The status of the plan to create (either active or draft). If not specified, this
+             * defaults to active.
              */
-            @JsonProperty("status")
-            fun status(status: Status) = apply {
-                this.status = status
-            }
+            @JsonProperty("status") fun status(status: Status) = apply { this.status = status }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -302,23 +262,19 @@ class PlanCreateParams constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): PlanCreateBody = PlanCreateBody(
-                checkNotNull(currency) {
-                    "`currency` is required but was not set"
-                },
-                checkNotNull(name) {
-                    "`name` is required but was not set"
-                },
-                checkNotNull(prices) {
-                    "`prices` is required but was not set"
-                }.toUnmodifiable(),
-                defaultInvoiceMemo,
-                externalPlanId,
-                metadata,
-                netTerms,
-                status,
-                additionalProperties.toUnmodifiable(),
-            )
+            fun build(): PlanCreateBody =
+                PlanCreateBody(
+                    checkNotNull(currency) { "`currency` is required but was not set" },
+                    checkNotNull(name) { "`name` is required but was not set" },
+                    checkNotNull(prices) { "`prices` is required but was not set" }
+                        .toUnmodifiable(),
+                    defaultInvoiceMemo,
+                    externalPlanId,
+                    metadata,
+                    netTerms,
+                    status,
+                    additionalProperties.toUnmodifiable(),
+                )
         }
     }
 
@@ -329,48 +285,48 @@ class PlanCreateParams constructor(
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is PlanCreateParams &&
-          this.currency == other.currency &&
-          this.name == other.name &&
-          this.prices == other.prices &&
-          this.defaultInvoiceMemo == other.defaultInvoiceMemo &&
-          this.externalPlanId == other.externalPlanId &&
-          this.metadata == other.metadata &&
-          this.netTerms == other.netTerms &&
-          this.status == other.status &&
-          this.additionalQueryParams == other.additionalQueryParams &&
-          this.additionalHeaders == other.additionalHeaders &&
-          this.additionalBodyProperties == other.additionalBodyProperties
+        return other is PlanCreateParams &&
+            this.currency == other.currency &&
+            this.name == other.name &&
+            this.prices == other.prices &&
+            this.defaultInvoiceMemo == other.defaultInvoiceMemo &&
+            this.externalPlanId == other.externalPlanId &&
+            this.metadata == other.metadata &&
+            this.netTerms == other.netTerms &&
+            this.status == other.status &&
+            this.additionalQueryParams == other.additionalQueryParams &&
+            this.additionalHeaders == other.additionalHeaders &&
+            this.additionalBodyProperties == other.additionalBodyProperties
     }
 
     override fun hashCode(): Int {
-      return Objects.hash(
-          currency,
-          name,
-          prices,
-          defaultInvoiceMemo,
-          externalPlanId,
-          metadata,
-          netTerms,
-          status,
-          additionalQueryParams,
-          additionalHeaders,
-          additionalBodyProperties,
-      )
+        return Objects.hash(
+            currency,
+            name,
+            prices,
+            defaultInvoiceMemo,
+            externalPlanId,
+            metadata,
+            netTerms,
+            status,
+            additionalQueryParams,
+            additionalHeaders,
+            additionalBodyProperties,
+        )
     }
 
-    override fun toString() = "PlanCreateParams{currency=$currency, name=$name, prices=$prices, defaultInvoiceMemo=$defaultInvoiceMemo, externalPlanId=$externalPlanId, metadata=$metadata, netTerms=$netTerms, status=$status, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+    override fun toString() =
+        "PlanCreateParams{currency=$currency, name=$name, prices=$prices, defaultInvoiceMemo=$defaultInvoiceMemo, externalPlanId=$externalPlanId, metadata=$metadata, netTerms=$netTerms, status=$status, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     @NoAutoDetect
@@ -403,21 +359,14 @@ class PlanCreateParams constructor(
             additionalBodyProperties(planCreateParams.additionalBodyProperties)
         }
 
-        /**
-         * An ISO 4217 currency string for invoices generated by subscriptions on this
-         * plan.
-         */
-        fun currency(currency: String) = apply {
-            this.currency = currency
-        }
+        /** An ISO 4217 currency string for invoices generated by subscriptions on this plan. */
+        fun currency(currency: String) = apply { this.currency = currency }
 
-        fun name(name: String) = apply {
-            this.name = name
-        }
+        fun name(name: String) = apply { this.name = name }
 
         /**
-         * Prices for this plan. If the plan has phases, this includes prices across all
-         * phases of the plan.
+         * Prices for this plan. If the plan has phases, this includes prices across all phases of
+         * the plan.
          */
         fun prices(prices: List<Price>) = apply {
             this.prices.clear()
@@ -425,47 +374,36 @@ class PlanCreateParams constructor(
         }
 
         /**
-         * Prices for this plan. If the plan has phases, this includes prices across all
-         * phases of the plan.
+         * Prices for this plan. If the plan has phases, this includes prices across all phases of
+         * the plan.
          */
-        fun addPrice(price: Price) = apply {
-            this.prices.add(price)
-        }
+        fun addPrice(price: Price) = apply { this.prices.add(price) }
 
         /** Free-form text which is available on the invoice PDF and the Orb invoice portal. */
         fun defaultInvoiceMemo(defaultInvoiceMemo: String) = apply {
             this.defaultInvoiceMemo = defaultInvoiceMemo
         }
 
-        fun externalPlanId(externalPlanId: String) = apply {
-            this.externalPlanId = externalPlanId
-        }
+        fun externalPlanId(externalPlanId: String) = apply { this.externalPlanId = externalPlanId }
 
         /**
-         * User-specified key/value pairs for the resource. Individual keys can be removed
-         * by setting the value to `null`, and the entire metadata mapping can be cleared
-         * by setting `metadata` to `null`.
+         * User-specified key/value pairs for the resource. Individual keys can be removed by
+         * setting the value to `null`, and the entire metadata mapping can be cleared by setting
+         * `metadata` to `null`.
          */
-        fun metadata(metadata: Metadata) = apply {
-            this.metadata = metadata
-        }
+        fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
         /**
-         * The net terms determines the difference between the invoice date and the issue
-         * date for the invoice. If you intend the invoice to be due on issue, set this
-         * to 0.
+         * The net terms determines the difference between the invoice date and the issue date for
+         * the invoice. If you intend the invoice to be due on issue, set this to 0.
          */
-        fun netTerms(netTerms: Long) = apply {
-            this.netTerms = netTerms
-        }
+        fun netTerms(netTerms: Long) = apply { this.netTerms = netTerms }
 
         /**
-         * The status of the plan to create (either active or draft). If not specified,
-         * this defaults to active.
+         * The status of the plan to create (either active or draft). If not specified, this
+         * defaults to active.
          */
-        fun status(status: Status) = apply {
-            this.status = status
-        }
+        fun status(status: Status) = apply { this.status = status }
 
         fun additionalQueryParams(additionalQueryParams: Map<String, List<String>>) = apply {
             this.additionalQueryParams.clear()
@@ -505,9 +443,7 @@ class PlanCreateParams constructor(
             additionalHeaders.forEach(this::putHeaders)
         }
 
-        fun removeHeader(name: String) = apply {
-            this.additionalHeaders.put(name, mutableListOf())
-        }
+        fun removeHeader(name: String) = apply { this.additionalHeaders.put(name, mutableListOf()) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             this.additionalBodyProperties.clear()
@@ -518,285 +454,423 @@ class PlanCreateParams constructor(
             this.additionalBodyProperties.put(key, value)
         }
 
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.putAll(additionalBodyProperties)
-        }
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalBodyProperties.putAll(additionalBodyProperties)
+            }
 
-        fun build(): PlanCreateParams = PlanCreateParams(
-            checkNotNull(currency) {
-                "`currency` is required but was not set"
-            },
-            checkNotNull(name) {
-                "`name` is required but was not set"
-            },
-            checkNotNull(prices) {
-                "`prices` is required but was not set"
-            }.toUnmodifiable(),
-            defaultInvoiceMemo,
-            externalPlanId,
-            metadata,
-            netTerms,
-            status,
-            additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-            additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-            additionalBodyProperties.toUnmodifiable(),
-        )
+        fun build(): PlanCreateParams =
+            PlanCreateParams(
+                checkNotNull(currency) { "`currency` is required but was not set" },
+                checkNotNull(name) { "`name` is required but was not set" },
+                checkNotNull(prices) { "`prices` is required but was not set" }.toUnmodifiable(),
+                defaultInvoiceMemo,
+                externalPlanId,
+                metadata,
+                netTerms,
+                status,
+                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+                additionalBodyProperties.toUnmodifiable(),
+            )
     }
 
     @JsonDeserialize(using = Price.Deserializer::class)
     @JsonSerialize(using = Price.Serializer::class)
-    class Price private constructor(
-      private val newPlanUnitPrice: NewPlanUnitPrice? = null,
-      private val newPlanPackagePrice: NewPlanPackagePrice? = null,
-      private val newPlanMatrixPrice: NewPlanMatrixPrice? = null,
-      private val newPlanTieredPrice: NewPlanTieredPrice? = null,
-      private val newPlanTieredBpsPrice: NewPlanTieredBpsPrice? = null,
-      private val newPlanBpsPrice: NewPlanBpsPrice? = null,
-      private val newPlanBulkBpsPrice: NewPlanBulkBpsPrice? = null,
-      private val newPlanBulkPrice: NewPlanBulkPrice? = null,
-      private val newPlanThresholdTotalAmountPrice: NewPlanThresholdTotalAmountPrice? = null,
-      private val newPlanTieredPackagePrice: NewPlanTieredPackagePrice? = null,
-      private val newPlanTieredWithMinimumPrice: NewPlanTieredWithMinimumPrice? = null,
-      private val newPlanUnitWithPercentPrice: NewPlanUnitWithPercentPrice? = null,
-      private val newPlanPackageWithAllocationPrice: NewPlanPackageWithAllocationPrice? = null,
-      private val newPlanTierWithProrationPrice: NewPlanTierWithProrationPrice? = null,
-      private val newPlanUnitWithProrationPrice: NewPlanUnitWithProrationPrice? = null,
-      private val newPlanGroupedAllocationPrice: NewPlanGroupedAllocationPrice? = null,
-      private val newPlanBulkWithProrationPrice: NewPlanBulkWithProrationPrice? = null,
-      private val _json: JsonValue? = null,
-
+    class Price
+    private constructor(
+        private val newPlanUnitPrice: NewPlanUnitPrice? = null,
+        private val newPlanPackagePrice: NewPlanPackagePrice? = null,
+        private val newPlanMatrixPrice: NewPlanMatrixPrice? = null,
+        private val newPlanTieredPrice: NewPlanTieredPrice? = null,
+        private val newPlanTieredBpsPrice: NewPlanTieredBpsPrice? = null,
+        private val newPlanBpsPrice: NewPlanBpsPrice? = null,
+        private val newPlanBulkBpsPrice: NewPlanBulkBpsPrice? = null,
+        private val newPlanBulkPrice: NewPlanBulkPrice? = null,
+        private val newPlanThresholdTotalAmountPrice: NewPlanThresholdTotalAmountPrice? = null,
+        private val newPlanTieredPackagePrice: NewPlanTieredPackagePrice? = null,
+        private val newPlanTieredWithMinimumPrice: NewPlanTieredWithMinimumPrice? = null,
+        private val newPlanUnitWithPercentPrice: NewPlanUnitWithPercentPrice? = null,
+        private val newPlanPackageWithAllocationPrice: NewPlanPackageWithAllocationPrice? = null,
+        private val newPlanTierWithProrationPrice: NewPlanTierWithProrationPrice? = null,
+        private val newPlanUnitWithProrationPrice: NewPlanUnitWithProrationPrice? = null,
+        private val newPlanGroupedAllocationPrice: NewPlanGroupedAllocationPrice? = null,
+        private val newPlanBulkWithProrationPrice: NewPlanBulkWithProrationPrice? = null,
+        private val _json: JsonValue? = null,
     ) {
 
         private var validated: Boolean = false
 
         fun newPlanUnitPrice(): Optional<NewPlanUnitPrice> = Optional.ofNullable(newPlanUnitPrice)
-        fun newPlanPackagePrice(): Optional<NewPlanPackagePrice> = Optional.ofNullable(newPlanPackagePrice)
-        fun newPlanMatrixPrice(): Optional<NewPlanMatrixPrice> = Optional.ofNullable(newPlanMatrixPrice)
-        fun newPlanTieredPrice(): Optional<NewPlanTieredPrice> = Optional.ofNullable(newPlanTieredPrice)
-        fun newPlanTieredBpsPrice(): Optional<NewPlanTieredBpsPrice> = Optional.ofNullable(newPlanTieredBpsPrice)
+
+        fun newPlanPackagePrice(): Optional<NewPlanPackagePrice> =
+            Optional.ofNullable(newPlanPackagePrice)
+
+        fun newPlanMatrixPrice(): Optional<NewPlanMatrixPrice> =
+            Optional.ofNullable(newPlanMatrixPrice)
+
+        fun newPlanTieredPrice(): Optional<NewPlanTieredPrice> =
+            Optional.ofNullable(newPlanTieredPrice)
+
+        fun newPlanTieredBpsPrice(): Optional<NewPlanTieredBpsPrice> =
+            Optional.ofNullable(newPlanTieredBpsPrice)
+
         fun newPlanBpsPrice(): Optional<NewPlanBpsPrice> = Optional.ofNullable(newPlanBpsPrice)
-        fun newPlanBulkBpsPrice(): Optional<NewPlanBulkBpsPrice> = Optional.ofNullable(newPlanBulkBpsPrice)
+
+        fun newPlanBulkBpsPrice(): Optional<NewPlanBulkBpsPrice> =
+            Optional.ofNullable(newPlanBulkBpsPrice)
+
         fun newPlanBulkPrice(): Optional<NewPlanBulkPrice> = Optional.ofNullable(newPlanBulkPrice)
-        fun newPlanThresholdTotalAmountPrice(): Optional<NewPlanThresholdTotalAmountPrice> = Optional.ofNullable(newPlanThresholdTotalAmountPrice)
-        fun newPlanTieredPackagePrice(): Optional<NewPlanTieredPackagePrice> = Optional.ofNullable(newPlanTieredPackagePrice)
-        fun newPlanTieredWithMinimumPrice(): Optional<NewPlanTieredWithMinimumPrice> = Optional.ofNullable(newPlanTieredWithMinimumPrice)
-        fun newPlanUnitWithPercentPrice(): Optional<NewPlanUnitWithPercentPrice> = Optional.ofNullable(newPlanUnitWithPercentPrice)
-        fun newPlanPackageWithAllocationPrice(): Optional<NewPlanPackageWithAllocationPrice> = Optional.ofNullable(newPlanPackageWithAllocationPrice)
-        fun newPlanTierWithProrationPrice(): Optional<NewPlanTierWithProrationPrice> = Optional.ofNullable(newPlanTierWithProrationPrice)
-        fun newPlanUnitWithProrationPrice(): Optional<NewPlanUnitWithProrationPrice> = Optional.ofNullable(newPlanUnitWithProrationPrice)
-        fun newPlanGroupedAllocationPrice(): Optional<NewPlanGroupedAllocationPrice> = Optional.ofNullable(newPlanGroupedAllocationPrice)
-        fun newPlanBulkWithProrationPrice(): Optional<NewPlanBulkWithProrationPrice> = Optional.ofNullable(newPlanBulkWithProrationPrice)
+
+        fun newPlanThresholdTotalAmountPrice(): Optional<NewPlanThresholdTotalAmountPrice> =
+            Optional.ofNullable(newPlanThresholdTotalAmountPrice)
+
+        fun newPlanTieredPackagePrice(): Optional<NewPlanTieredPackagePrice> =
+            Optional.ofNullable(newPlanTieredPackagePrice)
+
+        fun newPlanTieredWithMinimumPrice(): Optional<NewPlanTieredWithMinimumPrice> =
+            Optional.ofNullable(newPlanTieredWithMinimumPrice)
+
+        fun newPlanUnitWithPercentPrice(): Optional<NewPlanUnitWithPercentPrice> =
+            Optional.ofNullable(newPlanUnitWithPercentPrice)
+
+        fun newPlanPackageWithAllocationPrice(): Optional<NewPlanPackageWithAllocationPrice> =
+            Optional.ofNullable(newPlanPackageWithAllocationPrice)
+
+        fun newPlanTierWithProrationPrice(): Optional<NewPlanTierWithProrationPrice> =
+            Optional.ofNullable(newPlanTierWithProrationPrice)
+
+        fun newPlanUnitWithProrationPrice(): Optional<NewPlanUnitWithProrationPrice> =
+            Optional.ofNullable(newPlanUnitWithProrationPrice)
+
+        fun newPlanGroupedAllocationPrice(): Optional<NewPlanGroupedAllocationPrice> =
+            Optional.ofNullable(newPlanGroupedAllocationPrice)
+
+        fun newPlanBulkWithProrationPrice(): Optional<NewPlanBulkWithProrationPrice> =
+            Optional.ofNullable(newPlanBulkWithProrationPrice)
 
         fun isNewPlanUnitPrice(): Boolean = newPlanUnitPrice != null
+
         fun isNewPlanPackagePrice(): Boolean = newPlanPackagePrice != null
+
         fun isNewPlanMatrixPrice(): Boolean = newPlanMatrixPrice != null
+
         fun isNewPlanTieredPrice(): Boolean = newPlanTieredPrice != null
+
         fun isNewPlanTieredBpsPrice(): Boolean = newPlanTieredBpsPrice != null
+
         fun isNewPlanBpsPrice(): Boolean = newPlanBpsPrice != null
+
         fun isNewPlanBulkBpsPrice(): Boolean = newPlanBulkBpsPrice != null
+
         fun isNewPlanBulkPrice(): Boolean = newPlanBulkPrice != null
+
         fun isNewPlanThresholdTotalAmountPrice(): Boolean = newPlanThresholdTotalAmountPrice != null
+
         fun isNewPlanTieredPackagePrice(): Boolean = newPlanTieredPackagePrice != null
+
         fun isNewPlanTieredWithMinimumPrice(): Boolean = newPlanTieredWithMinimumPrice != null
+
         fun isNewPlanUnitWithPercentPrice(): Boolean = newPlanUnitWithPercentPrice != null
-        fun isNewPlanPackageWithAllocationPrice(): Boolean = newPlanPackageWithAllocationPrice != null
+
+        fun isNewPlanPackageWithAllocationPrice(): Boolean =
+            newPlanPackageWithAllocationPrice != null
+
         fun isNewPlanTierWithProrationPrice(): Boolean = newPlanTierWithProrationPrice != null
+
         fun isNewPlanUnitWithProrationPrice(): Boolean = newPlanUnitWithProrationPrice != null
+
         fun isNewPlanGroupedAllocationPrice(): Boolean = newPlanGroupedAllocationPrice != null
+
         fun isNewPlanBulkWithProrationPrice(): Boolean = newPlanBulkWithProrationPrice != null
 
         fun asNewPlanUnitPrice(): NewPlanUnitPrice = newPlanUnitPrice.getOrThrow("newPlanUnitPrice")
-        fun asNewPlanPackagePrice(): NewPlanPackagePrice = newPlanPackagePrice.getOrThrow("newPlanPackagePrice")
-        fun asNewPlanMatrixPrice(): NewPlanMatrixPrice = newPlanMatrixPrice.getOrThrow("newPlanMatrixPrice")
-        fun asNewPlanTieredPrice(): NewPlanTieredPrice = newPlanTieredPrice.getOrThrow("newPlanTieredPrice")
-        fun asNewPlanTieredBpsPrice(): NewPlanTieredBpsPrice = newPlanTieredBpsPrice.getOrThrow("newPlanTieredBpsPrice")
+
+        fun asNewPlanPackagePrice(): NewPlanPackagePrice =
+            newPlanPackagePrice.getOrThrow("newPlanPackagePrice")
+
+        fun asNewPlanMatrixPrice(): NewPlanMatrixPrice =
+            newPlanMatrixPrice.getOrThrow("newPlanMatrixPrice")
+
+        fun asNewPlanTieredPrice(): NewPlanTieredPrice =
+            newPlanTieredPrice.getOrThrow("newPlanTieredPrice")
+
+        fun asNewPlanTieredBpsPrice(): NewPlanTieredBpsPrice =
+            newPlanTieredBpsPrice.getOrThrow("newPlanTieredBpsPrice")
+
         fun asNewPlanBpsPrice(): NewPlanBpsPrice = newPlanBpsPrice.getOrThrow("newPlanBpsPrice")
-        fun asNewPlanBulkBpsPrice(): NewPlanBulkBpsPrice = newPlanBulkBpsPrice.getOrThrow("newPlanBulkBpsPrice")
+
+        fun asNewPlanBulkBpsPrice(): NewPlanBulkBpsPrice =
+            newPlanBulkBpsPrice.getOrThrow("newPlanBulkBpsPrice")
+
         fun asNewPlanBulkPrice(): NewPlanBulkPrice = newPlanBulkPrice.getOrThrow("newPlanBulkPrice")
-        fun asNewPlanThresholdTotalAmountPrice(): NewPlanThresholdTotalAmountPrice = newPlanThresholdTotalAmountPrice.getOrThrow("newPlanThresholdTotalAmountPrice")
-        fun asNewPlanTieredPackagePrice(): NewPlanTieredPackagePrice = newPlanTieredPackagePrice.getOrThrow("newPlanTieredPackagePrice")
-        fun asNewPlanTieredWithMinimumPrice(): NewPlanTieredWithMinimumPrice = newPlanTieredWithMinimumPrice.getOrThrow("newPlanTieredWithMinimumPrice")
-        fun asNewPlanUnitWithPercentPrice(): NewPlanUnitWithPercentPrice = newPlanUnitWithPercentPrice.getOrThrow("newPlanUnitWithPercentPrice")
-        fun asNewPlanPackageWithAllocationPrice(): NewPlanPackageWithAllocationPrice = newPlanPackageWithAllocationPrice.getOrThrow("newPlanPackageWithAllocationPrice")
-        fun asNewPlanTierWithProrationPrice(): NewPlanTierWithProrationPrice = newPlanTierWithProrationPrice.getOrThrow("newPlanTierWithProrationPrice")
-        fun asNewPlanUnitWithProrationPrice(): NewPlanUnitWithProrationPrice = newPlanUnitWithProrationPrice.getOrThrow("newPlanUnitWithProrationPrice")
-        fun asNewPlanGroupedAllocationPrice(): NewPlanGroupedAllocationPrice = newPlanGroupedAllocationPrice.getOrThrow("newPlanGroupedAllocationPrice")
-        fun asNewPlanBulkWithProrationPrice(): NewPlanBulkWithProrationPrice = newPlanBulkWithProrationPrice.getOrThrow("newPlanBulkWithProrationPrice")
+
+        fun asNewPlanThresholdTotalAmountPrice(): NewPlanThresholdTotalAmountPrice =
+            newPlanThresholdTotalAmountPrice.getOrThrow("newPlanThresholdTotalAmountPrice")
+
+        fun asNewPlanTieredPackagePrice(): NewPlanTieredPackagePrice =
+            newPlanTieredPackagePrice.getOrThrow("newPlanTieredPackagePrice")
+
+        fun asNewPlanTieredWithMinimumPrice(): NewPlanTieredWithMinimumPrice =
+            newPlanTieredWithMinimumPrice.getOrThrow("newPlanTieredWithMinimumPrice")
+
+        fun asNewPlanUnitWithPercentPrice(): NewPlanUnitWithPercentPrice =
+            newPlanUnitWithPercentPrice.getOrThrow("newPlanUnitWithPercentPrice")
+
+        fun asNewPlanPackageWithAllocationPrice(): NewPlanPackageWithAllocationPrice =
+            newPlanPackageWithAllocationPrice.getOrThrow("newPlanPackageWithAllocationPrice")
+
+        fun asNewPlanTierWithProrationPrice(): NewPlanTierWithProrationPrice =
+            newPlanTierWithProrationPrice.getOrThrow("newPlanTierWithProrationPrice")
+
+        fun asNewPlanUnitWithProrationPrice(): NewPlanUnitWithProrationPrice =
+            newPlanUnitWithProrationPrice.getOrThrow("newPlanUnitWithProrationPrice")
+
+        fun asNewPlanGroupedAllocationPrice(): NewPlanGroupedAllocationPrice =
+            newPlanGroupedAllocationPrice.getOrThrow("newPlanGroupedAllocationPrice")
+
+        fun asNewPlanBulkWithProrationPrice(): NewPlanBulkWithProrationPrice =
+            newPlanBulkWithProrationPrice.getOrThrow("newPlanBulkWithProrationPrice")
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
         fun <T> accept(visitor: Visitor<T>): T {
-          return when {
-              newPlanUnitPrice != null -> visitor.visitNewPlanUnitPrice(newPlanUnitPrice)
-              newPlanPackagePrice != null -> visitor.visitNewPlanPackagePrice(newPlanPackagePrice)
-              newPlanMatrixPrice != null -> visitor.visitNewPlanMatrixPrice(newPlanMatrixPrice)
-              newPlanTieredPrice != null -> visitor.visitNewPlanTieredPrice(newPlanTieredPrice)
-              newPlanTieredBpsPrice != null -> visitor.visitNewPlanTieredBpsPrice(newPlanTieredBpsPrice)
-              newPlanBpsPrice != null -> visitor.visitNewPlanBpsPrice(newPlanBpsPrice)
-              newPlanBulkBpsPrice != null -> visitor.visitNewPlanBulkBpsPrice(newPlanBulkBpsPrice)
-              newPlanBulkPrice != null -> visitor.visitNewPlanBulkPrice(newPlanBulkPrice)
-              newPlanThresholdTotalAmountPrice != null -> visitor.visitNewPlanThresholdTotalAmountPrice(newPlanThresholdTotalAmountPrice)
-              newPlanTieredPackagePrice != null -> visitor.visitNewPlanTieredPackagePrice(newPlanTieredPackagePrice)
-              newPlanTieredWithMinimumPrice != null -> visitor.visitNewPlanTieredWithMinimumPrice(newPlanTieredWithMinimumPrice)
-              newPlanUnitWithPercentPrice != null -> visitor.visitNewPlanUnitWithPercentPrice(newPlanUnitWithPercentPrice)
-              newPlanPackageWithAllocationPrice != null -> visitor.visitNewPlanPackageWithAllocationPrice(newPlanPackageWithAllocationPrice)
-              newPlanTierWithProrationPrice != null -> visitor.visitNewPlanTierWithProrationPrice(newPlanTierWithProrationPrice)
-              newPlanUnitWithProrationPrice != null -> visitor.visitNewPlanUnitWithProrationPrice(newPlanUnitWithProrationPrice)
-              newPlanGroupedAllocationPrice != null -> visitor.visitNewPlanGroupedAllocationPrice(newPlanGroupedAllocationPrice)
-              newPlanBulkWithProrationPrice != null -> visitor.visitNewPlanBulkWithProrationPrice(newPlanBulkWithProrationPrice)
-              else -> visitor.unknown(_json)
-          }
+            return when {
+                newPlanUnitPrice != null -> visitor.visitNewPlanUnitPrice(newPlanUnitPrice)
+                newPlanPackagePrice != null -> visitor.visitNewPlanPackagePrice(newPlanPackagePrice)
+                newPlanMatrixPrice != null -> visitor.visitNewPlanMatrixPrice(newPlanMatrixPrice)
+                newPlanTieredPrice != null -> visitor.visitNewPlanTieredPrice(newPlanTieredPrice)
+                newPlanTieredBpsPrice != null ->
+                    visitor.visitNewPlanTieredBpsPrice(newPlanTieredBpsPrice)
+                newPlanBpsPrice != null -> visitor.visitNewPlanBpsPrice(newPlanBpsPrice)
+                newPlanBulkBpsPrice != null -> visitor.visitNewPlanBulkBpsPrice(newPlanBulkBpsPrice)
+                newPlanBulkPrice != null -> visitor.visitNewPlanBulkPrice(newPlanBulkPrice)
+                newPlanThresholdTotalAmountPrice != null ->
+                    visitor.visitNewPlanThresholdTotalAmountPrice(newPlanThresholdTotalAmountPrice)
+                newPlanTieredPackagePrice != null ->
+                    visitor.visitNewPlanTieredPackagePrice(newPlanTieredPackagePrice)
+                newPlanTieredWithMinimumPrice != null ->
+                    visitor.visitNewPlanTieredWithMinimumPrice(newPlanTieredWithMinimumPrice)
+                newPlanUnitWithPercentPrice != null ->
+                    visitor.visitNewPlanUnitWithPercentPrice(newPlanUnitWithPercentPrice)
+                newPlanPackageWithAllocationPrice != null ->
+                    visitor.visitNewPlanPackageWithAllocationPrice(
+                        newPlanPackageWithAllocationPrice
+                    )
+                newPlanTierWithProrationPrice != null ->
+                    visitor.visitNewPlanTierWithProrationPrice(newPlanTierWithProrationPrice)
+                newPlanUnitWithProrationPrice != null ->
+                    visitor.visitNewPlanUnitWithProrationPrice(newPlanUnitWithProrationPrice)
+                newPlanGroupedAllocationPrice != null ->
+                    visitor.visitNewPlanGroupedAllocationPrice(newPlanGroupedAllocationPrice)
+                newPlanBulkWithProrationPrice != null ->
+                    visitor.visitNewPlanBulkWithProrationPrice(newPlanBulkWithProrationPrice)
+                else -> visitor.unknown(_json)
+            }
         }
 
         fun validate(): Price = apply {
             if (!validated) {
-              if (newPlanUnitPrice == null && newPlanPackagePrice == null && newPlanMatrixPrice == null && newPlanTieredPrice == null && newPlanTieredBpsPrice == null && newPlanBpsPrice == null && newPlanBulkBpsPrice == null && newPlanBulkPrice == null && newPlanThresholdTotalAmountPrice == null && newPlanTieredPackagePrice == null && newPlanTieredWithMinimumPrice == null && newPlanUnitWithPercentPrice == null && newPlanPackageWithAllocationPrice == null && newPlanTierWithProrationPrice == null && newPlanUnitWithProrationPrice == null && newPlanGroupedAllocationPrice == null && newPlanBulkWithProrationPrice == null) {
-                throw OrbInvalidDataException("Unknown Price: $_json")
-              }
-              newPlanUnitPrice?.validate()
-              newPlanPackagePrice?.validate()
-              newPlanMatrixPrice?.validate()
-              newPlanTieredPrice?.validate()
-              newPlanTieredBpsPrice?.validate()
-              newPlanBpsPrice?.validate()
-              newPlanBulkBpsPrice?.validate()
-              newPlanBulkPrice?.validate()
-              newPlanThresholdTotalAmountPrice?.validate()
-              newPlanTieredPackagePrice?.validate()
-              newPlanTieredWithMinimumPrice?.validate()
-              newPlanUnitWithPercentPrice?.validate()
-              newPlanPackageWithAllocationPrice?.validate()
-              newPlanTierWithProrationPrice?.validate()
-              newPlanUnitWithProrationPrice?.validate()
-              newPlanGroupedAllocationPrice?.validate()
-              newPlanBulkWithProrationPrice?.validate()
-              validated = true
+                if (
+                    newPlanUnitPrice == null &&
+                        newPlanPackagePrice == null &&
+                        newPlanMatrixPrice == null &&
+                        newPlanTieredPrice == null &&
+                        newPlanTieredBpsPrice == null &&
+                        newPlanBpsPrice == null &&
+                        newPlanBulkBpsPrice == null &&
+                        newPlanBulkPrice == null &&
+                        newPlanThresholdTotalAmountPrice == null &&
+                        newPlanTieredPackagePrice == null &&
+                        newPlanTieredWithMinimumPrice == null &&
+                        newPlanUnitWithPercentPrice == null &&
+                        newPlanPackageWithAllocationPrice == null &&
+                        newPlanTierWithProrationPrice == null &&
+                        newPlanUnitWithProrationPrice == null &&
+                        newPlanGroupedAllocationPrice == null &&
+                        newPlanBulkWithProrationPrice == null
+                ) {
+                    throw OrbInvalidDataException("Unknown Price: $_json")
+                }
+                newPlanUnitPrice?.validate()
+                newPlanPackagePrice?.validate()
+                newPlanMatrixPrice?.validate()
+                newPlanTieredPrice?.validate()
+                newPlanTieredBpsPrice?.validate()
+                newPlanBpsPrice?.validate()
+                newPlanBulkBpsPrice?.validate()
+                newPlanBulkPrice?.validate()
+                newPlanThresholdTotalAmountPrice?.validate()
+                newPlanTieredPackagePrice?.validate()
+                newPlanTieredWithMinimumPrice?.validate()
+                newPlanUnitWithPercentPrice?.validate()
+                newPlanPackageWithAllocationPrice?.validate()
+                newPlanTierWithProrationPrice?.validate()
+                newPlanUnitWithProrationPrice?.validate()
+                newPlanGroupedAllocationPrice?.validate()
+                newPlanBulkWithProrationPrice?.validate()
+                validated = true
             }
         }
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is Price &&
-              this.newPlanUnitPrice == other.newPlanUnitPrice &&
-              this.newPlanPackagePrice == other.newPlanPackagePrice &&
-              this.newPlanMatrixPrice == other.newPlanMatrixPrice &&
-              this.newPlanTieredPrice == other.newPlanTieredPrice &&
-              this.newPlanTieredBpsPrice == other.newPlanTieredBpsPrice &&
-              this.newPlanBpsPrice == other.newPlanBpsPrice &&
-              this.newPlanBulkBpsPrice == other.newPlanBulkBpsPrice &&
-              this.newPlanBulkPrice == other.newPlanBulkPrice &&
-              this.newPlanThresholdTotalAmountPrice == other.newPlanThresholdTotalAmountPrice &&
-              this.newPlanTieredPackagePrice == other.newPlanTieredPackagePrice &&
-              this.newPlanTieredWithMinimumPrice == other.newPlanTieredWithMinimumPrice &&
-              this.newPlanUnitWithPercentPrice == other.newPlanUnitWithPercentPrice &&
-              this.newPlanPackageWithAllocationPrice == other.newPlanPackageWithAllocationPrice &&
-              this.newPlanTierWithProrationPrice == other.newPlanTierWithProrationPrice &&
-              this.newPlanUnitWithProrationPrice == other.newPlanUnitWithProrationPrice &&
-              this.newPlanGroupedAllocationPrice == other.newPlanGroupedAllocationPrice &&
-              this.newPlanBulkWithProrationPrice == other.newPlanBulkWithProrationPrice
+            return other is Price &&
+                this.newPlanUnitPrice == other.newPlanUnitPrice &&
+                this.newPlanPackagePrice == other.newPlanPackagePrice &&
+                this.newPlanMatrixPrice == other.newPlanMatrixPrice &&
+                this.newPlanTieredPrice == other.newPlanTieredPrice &&
+                this.newPlanTieredBpsPrice == other.newPlanTieredBpsPrice &&
+                this.newPlanBpsPrice == other.newPlanBpsPrice &&
+                this.newPlanBulkBpsPrice == other.newPlanBulkBpsPrice &&
+                this.newPlanBulkPrice == other.newPlanBulkPrice &&
+                this.newPlanThresholdTotalAmountPrice == other.newPlanThresholdTotalAmountPrice &&
+                this.newPlanTieredPackagePrice == other.newPlanTieredPackagePrice &&
+                this.newPlanTieredWithMinimumPrice == other.newPlanTieredWithMinimumPrice &&
+                this.newPlanUnitWithPercentPrice == other.newPlanUnitWithPercentPrice &&
+                this.newPlanPackageWithAllocationPrice == other.newPlanPackageWithAllocationPrice &&
+                this.newPlanTierWithProrationPrice == other.newPlanTierWithProrationPrice &&
+                this.newPlanUnitWithProrationPrice == other.newPlanUnitWithProrationPrice &&
+                this.newPlanGroupedAllocationPrice == other.newPlanGroupedAllocationPrice &&
+                this.newPlanBulkWithProrationPrice == other.newPlanBulkWithProrationPrice
         }
 
         override fun hashCode(): Int {
-          return Objects.hash(
-              newPlanUnitPrice,
-              newPlanPackagePrice,
-              newPlanMatrixPrice,
-              newPlanTieredPrice,
-              newPlanTieredBpsPrice,
-              newPlanBpsPrice,
-              newPlanBulkBpsPrice,
-              newPlanBulkPrice,
-              newPlanThresholdTotalAmountPrice,
-              newPlanTieredPackagePrice,
-              newPlanTieredWithMinimumPrice,
-              newPlanUnitWithPercentPrice,
-              newPlanPackageWithAllocationPrice,
-              newPlanTierWithProrationPrice,
-              newPlanUnitWithProrationPrice,
-              newPlanGroupedAllocationPrice,
-              newPlanBulkWithProrationPrice,
-          )
+            return Objects.hash(
+                newPlanUnitPrice,
+                newPlanPackagePrice,
+                newPlanMatrixPrice,
+                newPlanTieredPrice,
+                newPlanTieredBpsPrice,
+                newPlanBpsPrice,
+                newPlanBulkBpsPrice,
+                newPlanBulkPrice,
+                newPlanThresholdTotalAmountPrice,
+                newPlanTieredPackagePrice,
+                newPlanTieredWithMinimumPrice,
+                newPlanUnitWithPercentPrice,
+                newPlanPackageWithAllocationPrice,
+                newPlanTierWithProrationPrice,
+                newPlanUnitWithProrationPrice,
+                newPlanGroupedAllocationPrice,
+                newPlanBulkWithProrationPrice,
+            )
         }
 
         override fun toString(): String {
-          return when {
-              newPlanUnitPrice != null -> "Price{newPlanUnitPrice=$newPlanUnitPrice}"
-              newPlanPackagePrice != null -> "Price{newPlanPackagePrice=$newPlanPackagePrice}"
-              newPlanMatrixPrice != null -> "Price{newPlanMatrixPrice=$newPlanMatrixPrice}"
-              newPlanTieredPrice != null -> "Price{newPlanTieredPrice=$newPlanTieredPrice}"
-              newPlanTieredBpsPrice != null -> "Price{newPlanTieredBpsPrice=$newPlanTieredBpsPrice}"
-              newPlanBpsPrice != null -> "Price{newPlanBpsPrice=$newPlanBpsPrice}"
-              newPlanBulkBpsPrice != null -> "Price{newPlanBulkBpsPrice=$newPlanBulkBpsPrice}"
-              newPlanBulkPrice != null -> "Price{newPlanBulkPrice=$newPlanBulkPrice}"
-              newPlanThresholdTotalAmountPrice != null -> "Price{newPlanThresholdTotalAmountPrice=$newPlanThresholdTotalAmountPrice}"
-              newPlanTieredPackagePrice != null -> "Price{newPlanTieredPackagePrice=$newPlanTieredPackagePrice}"
-              newPlanTieredWithMinimumPrice != null -> "Price{newPlanTieredWithMinimumPrice=$newPlanTieredWithMinimumPrice}"
-              newPlanUnitWithPercentPrice != null -> "Price{newPlanUnitWithPercentPrice=$newPlanUnitWithPercentPrice}"
-              newPlanPackageWithAllocationPrice != null -> "Price{newPlanPackageWithAllocationPrice=$newPlanPackageWithAllocationPrice}"
-              newPlanTierWithProrationPrice != null -> "Price{newPlanTierWithProrationPrice=$newPlanTierWithProrationPrice}"
-              newPlanUnitWithProrationPrice != null -> "Price{newPlanUnitWithProrationPrice=$newPlanUnitWithProrationPrice}"
-              newPlanGroupedAllocationPrice != null -> "Price{newPlanGroupedAllocationPrice=$newPlanGroupedAllocationPrice}"
-              newPlanBulkWithProrationPrice != null -> "Price{newPlanBulkWithProrationPrice=$newPlanBulkWithProrationPrice}"
-              _json != null -> "Price{_unknown=$_json}"
-              else -> throw IllegalStateException("Invalid Price")
-          }
+            return when {
+                newPlanUnitPrice != null -> "Price{newPlanUnitPrice=$newPlanUnitPrice}"
+                newPlanPackagePrice != null -> "Price{newPlanPackagePrice=$newPlanPackagePrice}"
+                newPlanMatrixPrice != null -> "Price{newPlanMatrixPrice=$newPlanMatrixPrice}"
+                newPlanTieredPrice != null -> "Price{newPlanTieredPrice=$newPlanTieredPrice}"
+                newPlanTieredBpsPrice != null ->
+                    "Price{newPlanTieredBpsPrice=$newPlanTieredBpsPrice}"
+                newPlanBpsPrice != null -> "Price{newPlanBpsPrice=$newPlanBpsPrice}"
+                newPlanBulkBpsPrice != null -> "Price{newPlanBulkBpsPrice=$newPlanBulkBpsPrice}"
+                newPlanBulkPrice != null -> "Price{newPlanBulkPrice=$newPlanBulkPrice}"
+                newPlanThresholdTotalAmountPrice != null ->
+                    "Price{newPlanThresholdTotalAmountPrice=$newPlanThresholdTotalAmountPrice}"
+                newPlanTieredPackagePrice != null ->
+                    "Price{newPlanTieredPackagePrice=$newPlanTieredPackagePrice}"
+                newPlanTieredWithMinimumPrice != null ->
+                    "Price{newPlanTieredWithMinimumPrice=$newPlanTieredWithMinimumPrice}"
+                newPlanUnitWithPercentPrice != null ->
+                    "Price{newPlanUnitWithPercentPrice=$newPlanUnitWithPercentPrice}"
+                newPlanPackageWithAllocationPrice != null ->
+                    "Price{newPlanPackageWithAllocationPrice=$newPlanPackageWithAllocationPrice}"
+                newPlanTierWithProrationPrice != null ->
+                    "Price{newPlanTierWithProrationPrice=$newPlanTierWithProrationPrice}"
+                newPlanUnitWithProrationPrice != null ->
+                    "Price{newPlanUnitWithProrationPrice=$newPlanUnitWithProrationPrice}"
+                newPlanGroupedAllocationPrice != null ->
+                    "Price{newPlanGroupedAllocationPrice=$newPlanGroupedAllocationPrice}"
+                newPlanBulkWithProrationPrice != null ->
+                    "Price{newPlanBulkWithProrationPrice=$newPlanBulkWithProrationPrice}"
+                _json != null -> "Price{_unknown=$_json}"
+                else -> throw IllegalStateException("Invalid Price")
+            }
         }
 
         companion object {
 
             @JvmStatic
-            fun ofNewPlanUnitPrice(newPlanUnitPrice: NewPlanUnitPrice) = Price(newPlanUnitPrice = newPlanUnitPrice)
+            fun ofNewPlanUnitPrice(newPlanUnitPrice: NewPlanUnitPrice) =
+                Price(newPlanUnitPrice = newPlanUnitPrice)
 
             @JvmStatic
-            fun ofNewPlanPackagePrice(newPlanPackagePrice: NewPlanPackagePrice) = Price(newPlanPackagePrice = newPlanPackagePrice)
+            fun ofNewPlanPackagePrice(newPlanPackagePrice: NewPlanPackagePrice) =
+                Price(newPlanPackagePrice = newPlanPackagePrice)
 
             @JvmStatic
-            fun ofNewPlanMatrixPrice(newPlanMatrixPrice: NewPlanMatrixPrice) = Price(newPlanMatrixPrice = newPlanMatrixPrice)
+            fun ofNewPlanMatrixPrice(newPlanMatrixPrice: NewPlanMatrixPrice) =
+                Price(newPlanMatrixPrice = newPlanMatrixPrice)
 
             @JvmStatic
-            fun ofNewPlanTieredPrice(newPlanTieredPrice: NewPlanTieredPrice) = Price(newPlanTieredPrice = newPlanTieredPrice)
+            fun ofNewPlanTieredPrice(newPlanTieredPrice: NewPlanTieredPrice) =
+                Price(newPlanTieredPrice = newPlanTieredPrice)
 
             @JvmStatic
-            fun ofNewPlanTieredBpsPrice(newPlanTieredBpsPrice: NewPlanTieredBpsPrice) = Price(newPlanTieredBpsPrice = newPlanTieredBpsPrice)
+            fun ofNewPlanTieredBpsPrice(newPlanTieredBpsPrice: NewPlanTieredBpsPrice) =
+                Price(newPlanTieredBpsPrice = newPlanTieredBpsPrice)
 
             @JvmStatic
-            fun ofNewPlanBpsPrice(newPlanBpsPrice: NewPlanBpsPrice) = Price(newPlanBpsPrice = newPlanBpsPrice)
+            fun ofNewPlanBpsPrice(newPlanBpsPrice: NewPlanBpsPrice) =
+                Price(newPlanBpsPrice = newPlanBpsPrice)
 
             @JvmStatic
-            fun ofNewPlanBulkBpsPrice(newPlanBulkBpsPrice: NewPlanBulkBpsPrice) = Price(newPlanBulkBpsPrice = newPlanBulkBpsPrice)
+            fun ofNewPlanBulkBpsPrice(newPlanBulkBpsPrice: NewPlanBulkBpsPrice) =
+                Price(newPlanBulkBpsPrice = newPlanBulkBpsPrice)
 
             @JvmStatic
-            fun ofNewPlanBulkPrice(newPlanBulkPrice: NewPlanBulkPrice) = Price(newPlanBulkPrice = newPlanBulkPrice)
+            fun ofNewPlanBulkPrice(newPlanBulkPrice: NewPlanBulkPrice) =
+                Price(newPlanBulkPrice = newPlanBulkPrice)
 
             @JvmStatic
-            fun ofNewPlanThresholdTotalAmountPrice(newPlanThresholdTotalAmountPrice: NewPlanThresholdTotalAmountPrice) = Price(newPlanThresholdTotalAmountPrice = newPlanThresholdTotalAmountPrice)
+            fun ofNewPlanThresholdTotalAmountPrice(
+                newPlanThresholdTotalAmountPrice: NewPlanThresholdTotalAmountPrice
+            ) = Price(newPlanThresholdTotalAmountPrice = newPlanThresholdTotalAmountPrice)
 
             @JvmStatic
-            fun ofNewPlanTieredPackagePrice(newPlanTieredPackagePrice: NewPlanTieredPackagePrice) = Price(newPlanTieredPackagePrice = newPlanTieredPackagePrice)
+            fun ofNewPlanTieredPackagePrice(newPlanTieredPackagePrice: NewPlanTieredPackagePrice) =
+                Price(newPlanTieredPackagePrice = newPlanTieredPackagePrice)
 
             @JvmStatic
-            fun ofNewPlanTieredWithMinimumPrice(newPlanTieredWithMinimumPrice: NewPlanTieredWithMinimumPrice) = Price(newPlanTieredWithMinimumPrice = newPlanTieredWithMinimumPrice)
+            fun ofNewPlanTieredWithMinimumPrice(
+                newPlanTieredWithMinimumPrice: NewPlanTieredWithMinimumPrice
+            ) = Price(newPlanTieredWithMinimumPrice = newPlanTieredWithMinimumPrice)
 
             @JvmStatic
-            fun ofNewPlanUnitWithPercentPrice(newPlanUnitWithPercentPrice: NewPlanUnitWithPercentPrice) = Price(newPlanUnitWithPercentPrice = newPlanUnitWithPercentPrice)
+            fun ofNewPlanUnitWithPercentPrice(
+                newPlanUnitWithPercentPrice: NewPlanUnitWithPercentPrice
+            ) = Price(newPlanUnitWithPercentPrice = newPlanUnitWithPercentPrice)
 
             @JvmStatic
-            fun ofNewPlanPackageWithAllocationPrice(newPlanPackageWithAllocationPrice: NewPlanPackageWithAllocationPrice) = Price(newPlanPackageWithAllocationPrice = newPlanPackageWithAllocationPrice)
+            fun ofNewPlanPackageWithAllocationPrice(
+                newPlanPackageWithAllocationPrice: NewPlanPackageWithAllocationPrice
+            ) = Price(newPlanPackageWithAllocationPrice = newPlanPackageWithAllocationPrice)
 
             @JvmStatic
-            fun ofNewPlanTierWithProrationPrice(newPlanTierWithProrationPrice: NewPlanTierWithProrationPrice) = Price(newPlanTierWithProrationPrice = newPlanTierWithProrationPrice)
+            fun ofNewPlanTierWithProrationPrice(
+                newPlanTierWithProrationPrice: NewPlanTierWithProrationPrice
+            ) = Price(newPlanTierWithProrationPrice = newPlanTierWithProrationPrice)
 
             @JvmStatic
-            fun ofNewPlanUnitWithProrationPrice(newPlanUnitWithProrationPrice: NewPlanUnitWithProrationPrice) = Price(newPlanUnitWithProrationPrice = newPlanUnitWithProrationPrice)
+            fun ofNewPlanUnitWithProrationPrice(
+                newPlanUnitWithProrationPrice: NewPlanUnitWithProrationPrice
+            ) = Price(newPlanUnitWithProrationPrice = newPlanUnitWithProrationPrice)
 
             @JvmStatic
-            fun ofNewPlanGroupedAllocationPrice(newPlanGroupedAllocationPrice: NewPlanGroupedAllocationPrice) = Price(newPlanGroupedAllocationPrice = newPlanGroupedAllocationPrice)
+            fun ofNewPlanGroupedAllocationPrice(
+                newPlanGroupedAllocationPrice: NewPlanGroupedAllocationPrice
+            ) = Price(newPlanGroupedAllocationPrice = newPlanGroupedAllocationPrice)
 
             @JvmStatic
-            fun ofNewPlanBulkWithProrationPrice(newPlanBulkWithProrationPrice: NewPlanBulkWithProrationPrice) = Price(newPlanBulkWithProrationPrice = newPlanBulkWithProrationPrice)
+            fun ofNewPlanBulkWithProrationPrice(
+                newPlanBulkWithProrationPrice: NewPlanBulkWithProrationPrice
+            ) = Price(newPlanBulkWithProrationPrice = newPlanBulkWithProrationPrice)
         }
 
         interface Visitor<out T> {
@@ -817,134 +891,203 @@ class PlanCreateParams constructor(
 
             fun visitNewPlanBulkPrice(newPlanBulkPrice: NewPlanBulkPrice): T
 
-            fun visitNewPlanThresholdTotalAmountPrice(newPlanThresholdTotalAmountPrice: NewPlanThresholdTotalAmountPrice): T
+            fun visitNewPlanThresholdTotalAmountPrice(
+                newPlanThresholdTotalAmountPrice: NewPlanThresholdTotalAmountPrice
+            ): T
 
-            fun visitNewPlanTieredPackagePrice(newPlanTieredPackagePrice: NewPlanTieredPackagePrice): T
+            fun visitNewPlanTieredPackagePrice(
+                newPlanTieredPackagePrice: NewPlanTieredPackagePrice
+            ): T
 
-            fun visitNewPlanTieredWithMinimumPrice(newPlanTieredWithMinimumPrice: NewPlanTieredWithMinimumPrice): T
+            fun visitNewPlanTieredWithMinimumPrice(
+                newPlanTieredWithMinimumPrice: NewPlanTieredWithMinimumPrice
+            ): T
 
-            fun visitNewPlanUnitWithPercentPrice(newPlanUnitWithPercentPrice: NewPlanUnitWithPercentPrice): T
+            fun visitNewPlanUnitWithPercentPrice(
+                newPlanUnitWithPercentPrice: NewPlanUnitWithPercentPrice
+            ): T
 
-            fun visitNewPlanPackageWithAllocationPrice(newPlanPackageWithAllocationPrice: NewPlanPackageWithAllocationPrice): T
+            fun visitNewPlanPackageWithAllocationPrice(
+                newPlanPackageWithAllocationPrice: NewPlanPackageWithAllocationPrice
+            ): T
 
-            fun visitNewPlanTierWithProrationPrice(newPlanTierWithProrationPrice: NewPlanTierWithProrationPrice): T
+            fun visitNewPlanTierWithProrationPrice(
+                newPlanTierWithProrationPrice: NewPlanTierWithProrationPrice
+            ): T
 
-            fun visitNewPlanUnitWithProrationPrice(newPlanUnitWithProrationPrice: NewPlanUnitWithProrationPrice): T
+            fun visitNewPlanUnitWithProrationPrice(
+                newPlanUnitWithProrationPrice: NewPlanUnitWithProrationPrice
+            ): T
 
-            fun visitNewPlanGroupedAllocationPrice(newPlanGroupedAllocationPrice: NewPlanGroupedAllocationPrice): T
+            fun visitNewPlanGroupedAllocationPrice(
+                newPlanGroupedAllocationPrice: NewPlanGroupedAllocationPrice
+            ): T
 
-            fun visitNewPlanBulkWithProrationPrice(newPlanBulkWithProrationPrice: NewPlanBulkWithProrationPrice): T
+            fun visitNewPlanBulkWithProrationPrice(
+                newPlanBulkWithProrationPrice: NewPlanBulkWithProrationPrice
+            ): T
 
             fun unknown(json: JsonValue?): T {
-              throw OrbInvalidDataException("Unknown Price: $json")
+                throw OrbInvalidDataException("Unknown Price: $json")
             }
         }
 
         class Deserializer : BaseDeserializer<Price>(Price::class) {
 
             override fun ObjectCodec.deserialize(node: JsonNode): Price {
-              val json = JsonValue.fromJsonNode(node)
-              tryDeserialize(node, jacksonTypeRef<NewPlanUnitPrice>()){ it.validate() }?.let {
-                  return Price(newPlanUnitPrice = it, _json = json)
-              }
-              tryDeserialize(node, jacksonTypeRef<NewPlanPackagePrice>()){ it.validate() }?.let {
-                  return Price(newPlanPackagePrice = it, _json = json)
-              }
-              tryDeserialize(node, jacksonTypeRef<NewPlanMatrixPrice>()){ it.validate() }?.let {
-                  return Price(newPlanMatrixPrice = it, _json = json)
-              }
-              tryDeserialize(node, jacksonTypeRef<NewPlanTieredPrice>()){ it.validate() }?.let {
-                  return Price(newPlanTieredPrice = it, _json = json)
-              }
-              tryDeserialize(node, jacksonTypeRef<NewPlanTieredBpsPrice>()){ it.validate() }?.let {
-                  return Price(newPlanTieredBpsPrice = it, _json = json)
-              }
-              tryDeserialize(node, jacksonTypeRef<NewPlanBpsPrice>()){ it.validate() }?.let {
-                  return Price(newPlanBpsPrice = it, _json = json)
-              }
-              tryDeserialize(node, jacksonTypeRef<NewPlanBulkBpsPrice>()){ it.validate() }?.let {
-                  return Price(newPlanBulkBpsPrice = it, _json = json)
-              }
-              tryDeserialize(node, jacksonTypeRef<NewPlanBulkPrice>()){ it.validate() }?.let {
-                  return Price(newPlanBulkPrice = it, _json = json)
-              }
-              tryDeserialize(node, jacksonTypeRef<NewPlanThresholdTotalAmountPrice>()){ it.validate() }?.let {
-                  return Price(newPlanThresholdTotalAmountPrice = it, _json = json)
-              }
-              tryDeserialize(node, jacksonTypeRef<NewPlanTieredPackagePrice>()){ it.validate() }?.let {
-                  return Price(newPlanTieredPackagePrice = it, _json = json)
-              }
-              tryDeserialize(node, jacksonTypeRef<NewPlanTieredWithMinimumPrice>()){ it.validate() }?.let {
-                  return Price(newPlanTieredWithMinimumPrice = it, _json = json)
-              }
-              tryDeserialize(node, jacksonTypeRef<NewPlanUnitWithPercentPrice>()){ it.validate() }?.let {
-                  return Price(newPlanUnitWithPercentPrice = it, _json = json)
-              }
-              tryDeserialize(node, jacksonTypeRef<NewPlanPackageWithAllocationPrice>()){ it.validate() }?.let {
-                  return Price(newPlanPackageWithAllocationPrice = it, _json = json)
-              }
-              tryDeserialize(node, jacksonTypeRef<NewPlanTierWithProrationPrice>()){ it.validate() }?.let {
-                  return Price(newPlanTierWithProrationPrice = it, _json = json)
-              }
-              tryDeserialize(node, jacksonTypeRef<NewPlanUnitWithProrationPrice>()){ it.validate() }?.let {
-                  return Price(newPlanUnitWithProrationPrice = it, _json = json)
-              }
-              tryDeserialize(node, jacksonTypeRef<NewPlanGroupedAllocationPrice>()){ it.validate() }?.let {
-                  return Price(newPlanGroupedAllocationPrice = it, _json = json)
-              }
-              tryDeserialize(node, jacksonTypeRef<NewPlanBulkWithProrationPrice>()){ it.validate() }?.let {
-                  return Price(newPlanBulkWithProrationPrice = it, _json = json)
-              }
+                val json = JsonValue.fromJsonNode(node)
+                tryDeserialize(node, jacksonTypeRef<NewPlanUnitPrice>()) { it.validate() }
+                    ?.let {
+                        return Price(newPlanUnitPrice = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<NewPlanPackagePrice>()) { it.validate() }
+                    ?.let {
+                        return Price(newPlanPackagePrice = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<NewPlanMatrixPrice>()) { it.validate() }
+                    ?.let {
+                        return Price(newPlanMatrixPrice = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<NewPlanTieredPrice>()) { it.validate() }
+                    ?.let {
+                        return Price(newPlanTieredPrice = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<NewPlanTieredBpsPrice>()) { it.validate() }
+                    ?.let {
+                        return Price(newPlanTieredBpsPrice = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<NewPlanBpsPrice>()) { it.validate() }
+                    ?.let {
+                        return Price(newPlanBpsPrice = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<NewPlanBulkBpsPrice>()) { it.validate() }
+                    ?.let {
+                        return Price(newPlanBulkBpsPrice = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<NewPlanBulkPrice>()) { it.validate() }
+                    ?.let {
+                        return Price(newPlanBulkPrice = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<NewPlanThresholdTotalAmountPrice>()) {
+                        it.validate()
+                    }
+                    ?.let {
+                        return Price(newPlanThresholdTotalAmountPrice = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<NewPlanTieredPackagePrice>()) { it.validate() }
+                    ?.let {
+                        return Price(newPlanTieredPackagePrice = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<NewPlanTieredWithMinimumPrice>()) {
+                        it.validate()
+                    }
+                    ?.let {
+                        return Price(newPlanTieredWithMinimumPrice = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<NewPlanUnitWithPercentPrice>()) {
+                        it.validate()
+                    }
+                    ?.let {
+                        return Price(newPlanUnitWithPercentPrice = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<NewPlanPackageWithAllocationPrice>()) {
+                        it.validate()
+                    }
+                    ?.let {
+                        return Price(newPlanPackageWithAllocationPrice = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<NewPlanTierWithProrationPrice>()) {
+                        it.validate()
+                    }
+                    ?.let {
+                        return Price(newPlanTierWithProrationPrice = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<NewPlanUnitWithProrationPrice>()) {
+                        it.validate()
+                    }
+                    ?.let {
+                        return Price(newPlanUnitWithProrationPrice = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<NewPlanGroupedAllocationPrice>()) {
+                        it.validate()
+                    }
+                    ?.let {
+                        return Price(newPlanGroupedAllocationPrice = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<NewPlanBulkWithProrationPrice>()) {
+                        it.validate()
+                    }
+                    ?.let {
+                        return Price(newPlanBulkWithProrationPrice = it, _json = json)
+                    }
 
-              return Price(_json = json)
+                return Price(_json = json)
             }
         }
 
         class Serializer : BaseSerializer<Price>(Price::class) {
 
-            override fun serialize(value: Price, generator: JsonGenerator, provider: SerializerProvider) {
-              when {
-                  value.newPlanUnitPrice != null -> generator.writeObject(value.newPlanUnitPrice)
-                  value.newPlanPackagePrice != null -> generator.writeObject(value.newPlanPackagePrice)
-                  value.newPlanMatrixPrice != null -> generator.writeObject(value.newPlanMatrixPrice)
-                  value.newPlanTieredPrice != null -> generator.writeObject(value.newPlanTieredPrice)
-                  value.newPlanTieredBpsPrice != null -> generator.writeObject(value.newPlanTieredBpsPrice)
-                  value.newPlanBpsPrice != null -> generator.writeObject(value.newPlanBpsPrice)
-                  value.newPlanBulkBpsPrice != null -> generator.writeObject(value.newPlanBulkBpsPrice)
-                  value.newPlanBulkPrice != null -> generator.writeObject(value.newPlanBulkPrice)
-                  value.newPlanThresholdTotalAmountPrice != null -> generator.writeObject(value.newPlanThresholdTotalAmountPrice)
-                  value.newPlanTieredPackagePrice != null -> generator.writeObject(value.newPlanTieredPackagePrice)
-                  value.newPlanTieredWithMinimumPrice != null -> generator.writeObject(value.newPlanTieredWithMinimumPrice)
-                  value.newPlanUnitWithPercentPrice != null -> generator.writeObject(value.newPlanUnitWithPercentPrice)
-                  value.newPlanPackageWithAllocationPrice != null -> generator.writeObject(value.newPlanPackageWithAllocationPrice)
-                  value.newPlanTierWithProrationPrice != null -> generator.writeObject(value.newPlanTierWithProrationPrice)
-                  value.newPlanUnitWithProrationPrice != null -> generator.writeObject(value.newPlanUnitWithProrationPrice)
-                  value.newPlanGroupedAllocationPrice != null -> generator.writeObject(value.newPlanGroupedAllocationPrice)
-                  value.newPlanBulkWithProrationPrice != null -> generator.writeObject(value.newPlanBulkWithProrationPrice)
-                  value._json != null -> generator.writeObject(value._json)
-                  else -> throw IllegalStateException("Invalid Price")
-              }
+            override fun serialize(
+                value: Price,
+                generator: JsonGenerator,
+                provider: SerializerProvider
+            ) {
+                when {
+                    value.newPlanUnitPrice != null -> generator.writeObject(value.newPlanUnitPrice)
+                    value.newPlanPackagePrice != null ->
+                        generator.writeObject(value.newPlanPackagePrice)
+                    value.newPlanMatrixPrice != null ->
+                        generator.writeObject(value.newPlanMatrixPrice)
+                    value.newPlanTieredPrice != null ->
+                        generator.writeObject(value.newPlanTieredPrice)
+                    value.newPlanTieredBpsPrice != null ->
+                        generator.writeObject(value.newPlanTieredBpsPrice)
+                    value.newPlanBpsPrice != null -> generator.writeObject(value.newPlanBpsPrice)
+                    value.newPlanBulkBpsPrice != null ->
+                        generator.writeObject(value.newPlanBulkBpsPrice)
+                    value.newPlanBulkPrice != null -> generator.writeObject(value.newPlanBulkPrice)
+                    value.newPlanThresholdTotalAmountPrice != null ->
+                        generator.writeObject(value.newPlanThresholdTotalAmountPrice)
+                    value.newPlanTieredPackagePrice != null ->
+                        generator.writeObject(value.newPlanTieredPackagePrice)
+                    value.newPlanTieredWithMinimumPrice != null ->
+                        generator.writeObject(value.newPlanTieredWithMinimumPrice)
+                    value.newPlanUnitWithPercentPrice != null ->
+                        generator.writeObject(value.newPlanUnitWithPercentPrice)
+                    value.newPlanPackageWithAllocationPrice != null ->
+                        generator.writeObject(value.newPlanPackageWithAllocationPrice)
+                    value.newPlanTierWithProrationPrice != null ->
+                        generator.writeObject(value.newPlanTierWithProrationPrice)
+                    value.newPlanUnitWithProrationPrice != null ->
+                        generator.writeObject(value.newPlanUnitWithProrationPrice)
+                    value.newPlanGroupedAllocationPrice != null ->
+                        generator.writeObject(value.newPlanGroupedAllocationPrice)
+                    value.newPlanBulkWithProrationPrice != null ->
+                        generator.writeObject(value.newPlanBulkWithProrationPrice)
+                    value._json != null -> generator.writeObject(value._json)
+                    else -> throw IllegalStateException("Invalid Price")
+                }
             }
         }
 
         @JsonDeserialize(builder = NewPlanUnitPrice.Builder::class)
         @NoAutoDetect
-        class NewPlanUnitPrice private constructor(
-          private val metadata: JsonField<Metadata>,
-          private val externalPriceId: JsonField<String>,
-          private val name: JsonField<String>,
-          private val billableMetricId: JsonField<String>,
-          private val itemId: JsonField<String>,
-          private val billedInAdvance: JsonField<Boolean>,
-          private val fixedPriceQuantity: JsonField<Double>,
-          private val invoiceGroupingKey: JsonField<String>,
-          private val cadence: JsonField<Cadence>,
-          private val conversionRate: JsonField<Double>,
-          private val modelType: JsonField<ModelType>,
-          private val unitConfig: JsonField<UnitConfig>,
-          private val currency: JsonField<String>,
-          private val additionalProperties: Map<String, JsonValue>,
-
+        class NewPlanUnitPrice
+        private constructor(
+            private val metadata: JsonField<Metadata>,
+            private val externalPriceId: JsonField<String>,
+            private val name: JsonField<String>,
+            private val billableMetricId: JsonField<String>,
+            private val itemId: JsonField<String>,
+            private val billedInAdvance: JsonField<Boolean>,
+            private val fixedPriceQuantity: JsonField<Double>,
+            private val invoiceGroupingKey: JsonField<String>,
+            private val cadence: JsonField<Cadence>,
+            private val conversionRate: JsonField<Double>,
+            private val modelType: JsonField<ModelType>,
+            private val unitConfig: JsonField<UnitConfig>,
+            private val currency: JsonField<String>,
+            private val additionalProperties: Map<String, JsonValue>,
         ) {
 
             private var validated: Boolean = false
@@ -952,66 +1095,69 @@ class PlanCreateParams constructor(
             private var hashCode: Int = 0
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata.getNullable("metadata"))
+            fun metadata(): Optional<Metadata> =
+                Optional.ofNullable(metadata.getNullable("metadata"))
 
             /** An alias for the price. */
-            fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+            fun externalPriceId(): Optional<String> =
+                Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
 
             /** The name of the price. */
             fun name(): String = name.getRequired("name")
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
-            fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+            fun billableMetricId(): Optional<String> =
+                Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
 
             /** The id of the item the plan will be associated with. */
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
-            fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+            fun billedInAdvance(): Optional<Boolean> =
+                Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
-            fun fixedPriceQuantity(): Optional<Double> = Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+            fun fixedPriceQuantity(): Optional<Double> =
+                Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
 
             /** The property used to group this price on an invoice */
-            fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+            fun invoiceGroupingKey(): Optional<String> =
+                Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
 
             /** The cadence to bill for this price on. */
             fun cadence(): Cadence = cadence.getRequired("cadence")
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+            fun conversionRate(): Optional<Double> =
+                Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
 
             fun modelType(): ModelType = modelType.getRequired("model_type")
 
             fun unitConfig(): UnitConfig = unitConfig.getRequired("unit_config")
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
             fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            @JsonProperty("metadata")
-            @ExcludeMissing
-            fun _metadata() = metadata
+            @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
 
             /** An alias for the price. */
             @JsonProperty("external_price_id")
@@ -1019,34 +1165,28 @@ class PlanCreateParams constructor(
             fun _externalPriceId() = externalPriceId
 
             /** The name of the price. */
-            @JsonProperty("name")
-            @ExcludeMissing
-            fun _name() = name
+            @JsonProperty("name") @ExcludeMissing fun _name() = name
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
             @JsonProperty("billable_metric_id")
             @ExcludeMissing
             fun _billableMetricId() = billableMetricId
 
             /** The id of the item the plan will be associated with. */
-            @JsonProperty("item_id")
-            @ExcludeMissing
-            fun _itemId() = itemId
+            @JsonProperty("item_id") @ExcludeMissing fun _itemId() = itemId
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
             @JsonProperty("billed_in_advance")
             @ExcludeMissing
             fun _billedInAdvance() = billedInAdvance
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
             @JsonProperty("fixed_price_quantity")
             @ExcludeMissing
@@ -1058,30 +1198,20 @@ class PlanCreateParams constructor(
             fun _invoiceGroupingKey() = invoiceGroupingKey
 
             /** The cadence to bill for this price on. */
-            @JsonProperty("cadence")
-            @ExcludeMissing
-            fun _cadence() = cadence
+            @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            @JsonProperty("conversion_rate")
-            @ExcludeMissing
-            fun _conversionRate() = conversionRate
+            @JsonProperty("conversion_rate") @ExcludeMissing fun _conversionRate() = conversionRate
 
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType() = modelType
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType() = modelType
 
-            @JsonProperty("unit_config")
-            @ExcludeMissing
-            fun _unitConfig() = unitConfig
+            @JsonProperty("unit_config") @ExcludeMissing fun _unitConfig() = unitConfig
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
-            @JsonProperty("currency")
-            @ExcludeMissing
-            fun _currency() = currency
+            @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -1089,75 +1219,76 @@ class PlanCreateParams constructor(
 
             fun validate(): NewPlanUnitPrice = apply {
                 if (!validated) {
-                  metadata().map { it.validate() }
-                  externalPriceId()
-                  name()
-                  billableMetricId()
-                  itemId()
-                  billedInAdvance()
-                  fixedPriceQuantity()
-                  invoiceGroupingKey()
-                  cadence()
-                  conversionRate()
-                  modelType()
-                  unitConfig().validate()
-                  currency()
-                  validated = true
+                    metadata().map { it.validate() }
+                    externalPriceId()
+                    name()
+                    billableMetricId()
+                    itemId()
+                    billedInAdvance()
+                    fixedPriceQuantity()
+                    invoiceGroupingKey()
+                    cadence()
+                    conversionRate()
+                    modelType()
+                    unitConfig().validate()
+                    currency()
+                    validated = true
                 }
             }
 
             fun toBuilder() = Builder().from(this)
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is NewPlanUnitPrice &&
-                  this.metadata == other.metadata &&
-                  this.externalPriceId == other.externalPriceId &&
-                  this.name == other.name &&
-                  this.billableMetricId == other.billableMetricId &&
-                  this.itemId == other.itemId &&
-                  this.billedInAdvance == other.billedInAdvance &&
-                  this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                  this.invoiceGroupingKey == other.invoiceGroupingKey &&
-                  this.cadence == other.cadence &&
-                  this.conversionRate == other.conversionRate &&
-                  this.modelType == other.modelType &&
-                  this.unitConfig == other.unitConfig &&
-                  this.currency == other.currency &&
-                  this.additionalProperties == other.additionalProperties
+                return other is NewPlanUnitPrice &&
+                    this.metadata == other.metadata &&
+                    this.externalPriceId == other.externalPriceId &&
+                    this.name == other.name &&
+                    this.billableMetricId == other.billableMetricId &&
+                    this.itemId == other.itemId &&
+                    this.billedInAdvance == other.billedInAdvance &&
+                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
+                    this.invoiceGroupingKey == other.invoiceGroupingKey &&
+                    this.cadence == other.cadence &&
+                    this.conversionRate == other.conversionRate &&
+                    this.modelType == other.modelType &&
+                    this.unitConfig == other.unitConfig &&
+                    this.currency == other.currency &&
+                    this.additionalProperties == other.additionalProperties
             }
 
             override fun hashCode(): Int {
-              if (hashCode == 0) {
-                hashCode = Objects.hash(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    unitConfig,
-                    currency,
-                    additionalProperties,
-                )
-              }
-              return hashCode
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            metadata,
+                            externalPriceId,
+                            name,
+                            billableMetricId,
+                            itemId,
+                            billedInAdvance,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            cadence,
+                            conversionRate,
+                            modelType,
+                            unitConfig,
+                            currency,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
             }
 
-            override fun toString() = "NewPlanUnitPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, unitConfig=$unitConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "NewPlanUnitPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, unitConfig=$unitConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
             companion object {
 
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             class Builder {
@@ -1197,24 +1328,23 @@ class PlanCreateParams constructor(
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 @JsonProperty("metadata")
                 @ExcludeMissing
-                fun metadata(metadata: JsonField<Metadata>) = apply {
-                    this.metadata = metadata
-                }
+                fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
                 /** An alias for the price. */
-                fun externalPriceId(externalPriceId: String) = externalPriceId(JsonField.of(externalPriceId))
+                fun externalPriceId(externalPriceId: String) =
+                    externalPriceId(JsonField.of(externalPriceId))
 
                 /** An alias for the price. */
                 @JsonProperty("external_price_id")
@@ -1229,15 +1359,14 @@ class PlanCreateParams constructor(
                 /** The name of the price. */
                 @JsonProperty("name")
                 @ExcludeMissing
-                fun name(name: JsonField<String>) = apply {
-                    this.name = name
-                }
+                fun name(name: JsonField<String>) = apply { this.name = name }
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
                  * usage-based.
                  */
-                fun billableMetricId(billableMetricId: String) = billableMetricId(JsonField.of(billableMetricId))
+                fun billableMetricId(billableMetricId: String) =
+                    billableMetricId(JsonField.of(billableMetricId))
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -1255,19 +1384,18 @@ class PlanCreateParams constructor(
                 /** The id of the item the plan will be associated with. */
                 @JsonProperty("item_id")
                 @ExcludeMissing
-                fun itemId(itemId: JsonField<String>) = apply {
-                    this.itemId = itemId
-                }
+                fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
-                fun billedInAdvance(billedInAdvance: Boolean) = billedInAdvance(JsonField.of(billedInAdvance))
+                fun billedInAdvance(billedInAdvance: Boolean) =
+                    billedInAdvance(JsonField.of(billedInAdvance))
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 @ExcludeMissing
@@ -1279,7 +1407,8 @@ class PlanCreateParams constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                fun fixedPriceQuantity(fixedPriceQuantity: Double) = fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
+                fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                    fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -1292,7 +1421,8 @@ class PlanCreateParams constructor(
                 }
 
                 /** The property used to group this price on an invoice */
-                fun invoiceGroupingKey(invoiceGroupingKey: String) = invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
+                fun invoiceGroupingKey(invoiceGroupingKey: String) =
+                    invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
 
                 /** The property used to group this price on an invoice */
                 @JsonProperty("invoice_grouping_key")
@@ -1307,12 +1437,11 @@ class PlanCreateParams constructor(
                 /** The cadence to bill for this price on. */
                 @JsonProperty("cadence")
                 @ExcludeMissing
-                fun cadence(cadence: JsonField<Cadence>) = apply {
-                    this.cadence = cadence
-                }
+                fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                fun conversionRate(conversionRate: Double) = conversionRate(JsonField.of(conversionRate))
+                fun conversionRate(conversionRate: Double) =
+                    conversionRate(JsonField.of(conversionRate))
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 @JsonProperty("conversion_rate")
@@ -1349,9 +1478,7 @@ class PlanCreateParams constructor(
                  */
                 @JsonProperty("currency")
                 @ExcludeMissing
-                fun currency(currency: JsonField<String>) = apply {
-                    this.currency = currency
-                }
+                fun currency(currency: JsonField<String>) = apply { this.currency = currency }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -1363,40 +1490,44 @@ class PlanCreateParams constructor(
                     this.additionalProperties.put(key, value)
                 }
 
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
 
-                fun build(): NewPlanUnitPrice = NewPlanUnitPrice(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    unitConfig,
-                    currency,
-                    additionalProperties.toUnmodifiable(),
-                )
+                fun build(): NewPlanUnitPrice =
+                    NewPlanUnitPrice(
+                        metadata,
+                        externalPriceId,
+                        name,
+                        billableMetricId,
+                        itemId,
+                        billedInAdvance,
+                        fixedPriceQuantity,
+                        invoiceGroupingKey,
+                        cadence,
+                        conversionRate,
+                        modelType,
+                        unitConfig,
+                        currency,
+                        additionalProperties.toUnmodifiable(),
+                    )
             }
 
-            class Cadence @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class Cadence
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Cadence &&
-                      this.value == other.value
+                    return other is Cadence && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -1439,41 +1570,45 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    ANNUAL -> Value.ANNUAL
-                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
-                    MONTHLY -> Value.MONTHLY
-                    QUARTERLY -> Value.QUARTERLY
-                    ONE_TIME -> Value.ONE_TIME
-                    CUSTOM -> Value.CUSTOM
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        ANNUAL -> Value.ANNUAL
+                        SEMI_ANNUAL -> Value.SEMI_ANNUAL
+                        MONTHLY -> Value.MONTHLY
+                        QUARTERLY -> Value.QUARTERLY
+                        ONE_TIME -> Value.ONE_TIME
+                        CUSTOM -> Value.CUSTOM
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    ANNUAL -> Known.ANNUAL
-                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
-                    MONTHLY -> Known.MONTHLY
-                    QUARTERLY -> Known.QUARTERLY
-                    ONE_TIME -> Known.ONE_TIME
-                    CUSTOM -> Known.CUSTOM
-                    else -> throw OrbInvalidDataException("Unknown Cadence: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        ANNUAL -> Known.ANNUAL
+                        SEMI_ANNUAL -> Known.SEMI_ANNUAL
+                        MONTHLY -> Known.MONTHLY
+                        QUARTERLY -> Known.QUARTERLY
+                        ONE_TIME -> Known.ONE_TIME
+                        CUSTOM -> Known.CUSTOM
+                        else -> throw OrbInvalidDataException("Unknown Cadence: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class ModelType
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is ModelType &&
-                      this.value == other.value
+                    return other is ModelType && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -1496,22 +1631,28 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    UNIT -> Value.UNIT
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        UNIT -> Value.UNIT
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    UNIT -> Known.UNIT
-                    else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        UNIT -> Known.UNIT
+                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
             @JsonDeserialize(builder = UnitConfig.Builder::class)
             @NoAutoDetect
-            class UnitConfig private constructor(private val unitAmount: JsonField<String>, private val additionalProperties: Map<String, JsonValue>, ) {
+            class UnitConfig
+            private constructor(
+                private val unitAmount: JsonField<String>,
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -1521,9 +1662,7 @@ class PlanCreateParams constructor(
                 fun unitAmount(): String = unitAmount.getRequired("unit_amount")
 
                 /** Rate per unit of usage */
-                @JsonProperty("unit_amount")
-                @ExcludeMissing
-                fun _unitAmount() = unitAmount
+                @JsonProperty("unit_amount") @ExcludeMissing fun _unitAmount() = unitAmount
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -1531,36 +1670,36 @@ class PlanCreateParams constructor(
 
                 fun validate(): UnitConfig = apply {
                     if (!validated) {
-                      unitAmount()
-                      validated = true
+                        unitAmount()
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is UnitConfig &&
-                      this.unitAmount == other.unitAmount &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is UnitConfig &&
+                        this.unitAmount == other.unitAmount &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(unitAmount, additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(unitAmount, additionalProperties)
+                    }
+                    return hashCode
                 }
 
-                override fun toString() = "UnitConfig{unitAmount=$unitAmount, additionalProperties=$additionalProperties}"
+                override fun toString() =
+                    "UnitConfig{unitAmount=$unitAmount, additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -1594,22 +1733,27 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
-                    fun build(): UnitConfig = UnitConfig(unitAmount, additionalProperties.toUnmodifiable())
+                    fun build(): UnitConfig =
+                        UnitConfig(unitAmount, additionalProperties.toUnmodifiable())
                 }
             }
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
             @JsonDeserialize(builder = Metadata.Builder::class)
             @NoAutoDetect
-            class Metadata private constructor(private val additionalProperties: Map<String, JsonValue>, ) {
+            class Metadata
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -1621,34 +1765,33 @@ class PlanCreateParams constructor(
 
                 fun validate(): Metadata = apply {
                     if (!validated) {
-                      validated = true
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Metadata &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is Metadata &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
                 }
 
                 override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -1670,9 +1813,10 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
                     fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
                 }
@@ -1681,22 +1825,22 @@ class PlanCreateParams constructor(
 
         @JsonDeserialize(builder = NewPlanPackagePrice.Builder::class)
         @NoAutoDetect
-        class NewPlanPackagePrice private constructor(
-          private val metadata: JsonField<Metadata>,
-          private val externalPriceId: JsonField<String>,
-          private val name: JsonField<String>,
-          private val billableMetricId: JsonField<String>,
-          private val itemId: JsonField<String>,
-          private val billedInAdvance: JsonField<Boolean>,
-          private val fixedPriceQuantity: JsonField<Double>,
-          private val invoiceGroupingKey: JsonField<String>,
-          private val cadence: JsonField<Cadence>,
-          private val conversionRate: JsonField<Double>,
-          private val modelType: JsonField<ModelType>,
-          private val packageConfig: JsonField<PackageConfig>,
-          private val currency: JsonField<String>,
-          private val additionalProperties: Map<String, JsonValue>,
-
+        class NewPlanPackagePrice
+        private constructor(
+            private val metadata: JsonField<Metadata>,
+            private val externalPriceId: JsonField<String>,
+            private val name: JsonField<String>,
+            private val billableMetricId: JsonField<String>,
+            private val itemId: JsonField<String>,
+            private val billedInAdvance: JsonField<Boolean>,
+            private val fixedPriceQuantity: JsonField<Double>,
+            private val invoiceGroupingKey: JsonField<String>,
+            private val cadence: JsonField<Cadence>,
+            private val conversionRate: JsonField<Double>,
+            private val modelType: JsonField<ModelType>,
+            private val packageConfig: JsonField<PackageConfig>,
+            private val currency: JsonField<String>,
+            private val additionalProperties: Map<String, JsonValue>,
         ) {
 
             private var validated: Boolean = false
@@ -1704,66 +1848,69 @@ class PlanCreateParams constructor(
             private var hashCode: Int = 0
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata.getNullable("metadata"))
+            fun metadata(): Optional<Metadata> =
+                Optional.ofNullable(metadata.getNullable("metadata"))
 
             /** An alias for the price. */
-            fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+            fun externalPriceId(): Optional<String> =
+                Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
 
             /** The name of the price. */
             fun name(): String = name.getRequired("name")
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
-            fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+            fun billableMetricId(): Optional<String> =
+                Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
 
             /** The id of the item the plan will be associated with. */
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
-            fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+            fun billedInAdvance(): Optional<Boolean> =
+                Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
-            fun fixedPriceQuantity(): Optional<Double> = Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+            fun fixedPriceQuantity(): Optional<Double> =
+                Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
 
             /** The property used to group this price on an invoice */
-            fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+            fun invoiceGroupingKey(): Optional<String> =
+                Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
 
             /** The cadence to bill for this price on. */
             fun cadence(): Cadence = cadence.getRequired("cadence")
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+            fun conversionRate(): Optional<Double> =
+                Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
 
             fun modelType(): ModelType = modelType.getRequired("model_type")
 
             fun packageConfig(): PackageConfig = packageConfig.getRequired("package_config")
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
             fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            @JsonProperty("metadata")
-            @ExcludeMissing
-            fun _metadata() = metadata
+            @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
 
             /** An alias for the price. */
             @JsonProperty("external_price_id")
@@ -1771,34 +1918,28 @@ class PlanCreateParams constructor(
             fun _externalPriceId() = externalPriceId
 
             /** The name of the price. */
-            @JsonProperty("name")
-            @ExcludeMissing
-            fun _name() = name
+            @JsonProperty("name") @ExcludeMissing fun _name() = name
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
             @JsonProperty("billable_metric_id")
             @ExcludeMissing
             fun _billableMetricId() = billableMetricId
 
             /** The id of the item the plan will be associated with. */
-            @JsonProperty("item_id")
-            @ExcludeMissing
-            fun _itemId() = itemId
+            @JsonProperty("item_id") @ExcludeMissing fun _itemId() = itemId
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
             @JsonProperty("billed_in_advance")
             @ExcludeMissing
             fun _billedInAdvance() = billedInAdvance
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
             @JsonProperty("fixed_price_quantity")
             @ExcludeMissing
@@ -1810,30 +1951,20 @@ class PlanCreateParams constructor(
             fun _invoiceGroupingKey() = invoiceGroupingKey
 
             /** The cadence to bill for this price on. */
-            @JsonProperty("cadence")
-            @ExcludeMissing
-            fun _cadence() = cadence
+            @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            @JsonProperty("conversion_rate")
-            @ExcludeMissing
-            fun _conversionRate() = conversionRate
+            @JsonProperty("conversion_rate") @ExcludeMissing fun _conversionRate() = conversionRate
 
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType() = modelType
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType() = modelType
 
-            @JsonProperty("package_config")
-            @ExcludeMissing
-            fun _packageConfig() = packageConfig
+            @JsonProperty("package_config") @ExcludeMissing fun _packageConfig() = packageConfig
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
-            @JsonProperty("currency")
-            @ExcludeMissing
-            fun _currency() = currency
+            @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -1841,75 +1972,76 @@ class PlanCreateParams constructor(
 
             fun validate(): NewPlanPackagePrice = apply {
                 if (!validated) {
-                  metadata().map { it.validate() }
-                  externalPriceId()
-                  name()
-                  billableMetricId()
-                  itemId()
-                  billedInAdvance()
-                  fixedPriceQuantity()
-                  invoiceGroupingKey()
-                  cadence()
-                  conversionRate()
-                  modelType()
-                  packageConfig().validate()
-                  currency()
-                  validated = true
+                    metadata().map { it.validate() }
+                    externalPriceId()
+                    name()
+                    billableMetricId()
+                    itemId()
+                    billedInAdvance()
+                    fixedPriceQuantity()
+                    invoiceGroupingKey()
+                    cadence()
+                    conversionRate()
+                    modelType()
+                    packageConfig().validate()
+                    currency()
+                    validated = true
                 }
             }
 
             fun toBuilder() = Builder().from(this)
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is NewPlanPackagePrice &&
-                  this.metadata == other.metadata &&
-                  this.externalPriceId == other.externalPriceId &&
-                  this.name == other.name &&
-                  this.billableMetricId == other.billableMetricId &&
-                  this.itemId == other.itemId &&
-                  this.billedInAdvance == other.billedInAdvance &&
-                  this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                  this.invoiceGroupingKey == other.invoiceGroupingKey &&
-                  this.cadence == other.cadence &&
-                  this.conversionRate == other.conversionRate &&
-                  this.modelType == other.modelType &&
-                  this.packageConfig == other.packageConfig &&
-                  this.currency == other.currency &&
-                  this.additionalProperties == other.additionalProperties
+                return other is NewPlanPackagePrice &&
+                    this.metadata == other.metadata &&
+                    this.externalPriceId == other.externalPriceId &&
+                    this.name == other.name &&
+                    this.billableMetricId == other.billableMetricId &&
+                    this.itemId == other.itemId &&
+                    this.billedInAdvance == other.billedInAdvance &&
+                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
+                    this.invoiceGroupingKey == other.invoiceGroupingKey &&
+                    this.cadence == other.cadence &&
+                    this.conversionRate == other.conversionRate &&
+                    this.modelType == other.modelType &&
+                    this.packageConfig == other.packageConfig &&
+                    this.currency == other.currency &&
+                    this.additionalProperties == other.additionalProperties
             }
 
             override fun hashCode(): Int {
-              if (hashCode == 0) {
-                hashCode = Objects.hash(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    packageConfig,
-                    currency,
-                    additionalProperties,
-                )
-              }
-              return hashCode
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            metadata,
+                            externalPriceId,
+                            name,
+                            billableMetricId,
+                            itemId,
+                            billedInAdvance,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            cadence,
+                            conversionRate,
+                            modelType,
+                            packageConfig,
+                            currency,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
             }
 
-            override fun toString() = "NewPlanPackagePrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, packageConfig=$packageConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "NewPlanPackagePrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, packageConfig=$packageConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
             companion object {
 
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             class Builder {
@@ -1949,24 +2081,23 @@ class PlanCreateParams constructor(
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 @JsonProperty("metadata")
                 @ExcludeMissing
-                fun metadata(metadata: JsonField<Metadata>) = apply {
-                    this.metadata = metadata
-                }
+                fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
                 /** An alias for the price. */
-                fun externalPriceId(externalPriceId: String) = externalPriceId(JsonField.of(externalPriceId))
+                fun externalPriceId(externalPriceId: String) =
+                    externalPriceId(JsonField.of(externalPriceId))
 
                 /** An alias for the price. */
                 @JsonProperty("external_price_id")
@@ -1981,15 +2112,14 @@ class PlanCreateParams constructor(
                 /** The name of the price. */
                 @JsonProperty("name")
                 @ExcludeMissing
-                fun name(name: JsonField<String>) = apply {
-                    this.name = name
-                }
+                fun name(name: JsonField<String>) = apply { this.name = name }
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
                  * usage-based.
                  */
-                fun billableMetricId(billableMetricId: String) = billableMetricId(JsonField.of(billableMetricId))
+                fun billableMetricId(billableMetricId: String) =
+                    billableMetricId(JsonField.of(billableMetricId))
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -2007,19 +2137,18 @@ class PlanCreateParams constructor(
                 /** The id of the item the plan will be associated with. */
                 @JsonProperty("item_id")
                 @ExcludeMissing
-                fun itemId(itemId: JsonField<String>) = apply {
-                    this.itemId = itemId
-                }
+                fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
-                fun billedInAdvance(billedInAdvance: Boolean) = billedInAdvance(JsonField.of(billedInAdvance))
+                fun billedInAdvance(billedInAdvance: Boolean) =
+                    billedInAdvance(JsonField.of(billedInAdvance))
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 @ExcludeMissing
@@ -2031,7 +2160,8 @@ class PlanCreateParams constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                fun fixedPriceQuantity(fixedPriceQuantity: Double) = fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
+                fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                    fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -2044,7 +2174,8 @@ class PlanCreateParams constructor(
                 }
 
                 /** The property used to group this price on an invoice */
-                fun invoiceGroupingKey(invoiceGroupingKey: String) = invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
+                fun invoiceGroupingKey(invoiceGroupingKey: String) =
+                    invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
 
                 /** The property used to group this price on an invoice */
                 @JsonProperty("invoice_grouping_key")
@@ -2059,12 +2190,11 @@ class PlanCreateParams constructor(
                 /** The cadence to bill for this price on. */
                 @JsonProperty("cadence")
                 @ExcludeMissing
-                fun cadence(cadence: JsonField<Cadence>) = apply {
-                    this.cadence = cadence
-                }
+                fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                fun conversionRate(conversionRate: Double) = conversionRate(JsonField.of(conversionRate))
+                fun conversionRate(conversionRate: Double) =
+                    conversionRate(JsonField.of(conversionRate))
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 @JsonProperty("conversion_rate")
@@ -2081,7 +2211,8 @@ class PlanCreateParams constructor(
                     this.modelType = modelType
                 }
 
-                fun packageConfig(packageConfig: PackageConfig) = packageConfig(JsonField.of(packageConfig))
+                fun packageConfig(packageConfig: PackageConfig) =
+                    packageConfig(JsonField.of(packageConfig))
 
                 @JsonProperty("package_config")
                 @ExcludeMissing
@@ -2101,9 +2232,7 @@ class PlanCreateParams constructor(
                  */
                 @JsonProperty("currency")
                 @ExcludeMissing
-                fun currency(currency: JsonField<String>) = apply {
-                    this.currency = currency
-                }
+                fun currency(currency: JsonField<String>) = apply { this.currency = currency }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -2115,40 +2244,44 @@ class PlanCreateParams constructor(
                     this.additionalProperties.put(key, value)
                 }
 
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
 
-                fun build(): NewPlanPackagePrice = NewPlanPackagePrice(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    packageConfig,
-                    currency,
-                    additionalProperties.toUnmodifiable(),
-                )
+                fun build(): NewPlanPackagePrice =
+                    NewPlanPackagePrice(
+                        metadata,
+                        externalPriceId,
+                        name,
+                        billableMetricId,
+                        itemId,
+                        billedInAdvance,
+                        fixedPriceQuantity,
+                        invoiceGroupingKey,
+                        cadence,
+                        conversionRate,
+                        modelType,
+                        packageConfig,
+                        currency,
+                        additionalProperties.toUnmodifiable(),
+                    )
             }
 
-            class Cadence @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class Cadence
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Cadence &&
-                      this.value == other.value
+                    return other is Cadence && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -2191,41 +2324,45 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    ANNUAL -> Value.ANNUAL
-                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
-                    MONTHLY -> Value.MONTHLY
-                    QUARTERLY -> Value.QUARTERLY
-                    ONE_TIME -> Value.ONE_TIME
-                    CUSTOM -> Value.CUSTOM
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        ANNUAL -> Value.ANNUAL
+                        SEMI_ANNUAL -> Value.SEMI_ANNUAL
+                        MONTHLY -> Value.MONTHLY
+                        QUARTERLY -> Value.QUARTERLY
+                        ONE_TIME -> Value.ONE_TIME
+                        CUSTOM -> Value.CUSTOM
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    ANNUAL -> Known.ANNUAL
-                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
-                    MONTHLY -> Known.MONTHLY
-                    QUARTERLY -> Known.QUARTERLY
-                    ONE_TIME -> Known.ONE_TIME
-                    CUSTOM -> Known.CUSTOM
-                    else -> throw OrbInvalidDataException("Unknown Cadence: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        ANNUAL -> Known.ANNUAL
+                        SEMI_ANNUAL -> Known.SEMI_ANNUAL
+                        MONTHLY -> Known.MONTHLY
+                        QUARTERLY -> Known.QUARTERLY
+                        ONE_TIME -> Known.ONE_TIME
+                        CUSTOM -> Known.CUSTOM
+                        else -> throw OrbInvalidDataException("Unknown Cadence: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class ModelType
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is ModelType &&
-                      this.value == other.value
+                    return other is ModelType && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -2248,22 +2385,29 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    PACKAGE -> Value.PACKAGE
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        PACKAGE -> Value.PACKAGE
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    PACKAGE -> Known.PACKAGE
-                    else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        PACKAGE -> Known.PACKAGE
+                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
             @JsonDeserialize(builder = PackageConfig.Builder::class)
             @NoAutoDetect
-            class PackageConfig private constructor(private val packageAmount: JsonField<String>, private val packageSize: JsonField<Long>, private val additionalProperties: Map<String, JsonValue>, ) {
+            class PackageConfig
+            private constructor(
+                private val packageAmount: JsonField<String>,
+                private val packageSize: JsonField<Long>,
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -2279,17 +2423,13 @@ class PlanCreateParams constructor(
                 fun packageSize(): Long = packageSize.getRequired("package_size")
 
                 /** A currency amount to rate usage by */
-                @JsonProperty("package_amount")
-                @ExcludeMissing
-                fun _packageAmount() = packageAmount
+                @JsonProperty("package_amount") @ExcludeMissing fun _packageAmount() = packageAmount
 
                 /**
                  * An integer amount to represent package size. For example, 1000 here would divide
                  * usage by 1000 before multiplying by package_amount in rating
                  */
-                @JsonProperty("package_size")
-                @ExcludeMissing
-                fun _packageSize() = packageSize
+                @JsonProperty("package_size") @ExcludeMissing fun _packageSize() = packageSize
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -2297,42 +2437,43 @@ class PlanCreateParams constructor(
 
                 fun validate(): PackageConfig = apply {
                     if (!validated) {
-                      packageAmount()
-                      packageSize()
-                      validated = true
+                        packageAmount()
+                        packageSize()
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is PackageConfig &&
-                      this.packageAmount == other.packageAmount &&
-                      this.packageSize == other.packageSize &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is PackageConfig &&
+                        this.packageAmount == other.packageAmount &&
+                        this.packageSize == other.packageSize &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(
-                        packageAmount,
-                        packageSize,
-                        additionalProperties,
-                    )
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode =
+                            Objects.hash(
+                                packageAmount,
+                                packageSize,
+                                additionalProperties,
+                            )
+                    }
+                    return hashCode
                 }
 
-                override fun toString() = "PackageConfig{packageAmount=$packageAmount, packageSize=$packageSize, additionalProperties=$additionalProperties}"
+                override fun toString() =
+                    "PackageConfig{packageAmount=$packageAmount, packageSize=$packageSize, additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -2349,7 +2490,8 @@ class PlanCreateParams constructor(
                     }
 
                     /** A currency amount to rate usage by */
-                    fun packageAmount(packageAmount: String) = packageAmount(JsonField.of(packageAmount))
+                    fun packageAmount(packageAmount: String) =
+                        packageAmount(JsonField.of(packageAmount))
 
                     /** A currency amount to rate usage by */
                     @JsonProperty("package_amount")
@@ -2359,14 +2501,14 @@ class PlanCreateParams constructor(
                     }
 
                     /**
-                     * An integer amount to represent package size. For example, 1000 here would divide
-                     * usage by 1000 before multiplying by package_amount in rating
+                     * An integer amount to represent package size. For example, 1000 here would
+                     * divide usage by 1000 before multiplying by package_amount in rating
                      */
                     fun packageSize(packageSize: Long) = packageSize(JsonField.of(packageSize))
 
                     /**
-                     * An integer amount to represent package size. For example, 1000 here would divide
-                     * usage by 1000 before multiplying by package_amount in rating
+                     * An integer amount to represent package size. For example, 1000 here would
+                     * divide usage by 1000 before multiplying by package_amount in rating
                      */
                     @JsonProperty("package_size")
                     @ExcludeMissing
@@ -2384,26 +2526,31 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
-                    fun build(): PackageConfig = PackageConfig(
-                        packageAmount,
-                        packageSize,
-                        additionalProperties.toUnmodifiable(),
-                    )
+                    fun build(): PackageConfig =
+                        PackageConfig(
+                            packageAmount,
+                            packageSize,
+                            additionalProperties.toUnmodifiable(),
+                        )
                 }
             }
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
             @JsonDeserialize(builder = Metadata.Builder::class)
             @NoAutoDetect
-            class Metadata private constructor(private val additionalProperties: Map<String, JsonValue>, ) {
+            class Metadata
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -2415,34 +2562,33 @@ class PlanCreateParams constructor(
 
                 fun validate(): Metadata = apply {
                     if (!validated) {
-                      validated = true
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Metadata &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is Metadata &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
                 }
 
                 override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -2464,9 +2610,10 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
                     fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
                 }
@@ -2475,22 +2622,22 @@ class PlanCreateParams constructor(
 
         @JsonDeserialize(builder = NewPlanMatrixPrice.Builder::class)
         @NoAutoDetect
-        class NewPlanMatrixPrice private constructor(
-          private val metadata: JsonField<Metadata>,
-          private val externalPriceId: JsonField<String>,
-          private val name: JsonField<String>,
-          private val billableMetricId: JsonField<String>,
-          private val itemId: JsonField<String>,
-          private val billedInAdvance: JsonField<Boolean>,
-          private val fixedPriceQuantity: JsonField<Double>,
-          private val invoiceGroupingKey: JsonField<String>,
-          private val cadence: JsonField<Cadence>,
-          private val conversionRate: JsonField<Double>,
-          private val modelType: JsonField<ModelType>,
-          private val matrixConfig: JsonField<MatrixConfig>,
-          private val currency: JsonField<String>,
-          private val additionalProperties: Map<String, JsonValue>,
-
+        class NewPlanMatrixPrice
+        private constructor(
+            private val metadata: JsonField<Metadata>,
+            private val externalPriceId: JsonField<String>,
+            private val name: JsonField<String>,
+            private val billableMetricId: JsonField<String>,
+            private val itemId: JsonField<String>,
+            private val billedInAdvance: JsonField<Boolean>,
+            private val fixedPriceQuantity: JsonField<Double>,
+            private val invoiceGroupingKey: JsonField<String>,
+            private val cadence: JsonField<Cadence>,
+            private val conversionRate: JsonField<Double>,
+            private val modelType: JsonField<ModelType>,
+            private val matrixConfig: JsonField<MatrixConfig>,
+            private val currency: JsonField<String>,
+            private val additionalProperties: Map<String, JsonValue>,
         ) {
 
             private var validated: Boolean = false
@@ -2498,66 +2645,69 @@ class PlanCreateParams constructor(
             private var hashCode: Int = 0
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata.getNullable("metadata"))
+            fun metadata(): Optional<Metadata> =
+                Optional.ofNullable(metadata.getNullable("metadata"))
 
             /** An alias for the price. */
-            fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+            fun externalPriceId(): Optional<String> =
+                Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
 
             /** The name of the price. */
             fun name(): String = name.getRequired("name")
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
-            fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+            fun billableMetricId(): Optional<String> =
+                Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
 
             /** The id of the item the plan will be associated with. */
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
-            fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+            fun billedInAdvance(): Optional<Boolean> =
+                Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
-            fun fixedPriceQuantity(): Optional<Double> = Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+            fun fixedPriceQuantity(): Optional<Double> =
+                Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
 
             /** The property used to group this price on an invoice */
-            fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+            fun invoiceGroupingKey(): Optional<String> =
+                Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
 
             /** The cadence to bill for this price on. */
             fun cadence(): Cadence = cadence.getRequired("cadence")
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+            fun conversionRate(): Optional<Double> =
+                Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
 
             fun modelType(): ModelType = modelType.getRequired("model_type")
 
             fun matrixConfig(): MatrixConfig = matrixConfig.getRequired("matrix_config")
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
             fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            @JsonProperty("metadata")
-            @ExcludeMissing
-            fun _metadata() = metadata
+            @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
 
             /** An alias for the price. */
             @JsonProperty("external_price_id")
@@ -2565,34 +2715,28 @@ class PlanCreateParams constructor(
             fun _externalPriceId() = externalPriceId
 
             /** The name of the price. */
-            @JsonProperty("name")
-            @ExcludeMissing
-            fun _name() = name
+            @JsonProperty("name") @ExcludeMissing fun _name() = name
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
             @JsonProperty("billable_metric_id")
             @ExcludeMissing
             fun _billableMetricId() = billableMetricId
 
             /** The id of the item the plan will be associated with. */
-            @JsonProperty("item_id")
-            @ExcludeMissing
-            fun _itemId() = itemId
+            @JsonProperty("item_id") @ExcludeMissing fun _itemId() = itemId
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
             @JsonProperty("billed_in_advance")
             @ExcludeMissing
             fun _billedInAdvance() = billedInAdvance
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
             @JsonProperty("fixed_price_quantity")
             @ExcludeMissing
@@ -2604,30 +2748,20 @@ class PlanCreateParams constructor(
             fun _invoiceGroupingKey() = invoiceGroupingKey
 
             /** The cadence to bill for this price on. */
-            @JsonProperty("cadence")
-            @ExcludeMissing
-            fun _cadence() = cadence
+            @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            @JsonProperty("conversion_rate")
-            @ExcludeMissing
-            fun _conversionRate() = conversionRate
+            @JsonProperty("conversion_rate") @ExcludeMissing fun _conversionRate() = conversionRate
 
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType() = modelType
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType() = modelType
 
-            @JsonProperty("matrix_config")
-            @ExcludeMissing
-            fun _matrixConfig() = matrixConfig
+            @JsonProperty("matrix_config") @ExcludeMissing fun _matrixConfig() = matrixConfig
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
-            @JsonProperty("currency")
-            @ExcludeMissing
-            fun _currency() = currency
+            @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -2635,75 +2769,76 @@ class PlanCreateParams constructor(
 
             fun validate(): NewPlanMatrixPrice = apply {
                 if (!validated) {
-                  metadata().map { it.validate() }
-                  externalPriceId()
-                  name()
-                  billableMetricId()
-                  itemId()
-                  billedInAdvance()
-                  fixedPriceQuantity()
-                  invoiceGroupingKey()
-                  cadence()
-                  conversionRate()
-                  modelType()
-                  matrixConfig().validate()
-                  currency()
-                  validated = true
+                    metadata().map { it.validate() }
+                    externalPriceId()
+                    name()
+                    billableMetricId()
+                    itemId()
+                    billedInAdvance()
+                    fixedPriceQuantity()
+                    invoiceGroupingKey()
+                    cadence()
+                    conversionRate()
+                    modelType()
+                    matrixConfig().validate()
+                    currency()
+                    validated = true
                 }
             }
 
             fun toBuilder() = Builder().from(this)
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is NewPlanMatrixPrice &&
-                  this.metadata == other.metadata &&
-                  this.externalPriceId == other.externalPriceId &&
-                  this.name == other.name &&
-                  this.billableMetricId == other.billableMetricId &&
-                  this.itemId == other.itemId &&
-                  this.billedInAdvance == other.billedInAdvance &&
-                  this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                  this.invoiceGroupingKey == other.invoiceGroupingKey &&
-                  this.cadence == other.cadence &&
-                  this.conversionRate == other.conversionRate &&
-                  this.modelType == other.modelType &&
-                  this.matrixConfig == other.matrixConfig &&
-                  this.currency == other.currency &&
-                  this.additionalProperties == other.additionalProperties
+                return other is NewPlanMatrixPrice &&
+                    this.metadata == other.metadata &&
+                    this.externalPriceId == other.externalPriceId &&
+                    this.name == other.name &&
+                    this.billableMetricId == other.billableMetricId &&
+                    this.itemId == other.itemId &&
+                    this.billedInAdvance == other.billedInAdvance &&
+                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
+                    this.invoiceGroupingKey == other.invoiceGroupingKey &&
+                    this.cadence == other.cadence &&
+                    this.conversionRate == other.conversionRate &&
+                    this.modelType == other.modelType &&
+                    this.matrixConfig == other.matrixConfig &&
+                    this.currency == other.currency &&
+                    this.additionalProperties == other.additionalProperties
             }
 
             override fun hashCode(): Int {
-              if (hashCode == 0) {
-                hashCode = Objects.hash(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    matrixConfig,
-                    currency,
-                    additionalProperties,
-                )
-              }
-              return hashCode
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            metadata,
+                            externalPriceId,
+                            name,
+                            billableMetricId,
+                            itemId,
+                            billedInAdvance,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            cadence,
+                            conversionRate,
+                            modelType,
+                            matrixConfig,
+                            currency,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
             }
 
-            override fun toString() = "NewPlanMatrixPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, matrixConfig=$matrixConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "NewPlanMatrixPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, matrixConfig=$matrixConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
             companion object {
 
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             class Builder {
@@ -2743,24 +2878,23 @@ class PlanCreateParams constructor(
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 @JsonProperty("metadata")
                 @ExcludeMissing
-                fun metadata(metadata: JsonField<Metadata>) = apply {
-                    this.metadata = metadata
-                }
+                fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
                 /** An alias for the price. */
-                fun externalPriceId(externalPriceId: String) = externalPriceId(JsonField.of(externalPriceId))
+                fun externalPriceId(externalPriceId: String) =
+                    externalPriceId(JsonField.of(externalPriceId))
 
                 /** An alias for the price. */
                 @JsonProperty("external_price_id")
@@ -2775,15 +2909,14 @@ class PlanCreateParams constructor(
                 /** The name of the price. */
                 @JsonProperty("name")
                 @ExcludeMissing
-                fun name(name: JsonField<String>) = apply {
-                    this.name = name
-                }
+                fun name(name: JsonField<String>) = apply { this.name = name }
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
                  * usage-based.
                  */
-                fun billableMetricId(billableMetricId: String) = billableMetricId(JsonField.of(billableMetricId))
+                fun billableMetricId(billableMetricId: String) =
+                    billableMetricId(JsonField.of(billableMetricId))
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -2801,19 +2934,18 @@ class PlanCreateParams constructor(
                 /** The id of the item the plan will be associated with. */
                 @JsonProperty("item_id")
                 @ExcludeMissing
-                fun itemId(itemId: JsonField<String>) = apply {
-                    this.itemId = itemId
-                }
+                fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
-                fun billedInAdvance(billedInAdvance: Boolean) = billedInAdvance(JsonField.of(billedInAdvance))
+                fun billedInAdvance(billedInAdvance: Boolean) =
+                    billedInAdvance(JsonField.of(billedInAdvance))
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 @ExcludeMissing
@@ -2825,7 +2957,8 @@ class PlanCreateParams constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                fun fixedPriceQuantity(fixedPriceQuantity: Double) = fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
+                fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                    fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -2838,7 +2971,8 @@ class PlanCreateParams constructor(
                 }
 
                 /** The property used to group this price on an invoice */
-                fun invoiceGroupingKey(invoiceGroupingKey: String) = invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
+                fun invoiceGroupingKey(invoiceGroupingKey: String) =
+                    invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
 
                 /** The property used to group this price on an invoice */
                 @JsonProperty("invoice_grouping_key")
@@ -2853,12 +2987,11 @@ class PlanCreateParams constructor(
                 /** The cadence to bill for this price on. */
                 @JsonProperty("cadence")
                 @ExcludeMissing
-                fun cadence(cadence: JsonField<Cadence>) = apply {
-                    this.cadence = cadence
-                }
+                fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                fun conversionRate(conversionRate: Double) = conversionRate(JsonField.of(conversionRate))
+                fun conversionRate(conversionRate: Double) =
+                    conversionRate(JsonField.of(conversionRate))
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 @JsonProperty("conversion_rate")
@@ -2875,7 +3008,8 @@ class PlanCreateParams constructor(
                     this.modelType = modelType
                 }
 
-                fun matrixConfig(matrixConfig: MatrixConfig) = matrixConfig(JsonField.of(matrixConfig))
+                fun matrixConfig(matrixConfig: MatrixConfig) =
+                    matrixConfig(JsonField.of(matrixConfig))
 
                 @JsonProperty("matrix_config")
                 @ExcludeMissing
@@ -2895,9 +3029,7 @@ class PlanCreateParams constructor(
                  */
                 @JsonProperty("currency")
                 @ExcludeMissing
-                fun currency(currency: JsonField<String>) = apply {
-                    this.currency = currency
-                }
+                fun currency(currency: JsonField<String>) = apply { this.currency = currency }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -2909,40 +3041,44 @@ class PlanCreateParams constructor(
                     this.additionalProperties.put(key, value)
                 }
 
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
 
-                fun build(): NewPlanMatrixPrice = NewPlanMatrixPrice(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    matrixConfig,
-                    currency,
-                    additionalProperties.toUnmodifiable(),
-                )
+                fun build(): NewPlanMatrixPrice =
+                    NewPlanMatrixPrice(
+                        metadata,
+                        externalPriceId,
+                        name,
+                        billableMetricId,
+                        itemId,
+                        billedInAdvance,
+                        fixedPriceQuantity,
+                        invoiceGroupingKey,
+                        cadence,
+                        conversionRate,
+                        modelType,
+                        matrixConfig,
+                        currency,
+                        additionalProperties.toUnmodifiable(),
+                    )
             }
 
-            class Cadence @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class Cadence
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Cadence &&
-                      this.value == other.value
+                    return other is Cadence && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -2985,37 +3121,39 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    ANNUAL -> Value.ANNUAL
-                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
-                    MONTHLY -> Value.MONTHLY
-                    QUARTERLY -> Value.QUARTERLY
-                    ONE_TIME -> Value.ONE_TIME
-                    CUSTOM -> Value.CUSTOM
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        ANNUAL -> Value.ANNUAL
+                        SEMI_ANNUAL -> Value.SEMI_ANNUAL
+                        MONTHLY -> Value.MONTHLY
+                        QUARTERLY -> Value.QUARTERLY
+                        ONE_TIME -> Value.ONE_TIME
+                        CUSTOM -> Value.CUSTOM
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    ANNUAL -> Known.ANNUAL
-                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
-                    MONTHLY -> Known.MONTHLY
-                    QUARTERLY -> Known.QUARTERLY
-                    ONE_TIME -> Known.ONE_TIME
-                    CUSTOM -> Known.CUSTOM
-                    else -> throw OrbInvalidDataException("Unknown Cadence: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        ANNUAL -> Known.ANNUAL
+                        SEMI_ANNUAL -> Known.SEMI_ANNUAL
+                        MONTHLY -> Known.MONTHLY
+                        QUARTERLY -> Known.QUARTERLY
+                        ONE_TIME -> Known.ONE_TIME
+                        CUSTOM -> Known.CUSTOM
+                        else -> throw OrbInvalidDataException("Unknown Cadence: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
             @JsonDeserialize(builder = MatrixConfig.Builder::class)
             @NoAutoDetect
-            class MatrixConfig private constructor(
-              private val dimensions: JsonField<List<String?>>,
-              private val defaultUnitAmount: JsonField<String>,
-              private val matrixValues: JsonField<List<MatrixValue>>,
-              private val additionalProperties: Map<String, JsonValue>,
-
+            class MatrixConfig
+            private constructor(
+                private val dimensions: JsonField<List<String?>>,
+                private val defaultUnitAmount: JsonField<String>,
+                private val matrixValues: JsonField<List<MatrixValue>>,
+                private val additionalProperties: Map<String, JsonValue>,
             ) {
 
                 private var validated: Boolean = false
@@ -3025,26 +3163,27 @@ class PlanCreateParams constructor(
                 /** One or two event property values to evaluate matrix groups by */
                 fun dimensions(): List<String?> = dimensions.getRequired("dimensions")
 
-                /** Default per unit rate for any usage not bucketed into a specified matrix_value */
-                fun defaultUnitAmount(): String = defaultUnitAmount.getRequired("default_unit_amount")
+                /**
+                 * Default per unit rate for any usage not bucketed into a specified matrix_value
+                 */
+                fun defaultUnitAmount(): String =
+                    defaultUnitAmount.getRequired("default_unit_amount")
 
                 /** Matrix values for specified matrix grouping keys */
                 fun matrixValues(): List<MatrixValue> = matrixValues.getRequired("matrix_values")
 
                 /** One or two event property values to evaluate matrix groups by */
-                @JsonProperty("dimensions")
-                @ExcludeMissing
-                fun _dimensions() = dimensions
+                @JsonProperty("dimensions") @ExcludeMissing fun _dimensions() = dimensions
 
-                /** Default per unit rate for any usage not bucketed into a specified matrix_value */
+                /**
+                 * Default per unit rate for any usage not bucketed into a specified matrix_value
+                 */
                 @JsonProperty("default_unit_amount")
                 @ExcludeMissing
                 fun _defaultUnitAmount() = defaultUnitAmount
 
                 /** Matrix values for specified matrix grouping keys */
-                @JsonProperty("matrix_values")
-                @ExcludeMissing
-                fun _matrixValues() = matrixValues
+                @JsonProperty("matrix_values") @ExcludeMissing fun _matrixValues() = matrixValues
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -3052,45 +3191,46 @@ class PlanCreateParams constructor(
 
                 fun validate(): MatrixConfig = apply {
                     if (!validated) {
-                      dimensions()
-                      defaultUnitAmount()
-                      matrixValues().forEach { it.validate() }
-                      validated = true
+                        dimensions()
+                        defaultUnitAmount()
+                        matrixValues().forEach { it.validate() }
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is MatrixConfig &&
-                      this.dimensions == other.dimensions &&
-                      this.defaultUnitAmount == other.defaultUnitAmount &&
-                      this.matrixValues == other.matrixValues &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is MatrixConfig &&
+                        this.dimensions == other.dimensions &&
+                        this.defaultUnitAmount == other.defaultUnitAmount &&
+                        this.matrixValues == other.matrixValues &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(
-                        dimensions,
-                        defaultUnitAmount,
-                        matrixValues,
-                        additionalProperties,
-                    )
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode =
+                            Objects.hash(
+                                dimensions,
+                                defaultUnitAmount,
+                                matrixValues,
+                                additionalProperties,
+                            )
+                    }
+                    return hashCode
                 }
 
-                override fun toString() = "MatrixConfig{dimensions=$dimensions, defaultUnitAmount=$defaultUnitAmount, matrixValues=$matrixValues, additionalProperties=$additionalProperties}"
+                override fun toString() =
+                    "MatrixConfig{dimensions=$dimensions, defaultUnitAmount=$defaultUnitAmount, matrixValues=$matrixValues, additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -3118,10 +3258,17 @@ class PlanCreateParams constructor(
                         this.dimensions = dimensions
                     }
 
-                    /** Default per unit rate for any usage not bucketed into a specified matrix_value */
-                    fun defaultUnitAmount(defaultUnitAmount: String) = defaultUnitAmount(JsonField.of(defaultUnitAmount))
+                    /**
+                     * Default per unit rate for any usage not bucketed into a specified
+                     * matrix_value
+                     */
+                    fun defaultUnitAmount(defaultUnitAmount: String) =
+                        defaultUnitAmount(JsonField.of(defaultUnitAmount))
 
-                    /** Default per unit rate for any usage not bucketed into a specified matrix_value */
+                    /**
+                     * Default per unit rate for any usage not bucketed into a specified
+                     * matrix_value
+                     */
                     @JsonProperty("default_unit_amount")
                     @ExcludeMissing
                     fun defaultUnitAmount(defaultUnitAmount: JsonField<String>) = apply {
@@ -3129,7 +3276,8 @@ class PlanCreateParams constructor(
                     }
 
                     /** Matrix values for specified matrix grouping keys */
-                    fun matrixValues(matrixValues: List<MatrixValue>) = matrixValues(JsonField.of(matrixValues))
+                    fun matrixValues(matrixValues: List<MatrixValue>) =
+                        matrixValues(JsonField.of(matrixValues))
 
                     /** Matrix values for specified matrix grouping keys */
                     @JsonProperty("matrix_values")
@@ -3148,21 +3296,28 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
-                    fun build(): MatrixConfig = MatrixConfig(
-                        dimensions.map { it.toUnmodifiable() },
-                        defaultUnitAmount,
-                        matrixValues.map { it.toUnmodifiable() },
-                        additionalProperties.toUnmodifiable(),
-                    )
+                    fun build(): MatrixConfig =
+                        MatrixConfig(
+                            dimensions.map { it.toUnmodifiable() },
+                            defaultUnitAmount,
+                            matrixValues.map { it.toUnmodifiable() },
+                            additionalProperties.toUnmodifiable(),
+                        )
                 }
 
                 @JsonDeserialize(builder = MatrixValue.Builder::class)
                 @NoAutoDetect
-                class MatrixValue private constructor(private val unitAmount: JsonField<String>, private val dimensionValues: JsonField<List<String?>>, private val additionalProperties: Map<String, JsonValue>, ) {
+                class MatrixValue
+                private constructor(
+                    private val unitAmount: JsonField<String>,
+                    private val dimensionValues: JsonField<List<String?>>,
+                    private val additionalProperties: Map<String, JsonValue>,
+                ) {
 
                     private var validated: Boolean = false
 
@@ -3173,20 +3328,19 @@ class PlanCreateParams constructor(
 
                     /**
                      * One or two matrix keys to filter usage to this Matrix value by. For example,
-                     * ["region", "tier"] could be used to filter cloud usage by a cloud region and an
-                     * instance tier.
+                     * ["region", "tier"] could be used to filter cloud usage by a cloud region and
+                     * an instance tier.
                      */
-                    fun dimensionValues(): List<String?> = dimensionValues.getRequired("dimension_values")
+                    fun dimensionValues(): List<String?> =
+                        dimensionValues.getRequired("dimension_values")
 
                     /** Unit price for the specified dimension_values */
-                    @JsonProperty("unit_amount")
-                    @ExcludeMissing
-                    fun _unitAmount() = unitAmount
+                    @JsonProperty("unit_amount") @ExcludeMissing fun _unitAmount() = unitAmount
 
                     /**
                      * One or two matrix keys to filter usage to this Matrix value by. For example,
-                     * ["region", "tier"] could be used to filter cloud usage by a cloud region and an
-                     * instance tier.
+                     * ["region", "tier"] could be used to filter cloud usage by a cloud region and
+                     * an instance tier.
                      */
                     @JsonProperty("dimension_values")
                     @ExcludeMissing
@@ -3198,49 +3352,51 @@ class PlanCreateParams constructor(
 
                     fun validate(): MatrixValue = apply {
                         if (!validated) {
-                          unitAmount()
-                          dimensionValues()
-                          validated = true
+                            unitAmount()
+                            dimensionValues()
+                            validated = true
                         }
                     }
 
                     fun toBuilder() = Builder().from(this)
 
                     override fun equals(other: Any?): Boolean {
-                      if (this === other) {
-                          return true
-                      }
+                        if (this === other) {
+                            return true
+                        }
 
-                      return other is MatrixValue &&
-                          this.unitAmount == other.unitAmount &&
-                          this.dimensionValues == other.dimensionValues &&
-                          this.additionalProperties == other.additionalProperties
+                        return other is MatrixValue &&
+                            this.unitAmount == other.unitAmount &&
+                            this.dimensionValues == other.dimensionValues &&
+                            this.additionalProperties == other.additionalProperties
                     }
 
                     override fun hashCode(): Int {
-                      if (hashCode == 0) {
-                        hashCode = Objects.hash(
-                            unitAmount,
-                            dimensionValues,
-                            additionalProperties,
-                        )
-                      }
-                      return hashCode
+                        if (hashCode == 0) {
+                            hashCode =
+                                Objects.hash(
+                                    unitAmount,
+                                    dimensionValues,
+                                    additionalProperties,
+                                )
+                        }
+                        return hashCode
                     }
 
-                    override fun toString() = "MatrixValue{unitAmount=$unitAmount, dimensionValues=$dimensionValues, additionalProperties=$additionalProperties}"
+                    override fun toString() =
+                        "MatrixValue{unitAmount=$unitAmount, dimensionValues=$dimensionValues, additionalProperties=$additionalProperties}"
 
                     companion object {
 
-                        @JvmStatic
-                        fun builder() = Builder()
+                        @JvmStatic fun builder() = Builder()
                     }
 
                     class Builder {
 
                         private var unitAmount: JsonField<String> = JsonMissing.of()
                         private var dimensionValues: JsonField<List<String?>> = JsonMissing.of()
-                        private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+                        private var additionalProperties: MutableMap<String, JsonValue> =
+                            mutableMapOf()
 
                         @JvmSynthetic
                         internal fun from(matrixValue: MatrixValue) = apply {
@@ -3260,16 +3416,17 @@ class PlanCreateParams constructor(
                         }
 
                         /**
-                         * One or two matrix keys to filter usage to this Matrix value by. For example,
-                         * ["region", "tier"] could be used to filter cloud usage by a cloud region and an
-                         * instance tier.
+                         * One or two matrix keys to filter usage to this Matrix value by. For
+                         * example, ["region", "tier"] could be used to filter cloud usage by a
+                         * cloud region and an instance tier.
                          */
-                        fun dimensionValues(dimensionValues: List<String?>) = dimensionValues(JsonField.of(dimensionValues))
+                        fun dimensionValues(dimensionValues: List<String?>) =
+                            dimensionValues(JsonField.of(dimensionValues))
 
                         /**
-                         * One or two matrix keys to filter usage to this Matrix value by. For example,
-                         * ["region", "tier"] could be used to filter cloud usage by a cloud region and an
-                         * instance tier.
+                         * One or two matrix keys to filter usage to this Matrix value by. For
+                         * example, ["region", "tier"] could be used to filter cloud usage by a
+                         * cloud region and an instance tier.
                          */
                         @JsonProperty("dimension_values")
                         @ExcludeMissing
@@ -3277,41 +3434,45 @@ class PlanCreateParams constructor(
                             this.dimensionValues = dimensionValues
                         }
 
-                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                            this.additionalProperties.clear()
-                            this.additionalProperties.putAll(additionalProperties)
-                        }
+                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                            apply {
+                                this.additionalProperties.clear()
+                                this.additionalProperties.putAll(additionalProperties)
+                            }
 
                         @JsonAnySetter
                         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                             this.additionalProperties.put(key, value)
                         }
 
-                        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                            this.additionalProperties.putAll(additionalProperties)
-                        }
+                        fun putAllAdditionalProperties(
+                            additionalProperties: Map<String, JsonValue>
+                        ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): MatrixValue = MatrixValue(
-                            unitAmount,
-                            dimensionValues.map { it.toUnmodifiable() },
-                            additionalProperties.toUnmodifiable(),
-                        )
+                        fun build(): MatrixValue =
+                            MatrixValue(
+                                unitAmount,
+                                dimensionValues.map { it.toUnmodifiable() },
+                                additionalProperties.toUnmodifiable(),
+                            )
                     }
                 }
             }
 
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class ModelType
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is ModelType &&
-                      this.value == other.value
+                    return other is ModelType && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -3334,27 +3495,32 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    MATRIX -> Value.MATRIX
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        MATRIX -> Value.MATRIX
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    MATRIX -> Known.MATRIX
-                    else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        MATRIX -> Known.MATRIX
+                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
             @JsonDeserialize(builder = Metadata.Builder::class)
             @NoAutoDetect
-            class Metadata private constructor(private val additionalProperties: Map<String, JsonValue>, ) {
+            class Metadata
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -3366,34 +3532,33 @@ class PlanCreateParams constructor(
 
                 fun validate(): Metadata = apply {
                     if (!validated) {
-                      validated = true
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Metadata &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is Metadata &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
                 }
 
                 override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -3415,9 +3580,10 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
                     fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
                 }
@@ -3426,22 +3592,22 @@ class PlanCreateParams constructor(
 
         @JsonDeserialize(builder = NewPlanTieredPrice.Builder::class)
         @NoAutoDetect
-        class NewPlanTieredPrice private constructor(
-          private val metadata: JsonField<Metadata>,
-          private val externalPriceId: JsonField<String>,
-          private val name: JsonField<String>,
-          private val billableMetricId: JsonField<String>,
-          private val itemId: JsonField<String>,
-          private val billedInAdvance: JsonField<Boolean>,
-          private val fixedPriceQuantity: JsonField<Double>,
-          private val invoiceGroupingKey: JsonField<String>,
-          private val cadence: JsonField<Cadence>,
-          private val conversionRate: JsonField<Double>,
-          private val modelType: JsonField<ModelType>,
-          private val tieredConfig: JsonField<TieredConfig>,
-          private val currency: JsonField<String>,
-          private val additionalProperties: Map<String, JsonValue>,
-
+        class NewPlanTieredPrice
+        private constructor(
+            private val metadata: JsonField<Metadata>,
+            private val externalPriceId: JsonField<String>,
+            private val name: JsonField<String>,
+            private val billableMetricId: JsonField<String>,
+            private val itemId: JsonField<String>,
+            private val billedInAdvance: JsonField<Boolean>,
+            private val fixedPriceQuantity: JsonField<Double>,
+            private val invoiceGroupingKey: JsonField<String>,
+            private val cadence: JsonField<Cadence>,
+            private val conversionRate: JsonField<Double>,
+            private val modelType: JsonField<ModelType>,
+            private val tieredConfig: JsonField<TieredConfig>,
+            private val currency: JsonField<String>,
+            private val additionalProperties: Map<String, JsonValue>,
         ) {
 
             private var validated: Boolean = false
@@ -3449,66 +3615,69 @@ class PlanCreateParams constructor(
             private var hashCode: Int = 0
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata.getNullable("metadata"))
+            fun metadata(): Optional<Metadata> =
+                Optional.ofNullable(metadata.getNullable("metadata"))
 
             /** An alias for the price. */
-            fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+            fun externalPriceId(): Optional<String> =
+                Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
 
             /** The name of the price. */
             fun name(): String = name.getRequired("name")
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
-            fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+            fun billableMetricId(): Optional<String> =
+                Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
 
             /** The id of the item the plan will be associated with. */
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
-            fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+            fun billedInAdvance(): Optional<Boolean> =
+                Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
-            fun fixedPriceQuantity(): Optional<Double> = Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+            fun fixedPriceQuantity(): Optional<Double> =
+                Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
 
             /** The property used to group this price on an invoice */
-            fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+            fun invoiceGroupingKey(): Optional<String> =
+                Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
 
             /** The cadence to bill for this price on. */
             fun cadence(): Cadence = cadence.getRequired("cadence")
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+            fun conversionRate(): Optional<Double> =
+                Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
 
             fun modelType(): ModelType = modelType.getRequired("model_type")
 
             fun tieredConfig(): TieredConfig = tieredConfig.getRequired("tiered_config")
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
             fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            @JsonProperty("metadata")
-            @ExcludeMissing
-            fun _metadata() = metadata
+            @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
 
             /** An alias for the price. */
             @JsonProperty("external_price_id")
@@ -3516,34 +3685,28 @@ class PlanCreateParams constructor(
             fun _externalPriceId() = externalPriceId
 
             /** The name of the price. */
-            @JsonProperty("name")
-            @ExcludeMissing
-            fun _name() = name
+            @JsonProperty("name") @ExcludeMissing fun _name() = name
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
             @JsonProperty("billable_metric_id")
             @ExcludeMissing
             fun _billableMetricId() = billableMetricId
 
             /** The id of the item the plan will be associated with. */
-            @JsonProperty("item_id")
-            @ExcludeMissing
-            fun _itemId() = itemId
+            @JsonProperty("item_id") @ExcludeMissing fun _itemId() = itemId
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
             @JsonProperty("billed_in_advance")
             @ExcludeMissing
             fun _billedInAdvance() = billedInAdvance
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
             @JsonProperty("fixed_price_quantity")
             @ExcludeMissing
@@ -3555,30 +3718,20 @@ class PlanCreateParams constructor(
             fun _invoiceGroupingKey() = invoiceGroupingKey
 
             /** The cadence to bill for this price on. */
-            @JsonProperty("cadence")
-            @ExcludeMissing
-            fun _cadence() = cadence
+            @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            @JsonProperty("conversion_rate")
-            @ExcludeMissing
-            fun _conversionRate() = conversionRate
+            @JsonProperty("conversion_rate") @ExcludeMissing fun _conversionRate() = conversionRate
 
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType() = modelType
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType() = modelType
 
-            @JsonProperty("tiered_config")
-            @ExcludeMissing
-            fun _tieredConfig() = tieredConfig
+            @JsonProperty("tiered_config") @ExcludeMissing fun _tieredConfig() = tieredConfig
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
-            @JsonProperty("currency")
-            @ExcludeMissing
-            fun _currency() = currency
+            @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -3586,75 +3739,76 @@ class PlanCreateParams constructor(
 
             fun validate(): NewPlanTieredPrice = apply {
                 if (!validated) {
-                  metadata().map { it.validate() }
-                  externalPriceId()
-                  name()
-                  billableMetricId()
-                  itemId()
-                  billedInAdvance()
-                  fixedPriceQuantity()
-                  invoiceGroupingKey()
-                  cadence()
-                  conversionRate()
-                  modelType()
-                  tieredConfig().validate()
-                  currency()
-                  validated = true
+                    metadata().map { it.validate() }
+                    externalPriceId()
+                    name()
+                    billableMetricId()
+                    itemId()
+                    billedInAdvance()
+                    fixedPriceQuantity()
+                    invoiceGroupingKey()
+                    cadence()
+                    conversionRate()
+                    modelType()
+                    tieredConfig().validate()
+                    currency()
+                    validated = true
                 }
             }
 
             fun toBuilder() = Builder().from(this)
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is NewPlanTieredPrice &&
-                  this.metadata == other.metadata &&
-                  this.externalPriceId == other.externalPriceId &&
-                  this.name == other.name &&
-                  this.billableMetricId == other.billableMetricId &&
-                  this.itemId == other.itemId &&
-                  this.billedInAdvance == other.billedInAdvance &&
-                  this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                  this.invoiceGroupingKey == other.invoiceGroupingKey &&
-                  this.cadence == other.cadence &&
-                  this.conversionRate == other.conversionRate &&
-                  this.modelType == other.modelType &&
-                  this.tieredConfig == other.tieredConfig &&
-                  this.currency == other.currency &&
-                  this.additionalProperties == other.additionalProperties
+                return other is NewPlanTieredPrice &&
+                    this.metadata == other.metadata &&
+                    this.externalPriceId == other.externalPriceId &&
+                    this.name == other.name &&
+                    this.billableMetricId == other.billableMetricId &&
+                    this.itemId == other.itemId &&
+                    this.billedInAdvance == other.billedInAdvance &&
+                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
+                    this.invoiceGroupingKey == other.invoiceGroupingKey &&
+                    this.cadence == other.cadence &&
+                    this.conversionRate == other.conversionRate &&
+                    this.modelType == other.modelType &&
+                    this.tieredConfig == other.tieredConfig &&
+                    this.currency == other.currency &&
+                    this.additionalProperties == other.additionalProperties
             }
 
             override fun hashCode(): Int {
-              if (hashCode == 0) {
-                hashCode = Objects.hash(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    tieredConfig,
-                    currency,
-                    additionalProperties,
-                )
-              }
-              return hashCode
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            metadata,
+                            externalPriceId,
+                            name,
+                            billableMetricId,
+                            itemId,
+                            billedInAdvance,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            cadence,
+                            conversionRate,
+                            modelType,
+                            tieredConfig,
+                            currency,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
             }
 
-            override fun toString() = "NewPlanTieredPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, tieredConfig=$tieredConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "NewPlanTieredPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, tieredConfig=$tieredConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
             companion object {
 
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             class Builder {
@@ -3694,24 +3848,23 @@ class PlanCreateParams constructor(
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 @JsonProperty("metadata")
                 @ExcludeMissing
-                fun metadata(metadata: JsonField<Metadata>) = apply {
-                    this.metadata = metadata
-                }
+                fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
                 /** An alias for the price. */
-                fun externalPriceId(externalPriceId: String) = externalPriceId(JsonField.of(externalPriceId))
+                fun externalPriceId(externalPriceId: String) =
+                    externalPriceId(JsonField.of(externalPriceId))
 
                 /** An alias for the price. */
                 @JsonProperty("external_price_id")
@@ -3726,15 +3879,14 @@ class PlanCreateParams constructor(
                 /** The name of the price. */
                 @JsonProperty("name")
                 @ExcludeMissing
-                fun name(name: JsonField<String>) = apply {
-                    this.name = name
-                }
+                fun name(name: JsonField<String>) = apply { this.name = name }
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
                  * usage-based.
                  */
-                fun billableMetricId(billableMetricId: String) = billableMetricId(JsonField.of(billableMetricId))
+                fun billableMetricId(billableMetricId: String) =
+                    billableMetricId(JsonField.of(billableMetricId))
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -3752,19 +3904,18 @@ class PlanCreateParams constructor(
                 /** The id of the item the plan will be associated with. */
                 @JsonProperty("item_id")
                 @ExcludeMissing
-                fun itemId(itemId: JsonField<String>) = apply {
-                    this.itemId = itemId
-                }
+                fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
-                fun billedInAdvance(billedInAdvance: Boolean) = billedInAdvance(JsonField.of(billedInAdvance))
+                fun billedInAdvance(billedInAdvance: Boolean) =
+                    billedInAdvance(JsonField.of(billedInAdvance))
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 @ExcludeMissing
@@ -3776,7 +3927,8 @@ class PlanCreateParams constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                fun fixedPriceQuantity(fixedPriceQuantity: Double) = fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
+                fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                    fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -3789,7 +3941,8 @@ class PlanCreateParams constructor(
                 }
 
                 /** The property used to group this price on an invoice */
-                fun invoiceGroupingKey(invoiceGroupingKey: String) = invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
+                fun invoiceGroupingKey(invoiceGroupingKey: String) =
+                    invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
 
                 /** The property used to group this price on an invoice */
                 @JsonProperty("invoice_grouping_key")
@@ -3804,12 +3957,11 @@ class PlanCreateParams constructor(
                 /** The cadence to bill for this price on. */
                 @JsonProperty("cadence")
                 @ExcludeMissing
-                fun cadence(cadence: JsonField<Cadence>) = apply {
-                    this.cadence = cadence
-                }
+                fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                fun conversionRate(conversionRate: Double) = conversionRate(JsonField.of(conversionRate))
+                fun conversionRate(conversionRate: Double) =
+                    conversionRate(JsonField.of(conversionRate))
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 @JsonProperty("conversion_rate")
@@ -3826,7 +3978,8 @@ class PlanCreateParams constructor(
                     this.modelType = modelType
                 }
 
-                fun tieredConfig(tieredConfig: TieredConfig) = tieredConfig(JsonField.of(tieredConfig))
+                fun tieredConfig(tieredConfig: TieredConfig) =
+                    tieredConfig(JsonField.of(tieredConfig))
 
                 @JsonProperty("tiered_config")
                 @ExcludeMissing
@@ -3846,9 +3999,7 @@ class PlanCreateParams constructor(
                  */
                 @JsonProperty("currency")
                 @ExcludeMissing
-                fun currency(currency: JsonField<String>) = apply {
-                    this.currency = currency
-                }
+                fun currency(currency: JsonField<String>) = apply { this.currency = currency }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -3860,40 +4011,44 @@ class PlanCreateParams constructor(
                     this.additionalProperties.put(key, value)
                 }
 
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
 
-                fun build(): NewPlanTieredPrice = NewPlanTieredPrice(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    tieredConfig,
-                    currency,
-                    additionalProperties.toUnmodifiable(),
-                )
+                fun build(): NewPlanTieredPrice =
+                    NewPlanTieredPrice(
+                        metadata,
+                        externalPriceId,
+                        name,
+                        billableMetricId,
+                        itemId,
+                        billedInAdvance,
+                        fixedPriceQuantity,
+                        invoiceGroupingKey,
+                        cadence,
+                        conversionRate,
+                        modelType,
+                        tieredConfig,
+                        currency,
+                        additionalProperties.toUnmodifiable(),
+                    )
             }
 
-            class Cadence @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class Cadence
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Cadence &&
-                      this.value == other.value
+                    return other is Cadence && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -3936,41 +4091,45 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    ANNUAL -> Value.ANNUAL
-                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
-                    MONTHLY -> Value.MONTHLY
-                    QUARTERLY -> Value.QUARTERLY
-                    ONE_TIME -> Value.ONE_TIME
-                    CUSTOM -> Value.CUSTOM
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        ANNUAL -> Value.ANNUAL
+                        SEMI_ANNUAL -> Value.SEMI_ANNUAL
+                        MONTHLY -> Value.MONTHLY
+                        QUARTERLY -> Value.QUARTERLY
+                        ONE_TIME -> Value.ONE_TIME
+                        CUSTOM -> Value.CUSTOM
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    ANNUAL -> Known.ANNUAL
-                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
-                    MONTHLY -> Known.MONTHLY
-                    QUARTERLY -> Known.QUARTERLY
-                    ONE_TIME -> Known.ONE_TIME
-                    CUSTOM -> Known.CUSTOM
-                    else -> throw OrbInvalidDataException("Unknown Cadence: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        ANNUAL -> Known.ANNUAL
+                        SEMI_ANNUAL -> Known.SEMI_ANNUAL
+                        MONTHLY -> Known.MONTHLY
+                        QUARTERLY -> Known.QUARTERLY
+                        ONE_TIME -> Known.ONE_TIME
+                        CUSTOM -> Known.CUSTOM
+                        else -> throw OrbInvalidDataException("Unknown Cadence: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class ModelType
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is ModelType &&
-                      this.value == other.value
+                    return other is ModelType && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -3993,22 +4152,28 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    TIERED -> Value.TIERED
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        TIERED -> Value.TIERED
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    TIERED -> Known.TIERED
-                    else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        TIERED -> Known.TIERED
+                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
             @JsonDeserialize(builder = TieredConfig.Builder::class)
             @NoAutoDetect
-            class TieredConfig private constructor(private val tiers: JsonField<List<Tier>>, private val additionalProperties: Map<String, JsonValue>, ) {
+            class TieredConfig
+            private constructor(
+                private val tiers: JsonField<List<Tier>>,
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -4018,9 +4183,7 @@ class PlanCreateParams constructor(
                 fun tiers(): List<Tier> = tiers.getRequired("tiers")
 
                 /** Tiers for rating based on total usage quantities into the specified tier */
-                @JsonProperty("tiers")
-                @ExcludeMissing
-                fun _tiers() = tiers
+                @JsonProperty("tiers") @ExcludeMissing fun _tiers() = tiers
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -4028,36 +4191,36 @@ class PlanCreateParams constructor(
 
                 fun validate(): TieredConfig = apply {
                     if (!validated) {
-                      tiers().forEach { it.validate() }
-                      validated = true
+                        tiers().forEach { it.validate() }
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is TieredConfig &&
-                      this.tiers == other.tiers &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is TieredConfig &&
+                        this.tiers == other.tiers &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(tiers, additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(tiers, additionalProperties)
+                    }
+                    return hashCode
                 }
 
-                override fun toString() = "TieredConfig{tiers=$tiers, additionalProperties=$additionalProperties}"
+                override fun toString() =
+                    "TieredConfig{tiers=$tiers, additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -4077,9 +4240,7 @@ class PlanCreateParams constructor(
                     /** Tiers for rating based on total usage quantities into the specified tier */
                     @JsonProperty("tiers")
                     @ExcludeMissing
-                    fun tiers(tiers: JsonField<List<Tier>>) = apply {
-                        this.tiers = tiers
-                    }
+                    fun tiers(tiers: JsonField<List<Tier>>) = apply { this.tiers = tiers }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -4091,21 +4252,26 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
-                    fun build(): TieredConfig = TieredConfig(tiers.map { it.toUnmodifiable() }, additionalProperties.toUnmodifiable())
+                    fun build(): TieredConfig =
+                        TieredConfig(
+                            tiers.map { it.toUnmodifiable() },
+                            additionalProperties.toUnmodifiable()
+                        )
                 }
 
                 @JsonDeserialize(builder = Tier.Builder::class)
                 @NoAutoDetect
-                class Tier private constructor(
-                  private val firstUnit: JsonField<Double>,
-                  private val lastUnit: JsonField<Double>,
-                  private val unitAmount: JsonField<String>,
-                  private val additionalProperties: Map<String, JsonValue>,
-
+                class Tier
+                private constructor(
+                    private val firstUnit: JsonField<Double>,
+                    private val lastUnit: JsonField<Double>,
+                    private val unitAmount: JsonField<String>,
+                    private val additionalProperties: Map<String, JsonValue>,
                 ) {
 
                     private var validated: Boolean = false
@@ -4116,25 +4282,20 @@ class PlanCreateParams constructor(
                     fun firstUnit(): Double = firstUnit.getRequired("first_unit")
 
                     /** Exclusive tier ending value. If null, this is treated as the last tier */
-                    fun lastUnit(): Optional<Double> = Optional.ofNullable(lastUnit.getNullable("last_unit"))
+                    fun lastUnit(): Optional<Double> =
+                        Optional.ofNullable(lastUnit.getNullable("last_unit"))
 
                     /** Amount per unit */
                     fun unitAmount(): String = unitAmount.getRequired("unit_amount")
 
                     /** Inclusive tier starting value */
-                    @JsonProperty("first_unit")
-                    @ExcludeMissing
-                    fun _firstUnit() = firstUnit
+                    @JsonProperty("first_unit") @ExcludeMissing fun _firstUnit() = firstUnit
 
                     /** Exclusive tier ending value. If null, this is treated as the last tier */
-                    @JsonProperty("last_unit")
-                    @ExcludeMissing
-                    fun _lastUnit() = lastUnit
+                    @JsonProperty("last_unit") @ExcludeMissing fun _lastUnit() = lastUnit
 
                     /** Amount per unit */
-                    @JsonProperty("unit_amount")
-                    @ExcludeMissing
-                    fun _unitAmount() = unitAmount
+                    @JsonProperty("unit_amount") @ExcludeMissing fun _unitAmount() = unitAmount
 
                     @JsonAnyGetter
                     @ExcludeMissing
@@ -4142,45 +4303,46 @@ class PlanCreateParams constructor(
 
                     fun validate(): Tier = apply {
                         if (!validated) {
-                          firstUnit()
-                          lastUnit()
-                          unitAmount()
-                          validated = true
+                            firstUnit()
+                            lastUnit()
+                            unitAmount()
+                            validated = true
                         }
                     }
 
                     fun toBuilder() = Builder().from(this)
 
                     override fun equals(other: Any?): Boolean {
-                      if (this === other) {
-                          return true
-                      }
+                        if (this === other) {
+                            return true
+                        }
 
-                      return other is Tier &&
-                          this.firstUnit == other.firstUnit &&
-                          this.lastUnit == other.lastUnit &&
-                          this.unitAmount == other.unitAmount &&
-                          this.additionalProperties == other.additionalProperties
+                        return other is Tier &&
+                            this.firstUnit == other.firstUnit &&
+                            this.lastUnit == other.lastUnit &&
+                            this.unitAmount == other.unitAmount &&
+                            this.additionalProperties == other.additionalProperties
                     }
 
                     override fun hashCode(): Int {
-                      if (hashCode == 0) {
-                        hashCode = Objects.hash(
-                            firstUnit,
-                            lastUnit,
-                            unitAmount,
-                            additionalProperties,
-                        )
-                      }
-                      return hashCode
+                        if (hashCode == 0) {
+                            hashCode =
+                                Objects.hash(
+                                    firstUnit,
+                                    lastUnit,
+                                    unitAmount,
+                                    additionalProperties,
+                                )
+                        }
+                        return hashCode
                     }
 
-                    override fun toString() = "Tier{firstUnit=$firstUnit, lastUnit=$lastUnit, unitAmount=$unitAmount, additionalProperties=$additionalProperties}"
+                    override fun toString() =
+                        "Tier{firstUnit=$firstUnit, lastUnit=$lastUnit, unitAmount=$unitAmount, additionalProperties=$additionalProperties}"
 
                     companion object {
 
-                        @JvmStatic
-                        fun builder() = Builder()
+                        @JvmStatic fun builder() = Builder()
                     }
 
                     class Builder {
@@ -4188,7 +4350,8 @@ class PlanCreateParams constructor(
                         private var firstUnit: JsonField<Double> = JsonMissing.of()
                         private var lastUnit: JsonField<Double> = JsonMissing.of()
                         private var unitAmount: JsonField<String> = JsonMissing.of()
-                        private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+                        private var additionalProperties: MutableMap<String, JsonValue> =
+                            mutableMapOf()
 
                         @JvmSynthetic
                         internal fun from(tier: Tier) = apply {
@@ -4208,10 +4371,14 @@ class PlanCreateParams constructor(
                             this.firstUnit = firstUnit
                         }
 
-                        /** Exclusive tier ending value. If null, this is treated as the last tier */
+                        /**
+                         * Exclusive tier ending value. If null, this is treated as the last tier
+                         */
                         fun lastUnit(lastUnit: Double) = lastUnit(JsonField.of(lastUnit))
 
-                        /** Exclusive tier ending value. If null, this is treated as the last tier */
+                        /**
+                         * Exclusive tier ending value. If null, this is treated as the last tier
+                         */
                         @JsonProperty("last_unit")
                         @ExcludeMissing
                         fun lastUnit(lastUnit: JsonField<Double>) = apply {
@@ -4228,38 +4395,43 @@ class PlanCreateParams constructor(
                             this.unitAmount = unitAmount
                         }
 
-                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                            this.additionalProperties.clear()
-                            this.additionalProperties.putAll(additionalProperties)
-                        }
+                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                            apply {
+                                this.additionalProperties.clear()
+                                this.additionalProperties.putAll(additionalProperties)
+                            }
 
                         @JsonAnySetter
                         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                             this.additionalProperties.put(key, value)
                         }
 
-                        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                            this.additionalProperties.putAll(additionalProperties)
-                        }
+                        fun putAllAdditionalProperties(
+                            additionalProperties: Map<String, JsonValue>
+                        ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Tier = Tier(
-                            firstUnit,
-                            lastUnit,
-                            unitAmount,
-                            additionalProperties.toUnmodifiable(),
-                        )
+                        fun build(): Tier =
+                            Tier(
+                                firstUnit,
+                                lastUnit,
+                                unitAmount,
+                                additionalProperties.toUnmodifiable(),
+                            )
                     }
                 }
             }
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
             @JsonDeserialize(builder = Metadata.Builder::class)
             @NoAutoDetect
-            class Metadata private constructor(private val additionalProperties: Map<String, JsonValue>, ) {
+            class Metadata
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -4271,34 +4443,33 @@ class PlanCreateParams constructor(
 
                 fun validate(): Metadata = apply {
                     if (!validated) {
-                      validated = true
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Metadata &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is Metadata &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
                 }
 
                 override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -4320,9 +4491,10 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
                     fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
                 }
@@ -4331,22 +4503,22 @@ class PlanCreateParams constructor(
 
         @JsonDeserialize(builder = NewPlanTieredBpsPrice.Builder::class)
         @NoAutoDetect
-        class NewPlanTieredBpsPrice private constructor(
-          private val metadata: JsonField<Metadata>,
-          private val externalPriceId: JsonField<String>,
-          private val name: JsonField<String>,
-          private val billableMetricId: JsonField<String>,
-          private val itemId: JsonField<String>,
-          private val billedInAdvance: JsonField<Boolean>,
-          private val fixedPriceQuantity: JsonField<Double>,
-          private val invoiceGroupingKey: JsonField<String>,
-          private val cadence: JsonField<Cadence>,
-          private val conversionRate: JsonField<Double>,
-          private val modelType: JsonField<ModelType>,
-          private val tieredBpsConfig: JsonField<TieredBpsConfig>,
-          private val currency: JsonField<String>,
-          private val additionalProperties: Map<String, JsonValue>,
-
+        class NewPlanTieredBpsPrice
+        private constructor(
+            private val metadata: JsonField<Metadata>,
+            private val externalPriceId: JsonField<String>,
+            private val name: JsonField<String>,
+            private val billableMetricId: JsonField<String>,
+            private val itemId: JsonField<String>,
+            private val billedInAdvance: JsonField<Boolean>,
+            private val fixedPriceQuantity: JsonField<Double>,
+            private val invoiceGroupingKey: JsonField<String>,
+            private val cadence: JsonField<Cadence>,
+            private val conversionRate: JsonField<Double>,
+            private val modelType: JsonField<ModelType>,
+            private val tieredBpsConfig: JsonField<TieredBpsConfig>,
+            private val currency: JsonField<String>,
+            private val additionalProperties: Map<String, JsonValue>,
         ) {
 
             private var validated: Boolean = false
@@ -4354,66 +4526,70 @@ class PlanCreateParams constructor(
             private var hashCode: Int = 0
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata.getNullable("metadata"))
+            fun metadata(): Optional<Metadata> =
+                Optional.ofNullable(metadata.getNullable("metadata"))
 
             /** An alias for the price. */
-            fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+            fun externalPriceId(): Optional<String> =
+                Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
 
             /** The name of the price. */
             fun name(): String = name.getRequired("name")
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
-            fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+            fun billableMetricId(): Optional<String> =
+                Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
 
             /** The id of the item the plan will be associated with. */
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
-            fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+            fun billedInAdvance(): Optional<Boolean> =
+                Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
-            fun fixedPriceQuantity(): Optional<Double> = Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+            fun fixedPriceQuantity(): Optional<Double> =
+                Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
 
             /** The property used to group this price on an invoice */
-            fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+            fun invoiceGroupingKey(): Optional<String> =
+                Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
 
             /** The cadence to bill for this price on. */
             fun cadence(): Cadence = cadence.getRequired("cadence")
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+            fun conversionRate(): Optional<Double> =
+                Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
 
             fun modelType(): ModelType = modelType.getRequired("model_type")
 
-            fun tieredBpsConfig(): TieredBpsConfig = tieredBpsConfig.getRequired("tiered_bps_config")
+            fun tieredBpsConfig(): TieredBpsConfig =
+                tieredBpsConfig.getRequired("tiered_bps_config")
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
             fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            @JsonProperty("metadata")
-            @ExcludeMissing
-            fun _metadata() = metadata
+            @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
 
             /** An alias for the price. */
             @JsonProperty("external_price_id")
@@ -4421,34 +4597,28 @@ class PlanCreateParams constructor(
             fun _externalPriceId() = externalPriceId
 
             /** The name of the price. */
-            @JsonProperty("name")
-            @ExcludeMissing
-            fun _name() = name
+            @JsonProperty("name") @ExcludeMissing fun _name() = name
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
             @JsonProperty("billable_metric_id")
             @ExcludeMissing
             fun _billableMetricId() = billableMetricId
 
             /** The id of the item the plan will be associated with. */
-            @JsonProperty("item_id")
-            @ExcludeMissing
-            fun _itemId() = itemId
+            @JsonProperty("item_id") @ExcludeMissing fun _itemId() = itemId
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
             @JsonProperty("billed_in_advance")
             @ExcludeMissing
             fun _billedInAdvance() = billedInAdvance
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
             @JsonProperty("fixed_price_quantity")
             @ExcludeMissing
@@ -4460,30 +4630,22 @@ class PlanCreateParams constructor(
             fun _invoiceGroupingKey() = invoiceGroupingKey
 
             /** The cadence to bill for this price on. */
-            @JsonProperty("cadence")
-            @ExcludeMissing
-            fun _cadence() = cadence
+            @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            @JsonProperty("conversion_rate")
-            @ExcludeMissing
-            fun _conversionRate() = conversionRate
+            @JsonProperty("conversion_rate") @ExcludeMissing fun _conversionRate() = conversionRate
 
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType() = modelType
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType() = modelType
 
             @JsonProperty("tiered_bps_config")
             @ExcludeMissing
             fun _tieredBpsConfig() = tieredBpsConfig
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
-            @JsonProperty("currency")
-            @ExcludeMissing
-            fun _currency() = currency
+            @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -4491,75 +4653,76 @@ class PlanCreateParams constructor(
 
             fun validate(): NewPlanTieredBpsPrice = apply {
                 if (!validated) {
-                  metadata().map { it.validate() }
-                  externalPriceId()
-                  name()
-                  billableMetricId()
-                  itemId()
-                  billedInAdvance()
-                  fixedPriceQuantity()
-                  invoiceGroupingKey()
-                  cadence()
-                  conversionRate()
-                  modelType()
-                  tieredBpsConfig().validate()
-                  currency()
-                  validated = true
+                    metadata().map { it.validate() }
+                    externalPriceId()
+                    name()
+                    billableMetricId()
+                    itemId()
+                    billedInAdvance()
+                    fixedPriceQuantity()
+                    invoiceGroupingKey()
+                    cadence()
+                    conversionRate()
+                    modelType()
+                    tieredBpsConfig().validate()
+                    currency()
+                    validated = true
                 }
             }
 
             fun toBuilder() = Builder().from(this)
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is NewPlanTieredBpsPrice &&
-                  this.metadata == other.metadata &&
-                  this.externalPriceId == other.externalPriceId &&
-                  this.name == other.name &&
-                  this.billableMetricId == other.billableMetricId &&
-                  this.itemId == other.itemId &&
-                  this.billedInAdvance == other.billedInAdvance &&
-                  this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                  this.invoiceGroupingKey == other.invoiceGroupingKey &&
-                  this.cadence == other.cadence &&
-                  this.conversionRate == other.conversionRate &&
-                  this.modelType == other.modelType &&
-                  this.tieredBpsConfig == other.tieredBpsConfig &&
-                  this.currency == other.currency &&
-                  this.additionalProperties == other.additionalProperties
+                return other is NewPlanTieredBpsPrice &&
+                    this.metadata == other.metadata &&
+                    this.externalPriceId == other.externalPriceId &&
+                    this.name == other.name &&
+                    this.billableMetricId == other.billableMetricId &&
+                    this.itemId == other.itemId &&
+                    this.billedInAdvance == other.billedInAdvance &&
+                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
+                    this.invoiceGroupingKey == other.invoiceGroupingKey &&
+                    this.cadence == other.cadence &&
+                    this.conversionRate == other.conversionRate &&
+                    this.modelType == other.modelType &&
+                    this.tieredBpsConfig == other.tieredBpsConfig &&
+                    this.currency == other.currency &&
+                    this.additionalProperties == other.additionalProperties
             }
 
             override fun hashCode(): Int {
-              if (hashCode == 0) {
-                hashCode = Objects.hash(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    tieredBpsConfig,
-                    currency,
-                    additionalProperties,
-                )
-              }
-              return hashCode
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            metadata,
+                            externalPriceId,
+                            name,
+                            billableMetricId,
+                            itemId,
+                            billedInAdvance,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            cadence,
+                            conversionRate,
+                            modelType,
+                            tieredBpsConfig,
+                            currency,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
             }
 
-            override fun toString() = "NewPlanTieredBpsPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, tieredBpsConfig=$tieredBpsConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "NewPlanTieredBpsPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, tieredBpsConfig=$tieredBpsConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
             companion object {
 
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             class Builder {
@@ -4599,24 +4762,23 @@ class PlanCreateParams constructor(
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 @JsonProperty("metadata")
                 @ExcludeMissing
-                fun metadata(metadata: JsonField<Metadata>) = apply {
-                    this.metadata = metadata
-                }
+                fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
                 /** An alias for the price. */
-                fun externalPriceId(externalPriceId: String) = externalPriceId(JsonField.of(externalPriceId))
+                fun externalPriceId(externalPriceId: String) =
+                    externalPriceId(JsonField.of(externalPriceId))
 
                 /** An alias for the price. */
                 @JsonProperty("external_price_id")
@@ -4631,15 +4793,14 @@ class PlanCreateParams constructor(
                 /** The name of the price. */
                 @JsonProperty("name")
                 @ExcludeMissing
-                fun name(name: JsonField<String>) = apply {
-                    this.name = name
-                }
+                fun name(name: JsonField<String>) = apply { this.name = name }
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
                  * usage-based.
                  */
-                fun billableMetricId(billableMetricId: String) = billableMetricId(JsonField.of(billableMetricId))
+                fun billableMetricId(billableMetricId: String) =
+                    billableMetricId(JsonField.of(billableMetricId))
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -4657,19 +4818,18 @@ class PlanCreateParams constructor(
                 /** The id of the item the plan will be associated with. */
                 @JsonProperty("item_id")
                 @ExcludeMissing
-                fun itemId(itemId: JsonField<String>) = apply {
-                    this.itemId = itemId
-                }
+                fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
-                fun billedInAdvance(billedInAdvance: Boolean) = billedInAdvance(JsonField.of(billedInAdvance))
+                fun billedInAdvance(billedInAdvance: Boolean) =
+                    billedInAdvance(JsonField.of(billedInAdvance))
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 @ExcludeMissing
@@ -4681,7 +4841,8 @@ class PlanCreateParams constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                fun fixedPriceQuantity(fixedPriceQuantity: Double) = fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
+                fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                    fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -4694,7 +4855,8 @@ class PlanCreateParams constructor(
                 }
 
                 /** The property used to group this price on an invoice */
-                fun invoiceGroupingKey(invoiceGroupingKey: String) = invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
+                fun invoiceGroupingKey(invoiceGroupingKey: String) =
+                    invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
 
                 /** The property used to group this price on an invoice */
                 @JsonProperty("invoice_grouping_key")
@@ -4709,12 +4871,11 @@ class PlanCreateParams constructor(
                 /** The cadence to bill for this price on. */
                 @JsonProperty("cadence")
                 @ExcludeMissing
-                fun cadence(cadence: JsonField<Cadence>) = apply {
-                    this.cadence = cadence
-                }
+                fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                fun conversionRate(conversionRate: Double) = conversionRate(JsonField.of(conversionRate))
+                fun conversionRate(conversionRate: Double) =
+                    conversionRate(JsonField.of(conversionRate))
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 @JsonProperty("conversion_rate")
@@ -4731,7 +4892,8 @@ class PlanCreateParams constructor(
                     this.modelType = modelType
                 }
 
-                fun tieredBpsConfig(tieredBpsConfig: TieredBpsConfig) = tieredBpsConfig(JsonField.of(tieredBpsConfig))
+                fun tieredBpsConfig(tieredBpsConfig: TieredBpsConfig) =
+                    tieredBpsConfig(JsonField.of(tieredBpsConfig))
 
                 @JsonProperty("tiered_bps_config")
                 @ExcludeMissing
@@ -4751,9 +4913,7 @@ class PlanCreateParams constructor(
                  */
                 @JsonProperty("currency")
                 @ExcludeMissing
-                fun currency(currency: JsonField<String>) = apply {
-                    this.currency = currency
-                }
+                fun currency(currency: JsonField<String>) = apply { this.currency = currency }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -4765,40 +4925,44 @@ class PlanCreateParams constructor(
                     this.additionalProperties.put(key, value)
                 }
 
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
 
-                fun build(): NewPlanTieredBpsPrice = NewPlanTieredBpsPrice(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    tieredBpsConfig,
-                    currency,
-                    additionalProperties.toUnmodifiable(),
-                )
+                fun build(): NewPlanTieredBpsPrice =
+                    NewPlanTieredBpsPrice(
+                        metadata,
+                        externalPriceId,
+                        name,
+                        billableMetricId,
+                        itemId,
+                        billedInAdvance,
+                        fixedPriceQuantity,
+                        invoiceGroupingKey,
+                        cadence,
+                        conversionRate,
+                        modelType,
+                        tieredBpsConfig,
+                        currency,
+                        additionalProperties.toUnmodifiable(),
+                    )
             }
 
-            class Cadence @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class Cadence
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Cadence &&
-                      this.value == other.value
+                    return other is Cadence && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -4841,41 +5005,45 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    ANNUAL -> Value.ANNUAL
-                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
-                    MONTHLY -> Value.MONTHLY
-                    QUARTERLY -> Value.QUARTERLY
-                    ONE_TIME -> Value.ONE_TIME
-                    CUSTOM -> Value.CUSTOM
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        ANNUAL -> Value.ANNUAL
+                        SEMI_ANNUAL -> Value.SEMI_ANNUAL
+                        MONTHLY -> Value.MONTHLY
+                        QUARTERLY -> Value.QUARTERLY
+                        ONE_TIME -> Value.ONE_TIME
+                        CUSTOM -> Value.CUSTOM
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    ANNUAL -> Known.ANNUAL
-                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
-                    MONTHLY -> Known.MONTHLY
-                    QUARTERLY -> Known.QUARTERLY
-                    ONE_TIME -> Known.ONE_TIME
-                    CUSTOM -> Known.CUSTOM
-                    else -> throw OrbInvalidDataException("Unknown Cadence: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        ANNUAL -> Known.ANNUAL
+                        SEMI_ANNUAL -> Known.SEMI_ANNUAL
+                        MONTHLY -> Known.MONTHLY
+                        QUARTERLY -> Known.QUARTERLY
+                        ONE_TIME -> Known.ONE_TIME
+                        CUSTOM -> Known.CUSTOM
+                        else -> throw OrbInvalidDataException("Unknown Cadence: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class ModelType
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is ModelType &&
-                      this.value == other.value
+                    return other is ModelType && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -4898,22 +5066,28 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    TIERED_BPS -> Value.TIERED_BPS
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        TIERED_BPS -> Value.TIERED_BPS
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    TIERED_BPS -> Known.TIERED_BPS
-                    else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        TIERED_BPS -> Known.TIERED_BPS
+                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
             @JsonDeserialize(builder = TieredBpsConfig.Builder::class)
             @NoAutoDetect
-            class TieredBpsConfig private constructor(private val tiers: JsonField<List<Tier>>, private val additionalProperties: Map<String, JsonValue>, ) {
+            class TieredBpsConfig
+            private constructor(
+                private val tiers: JsonField<List<Tier>>,
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -4929,9 +5103,7 @@ class PlanCreateParams constructor(
                  * Tiers for a Graduated BPS pricing model, where usage is bucketed into specified
                  * tiers
                  */
-                @JsonProperty("tiers")
-                @ExcludeMissing
-                fun _tiers() = tiers
+                @JsonProperty("tiers") @ExcludeMissing fun _tiers() = tiers
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -4939,36 +5111,36 @@ class PlanCreateParams constructor(
 
                 fun validate(): TieredBpsConfig = apply {
                     if (!validated) {
-                      tiers().forEach { it.validate() }
-                      validated = true
+                        tiers().forEach { it.validate() }
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is TieredBpsConfig &&
-                      this.tiers == other.tiers &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is TieredBpsConfig &&
+                        this.tiers == other.tiers &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(tiers, additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(tiers, additionalProperties)
+                    }
+                    return hashCode
                 }
 
-                override fun toString() = "TieredBpsConfig{tiers=$tiers, additionalProperties=$additionalProperties}"
+                override fun toString() =
+                    "TieredBpsConfig{tiers=$tiers, additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -4983,20 +5155,18 @@ class PlanCreateParams constructor(
                     }
 
                     /**
-                     * Tiers for a Graduated BPS pricing model, where usage is bucketed into specified
-                     * tiers
+                     * Tiers for a Graduated BPS pricing model, where usage is bucketed into
+                     * specified tiers
                      */
                     fun tiers(tiers: List<Tier>) = tiers(JsonField.of(tiers))
 
                     /**
-                     * Tiers for a Graduated BPS pricing model, where usage is bucketed into specified
-                     * tiers
+                     * Tiers for a Graduated BPS pricing model, where usage is bucketed into
+                     * specified tiers
                      */
                     @JsonProperty("tiers")
                     @ExcludeMissing
-                    fun tiers(tiers: JsonField<List<Tier>>) = apply {
-                        this.tiers = tiers
-                    }
+                    fun tiers(tiers: JsonField<List<Tier>>) = apply { this.tiers = tiers }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -5008,22 +5178,27 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
-                    fun build(): TieredBpsConfig = TieredBpsConfig(tiers.map { it.toUnmodifiable() }, additionalProperties.toUnmodifiable())
+                    fun build(): TieredBpsConfig =
+                        TieredBpsConfig(
+                            tiers.map { it.toUnmodifiable() },
+                            additionalProperties.toUnmodifiable()
+                        )
                 }
 
                 @JsonDeserialize(builder = Tier.Builder::class)
                 @NoAutoDetect
-                class Tier private constructor(
-                  private val minimumAmount: JsonField<String>,
-                  private val maximumAmount: JsonField<String>,
-                  private val bps: JsonField<Double>,
-                  private val perUnitMaximum: JsonField<String>,
-                  private val additionalProperties: Map<String, JsonValue>,
-
+                class Tier
+                private constructor(
+                    private val minimumAmount: JsonField<String>,
+                    private val maximumAmount: JsonField<String>,
+                    private val bps: JsonField<Double>,
+                    private val perUnitMaximum: JsonField<String>,
+                    private val additionalProperties: Map<String, JsonValue>,
                 ) {
 
                     private var validated: Boolean = false
@@ -5034,13 +5209,15 @@ class PlanCreateParams constructor(
                     fun minimumAmount(): String = minimumAmount.getRequired("minimum_amount")
 
                     /** Exclusive tier ending value */
-                    fun maximumAmount(): Optional<String> = Optional.ofNullable(maximumAmount.getNullable("maximum_amount"))
+                    fun maximumAmount(): Optional<String> =
+                        Optional.ofNullable(maximumAmount.getNullable("maximum_amount"))
 
                     /** Per-event basis point rate */
                     fun bps(): Double = bps.getRequired("bps")
 
                     /** Per unit maximum to charge */
-                    fun perUnitMaximum(): Optional<String> = Optional.ofNullable(perUnitMaximum.getNullable("per_unit_maximum"))
+                    fun perUnitMaximum(): Optional<String> =
+                        Optional.ofNullable(perUnitMaximum.getNullable("per_unit_maximum"))
 
                     /** Inclusive tier starting value */
                     @JsonProperty("minimum_amount")
@@ -5053,9 +5230,7 @@ class PlanCreateParams constructor(
                     fun _maximumAmount() = maximumAmount
 
                     /** Per-event basis point rate */
-                    @JsonProperty("bps")
-                    @ExcludeMissing
-                    fun _bps() = bps
+                    @JsonProperty("bps") @ExcludeMissing fun _bps() = bps
 
                     /** Per unit maximum to charge */
                     @JsonProperty("per_unit_maximum")
@@ -5068,48 +5243,49 @@ class PlanCreateParams constructor(
 
                     fun validate(): Tier = apply {
                         if (!validated) {
-                          minimumAmount()
-                          maximumAmount()
-                          bps()
-                          perUnitMaximum()
-                          validated = true
+                            minimumAmount()
+                            maximumAmount()
+                            bps()
+                            perUnitMaximum()
+                            validated = true
                         }
                     }
 
                     fun toBuilder() = Builder().from(this)
 
                     override fun equals(other: Any?): Boolean {
-                      if (this === other) {
-                          return true
-                      }
+                        if (this === other) {
+                            return true
+                        }
 
-                      return other is Tier &&
-                          this.minimumAmount == other.minimumAmount &&
-                          this.maximumAmount == other.maximumAmount &&
-                          this.bps == other.bps &&
-                          this.perUnitMaximum == other.perUnitMaximum &&
-                          this.additionalProperties == other.additionalProperties
+                        return other is Tier &&
+                            this.minimumAmount == other.minimumAmount &&
+                            this.maximumAmount == other.maximumAmount &&
+                            this.bps == other.bps &&
+                            this.perUnitMaximum == other.perUnitMaximum &&
+                            this.additionalProperties == other.additionalProperties
                     }
 
                     override fun hashCode(): Int {
-                      if (hashCode == 0) {
-                        hashCode = Objects.hash(
-                            minimumAmount,
-                            maximumAmount,
-                            bps,
-                            perUnitMaximum,
-                            additionalProperties,
-                        )
-                      }
-                      return hashCode
+                        if (hashCode == 0) {
+                            hashCode =
+                                Objects.hash(
+                                    minimumAmount,
+                                    maximumAmount,
+                                    bps,
+                                    perUnitMaximum,
+                                    additionalProperties,
+                                )
+                        }
+                        return hashCode
                     }
 
-                    override fun toString() = "Tier{minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, bps=$bps, perUnitMaximum=$perUnitMaximum, additionalProperties=$additionalProperties}"
+                    override fun toString() =
+                        "Tier{minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, bps=$bps, perUnitMaximum=$perUnitMaximum, additionalProperties=$additionalProperties}"
 
                     companion object {
 
-                        @JvmStatic
-                        fun builder() = Builder()
+                        @JvmStatic fun builder() = Builder()
                     }
 
                     class Builder {
@@ -5118,7 +5294,8 @@ class PlanCreateParams constructor(
                         private var maximumAmount: JsonField<String> = JsonMissing.of()
                         private var bps: JsonField<Double> = JsonMissing.of()
                         private var perUnitMaximum: JsonField<String> = JsonMissing.of()
-                        private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+                        private var additionalProperties: MutableMap<String, JsonValue> =
+                            mutableMapOf()
 
                         @JvmSynthetic
                         internal fun from(tier: Tier) = apply {
@@ -5130,7 +5307,8 @@ class PlanCreateParams constructor(
                         }
 
                         /** Inclusive tier starting value */
-                        fun minimumAmount(minimumAmount: String) = minimumAmount(JsonField.of(minimumAmount))
+                        fun minimumAmount(minimumAmount: String) =
+                            minimumAmount(JsonField.of(minimumAmount))
 
                         /** Inclusive tier starting value */
                         @JsonProperty("minimum_amount")
@@ -5140,7 +5318,8 @@ class PlanCreateParams constructor(
                         }
 
                         /** Exclusive tier ending value */
-                        fun maximumAmount(maximumAmount: String) = maximumAmount(JsonField.of(maximumAmount))
+                        fun maximumAmount(maximumAmount: String) =
+                            maximumAmount(JsonField.of(maximumAmount))
 
                         /** Exclusive tier ending value */
                         @JsonProperty("maximum_amount")
@@ -5155,12 +5334,11 @@ class PlanCreateParams constructor(
                         /** Per-event basis point rate */
                         @JsonProperty("bps")
                         @ExcludeMissing
-                        fun bps(bps: JsonField<Double>) = apply {
-                            this.bps = bps
-                        }
+                        fun bps(bps: JsonField<Double>) = apply { this.bps = bps }
 
                         /** Per unit maximum to charge */
-                        fun perUnitMaximum(perUnitMaximum: String) = perUnitMaximum(JsonField.of(perUnitMaximum))
+                        fun perUnitMaximum(perUnitMaximum: String) =
+                            perUnitMaximum(JsonField.of(perUnitMaximum))
 
                         /** Per unit maximum to charge */
                         @JsonProperty("per_unit_maximum")
@@ -5169,39 +5347,44 @@ class PlanCreateParams constructor(
                             this.perUnitMaximum = perUnitMaximum
                         }
 
-                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                            this.additionalProperties.clear()
-                            this.additionalProperties.putAll(additionalProperties)
-                        }
+                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                            apply {
+                                this.additionalProperties.clear()
+                                this.additionalProperties.putAll(additionalProperties)
+                            }
 
                         @JsonAnySetter
                         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                             this.additionalProperties.put(key, value)
                         }
 
-                        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                            this.additionalProperties.putAll(additionalProperties)
-                        }
+                        fun putAllAdditionalProperties(
+                            additionalProperties: Map<String, JsonValue>
+                        ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Tier = Tier(
-                            minimumAmount,
-                            maximumAmount,
-                            bps,
-                            perUnitMaximum,
-                            additionalProperties.toUnmodifiable(),
-                        )
+                        fun build(): Tier =
+                            Tier(
+                                minimumAmount,
+                                maximumAmount,
+                                bps,
+                                perUnitMaximum,
+                                additionalProperties.toUnmodifiable(),
+                            )
                     }
                 }
             }
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
             @JsonDeserialize(builder = Metadata.Builder::class)
             @NoAutoDetect
-            class Metadata private constructor(private val additionalProperties: Map<String, JsonValue>, ) {
+            class Metadata
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -5213,34 +5396,33 @@ class PlanCreateParams constructor(
 
                 fun validate(): Metadata = apply {
                     if (!validated) {
-                      validated = true
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Metadata &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is Metadata &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
                 }
 
                 override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -5262,9 +5444,10 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
                     fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
                 }
@@ -5273,22 +5456,22 @@ class PlanCreateParams constructor(
 
         @JsonDeserialize(builder = NewPlanBpsPrice.Builder::class)
         @NoAutoDetect
-        class NewPlanBpsPrice private constructor(
-          private val metadata: JsonField<Metadata>,
-          private val externalPriceId: JsonField<String>,
-          private val name: JsonField<String>,
-          private val billableMetricId: JsonField<String>,
-          private val itemId: JsonField<String>,
-          private val billedInAdvance: JsonField<Boolean>,
-          private val fixedPriceQuantity: JsonField<Double>,
-          private val invoiceGroupingKey: JsonField<String>,
-          private val cadence: JsonField<Cadence>,
-          private val conversionRate: JsonField<Double>,
-          private val modelType: JsonField<ModelType>,
-          private val bpsConfig: JsonField<BpsConfig>,
-          private val currency: JsonField<String>,
-          private val additionalProperties: Map<String, JsonValue>,
-
+        class NewPlanBpsPrice
+        private constructor(
+            private val metadata: JsonField<Metadata>,
+            private val externalPriceId: JsonField<String>,
+            private val name: JsonField<String>,
+            private val billableMetricId: JsonField<String>,
+            private val itemId: JsonField<String>,
+            private val billedInAdvance: JsonField<Boolean>,
+            private val fixedPriceQuantity: JsonField<Double>,
+            private val invoiceGroupingKey: JsonField<String>,
+            private val cadence: JsonField<Cadence>,
+            private val conversionRate: JsonField<Double>,
+            private val modelType: JsonField<ModelType>,
+            private val bpsConfig: JsonField<BpsConfig>,
+            private val currency: JsonField<String>,
+            private val additionalProperties: Map<String, JsonValue>,
         ) {
 
             private var validated: Boolean = false
@@ -5296,66 +5479,69 @@ class PlanCreateParams constructor(
             private var hashCode: Int = 0
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata.getNullable("metadata"))
+            fun metadata(): Optional<Metadata> =
+                Optional.ofNullable(metadata.getNullable("metadata"))
 
             /** An alias for the price. */
-            fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+            fun externalPriceId(): Optional<String> =
+                Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
 
             /** The name of the price. */
             fun name(): String = name.getRequired("name")
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
-            fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+            fun billableMetricId(): Optional<String> =
+                Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
 
             /** The id of the item the plan will be associated with. */
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
-            fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+            fun billedInAdvance(): Optional<Boolean> =
+                Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
-            fun fixedPriceQuantity(): Optional<Double> = Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+            fun fixedPriceQuantity(): Optional<Double> =
+                Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
 
             /** The property used to group this price on an invoice */
-            fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+            fun invoiceGroupingKey(): Optional<String> =
+                Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
 
             /** The cadence to bill for this price on. */
             fun cadence(): Cadence = cadence.getRequired("cadence")
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+            fun conversionRate(): Optional<Double> =
+                Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
 
             fun modelType(): ModelType = modelType.getRequired("model_type")
 
             fun bpsConfig(): BpsConfig = bpsConfig.getRequired("bps_config")
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
             fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            @JsonProperty("metadata")
-            @ExcludeMissing
-            fun _metadata() = metadata
+            @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
 
             /** An alias for the price. */
             @JsonProperty("external_price_id")
@@ -5363,34 +5549,28 @@ class PlanCreateParams constructor(
             fun _externalPriceId() = externalPriceId
 
             /** The name of the price. */
-            @JsonProperty("name")
-            @ExcludeMissing
-            fun _name() = name
+            @JsonProperty("name") @ExcludeMissing fun _name() = name
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
             @JsonProperty("billable_metric_id")
             @ExcludeMissing
             fun _billableMetricId() = billableMetricId
 
             /** The id of the item the plan will be associated with. */
-            @JsonProperty("item_id")
-            @ExcludeMissing
-            fun _itemId() = itemId
+            @JsonProperty("item_id") @ExcludeMissing fun _itemId() = itemId
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
             @JsonProperty("billed_in_advance")
             @ExcludeMissing
             fun _billedInAdvance() = billedInAdvance
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
             @JsonProperty("fixed_price_quantity")
             @ExcludeMissing
@@ -5402,30 +5582,20 @@ class PlanCreateParams constructor(
             fun _invoiceGroupingKey() = invoiceGroupingKey
 
             /** The cadence to bill for this price on. */
-            @JsonProperty("cadence")
-            @ExcludeMissing
-            fun _cadence() = cadence
+            @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            @JsonProperty("conversion_rate")
-            @ExcludeMissing
-            fun _conversionRate() = conversionRate
+            @JsonProperty("conversion_rate") @ExcludeMissing fun _conversionRate() = conversionRate
 
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType() = modelType
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType() = modelType
 
-            @JsonProperty("bps_config")
-            @ExcludeMissing
-            fun _bpsConfig() = bpsConfig
+            @JsonProperty("bps_config") @ExcludeMissing fun _bpsConfig() = bpsConfig
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
-            @JsonProperty("currency")
-            @ExcludeMissing
-            fun _currency() = currency
+            @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -5433,75 +5603,76 @@ class PlanCreateParams constructor(
 
             fun validate(): NewPlanBpsPrice = apply {
                 if (!validated) {
-                  metadata().map { it.validate() }
-                  externalPriceId()
-                  name()
-                  billableMetricId()
-                  itemId()
-                  billedInAdvance()
-                  fixedPriceQuantity()
-                  invoiceGroupingKey()
-                  cadence()
-                  conversionRate()
-                  modelType()
-                  bpsConfig().validate()
-                  currency()
-                  validated = true
+                    metadata().map { it.validate() }
+                    externalPriceId()
+                    name()
+                    billableMetricId()
+                    itemId()
+                    billedInAdvance()
+                    fixedPriceQuantity()
+                    invoiceGroupingKey()
+                    cadence()
+                    conversionRate()
+                    modelType()
+                    bpsConfig().validate()
+                    currency()
+                    validated = true
                 }
             }
 
             fun toBuilder() = Builder().from(this)
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is NewPlanBpsPrice &&
-                  this.metadata == other.metadata &&
-                  this.externalPriceId == other.externalPriceId &&
-                  this.name == other.name &&
-                  this.billableMetricId == other.billableMetricId &&
-                  this.itemId == other.itemId &&
-                  this.billedInAdvance == other.billedInAdvance &&
-                  this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                  this.invoiceGroupingKey == other.invoiceGroupingKey &&
-                  this.cadence == other.cadence &&
-                  this.conversionRate == other.conversionRate &&
-                  this.modelType == other.modelType &&
-                  this.bpsConfig == other.bpsConfig &&
-                  this.currency == other.currency &&
-                  this.additionalProperties == other.additionalProperties
+                return other is NewPlanBpsPrice &&
+                    this.metadata == other.metadata &&
+                    this.externalPriceId == other.externalPriceId &&
+                    this.name == other.name &&
+                    this.billableMetricId == other.billableMetricId &&
+                    this.itemId == other.itemId &&
+                    this.billedInAdvance == other.billedInAdvance &&
+                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
+                    this.invoiceGroupingKey == other.invoiceGroupingKey &&
+                    this.cadence == other.cadence &&
+                    this.conversionRate == other.conversionRate &&
+                    this.modelType == other.modelType &&
+                    this.bpsConfig == other.bpsConfig &&
+                    this.currency == other.currency &&
+                    this.additionalProperties == other.additionalProperties
             }
 
             override fun hashCode(): Int {
-              if (hashCode == 0) {
-                hashCode = Objects.hash(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    bpsConfig,
-                    currency,
-                    additionalProperties,
-                )
-              }
-              return hashCode
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            metadata,
+                            externalPriceId,
+                            name,
+                            billableMetricId,
+                            itemId,
+                            billedInAdvance,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            cadence,
+                            conversionRate,
+                            modelType,
+                            bpsConfig,
+                            currency,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
             }
 
-            override fun toString() = "NewPlanBpsPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, bpsConfig=$bpsConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "NewPlanBpsPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, bpsConfig=$bpsConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
             companion object {
 
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             class Builder {
@@ -5541,24 +5712,23 @@ class PlanCreateParams constructor(
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 @JsonProperty("metadata")
                 @ExcludeMissing
-                fun metadata(metadata: JsonField<Metadata>) = apply {
-                    this.metadata = metadata
-                }
+                fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
                 /** An alias for the price. */
-                fun externalPriceId(externalPriceId: String) = externalPriceId(JsonField.of(externalPriceId))
+                fun externalPriceId(externalPriceId: String) =
+                    externalPriceId(JsonField.of(externalPriceId))
 
                 /** An alias for the price. */
                 @JsonProperty("external_price_id")
@@ -5573,15 +5743,14 @@ class PlanCreateParams constructor(
                 /** The name of the price. */
                 @JsonProperty("name")
                 @ExcludeMissing
-                fun name(name: JsonField<String>) = apply {
-                    this.name = name
-                }
+                fun name(name: JsonField<String>) = apply { this.name = name }
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
                  * usage-based.
                  */
-                fun billableMetricId(billableMetricId: String) = billableMetricId(JsonField.of(billableMetricId))
+                fun billableMetricId(billableMetricId: String) =
+                    billableMetricId(JsonField.of(billableMetricId))
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -5599,19 +5768,18 @@ class PlanCreateParams constructor(
                 /** The id of the item the plan will be associated with. */
                 @JsonProperty("item_id")
                 @ExcludeMissing
-                fun itemId(itemId: JsonField<String>) = apply {
-                    this.itemId = itemId
-                }
+                fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
-                fun billedInAdvance(billedInAdvance: Boolean) = billedInAdvance(JsonField.of(billedInAdvance))
+                fun billedInAdvance(billedInAdvance: Boolean) =
+                    billedInAdvance(JsonField.of(billedInAdvance))
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 @ExcludeMissing
@@ -5623,7 +5791,8 @@ class PlanCreateParams constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                fun fixedPriceQuantity(fixedPriceQuantity: Double) = fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
+                fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                    fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -5636,7 +5805,8 @@ class PlanCreateParams constructor(
                 }
 
                 /** The property used to group this price on an invoice */
-                fun invoiceGroupingKey(invoiceGroupingKey: String) = invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
+                fun invoiceGroupingKey(invoiceGroupingKey: String) =
+                    invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
 
                 /** The property used to group this price on an invoice */
                 @JsonProperty("invoice_grouping_key")
@@ -5651,12 +5821,11 @@ class PlanCreateParams constructor(
                 /** The cadence to bill for this price on. */
                 @JsonProperty("cadence")
                 @ExcludeMissing
-                fun cadence(cadence: JsonField<Cadence>) = apply {
-                    this.cadence = cadence
-                }
+                fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                fun conversionRate(conversionRate: Double) = conversionRate(JsonField.of(conversionRate))
+                fun conversionRate(conversionRate: Double) =
+                    conversionRate(JsonField.of(conversionRate))
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 @JsonProperty("conversion_rate")
@@ -5693,9 +5862,7 @@ class PlanCreateParams constructor(
                  */
                 @JsonProperty("currency")
                 @ExcludeMissing
-                fun currency(currency: JsonField<String>) = apply {
-                    this.currency = currency
-                }
+                fun currency(currency: JsonField<String>) = apply { this.currency = currency }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -5707,31 +5874,38 @@ class PlanCreateParams constructor(
                     this.additionalProperties.put(key, value)
                 }
 
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
 
-                fun build(): NewPlanBpsPrice = NewPlanBpsPrice(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    bpsConfig,
-                    currency,
-                    additionalProperties.toUnmodifiable(),
-                )
+                fun build(): NewPlanBpsPrice =
+                    NewPlanBpsPrice(
+                        metadata,
+                        externalPriceId,
+                        name,
+                        billableMetricId,
+                        itemId,
+                        billedInAdvance,
+                        fixedPriceQuantity,
+                        invoiceGroupingKey,
+                        cadence,
+                        conversionRate,
+                        modelType,
+                        bpsConfig,
+                        currency,
+                        additionalProperties.toUnmodifiable(),
+                    )
             }
 
             @JsonDeserialize(builder = BpsConfig.Builder::class)
             @NoAutoDetect
-            class BpsConfig private constructor(private val bps: JsonField<Double>, private val perUnitMaximum: JsonField<String>, private val additionalProperties: Map<String, JsonValue>, ) {
+            class BpsConfig
+            private constructor(
+                private val bps: JsonField<Double>,
+                private val perUnitMaximum: JsonField<String>,
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -5741,12 +5915,11 @@ class PlanCreateParams constructor(
                 fun bps(): Double = bps.getRequired("bps")
 
                 /** Optional currency amount maximum to cap spend per event */
-                fun perUnitMaximum(): Optional<String> = Optional.ofNullable(perUnitMaximum.getNullable("per_unit_maximum"))
+                fun perUnitMaximum(): Optional<String> =
+                    Optional.ofNullable(perUnitMaximum.getNullable("per_unit_maximum"))
 
                 /** Basis point take rate per event */
-                @JsonProperty("bps")
-                @ExcludeMissing
-                fun _bps() = bps
+                @JsonProperty("bps") @ExcludeMissing fun _bps() = bps
 
                 /** Optional currency amount maximum to cap spend per event */
                 @JsonProperty("per_unit_maximum")
@@ -5759,42 +5932,43 @@ class PlanCreateParams constructor(
 
                 fun validate(): BpsConfig = apply {
                     if (!validated) {
-                      bps()
-                      perUnitMaximum()
-                      validated = true
+                        bps()
+                        perUnitMaximum()
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is BpsConfig &&
-                      this.bps == other.bps &&
-                      this.perUnitMaximum == other.perUnitMaximum &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is BpsConfig &&
+                        this.bps == other.bps &&
+                        this.perUnitMaximum == other.perUnitMaximum &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(
-                        bps,
-                        perUnitMaximum,
-                        additionalProperties,
-                    )
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode =
+                            Objects.hash(
+                                bps,
+                                perUnitMaximum,
+                                additionalProperties,
+                            )
+                    }
+                    return hashCode
                 }
 
-                override fun toString() = "BpsConfig{bps=$bps, perUnitMaximum=$perUnitMaximum, additionalProperties=$additionalProperties}"
+                override fun toString() =
+                    "BpsConfig{bps=$bps, perUnitMaximum=$perUnitMaximum, additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -5816,12 +5990,11 @@ class PlanCreateParams constructor(
                     /** Basis point take rate per event */
                     @JsonProperty("bps")
                     @ExcludeMissing
-                    fun bps(bps: JsonField<Double>) = apply {
-                        this.bps = bps
-                    }
+                    fun bps(bps: JsonField<Double>) = apply { this.bps = bps }
 
                     /** Optional currency amount maximum to cap spend per event */
-                    fun perUnitMaximum(perUnitMaximum: String) = perUnitMaximum(JsonField.of(perUnitMaximum))
+                    fun perUnitMaximum(perUnitMaximum: String) =
+                        perUnitMaximum(JsonField.of(perUnitMaximum))
 
                     /** Optional currency amount maximum to cap spend per event */
                     @JsonProperty("per_unit_maximum")
@@ -5840,30 +6013,34 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
-                    fun build(): BpsConfig = BpsConfig(
-                        bps,
-                        perUnitMaximum,
-                        additionalProperties.toUnmodifiable(),
-                    )
+                    fun build(): BpsConfig =
+                        BpsConfig(
+                            bps,
+                            perUnitMaximum,
+                            additionalProperties.toUnmodifiable(),
+                        )
                 }
             }
 
-            class Cadence @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class Cadence
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Cadence &&
-                      this.value == other.value
+                    return other is Cadence && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -5906,41 +6083,45 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    ANNUAL -> Value.ANNUAL
-                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
-                    MONTHLY -> Value.MONTHLY
-                    QUARTERLY -> Value.QUARTERLY
-                    ONE_TIME -> Value.ONE_TIME
-                    CUSTOM -> Value.CUSTOM
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        ANNUAL -> Value.ANNUAL
+                        SEMI_ANNUAL -> Value.SEMI_ANNUAL
+                        MONTHLY -> Value.MONTHLY
+                        QUARTERLY -> Value.QUARTERLY
+                        ONE_TIME -> Value.ONE_TIME
+                        CUSTOM -> Value.CUSTOM
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    ANNUAL -> Known.ANNUAL
-                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
-                    MONTHLY -> Known.MONTHLY
-                    QUARTERLY -> Known.QUARTERLY
-                    ONE_TIME -> Known.ONE_TIME
-                    CUSTOM -> Known.CUSTOM
-                    else -> throw OrbInvalidDataException("Unknown Cadence: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        ANNUAL -> Known.ANNUAL
+                        SEMI_ANNUAL -> Known.SEMI_ANNUAL
+                        MONTHLY -> Known.MONTHLY
+                        QUARTERLY -> Known.QUARTERLY
+                        ONE_TIME -> Known.ONE_TIME
+                        CUSTOM -> Known.CUSTOM
+                        else -> throw OrbInvalidDataException("Unknown Cadence: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class ModelType
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is ModelType &&
-                      this.value == other.value
+                    return other is ModelType && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -5963,27 +6144,32 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    BPS -> Value.BPS
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        BPS -> Value.BPS
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    BPS -> Known.BPS
-                    else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        BPS -> Known.BPS
+                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
             @JsonDeserialize(builder = Metadata.Builder::class)
             @NoAutoDetect
-            class Metadata private constructor(private val additionalProperties: Map<String, JsonValue>, ) {
+            class Metadata
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -5995,34 +6181,33 @@ class PlanCreateParams constructor(
 
                 fun validate(): Metadata = apply {
                     if (!validated) {
-                      validated = true
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Metadata &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is Metadata &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
                 }
 
                 override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -6044,9 +6229,10 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
                     fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
                 }
@@ -6055,22 +6241,22 @@ class PlanCreateParams constructor(
 
         @JsonDeserialize(builder = NewPlanBulkBpsPrice.Builder::class)
         @NoAutoDetect
-        class NewPlanBulkBpsPrice private constructor(
-          private val metadata: JsonField<Metadata>,
-          private val externalPriceId: JsonField<String>,
-          private val name: JsonField<String>,
-          private val billableMetricId: JsonField<String>,
-          private val itemId: JsonField<String>,
-          private val billedInAdvance: JsonField<Boolean>,
-          private val fixedPriceQuantity: JsonField<Double>,
-          private val invoiceGroupingKey: JsonField<String>,
-          private val cadence: JsonField<Cadence>,
-          private val conversionRate: JsonField<Double>,
-          private val modelType: JsonField<ModelType>,
-          private val bulkBpsConfig: JsonField<BulkBpsConfig>,
-          private val currency: JsonField<String>,
-          private val additionalProperties: Map<String, JsonValue>,
-
+        class NewPlanBulkBpsPrice
+        private constructor(
+            private val metadata: JsonField<Metadata>,
+            private val externalPriceId: JsonField<String>,
+            private val name: JsonField<String>,
+            private val billableMetricId: JsonField<String>,
+            private val itemId: JsonField<String>,
+            private val billedInAdvance: JsonField<Boolean>,
+            private val fixedPriceQuantity: JsonField<Double>,
+            private val invoiceGroupingKey: JsonField<String>,
+            private val cadence: JsonField<Cadence>,
+            private val conversionRate: JsonField<Double>,
+            private val modelType: JsonField<ModelType>,
+            private val bulkBpsConfig: JsonField<BulkBpsConfig>,
+            private val currency: JsonField<String>,
+            private val additionalProperties: Map<String, JsonValue>,
         ) {
 
             private var validated: Boolean = false
@@ -6078,66 +6264,69 @@ class PlanCreateParams constructor(
             private var hashCode: Int = 0
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata.getNullable("metadata"))
+            fun metadata(): Optional<Metadata> =
+                Optional.ofNullable(metadata.getNullable("metadata"))
 
             /** An alias for the price. */
-            fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+            fun externalPriceId(): Optional<String> =
+                Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
 
             /** The name of the price. */
             fun name(): String = name.getRequired("name")
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
-            fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+            fun billableMetricId(): Optional<String> =
+                Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
 
             /** The id of the item the plan will be associated with. */
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
-            fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+            fun billedInAdvance(): Optional<Boolean> =
+                Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
-            fun fixedPriceQuantity(): Optional<Double> = Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+            fun fixedPriceQuantity(): Optional<Double> =
+                Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
 
             /** The property used to group this price on an invoice */
-            fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+            fun invoiceGroupingKey(): Optional<String> =
+                Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
 
             /** The cadence to bill for this price on. */
             fun cadence(): Cadence = cadence.getRequired("cadence")
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+            fun conversionRate(): Optional<Double> =
+                Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
 
             fun modelType(): ModelType = modelType.getRequired("model_type")
 
             fun bulkBpsConfig(): BulkBpsConfig = bulkBpsConfig.getRequired("bulk_bps_config")
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
             fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            @JsonProperty("metadata")
-            @ExcludeMissing
-            fun _metadata() = metadata
+            @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
 
             /** An alias for the price. */
             @JsonProperty("external_price_id")
@@ -6145,34 +6334,28 @@ class PlanCreateParams constructor(
             fun _externalPriceId() = externalPriceId
 
             /** The name of the price. */
-            @JsonProperty("name")
-            @ExcludeMissing
-            fun _name() = name
+            @JsonProperty("name") @ExcludeMissing fun _name() = name
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
             @JsonProperty("billable_metric_id")
             @ExcludeMissing
             fun _billableMetricId() = billableMetricId
 
             /** The id of the item the plan will be associated with. */
-            @JsonProperty("item_id")
-            @ExcludeMissing
-            fun _itemId() = itemId
+            @JsonProperty("item_id") @ExcludeMissing fun _itemId() = itemId
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
             @JsonProperty("billed_in_advance")
             @ExcludeMissing
             fun _billedInAdvance() = billedInAdvance
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
             @JsonProperty("fixed_price_quantity")
             @ExcludeMissing
@@ -6184,30 +6367,20 @@ class PlanCreateParams constructor(
             fun _invoiceGroupingKey() = invoiceGroupingKey
 
             /** The cadence to bill for this price on. */
-            @JsonProperty("cadence")
-            @ExcludeMissing
-            fun _cadence() = cadence
+            @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            @JsonProperty("conversion_rate")
-            @ExcludeMissing
-            fun _conversionRate() = conversionRate
+            @JsonProperty("conversion_rate") @ExcludeMissing fun _conversionRate() = conversionRate
 
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType() = modelType
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType() = modelType
 
-            @JsonProperty("bulk_bps_config")
-            @ExcludeMissing
-            fun _bulkBpsConfig() = bulkBpsConfig
+            @JsonProperty("bulk_bps_config") @ExcludeMissing fun _bulkBpsConfig() = bulkBpsConfig
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
-            @JsonProperty("currency")
-            @ExcludeMissing
-            fun _currency() = currency
+            @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -6215,75 +6388,76 @@ class PlanCreateParams constructor(
 
             fun validate(): NewPlanBulkBpsPrice = apply {
                 if (!validated) {
-                  metadata().map { it.validate() }
-                  externalPriceId()
-                  name()
-                  billableMetricId()
-                  itemId()
-                  billedInAdvance()
-                  fixedPriceQuantity()
-                  invoiceGroupingKey()
-                  cadence()
-                  conversionRate()
-                  modelType()
-                  bulkBpsConfig().validate()
-                  currency()
-                  validated = true
+                    metadata().map { it.validate() }
+                    externalPriceId()
+                    name()
+                    billableMetricId()
+                    itemId()
+                    billedInAdvance()
+                    fixedPriceQuantity()
+                    invoiceGroupingKey()
+                    cadence()
+                    conversionRate()
+                    modelType()
+                    bulkBpsConfig().validate()
+                    currency()
+                    validated = true
                 }
             }
 
             fun toBuilder() = Builder().from(this)
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is NewPlanBulkBpsPrice &&
-                  this.metadata == other.metadata &&
-                  this.externalPriceId == other.externalPriceId &&
-                  this.name == other.name &&
-                  this.billableMetricId == other.billableMetricId &&
-                  this.itemId == other.itemId &&
-                  this.billedInAdvance == other.billedInAdvance &&
-                  this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                  this.invoiceGroupingKey == other.invoiceGroupingKey &&
-                  this.cadence == other.cadence &&
-                  this.conversionRate == other.conversionRate &&
-                  this.modelType == other.modelType &&
-                  this.bulkBpsConfig == other.bulkBpsConfig &&
-                  this.currency == other.currency &&
-                  this.additionalProperties == other.additionalProperties
+                return other is NewPlanBulkBpsPrice &&
+                    this.metadata == other.metadata &&
+                    this.externalPriceId == other.externalPriceId &&
+                    this.name == other.name &&
+                    this.billableMetricId == other.billableMetricId &&
+                    this.itemId == other.itemId &&
+                    this.billedInAdvance == other.billedInAdvance &&
+                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
+                    this.invoiceGroupingKey == other.invoiceGroupingKey &&
+                    this.cadence == other.cadence &&
+                    this.conversionRate == other.conversionRate &&
+                    this.modelType == other.modelType &&
+                    this.bulkBpsConfig == other.bulkBpsConfig &&
+                    this.currency == other.currency &&
+                    this.additionalProperties == other.additionalProperties
             }
 
             override fun hashCode(): Int {
-              if (hashCode == 0) {
-                hashCode = Objects.hash(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    bulkBpsConfig,
-                    currency,
-                    additionalProperties,
-                )
-              }
-              return hashCode
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            metadata,
+                            externalPriceId,
+                            name,
+                            billableMetricId,
+                            itemId,
+                            billedInAdvance,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            cadence,
+                            conversionRate,
+                            modelType,
+                            bulkBpsConfig,
+                            currency,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
             }
 
-            override fun toString() = "NewPlanBulkBpsPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, bulkBpsConfig=$bulkBpsConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "NewPlanBulkBpsPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, bulkBpsConfig=$bulkBpsConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
             companion object {
 
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             class Builder {
@@ -6323,24 +6497,23 @@ class PlanCreateParams constructor(
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 @JsonProperty("metadata")
                 @ExcludeMissing
-                fun metadata(metadata: JsonField<Metadata>) = apply {
-                    this.metadata = metadata
-                }
+                fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
                 /** An alias for the price. */
-                fun externalPriceId(externalPriceId: String) = externalPriceId(JsonField.of(externalPriceId))
+                fun externalPriceId(externalPriceId: String) =
+                    externalPriceId(JsonField.of(externalPriceId))
 
                 /** An alias for the price. */
                 @JsonProperty("external_price_id")
@@ -6355,15 +6528,14 @@ class PlanCreateParams constructor(
                 /** The name of the price. */
                 @JsonProperty("name")
                 @ExcludeMissing
-                fun name(name: JsonField<String>) = apply {
-                    this.name = name
-                }
+                fun name(name: JsonField<String>) = apply { this.name = name }
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
                  * usage-based.
                  */
-                fun billableMetricId(billableMetricId: String) = billableMetricId(JsonField.of(billableMetricId))
+                fun billableMetricId(billableMetricId: String) =
+                    billableMetricId(JsonField.of(billableMetricId))
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -6381,19 +6553,18 @@ class PlanCreateParams constructor(
                 /** The id of the item the plan will be associated with. */
                 @JsonProperty("item_id")
                 @ExcludeMissing
-                fun itemId(itemId: JsonField<String>) = apply {
-                    this.itemId = itemId
-                }
+                fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
-                fun billedInAdvance(billedInAdvance: Boolean) = billedInAdvance(JsonField.of(billedInAdvance))
+                fun billedInAdvance(billedInAdvance: Boolean) =
+                    billedInAdvance(JsonField.of(billedInAdvance))
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 @ExcludeMissing
@@ -6405,7 +6576,8 @@ class PlanCreateParams constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                fun fixedPriceQuantity(fixedPriceQuantity: Double) = fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
+                fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                    fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -6418,7 +6590,8 @@ class PlanCreateParams constructor(
                 }
 
                 /** The property used to group this price on an invoice */
-                fun invoiceGroupingKey(invoiceGroupingKey: String) = invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
+                fun invoiceGroupingKey(invoiceGroupingKey: String) =
+                    invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
 
                 /** The property used to group this price on an invoice */
                 @JsonProperty("invoice_grouping_key")
@@ -6433,12 +6606,11 @@ class PlanCreateParams constructor(
                 /** The cadence to bill for this price on. */
                 @JsonProperty("cadence")
                 @ExcludeMissing
-                fun cadence(cadence: JsonField<Cadence>) = apply {
-                    this.cadence = cadence
-                }
+                fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                fun conversionRate(conversionRate: Double) = conversionRate(JsonField.of(conversionRate))
+                fun conversionRate(conversionRate: Double) =
+                    conversionRate(JsonField.of(conversionRate))
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 @JsonProperty("conversion_rate")
@@ -6455,7 +6627,8 @@ class PlanCreateParams constructor(
                     this.modelType = modelType
                 }
 
-                fun bulkBpsConfig(bulkBpsConfig: BulkBpsConfig) = bulkBpsConfig(JsonField.of(bulkBpsConfig))
+                fun bulkBpsConfig(bulkBpsConfig: BulkBpsConfig) =
+                    bulkBpsConfig(JsonField.of(bulkBpsConfig))
 
                 @JsonProperty("bulk_bps_config")
                 @ExcludeMissing
@@ -6475,9 +6648,7 @@ class PlanCreateParams constructor(
                  */
                 @JsonProperty("currency")
                 @ExcludeMissing
-                fun currency(currency: JsonField<String>) = apply {
-                    this.currency = currency
-                }
+                fun currency(currency: JsonField<String>) = apply { this.currency = currency }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -6489,49 +6660,53 @@ class PlanCreateParams constructor(
                     this.additionalProperties.put(key, value)
                 }
 
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
 
-                fun build(): NewPlanBulkBpsPrice = NewPlanBulkBpsPrice(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    bulkBpsConfig,
-                    currency,
-                    additionalProperties.toUnmodifiable(),
-                )
+                fun build(): NewPlanBulkBpsPrice =
+                    NewPlanBulkBpsPrice(
+                        metadata,
+                        externalPriceId,
+                        name,
+                        billableMetricId,
+                        itemId,
+                        billedInAdvance,
+                        fixedPriceQuantity,
+                        invoiceGroupingKey,
+                        cadence,
+                        conversionRate,
+                        modelType,
+                        bulkBpsConfig,
+                        currency,
+                        additionalProperties.toUnmodifiable(),
+                    )
             }
 
             @JsonDeserialize(builder = BulkBpsConfig.Builder::class)
             @NoAutoDetect
-            class BulkBpsConfig private constructor(private val tiers: JsonField<List<Tier>>, private val additionalProperties: Map<String, JsonValue>, ) {
+            class BulkBpsConfig
+            private constructor(
+                private val tiers: JsonField<List<Tier>>,
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
                 private var hashCode: Int = 0
 
                 /**
-                 * Tiers for a bulk BPS pricing model where all usage is aggregated to a single
-                 * tier based on total volume
+                 * Tiers for a bulk BPS pricing model where all usage is aggregated to a single tier
+                 * based on total volume
                  */
                 fun tiers(): List<Tier> = tiers.getRequired("tiers")
 
                 /**
-                 * Tiers for a bulk BPS pricing model where all usage is aggregated to a single
-                 * tier based on total volume
+                 * Tiers for a bulk BPS pricing model where all usage is aggregated to a single tier
+                 * based on total volume
                  */
-                @JsonProperty("tiers")
-                @ExcludeMissing
-                fun _tiers() = tiers
+                @JsonProperty("tiers") @ExcludeMissing fun _tiers() = tiers
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -6539,36 +6714,36 @@ class PlanCreateParams constructor(
 
                 fun validate(): BulkBpsConfig = apply {
                     if (!validated) {
-                      tiers().forEach { it.validate() }
-                      validated = true
+                        tiers().forEach { it.validate() }
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is BulkBpsConfig &&
-                      this.tiers == other.tiers &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is BulkBpsConfig &&
+                        this.tiers == other.tiers &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(tiers, additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(tiers, additionalProperties)
+                    }
+                    return hashCode
                 }
 
-                override fun toString() = "BulkBpsConfig{tiers=$tiers, additionalProperties=$additionalProperties}"
+                override fun toString() =
+                    "BulkBpsConfig{tiers=$tiers, additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -6594,9 +6769,7 @@ class PlanCreateParams constructor(
                      */
                     @JsonProperty("tiers")
                     @ExcludeMissing
-                    fun tiers(tiers: JsonField<List<Tier>>) = apply {
-                        this.tiers = tiers
-                    }
+                    fun tiers(tiers: JsonField<List<Tier>>) = apply { this.tiers = tiers }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -6608,21 +6781,26 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
-                    fun build(): BulkBpsConfig = BulkBpsConfig(tiers.map { it.toUnmodifiable() }, additionalProperties.toUnmodifiable())
+                    fun build(): BulkBpsConfig =
+                        BulkBpsConfig(
+                            tiers.map { it.toUnmodifiable() },
+                            additionalProperties.toUnmodifiable()
+                        )
                 }
 
                 @JsonDeserialize(builder = Tier.Builder::class)
                 @NoAutoDetect
-                class Tier private constructor(
-                  private val maximumAmount: JsonField<String>,
-                  private val bps: JsonField<Double>,
-                  private val perUnitMaximum: JsonField<String>,
-                  private val additionalProperties: Map<String, JsonValue>,
-
+                class Tier
+                private constructor(
+                    private val maximumAmount: JsonField<String>,
+                    private val bps: JsonField<Double>,
+                    private val perUnitMaximum: JsonField<String>,
+                    private val additionalProperties: Map<String, JsonValue>,
                 ) {
 
                     private var validated: Boolean = false
@@ -6630,13 +6808,15 @@ class PlanCreateParams constructor(
                     private var hashCode: Int = 0
 
                     /** Upper bound for tier */
-                    fun maximumAmount(): Optional<String> = Optional.ofNullable(maximumAmount.getNullable("maximum_amount"))
+                    fun maximumAmount(): Optional<String> =
+                        Optional.ofNullable(maximumAmount.getNullable("maximum_amount"))
 
                     /** Basis points to rate on */
                     fun bps(): Double = bps.getRequired("bps")
 
                     /** The maximum amount to charge for any one event */
-                    fun perUnitMaximum(): Optional<String> = Optional.ofNullable(perUnitMaximum.getNullable("per_unit_maximum"))
+                    fun perUnitMaximum(): Optional<String> =
+                        Optional.ofNullable(perUnitMaximum.getNullable("per_unit_maximum"))
 
                     /** Upper bound for tier */
                     @JsonProperty("maximum_amount")
@@ -6644,9 +6824,7 @@ class PlanCreateParams constructor(
                     fun _maximumAmount() = maximumAmount
 
                     /** Basis points to rate on */
-                    @JsonProperty("bps")
-                    @ExcludeMissing
-                    fun _bps() = bps
+                    @JsonProperty("bps") @ExcludeMissing fun _bps() = bps
 
                     /** The maximum amount to charge for any one event */
                     @JsonProperty("per_unit_maximum")
@@ -6659,45 +6837,46 @@ class PlanCreateParams constructor(
 
                     fun validate(): Tier = apply {
                         if (!validated) {
-                          maximumAmount()
-                          bps()
-                          perUnitMaximum()
-                          validated = true
+                            maximumAmount()
+                            bps()
+                            perUnitMaximum()
+                            validated = true
                         }
                     }
 
                     fun toBuilder() = Builder().from(this)
 
                     override fun equals(other: Any?): Boolean {
-                      if (this === other) {
-                          return true
-                      }
+                        if (this === other) {
+                            return true
+                        }
 
-                      return other is Tier &&
-                          this.maximumAmount == other.maximumAmount &&
-                          this.bps == other.bps &&
-                          this.perUnitMaximum == other.perUnitMaximum &&
-                          this.additionalProperties == other.additionalProperties
+                        return other is Tier &&
+                            this.maximumAmount == other.maximumAmount &&
+                            this.bps == other.bps &&
+                            this.perUnitMaximum == other.perUnitMaximum &&
+                            this.additionalProperties == other.additionalProperties
                     }
 
                     override fun hashCode(): Int {
-                      if (hashCode == 0) {
-                        hashCode = Objects.hash(
-                            maximumAmount,
-                            bps,
-                            perUnitMaximum,
-                            additionalProperties,
-                        )
-                      }
-                      return hashCode
+                        if (hashCode == 0) {
+                            hashCode =
+                                Objects.hash(
+                                    maximumAmount,
+                                    bps,
+                                    perUnitMaximum,
+                                    additionalProperties,
+                                )
+                        }
+                        return hashCode
                     }
 
-                    override fun toString() = "Tier{maximumAmount=$maximumAmount, bps=$bps, perUnitMaximum=$perUnitMaximum, additionalProperties=$additionalProperties}"
+                    override fun toString() =
+                        "Tier{maximumAmount=$maximumAmount, bps=$bps, perUnitMaximum=$perUnitMaximum, additionalProperties=$additionalProperties}"
 
                     companion object {
 
-                        @JvmStatic
-                        fun builder() = Builder()
+                        @JvmStatic fun builder() = Builder()
                     }
 
                     class Builder {
@@ -6705,7 +6884,8 @@ class PlanCreateParams constructor(
                         private var maximumAmount: JsonField<String> = JsonMissing.of()
                         private var bps: JsonField<Double> = JsonMissing.of()
                         private var perUnitMaximum: JsonField<String> = JsonMissing.of()
-                        private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+                        private var additionalProperties: MutableMap<String, JsonValue> =
+                            mutableMapOf()
 
                         @JvmSynthetic
                         internal fun from(tier: Tier) = apply {
@@ -6716,7 +6896,8 @@ class PlanCreateParams constructor(
                         }
 
                         /** Upper bound for tier */
-                        fun maximumAmount(maximumAmount: String) = maximumAmount(JsonField.of(maximumAmount))
+                        fun maximumAmount(maximumAmount: String) =
+                            maximumAmount(JsonField.of(maximumAmount))
 
                         /** Upper bound for tier */
                         @JsonProperty("maximum_amount")
@@ -6731,12 +6912,11 @@ class PlanCreateParams constructor(
                         /** Basis points to rate on */
                         @JsonProperty("bps")
                         @ExcludeMissing
-                        fun bps(bps: JsonField<Double>) = apply {
-                            this.bps = bps
-                        }
+                        fun bps(bps: JsonField<Double>) = apply { this.bps = bps }
 
                         /** The maximum amount to charge for any one event */
-                        fun perUnitMaximum(perUnitMaximum: String) = perUnitMaximum(JsonField.of(perUnitMaximum))
+                        fun perUnitMaximum(perUnitMaximum: String) =
+                            perUnitMaximum(JsonField.of(perUnitMaximum))
 
                         /** The maximum amount to charge for any one event */
                         @JsonProperty("per_unit_maximum")
@@ -6745,42 +6925,46 @@ class PlanCreateParams constructor(
                             this.perUnitMaximum = perUnitMaximum
                         }
 
-                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                            this.additionalProperties.clear()
-                            this.additionalProperties.putAll(additionalProperties)
-                        }
+                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                            apply {
+                                this.additionalProperties.clear()
+                                this.additionalProperties.putAll(additionalProperties)
+                            }
 
                         @JsonAnySetter
                         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                             this.additionalProperties.put(key, value)
                         }
 
-                        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                            this.additionalProperties.putAll(additionalProperties)
-                        }
+                        fun putAllAdditionalProperties(
+                            additionalProperties: Map<String, JsonValue>
+                        ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Tier = Tier(
-                            maximumAmount,
-                            bps,
-                            perUnitMaximum,
-                            additionalProperties.toUnmodifiable(),
-                        )
+                        fun build(): Tier =
+                            Tier(
+                                maximumAmount,
+                                bps,
+                                perUnitMaximum,
+                                additionalProperties.toUnmodifiable(),
+                            )
                     }
                 }
             }
 
-            class Cadence @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class Cadence
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Cadence &&
-                      this.value == other.value
+                    return other is Cadence && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -6823,41 +7007,45 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    ANNUAL -> Value.ANNUAL
-                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
-                    MONTHLY -> Value.MONTHLY
-                    QUARTERLY -> Value.QUARTERLY
-                    ONE_TIME -> Value.ONE_TIME
-                    CUSTOM -> Value.CUSTOM
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        ANNUAL -> Value.ANNUAL
+                        SEMI_ANNUAL -> Value.SEMI_ANNUAL
+                        MONTHLY -> Value.MONTHLY
+                        QUARTERLY -> Value.QUARTERLY
+                        ONE_TIME -> Value.ONE_TIME
+                        CUSTOM -> Value.CUSTOM
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    ANNUAL -> Known.ANNUAL
-                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
-                    MONTHLY -> Known.MONTHLY
-                    QUARTERLY -> Known.QUARTERLY
-                    ONE_TIME -> Known.ONE_TIME
-                    CUSTOM -> Known.CUSTOM
-                    else -> throw OrbInvalidDataException("Unknown Cadence: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        ANNUAL -> Known.ANNUAL
+                        SEMI_ANNUAL -> Known.SEMI_ANNUAL
+                        MONTHLY -> Known.MONTHLY
+                        QUARTERLY -> Known.QUARTERLY
+                        ONE_TIME -> Known.ONE_TIME
+                        CUSTOM -> Known.CUSTOM
+                        else -> throw OrbInvalidDataException("Unknown Cadence: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class ModelType
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is ModelType &&
-                      this.value == other.value
+                    return other is ModelType && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -6880,27 +7068,32 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    BULK_BPS -> Value.BULK_BPS
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        BULK_BPS -> Value.BULK_BPS
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    BULK_BPS -> Known.BULK_BPS
-                    else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        BULK_BPS -> Known.BULK_BPS
+                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
             @JsonDeserialize(builder = Metadata.Builder::class)
             @NoAutoDetect
-            class Metadata private constructor(private val additionalProperties: Map<String, JsonValue>, ) {
+            class Metadata
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -6912,34 +7105,33 @@ class PlanCreateParams constructor(
 
                 fun validate(): Metadata = apply {
                     if (!validated) {
-                      validated = true
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Metadata &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is Metadata &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
                 }
 
                 override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -6961,9 +7153,10 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
                     fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
                 }
@@ -6972,22 +7165,22 @@ class PlanCreateParams constructor(
 
         @JsonDeserialize(builder = NewPlanBulkPrice.Builder::class)
         @NoAutoDetect
-        class NewPlanBulkPrice private constructor(
-          private val metadata: JsonField<Metadata>,
-          private val externalPriceId: JsonField<String>,
-          private val name: JsonField<String>,
-          private val billableMetricId: JsonField<String>,
-          private val itemId: JsonField<String>,
-          private val billedInAdvance: JsonField<Boolean>,
-          private val fixedPriceQuantity: JsonField<Double>,
-          private val invoiceGroupingKey: JsonField<String>,
-          private val cadence: JsonField<Cadence>,
-          private val conversionRate: JsonField<Double>,
-          private val modelType: JsonField<ModelType>,
-          private val bulkConfig: JsonField<BulkConfig>,
-          private val currency: JsonField<String>,
-          private val additionalProperties: Map<String, JsonValue>,
-
+        class NewPlanBulkPrice
+        private constructor(
+            private val metadata: JsonField<Metadata>,
+            private val externalPriceId: JsonField<String>,
+            private val name: JsonField<String>,
+            private val billableMetricId: JsonField<String>,
+            private val itemId: JsonField<String>,
+            private val billedInAdvance: JsonField<Boolean>,
+            private val fixedPriceQuantity: JsonField<Double>,
+            private val invoiceGroupingKey: JsonField<String>,
+            private val cadence: JsonField<Cadence>,
+            private val conversionRate: JsonField<Double>,
+            private val modelType: JsonField<ModelType>,
+            private val bulkConfig: JsonField<BulkConfig>,
+            private val currency: JsonField<String>,
+            private val additionalProperties: Map<String, JsonValue>,
         ) {
 
             private var validated: Boolean = false
@@ -6995,66 +7188,69 @@ class PlanCreateParams constructor(
             private var hashCode: Int = 0
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata.getNullable("metadata"))
+            fun metadata(): Optional<Metadata> =
+                Optional.ofNullable(metadata.getNullable("metadata"))
 
             /** An alias for the price. */
-            fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+            fun externalPriceId(): Optional<String> =
+                Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
 
             /** The name of the price. */
             fun name(): String = name.getRequired("name")
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
-            fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+            fun billableMetricId(): Optional<String> =
+                Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
 
             /** The id of the item the plan will be associated with. */
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
-            fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+            fun billedInAdvance(): Optional<Boolean> =
+                Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
-            fun fixedPriceQuantity(): Optional<Double> = Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+            fun fixedPriceQuantity(): Optional<Double> =
+                Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
 
             /** The property used to group this price on an invoice */
-            fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+            fun invoiceGroupingKey(): Optional<String> =
+                Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
 
             /** The cadence to bill for this price on. */
             fun cadence(): Cadence = cadence.getRequired("cadence")
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+            fun conversionRate(): Optional<Double> =
+                Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
 
             fun modelType(): ModelType = modelType.getRequired("model_type")
 
             fun bulkConfig(): BulkConfig = bulkConfig.getRequired("bulk_config")
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
             fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            @JsonProperty("metadata")
-            @ExcludeMissing
-            fun _metadata() = metadata
+            @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
 
             /** An alias for the price. */
             @JsonProperty("external_price_id")
@@ -7062,34 +7258,28 @@ class PlanCreateParams constructor(
             fun _externalPriceId() = externalPriceId
 
             /** The name of the price. */
-            @JsonProperty("name")
-            @ExcludeMissing
-            fun _name() = name
+            @JsonProperty("name") @ExcludeMissing fun _name() = name
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
             @JsonProperty("billable_metric_id")
             @ExcludeMissing
             fun _billableMetricId() = billableMetricId
 
             /** The id of the item the plan will be associated with. */
-            @JsonProperty("item_id")
-            @ExcludeMissing
-            fun _itemId() = itemId
+            @JsonProperty("item_id") @ExcludeMissing fun _itemId() = itemId
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
             @JsonProperty("billed_in_advance")
             @ExcludeMissing
             fun _billedInAdvance() = billedInAdvance
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
             @JsonProperty("fixed_price_quantity")
             @ExcludeMissing
@@ -7101,30 +7291,20 @@ class PlanCreateParams constructor(
             fun _invoiceGroupingKey() = invoiceGroupingKey
 
             /** The cadence to bill for this price on. */
-            @JsonProperty("cadence")
-            @ExcludeMissing
-            fun _cadence() = cadence
+            @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            @JsonProperty("conversion_rate")
-            @ExcludeMissing
-            fun _conversionRate() = conversionRate
+            @JsonProperty("conversion_rate") @ExcludeMissing fun _conversionRate() = conversionRate
 
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType() = modelType
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType() = modelType
 
-            @JsonProperty("bulk_config")
-            @ExcludeMissing
-            fun _bulkConfig() = bulkConfig
+            @JsonProperty("bulk_config") @ExcludeMissing fun _bulkConfig() = bulkConfig
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
-            @JsonProperty("currency")
-            @ExcludeMissing
-            fun _currency() = currency
+            @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -7132,75 +7312,76 @@ class PlanCreateParams constructor(
 
             fun validate(): NewPlanBulkPrice = apply {
                 if (!validated) {
-                  metadata().map { it.validate() }
-                  externalPriceId()
-                  name()
-                  billableMetricId()
-                  itemId()
-                  billedInAdvance()
-                  fixedPriceQuantity()
-                  invoiceGroupingKey()
-                  cadence()
-                  conversionRate()
-                  modelType()
-                  bulkConfig().validate()
-                  currency()
-                  validated = true
+                    metadata().map { it.validate() }
+                    externalPriceId()
+                    name()
+                    billableMetricId()
+                    itemId()
+                    billedInAdvance()
+                    fixedPriceQuantity()
+                    invoiceGroupingKey()
+                    cadence()
+                    conversionRate()
+                    modelType()
+                    bulkConfig().validate()
+                    currency()
+                    validated = true
                 }
             }
 
             fun toBuilder() = Builder().from(this)
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is NewPlanBulkPrice &&
-                  this.metadata == other.metadata &&
-                  this.externalPriceId == other.externalPriceId &&
-                  this.name == other.name &&
-                  this.billableMetricId == other.billableMetricId &&
-                  this.itemId == other.itemId &&
-                  this.billedInAdvance == other.billedInAdvance &&
-                  this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                  this.invoiceGroupingKey == other.invoiceGroupingKey &&
-                  this.cadence == other.cadence &&
-                  this.conversionRate == other.conversionRate &&
-                  this.modelType == other.modelType &&
-                  this.bulkConfig == other.bulkConfig &&
-                  this.currency == other.currency &&
-                  this.additionalProperties == other.additionalProperties
+                return other is NewPlanBulkPrice &&
+                    this.metadata == other.metadata &&
+                    this.externalPriceId == other.externalPriceId &&
+                    this.name == other.name &&
+                    this.billableMetricId == other.billableMetricId &&
+                    this.itemId == other.itemId &&
+                    this.billedInAdvance == other.billedInAdvance &&
+                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
+                    this.invoiceGroupingKey == other.invoiceGroupingKey &&
+                    this.cadence == other.cadence &&
+                    this.conversionRate == other.conversionRate &&
+                    this.modelType == other.modelType &&
+                    this.bulkConfig == other.bulkConfig &&
+                    this.currency == other.currency &&
+                    this.additionalProperties == other.additionalProperties
             }
 
             override fun hashCode(): Int {
-              if (hashCode == 0) {
-                hashCode = Objects.hash(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    bulkConfig,
-                    currency,
-                    additionalProperties,
-                )
-              }
-              return hashCode
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            metadata,
+                            externalPriceId,
+                            name,
+                            billableMetricId,
+                            itemId,
+                            billedInAdvance,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            cadence,
+                            conversionRate,
+                            modelType,
+                            bulkConfig,
+                            currency,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
             }
 
-            override fun toString() = "NewPlanBulkPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, bulkConfig=$bulkConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "NewPlanBulkPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, bulkConfig=$bulkConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
             companion object {
 
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             class Builder {
@@ -7240,24 +7421,23 @@ class PlanCreateParams constructor(
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 @JsonProperty("metadata")
                 @ExcludeMissing
-                fun metadata(metadata: JsonField<Metadata>) = apply {
-                    this.metadata = metadata
-                }
+                fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
                 /** An alias for the price. */
-                fun externalPriceId(externalPriceId: String) = externalPriceId(JsonField.of(externalPriceId))
+                fun externalPriceId(externalPriceId: String) =
+                    externalPriceId(JsonField.of(externalPriceId))
 
                 /** An alias for the price. */
                 @JsonProperty("external_price_id")
@@ -7272,15 +7452,14 @@ class PlanCreateParams constructor(
                 /** The name of the price. */
                 @JsonProperty("name")
                 @ExcludeMissing
-                fun name(name: JsonField<String>) = apply {
-                    this.name = name
-                }
+                fun name(name: JsonField<String>) = apply { this.name = name }
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
                  * usage-based.
                  */
-                fun billableMetricId(billableMetricId: String) = billableMetricId(JsonField.of(billableMetricId))
+                fun billableMetricId(billableMetricId: String) =
+                    billableMetricId(JsonField.of(billableMetricId))
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -7298,19 +7477,18 @@ class PlanCreateParams constructor(
                 /** The id of the item the plan will be associated with. */
                 @JsonProperty("item_id")
                 @ExcludeMissing
-                fun itemId(itemId: JsonField<String>) = apply {
-                    this.itemId = itemId
-                }
+                fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
-                fun billedInAdvance(billedInAdvance: Boolean) = billedInAdvance(JsonField.of(billedInAdvance))
+                fun billedInAdvance(billedInAdvance: Boolean) =
+                    billedInAdvance(JsonField.of(billedInAdvance))
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 @ExcludeMissing
@@ -7322,7 +7500,8 @@ class PlanCreateParams constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                fun fixedPriceQuantity(fixedPriceQuantity: Double) = fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
+                fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                    fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -7335,7 +7514,8 @@ class PlanCreateParams constructor(
                 }
 
                 /** The property used to group this price on an invoice */
-                fun invoiceGroupingKey(invoiceGroupingKey: String) = invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
+                fun invoiceGroupingKey(invoiceGroupingKey: String) =
+                    invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
 
                 /** The property used to group this price on an invoice */
                 @JsonProperty("invoice_grouping_key")
@@ -7350,12 +7530,11 @@ class PlanCreateParams constructor(
                 /** The cadence to bill for this price on. */
                 @JsonProperty("cadence")
                 @ExcludeMissing
-                fun cadence(cadence: JsonField<Cadence>) = apply {
-                    this.cadence = cadence
-                }
+                fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                fun conversionRate(conversionRate: Double) = conversionRate(JsonField.of(conversionRate))
+                fun conversionRate(conversionRate: Double) =
+                    conversionRate(JsonField.of(conversionRate))
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 @JsonProperty("conversion_rate")
@@ -7392,9 +7571,7 @@ class PlanCreateParams constructor(
                  */
                 @JsonProperty("currency")
                 @ExcludeMissing
-                fun currency(currency: JsonField<String>) = apply {
-                    this.currency = currency
-                }
+                fun currency(currency: JsonField<String>) = apply { this.currency = currency }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -7406,31 +7583,37 @@ class PlanCreateParams constructor(
                     this.additionalProperties.put(key, value)
                 }
 
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
 
-                fun build(): NewPlanBulkPrice = NewPlanBulkPrice(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    bulkConfig,
-                    currency,
-                    additionalProperties.toUnmodifiable(),
-                )
+                fun build(): NewPlanBulkPrice =
+                    NewPlanBulkPrice(
+                        metadata,
+                        externalPriceId,
+                        name,
+                        billableMetricId,
+                        itemId,
+                        billedInAdvance,
+                        fixedPriceQuantity,
+                        invoiceGroupingKey,
+                        cadence,
+                        conversionRate,
+                        modelType,
+                        bulkConfig,
+                        currency,
+                        additionalProperties.toUnmodifiable(),
+                    )
             }
 
             @JsonDeserialize(builder = BulkConfig.Builder::class)
             @NoAutoDetect
-            class BulkConfig private constructor(private val tiers: JsonField<List<Tier>>, private val additionalProperties: Map<String, JsonValue>, ) {
+            class BulkConfig
+            private constructor(
+                private val tiers: JsonField<List<Tier>>,
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -7440,9 +7623,7 @@ class PlanCreateParams constructor(
                 fun tiers(): List<Tier> = tiers.getRequired("tiers")
 
                 /** Bulk tiers for rating based on total usage volume */
-                @JsonProperty("tiers")
-                @ExcludeMissing
-                fun _tiers() = tiers
+                @JsonProperty("tiers") @ExcludeMissing fun _tiers() = tiers
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -7450,36 +7631,36 @@ class PlanCreateParams constructor(
 
                 fun validate(): BulkConfig = apply {
                     if (!validated) {
-                      tiers().forEach { it.validate() }
-                      validated = true
+                        tiers().forEach { it.validate() }
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is BulkConfig &&
-                      this.tiers == other.tiers &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is BulkConfig &&
+                        this.tiers == other.tiers &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(tiers, additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(tiers, additionalProperties)
+                    }
+                    return hashCode
                 }
 
-                override fun toString() = "BulkConfig{tiers=$tiers, additionalProperties=$additionalProperties}"
+                override fun toString() =
+                    "BulkConfig{tiers=$tiers, additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -7499,9 +7680,7 @@ class PlanCreateParams constructor(
                     /** Bulk tiers for rating based on total usage volume */
                     @JsonProperty("tiers")
                     @ExcludeMissing
-                    fun tiers(tiers: JsonField<List<Tier>>) = apply {
-                        this.tiers = tiers
-                    }
+                    fun tiers(tiers: JsonField<List<Tier>>) = apply { this.tiers = tiers }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -7513,23 +7692,34 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
-                    fun build(): BulkConfig = BulkConfig(tiers.map { it.toUnmodifiable() }, additionalProperties.toUnmodifiable())
+                    fun build(): BulkConfig =
+                        BulkConfig(
+                            tiers.map { it.toUnmodifiable() },
+                            additionalProperties.toUnmodifiable()
+                        )
                 }
 
                 @JsonDeserialize(builder = Tier.Builder::class)
                 @NoAutoDetect
-                class Tier private constructor(private val maximumUnits: JsonField<Double>, private val unitAmount: JsonField<String>, private val additionalProperties: Map<String, JsonValue>, ) {
+                class Tier
+                private constructor(
+                    private val maximumUnits: JsonField<Double>,
+                    private val unitAmount: JsonField<String>,
+                    private val additionalProperties: Map<String, JsonValue>,
+                ) {
 
                     private var validated: Boolean = false
 
                     private var hashCode: Int = 0
 
                     /** Upper bound for this tier */
-                    fun maximumUnits(): Optional<Double> = Optional.ofNullable(maximumUnits.getNullable("maximum_units"))
+                    fun maximumUnits(): Optional<Double> =
+                        Optional.ofNullable(maximumUnits.getNullable("maximum_units"))
 
                     /** Amount per unit */
                     fun unitAmount(): String = unitAmount.getRequired("unit_amount")
@@ -7540,9 +7730,7 @@ class PlanCreateParams constructor(
                     fun _maximumUnits() = maximumUnits
 
                     /** Amount per unit */
-                    @JsonProperty("unit_amount")
-                    @ExcludeMissing
-                    fun _unitAmount() = unitAmount
+                    @JsonProperty("unit_amount") @ExcludeMissing fun _unitAmount() = unitAmount
 
                     @JsonAnyGetter
                     @ExcludeMissing
@@ -7550,49 +7738,51 @@ class PlanCreateParams constructor(
 
                     fun validate(): Tier = apply {
                         if (!validated) {
-                          maximumUnits()
-                          unitAmount()
-                          validated = true
+                            maximumUnits()
+                            unitAmount()
+                            validated = true
                         }
                     }
 
                     fun toBuilder() = Builder().from(this)
 
                     override fun equals(other: Any?): Boolean {
-                      if (this === other) {
-                          return true
-                      }
+                        if (this === other) {
+                            return true
+                        }
 
-                      return other is Tier &&
-                          this.maximumUnits == other.maximumUnits &&
-                          this.unitAmount == other.unitAmount &&
-                          this.additionalProperties == other.additionalProperties
+                        return other is Tier &&
+                            this.maximumUnits == other.maximumUnits &&
+                            this.unitAmount == other.unitAmount &&
+                            this.additionalProperties == other.additionalProperties
                     }
 
                     override fun hashCode(): Int {
-                      if (hashCode == 0) {
-                        hashCode = Objects.hash(
-                            maximumUnits,
-                            unitAmount,
-                            additionalProperties,
-                        )
-                      }
-                      return hashCode
+                        if (hashCode == 0) {
+                            hashCode =
+                                Objects.hash(
+                                    maximumUnits,
+                                    unitAmount,
+                                    additionalProperties,
+                                )
+                        }
+                        return hashCode
                     }
 
-                    override fun toString() = "Tier{maximumUnits=$maximumUnits, unitAmount=$unitAmount, additionalProperties=$additionalProperties}"
+                    override fun toString() =
+                        "Tier{maximumUnits=$maximumUnits, unitAmount=$unitAmount, additionalProperties=$additionalProperties}"
 
                     companion object {
 
-                        @JvmStatic
-                        fun builder() = Builder()
+                        @JvmStatic fun builder() = Builder()
                     }
 
                     class Builder {
 
                         private var maximumUnits: JsonField<Double> = JsonMissing.of()
                         private var unitAmount: JsonField<String> = JsonMissing.of()
-                        private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+                        private var additionalProperties: MutableMap<String, JsonValue> =
+                            mutableMapOf()
 
                         @JvmSynthetic
                         internal fun from(tier: Tier) = apply {
@@ -7602,7 +7792,8 @@ class PlanCreateParams constructor(
                         }
 
                         /** Upper bound for this tier */
-                        fun maximumUnits(maximumUnits: Double) = maximumUnits(JsonField.of(maximumUnits))
+                        fun maximumUnits(maximumUnits: Double) =
+                            maximumUnits(JsonField.of(maximumUnits))
 
                         /** Upper bound for this tier */
                         @JsonProperty("maximum_units")
@@ -7621,41 +7812,45 @@ class PlanCreateParams constructor(
                             this.unitAmount = unitAmount
                         }
 
-                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                            this.additionalProperties.clear()
-                            this.additionalProperties.putAll(additionalProperties)
-                        }
+                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                            apply {
+                                this.additionalProperties.clear()
+                                this.additionalProperties.putAll(additionalProperties)
+                            }
 
                         @JsonAnySetter
                         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                             this.additionalProperties.put(key, value)
                         }
 
-                        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                            this.additionalProperties.putAll(additionalProperties)
-                        }
+                        fun putAllAdditionalProperties(
+                            additionalProperties: Map<String, JsonValue>
+                        ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Tier = Tier(
-                            maximumUnits,
-                            unitAmount,
-                            additionalProperties.toUnmodifiable(),
-                        )
+                        fun build(): Tier =
+                            Tier(
+                                maximumUnits,
+                                unitAmount,
+                                additionalProperties.toUnmodifiable(),
+                            )
                     }
                 }
             }
 
-            class Cadence @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class Cadence
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Cadence &&
-                      this.value == other.value
+                    return other is Cadence && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -7698,41 +7893,45 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    ANNUAL -> Value.ANNUAL
-                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
-                    MONTHLY -> Value.MONTHLY
-                    QUARTERLY -> Value.QUARTERLY
-                    ONE_TIME -> Value.ONE_TIME
-                    CUSTOM -> Value.CUSTOM
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        ANNUAL -> Value.ANNUAL
+                        SEMI_ANNUAL -> Value.SEMI_ANNUAL
+                        MONTHLY -> Value.MONTHLY
+                        QUARTERLY -> Value.QUARTERLY
+                        ONE_TIME -> Value.ONE_TIME
+                        CUSTOM -> Value.CUSTOM
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    ANNUAL -> Known.ANNUAL
-                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
-                    MONTHLY -> Known.MONTHLY
-                    QUARTERLY -> Known.QUARTERLY
-                    ONE_TIME -> Known.ONE_TIME
-                    CUSTOM -> Known.CUSTOM
-                    else -> throw OrbInvalidDataException("Unknown Cadence: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        ANNUAL -> Known.ANNUAL
+                        SEMI_ANNUAL -> Known.SEMI_ANNUAL
+                        MONTHLY -> Known.MONTHLY
+                        QUARTERLY -> Known.QUARTERLY
+                        ONE_TIME -> Known.ONE_TIME
+                        CUSTOM -> Known.CUSTOM
+                        else -> throw OrbInvalidDataException("Unknown Cadence: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class ModelType
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is ModelType &&
-                      this.value == other.value
+                    return other is ModelType && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -7755,27 +7954,32 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    BULK -> Value.BULK
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        BULK -> Value.BULK
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    BULK -> Known.BULK
-                    else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        BULK -> Known.BULK
+                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
             @JsonDeserialize(builder = Metadata.Builder::class)
             @NoAutoDetect
-            class Metadata private constructor(private val additionalProperties: Map<String, JsonValue>, ) {
+            class Metadata
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -7787,34 +7991,33 @@ class PlanCreateParams constructor(
 
                 fun validate(): Metadata = apply {
                     if (!validated) {
-                      validated = true
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Metadata &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is Metadata &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
                 }
 
                 override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -7836,9 +8039,10 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
                     fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
                 }
@@ -7847,22 +8051,22 @@ class PlanCreateParams constructor(
 
         @JsonDeserialize(builder = NewPlanThresholdTotalAmountPrice.Builder::class)
         @NoAutoDetect
-        class NewPlanThresholdTotalAmountPrice private constructor(
-          private val metadata: JsonField<Metadata>,
-          private val externalPriceId: JsonField<String>,
-          private val name: JsonField<String>,
-          private val billableMetricId: JsonField<String>,
-          private val itemId: JsonField<String>,
-          private val billedInAdvance: JsonField<Boolean>,
-          private val fixedPriceQuantity: JsonField<Double>,
-          private val invoiceGroupingKey: JsonField<String>,
-          private val cadence: JsonField<Cadence>,
-          private val conversionRate: JsonField<Double>,
-          private val modelType: JsonField<ModelType>,
-          private val thresholdTotalAmountConfig: JsonField<ThresholdTotalAmountConfig>,
-          private val currency: JsonField<String>,
-          private val additionalProperties: Map<String, JsonValue>,
-
+        class NewPlanThresholdTotalAmountPrice
+        private constructor(
+            private val metadata: JsonField<Metadata>,
+            private val externalPriceId: JsonField<String>,
+            private val name: JsonField<String>,
+            private val billableMetricId: JsonField<String>,
+            private val itemId: JsonField<String>,
+            private val billedInAdvance: JsonField<Boolean>,
+            private val fixedPriceQuantity: JsonField<Double>,
+            private val invoiceGroupingKey: JsonField<String>,
+            private val cadence: JsonField<Cadence>,
+            private val conversionRate: JsonField<Double>,
+            private val modelType: JsonField<ModelType>,
+            private val thresholdTotalAmountConfig: JsonField<ThresholdTotalAmountConfig>,
+            private val currency: JsonField<String>,
+            private val additionalProperties: Map<String, JsonValue>,
         ) {
 
             private var validated: Boolean = false
@@ -7870,66 +8074,70 @@ class PlanCreateParams constructor(
             private var hashCode: Int = 0
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata.getNullable("metadata"))
+            fun metadata(): Optional<Metadata> =
+                Optional.ofNullable(metadata.getNullable("metadata"))
 
             /** An alias for the price. */
-            fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+            fun externalPriceId(): Optional<String> =
+                Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
 
             /** The name of the price. */
             fun name(): String = name.getRequired("name")
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
-            fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+            fun billableMetricId(): Optional<String> =
+                Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
 
             /** The id of the item the plan will be associated with. */
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
-            fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+            fun billedInAdvance(): Optional<Boolean> =
+                Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
-            fun fixedPriceQuantity(): Optional<Double> = Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+            fun fixedPriceQuantity(): Optional<Double> =
+                Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
 
             /** The property used to group this price on an invoice */
-            fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+            fun invoiceGroupingKey(): Optional<String> =
+                Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
 
             /** The cadence to bill for this price on. */
             fun cadence(): Cadence = cadence.getRequired("cadence")
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+            fun conversionRate(): Optional<Double> =
+                Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
 
             fun modelType(): ModelType = modelType.getRequired("model_type")
 
-            fun thresholdTotalAmountConfig(): ThresholdTotalAmountConfig = thresholdTotalAmountConfig.getRequired("threshold_total_amount_config")
+            fun thresholdTotalAmountConfig(): ThresholdTotalAmountConfig =
+                thresholdTotalAmountConfig.getRequired("threshold_total_amount_config")
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
             fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            @JsonProperty("metadata")
-            @ExcludeMissing
-            fun _metadata() = metadata
+            @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
 
             /** An alias for the price. */
             @JsonProperty("external_price_id")
@@ -7937,34 +8145,28 @@ class PlanCreateParams constructor(
             fun _externalPriceId() = externalPriceId
 
             /** The name of the price. */
-            @JsonProperty("name")
-            @ExcludeMissing
-            fun _name() = name
+            @JsonProperty("name") @ExcludeMissing fun _name() = name
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
             @JsonProperty("billable_metric_id")
             @ExcludeMissing
             fun _billableMetricId() = billableMetricId
 
             /** The id of the item the plan will be associated with. */
-            @JsonProperty("item_id")
-            @ExcludeMissing
-            fun _itemId() = itemId
+            @JsonProperty("item_id") @ExcludeMissing fun _itemId() = itemId
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
             @JsonProperty("billed_in_advance")
             @ExcludeMissing
             fun _billedInAdvance() = billedInAdvance
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
             @JsonProperty("fixed_price_quantity")
             @ExcludeMissing
@@ -7976,30 +8178,22 @@ class PlanCreateParams constructor(
             fun _invoiceGroupingKey() = invoiceGroupingKey
 
             /** The cadence to bill for this price on. */
-            @JsonProperty("cadence")
-            @ExcludeMissing
-            fun _cadence() = cadence
+            @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            @JsonProperty("conversion_rate")
-            @ExcludeMissing
-            fun _conversionRate() = conversionRate
+            @JsonProperty("conversion_rate") @ExcludeMissing fun _conversionRate() = conversionRate
 
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType() = modelType
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType() = modelType
 
             @JsonProperty("threshold_total_amount_config")
             @ExcludeMissing
             fun _thresholdTotalAmountConfig() = thresholdTotalAmountConfig
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
-            @JsonProperty("currency")
-            @ExcludeMissing
-            fun _currency() = currency
+            @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -8007,75 +8201,76 @@ class PlanCreateParams constructor(
 
             fun validate(): NewPlanThresholdTotalAmountPrice = apply {
                 if (!validated) {
-                  metadata().map { it.validate() }
-                  externalPriceId()
-                  name()
-                  billableMetricId()
-                  itemId()
-                  billedInAdvance()
-                  fixedPriceQuantity()
-                  invoiceGroupingKey()
-                  cadence()
-                  conversionRate()
-                  modelType()
-                  thresholdTotalAmountConfig().validate()
-                  currency()
-                  validated = true
+                    metadata().map { it.validate() }
+                    externalPriceId()
+                    name()
+                    billableMetricId()
+                    itemId()
+                    billedInAdvance()
+                    fixedPriceQuantity()
+                    invoiceGroupingKey()
+                    cadence()
+                    conversionRate()
+                    modelType()
+                    thresholdTotalAmountConfig().validate()
+                    currency()
+                    validated = true
                 }
             }
 
             fun toBuilder() = Builder().from(this)
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is NewPlanThresholdTotalAmountPrice &&
-                  this.metadata == other.metadata &&
-                  this.externalPriceId == other.externalPriceId &&
-                  this.name == other.name &&
-                  this.billableMetricId == other.billableMetricId &&
-                  this.itemId == other.itemId &&
-                  this.billedInAdvance == other.billedInAdvance &&
-                  this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                  this.invoiceGroupingKey == other.invoiceGroupingKey &&
-                  this.cadence == other.cadence &&
-                  this.conversionRate == other.conversionRate &&
-                  this.modelType == other.modelType &&
-                  this.thresholdTotalAmountConfig == other.thresholdTotalAmountConfig &&
-                  this.currency == other.currency &&
-                  this.additionalProperties == other.additionalProperties
+                return other is NewPlanThresholdTotalAmountPrice &&
+                    this.metadata == other.metadata &&
+                    this.externalPriceId == other.externalPriceId &&
+                    this.name == other.name &&
+                    this.billableMetricId == other.billableMetricId &&
+                    this.itemId == other.itemId &&
+                    this.billedInAdvance == other.billedInAdvance &&
+                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
+                    this.invoiceGroupingKey == other.invoiceGroupingKey &&
+                    this.cadence == other.cadence &&
+                    this.conversionRate == other.conversionRate &&
+                    this.modelType == other.modelType &&
+                    this.thresholdTotalAmountConfig == other.thresholdTotalAmountConfig &&
+                    this.currency == other.currency &&
+                    this.additionalProperties == other.additionalProperties
             }
 
             override fun hashCode(): Int {
-              if (hashCode == 0) {
-                hashCode = Objects.hash(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    thresholdTotalAmountConfig,
-                    currency,
-                    additionalProperties,
-                )
-              }
-              return hashCode
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            metadata,
+                            externalPriceId,
+                            name,
+                            billableMetricId,
+                            itemId,
+                            billedInAdvance,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            cadence,
+                            conversionRate,
+                            modelType,
+                            thresholdTotalAmountConfig,
+                            currency,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
             }
 
-            override fun toString() = "NewPlanThresholdTotalAmountPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, thresholdTotalAmountConfig=$thresholdTotalAmountConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "NewPlanThresholdTotalAmountPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, thresholdTotalAmountConfig=$thresholdTotalAmountConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
             companion object {
 
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             class Builder {
@@ -8091,12 +8286,15 @@ class PlanCreateParams constructor(
                 private var cadence: JsonField<Cadence> = JsonMissing.of()
                 private var conversionRate: JsonField<Double> = JsonMissing.of()
                 private var modelType: JsonField<ModelType> = JsonMissing.of()
-                private var thresholdTotalAmountConfig: JsonField<ThresholdTotalAmountConfig> = JsonMissing.of()
+                private var thresholdTotalAmountConfig: JsonField<ThresholdTotalAmountConfig> =
+                    JsonMissing.of()
                 private var currency: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(newPlanThresholdTotalAmountPrice: NewPlanThresholdTotalAmountPrice) = apply {
+                internal fun from(
+                    newPlanThresholdTotalAmountPrice: NewPlanThresholdTotalAmountPrice
+                ) = apply {
                     this.metadata = newPlanThresholdTotalAmountPrice.metadata
                     this.externalPriceId = newPlanThresholdTotalAmountPrice.externalPriceId
                     this.name = newPlanThresholdTotalAmountPrice.name
@@ -8108,31 +8306,31 @@ class PlanCreateParams constructor(
                     this.cadence = newPlanThresholdTotalAmountPrice.cadence
                     this.conversionRate = newPlanThresholdTotalAmountPrice.conversionRate
                     this.modelType = newPlanThresholdTotalAmountPrice.modelType
-                    this.thresholdTotalAmountConfig = newPlanThresholdTotalAmountPrice.thresholdTotalAmountConfig
+                    this.thresholdTotalAmountConfig =
+                        newPlanThresholdTotalAmountPrice.thresholdTotalAmountConfig
                     this.currency = newPlanThresholdTotalAmountPrice.currency
                     additionalProperties(newPlanThresholdTotalAmountPrice.additionalProperties)
                 }
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 @JsonProperty("metadata")
                 @ExcludeMissing
-                fun metadata(metadata: JsonField<Metadata>) = apply {
-                    this.metadata = metadata
-                }
+                fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
                 /** An alias for the price. */
-                fun externalPriceId(externalPriceId: String) = externalPriceId(JsonField.of(externalPriceId))
+                fun externalPriceId(externalPriceId: String) =
+                    externalPriceId(JsonField.of(externalPriceId))
 
                 /** An alias for the price. */
                 @JsonProperty("external_price_id")
@@ -8147,15 +8345,14 @@ class PlanCreateParams constructor(
                 /** The name of the price. */
                 @JsonProperty("name")
                 @ExcludeMissing
-                fun name(name: JsonField<String>) = apply {
-                    this.name = name
-                }
+                fun name(name: JsonField<String>) = apply { this.name = name }
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
                  * usage-based.
                  */
-                fun billableMetricId(billableMetricId: String) = billableMetricId(JsonField.of(billableMetricId))
+                fun billableMetricId(billableMetricId: String) =
+                    billableMetricId(JsonField.of(billableMetricId))
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -8173,19 +8370,18 @@ class PlanCreateParams constructor(
                 /** The id of the item the plan will be associated with. */
                 @JsonProperty("item_id")
                 @ExcludeMissing
-                fun itemId(itemId: JsonField<String>) = apply {
-                    this.itemId = itemId
-                }
+                fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
-                fun billedInAdvance(billedInAdvance: Boolean) = billedInAdvance(JsonField.of(billedInAdvance))
+                fun billedInAdvance(billedInAdvance: Boolean) =
+                    billedInAdvance(JsonField.of(billedInAdvance))
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 @ExcludeMissing
@@ -8197,7 +8393,8 @@ class PlanCreateParams constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                fun fixedPriceQuantity(fixedPriceQuantity: Double) = fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
+                fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                    fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -8210,7 +8407,8 @@ class PlanCreateParams constructor(
                 }
 
                 /** The property used to group this price on an invoice */
-                fun invoiceGroupingKey(invoiceGroupingKey: String) = invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
+                fun invoiceGroupingKey(invoiceGroupingKey: String) =
+                    invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
 
                 /** The property used to group this price on an invoice */
                 @JsonProperty("invoice_grouping_key")
@@ -8225,12 +8423,11 @@ class PlanCreateParams constructor(
                 /** The cadence to bill for this price on. */
                 @JsonProperty("cadence")
                 @ExcludeMissing
-                fun cadence(cadence: JsonField<Cadence>) = apply {
-                    this.cadence = cadence
-                }
+                fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                fun conversionRate(conversionRate: Double) = conversionRate(JsonField.of(conversionRate))
+                fun conversionRate(conversionRate: Double) =
+                    conversionRate(JsonField.of(conversionRate))
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 @JsonProperty("conversion_rate")
@@ -8247,13 +8444,15 @@ class PlanCreateParams constructor(
                     this.modelType = modelType
                 }
 
-                fun thresholdTotalAmountConfig(thresholdTotalAmountConfig: ThresholdTotalAmountConfig) = thresholdTotalAmountConfig(JsonField.of(thresholdTotalAmountConfig))
+                fun thresholdTotalAmountConfig(
+                    thresholdTotalAmountConfig: ThresholdTotalAmountConfig
+                ) = thresholdTotalAmountConfig(JsonField.of(thresholdTotalAmountConfig))
 
                 @JsonProperty("threshold_total_amount_config")
                 @ExcludeMissing
-                fun thresholdTotalAmountConfig(thresholdTotalAmountConfig: JsonField<ThresholdTotalAmountConfig>) = apply {
-                    this.thresholdTotalAmountConfig = thresholdTotalAmountConfig
-                }
+                fun thresholdTotalAmountConfig(
+                    thresholdTotalAmountConfig: JsonField<ThresholdTotalAmountConfig>
+                ) = apply { this.thresholdTotalAmountConfig = thresholdTotalAmountConfig }
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -8267,9 +8466,7 @@ class PlanCreateParams constructor(
                  */
                 @JsonProperty("currency")
                 @ExcludeMissing
-                fun currency(currency: JsonField<String>) = apply {
-                    this.currency = currency
-                }
+                fun currency(currency: JsonField<String>) = apply { this.currency = currency }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -8281,40 +8478,44 @@ class PlanCreateParams constructor(
                     this.additionalProperties.put(key, value)
                 }
 
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
 
-                fun build(): NewPlanThresholdTotalAmountPrice = NewPlanThresholdTotalAmountPrice(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    thresholdTotalAmountConfig,
-                    currency,
-                    additionalProperties.toUnmodifiable(),
-                )
+                fun build(): NewPlanThresholdTotalAmountPrice =
+                    NewPlanThresholdTotalAmountPrice(
+                        metadata,
+                        externalPriceId,
+                        name,
+                        billableMetricId,
+                        itemId,
+                        billedInAdvance,
+                        fixedPriceQuantity,
+                        invoiceGroupingKey,
+                        cadence,
+                        conversionRate,
+                        modelType,
+                        thresholdTotalAmountConfig,
+                        currency,
+                        additionalProperties.toUnmodifiable(),
+                    )
             }
 
-            class Cadence @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class Cadence
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Cadence &&
-                      this.value == other.value
+                    return other is Cadence && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -8357,41 +8558,45 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    ANNUAL -> Value.ANNUAL
-                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
-                    MONTHLY -> Value.MONTHLY
-                    QUARTERLY -> Value.QUARTERLY
-                    ONE_TIME -> Value.ONE_TIME
-                    CUSTOM -> Value.CUSTOM
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        ANNUAL -> Value.ANNUAL
+                        SEMI_ANNUAL -> Value.SEMI_ANNUAL
+                        MONTHLY -> Value.MONTHLY
+                        QUARTERLY -> Value.QUARTERLY
+                        ONE_TIME -> Value.ONE_TIME
+                        CUSTOM -> Value.CUSTOM
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    ANNUAL -> Known.ANNUAL
-                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
-                    MONTHLY -> Known.MONTHLY
-                    QUARTERLY -> Known.QUARTERLY
-                    ONE_TIME -> Known.ONE_TIME
-                    CUSTOM -> Known.CUSTOM
-                    else -> throw OrbInvalidDataException("Unknown Cadence: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        ANNUAL -> Known.ANNUAL
+                        SEMI_ANNUAL -> Known.SEMI_ANNUAL
+                        MONTHLY -> Known.MONTHLY
+                        QUARTERLY -> Known.QUARTERLY
+                        ONE_TIME -> Known.ONE_TIME
+                        CUSTOM -> Known.CUSTOM
+                        else -> throw OrbInvalidDataException("Unknown Cadence: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class ModelType
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is ModelType &&
-                      this.value == other.value
+                    return other is ModelType && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -8400,7 +8605,8 @@ class PlanCreateParams constructor(
 
                 companion object {
 
-                    @JvmField val THRESHOLD_TOTAL_AMOUNT = ModelType(JsonField.of("threshold_total_amount"))
+                    @JvmField
+                    val THRESHOLD_TOTAL_AMOUNT = ModelType(JsonField.of("threshold_total_amount"))
 
                     @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                 }
@@ -8414,22 +8620,27 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    THRESHOLD_TOTAL_AMOUNT -> Value.THRESHOLD_TOTAL_AMOUNT
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        THRESHOLD_TOTAL_AMOUNT -> Value.THRESHOLD_TOTAL_AMOUNT
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    THRESHOLD_TOTAL_AMOUNT -> Known.THRESHOLD_TOTAL_AMOUNT
-                    else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        THRESHOLD_TOTAL_AMOUNT -> Known.THRESHOLD_TOTAL_AMOUNT
+                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
             @JsonDeserialize(builder = ThresholdTotalAmountConfig.Builder::class)
             @NoAutoDetect
-            class ThresholdTotalAmountConfig private constructor(private val additionalProperties: Map<String, JsonValue>, ) {
+            class ThresholdTotalAmountConfig
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -8441,34 +8652,34 @@ class PlanCreateParams constructor(
 
                 fun validate(): ThresholdTotalAmountConfig = apply {
                     if (!validated) {
-                      validated = true
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is ThresholdTotalAmountConfig &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is ThresholdTotalAmountConfig &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
                 }
 
-                override fun toString() = "ThresholdTotalAmountConfig{additionalProperties=$additionalProperties}"
+                override fun toString() =
+                    "ThresholdTotalAmountConfig{additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -8476,9 +8687,10 @@ class PlanCreateParams constructor(
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
-                    internal fun from(thresholdTotalAmountConfig: ThresholdTotalAmountConfig) = apply {
-                        additionalProperties(thresholdTotalAmountConfig.additionalProperties)
-                    }
+                    internal fun from(thresholdTotalAmountConfig: ThresholdTotalAmountConfig) =
+                        apply {
+                            additionalProperties(thresholdTotalAmountConfig.additionalProperties)
+                        }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -8490,22 +8702,27 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
-                    fun build(): ThresholdTotalAmountConfig = ThresholdTotalAmountConfig(additionalProperties.toUnmodifiable())
+                    fun build(): ThresholdTotalAmountConfig =
+                        ThresholdTotalAmountConfig(additionalProperties.toUnmodifiable())
                 }
             }
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
             @JsonDeserialize(builder = Metadata.Builder::class)
             @NoAutoDetect
-            class Metadata private constructor(private val additionalProperties: Map<String, JsonValue>, ) {
+            class Metadata
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -8517,34 +8734,33 @@ class PlanCreateParams constructor(
 
                 fun validate(): Metadata = apply {
                     if (!validated) {
-                      validated = true
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Metadata &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is Metadata &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
                 }
 
                 override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -8566,9 +8782,10 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
                     fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
                 }
@@ -8577,22 +8794,22 @@ class PlanCreateParams constructor(
 
         @JsonDeserialize(builder = NewPlanTieredPackagePrice.Builder::class)
         @NoAutoDetect
-        class NewPlanTieredPackagePrice private constructor(
-          private val metadata: JsonField<Metadata>,
-          private val externalPriceId: JsonField<String>,
-          private val name: JsonField<String>,
-          private val billableMetricId: JsonField<String>,
-          private val itemId: JsonField<String>,
-          private val billedInAdvance: JsonField<Boolean>,
-          private val fixedPriceQuantity: JsonField<Double>,
-          private val invoiceGroupingKey: JsonField<String>,
-          private val cadence: JsonField<Cadence>,
-          private val conversionRate: JsonField<Double>,
-          private val modelType: JsonField<ModelType>,
-          private val tieredPackageConfig: JsonField<TieredPackageConfig>,
-          private val currency: JsonField<String>,
-          private val additionalProperties: Map<String, JsonValue>,
-
+        class NewPlanTieredPackagePrice
+        private constructor(
+            private val metadata: JsonField<Metadata>,
+            private val externalPriceId: JsonField<String>,
+            private val name: JsonField<String>,
+            private val billableMetricId: JsonField<String>,
+            private val itemId: JsonField<String>,
+            private val billedInAdvance: JsonField<Boolean>,
+            private val fixedPriceQuantity: JsonField<Double>,
+            private val invoiceGroupingKey: JsonField<String>,
+            private val cadence: JsonField<Cadence>,
+            private val conversionRate: JsonField<Double>,
+            private val modelType: JsonField<ModelType>,
+            private val tieredPackageConfig: JsonField<TieredPackageConfig>,
+            private val currency: JsonField<String>,
+            private val additionalProperties: Map<String, JsonValue>,
         ) {
 
             private var validated: Boolean = false
@@ -8600,66 +8817,70 @@ class PlanCreateParams constructor(
             private var hashCode: Int = 0
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata.getNullable("metadata"))
+            fun metadata(): Optional<Metadata> =
+                Optional.ofNullable(metadata.getNullable("metadata"))
 
             /** An alias for the price. */
-            fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+            fun externalPriceId(): Optional<String> =
+                Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
 
             /** The name of the price. */
             fun name(): String = name.getRequired("name")
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
-            fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+            fun billableMetricId(): Optional<String> =
+                Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
 
             /** The id of the item the plan will be associated with. */
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
-            fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+            fun billedInAdvance(): Optional<Boolean> =
+                Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
-            fun fixedPriceQuantity(): Optional<Double> = Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+            fun fixedPriceQuantity(): Optional<Double> =
+                Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
 
             /** The property used to group this price on an invoice */
-            fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+            fun invoiceGroupingKey(): Optional<String> =
+                Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
 
             /** The cadence to bill for this price on. */
             fun cadence(): Cadence = cadence.getRequired("cadence")
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+            fun conversionRate(): Optional<Double> =
+                Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
 
             fun modelType(): ModelType = modelType.getRequired("model_type")
 
-            fun tieredPackageConfig(): TieredPackageConfig = tieredPackageConfig.getRequired("tiered_package_config")
+            fun tieredPackageConfig(): TieredPackageConfig =
+                tieredPackageConfig.getRequired("tiered_package_config")
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
             fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            @JsonProperty("metadata")
-            @ExcludeMissing
-            fun _metadata() = metadata
+            @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
 
             /** An alias for the price. */
             @JsonProperty("external_price_id")
@@ -8667,34 +8888,28 @@ class PlanCreateParams constructor(
             fun _externalPriceId() = externalPriceId
 
             /** The name of the price. */
-            @JsonProperty("name")
-            @ExcludeMissing
-            fun _name() = name
+            @JsonProperty("name") @ExcludeMissing fun _name() = name
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
             @JsonProperty("billable_metric_id")
             @ExcludeMissing
             fun _billableMetricId() = billableMetricId
 
             /** The id of the item the plan will be associated with. */
-            @JsonProperty("item_id")
-            @ExcludeMissing
-            fun _itemId() = itemId
+            @JsonProperty("item_id") @ExcludeMissing fun _itemId() = itemId
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
             @JsonProperty("billed_in_advance")
             @ExcludeMissing
             fun _billedInAdvance() = billedInAdvance
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
             @JsonProperty("fixed_price_quantity")
             @ExcludeMissing
@@ -8706,30 +8921,22 @@ class PlanCreateParams constructor(
             fun _invoiceGroupingKey() = invoiceGroupingKey
 
             /** The cadence to bill for this price on. */
-            @JsonProperty("cadence")
-            @ExcludeMissing
-            fun _cadence() = cadence
+            @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            @JsonProperty("conversion_rate")
-            @ExcludeMissing
-            fun _conversionRate() = conversionRate
+            @JsonProperty("conversion_rate") @ExcludeMissing fun _conversionRate() = conversionRate
 
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType() = modelType
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType() = modelType
 
             @JsonProperty("tiered_package_config")
             @ExcludeMissing
             fun _tieredPackageConfig() = tieredPackageConfig
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
-            @JsonProperty("currency")
-            @ExcludeMissing
-            fun _currency() = currency
+            @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -8737,75 +8944,76 @@ class PlanCreateParams constructor(
 
             fun validate(): NewPlanTieredPackagePrice = apply {
                 if (!validated) {
-                  metadata().map { it.validate() }
-                  externalPriceId()
-                  name()
-                  billableMetricId()
-                  itemId()
-                  billedInAdvance()
-                  fixedPriceQuantity()
-                  invoiceGroupingKey()
-                  cadence()
-                  conversionRate()
-                  modelType()
-                  tieredPackageConfig().validate()
-                  currency()
-                  validated = true
+                    metadata().map { it.validate() }
+                    externalPriceId()
+                    name()
+                    billableMetricId()
+                    itemId()
+                    billedInAdvance()
+                    fixedPriceQuantity()
+                    invoiceGroupingKey()
+                    cadence()
+                    conversionRate()
+                    modelType()
+                    tieredPackageConfig().validate()
+                    currency()
+                    validated = true
                 }
             }
 
             fun toBuilder() = Builder().from(this)
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is NewPlanTieredPackagePrice &&
-                  this.metadata == other.metadata &&
-                  this.externalPriceId == other.externalPriceId &&
-                  this.name == other.name &&
-                  this.billableMetricId == other.billableMetricId &&
-                  this.itemId == other.itemId &&
-                  this.billedInAdvance == other.billedInAdvance &&
-                  this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                  this.invoiceGroupingKey == other.invoiceGroupingKey &&
-                  this.cadence == other.cadence &&
-                  this.conversionRate == other.conversionRate &&
-                  this.modelType == other.modelType &&
-                  this.tieredPackageConfig == other.tieredPackageConfig &&
-                  this.currency == other.currency &&
-                  this.additionalProperties == other.additionalProperties
+                return other is NewPlanTieredPackagePrice &&
+                    this.metadata == other.metadata &&
+                    this.externalPriceId == other.externalPriceId &&
+                    this.name == other.name &&
+                    this.billableMetricId == other.billableMetricId &&
+                    this.itemId == other.itemId &&
+                    this.billedInAdvance == other.billedInAdvance &&
+                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
+                    this.invoiceGroupingKey == other.invoiceGroupingKey &&
+                    this.cadence == other.cadence &&
+                    this.conversionRate == other.conversionRate &&
+                    this.modelType == other.modelType &&
+                    this.tieredPackageConfig == other.tieredPackageConfig &&
+                    this.currency == other.currency &&
+                    this.additionalProperties == other.additionalProperties
             }
 
             override fun hashCode(): Int {
-              if (hashCode == 0) {
-                hashCode = Objects.hash(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    tieredPackageConfig,
-                    currency,
-                    additionalProperties,
-                )
-              }
-              return hashCode
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            metadata,
+                            externalPriceId,
+                            name,
+                            billableMetricId,
+                            itemId,
+                            billedInAdvance,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            cadence,
+                            conversionRate,
+                            modelType,
+                            tieredPackageConfig,
+                            currency,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
             }
 
-            override fun toString() = "NewPlanTieredPackagePrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, tieredPackageConfig=$tieredPackageConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "NewPlanTieredPackagePrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, tieredPackageConfig=$tieredPackageConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
             companion object {
 
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             class Builder {
@@ -8845,24 +9053,23 @@ class PlanCreateParams constructor(
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 @JsonProperty("metadata")
                 @ExcludeMissing
-                fun metadata(metadata: JsonField<Metadata>) = apply {
-                    this.metadata = metadata
-                }
+                fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
                 /** An alias for the price. */
-                fun externalPriceId(externalPriceId: String) = externalPriceId(JsonField.of(externalPriceId))
+                fun externalPriceId(externalPriceId: String) =
+                    externalPriceId(JsonField.of(externalPriceId))
 
                 /** An alias for the price. */
                 @JsonProperty("external_price_id")
@@ -8877,15 +9084,14 @@ class PlanCreateParams constructor(
                 /** The name of the price. */
                 @JsonProperty("name")
                 @ExcludeMissing
-                fun name(name: JsonField<String>) = apply {
-                    this.name = name
-                }
+                fun name(name: JsonField<String>) = apply { this.name = name }
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
                  * usage-based.
                  */
-                fun billableMetricId(billableMetricId: String) = billableMetricId(JsonField.of(billableMetricId))
+                fun billableMetricId(billableMetricId: String) =
+                    billableMetricId(JsonField.of(billableMetricId))
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -8903,19 +9109,18 @@ class PlanCreateParams constructor(
                 /** The id of the item the plan will be associated with. */
                 @JsonProperty("item_id")
                 @ExcludeMissing
-                fun itemId(itemId: JsonField<String>) = apply {
-                    this.itemId = itemId
-                }
+                fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
-                fun billedInAdvance(billedInAdvance: Boolean) = billedInAdvance(JsonField.of(billedInAdvance))
+                fun billedInAdvance(billedInAdvance: Boolean) =
+                    billedInAdvance(JsonField.of(billedInAdvance))
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 @ExcludeMissing
@@ -8927,7 +9132,8 @@ class PlanCreateParams constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                fun fixedPriceQuantity(fixedPriceQuantity: Double) = fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
+                fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                    fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -8940,7 +9146,8 @@ class PlanCreateParams constructor(
                 }
 
                 /** The property used to group this price on an invoice */
-                fun invoiceGroupingKey(invoiceGroupingKey: String) = invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
+                fun invoiceGroupingKey(invoiceGroupingKey: String) =
+                    invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
 
                 /** The property used to group this price on an invoice */
                 @JsonProperty("invoice_grouping_key")
@@ -8955,12 +9162,11 @@ class PlanCreateParams constructor(
                 /** The cadence to bill for this price on. */
                 @JsonProperty("cadence")
                 @ExcludeMissing
-                fun cadence(cadence: JsonField<Cadence>) = apply {
-                    this.cadence = cadence
-                }
+                fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                fun conversionRate(conversionRate: Double) = conversionRate(JsonField.of(conversionRate))
+                fun conversionRate(conversionRate: Double) =
+                    conversionRate(JsonField.of(conversionRate))
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 @JsonProperty("conversion_rate")
@@ -8977,13 +9183,15 @@ class PlanCreateParams constructor(
                     this.modelType = modelType
                 }
 
-                fun tieredPackageConfig(tieredPackageConfig: TieredPackageConfig) = tieredPackageConfig(JsonField.of(tieredPackageConfig))
+                fun tieredPackageConfig(tieredPackageConfig: TieredPackageConfig) =
+                    tieredPackageConfig(JsonField.of(tieredPackageConfig))
 
                 @JsonProperty("tiered_package_config")
                 @ExcludeMissing
-                fun tieredPackageConfig(tieredPackageConfig: JsonField<TieredPackageConfig>) = apply {
-                    this.tieredPackageConfig = tieredPackageConfig
-                }
+                fun tieredPackageConfig(tieredPackageConfig: JsonField<TieredPackageConfig>) =
+                    apply {
+                        this.tieredPackageConfig = tieredPackageConfig
+                    }
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -8997,9 +9205,7 @@ class PlanCreateParams constructor(
                  */
                 @JsonProperty("currency")
                 @ExcludeMissing
-                fun currency(currency: JsonField<String>) = apply {
-                    this.currency = currency
-                }
+                fun currency(currency: JsonField<String>) = apply { this.currency = currency }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -9011,40 +9217,44 @@ class PlanCreateParams constructor(
                     this.additionalProperties.put(key, value)
                 }
 
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
 
-                fun build(): NewPlanTieredPackagePrice = NewPlanTieredPackagePrice(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    tieredPackageConfig,
-                    currency,
-                    additionalProperties.toUnmodifiable(),
-                )
+                fun build(): NewPlanTieredPackagePrice =
+                    NewPlanTieredPackagePrice(
+                        metadata,
+                        externalPriceId,
+                        name,
+                        billableMetricId,
+                        itemId,
+                        billedInAdvance,
+                        fixedPriceQuantity,
+                        invoiceGroupingKey,
+                        cadence,
+                        conversionRate,
+                        modelType,
+                        tieredPackageConfig,
+                        currency,
+                        additionalProperties.toUnmodifiable(),
+                    )
             }
 
-            class Cadence @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class Cadence
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Cadence &&
-                      this.value == other.value
+                    return other is Cadence && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -9087,41 +9297,45 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    ANNUAL -> Value.ANNUAL
-                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
-                    MONTHLY -> Value.MONTHLY
-                    QUARTERLY -> Value.QUARTERLY
-                    ONE_TIME -> Value.ONE_TIME
-                    CUSTOM -> Value.CUSTOM
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        ANNUAL -> Value.ANNUAL
+                        SEMI_ANNUAL -> Value.SEMI_ANNUAL
+                        MONTHLY -> Value.MONTHLY
+                        QUARTERLY -> Value.QUARTERLY
+                        ONE_TIME -> Value.ONE_TIME
+                        CUSTOM -> Value.CUSTOM
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    ANNUAL -> Known.ANNUAL
-                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
-                    MONTHLY -> Known.MONTHLY
-                    QUARTERLY -> Known.QUARTERLY
-                    ONE_TIME -> Known.ONE_TIME
-                    CUSTOM -> Known.CUSTOM
-                    else -> throw OrbInvalidDataException("Unknown Cadence: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        ANNUAL -> Known.ANNUAL
+                        SEMI_ANNUAL -> Known.SEMI_ANNUAL
+                        MONTHLY -> Known.MONTHLY
+                        QUARTERLY -> Known.QUARTERLY
+                        ONE_TIME -> Known.ONE_TIME
+                        CUSTOM -> Known.CUSTOM
+                        else -> throw OrbInvalidDataException("Unknown Cadence: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class ModelType
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is ModelType &&
-                      this.value == other.value
+                    return other is ModelType && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -9144,22 +9358,27 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    TIERED_PACKAGE -> Value.TIERED_PACKAGE
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        TIERED_PACKAGE -> Value.TIERED_PACKAGE
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    TIERED_PACKAGE -> Known.TIERED_PACKAGE
-                    else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        TIERED_PACKAGE -> Known.TIERED_PACKAGE
+                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
             @JsonDeserialize(builder = TieredPackageConfig.Builder::class)
             @NoAutoDetect
-            class TieredPackageConfig private constructor(private val additionalProperties: Map<String, JsonValue>, ) {
+            class TieredPackageConfig
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -9171,34 +9390,34 @@ class PlanCreateParams constructor(
 
                 fun validate(): TieredPackageConfig = apply {
                     if (!validated) {
-                      validated = true
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is TieredPackageConfig &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is TieredPackageConfig &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
                 }
 
-                override fun toString() = "TieredPackageConfig{additionalProperties=$additionalProperties}"
+                override fun toString() =
+                    "TieredPackageConfig{additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -9220,22 +9439,27 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
-                    fun build(): TieredPackageConfig = TieredPackageConfig(additionalProperties.toUnmodifiable())
+                    fun build(): TieredPackageConfig =
+                        TieredPackageConfig(additionalProperties.toUnmodifiable())
                 }
             }
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
             @JsonDeserialize(builder = Metadata.Builder::class)
             @NoAutoDetect
-            class Metadata private constructor(private val additionalProperties: Map<String, JsonValue>, ) {
+            class Metadata
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -9247,34 +9471,33 @@ class PlanCreateParams constructor(
 
                 fun validate(): Metadata = apply {
                     if (!validated) {
-                      validated = true
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Metadata &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is Metadata &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
                 }
 
                 override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -9296,9 +9519,10 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
                     fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
                 }
@@ -9307,22 +9531,22 @@ class PlanCreateParams constructor(
 
         @JsonDeserialize(builder = NewPlanTieredWithMinimumPrice.Builder::class)
         @NoAutoDetect
-        class NewPlanTieredWithMinimumPrice private constructor(
-          private val metadata: JsonField<Metadata>,
-          private val externalPriceId: JsonField<String>,
-          private val name: JsonField<String>,
-          private val billableMetricId: JsonField<String>,
-          private val itemId: JsonField<String>,
-          private val billedInAdvance: JsonField<Boolean>,
-          private val fixedPriceQuantity: JsonField<Double>,
-          private val invoiceGroupingKey: JsonField<String>,
-          private val cadence: JsonField<Cadence>,
-          private val conversionRate: JsonField<Double>,
-          private val modelType: JsonField<ModelType>,
-          private val tieredWithMinimumConfig: JsonField<TieredWithMinimumConfig>,
-          private val currency: JsonField<String>,
-          private val additionalProperties: Map<String, JsonValue>,
-
+        class NewPlanTieredWithMinimumPrice
+        private constructor(
+            private val metadata: JsonField<Metadata>,
+            private val externalPriceId: JsonField<String>,
+            private val name: JsonField<String>,
+            private val billableMetricId: JsonField<String>,
+            private val itemId: JsonField<String>,
+            private val billedInAdvance: JsonField<Boolean>,
+            private val fixedPriceQuantity: JsonField<Double>,
+            private val invoiceGroupingKey: JsonField<String>,
+            private val cadence: JsonField<Cadence>,
+            private val conversionRate: JsonField<Double>,
+            private val modelType: JsonField<ModelType>,
+            private val tieredWithMinimumConfig: JsonField<TieredWithMinimumConfig>,
+            private val currency: JsonField<String>,
+            private val additionalProperties: Map<String, JsonValue>,
         ) {
 
             private var validated: Boolean = false
@@ -9330,66 +9554,70 @@ class PlanCreateParams constructor(
             private var hashCode: Int = 0
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata.getNullable("metadata"))
+            fun metadata(): Optional<Metadata> =
+                Optional.ofNullable(metadata.getNullable("metadata"))
 
             /** An alias for the price. */
-            fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+            fun externalPriceId(): Optional<String> =
+                Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
 
             /** The name of the price. */
             fun name(): String = name.getRequired("name")
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
-            fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+            fun billableMetricId(): Optional<String> =
+                Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
 
             /** The id of the item the plan will be associated with. */
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
-            fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+            fun billedInAdvance(): Optional<Boolean> =
+                Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
-            fun fixedPriceQuantity(): Optional<Double> = Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+            fun fixedPriceQuantity(): Optional<Double> =
+                Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
 
             /** The property used to group this price on an invoice */
-            fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+            fun invoiceGroupingKey(): Optional<String> =
+                Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
 
             /** The cadence to bill for this price on. */
             fun cadence(): Cadence = cadence.getRequired("cadence")
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+            fun conversionRate(): Optional<Double> =
+                Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
 
             fun modelType(): ModelType = modelType.getRequired("model_type")
 
-            fun tieredWithMinimumConfig(): TieredWithMinimumConfig = tieredWithMinimumConfig.getRequired("tiered_with_minimum_config")
+            fun tieredWithMinimumConfig(): TieredWithMinimumConfig =
+                tieredWithMinimumConfig.getRequired("tiered_with_minimum_config")
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
             fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            @JsonProperty("metadata")
-            @ExcludeMissing
-            fun _metadata() = metadata
+            @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
 
             /** An alias for the price. */
             @JsonProperty("external_price_id")
@@ -9397,34 +9625,28 @@ class PlanCreateParams constructor(
             fun _externalPriceId() = externalPriceId
 
             /** The name of the price. */
-            @JsonProperty("name")
-            @ExcludeMissing
-            fun _name() = name
+            @JsonProperty("name") @ExcludeMissing fun _name() = name
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
             @JsonProperty("billable_metric_id")
             @ExcludeMissing
             fun _billableMetricId() = billableMetricId
 
             /** The id of the item the plan will be associated with. */
-            @JsonProperty("item_id")
-            @ExcludeMissing
-            fun _itemId() = itemId
+            @JsonProperty("item_id") @ExcludeMissing fun _itemId() = itemId
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
             @JsonProperty("billed_in_advance")
             @ExcludeMissing
             fun _billedInAdvance() = billedInAdvance
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
             @JsonProperty("fixed_price_quantity")
             @ExcludeMissing
@@ -9436,30 +9658,22 @@ class PlanCreateParams constructor(
             fun _invoiceGroupingKey() = invoiceGroupingKey
 
             /** The cadence to bill for this price on. */
-            @JsonProperty("cadence")
-            @ExcludeMissing
-            fun _cadence() = cadence
+            @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            @JsonProperty("conversion_rate")
-            @ExcludeMissing
-            fun _conversionRate() = conversionRate
+            @JsonProperty("conversion_rate") @ExcludeMissing fun _conversionRate() = conversionRate
 
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType() = modelType
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType() = modelType
 
             @JsonProperty("tiered_with_minimum_config")
             @ExcludeMissing
             fun _tieredWithMinimumConfig() = tieredWithMinimumConfig
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
-            @JsonProperty("currency")
-            @ExcludeMissing
-            fun _currency() = currency
+            @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -9467,75 +9681,76 @@ class PlanCreateParams constructor(
 
             fun validate(): NewPlanTieredWithMinimumPrice = apply {
                 if (!validated) {
-                  metadata().map { it.validate() }
-                  externalPriceId()
-                  name()
-                  billableMetricId()
-                  itemId()
-                  billedInAdvance()
-                  fixedPriceQuantity()
-                  invoiceGroupingKey()
-                  cadence()
-                  conversionRate()
-                  modelType()
-                  tieredWithMinimumConfig().validate()
-                  currency()
-                  validated = true
+                    metadata().map { it.validate() }
+                    externalPriceId()
+                    name()
+                    billableMetricId()
+                    itemId()
+                    billedInAdvance()
+                    fixedPriceQuantity()
+                    invoiceGroupingKey()
+                    cadence()
+                    conversionRate()
+                    modelType()
+                    tieredWithMinimumConfig().validate()
+                    currency()
+                    validated = true
                 }
             }
 
             fun toBuilder() = Builder().from(this)
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is NewPlanTieredWithMinimumPrice &&
-                  this.metadata == other.metadata &&
-                  this.externalPriceId == other.externalPriceId &&
-                  this.name == other.name &&
-                  this.billableMetricId == other.billableMetricId &&
-                  this.itemId == other.itemId &&
-                  this.billedInAdvance == other.billedInAdvance &&
-                  this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                  this.invoiceGroupingKey == other.invoiceGroupingKey &&
-                  this.cadence == other.cadence &&
-                  this.conversionRate == other.conversionRate &&
-                  this.modelType == other.modelType &&
-                  this.tieredWithMinimumConfig == other.tieredWithMinimumConfig &&
-                  this.currency == other.currency &&
-                  this.additionalProperties == other.additionalProperties
+                return other is NewPlanTieredWithMinimumPrice &&
+                    this.metadata == other.metadata &&
+                    this.externalPriceId == other.externalPriceId &&
+                    this.name == other.name &&
+                    this.billableMetricId == other.billableMetricId &&
+                    this.itemId == other.itemId &&
+                    this.billedInAdvance == other.billedInAdvance &&
+                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
+                    this.invoiceGroupingKey == other.invoiceGroupingKey &&
+                    this.cadence == other.cadence &&
+                    this.conversionRate == other.conversionRate &&
+                    this.modelType == other.modelType &&
+                    this.tieredWithMinimumConfig == other.tieredWithMinimumConfig &&
+                    this.currency == other.currency &&
+                    this.additionalProperties == other.additionalProperties
             }
 
             override fun hashCode(): Int {
-              if (hashCode == 0) {
-                hashCode = Objects.hash(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    tieredWithMinimumConfig,
-                    currency,
-                    additionalProperties,
-                )
-              }
-              return hashCode
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            metadata,
+                            externalPriceId,
+                            name,
+                            billableMetricId,
+                            itemId,
+                            billedInAdvance,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            cadence,
+                            conversionRate,
+                            modelType,
+                            tieredWithMinimumConfig,
+                            currency,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
             }
 
-            override fun toString() = "NewPlanTieredWithMinimumPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, tieredWithMinimumConfig=$tieredWithMinimumConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "NewPlanTieredWithMinimumPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, tieredWithMinimumConfig=$tieredWithMinimumConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
             companion object {
 
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             class Builder {
@@ -9551,48 +9766,50 @@ class PlanCreateParams constructor(
                 private var cadence: JsonField<Cadence> = JsonMissing.of()
                 private var conversionRate: JsonField<Double> = JsonMissing.of()
                 private var modelType: JsonField<ModelType> = JsonMissing.of()
-                private var tieredWithMinimumConfig: JsonField<TieredWithMinimumConfig> = JsonMissing.of()
+                private var tieredWithMinimumConfig: JsonField<TieredWithMinimumConfig> =
+                    JsonMissing.of()
                 private var currency: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(newPlanTieredWithMinimumPrice: NewPlanTieredWithMinimumPrice) = apply {
-                    this.metadata = newPlanTieredWithMinimumPrice.metadata
-                    this.externalPriceId = newPlanTieredWithMinimumPrice.externalPriceId
-                    this.name = newPlanTieredWithMinimumPrice.name
-                    this.billableMetricId = newPlanTieredWithMinimumPrice.billableMetricId
-                    this.itemId = newPlanTieredWithMinimumPrice.itemId
-                    this.billedInAdvance = newPlanTieredWithMinimumPrice.billedInAdvance
-                    this.fixedPriceQuantity = newPlanTieredWithMinimumPrice.fixedPriceQuantity
-                    this.invoiceGroupingKey = newPlanTieredWithMinimumPrice.invoiceGroupingKey
-                    this.cadence = newPlanTieredWithMinimumPrice.cadence
-                    this.conversionRate = newPlanTieredWithMinimumPrice.conversionRate
-                    this.modelType = newPlanTieredWithMinimumPrice.modelType
-                    this.tieredWithMinimumConfig = newPlanTieredWithMinimumPrice.tieredWithMinimumConfig
-                    this.currency = newPlanTieredWithMinimumPrice.currency
-                    additionalProperties(newPlanTieredWithMinimumPrice.additionalProperties)
-                }
+                internal fun from(newPlanTieredWithMinimumPrice: NewPlanTieredWithMinimumPrice) =
+                    apply {
+                        this.metadata = newPlanTieredWithMinimumPrice.metadata
+                        this.externalPriceId = newPlanTieredWithMinimumPrice.externalPriceId
+                        this.name = newPlanTieredWithMinimumPrice.name
+                        this.billableMetricId = newPlanTieredWithMinimumPrice.billableMetricId
+                        this.itemId = newPlanTieredWithMinimumPrice.itemId
+                        this.billedInAdvance = newPlanTieredWithMinimumPrice.billedInAdvance
+                        this.fixedPriceQuantity = newPlanTieredWithMinimumPrice.fixedPriceQuantity
+                        this.invoiceGroupingKey = newPlanTieredWithMinimumPrice.invoiceGroupingKey
+                        this.cadence = newPlanTieredWithMinimumPrice.cadence
+                        this.conversionRate = newPlanTieredWithMinimumPrice.conversionRate
+                        this.modelType = newPlanTieredWithMinimumPrice.modelType
+                        this.tieredWithMinimumConfig =
+                            newPlanTieredWithMinimumPrice.tieredWithMinimumConfig
+                        this.currency = newPlanTieredWithMinimumPrice.currency
+                        additionalProperties(newPlanTieredWithMinimumPrice.additionalProperties)
+                    }
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 @JsonProperty("metadata")
                 @ExcludeMissing
-                fun metadata(metadata: JsonField<Metadata>) = apply {
-                    this.metadata = metadata
-                }
+                fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
                 /** An alias for the price. */
-                fun externalPriceId(externalPriceId: String) = externalPriceId(JsonField.of(externalPriceId))
+                fun externalPriceId(externalPriceId: String) =
+                    externalPriceId(JsonField.of(externalPriceId))
 
                 /** An alias for the price. */
                 @JsonProperty("external_price_id")
@@ -9607,15 +9824,14 @@ class PlanCreateParams constructor(
                 /** The name of the price. */
                 @JsonProperty("name")
                 @ExcludeMissing
-                fun name(name: JsonField<String>) = apply {
-                    this.name = name
-                }
+                fun name(name: JsonField<String>) = apply { this.name = name }
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
                  * usage-based.
                  */
-                fun billableMetricId(billableMetricId: String) = billableMetricId(JsonField.of(billableMetricId))
+                fun billableMetricId(billableMetricId: String) =
+                    billableMetricId(JsonField.of(billableMetricId))
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -9633,19 +9849,18 @@ class PlanCreateParams constructor(
                 /** The id of the item the plan will be associated with. */
                 @JsonProperty("item_id")
                 @ExcludeMissing
-                fun itemId(itemId: JsonField<String>) = apply {
-                    this.itemId = itemId
-                }
+                fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
-                fun billedInAdvance(billedInAdvance: Boolean) = billedInAdvance(JsonField.of(billedInAdvance))
+                fun billedInAdvance(billedInAdvance: Boolean) =
+                    billedInAdvance(JsonField.of(billedInAdvance))
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 @ExcludeMissing
@@ -9657,7 +9872,8 @@ class PlanCreateParams constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                fun fixedPriceQuantity(fixedPriceQuantity: Double) = fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
+                fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                    fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -9670,7 +9886,8 @@ class PlanCreateParams constructor(
                 }
 
                 /** The property used to group this price on an invoice */
-                fun invoiceGroupingKey(invoiceGroupingKey: String) = invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
+                fun invoiceGroupingKey(invoiceGroupingKey: String) =
+                    invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
 
                 /** The property used to group this price on an invoice */
                 @JsonProperty("invoice_grouping_key")
@@ -9685,12 +9902,11 @@ class PlanCreateParams constructor(
                 /** The cadence to bill for this price on. */
                 @JsonProperty("cadence")
                 @ExcludeMissing
-                fun cadence(cadence: JsonField<Cadence>) = apply {
-                    this.cadence = cadence
-                }
+                fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                fun conversionRate(conversionRate: Double) = conversionRate(JsonField.of(conversionRate))
+                fun conversionRate(conversionRate: Double) =
+                    conversionRate(JsonField.of(conversionRate))
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 @JsonProperty("conversion_rate")
@@ -9707,13 +9923,14 @@ class PlanCreateParams constructor(
                     this.modelType = modelType
                 }
 
-                fun tieredWithMinimumConfig(tieredWithMinimumConfig: TieredWithMinimumConfig) = tieredWithMinimumConfig(JsonField.of(tieredWithMinimumConfig))
+                fun tieredWithMinimumConfig(tieredWithMinimumConfig: TieredWithMinimumConfig) =
+                    tieredWithMinimumConfig(JsonField.of(tieredWithMinimumConfig))
 
                 @JsonProperty("tiered_with_minimum_config")
                 @ExcludeMissing
-                fun tieredWithMinimumConfig(tieredWithMinimumConfig: JsonField<TieredWithMinimumConfig>) = apply {
-                    this.tieredWithMinimumConfig = tieredWithMinimumConfig
-                }
+                fun tieredWithMinimumConfig(
+                    tieredWithMinimumConfig: JsonField<TieredWithMinimumConfig>
+                ) = apply { this.tieredWithMinimumConfig = tieredWithMinimumConfig }
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -9727,9 +9944,7 @@ class PlanCreateParams constructor(
                  */
                 @JsonProperty("currency")
                 @ExcludeMissing
-                fun currency(currency: JsonField<String>) = apply {
-                    this.currency = currency
-                }
+                fun currency(currency: JsonField<String>) = apply { this.currency = currency }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -9741,40 +9956,44 @@ class PlanCreateParams constructor(
                     this.additionalProperties.put(key, value)
                 }
 
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
 
-                fun build(): NewPlanTieredWithMinimumPrice = NewPlanTieredWithMinimumPrice(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    tieredWithMinimumConfig,
-                    currency,
-                    additionalProperties.toUnmodifiable(),
-                )
+                fun build(): NewPlanTieredWithMinimumPrice =
+                    NewPlanTieredWithMinimumPrice(
+                        metadata,
+                        externalPriceId,
+                        name,
+                        billableMetricId,
+                        itemId,
+                        billedInAdvance,
+                        fixedPriceQuantity,
+                        invoiceGroupingKey,
+                        cadence,
+                        conversionRate,
+                        modelType,
+                        tieredWithMinimumConfig,
+                        currency,
+                        additionalProperties.toUnmodifiable(),
+                    )
             }
 
-            class Cadence @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class Cadence
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Cadence &&
-                      this.value == other.value
+                    return other is Cadence && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -9817,41 +10036,45 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    ANNUAL -> Value.ANNUAL
-                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
-                    MONTHLY -> Value.MONTHLY
-                    QUARTERLY -> Value.QUARTERLY
-                    ONE_TIME -> Value.ONE_TIME
-                    CUSTOM -> Value.CUSTOM
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        ANNUAL -> Value.ANNUAL
+                        SEMI_ANNUAL -> Value.SEMI_ANNUAL
+                        MONTHLY -> Value.MONTHLY
+                        QUARTERLY -> Value.QUARTERLY
+                        ONE_TIME -> Value.ONE_TIME
+                        CUSTOM -> Value.CUSTOM
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    ANNUAL -> Known.ANNUAL
-                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
-                    MONTHLY -> Known.MONTHLY
-                    QUARTERLY -> Known.QUARTERLY
-                    ONE_TIME -> Known.ONE_TIME
-                    CUSTOM -> Known.CUSTOM
-                    else -> throw OrbInvalidDataException("Unknown Cadence: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        ANNUAL -> Known.ANNUAL
+                        SEMI_ANNUAL -> Known.SEMI_ANNUAL
+                        MONTHLY -> Known.MONTHLY
+                        QUARTERLY -> Known.QUARTERLY
+                        ONE_TIME -> Known.ONE_TIME
+                        CUSTOM -> Known.CUSTOM
+                        else -> throw OrbInvalidDataException("Unknown Cadence: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class ModelType
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is ModelType &&
-                      this.value == other.value
+                    return other is ModelType && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -9860,7 +10083,8 @@ class PlanCreateParams constructor(
 
                 companion object {
 
-                    @JvmField val TIERED_WITH_MINIMUM = ModelType(JsonField.of("tiered_with_minimum"))
+                    @JvmField
+                    val TIERED_WITH_MINIMUM = ModelType(JsonField.of("tiered_with_minimum"))
 
                     @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                 }
@@ -9874,22 +10098,27 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    TIERED_WITH_MINIMUM -> Value.TIERED_WITH_MINIMUM
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        TIERED_WITH_MINIMUM -> Value.TIERED_WITH_MINIMUM
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    TIERED_WITH_MINIMUM -> Known.TIERED_WITH_MINIMUM
-                    else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        TIERED_WITH_MINIMUM -> Known.TIERED_WITH_MINIMUM
+                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
             @JsonDeserialize(builder = TieredWithMinimumConfig.Builder::class)
             @NoAutoDetect
-            class TieredWithMinimumConfig private constructor(private val additionalProperties: Map<String, JsonValue>, ) {
+            class TieredWithMinimumConfig
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -9901,34 +10130,34 @@ class PlanCreateParams constructor(
 
                 fun validate(): TieredWithMinimumConfig = apply {
                     if (!validated) {
-                      validated = true
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is TieredWithMinimumConfig &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is TieredWithMinimumConfig &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
                 }
 
-                override fun toString() = "TieredWithMinimumConfig{additionalProperties=$additionalProperties}"
+                override fun toString() =
+                    "TieredWithMinimumConfig{additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -9950,22 +10179,27 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
-                    fun build(): TieredWithMinimumConfig = TieredWithMinimumConfig(additionalProperties.toUnmodifiable())
+                    fun build(): TieredWithMinimumConfig =
+                        TieredWithMinimumConfig(additionalProperties.toUnmodifiable())
                 }
             }
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
             @JsonDeserialize(builder = Metadata.Builder::class)
             @NoAutoDetect
-            class Metadata private constructor(private val additionalProperties: Map<String, JsonValue>, ) {
+            class Metadata
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -9977,34 +10211,33 @@ class PlanCreateParams constructor(
 
                 fun validate(): Metadata = apply {
                     if (!validated) {
-                      validated = true
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Metadata &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is Metadata &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
                 }
 
                 override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -10026,9 +10259,10 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
                     fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
                 }
@@ -10037,22 +10271,22 @@ class PlanCreateParams constructor(
 
         @JsonDeserialize(builder = NewPlanUnitWithPercentPrice.Builder::class)
         @NoAutoDetect
-        class NewPlanUnitWithPercentPrice private constructor(
-          private val metadata: JsonField<Metadata>,
-          private val externalPriceId: JsonField<String>,
-          private val name: JsonField<String>,
-          private val billableMetricId: JsonField<String>,
-          private val itemId: JsonField<String>,
-          private val billedInAdvance: JsonField<Boolean>,
-          private val fixedPriceQuantity: JsonField<Double>,
-          private val invoiceGroupingKey: JsonField<String>,
-          private val cadence: JsonField<Cadence>,
-          private val conversionRate: JsonField<Double>,
-          private val modelType: JsonField<ModelType>,
-          private val unitWithPercentConfig: JsonField<UnitWithPercentConfig>,
-          private val currency: JsonField<String>,
-          private val additionalProperties: Map<String, JsonValue>,
-
+        class NewPlanUnitWithPercentPrice
+        private constructor(
+            private val metadata: JsonField<Metadata>,
+            private val externalPriceId: JsonField<String>,
+            private val name: JsonField<String>,
+            private val billableMetricId: JsonField<String>,
+            private val itemId: JsonField<String>,
+            private val billedInAdvance: JsonField<Boolean>,
+            private val fixedPriceQuantity: JsonField<Double>,
+            private val invoiceGroupingKey: JsonField<String>,
+            private val cadence: JsonField<Cadence>,
+            private val conversionRate: JsonField<Double>,
+            private val modelType: JsonField<ModelType>,
+            private val unitWithPercentConfig: JsonField<UnitWithPercentConfig>,
+            private val currency: JsonField<String>,
+            private val additionalProperties: Map<String, JsonValue>,
         ) {
 
             private var validated: Boolean = false
@@ -10060,66 +10294,70 @@ class PlanCreateParams constructor(
             private var hashCode: Int = 0
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata.getNullable("metadata"))
+            fun metadata(): Optional<Metadata> =
+                Optional.ofNullable(metadata.getNullable("metadata"))
 
             /** An alias for the price. */
-            fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+            fun externalPriceId(): Optional<String> =
+                Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
 
             /** The name of the price. */
             fun name(): String = name.getRequired("name")
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
-            fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+            fun billableMetricId(): Optional<String> =
+                Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
 
             /** The id of the item the plan will be associated with. */
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
-            fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+            fun billedInAdvance(): Optional<Boolean> =
+                Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
-            fun fixedPriceQuantity(): Optional<Double> = Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+            fun fixedPriceQuantity(): Optional<Double> =
+                Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
 
             /** The property used to group this price on an invoice */
-            fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+            fun invoiceGroupingKey(): Optional<String> =
+                Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
 
             /** The cadence to bill for this price on. */
             fun cadence(): Cadence = cadence.getRequired("cadence")
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+            fun conversionRate(): Optional<Double> =
+                Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
 
             fun modelType(): ModelType = modelType.getRequired("model_type")
 
-            fun unitWithPercentConfig(): UnitWithPercentConfig = unitWithPercentConfig.getRequired("unit_with_percent_config")
+            fun unitWithPercentConfig(): UnitWithPercentConfig =
+                unitWithPercentConfig.getRequired("unit_with_percent_config")
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
             fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            @JsonProperty("metadata")
-            @ExcludeMissing
-            fun _metadata() = metadata
+            @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
 
             /** An alias for the price. */
             @JsonProperty("external_price_id")
@@ -10127,34 +10365,28 @@ class PlanCreateParams constructor(
             fun _externalPriceId() = externalPriceId
 
             /** The name of the price. */
-            @JsonProperty("name")
-            @ExcludeMissing
-            fun _name() = name
+            @JsonProperty("name") @ExcludeMissing fun _name() = name
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
             @JsonProperty("billable_metric_id")
             @ExcludeMissing
             fun _billableMetricId() = billableMetricId
 
             /** The id of the item the plan will be associated with. */
-            @JsonProperty("item_id")
-            @ExcludeMissing
-            fun _itemId() = itemId
+            @JsonProperty("item_id") @ExcludeMissing fun _itemId() = itemId
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
             @JsonProperty("billed_in_advance")
             @ExcludeMissing
             fun _billedInAdvance() = billedInAdvance
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
             @JsonProperty("fixed_price_quantity")
             @ExcludeMissing
@@ -10166,30 +10398,22 @@ class PlanCreateParams constructor(
             fun _invoiceGroupingKey() = invoiceGroupingKey
 
             /** The cadence to bill for this price on. */
-            @JsonProperty("cadence")
-            @ExcludeMissing
-            fun _cadence() = cadence
+            @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            @JsonProperty("conversion_rate")
-            @ExcludeMissing
-            fun _conversionRate() = conversionRate
+            @JsonProperty("conversion_rate") @ExcludeMissing fun _conversionRate() = conversionRate
 
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType() = modelType
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType() = modelType
 
             @JsonProperty("unit_with_percent_config")
             @ExcludeMissing
             fun _unitWithPercentConfig() = unitWithPercentConfig
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
-            @JsonProperty("currency")
-            @ExcludeMissing
-            fun _currency() = currency
+            @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -10197,75 +10421,76 @@ class PlanCreateParams constructor(
 
             fun validate(): NewPlanUnitWithPercentPrice = apply {
                 if (!validated) {
-                  metadata().map { it.validate() }
-                  externalPriceId()
-                  name()
-                  billableMetricId()
-                  itemId()
-                  billedInAdvance()
-                  fixedPriceQuantity()
-                  invoiceGroupingKey()
-                  cadence()
-                  conversionRate()
-                  modelType()
-                  unitWithPercentConfig().validate()
-                  currency()
-                  validated = true
+                    metadata().map { it.validate() }
+                    externalPriceId()
+                    name()
+                    billableMetricId()
+                    itemId()
+                    billedInAdvance()
+                    fixedPriceQuantity()
+                    invoiceGroupingKey()
+                    cadence()
+                    conversionRate()
+                    modelType()
+                    unitWithPercentConfig().validate()
+                    currency()
+                    validated = true
                 }
             }
 
             fun toBuilder() = Builder().from(this)
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is NewPlanUnitWithPercentPrice &&
-                  this.metadata == other.metadata &&
-                  this.externalPriceId == other.externalPriceId &&
-                  this.name == other.name &&
-                  this.billableMetricId == other.billableMetricId &&
-                  this.itemId == other.itemId &&
-                  this.billedInAdvance == other.billedInAdvance &&
-                  this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                  this.invoiceGroupingKey == other.invoiceGroupingKey &&
-                  this.cadence == other.cadence &&
-                  this.conversionRate == other.conversionRate &&
-                  this.modelType == other.modelType &&
-                  this.unitWithPercentConfig == other.unitWithPercentConfig &&
-                  this.currency == other.currency &&
-                  this.additionalProperties == other.additionalProperties
+                return other is NewPlanUnitWithPercentPrice &&
+                    this.metadata == other.metadata &&
+                    this.externalPriceId == other.externalPriceId &&
+                    this.name == other.name &&
+                    this.billableMetricId == other.billableMetricId &&
+                    this.itemId == other.itemId &&
+                    this.billedInAdvance == other.billedInAdvance &&
+                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
+                    this.invoiceGroupingKey == other.invoiceGroupingKey &&
+                    this.cadence == other.cadence &&
+                    this.conversionRate == other.conversionRate &&
+                    this.modelType == other.modelType &&
+                    this.unitWithPercentConfig == other.unitWithPercentConfig &&
+                    this.currency == other.currency &&
+                    this.additionalProperties == other.additionalProperties
             }
 
             override fun hashCode(): Int {
-              if (hashCode == 0) {
-                hashCode = Objects.hash(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    unitWithPercentConfig,
-                    currency,
-                    additionalProperties,
-                )
-              }
-              return hashCode
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            metadata,
+                            externalPriceId,
+                            name,
+                            billableMetricId,
+                            itemId,
+                            billedInAdvance,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            cadence,
+                            conversionRate,
+                            modelType,
+                            unitWithPercentConfig,
+                            currency,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
             }
 
-            override fun toString() = "NewPlanUnitWithPercentPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, unitWithPercentConfig=$unitWithPercentConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "NewPlanUnitWithPercentPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, unitWithPercentConfig=$unitWithPercentConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
             companion object {
 
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             class Builder {
@@ -10281,48 +10506,50 @@ class PlanCreateParams constructor(
                 private var cadence: JsonField<Cadence> = JsonMissing.of()
                 private var conversionRate: JsonField<Double> = JsonMissing.of()
                 private var modelType: JsonField<ModelType> = JsonMissing.of()
-                private var unitWithPercentConfig: JsonField<UnitWithPercentConfig> = JsonMissing.of()
+                private var unitWithPercentConfig: JsonField<UnitWithPercentConfig> =
+                    JsonMissing.of()
                 private var currency: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(newPlanUnitWithPercentPrice: NewPlanUnitWithPercentPrice) = apply {
-                    this.metadata = newPlanUnitWithPercentPrice.metadata
-                    this.externalPriceId = newPlanUnitWithPercentPrice.externalPriceId
-                    this.name = newPlanUnitWithPercentPrice.name
-                    this.billableMetricId = newPlanUnitWithPercentPrice.billableMetricId
-                    this.itemId = newPlanUnitWithPercentPrice.itemId
-                    this.billedInAdvance = newPlanUnitWithPercentPrice.billedInAdvance
-                    this.fixedPriceQuantity = newPlanUnitWithPercentPrice.fixedPriceQuantity
-                    this.invoiceGroupingKey = newPlanUnitWithPercentPrice.invoiceGroupingKey
-                    this.cadence = newPlanUnitWithPercentPrice.cadence
-                    this.conversionRate = newPlanUnitWithPercentPrice.conversionRate
-                    this.modelType = newPlanUnitWithPercentPrice.modelType
-                    this.unitWithPercentConfig = newPlanUnitWithPercentPrice.unitWithPercentConfig
-                    this.currency = newPlanUnitWithPercentPrice.currency
-                    additionalProperties(newPlanUnitWithPercentPrice.additionalProperties)
-                }
+                internal fun from(newPlanUnitWithPercentPrice: NewPlanUnitWithPercentPrice) =
+                    apply {
+                        this.metadata = newPlanUnitWithPercentPrice.metadata
+                        this.externalPriceId = newPlanUnitWithPercentPrice.externalPriceId
+                        this.name = newPlanUnitWithPercentPrice.name
+                        this.billableMetricId = newPlanUnitWithPercentPrice.billableMetricId
+                        this.itemId = newPlanUnitWithPercentPrice.itemId
+                        this.billedInAdvance = newPlanUnitWithPercentPrice.billedInAdvance
+                        this.fixedPriceQuantity = newPlanUnitWithPercentPrice.fixedPriceQuantity
+                        this.invoiceGroupingKey = newPlanUnitWithPercentPrice.invoiceGroupingKey
+                        this.cadence = newPlanUnitWithPercentPrice.cadence
+                        this.conversionRate = newPlanUnitWithPercentPrice.conversionRate
+                        this.modelType = newPlanUnitWithPercentPrice.modelType
+                        this.unitWithPercentConfig =
+                            newPlanUnitWithPercentPrice.unitWithPercentConfig
+                        this.currency = newPlanUnitWithPercentPrice.currency
+                        additionalProperties(newPlanUnitWithPercentPrice.additionalProperties)
+                    }
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 @JsonProperty("metadata")
                 @ExcludeMissing
-                fun metadata(metadata: JsonField<Metadata>) = apply {
-                    this.metadata = metadata
-                }
+                fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
                 /** An alias for the price. */
-                fun externalPriceId(externalPriceId: String) = externalPriceId(JsonField.of(externalPriceId))
+                fun externalPriceId(externalPriceId: String) =
+                    externalPriceId(JsonField.of(externalPriceId))
 
                 /** An alias for the price. */
                 @JsonProperty("external_price_id")
@@ -10337,15 +10564,14 @@ class PlanCreateParams constructor(
                 /** The name of the price. */
                 @JsonProperty("name")
                 @ExcludeMissing
-                fun name(name: JsonField<String>) = apply {
-                    this.name = name
-                }
+                fun name(name: JsonField<String>) = apply { this.name = name }
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
                  * usage-based.
                  */
-                fun billableMetricId(billableMetricId: String) = billableMetricId(JsonField.of(billableMetricId))
+                fun billableMetricId(billableMetricId: String) =
+                    billableMetricId(JsonField.of(billableMetricId))
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -10363,19 +10589,18 @@ class PlanCreateParams constructor(
                 /** The id of the item the plan will be associated with. */
                 @JsonProperty("item_id")
                 @ExcludeMissing
-                fun itemId(itemId: JsonField<String>) = apply {
-                    this.itemId = itemId
-                }
+                fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
-                fun billedInAdvance(billedInAdvance: Boolean) = billedInAdvance(JsonField.of(billedInAdvance))
+                fun billedInAdvance(billedInAdvance: Boolean) =
+                    billedInAdvance(JsonField.of(billedInAdvance))
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 @ExcludeMissing
@@ -10387,7 +10612,8 @@ class PlanCreateParams constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                fun fixedPriceQuantity(fixedPriceQuantity: Double) = fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
+                fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                    fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -10400,7 +10626,8 @@ class PlanCreateParams constructor(
                 }
 
                 /** The property used to group this price on an invoice */
-                fun invoiceGroupingKey(invoiceGroupingKey: String) = invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
+                fun invoiceGroupingKey(invoiceGroupingKey: String) =
+                    invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
 
                 /** The property used to group this price on an invoice */
                 @JsonProperty("invoice_grouping_key")
@@ -10415,12 +10642,11 @@ class PlanCreateParams constructor(
                 /** The cadence to bill for this price on. */
                 @JsonProperty("cadence")
                 @ExcludeMissing
-                fun cadence(cadence: JsonField<Cadence>) = apply {
-                    this.cadence = cadence
-                }
+                fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                fun conversionRate(conversionRate: Double) = conversionRate(JsonField.of(conversionRate))
+                fun conversionRate(conversionRate: Double) =
+                    conversionRate(JsonField.of(conversionRate))
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 @JsonProperty("conversion_rate")
@@ -10437,13 +10663,15 @@ class PlanCreateParams constructor(
                     this.modelType = modelType
                 }
 
-                fun unitWithPercentConfig(unitWithPercentConfig: UnitWithPercentConfig) = unitWithPercentConfig(JsonField.of(unitWithPercentConfig))
+                fun unitWithPercentConfig(unitWithPercentConfig: UnitWithPercentConfig) =
+                    unitWithPercentConfig(JsonField.of(unitWithPercentConfig))
 
                 @JsonProperty("unit_with_percent_config")
                 @ExcludeMissing
-                fun unitWithPercentConfig(unitWithPercentConfig: JsonField<UnitWithPercentConfig>) = apply {
-                    this.unitWithPercentConfig = unitWithPercentConfig
-                }
+                fun unitWithPercentConfig(unitWithPercentConfig: JsonField<UnitWithPercentConfig>) =
+                    apply {
+                        this.unitWithPercentConfig = unitWithPercentConfig
+                    }
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -10457,9 +10685,7 @@ class PlanCreateParams constructor(
                  */
                 @JsonProperty("currency")
                 @ExcludeMissing
-                fun currency(currency: JsonField<String>) = apply {
-                    this.currency = currency
-                }
+                fun currency(currency: JsonField<String>) = apply { this.currency = currency }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -10471,40 +10697,44 @@ class PlanCreateParams constructor(
                     this.additionalProperties.put(key, value)
                 }
 
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
 
-                fun build(): NewPlanUnitWithPercentPrice = NewPlanUnitWithPercentPrice(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    unitWithPercentConfig,
-                    currency,
-                    additionalProperties.toUnmodifiable(),
-                )
+                fun build(): NewPlanUnitWithPercentPrice =
+                    NewPlanUnitWithPercentPrice(
+                        metadata,
+                        externalPriceId,
+                        name,
+                        billableMetricId,
+                        itemId,
+                        billedInAdvance,
+                        fixedPriceQuantity,
+                        invoiceGroupingKey,
+                        cadence,
+                        conversionRate,
+                        modelType,
+                        unitWithPercentConfig,
+                        currency,
+                        additionalProperties.toUnmodifiable(),
+                    )
             }
 
-            class Cadence @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class Cadence
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Cadence &&
-                      this.value == other.value
+                    return other is Cadence && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -10547,41 +10777,45 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    ANNUAL -> Value.ANNUAL
-                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
-                    MONTHLY -> Value.MONTHLY
-                    QUARTERLY -> Value.QUARTERLY
-                    ONE_TIME -> Value.ONE_TIME
-                    CUSTOM -> Value.CUSTOM
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        ANNUAL -> Value.ANNUAL
+                        SEMI_ANNUAL -> Value.SEMI_ANNUAL
+                        MONTHLY -> Value.MONTHLY
+                        QUARTERLY -> Value.QUARTERLY
+                        ONE_TIME -> Value.ONE_TIME
+                        CUSTOM -> Value.CUSTOM
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    ANNUAL -> Known.ANNUAL
-                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
-                    MONTHLY -> Known.MONTHLY
-                    QUARTERLY -> Known.QUARTERLY
-                    ONE_TIME -> Known.ONE_TIME
-                    CUSTOM -> Known.CUSTOM
-                    else -> throw OrbInvalidDataException("Unknown Cadence: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        ANNUAL -> Known.ANNUAL
+                        SEMI_ANNUAL -> Known.SEMI_ANNUAL
+                        MONTHLY -> Known.MONTHLY
+                        QUARTERLY -> Known.QUARTERLY
+                        ONE_TIME -> Known.ONE_TIME
+                        CUSTOM -> Known.CUSTOM
+                        else -> throw OrbInvalidDataException("Unknown Cadence: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class ModelType
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is ModelType &&
-                      this.value == other.value
+                    return other is ModelType && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -10604,22 +10838,27 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    UNIT_WITH_PERCENT -> Value.UNIT_WITH_PERCENT
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        UNIT_WITH_PERCENT -> Value.UNIT_WITH_PERCENT
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    UNIT_WITH_PERCENT -> Known.UNIT_WITH_PERCENT
-                    else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        UNIT_WITH_PERCENT -> Known.UNIT_WITH_PERCENT
+                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
             @JsonDeserialize(builder = UnitWithPercentConfig.Builder::class)
             @NoAutoDetect
-            class UnitWithPercentConfig private constructor(private val additionalProperties: Map<String, JsonValue>, ) {
+            class UnitWithPercentConfig
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -10631,34 +10870,34 @@ class PlanCreateParams constructor(
 
                 fun validate(): UnitWithPercentConfig = apply {
                     if (!validated) {
-                      validated = true
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is UnitWithPercentConfig &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is UnitWithPercentConfig &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
                 }
 
-                override fun toString() = "UnitWithPercentConfig{additionalProperties=$additionalProperties}"
+                override fun toString() =
+                    "UnitWithPercentConfig{additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -10680,22 +10919,27 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
-                    fun build(): UnitWithPercentConfig = UnitWithPercentConfig(additionalProperties.toUnmodifiable())
+                    fun build(): UnitWithPercentConfig =
+                        UnitWithPercentConfig(additionalProperties.toUnmodifiable())
                 }
             }
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
             @JsonDeserialize(builder = Metadata.Builder::class)
             @NoAutoDetect
-            class Metadata private constructor(private val additionalProperties: Map<String, JsonValue>, ) {
+            class Metadata
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -10707,34 +10951,33 @@ class PlanCreateParams constructor(
 
                 fun validate(): Metadata = apply {
                     if (!validated) {
-                      validated = true
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Metadata &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is Metadata &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
                 }
 
                 override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -10756,9 +10999,10 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
                     fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
                 }
@@ -10767,22 +11011,22 @@ class PlanCreateParams constructor(
 
         @JsonDeserialize(builder = NewPlanPackageWithAllocationPrice.Builder::class)
         @NoAutoDetect
-        class NewPlanPackageWithAllocationPrice private constructor(
-          private val metadata: JsonField<Metadata>,
-          private val externalPriceId: JsonField<String>,
-          private val name: JsonField<String>,
-          private val billableMetricId: JsonField<String>,
-          private val itemId: JsonField<String>,
-          private val billedInAdvance: JsonField<Boolean>,
-          private val fixedPriceQuantity: JsonField<Double>,
-          private val invoiceGroupingKey: JsonField<String>,
-          private val cadence: JsonField<Cadence>,
-          private val conversionRate: JsonField<Double>,
-          private val modelType: JsonField<ModelType>,
-          private val packageWithAllocationConfig: JsonField<PackageWithAllocationConfig>,
-          private val currency: JsonField<String>,
-          private val additionalProperties: Map<String, JsonValue>,
-
+        class NewPlanPackageWithAllocationPrice
+        private constructor(
+            private val metadata: JsonField<Metadata>,
+            private val externalPriceId: JsonField<String>,
+            private val name: JsonField<String>,
+            private val billableMetricId: JsonField<String>,
+            private val itemId: JsonField<String>,
+            private val billedInAdvance: JsonField<Boolean>,
+            private val fixedPriceQuantity: JsonField<Double>,
+            private val invoiceGroupingKey: JsonField<String>,
+            private val cadence: JsonField<Cadence>,
+            private val conversionRate: JsonField<Double>,
+            private val modelType: JsonField<ModelType>,
+            private val packageWithAllocationConfig: JsonField<PackageWithAllocationConfig>,
+            private val currency: JsonField<String>,
+            private val additionalProperties: Map<String, JsonValue>,
         ) {
 
             private var validated: Boolean = false
@@ -10790,66 +11034,70 @@ class PlanCreateParams constructor(
             private var hashCode: Int = 0
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata.getNullable("metadata"))
+            fun metadata(): Optional<Metadata> =
+                Optional.ofNullable(metadata.getNullable("metadata"))
 
             /** An alias for the price. */
-            fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+            fun externalPriceId(): Optional<String> =
+                Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
 
             /** The name of the price. */
             fun name(): String = name.getRequired("name")
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
-            fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+            fun billableMetricId(): Optional<String> =
+                Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
 
             /** The id of the item the plan will be associated with. */
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
-            fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+            fun billedInAdvance(): Optional<Boolean> =
+                Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
-            fun fixedPriceQuantity(): Optional<Double> = Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+            fun fixedPriceQuantity(): Optional<Double> =
+                Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
 
             /** The property used to group this price on an invoice */
-            fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+            fun invoiceGroupingKey(): Optional<String> =
+                Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
 
             /** The cadence to bill for this price on. */
             fun cadence(): Cadence = cadence.getRequired("cadence")
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+            fun conversionRate(): Optional<Double> =
+                Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
 
             fun modelType(): ModelType = modelType.getRequired("model_type")
 
-            fun packageWithAllocationConfig(): PackageWithAllocationConfig = packageWithAllocationConfig.getRequired("package_with_allocation_config")
+            fun packageWithAllocationConfig(): PackageWithAllocationConfig =
+                packageWithAllocationConfig.getRequired("package_with_allocation_config")
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
             fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            @JsonProperty("metadata")
-            @ExcludeMissing
-            fun _metadata() = metadata
+            @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
 
             /** An alias for the price. */
             @JsonProperty("external_price_id")
@@ -10857,34 +11105,28 @@ class PlanCreateParams constructor(
             fun _externalPriceId() = externalPriceId
 
             /** The name of the price. */
-            @JsonProperty("name")
-            @ExcludeMissing
-            fun _name() = name
+            @JsonProperty("name") @ExcludeMissing fun _name() = name
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
             @JsonProperty("billable_metric_id")
             @ExcludeMissing
             fun _billableMetricId() = billableMetricId
 
             /** The id of the item the plan will be associated with. */
-            @JsonProperty("item_id")
-            @ExcludeMissing
-            fun _itemId() = itemId
+            @JsonProperty("item_id") @ExcludeMissing fun _itemId() = itemId
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
             @JsonProperty("billed_in_advance")
             @ExcludeMissing
             fun _billedInAdvance() = billedInAdvance
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
             @JsonProperty("fixed_price_quantity")
             @ExcludeMissing
@@ -10896,30 +11138,22 @@ class PlanCreateParams constructor(
             fun _invoiceGroupingKey() = invoiceGroupingKey
 
             /** The cadence to bill for this price on. */
-            @JsonProperty("cadence")
-            @ExcludeMissing
-            fun _cadence() = cadence
+            @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            @JsonProperty("conversion_rate")
-            @ExcludeMissing
-            fun _conversionRate() = conversionRate
+            @JsonProperty("conversion_rate") @ExcludeMissing fun _conversionRate() = conversionRate
 
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType() = modelType
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType() = modelType
 
             @JsonProperty("package_with_allocation_config")
             @ExcludeMissing
             fun _packageWithAllocationConfig() = packageWithAllocationConfig
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
-            @JsonProperty("currency")
-            @ExcludeMissing
-            fun _currency() = currency
+            @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -10927,75 +11161,76 @@ class PlanCreateParams constructor(
 
             fun validate(): NewPlanPackageWithAllocationPrice = apply {
                 if (!validated) {
-                  metadata().map { it.validate() }
-                  externalPriceId()
-                  name()
-                  billableMetricId()
-                  itemId()
-                  billedInAdvance()
-                  fixedPriceQuantity()
-                  invoiceGroupingKey()
-                  cadence()
-                  conversionRate()
-                  modelType()
-                  packageWithAllocationConfig().validate()
-                  currency()
-                  validated = true
+                    metadata().map { it.validate() }
+                    externalPriceId()
+                    name()
+                    billableMetricId()
+                    itemId()
+                    billedInAdvance()
+                    fixedPriceQuantity()
+                    invoiceGroupingKey()
+                    cadence()
+                    conversionRate()
+                    modelType()
+                    packageWithAllocationConfig().validate()
+                    currency()
+                    validated = true
                 }
             }
 
             fun toBuilder() = Builder().from(this)
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is NewPlanPackageWithAllocationPrice &&
-                  this.metadata == other.metadata &&
-                  this.externalPriceId == other.externalPriceId &&
-                  this.name == other.name &&
-                  this.billableMetricId == other.billableMetricId &&
-                  this.itemId == other.itemId &&
-                  this.billedInAdvance == other.billedInAdvance &&
-                  this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                  this.invoiceGroupingKey == other.invoiceGroupingKey &&
-                  this.cadence == other.cadence &&
-                  this.conversionRate == other.conversionRate &&
-                  this.modelType == other.modelType &&
-                  this.packageWithAllocationConfig == other.packageWithAllocationConfig &&
-                  this.currency == other.currency &&
-                  this.additionalProperties == other.additionalProperties
+                return other is NewPlanPackageWithAllocationPrice &&
+                    this.metadata == other.metadata &&
+                    this.externalPriceId == other.externalPriceId &&
+                    this.name == other.name &&
+                    this.billableMetricId == other.billableMetricId &&
+                    this.itemId == other.itemId &&
+                    this.billedInAdvance == other.billedInAdvance &&
+                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
+                    this.invoiceGroupingKey == other.invoiceGroupingKey &&
+                    this.cadence == other.cadence &&
+                    this.conversionRate == other.conversionRate &&
+                    this.modelType == other.modelType &&
+                    this.packageWithAllocationConfig == other.packageWithAllocationConfig &&
+                    this.currency == other.currency &&
+                    this.additionalProperties == other.additionalProperties
             }
 
             override fun hashCode(): Int {
-              if (hashCode == 0) {
-                hashCode = Objects.hash(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    packageWithAllocationConfig,
-                    currency,
-                    additionalProperties,
-                )
-              }
-              return hashCode
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            metadata,
+                            externalPriceId,
+                            name,
+                            billableMetricId,
+                            itemId,
+                            billedInAdvance,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            cadence,
+                            conversionRate,
+                            modelType,
+                            packageWithAllocationConfig,
+                            currency,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
             }
 
-            override fun toString() = "NewPlanPackageWithAllocationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, packageWithAllocationConfig=$packageWithAllocationConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "NewPlanPackageWithAllocationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, packageWithAllocationConfig=$packageWithAllocationConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
             companion object {
 
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             class Builder {
@@ -11011,12 +11246,15 @@ class PlanCreateParams constructor(
                 private var cadence: JsonField<Cadence> = JsonMissing.of()
                 private var conversionRate: JsonField<Double> = JsonMissing.of()
                 private var modelType: JsonField<ModelType> = JsonMissing.of()
-                private var packageWithAllocationConfig: JsonField<PackageWithAllocationConfig> = JsonMissing.of()
+                private var packageWithAllocationConfig: JsonField<PackageWithAllocationConfig> =
+                    JsonMissing.of()
                 private var currency: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(newPlanPackageWithAllocationPrice: NewPlanPackageWithAllocationPrice) = apply {
+                internal fun from(
+                    newPlanPackageWithAllocationPrice: NewPlanPackageWithAllocationPrice
+                ) = apply {
                     this.metadata = newPlanPackageWithAllocationPrice.metadata
                     this.externalPriceId = newPlanPackageWithAllocationPrice.externalPriceId
                     this.name = newPlanPackageWithAllocationPrice.name
@@ -11028,31 +11266,31 @@ class PlanCreateParams constructor(
                     this.cadence = newPlanPackageWithAllocationPrice.cadence
                     this.conversionRate = newPlanPackageWithAllocationPrice.conversionRate
                     this.modelType = newPlanPackageWithAllocationPrice.modelType
-                    this.packageWithAllocationConfig = newPlanPackageWithAllocationPrice.packageWithAllocationConfig
+                    this.packageWithAllocationConfig =
+                        newPlanPackageWithAllocationPrice.packageWithAllocationConfig
                     this.currency = newPlanPackageWithAllocationPrice.currency
                     additionalProperties(newPlanPackageWithAllocationPrice.additionalProperties)
                 }
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 @JsonProperty("metadata")
                 @ExcludeMissing
-                fun metadata(metadata: JsonField<Metadata>) = apply {
-                    this.metadata = metadata
-                }
+                fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
                 /** An alias for the price. */
-                fun externalPriceId(externalPriceId: String) = externalPriceId(JsonField.of(externalPriceId))
+                fun externalPriceId(externalPriceId: String) =
+                    externalPriceId(JsonField.of(externalPriceId))
 
                 /** An alias for the price. */
                 @JsonProperty("external_price_id")
@@ -11067,15 +11305,14 @@ class PlanCreateParams constructor(
                 /** The name of the price. */
                 @JsonProperty("name")
                 @ExcludeMissing
-                fun name(name: JsonField<String>) = apply {
-                    this.name = name
-                }
+                fun name(name: JsonField<String>) = apply { this.name = name }
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
                  * usage-based.
                  */
-                fun billableMetricId(billableMetricId: String) = billableMetricId(JsonField.of(billableMetricId))
+                fun billableMetricId(billableMetricId: String) =
+                    billableMetricId(JsonField.of(billableMetricId))
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -11093,19 +11330,18 @@ class PlanCreateParams constructor(
                 /** The id of the item the plan will be associated with. */
                 @JsonProperty("item_id")
                 @ExcludeMissing
-                fun itemId(itemId: JsonField<String>) = apply {
-                    this.itemId = itemId
-                }
+                fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
-                fun billedInAdvance(billedInAdvance: Boolean) = billedInAdvance(JsonField.of(billedInAdvance))
+                fun billedInAdvance(billedInAdvance: Boolean) =
+                    billedInAdvance(JsonField.of(billedInAdvance))
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 @ExcludeMissing
@@ -11117,7 +11353,8 @@ class PlanCreateParams constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                fun fixedPriceQuantity(fixedPriceQuantity: Double) = fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
+                fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                    fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -11130,7 +11367,8 @@ class PlanCreateParams constructor(
                 }
 
                 /** The property used to group this price on an invoice */
-                fun invoiceGroupingKey(invoiceGroupingKey: String) = invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
+                fun invoiceGroupingKey(invoiceGroupingKey: String) =
+                    invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
 
                 /** The property used to group this price on an invoice */
                 @JsonProperty("invoice_grouping_key")
@@ -11145,12 +11383,11 @@ class PlanCreateParams constructor(
                 /** The cadence to bill for this price on. */
                 @JsonProperty("cadence")
                 @ExcludeMissing
-                fun cadence(cadence: JsonField<Cadence>) = apply {
-                    this.cadence = cadence
-                }
+                fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                fun conversionRate(conversionRate: Double) = conversionRate(JsonField.of(conversionRate))
+                fun conversionRate(conversionRate: Double) =
+                    conversionRate(JsonField.of(conversionRate))
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 @JsonProperty("conversion_rate")
@@ -11167,13 +11404,15 @@ class PlanCreateParams constructor(
                     this.modelType = modelType
                 }
 
-                fun packageWithAllocationConfig(packageWithAllocationConfig: PackageWithAllocationConfig) = packageWithAllocationConfig(JsonField.of(packageWithAllocationConfig))
+                fun packageWithAllocationConfig(
+                    packageWithAllocationConfig: PackageWithAllocationConfig
+                ) = packageWithAllocationConfig(JsonField.of(packageWithAllocationConfig))
 
                 @JsonProperty("package_with_allocation_config")
                 @ExcludeMissing
-                fun packageWithAllocationConfig(packageWithAllocationConfig: JsonField<PackageWithAllocationConfig>) = apply {
-                    this.packageWithAllocationConfig = packageWithAllocationConfig
-                }
+                fun packageWithAllocationConfig(
+                    packageWithAllocationConfig: JsonField<PackageWithAllocationConfig>
+                ) = apply { this.packageWithAllocationConfig = packageWithAllocationConfig }
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -11187,9 +11426,7 @@ class PlanCreateParams constructor(
                  */
                 @JsonProperty("currency")
                 @ExcludeMissing
-                fun currency(currency: JsonField<String>) = apply {
-                    this.currency = currency
-                }
+                fun currency(currency: JsonField<String>) = apply { this.currency = currency }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -11201,40 +11438,44 @@ class PlanCreateParams constructor(
                     this.additionalProperties.put(key, value)
                 }
 
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
 
-                fun build(): NewPlanPackageWithAllocationPrice = NewPlanPackageWithAllocationPrice(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    packageWithAllocationConfig,
-                    currency,
-                    additionalProperties.toUnmodifiable(),
-                )
+                fun build(): NewPlanPackageWithAllocationPrice =
+                    NewPlanPackageWithAllocationPrice(
+                        metadata,
+                        externalPriceId,
+                        name,
+                        billableMetricId,
+                        itemId,
+                        billedInAdvance,
+                        fixedPriceQuantity,
+                        invoiceGroupingKey,
+                        cadence,
+                        conversionRate,
+                        modelType,
+                        packageWithAllocationConfig,
+                        currency,
+                        additionalProperties.toUnmodifiable(),
+                    )
             }
 
-            class Cadence @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class Cadence
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Cadence &&
-                      this.value == other.value
+                    return other is Cadence && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -11277,41 +11518,45 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    ANNUAL -> Value.ANNUAL
-                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
-                    MONTHLY -> Value.MONTHLY
-                    QUARTERLY -> Value.QUARTERLY
-                    ONE_TIME -> Value.ONE_TIME
-                    CUSTOM -> Value.CUSTOM
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        ANNUAL -> Value.ANNUAL
+                        SEMI_ANNUAL -> Value.SEMI_ANNUAL
+                        MONTHLY -> Value.MONTHLY
+                        QUARTERLY -> Value.QUARTERLY
+                        ONE_TIME -> Value.ONE_TIME
+                        CUSTOM -> Value.CUSTOM
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    ANNUAL -> Known.ANNUAL
-                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
-                    MONTHLY -> Known.MONTHLY
-                    QUARTERLY -> Known.QUARTERLY
-                    ONE_TIME -> Known.ONE_TIME
-                    CUSTOM -> Known.CUSTOM
-                    else -> throw OrbInvalidDataException("Unknown Cadence: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        ANNUAL -> Known.ANNUAL
+                        SEMI_ANNUAL -> Known.SEMI_ANNUAL
+                        MONTHLY -> Known.MONTHLY
+                        QUARTERLY -> Known.QUARTERLY
+                        ONE_TIME -> Known.ONE_TIME
+                        CUSTOM -> Known.CUSTOM
+                        else -> throw OrbInvalidDataException("Unknown Cadence: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class ModelType
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is ModelType &&
-                      this.value == other.value
+                    return other is ModelType && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -11320,7 +11565,8 @@ class PlanCreateParams constructor(
 
                 companion object {
 
-                    @JvmField val PACKAGE_WITH_ALLOCATION = ModelType(JsonField.of("package_with_allocation"))
+                    @JvmField
+                    val PACKAGE_WITH_ALLOCATION = ModelType(JsonField.of("package_with_allocation"))
 
                     @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                 }
@@ -11334,22 +11580,27 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    PACKAGE_WITH_ALLOCATION -> Value.PACKAGE_WITH_ALLOCATION
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        PACKAGE_WITH_ALLOCATION -> Value.PACKAGE_WITH_ALLOCATION
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    PACKAGE_WITH_ALLOCATION -> Known.PACKAGE_WITH_ALLOCATION
-                    else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        PACKAGE_WITH_ALLOCATION -> Known.PACKAGE_WITH_ALLOCATION
+                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
             @JsonDeserialize(builder = PackageWithAllocationConfig.Builder::class)
             @NoAutoDetect
-            class PackageWithAllocationConfig private constructor(private val additionalProperties: Map<String, JsonValue>, ) {
+            class PackageWithAllocationConfig
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -11361,34 +11612,34 @@ class PlanCreateParams constructor(
 
                 fun validate(): PackageWithAllocationConfig = apply {
                     if (!validated) {
-                      validated = true
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is PackageWithAllocationConfig &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is PackageWithAllocationConfig &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
                 }
 
-                override fun toString() = "PackageWithAllocationConfig{additionalProperties=$additionalProperties}"
+                override fun toString() =
+                    "PackageWithAllocationConfig{additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -11396,9 +11647,10 @@ class PlanCreateParams constructor(
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
-                    internal fun from(packageWithAllocationConfig: PackageWithAllocationConfig) = apply {
-                        additionalProperties(packageWithAllocationConfig.additionalProperties)
-                    }
+                    internal fun from(packageWithAllocationConfig: PackageWithAllocationConfig) =
+                        apply {
+                            additionalProperties(packageWithAllocationConfig.additionalProperties)
+                        }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -11410,22 +11662,27 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
-                    fun build(): PackageWithAllocationConfig = PackageWithAllocationConfig(additionalProperties.toUnmodifiable())
+                    fun build(): PackageWithAllocationConfig =
+                        PackageWithAllocationConfig(additionalProperties.toUnmodifiable())
                 }
             }
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
             @JsonDeserialize(builder = Metadata.Builder::class)
             @NoAutoDetect
-            class Metadata private constructor(private val additionalProperties: Map<String, JsonValue>, ) {
+            class Metadata
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -11437,34 +11694,33 @@ class PlanCreateParams constructor(
 
                 fun validate(): Metadata = apply {
                     if (!validated) {
-                      validated = true
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Metadata &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is Metadata &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
                 }
 
                 override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -11486,9 +11742,10 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
                     fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
                 }
@@ -11497,22 +11754,22 @@ class PlanCreateParams constructor(
 
         @JsonDeserialize(builder = NewPlanTierWithProrationPrice.Builder::class)
         @NoAutoDetect
-        class NewPlanTierWithProrationPrice private constructor(
-          private val metadata: JsonField<Metadata>,
-          private val externalPriceId: JsonField<String>,
-          private val name: JsonField<String>,
-          private val billableMetricId: JsonField<String>,
-          private val itemId: JsonField<String>,
-          private val billedInAdvance: JsonField<Boolean>,
-          private val fixedPriceQuantity: JsonField<Double>,
-          private val invoiceGroupingKey: JsonField<String>,
-          private val cadence: JsonField<Cadence>,
-          private val conversionRate: JsonField<Double>,
-          private val modelType: JsonField<ModelType>,
-          private val tieredWithProrationConfig: JsonField<TieredWithProrationConfig>,
-          private val currency: JsonField<String>,
-          private val additionalProperties: Map<String, JsonValue>,
-
+        class NewPlanTierWithProrationPrice
+        private constructor(
+            private val metadata: JsonField<Metadata>,
+            private val externalPriceId: JsonField<String>,
+            private val name: JsonField<String>,
+            private val billableMetricId: JsonField<String>,
+            private val itemId: JsonField<String>,
+            private val billedInAdvance: JsonField<Boolean>,
+            private val fixedPriceQuantity: JsonField<Double>,
+            private val invoiceGroupingKey: JsonField<String>,
+            private val cadence: JsonField<Cadence>,
+            private val conversionRate: JsonField<Double>,
+            private val modelType: JsonField<ModelType>,
+            private val tieredWithProrationConfig: JsonField<TieredWithProrationConfig>,
+            private val currency: JsonField<String>,
+            private val additionalProperties: Map<String, JsonValue>,
         ) {
 
             private var validated: Boolean = false
@@ -11520,66 +11777,70 @@ class PlanCreateParams constructor(
             private var hashCode: Int = 0
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata.getNullable("metadata"))
+            fun metadata(): Optional<Metadata> =
+                Optional.ofNullable(metadata.getNullable("metadata"))
 
             /** An alias for the price. */
-            fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+            fun externalPriceId(): Optional<String> =
+                Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
 
             /** The name of the price. */
             fun name(): String = name.getRequired("name")
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
-            fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+            fun billableMetricId(): Optional<String> =
+                Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
 
             /** The id of the item the plan will be associated with. */
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
-            fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+            fun billedInAdvance(): Optional<Boolean> =
+                Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
-            fun fixedPriceQuantity(): Optional<Double> = Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+            fun fixedPriceQuantity(): Optional<Double> =
+                Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
 
             /** The property used to group this price on an invoice */
-            fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+            fun invoiceGroupingKey(): Optional<String> =
+                Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
 
             /** The cadence to bill for this price on. */
             fun cadence(): Cadence = cadence.getRequired("cadence")
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+            fun conversionRate(): Optional<Double> =
+                Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
 
             fun modelType(): ModelType = modelType.getRequired("model_type")
 
-            fun tieredWithProrationConfig(): TieredWithProrationConfig = tieredWithProrationConfig.getRequired("tiered_with_proration_config")
+            fun tieredWithProrationConfig(): TieredWithProrationConfig =
+                tieredWithProrationConfig.getRequired("tiered_with_proration_config")
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
             fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            @JsonProperty("metadata")
-            @ExcludeMissing
-            fun _metadata() = metadata
+            @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
 
             /** An alias for the price. */
             @JsonProperty("external_price_id")
@@ -11587,34 +11848,28 @@ class PlanCreateParams constructor(
             fun _externalPriceId() = externalPriceId
 
             /** The name of the price. */
-            @JsonProperty("name")
-            @ExcludeMissing
-            fun _name() = name
+            @JsonProperty("name") @ExcludeMissing fun _name() = name
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
             @JsonProperty("billable_metric_id")
             @ExcludeMissing
             fun _billableMetricId() = billableMetricId
 
             /** The id of the item the plan will be associated with. */
-            @JsonProperty("item_id")
-            @ExcludeMissing
-            fun _itemId() = itemId
+            @JsonProperty("item_id") @ExcludeMissing fun _itemId() = itemId
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
             @JsonProperty("billed_in_advance")
             @ExcludeMissing
             fun _billedInAdvance() = billedInAdvance
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
             @JsonProperty("fixed_price_quantity")
             @ExcludeMissing
@@ -11626,30 +11881,22 @@ class PlanCreateParams constructor(
             fun _invoiceGroupingKey() = invoiceGroupingKey
 
             /** The cadence to bill for this price on. */
-            @JsonProperty("cadence")
-            @ExcludeMissing
-            fun _cadence() = cadence
+            @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            @JsonProperty("conversion_rate")
-            @ExcludeMissing
-            fun _conversionRate() = conversionRate
+            @JsonProperty("conversion_rate") @ExcludeMissing fun _conversionRate() = conversionRate
 
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType() = modelType
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType() = modelType
 
             @JsonProperty("tiered_with_proration_config")
             @ExcludeMissing
             fun _tieredWithProrationConfig() = tieredWithProrationConfig
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
-            @JsonProperty("currency")
-            @ExcludeMissing
-            fun _currency() = currency
+            @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -11657,75 +11904,76 @@ class PlanCreateParams constructor(
 
             fun validate(): NewPlanTierWithProrationPrice = apply {
                 if (!validated) {
-                  metadata().map { it.validate() }
-                  externalPriceId()
-                  name()
-                  billableMetricId()
-                  itemId()
-                  billedInAdvance()
-                  fixedPriceQuantity()
-                  invoiceGroupingKey()
-                  cadence()
-                  conversionRate()
-                  modelType()
-                  tieredWithProrationConfig().validate()
-                  currency()
-                  validated = true
+                    metadata().map { it.validate() }
+                    externalPriceId()
+                    name()
+                    billableMetricId()
+                    itemId()
+                    billedInAdvance()
+                    fixedPriceQuantity()
+                    invoiceGroupingKey()
+                    cadence()
+                    conversionRate()
+                    modelType()
+                    tieredWithProrationConfig().validate()
+                    currency()
+                    validated = true
                 }
             }
 
             fun toBuilder() = Builder().from(this)
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is NewPlanTierWithProrationPrice &&
-                  this.metadata == other.metadata &&
-                  this.externalPriceId == other.externalPriceId &&
-                  this.name == other.name &&
-                  this.billableMetricId == other.billableMetricId &&
-                  this.itemId == other.itemId &&
-                  this.billedInAdvance == other.billedInAdvance &&
-                  this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                  this.invoiceGroupingKey == other.invoiceGroupingKey &&
-                  this.cadence == other.cadence &&
-                  this.conversionRate == other.conversionRate &&
-                  this.modelType == other.modelType &&
-                  this.tieredWithProrationConfig == other.tieredWithProrationConfig &&
-                  this.currency == other.currency &&
-                  this.additionalProperties == other.additionalProperties
+                return other is NewPlanTierWithProrationPrice &&
+                    this.metadata == other.metadata &&
+                    this.externalPriceId == other.externalPriceId &&
+                    this.name == other.name &&
+                    this.billableMetricId == other.billableMetricId &&
+                    this.itemId == other.itemId &&
+                    this.billedInAdvance == other.billedInAdvance &&
+                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
+                    this.invoiceGroupingKey == other.invoiceGroupingKey &&
+                    this.cadence == other.cadence &&
+                    this.conversionRate == other.conversionRate &&
+                    this.modelType == other.modelType &&
+                    this.tieredWithProrationConfig == other.tieredWithProrationConfig &&
+                    this.currency == other.currency &&
+                    this.additionalProperties == other.additionalProperties
             }
 
             override fun hashCode(): Int {
-              if (hashCode == 0) {
-                hashCode = Objects.hash(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    tieredWithProrationConfig,
-                    currency,
-                    additionalProperties,
-                )
-              }
-              return hashCode
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            metadata,
+                            externalPriceId,
+                            name,
+                            billableMetricId,
+                            itemId,
+                            billedInAdvance,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            cadence,
+                            conversionRate,
+                            modelType,
+                            tieredWithProrationConfig,
+                            currency,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
             }
 
-            override fun toString() = "NewPlanTierWithProrationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, tieredWithProrationConfig=$tieredWithProrationConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "NewPlanTierWithProrationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, tieredWithProrationConfig=$tieredWithProrationConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
             companion object {
 
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             class Builder {
@@ -11741,48 +11989,50 @@ class PlanCreateParams constructor(
                 private var cadence: JsonField<Cadence> = JsonMissing.of()
                 private var conversionRate: JsonField<Double> = JsonMissing.of()
                 private var modelType: JsonField<ModelType> = JsonMissing.of()
-                private var tieredWithProrationConfig: JsonField<TieredWithProrationConfig> = JsonMissing.of()
+                private var tieredWithProrationConfig: JsonField<TieredWithProrationConfig> =
+                    JsonMissing.of()
                 private var currency: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(newPlanTierWithProrationPrice: NewPlanTierWithProrationPrice) = apply {
-                    this.metadata = newPlanTierWithProrationPrice.metadata
-                    this.externalPriceId = newPlanTierWithProrationPrice.externalPriceId
-                    this.name = newPlanTierWithProrationPrice.name
-                    this.billableMetricId = newPlanTierWithProrationPrice.billableMetricId
-                    this.itemId = newPlanTierWithProrationPrice.itemId
-                    this.billedInAdvance = newPlanTierWithProrationPrice.billedInAdvance
-                    this.fixedPriceQuantity = newPlanTierWithProrationPrice.fixedPriceQuantity
-                    this.invoiceGroupingKey = newPlanTierWithProrationPrice.invoiceGroupingKey
-                    this.cadence = newPlanTierWithProrationPrice.cadence
-                    this.conversionRate = newPlanTierWithProrationPrice.conversionRate
-                    this.modelType = newPlanTierWithProrationPrice.modelType
-                    this.tieredWithProrationConfig = newPlanTierWithProrationPrice.tieredWithProrationConfig
-                    this.currency = newPlanTierWithProrationPrice.currency
-                    additionalProperties(newPlanTierWithProrationPrice.additionalProperties)
-                }
+                internal fun from(newPlanTierWithProrationPrice: NewPlanTierWithProrationPrice) =
+                    apply {
+                        this.metadata = newPlanTierWithProrationPrice.metadata
+                        this.externalPriceId = newPlanTierWithProrationPrice.externalPriceId
+                        this.name = newPlanTierWithProrationPrice.name
+                        this.billableMetricId = newPlanTierWithProrationPrice.billableMetricId
+                        this.itemId = newPlanTierWithProrationPrice.itemId
+                        this.billedInAdvance = newPlanTierWithProrationPrice.billedInAdvance
+                        this.fixedPriceQuantity = newPlanTierWithProrationPrice.fixedPriceQuantity
+                        this.invoiceGroupingKey = newPlanTierWithProrationPrice.invoiceGroupingKey
+                        this.cadence = newPlanTierWithProrationPrice.cadence
+                        this.conversionRate = newPlanTierWithProrationPrice.conversionRate
+                        this.modelType = newPlanTierWithProrationPrice.modelType
+                        this.tieredWithProrationConfig =
+                            newPlanTierWithProrationPrice.tieredWithProrationConfig
+                        this.currency = newPlanTierWithProrationPrice.currency
+                        additionalProperties(newPlanTierWithProrationPrice.additionalProperties)
+                    }
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 @JsonProperty("metadata")
                 @ExcludeMissing
-                fun metadata(metadata: JsonField<Metadata>) = apply {
-                    this.metadata = metadata
-                }
+                fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
                 /** An alias for the price. */
-                fun externalPriceId(externalPriceId: String) = externalPriceId(JsonField.of(externalPriceId))
+                fun externalPriceId(externalPriceId: String) =
+                    externalPriceId(JsonField.of(externalPriceId))
 
                 /** An alias for the price. */
                 @JsonProperty("external_price_id")
@@ -11797,15 +12047,14 @@ class PlanCreateParams constructor(
                 /** The name of the price. */
                 @JsonProperty("name")
                 @ExcludeMissing
-                fun name(name: JsonField<String>) = apply {
-                    this.name = name
-                }
+                fun name(name: JsonField<String>) = apply { this.name = name }
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
                  * usage-based.
                  */
-                fun billableMetricId(billableMetricId: String) = billableMetricId(JsonField.of(billableMetricId))
+                fun billableMetricId(billableMetricId: String) =
+                    billableMetricId(JsonField.of(billableMetricId))
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -11823,19 +12072,18 @@ class PlanCreateParams constructor(
                 /** The id of the item the plan will be associated with. */
                 @JsonProperty("item_id")
                 @ExcludeMissing
-                fun itemId(itemId: JsonField<String>) = apply {
-                    this.itemId = itemId
-                }
+                fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
-                fun billedInAdvance(billedInAdvance: Boolean) = billedInAdvance(JsonField.of(billedInAdvance))
+                fun billedInAdvance(billedInAdvance: Boolean) =
+                    billedInAdvance(JsonField.of(billedInAdvance))
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 @ExcludeMissing
@@ -11847,7 +12095,8 @@ class PlanCreateParams constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                fun fixedPriceQuantity(fixedPriceQuantity: Double) = fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
+                fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                    fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -11860,7 +12109,8 @@ class PlanCreateParams constructor(
                 }
 
                 /** The property used to group this price on an invoice */
-                fun invoiceGroupingKey(invoiceGroupingKey: String) = invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
+                fun invoiceGroupingKey(invoiceGroupingKey: String) =
+                    invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
 
                 /** The property used to group this price on an invoice */
                 @JsonProperty("invoice_grouping_key")
@@ -11875,12 +12125,11 @@ class PlanCreateParams constructor(
                 /** The cadence to bill for this price on. */
                 @JsonProperty("cadence")
                 @ExcludeMissing
-                fun cadence(cadence: JsonField<Cadence>) = apply {
-                    this.cadence = cadence
-                }
+                fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                fun conversionRate(conversionRate: Double) = conversionRate(JsonField.of(conversionRate))
+                fun conversionRate(conversionRate: Double) =
+                    conversionRate(JsonField.of(conversionRate))
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 @JsonProperty("conversion_rate")
@@ -11897,13 +12146,15 @@ class PlanCreateParams constructor(
                     this.modelType = modelType
                 }
 
-                fun tieredWithProrationConfig(tieredWithProrationConfig: TieredWithProrationConfig) = tieredWithProrationConfig(JsonField.of(tieredWithProrationConfig))
+                fun tieredWithProrationConfig(
+                    tieredWithProrationConfig: TieredWithProrationConfig
+                ) = tieredWithProrationConfig(JsonField.of(tieredWithProrationConfig))
 
                 @JsonProperty("tiered_with_proration_config")
                 @ExcludeMissing
-                fun tieredWithProrationConfig(tieredWithProrationConfig: JsonField<TieredWithProrationConfig>) = apply {
-                    this.tieredWithProrationConfig = tieredWithProrationConfig
-                }
+                fun tieredWithProrationConfig(
+                    tieredWithProrationConfig: JsonField<TieredWithProrationConfig>
+                ) = apply { this.tieredWithProrationConfig = tieredWithProrationConfig }
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -11917,9 +12168,7 @@ class PlanCreateParams constructor(
                  */
                 @JsonProperty("currency")
                 @ExcludeMissing
-                fun currency(currency: JsonField<String>) = apply {
-                    this.currency = currency
-                }
+                fun currency(currency: JsonField<String>) = apply { this.currency = currency }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -11931,40 +12180,44 @@ class PlanCreateParams constructor(
                     this.additionalProperties.put(key, value)
                 }
 
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
 
-                fun build(): NewPlanTierWithProrationPrice = NewPlanTierWithProrationPrice(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    tieredWithProrationConfig,
-                    currency,
-                    additionalProperties.toUnmodifiable(),
-                )
+                fun build(): NewPlanTierWithProrationPrice =
+                    NewPlanTierWithProrationPrice(
+                        metadata,
+                        externalPriceId,
+                        name,
+                        billableMetricId,
+                        itemId,
+                        billedInAdvance,
+                        fixedPriceQuantity,
+                        invoiceGroupingKey,
+                        cadence,
+                        conversionRate,
+                        modelType,
+                        tieredWithProrationConfig,
+                        currency,
+                        additionalProperties.toUnmodifiable(),
+                    )
             }
 
-            class Cadence @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class Cadence
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Cadence &&
-                      this.value == other.value
+                    return other is Cadence && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -12007,41 +12260,45 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    ANNUAL -> Value.ANNUAL
-                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
-                    MONTHLY -> Value.MONTHLY
-                    QUARTERLY -> Value.QUARTERLY
-                    ONE_TIME -> Value.ONE_TIME
-                    CUSTOM -> Value.CUSTOM
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        ANNUAL -> Value.ANNUAL
+                        SEMI_ANNUAL -> Value.SEMI_ANNUAL
+                        MONTHLY -> Value.MONTHLY
+                        QUARTERLY -> Value.QUARTERLY
+                        ONE_TIME -> Value.ONE_TIME
+                        CUSTOM -> Value.CUSTOM
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    ANNUAL -> Known.ANNUAL
-                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
-                    MONTHLY -> Known.MONTHLY
-                    QUARTERLY -> Known.QUARTERLY
-                    ONE_TIME -> Known.ONE_TIME
-                    CUSTOM -> Known.CUSTOM
-                    else -> throw OrbInvalidDataException("Unknown Cadence: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        ANNUAL -> Known.ANNUAL
+                        SEMI_ANNUAL -> Known.SEMI_ANNUAL
+                        MONTHLY -> Known.MONTHLY
+                        QUARTERLY -> Known.QUARTERLY
+                        ONE_TIME -> Known.ONE_TIME
+                        CUSTOM -> Known.CUSTOM
+                        else -> throw OrbInvalidDataException("Unknown Cadence: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class ModelType
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is ModelType &&
-                      this.value == other.value
+                    return other is ModelType && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -12050,7 +12307,8 @@ class PlanCreateParams constructor(
 
                 companion object {
 
-                    @JvmField val TIERED_WITH_PRORATION = ModelType(JsonField.of("tiered_with_proration"))
+                    @JvmField
+                    val TIERED_WITH_PRORATION = ModelType(JsonField.of("tiered_with_proration"))
 
                     @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                 }
@@ -12064,22 +12322,27 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    TIERED_WITH_PRORATION -> Value.TIERED_WITH_PRORATION
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        TIERED_WITH_PRORATION -> Value.TIERED_WITH_PRORATION
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    TIERED_WITH_PRORATION -> Known.TIERED_WITH_PRORATION
-                    else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        TIERED_WITH_PRORATION -> Known.TIERED_WITH_PRORATION
+                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
             @JsonDeserialize(builder = TieredWithProrationConfig.Builder::class)
             @NoAutoDetect
-            class TieredWithProrationConfig private constructor(private val additionalProperties: Map<String, JsonValue>, ) {
+            class TieredWithProrationConfig
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -12091,34 +12354,34 @@ class PlanCreateParams constructor(
 
                 fun validate(): TieredWithProrationConfig = apply {
                     if (!validated) {
-                      validated = true
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is TieredWithProrationConfig &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is TieredWithProrationConfig &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
                 }
 
-                override fun toString() = "TieredWithProrationConfig{additionalProperties=$additionalProperties}"
+                override fun toString() =
+                    "TieredWithProrationConfig{additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -12126,9 +12389,10 @@ class PlanCreateParams constructor(
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
-                    internal fun from(tieredWithProrationConfig: TieredWithProrationConfig) = apply {
-                        additionalProperties(tieredWithProrationConfig.additionalProperties)
-                    }
+                    internal fun from(tieredWithProrationConfig: TieredWithProrationConfig) =
+                        apply {
+                            additionalProperties(tieredWithProrationConfig.additionalProperties)
+                        }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -12140,22 +12404,27 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
-                    fun build(): TieredWithProrationConfig = TieredWithProrationConfig(additionalProperties.toUnmodifiable())
+                    fun build(): TieredWithProrationConfig =
+                        TieredWithProrationConfig(additionalProperties.toUnmodifiable())
                 }
             }
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
             @JsonDeserialize(builder = Metadata.Builder::class)
             @NoAutoDetect
-            class Metadata private constructor(private val additionalProperties: Map<String, JsonValue>, ) {
+            class Metadata
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -12167,34 +12436,33 @@ class PlanCreateParams constructor(
 
                 fun validate(): Metadata = apply {
                     if (!validated) {
-                      validated = true
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Metadata &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is Metadata &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
                 }
 
                 override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -12216,9 +12484,10 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
                     fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
                 }
@@ -12227,22 +12496,22 @@ class PlanCreateParams constructor(
 
         @JsonDeserialize(builder = NewPlanUnitWithProrationPrice.Builder::class)
         @NoAutoDetect
-        class NewPlanUnitWithProrationPrice private constructor(
-          private val metadata: JsonField<Metadata>,
-          private val externalPriceId: JsonField<String>,
-          private val name: JsonField<String>,
-          private val billableMetricId: JsonField<String>,
-          private val itemId: JsonField<String>,
-          private val billedInAdvance: JsonField<Boolean>,
-          private val fixedPriceQuantity: JsonField<Double>,
-          private val invoiceGroupingKey: JsonField<String>,
-          private val cadence: JsonField<Cadence>,
-          private val conversionRate: JsonField<Double>,
-          private val modelType: JsonField<ModelType>,
-          private val unitWithProrationConfig: JsonField<UnitWithProrationConfig>,
-          private val currency: JsonField<String>,
-          private val additionalProperties: Map<String, JsonValue>,
-
+        class NewPlanUnitWithProrationPrice
+        private constructor(
+            private val metadata: JsonField<Metadata>,
+            private val externalPriceId: JsonField<String>,
+            private val name: JsonField<String>,
+            private val billableMetricId: JsonField<String>,
+            private val itemId: JsonField<String>,
+            private val billedInAdvance: JsonField<Boolean>,
+            private val fixedPriceQuantity: JsonField<Double>,
+            private val invoiceGroupingKey: JsonField<String>,
+            private val cadence: JsonField<Cadence>,
+            private val conversionRate: JsonField<Double>,
+            private val modelType: JsonField<ModelType>,
+            private val unitWithProrationConfig: JsonField<UnitWithProrationConfig>,
+            private val currency: JsonField<String>,
+            private val additionalProperties: Map<String, JsonValue>,
         ) {
 
             private var validated: Boolean = false
@@ -12250,66 +12519,70 @@ class PlanCreateParams constructor(
             private var hashCode: Int = 0
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata.getNullable("metadata"))
+            fun metadata(): Optional<Metadata> =
+                Optional.ofNullable(metadata.getNullable("metadata"))
 
             /** An alias for the price. */
-            fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+            fun externalPriceId(): Optional<String> =
+                Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
 
             /** The name of the price. */
             fun name(): String = name.getRequired("name")
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
-            fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+            fun billableMetricId(): Optional<String> =
+                Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
 
             /** The id of the item the plan will be associated with. */
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
-            fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+            fun billedInAdvance(): Optional<Boolean> =
+                Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
-            fun fixedPriceQuantity(): Optional<Double> = Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+            fun fixedPriceQuantity(): Optional<Double> =
+                Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
 
             /** The property used to group this price on an invoice */
-            fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+            fun invoiceGroupingKey(): Optional<String> =
+                Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
 
             /** The cadence to bill for this price on. */
             fun cadence(): Cadence = cadence.getRequired("cadence")
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+            fun conversionRate(): Optional<Double> =
+                Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
 
             fun modelType(): ModelType = modelType.getRequired("model_type")
 
-            fun unitWithProrationConfig(): UnitWithProrationConfig = unitWithProrationConfig.getRequired("unit_with_proration_config")
+            fun unitWithProrationConfig(): UnitWithProrationConfig =
+                unitWithProrationConfig.getRequired("unit_with_proration_config")
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
             fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            @JsonProperty("metadata")
-            @ExcludeMissing
-            fun _metadata() = metadata
+            @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
 
             /** An alias for the price. */
             @JsonProperty("external_price_id")
@@ -12317,34 +12590,28 @@ class PlanCreateParams constructor(
             fun _externalPriceId() = externalPriceId
 
             /** The name of the price. */
-            @JsonProperty("name")
-            @ExcludeMissing
-            fun _name() = name
+            @JsonProperty("name") @ExcludeMissing fun _name() = name
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
             @JsonProperty("billable_metric_id")
             @ExcludeMissing
             fun _billableMetricId() = billableMetricId
 
             /** The id of the item the plan will be associated with. */
-            @JsonProperty("item_id")
-            @ExcludeMissing
-            fun _itemId() = itemId
+            @JsonProperty("item_id") @ExcludeMissing fun _itemId() = itemId
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
             @JsonProperty("billed_in_advance")
             @ExcludeMissing
             fun _billedInAdvance() = billedInAdvance
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
             @JsonProperty("fixed_price_quantity")
             @ExcludeMissing
@@ -12356,30 +12623,22 @@ class PlanCreateParams constructor(
             fun _invoiceGroupingKey() = invoiceGroupingKey
 
             /** The cadence to bill for this price on. */
-            @JsonProperty("cadence")
-            @ExcludeMissing
-            fun _cadence() = cadence
+            @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            @JsonProperty("conversion_rate")
-            @ExcludeMissing
-            fun _conversionRate() = conversionRate
+            @JsonProperty("conversion_rate") @ExcludeMissing fun _conversionRate() = conversionRate
 
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType() = modelType
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType() = modelType
 
             @JsonProperty("unit_with_proration_config")
             @ExcludeMissing
             fun _unitWithProrationConfig() = unitWithProrationConfig
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
-            @JsonProperty("currency")
-            @ExcludeMissing
-            fun _currency() = currency
+            @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -12387,75 +12646,76 @@ class PlanCreateParams constructor(
 
             fun validate(): NewPlanUnitWithProrationPrice = apply {
                 if (!validated) {
-                  metadata().map { it.validate() }
-                  externalPriceId()
-                  name()
-                  billableMetricId()
-                  itemId()
-                  billedInAdvance()
-                  fixedPriceQuantity()
-                  invoiceGroupingKey()
-                  cadence()
-                  conversionRate()
-                  modelType()
-                  unitWithProrationConfig().validate()
-                  currency()
-                  validated = true
+                    metadata().map { it.validate() }
+                    externalPriceId()
+                    name()
+                    billableMetricId()
+                    itemId()
+                    billedInAdvance()
+                    fixedPriceQuantity()
+                    invoiceGroupingKey()
+                    cadence()
+                    conversionRate()
+                    modelType()
+                    unitWithProrationConfig().validate()
+                    currency()
+                    validated = true
                 }
             }
 
             fun toBuilder() = Builder().from(this)
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is NewPlanUnitWithProrationPrice &&
-                  this.metadata == other.metadata &&
-                  this.externalPriceId == other.externalPriceId &&
-                  this.name == other.name &&
-                  this.billableMetricId == other.billableMetricId &&
-                  this.itemId == other.itemId &&
-                  this.billedInAdvance == other.billedInAdvance &&
-                  this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                  this.invoiceGroupingKey == other.invoiceGroupingKey &&
-                  this.cadence == other.cadence &&
-                  this.conversionRate == other.conversionRate &&
-                  this.modelType == other.modelType &&
-                  this.unitWithProrationConfig == other.unitWithProrationConfig &&
-                  this.currency == other.currency &&
-                  this.additionalProperties == other.additionalProperties
+                return other is NewPlanUnitWithProrationPrice &&
+                    this.metadata == other.metadata &&
+                    this.externalPriceId == other.externalPriceId &&
+                    this.name == other.name &&
+                    this.billableMetricId == other.billableMetricId &&
+                    this.itemId == other.itemId &&
+                    this.billedInAdvance == other.billedInAdvance &&
+                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
+                    this.invoiceGroupingKey == other.invoiceGroupingKey &&
+                    this.cadence == other.cadence &&
+                    this.conversionRate == other.conversionRate &&
+                    this.modelType == other.modelType &&
+                    this.unitWithProrationConfig == other.unitWithProrationConfig &&
+                    this.currency == other.currency &&
+                    this.additionalProperties == other.additionalProperties
             }
 
             override fun hashCode(): Int {
-              if (hashCode == 0) {
-                hashCode = Objects.hash(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    unitWithProrationConfig,
-                    currency,
-                    additionalProperties,
-                )
-              }
-              return hashCode
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            metadata,
+                            externalPriceId,
+                            name,
+                            billableMetricId,
+                            itemId,
+                            billedInAdvance,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            cadence,
+                            conversionRate,
+                            modelType,
+                            unitWithProrationConfig,
+                            currency,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
             }
 
-            override fun toString() = "NewPlanUnitWithProrationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, unitWithProrationConfig=$unitWithProrationConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "NewPlanUnitWithProrationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, unitWithProrationConfig=$unitWithProrationConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
             companion object {
 
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             class Builder {
@@ -12471,48 +12731,50 @@ class PlanCreateParams constructor(
                 private var cadence: JsonField<Cadence> = JsonMissing.of()
                 private var conversionRate: JsonField<Double> = JsonMissing.of()
                 private var modelType: JsonField<ModelType> = JsonMissing.of()
-                private var unitWithProrationConfig: JsonField<UnitWithProrationConfig> = JsonMissing.of()
+                private var unitWithProrationConfig: JsonField<UnitWithProrationConfig> =
+                    JsonMissing.of()
                 private var currency: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(newPlanUnitWithProrationPrice: NewPlanUnitWithProrationPrice) = apply {
-                    this.metadata = newPlanUnitWithProrationPrice.metadata
-                    this.externalPriceId = newPlanUnitWithProrationPrice.externalPriceId
-                    this.name = newPlanUnitWithProrationPrice.name
-                    this.billableMetricId = newPlanUnitWithProrationPrice.billableMetricId
-                    this.itemId = newPlanUnitWithProrationPrice.itemId
-                    this.billedInAdvance = newPlanUnitWithProrationPrice.billedInAdvance
-                    this.fixedPriceQuantity = newPlanUnitWithProrationPrice.fixedPriceQuantity
-                    this.invoiceGroupingKey = newPlanUnitWithProrationPrice.invoiceGroupingKey
-                    this.cadence = newPlanUnitWithProrationPrice.cadence
-                    this.conversionRate = newPlanUnitWithProrationPrice.conversionRate
-                    this.modelType = newPlanUnitWithProrationPrice.modelType
-                    this.unitWithProrationConfig = newPlanUnitWithProrationPrice.unitWithProrationConfig
-                    this.currency = newPlanUnitWithProrationPrice.currency
-                    additionalProperties(newPlanUnitWithProrationPrice.additionalProperties)
-                }
+                internal fun from(newPlanUnitWithProrationPrice: NewPlanUnitWithProrationPrice) =
+                    apply {
+                        this.metadata = newPlanUnitWithProrationPrice.metadata
+                        this.externalPriceId = newPlanUnitWithProrationPrice.externalPriceId
+                        this.name = newPlanUnitWithProrationPrice.name
+                        this.billableMetricId = newPlanUnitWithProrationPrice.billableMetricId
+                        this.itemId = newPlanUnitWithProrationPrice.itemId
+                        this.billedInAdvance = newPlanUnitWithProrationPrice.billedInAdvance
+                        this.fixedPriceQuantity = newPlanUnitWithProrationPrice.fixedPriceQuantity
+                        this.invoiceGroupingKey = newPlanUnitWithProrationPrice.invoiceGroupingKey
+                        this.cadence = newPlanUnitWithProrationPrice.cadence
+                        this.conversionRate = newPlanUnitWithProrationPrice.conversionRate
+                        this.modelType = newPlanUnitWithProrationPrice.modelType
+                        this.unitWithProrationConfig =
+                            newPlanUnitWithProrationPrice.unitWithProrationConfig
+                        this.currency = newPlanUnitWithProrationPrice.currency
+                        additionalProperties(newPlanUnitWithProrationPrice.additionalProperties)
+                    }
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 @JsonProperty("metadata")
                 @ExcludeMissing
-                fun metadata(metadata: JsonField<Metadata>) = apply {
-                    this.metadata = metadata
-                }
+                fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
                 /** An alias for the price. */
-                fun externalPriceId(externalPriceId: String) = externalPriceId(JsonField.of(externalPriceId))
+                fun externalPriceId(externalPriceId: String) =
+                    externalPriceId(JsonField.of(externalPriceId))
 
                 /** An alias for the price. */
                 @JsonProperty("external_price_id")
@@ -12527,15 +12789,14 @@ class PlanCreateParams constructor(
                 /** The name of the price. */
                 @JsonProperty("name")
                 @ExcludeMissing
-                fun name(name: JsonField<String>) = apply {
-                    this.name = name
-                }
+                fun name(name: JsonField<String>) = apply { this.name = name }
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
                  * usage-based.
                  */
-                fun billableMetricId(billableMetricId: String) = billableMetricId(JsonField.of(billableMetricId))
+                fun billableMetricId(billableMetricId: String) =
+                    billableMetricId(JsonField.of(billableMetricId))
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -12553,19 +12814,18 @@ class PlanCreateParams constructor(
                 /** The id of the item the plan will be associated with. */
                 @JsonProperty("item_id")
                 @ExcludeMissing
-                fun itemId(itemId: JsonField<String>) = apply {
-                    this.itemId = itemId
-                }
+                fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
-                fun billedInAdvance(billedInAdvance: Boolean) = billedInAdvance(JsonField.of(billedInAdvance))
+                fun billedInAdvance(billedInAdvance: Boolean) =
+                    billedInAdvance(JsonField.of(billedInAdvance))
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 @ExcludeMissing
@@ -12577,7 +12837,8 @@ class PlanCreateParams constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                fun fixedPriceQuantity(fixedPriceQuantity: Double) = fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
+                fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                    fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -12590,7 +12851,8 @@ class PlanCreateParams constructor(
                 }
 
                 /** The property used to group this price on an invoice */
-                fun invoiceGroupingKey(invoiceGroupingKey: String) = invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
+                fun invoiceGroupingKey(invoiceGroupingKey: String) =
+                    invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
 
                 /** The property used to group this price on an invoice */
                 @JsonProperty("invoice_grouping_key")
@@ -12605,12 +12867,11 @@ class PlanCreateParams constructor(
                 /** The cadence to bill for this price on. */
                 @JsonProperty("cadence")
                 @ExcludeMissing
-                fun cadence(cadence: JsonField<Cadence>) = apply {
-                    this.cadence = cadence
-                }
+                fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                fun conversionRate(conversionRate: Double) = conversionRate(JsonField.of(conversionRate))
+                fun conversionRate(conversionRate: Double) =
+                    conversionRate(JsonField.of(conversionRate))
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 @JsonProperty("conversion_rate")
@@ -12627,13 +12888,14 @@ class PlanCreateParams constructor(
                     this.modelType = modelType
                 }
 
-                fun unitWithProrationConfig(unitWithProrationConfig: UnitWithProrationConfig) = unitWithProrationConfig(JsonField.of(unitWithProrationConfig))
+                fun unitWithProrationConfig(unitWithProrationConfig: UnitWithProrationConfig) =
+                    unitWithProrationConfig(JsonField.of(unitWithProrationConfig))
 
                 @JsonProperty("unit_with_proration_config")
                 @ExcludeMissing
-                fun unitWithProrationConfig(unitWithProrationConfig: JsonField<UnitWithProrationConfig>) = apply {
-                    this.unitWithProrationConfig = unitWithProrationConfig
-                }
+                fun unitWithProrationConfig(
+                    unitWithProrationConfig: JsonField<UnitWithProrationConfig>
+                ) = apply { this.unitWithProrationConfig = unitWithProrationConfig }
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -12647,9 +12909,7 @@ class PlanCreateParams constructor(
                  */
                 @JsonProperty("currency")
                 @ExcludeMissing
-                fun currency(currency: JsonField<String>) = apply {
-                    this.currency = currency
-                }
+                fun currency(currency: JsonField<String>) = apply { this.currency = currency }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -12661,40 +12921,44 @@ class PlanCreateParams constructor(
                     this.additionalProperties.put(key, value)
                 }
 
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
 
-                fun build(): NewPlanUnitWithProrationPrice = NewPlanUnitWithProrationPrice(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    unitWithProrationConfig,
-                    currency,
-                    additionalProperties.toUnmodifiable(),
-                )
+                fun build(): NewPlanUnitWithProrationPrice =
+                    NewPlanUnitWithProrationPrice(
+                        metadata,
+                        externalPriceId,
+                        name,
+                        billableMetricId,
+                        itemId,
+                        billedInAdvance,
+                        fixedPriceQuantity,
+                        invoiceGroupingKey,
+                        cadence,
+                        conversionRate,
+                        modelType,
+                        unitWithProrationConfig,
+                        currency,
+                        additionalProperties.toUnmodifiable(),
+                    )
             }
 
-            class Cadence @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class Cadence
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Cadence &&
-                      this.value == other.value
+                    return other is Cadence && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -12737,41 +13001,45 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    ANNUAL -> Value.ANNUAL
-                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
-                    MONTHLY -> Value.MONTHLY
-                    QUARTERLY -> Value.QUARTERLY
-                    ONE_TIME -> Value.ONE_TIME
-                    CUSTOM -> Value.CUSTOM
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        ANNUAL -> Value.ANNUAL
+                        SEMI_ANNUAL -> Value.SEMI_ANNUAL
+                        MONTHLY -> Value.MONTHLY
+                        QUARTERLY -> Value.QUARTERLY
+                        ONE_TIME -> Value.ONE_TIME
+                        CUSTOM -> Value.CUSTOM
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    ANNUAL -> Known.ANNUAL
-                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
-                    MONTHLY -> Known.MONTHLY
-                    QUARTERLY -> Known.QUARTERLY
-                    ONE_TIME -> Known.ONE_TIME
-                    CUSTOM -> Known.CUSTOM
-                    else -> throw OrbInvalidDataException("Unknown Cadence: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        ANNUAL -> Known.ANNUAL
+                        SEMI_ANNUAL -> Known.SEMI_ANNUAL
+                        MONTHLY -> Known.MONTHLY
+                        QUARTERLY -> Known.QUARTERLY
+                        ONE_TIME -> Known.ONE_TIME
+                        CUSTOM -> Known.CUSTOM
+                        else -> throw OrbInvalidDataException("Unknown Cadence: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class ModelType
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is ModelType &&
-                      this.value == other.value
+                    return other is ModelType && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -12780,7 +13048,8 @@ class PlanCreateParams constructor(
 
                 companion object {
 
-                    @JvmField val UNIT_WITH_PRORATION = ModelType(JsonField.of("unit_with_proration"))
+                    @JvmField
+                    val UNIT_WITH_PRORATION = ModelType(JsonField.of("unit_with_proration"))
 
                     @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                 }
@@ -12794,22 +13063,27 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    UNIT_WITH_PRORATION -> Value.UNIT_WITH_PRORATION
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        UNIT_WITH_PRORATION -> Value.UNIT_WITH_PRORATION
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    UNIT_WITH_PRORATION -> Known.UNIT_WITH_PRORATION
-                    else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        UNIT_WITH_PRORATION -> Known.UNIT_WITH_PRORATION
+                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
             @JsonDeserialize(builder = UnitWithProrationConfig.Builder::class)
             @NoAutoDetect
-            class UnitWithProrationConfig private constructor(private val additionalProperties: Map<String, JsonValue>, ) {
+            class UnitWithProrationConfig
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -12821,34 +13095,34 @@ class PlanCreateParams constructor(
 
                 fun validate(): UnitWithProrationConfig = apply {
                     if (!validated) {
-                      validated = true
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is UnitWithProrationConfig &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is UnitWithProrationConfig &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
                 }
 
-                override fun toString() = "UnitWithProrationConfig{additionalProperties=$additionalProperties}"
+                override fun toString() =
+                    "UnitWithProrationConfig{additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -12870,22 +13144,27 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
-                    fun build(): UnitWithProrationConfig = UnitWithProrationConfig(additionalProperties.toUnmodifiable())
+                    fun build(): UnitWithProrationConfig =
+                        UnitWithProrationConfig(additionalProperties.toUnmodifiable())
                 }
             }
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
             @JsonDeserialize(builder = Metadata.Builder::class)
             @NoAutoDetect
-            class Metadata private constructor(private val additionalProperties: Map<String, JsonValue>, ) {
+            class Metadata
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -12897,34 +13176,33 @@ class PlanCreateParams constructor(
 
                 fun validate(): Metadata = apply {
                     if (!validated) {
-                      validated = true
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Metadata &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is Metadata &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
                 }
 
                 override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -12946,9 +13224,10 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
                     fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
                 }
@@ -12957,22 +13236,22 @@ class PlanCreateParams constructor(
 
         @JsonDeserialize(builder = NewPlanGroupedAllocationPrice.Builder::class)
         @NoAutoDetect
-        class NewPlanGroupedAllocationPrice private constructor(
-          private val metadata: JsonField<Metadata>,
-          private val externalPriceId: JsonField<String>,
-          private val name: JsonField<String>,
-          private val billableMetricId: JsonField<String>,
-          private val itemId: JsonField<String>,
-          private val billedInAdvance: JsonField<Boolean>,
-          private val fixedPriceQuantity: JsonField<Double>,
-          private val invoiceGroupingKey: JsonField<String>,
-          private val cadence: JsonField<Cadence>,
-          private val conversionRate: JsonField<Double>,
-          private val modelType: JsonField<ModelType>,
-          private val groupedAllocationConfig: JsonField<GroupedAllocationConfig>,
-          private val currency: JsonField<String>,
-          private val additionalProperties: Map<String, JsonValue>,
-
+        class NewPlanGroupedAllocationPrice
+        private constructor(
+            private val metadata: JsonField<Metadata>,
+            private val externalPriceId: JsonField<String>,
+            private val name: JsonField<String>,
+            private val billableMetricId: JsonField<String>,
+            private val itemId: JsonField<String>,
+            private val billedInAdvance: JsonField<Boolean>,
+            private val fixedPriceQuantity: JsonField<Double>,
+            private val invoiceGroupingKey: JsonField<String>,
+            private val cadence: JsonField<Cadence>,
+            private val conversionRate: JsonField<Double>,
+            private val modelType: JsonField<ModelType>,
+            private val groupedAllocationConfig: JsonField<GroupedAllocationConfig>,
+            private val currency: JsonField<String>,
+            private val additionalProperties: Map<String, JsonValue>,
         ) {
 
             private var validated: Boolean = false
@@ -12980,66 +13259,70 @@ class PlanCreateParams constructor(
             private var hashCode: Int = 0
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata.getNullable("metadata"))
+            fun metadata(): Optional<Metadata> =
+                Optional.ofNullable(metadata.getNullable("metadata"))
 
             /** An alias for the price. */
-            fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+            fun externalPriceId(): Optional<String> =
+                Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
 
             /** The name of the price. */
             fun name(): String = name.getRequired("name")
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
-            fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+            fun billableMetricId(): Optional<String> =
+                Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
 
             /** The id of the item the plan will be associated with. */
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
-            fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+            fun billedInAdvance(): Optional<Boolean> =
+                Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
-            fun fixedPriceQuantity(): Optional<Double> = Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+            fun fixedPriceQuantity(): Optional<Double> =
+                Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
 
             /** The property used to group this price on an invoice */
-            fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+            fun invoiceGroupingKey(): Optional<String> =
+                Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
 
             /** The cadence to bill for this price on. */
             fun cadence(): Cadence = cadence.getRequired("cadence")
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+            fun conversionRate(): Optional<Double> =
+                Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
 
             fun modelType(): ModelType = modelType.getRequired("model_type")
 
-            fun groupedAllocationConfig(): GroupedAllocationConfig = groupedAllocationConfig.getRequired("grouped_allocation_config")
+            fun groupedAllocationConfig(): GroupedAllocationConfig =
+                groupedAllocationConfig.getRequired("grouped_allocation_config")
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
             fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            @JsonProperty("metadata")
-            @ExcludeMissing
-            fun _metadata() = metadata
+            @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
 
             /** An alias for the price. */
             @JsonProperty("external_price_id")
@@ -13047,34 +13330,28 @@ class PlanCreateParams constructor(
             fun _externalPriceId() = externalPriceId
 
             /** The name of the price. */
-            @JsonProperty("name")
-            @ExcludeMissing
-            fun _name() = name
+            @JsonProperty("name") @ExcludeMissing fun _name() = name
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
             @JsonProperty("billable_metric_id")
             @ExcludeMissing
             fun _billableMetricId() = billableMetricId
 
             /** The id of the item the plan will be associated with. */
-            @JsonProperty("item_id")
-            @ExcludeMissing
-            fun _itemId() = itemId
+            @JsonProperty("item_id") @ExcludeMissing fun _itemId() = itemId
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
             @JsonProperty("billed_in_advance")
             @ExcludeMissing
             fun _billedInAdvance() = billedInAdvance
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
             @JsonProperty("fixed_price_quantity")
             @ExcludeMissing
@@ -13086,30 +13363,22 @@ class PlanCreateParams constructor(
             fun _invoiceGroupingKey() = invoiceGroupingKey
 
             /** The cadence to bill for this price on. */
-            @JsonProperty("cadence")
-            @ExcludeMissing
-            fun _cadence() = cadence
+            @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            @JsonProperty("conversion_rate")
-            @ExcludeMissing
-            fun _conversionRate() = conversionRate
+            @JsonProperty("conversion_rate") @ExcludeMissing fun _conversionRate() = conversionRate
 
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType() = modelType
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType() = modelType
 
             @JsonProperty("grouped_allocation_config")
             @ExcludeMissing
             fun _groupedAllocationConfig() = groupedAllocationConfig
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
-            @JsonProperty("currency")
-            @ExcludeMissing
-            fun _currency() = currency
+            @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -13117,75 +13386,76 @@ class PlanCreateParams constructor(
 
             fun validate(): NewPlanGroupedAllocationPrice = apply {
                 if (!validated) {
-                  metadata().map { it.validate() }
-                  externalPriceId()
-                  name()
-                  billableMetricId()
-                  itemId()
-                  billedInAdvance()
-                  fixedPriceQuantity()
-                  invoiceGroupingKey()
-                  cadence()
-                  conversionRate()
-                  modelType()
-                  groupedAllocationConfig().validate()
-                  currency()
-                  validated = true
+                    metadata().map { it.validate() }
+                    externalPriceId()
+                    name()
+                    billableMetricId()
+                    itemId()
+                    billedInAdvance()
+                    fixedPriceQuantity()
+                    invoiceGroupingKey()
+                    cadence()
+                    conversionRate()
+                    modelType()
+                    groupedAllocationConfig().validate()
+                    currency()
+                    validated = true
                 }
             }
 
             fun toBuilder() = Builder().from(this)
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is NewPlanGroupedAllocationPrice &&
-                  this.metadata == other.metadata &&
-                  this.externalPriceId == other.externalPriceId &&
-                  this.name == other.name &&
-                  this.billableMetricId == other.billableMetricId &&
-                  this.itemId == other.itemId &&
-                  this.billedInAdvance == other.billedInAdvance &&
-                  this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                  this.invoiceGroupingKey == other.invoiceGroupingKey &&
-                  this.cadence == other.cadence &&
-                  this.conversionRate == other.conversionRate &&
-                  this.modelType == other.modelType &&
-                  this.groupedAllocationConfig == other.groupedAllocationConfig &&
-                  this.currency == other.currency &&
-                  this.additionalProperties == other.additionalProperties
+                return other is NewPlanGroupedAllocationPrice &&
+                    this.metadata == other.metadata &&
+                    this.externalPriceId == other.externalPriceId &&
+                    this.name == other.name &&
+                    this.billableMetricId == other.billableMetricId &&
+                    this.itemId == other.itemId &&
+                    this.billedInAdvance == other.billedInAdvance &&
+                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
+                    this.invoiceGroupingKey == other.invoiceGroupingKey &&
+                    this.cadence == other.cadence &&
+                    this.conversionRate == other.conversionRate &&
+                    this.modelType == other.modelType &&
+                    this.groupedAllocationConfig == other.groupedAllocationConfig &&
+                    this.currency == other.currency &&
+                    this.additionalProperties == other.additionalProperties
             }
 
             override fun hashCode(): Int {
-              if (hashCode == 0) {
-                hashCode = Objects.hash(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    groupedAllocationConfig,
-                    currency,
-                    additionalProperties,
-                )
-              }
-              return hashCode
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            metadata,
+                            externalPriceId,
+                            name,
+                            billableMetricId,
+                            itemId,
+                            billedInAdvance,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            cadence,
+                            conversionRate,
+                            modelType,
+                            groupedAllocationConfig,
+                            currency,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
             }
 
-            override fun toString() = "NewPlanGroupedAllocationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, groupedAllocationConfig=$groupedAllocationConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "NewPlanGroupedAllocationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, groupedAllocationConfig=$groupedAllocationConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
             companion object {
 
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             class Builder {
@@ -13201,48 +13471,50 @@ class PlanCreateParams constructor(
                 private var cadence: JsonField<Cadence> = JsonMissing.of()
                 private var conversionRate: JsonField<Double> = JsonMissing.of()
                 private var modelType: JsonField<ModelType> = JsonMissing.of()
-                private var groupedAllocationConfig: JsonField<GroupedAllocationConfig> = JsonMissing.of()
+                private var groupedAllocationConfig: JsonField<GroupedAllocationConfig> =
+                    JsonMissing.of()
                 private var currency: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(newPlanGroupedAllocationPrice: NewPlanGroupedAllocationPrice) = apply {
-                    this.metadata = newPlanGroupedAllocationPrice.metadata
-                    this.externalPriceId = newPlanGroupedAllocationPrice.externalPriceId
-                    this.name = newPlanGroupedAllocationPrice.name
-                    this.billableMetricId = newPlanGroupedAllocationPrice.billableMetricId
-                    this.itemId = newPlanGroupedAllocationPrice.itemId
-                    this.billedInAdvance = newPlanGroupedAllocationPrice.billedInAdvance
-                    this.fixedPriceQuantity = newPlanGroupedAllocationPrice.fixedPriceQuantity
-                    this.invoiceGroupingKey = newPlanGroupedAllocationPrice.invoiceGroupingKey
-                    this.cadence = newPlanGroupedAllocationPrice.cadence
-                    this.conversionRate = newPlanGroupedAllocationPrice.conversionRate
-                    this.modelType = newPlanGroupedAllocationPrice.modelType
-                    this.groupedAllocationConfig = newPlanGroupedAllocationPrice.groupedAllocationConfig
-                    this.currency = newPlanGroupedAllocationPrice.currency
-                    additionalProperties(newPlanGroupedAllocationPrice.additionalProperties)
-                }
+                internal fun from(newPlanGroupedAllocationPrice: NewPlanGroupedAllocationPrice) =
+                    apply {
+                        this.metadata = newPlanGroupedAllocationPrice.metadata
+                        this.externalPriceId = newPlanGroupedAllocationPrice.externalPriceId
+                        this.name = newPlanGroupedAllocationPrice.name
+                        this.billableMetricId = newPlanGroupedAllocationPrice.billableMetricId
+                        this.itemId = newPlanGroupedAllocationPrice.itemId
+                        this.billedInAdvance = newPlanGroupedAllocationPrice.billedInAdvance
+                        this.fixedPriceQuantity = newPlanGroupedAllocationPrice.fixedPriceQuantity
+                        this.invoiceGroupingKey = newPlanGroupedAllocationPrice.invoiceGroupingKey
+                        this.cadence = newPlanGroupedAllocationPrice.cadence
+                        this.conversionRate = newPlanGroupedAllocationPrice.conversionRate
+                        this.modelType = newPlanGroupedAllocationPrice.modelType
+                        this.groupedAllocationConfig =
+                            newPlanGroupedAllocationPrice.groupedAllocationConfig
+                        this.currency = newPlanGroupedAllocationPrice.currency
+                        additionalProperties(newPlanGroupedAllocationPrice.additionalProperties)
+                    }
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 @JsonProperty("metadata")
                 @ExcludeMissing
-                fun metadata(metadata: JsonField<Metadata>) = apply {
-                    this.metadata = metadata
-                }
+                fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
                 /** An alias for the price. */
-                fun externalPriceId(externalPriceId: String) = externalPriceId(JsonField.of(externalPriceId))
+                fun externalPriceId(externalPriceId: String) =
+                    externalPriceId(JsonField.of(externalPriceId))
 
                 /** An alias for the price. */
                 @JsonProperty("external_price_id")
@@ -13257,15 +13529,14 @@ class PlanCreateParams constructor(
                 /** The name of the price. */
                 @JsonProperty("name")
                 @ExcludeMissing
-                fun name(name: JsonField<String>) = apply {
-                    this.name = name
-                }
+                fun name(name: JsonField<String>) = apply { this.name = name }
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
                  * usage-based.
                  */
-                fun billableMetricId(billableMetricId: String) = billableMetricId(JsonField.of(billableMetricId))
+                fun billableMetricId(billableMetricId: String) =
+                    billableMetricId(JsonField.of(billableMetricId))
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -13283,19 +13554,18 @@ class PlanCreateParams constructor(
                 /** The id of the item the plan will be associated with. */
                 @JsonProperty("item_id")
                 @ExcludeMissing
-                fun itemId(itemId: JsonField<String>) = apply {
-                    this.itemId = itemId
-                }
+                fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
-                fun billedInAdvance(billedInAdvance: Boolean) = billedInAdvance(JsonField.of(billedInAdvance))
+                fun billedInAdvance(billedInAdvance: Boolean) =
+                    billedInAdvance(JsonField.of(billedInAdvance))
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 @ExcludeMissing
@@ -13307,7 +13577,8 @@ class PlanCreateParams constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                fun fixedPriceQuantity(fixedPriceQuantity: Double) = fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
+                fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                    fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -13320,7 +13591,8 @@ class PlanCreateParams constructor(
                 }
 
                 /** The property used to group this price on an invoice */
-                fun invoiceGroupingKey(invoiceGroupingKey: String) = invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
+                fun invoiceGroupingKey(invoiceGroupingKey: String) =
+                    invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
 
                 /** The property used to group this price on an invoice */
                 @JsonProperty("invoice_grouping_key")
@@ -13335,12 +13607,11 @@ class PlanCreateParams constructor(
                 /** The cadence to bill for this price on. */
                 @JsonProperty("cadence")
                 @ExcludeMissing
-                fun cadence(cadence: JsonField<Cadence>) = apply {
-                    this.cadence = cadence
-                }
+                fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                fun conversionRate(conversionRate: Double) = conversionRate(JsonField.of(conversionRate))
+                fun conversionRate(conversionRate: Double) =
+                    conversionRate(JsonField.of(conversionRate))
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 @JsonProperty("conversion_rate")
@@ -13357,13 +13628,14 @@ class PlanCreateParams constructor(
                     this.modelType = modelType
                 }
 
-                fun groupedAllocationConfig(groupedAllocationConfig: GroupedAllocationConfig) = groupedAllocationConfig(JsonField.of(groupedAllocationConfig))
+                fun groupedAllocationConfig(groupedAllocationConfig: GroupedAllocationConfig) =
+                    groupedAllocationConfig(JsonField.of(groupedAllocationConfig))
 
                 @JsonProperty("grouped_allocation_config")
                 @ExcludeMissing
-                fun groupedAllocationConfig(groupedAllocationConfig: JsonField<GroupedAllocationConfig>) = apply {
-                    this.groupedAllocationConfig = groupedAllocationConfig
-                }
+                fun groupedAllocationConfig(
+                    groupedAllocationConfig: JsonField<GroupedAllocationConfig>
+                ) = apply { this.groupedAllocationConfig = groupedAllocationConfig }
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -13377,9 +13649,7 @@ class PlanCreateParams constructor(
                  */
                 @JsonProperty("currency")
                 @ExcludeMissing
-                fun currency(currency: JsonField<String>) = apply {
-                    this.currency = currency
-                }
+                fun currency(currency: JsonField<String>) = apply { this.currency = currency }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -13391,40 +13661,44 @@ class PlanCreateParams constructor(
                     this.additionalProperties.put(key, value)
                 }
 
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
 
-                fun build(): NewPlanGroupedAllocationPrice = NewPlanGroupedAllocationPrice(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    groupedAllocationConfig,
-                    currency,
-                    additionalProperties.toUnmodifiable(),
-                )
+                fun build(): NewPlanGroupedAllocationPrice =
+                    NewPlanGroupedAllocationPrice(
+                        metadata,
+                        externalPriceId,
+                        name,
+                        billableMetricId,
+                        itemId,
+                        billedInAdvance,
+                        fixedPriceQuantity,
+                        invoiceGroupingKey,
+                        cadence,
+                        conversionRate,
+                        modelType,
+                        groupedAllocationConfig,
+                        currency,
+                        additionalProperties.toUnmodifiable(),
+                    )
             }
 
-            class Cadence @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class Cadence
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Cadence &&
-                      this.value == other.value
+                    return other is Cadence && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -13467,32 +13741,37 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    ANNUAL -> Value.ANNUAL
-                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
-                    MONTHLY -> Value.MONTHLY
-                    QUARTERLY -> Value.QUARTERLY
-                    ONE_TIME -> Value.ONE_TIME
-                    CUSTOM -> Value.CUSTOM
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        ANNUAL -> Value.ANNUAL
+                        SEMI_ANNUAL -> Value.SEMI_ANNUAL
+                        MONTHLY -> Value.MONTHLY
+                        QUARTERLY -> Value.QUARTERLY
+                        ONE_TIME -> Value.ONE_TIME
+                        CUSTOM -> Value.CUSTOM
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    ANNUAL -> Known.ANNUAL
-                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
-                    MONTHLY -> Known.MONTHLY
-                    QUARTERLY -> Known.QUARTERLY
-                    ONE_TIME -> Known.ONE_TIME
-                    CUSTOM -> Known.CUSTOM
-                    else -> throw OrbInvalidDataException("Unknown Cadence: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        ANNUAL -> Known.ANNUAL
+                        SEMI_ANNUAL -> Known.SEMI_ANNUAL
+                        MONTHLY -> Known.MONTHLY
+                        QUARTERLY -> Known.QUARTERLY
+                        ONE_TIME -> Known.ONE_TIME
+                        CUSTOM -> Known.CUSTOM
+                        else -> throw OrbInvalidDataException("Unknown Cadence: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
             @JsonDeserialize(builder = GroupedAllocationConfig.Builder::class)
             @NoAutoDetect
-            class GroupedAllocationConfig private constructor(private val additionalProperties: Map<String, JsonValue>, ) {
+            class GroupedAllocationConfig
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -13504,34 +13783,34 @@ class PlanCreateParams constructor(
 
                 fun validate(): GroupedAllocationConfig = apply {
                     if (!validated) {
-                      validated = true
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is GroupedAllocationConfig &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is GroupedAllocationConfig &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
                 }
 
-                override fun toString() = "GroupedAllocationConfig{additionalProperties=$additionalProperties}"
+                override fun toString() =
+                    "GroupedAllocationConfig{additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -13553,26 +13832,30 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
-                    fun build(): GroupedAllocationConfig = GroupedAllocationConfig(additionalProperties.toUnmodifiable())
+                    fun build(): GroupedAllocationConfig =
+                        GroupedAllocationConfig(additionalProperties.toUnmodifiable())
                 }
             }
 
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class ModelType
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is ModelType &&
-                      this.value == other.value
+                    return other is ModelType && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -13595,27 +13878,32 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    GROUPED_ALLOCATION -> Value.GROUPED_ALLOCATION
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        GROUPED_ALLOCATION -> Value.GROUPED_ALLOCATION
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    GROUPED_ALLOCATION -> Known.GROUPED_ALLOCATION
-                    else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        GROUPED_ALLOCATION -> Known.GROUPED_ALLOCATION
+                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
             @JsonDeserialize(builder = Metadata.Builder::class)
             @NoAutoDetect
-            class Metadata private constructor(private val additionalProperties: Map<String, JsonValue>, ) {
+            class Metadata
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -13627,34 +13915,33 @@ class PlanCreateParams constructor(
 
                 fun validate(): Metadata = apply {
                     if (!validated) {
-                      validated = true
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Metadata &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is Metadata &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
                 }
 
                 override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -13676,9 +13963,10 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
                     fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
                 }
@@ -13687,22 +13975,22 @@ class PlanCreateParams constructor(
 
         @JsonDeserialize(builder = NewPlanBulkWithProrationPrice.Builder::class)
         @NoAutoDetect
-        class NewPlanBulkWithProrationPrice private constructor(
-          private val metadata: JsonField<Metadata>,
-          private val externalPriceId: JsonField<String>,
-          private val name: JsonField<String>,
-          private val billableMetricId: JsonField<String>,
-          private val itemId: JsonField<String>,
-          private val billedInAdvance: JsonField<Boolean>,
-          private val fixedPriceQuantity: JsonField<Double>,
-          private val invoiceGroupingKey: JsonField<String>,
-          private val cadence: JsonField<Cadence>,
-          private val conversionRate: JsonField<Double>,
-          private val modelType: JsonField<ModelType>,
-          private val bulkWithProrationConfig: JsonField<BulkWithProrationConfig>,
-          private val currency: JsonField<String>,
-          private val additionalProperties: Map<String, JsonValue>,
-
+        class NewPlanBulkWithProrationPrice
+        private constructor(
+            private val metadata: JsonField<Metadata>,
+            private val externalPriceId: JsonField<String>,
+            private val name: JsonField<String>,
+            private val billableMetricId: JsonField<String>,
+            private val itemId: JsonField<String>,
+            private val billedInAdvance: JsonField<Boolean>,
+            private val fixedPriceQuantity: JsonField<Double>,
+            private val invoiceGroupingKey: JsonField<String>,
+            private val cadence: JsonField<Cadence>,
+            private val conversionRate: JsonField<Double>,
+            private val modelType: JsonField<ModelType>,
+            private val bulkWithProrationConfig: JsonField<BulkWithProrationConfig>,
+            private val currency: JsonField<String>,
+            private val additionalProperties: Map<String, JsonValue>,
         ) {
 
             private var validated: Boolean = false
@@ -13710,66 +13998,70 @@ class PlanCreateParams constructor(
             private var hashCode: Int = 0
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata.getNullable("metadata"))
+            fun metadata(): Optional<Metadata> =
+                Optional.ofNullable(metadata.getNullable("metadata"))
 
             /** An alias for the price. */
-            fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+            fun externalPriceId(): Optional<String> =
+                Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
 
             /** The name of the price. */
             fun name(): String = name.getRequired("name")
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
-            fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+            fun billableMetricId(): Optional<String> =
+                Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
 
             /** The id of the item the plan will be associated with. */
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
-            fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+            fun billedInAdvance(): Optional<Boolean> =
+                Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
-            fun fixedPriceQuantity(): Optional<Double> = Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+            fun fixedPriceQuantity(): Optional<Double> =
+                Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
 
             /** The property used to group this price on an invoice */
-            fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+            fun invoiceGroupingKey(): Optional<String> =
+                Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
 
             /** The cadence to bill for this price on. */
             fun cadence(): Cadence = cadence.getRequired("cadence")
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+            fun conversionRate(): Optional<Double> =
+                Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
 
             fun modelType(): ModelType = modelType.getRequired("model_type")
 
-            fun bulkWithProrationConfig(): BulkWithProrationConfig = bulkWithProrationConfig.getRequired("bulk_with_proration_config")
+            fun bulkWithProrationConfig(): BulkWithProrationConfig =
+                bulkWithProrationConfig.getRequired("bulk_with_proration_config")
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
             fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
-            @JsonProperty("metadata")
-            @ExcludeMissing
-            fun _metadata() = metadata
+            @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
 
             /** An alias for the price. */
             @JsonProperty("external_price_id")
@@ -13777,34 +14069,28 @@ class PlanCreateParams constructor(
             fun _externalPriceId() = externalPriceId
 
             /** The name of the price. */
-            @JsonProperty("name")
-            @ExcludeMissing
-            fun _name() = name
+            @JsonProperty("name") @ExcludeMissing fun _name() = name
 
             /**
-             * The id of the billable metric for the price. Only needed if the price is
-             * usage-based.
+             * The id of the billable metric for the price. Only needed if the price is usage-based.
              */
             @JsonProperty("billable_metric_id")
             @ExcludeMissing
             fun _billableMetricId() = billableMetricId
 
             /** The id of the item the plan will be associated with. */
-            @JsonProperty("item_id")
-            @ExcludeMissing
-            fun _itemId() = itemId
+            @JsonProperty("item_id") @ExcludeMissing fun _itemId() = itemId
 
             /**
-             * If the Price represents a fixed cost, the price will be billed in-advance if
-             * this is true, and in-arrears if this is false.
+             * If the Price represents a fixed cost, the price will be billed in-advance if this is
+             * true, and in-arrears if this is false.
              */
             @JsonProperty("billed_in_advance")
             @ExcludeMissing
             fun _billedInAdvance() = billedInAdvance
 
             /**
-             * If the Price represents a fixed cost, this represents the quantity of units
-             * applied.
+             * If the Price represents a fixed cost, this represents the quantity of units applied.
              */
             @JsonProperty("fixed_price_quantity")
             @ExcludeMissing
@@ -13816,30 +14102,22 @@ class PlanCreateParams constructor(
             fun _invoiceGroupingKey() = invoiceGroupingKey
 
             /** The cadence to bill for this price on. */
-            @JsonProperty("cadence")
-            @ExcludeMissing
-            fun _cadence() = cadence
+            @JsonProperty("cadence") @ExcludeMissing fun _cadence() = cadence
 
             /** The per unit conversion rate of the price currency to the invoicing currency. */
-            @JsonProperty("conversion_rate")
-            @ExcludeMissing
-            fun _conversionRate() = conversionRate
+            @JsonProperty("conversion_rate") @ExcludeMissing fun _conversionRate() = conversionRate
 
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType() = modelType
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType() = modelType
 
             @JsonProperty("bulk_with_proration_config")
             @ExcludeMissing
             fun _bulkWithProrationConfig() = bulkWithProrationConfig
 
             /**
-             * An ISO 4217 currency string, or custom pricing unit identifier, in which this
-             * price is billed.
+             * An ISO 4217 currency string, or custom pricing unit identifier, in which this price
+             * is billed.
              */
-            @JsonProperty("currency")
-            @ExcludeMissing
-            fun _currency() = currency
+            @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -13847,75 +14125,76 @@ class PlanCreateParams constructor(
 
             fun validate(): NewPlanBulkWithProrationPrice = apply {
                 if (!validated) {
-                  metadata().map { it.validate() }
-                  externalPriceId()
-                  name()
-                  billableMetricId()
-                  itemId()
-                  billedInAdvance()
-                  fixedPriceQuantity()
-                  invoiceGroupingKey()
-                  cadence()
-                  conversionRate()
-                  modelType()
-                  bulkWithProrationConfig().validate()
-                  currency()
-                  validated = true
+                    metadata().map { it.validate() }
+                    externalPriceId()
+                    name()
+                    billableMetricId()
+                    itemId()
+                    billedInAdvance()
+                    fixedPriceQuantity()
+                    invoiceGroupingKey()
+                    cadence()
+                    conversionRate()
+                    modelType()
+                    bulkWithProrationConfig().validate()
+                    currency()
+                    validated = true
                 }
             }
 
             fun toBuilder() = Builder().from(this)
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is NewPlanBulkWithProrationPrice &&
-                  this.metadata == other.metadata &&
-                  this.externalPriceId == other.externalPriceId &&
-                  this.name == other.name &&
-                  this.billableMetricId == other.billableMetricId &&
-                  this.itemId == other.itemId &&
-                  this.billedInAdvance == other.billedInAdvance &&
-                  this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                  this.invoiceGroupingKey == other.invoiceGroupingKey &&
-                  this.cadence == other.cadence &&
-                  this.conversionRate == other.conversionRate &&
-                  this.modelType == other.modelType &&
-                  this.bulkWithProrationConfig == other.bulkWithProrationConfig &&
-                  this.currency == other.currency &&
-                  this.additionalProperties == other.additionalProperties
+                return other is NewPlanBulkWithProrationPrice &&
+                    this.metadata == other.metadata &&
+                    this.externalPriceId == other.externalPriceId &&
+                    this.name == other.name &&
+                    this.billableMetricId == other.billableMetricId &&
+                    this.itemId == other.itemId &&
+                    this.billedInAdvance == other.billedInAdvance &&
+                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
+                    this.invoiceGroupingKey == other.invoiceGroupingKey &&
+                    this.cadence == other.cadence &&
+                    this.conversionRate == other.conversionRate &&
+                    this.modelType == other.modelType &&
+                    this.bulkWithProrationConfig == other.bulkWithProrationConfig &&
+                    this.currency == other.currency &&
+                    this.additionalProperties == other.additionalProperties
             }
 
             override fun hashCode(): Int {
-              if (hashCode == 0) {
-                hashCode = Objects.hash(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    bulkWithProrationConfig,
-                    currency,
-                    additionalProperties,
-                )
-              }
-              return hashCode
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            metadata,
+                            externalPriceId,
+                            name,
+                            billableMetricId,
+                            itemId,
+                            billedInAdvance,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            cadence,
+                            conversionRate,
+                            modelType,
+                            bulkWithProrationConfig,
+                            currency,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
             }
 
-            override fun toString() = "NewPlanBulkWithProrationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, bulkWithProrationConfig=$bulkWithProrationConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "NewPlanBulkWithProrationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, bulkWithProrationConfig=$bulkWithProrationConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
             companion object {
 
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             class Builder {
@@ -13931,48 +14210,50 @@ class PlanCreateParams constructor(
                 private var cadence: JsonField<Cadence> = JsonMissing.of()
                 private var conversionRate: JsonField<Double> = JsonMissing.of()
                 private var modelType: JsonField<ModelType> = JsonMissing.of()
-                private var bulkWithProrationConfig: JsonField<BulkWithProrationConfig> = JsonMissing.of()
+                private var bulkWithProrationConfig: JsonField<BulkWithProrationConfig> =
+                    JsonMissing.of()
                 private var currency: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(newPlanBulkWithProrationPrice: NewPlanBulkWithProrationPrice) = apply {
-                    this.metadata = newPlanBulkWithProrationPrice.metadata
-                    this.externalPriceId = newPlanBulkWithProrationPrice.externalPriceId
-                    this.name = newPlanBulkWithProrationPrice.name
-                    this.billableMetricId = newPlanBulkWithProrationPrice.billableMetricId
-                    this.itemId = newPlanBulkWithProrationPrice.itemId
-                    this.billedInAdvance = newPlanBulkWithProrationPrice.billedInAdvance
-                    this.fixedPriceQuantity = newPlanBulkWithProrationPrice.fixedPriceQuantity
-                    this.invoiceGroupingKey = newPlanBulkWithProrationPrice.invoiceGroupingKey
-                    this.cadence = newPlanBulkWithProrationPrice.cadence
-                    this.conversionRate = newPlanBulkWithProrationPrice.conversionRate
-                    this.modelType = newPlanBulkWithProrationPrice.modelType
-                    this.bulkWithProrationConfig = newPlanBulkWithProrationPrice.bulkWithProrationConfig
-                    this.currency = newPlanBulkWithProrationPrice.currency
-                    additionalProperties(newPlanBulkWithProrationPrice.additionalProperties)
-                }
+                internal fun from(newPlanBulkWithProrationPrice: NewPlanBulkWithProrationPrice) =
+                    apply {
+                        this.metadata = newPlanBulkWithProrationPrice.metadata
+                        this.externalPriceId = newPlanBulkWithProrationPrice.externalPriceId
+                        this.name = newPlanBulkWithProrationPrice.name
+                        this.billableMetricId = newPlanBulkWithProrationPrice.billableMetricId
+                        this.itemId = newPlanBulkWithProrationPrice.itemId
+                        this.billedInAdvance = newPlanBulkWithProrationPrice.billedInAdvance
+                        this.fixedPriceQuantity = newPlanBulkWithProrationPrice.fixedPriceQuantity
+                        this.invoiceGroupingKey = newPlanBulkWithProrationPrice.invoiceGroupingKey
+                        this.cadence = newPlanBulkWithProrationPrice.cadence
+                        this.conversionRate = newPlanBulkWithProrationPrice.conversionRate
+                        this.modelType = newPlanBulkWithProrationPrice.modelType
+                        this.bulkWithProrationConfig =
+                            newPlanBulkWithProrationPrice.bulkWithProrationConfig
+                        this.currency = newPlanBulkWithProrationPrice.currency
+                        additionalProperties(newPlanBulkWithProrationPrice.additionalProperties)
+                    }
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared
-                 * by setting `metadata` to `null`.
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
                  */
                 @JsonProperty("metadata")
                 @ExcludeMissing
-                fun metadata(metadata: JsonField<Metadata>) = apply {
-                    this.metadata = metadata
-                }
+                fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
                 /** An alias for the price. */
-                fun externalPriceId(externalPriceId: String) = externalPriceId(JsonField.of(externalPriceId))
+                fun externalPriceId(externalPriceId: String) =
+                    externalPriceId(JsonField.of(externalPriceId))
 
                 /** An alias for the price. */
                 @JsonProperty("external_price_id")
@@ -13987,15 +14268,14 @@ class PlanCreateParams constructor(
                 /** The name of the price. */
                 @JsonProperty("name")
                 @ExcludeMissing
-                fun name(name: JsonField<String>) = apply {
-                    this.name = name
-                }
+                fun name(name: JsonField<String>) = apply { this.name = name }
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
                  * usage-based.
                  */
-                fun billableMetricId(billableMetricId: String) = billableMetricId(JsonField.of(billableMetricId))
+                fun billableMetricId(billableMetricId: String) =
+                    billableMetricId(JsonField.of(billableMetricId))
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -14013,19 +14293,18 @@ class PlanCreateParams constructor(
                 /** The id of the item the plan will be associated with. */
                 @JsonProperty("item_id")
                 @ExcludeMissing
-                fun itemId(itemId: JsonField<String>) = apply {
-                    this.itemId = itemId
-                }
+                fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
-                fun billedInAdvance(billedInAdvance: Boolean) = billedInAdvance(JsonField.of(billedInAdvance))
+                fun billedInAdvance(billedInAdvance: Boolean) =
+                    billedInAdvance(JsonField.of(billedInAdvance))
 
                 /**
-                 * If the Price represents a fixed cost, the price will be billed in-advance if
-                 * this is true, and in-arrears if this is false.
+                 * If the Price represents a fixed cost, the price will be billed in-advance if this
+                 * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 @ExcludeMissing
@@ -14037,7 +14316,8 @@ class PlanCreateParams constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                fun fixedPriceQuantity(fixedPriceQuantity: Double) = fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
+                fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                    fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -14050,7 +14330,8 @@ class PlanCreateParams constructor(
                 }
 
                 /** The property used to group this price on an invoice */
-                fun invoiceGroupingKey(invoiceGroupingKey: String) = invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
+                fun invoiceGroupingKey(invoiceGroupingKey: String) =
+                    invoiceGroupingKey(JsonField.of(invoiceGroupingKey))
 
                 /** The property used to group this price on an invoice */
                 @JsonProperty("invoice_grouping_key")
@@ -14065,12 +14346,11 @@ class PlanCreateParams constructor(
                 /** The cadence to bill for this price on. */
                 @JsonProperty("cadence")
                 @ExcludeMissing
-                fun cadence(cadence: JsonField<Cadence>) = apply {
-                    this.cadence = cadence
-                }
+                fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                fun conversionRate(conversionRate: Double) = conversionRate(JsonField.of(conversionRate))
+                fun conversionRate(conversionRate: Double) =
+                    conversionRate(JsonField.of(conversionRate))
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 @JsonProperty("conversion_rate")
@@ -14087,13 +14367,14 @@ class PlanCreateParams constructor(
                     this.modelType = modelType
                 }
 
-                fun bulkWithProrationConfig(bulkWithProrationConfig: BulkWithProrationConfig) = bulkWithProrationConfig(JsonField.of(bulkWithProrationConfig))
+                fun bulkWithProrationConfig(bulkWithProrationConfig: BulkWithProrationConfig) =
+                    bulkWithProrationConfig(JsonField.of(bulkWithProrationConfig))
 
                 @JsonProperty("bulk_with_proration_config")
                 @ExcludeMissing
-                fun bulkWithProrationConfig(bulkWithProrationConfig: JsonField<BulkWithProrationConfig>) = apply {
-                    this.bulkWithProrationConfig = bulkWithProrationConfig
-                }
+                fun bulkWithProrationConfig(
+                    bulkWithProrationConfig: JsonField<BulkWithProrationConfig>
+                ) = apply { this.bulkWithProrationConfig = bulkWithProrationConfig }
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -14107,9 +14388,7 @@ class PlanCreateParams constructor(
                  */
                 @JsonProperty("currency")
                 @ExcludeMissing
-                fun currency(currency: JsonField<String>) = apply {
-                    this.currency = currency
-                }
+                fun currency(currency: JsonField<String>) = apply { this.currency = currency }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -14121,31 +14400,36 @@ class PlanCreateParams constructor(
                     this.additionalProperties.put(key, value)
                 }
 
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
 
-                fun build(): NewPlanBulkWithProrationPrice = NewPlanBulkWithProrationPrice(
-                    metadata,
-                    externalPriceId,
-                    name,
-                    billableMetricId,
-                    itemId,
-                    billedInAdvance,
-                    fixedPriceQuantity,
-                    invoiceGroupingKey,
-                    cadence,
-                    conversionRate,
-                    modelType,
-                    bulkWithProrationConfig,
-                    currency,
-                    additionalProperties.toUnmodifiable(),
-                )
+                fun build(): NewPlanBulkWithProrationPrice =
+                    NewPlanBulkWithProrationPrice(
+                        metadata,
+                        externalPriceId,
+                        name,
+                        billableMetricId,
+                        itemId,
+                        billedInAdvance,
+                        fixedPriceQuantity,
+                        invoiceGroupingKey,
+                        cadence,
+                        conversionRate,
+                        modelType,
+                        bulkWithProrationConfig,
+                        currency,
+                        additionalProperties.toUnmodifiable(),
+                    )
             }
 
             @JsonDeserialize(builder = BulkWithProrationConfig.Builder::class)
             @NoAutoDetect
-            class BulkWithProrationConfig private constructor(private val additionalProperties: Map<String, JsonValue>, ) {
+            class BulkWithProrationConfig
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -14157,34 +14441,34 @@ class PlanCreateParams constructor(
 
                 fun validate(): BulkWithProrationConfig = apply {
                     if (!validated) {
-                      validated = true
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is BulkWithProrationConfig &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is BulkWithProrationConfig &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
                 }
 
-                override fun toString() = "BulkWithProrationConfig{additionalProperties=$additionalProperties}"
+                override fun toString() =
+                    "BulkWithProrationConfig{additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -14206,26 +14490,30 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
-                    fun build(): BulkWithProrationConfig = BulkWithProrationConfig(additionalProperties.toUnmodifiable())
+                    fun build(): BulkWithProrationConfig =
+                        BulkWithProrationConfig(additionalProperties.toUnmodifiable())
                 }
             }
 
-            class Cadence @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class Cadence
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Cadence &&
-                      this.value == other.value
+                    return other is Cadence && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -14268,41 +14556,45 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    ANNUAL -> Value.ANNUAL
-                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
-                    MONTHLY -> Value.MONTHLY
-                    QUARTERLY -> Value.QUARTERLY
-                    ONE_TIME -> Value.ONE_TIME
-                    CUSTOM -> Value.CUSTOM
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        ANNUAL -> Value.ANNUAL
+                        SEMI_ANNUAL -> Value.SEMI_ANNUAL
+                        MONTHLY -> Value.MONTHLY
+                        QUARTERLY -> Value.QUARTERLY
+                        ONE_TIME -> Value.ONE_TIME
+                        CUSTOM -> Value.CUSTOM
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    ANNUAL -> Known.ANNUAL
-                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
-                    MONTHLY -> Known.MONTHLY
-                    QUARTERLY -> Known.QUARTERLY
-                    ONE_TIME -> Known.ONE_TIME
-                    CUSTOM -> Known.CUSTOM
-                    else -> throw OrbInvalidDataException("Unknown Cadence: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        ANNUAL -> Known.ANNUAL
+                        SEMI_ANNUAL -> Known.SEMI_ANNUAL
+                        MONTHLY -> Known.MONTHLY
+                        QUARTERLY -> Known.QUARTERLY
+                        ONE_TIME -> Known.ONE_TIME
+                        CUSTOM -> Known.CUSTOM
+                        else -> throw OrbInvalidDataException("Unknown Cadence: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+            class ModelType
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
 
-                @com.fasterxml.jackson.annotation.JsonValue
-                fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is ModelType &&
-                      this.value == other.value
+                    return other is ModelType && this.value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -14311,7 +14603,8 @@ class PlanCreateParams constructor(
 
                 companion object {
 
-                    @JvmField val BULK_WITH_PRORATION = ModelType(JsonField.of("bulk_with_proration"))
+                    @JvmField
+                    val BULK_WITH_PRORATION = ModelType(JsonField.of("bulk_with_proration"))
 
                     @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                 }
@@ -14325,27 +14618,32 @@ class PlanCreateParams constructor(
                     _UNKNOWN,
                 }
 
-                fun value(): Value = when (this) {
-                    BULK_WITH_PRORATION -> Value.BULK_WITH_PRORATION
-                    else -> Value._UNKNOWN
-                }
+                fun value(): Value =
+                    when (this) {
+                        BULK_WITH_PRORATION -> Value.BULK_WITH_PRORATION
+                        else -> Value._UNKNOWN
+                    }
 
-                fun known(): Known = when (this) {
-                    BULK_WITH_PRORATION -> Known.BULK_WITH_PRORATION
-                    else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                }
+                fun known(): Known =
+                    when (this) {
+                        BULK_WITH_PRORATION -> Known.BULK_WITH_PRORATION
+                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
+                    }
 
                 fun asString(): String = _value().asStringOrThrow()
             }
 
             /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed
-             * by setting the value to `null`, and the entire metadata mapping can be cleared
-             * by setting `metadata` to `null`.
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
              */
             @JsonDeserialize(builder = Metadata.Builder::class)
             @NoAutoDetect
-            class Metadata private constructor(private val additionalProperties: Map<String, JsonValue>, ) {
+            class Metadata
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
 
                 private var validated: Boolean = false
 
@@ -14357,34 +14655,33 @@ class PlanCreateParams constructor(
 
                 fun validate(): Metadata = apply {
                     if (!validated) {
-                      validated = true
+                        validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                  if (this === other) {
-                      return true
-                  }
+                    if (this === other) {
+                        return true
+                    }
 
-                  return other is Metadata &&
-                      this.additionalProperties == other.additionalProperties
+                    return other is Metadata &&
+                        this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                  if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
-                  }
-                  return hashCode
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
                 }
 
                 override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
 
                 companion object {
 
-                    @JvmStatic
-                    fun builder() = Builder()
+                    @JvmStatic fun builder() = Builder()
                 }
 
                 class Builder {
@@ -14406,9 +14703,10 @@ class PlanCreateParams constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
                     fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
                 }
@@ -14417,13 +14715,16 @@ class PlanCreateParams constructor(
     }
 
     /**
-     * User-specified key/value pairs for the resource. Individual keys can be removed
-     * by setting the value to `null`, and the entire metadata mapping can be cleared
-     * by setting `metadata` to `null`.
+     * User-specified key/value pairs for the resource. Individual keys can be removed by setting
+     * the value to `null`, and the entire metadata mapping can be cleared by setting `metadata` to
+     * `null`.
      */
     @JsonDeserialize(builder = Metadata.Builder::class)
     @NoAutoDetect
-    class Metadata private constructor(private val additionalProperties: Map<String, JsonValue>, ) {
+    class Metadata
+    private constructor(
+        private val additionalProperties: Map<String, JsonValue>,
+    ) {
 
         private var hashCode: Int = 0
 
@@ -14434,27 +14735,25 @@ class PlanCreateParams constructor(
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is Metadata &&
-              this.additionalProperties == other.additionalProperties
+            return other is Metadata && this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-          if (hashCode == 0) {
-            hashCode = Objects.hash(additionalProperties)
-          }
-          return hashCode
+            if (hashCode == 0) {
+                hashCode = Objects.hash(additionalProperties)
+            }
+            return hashCode
         }
 
         override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
 
         companion object {
 
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         class Builder {
@@ -14484,18 +14783,20 @@ class PlanCreateParams constructor(
         }
     }
 
-    class Status @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+    class Status
+    @JsonCreator
+    private constructor(
+        private val value: JsonField<String>,
+    ) : Enum {
 
-        @com.fasterxml.jackson.annotation.JsonValue
-        fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is Status &&
-              this.value == other.value
+            return other is Status && this.value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -14522,17 +14823,19 @@ class PlanCreateParams constructor(
             _UNKNOWN,
         }
 
-        fun value(): Value = when (this) {
-            ACTIVE -> Value.ACTIVE
-            DRAFT -> Value.DRAFT
-            else -> Value._UNKNOWN
-        }
+        fun value(): Value =
+            when (this) {
+                ACTIVE -> Value.ACTIVE
+                DRAFT -> Value.DRAFT
+                else -> Value._UNKNOWN
+            }
 
-        fun known(): Known = when (this) {
-            ACTIVE -> Known.ACTIVE
-            DRAFT -> Known.DRAFT
-            else -> throw OrbInvalidDataException("Unknown Status: $value")
-        }
+        fun known(): Known =
+            when (this) {
+                ACTIVE -> Known.ACTIVE
+                DRAFT -> Known.DRAFT
+                else -> throw OrbInvalidDataException("Unknown Status: $value")
+            }
 
         fun asString(): String = _value().asStringOrThrow()
     }
