@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.1.0-alpha.5 (2024-08-22)
+
+Full Changelog: [v0.1.0-alpha.4...v0.1.0-alpha.5](https://github.com/orbcorp/orb-java/compare/v0.1.0-alpha.4...v0.1.0-alpha.5)
+
+### Features
+
+* **api:** codegen changes ([#39](https://github.com/orbcorp/orb-java/issues/39)) ([4568489](https://github.com/orbcorp/orb-java/commit/4568489793e5a8793a8ebe847efa218cdaa494e5))
+* **api:** manual updates ([#40](https://github.com/orbcorp/orb-java/issues/40)) ([423de9f](https://github.com/orbcorp/orb-java/commit/423de9f49600ef8deac5049da1f96956fddcf69f))
+* **api:** OpenAPI spec update via Stainless API ([#34](https://github.com/orbcorp/orb-java/issues/34)) ([3a42785](https://github.com/orbcorp/orb-java/commit/3a427852b444a502116457fb1d45ff85e9378cd5))
+* **api:** OpenAPI spec update via Stainless API ([#36](https://github.com/orbcorp/orb-java/issues/36)) ([03178df](https://github.com/orbcorp/orb-java/commit/03178dfaa6bfd6a3b180438916cb44738bb084d4))
+* **api:** OpenAPI spec update via Stainless API ([#37](https://github.com/orbcorp/orb-java/issues/37)) ([6d07d56](https://github.com/orbcorp/orb-java/commit/6d07d56a02f520af24180d9e825b9551c8d4bf7a))
+* **api:** OpenAPI spec update via Stainless API ([#38](https://github.com/orbcorp/orb-java/issues/38)) ([a92d627](https://github.com/orbcorp/orb-java/commit/a92d627184db41c58d90bf860e1746276a4228fb))
+* **api:** OpenAPI spec update via Stainless API ([#41](https://github.com/orbcorp/orb-java/issues/41)) ([64fdca5](https://github.com/orbcorp/orb-java/commit/64fdca5952f67afccb6220c99bc39a6417bb8ba2))
+* **api:** OpenAPI spec update via Stainless API ([#43](https://github.com/orbcorp/orb-java/issues/43)) ([ed5e3c8](https://github.com/orbcorp/orb-java/commit/ed5e3c8cafa1abfee247ddbe824700084ef7d7a7))
+* **api:** OpenAPI spec update via Stainless API ([#44](https://github.com/orbcorp/orb-java/issues/44)) ([9941471](https://github.com/orbcorp/orb-java/commit/994147155249ff02075d5c590671654cbcbb6676))
+
+
+### Bug Fixes
+
+* **docs:** use correct putAdditionalProperty value ([#42](https://github.com/orbcorp/orb-java/issues/42)) ([4f236bc](https://github.com/orbcorp/orb-java/commit/4f236bc7d29a65895aafd0c9c5e6e1745fb42bad))
+
 ## 0.1.0-alpha.4 (2024-08-14)
 
 Full Changelog: [v0.1.0-alpha.3...v0.1.0-alpha.4](https://github.com/orbcorp/orb-java/compare/v0.1.0-alpha.3...v0.1.0-alpha.4)

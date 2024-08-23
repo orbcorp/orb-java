@@ -2,7 +2,7 @@
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.withorb.api/orb-java)](https://central.sonatype.com/artifact/com.withorb.api/orb-java/0.1.0-alpha.4)
+[![Maven Central](https://img.shields.io/maven-central/v/com.withorb.api/orb-java)](https://central.sonatype.com/artifact/com.withorb.api/orb-java/0.1.0-alpha.5)
 
 <!-- x-release-please-end -->
 
@@ -25,7 +25,7 @@ The REST API documentation can be found on [docs.withorb.com](https://docs.with
 <!-- x-release-please-start-version -->
 
 ```kotlin
-implementation("com.withorb.api:orb-java:0.1.0-alpha.4")
+implementation("com.withorb.api:orb-java:0.1.0-alpha.5")
 ```
 
 #### Maven
@@ -34,7 +34,7 @@ implementation("com.withorb.api:orb-java:0.1.0-alpha.4")
 <dependency>
     <groupId>com.withorb.api</groupId>
     <artifactId>orb-java</artifactId>
-    <version>0.1.0-alpha.4</version>
+    <version>0.1.0-alpha.5</version>
 </dependency>
 ```
 
@@ -122,9 +122,10 @@ Sometimes, the API may support other properties that are not yet supported in th
 you can attach them using the `putAdditionalProperty` method.
 
 ```java
+import com.withorb.api.models.core.JsonValue;
 CustomerCreateParams params = CustomerCreateParams.builder()
     // ... normal properties
-    .putAdditionalProperty("secret_param", "4242")
+    .putAdditionalProperty("secret_param", JsonValue.from("4242"))
     .build();
 ```
 
