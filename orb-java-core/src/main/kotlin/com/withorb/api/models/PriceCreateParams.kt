@@ -1552,6 +1552,8 @@ constructor(
         private val fixedPriceQuantity: Double?,
         private val invoiceGroupingKey: String?,
         private val cadence: Cadence?,
+        private val billingCycleConfiguration: BillingCycleConfiguration?,
+        private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
         private val conversionRate: Double?,
         private val modelType: ModelType?,
         private val unitConfig: UnitConfig?,
@@ -1595,6 +1597,18 @@ constructor(
         /** The cadence to bill for this price on. */
         @JsonProperty("cadence") fun cadence(): Cadence? = cadence
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonProperty("billing_cycle_configuration")
+        fun billingCycleConfiguration(): BillingCycleConfiguration? = billingCycleConfiguration
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonProperty("invoicing_cycle_configuration")
+        fun invoicingCycleConfiguration(): InvoicingCycleConfiguration? =
+            invoicingCycleConfiguration
+
         /** The per unit conversion rate of the price currency to the invoicing currency. */
         @JsonProperty("conversion_rate") fun conversionRate(): Double? = conversionRate
 
@@ -1626,6 +1640,8 @@ constructor(
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.invoiceGroupingKey == other.invoiceGroupingKey &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
+                this.invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
                 this.conversionRate == other.conversionRate &&
                 this.modelType == other.modelType &&
                 this.unitConfig == other.unitConfig &&
@@ -1646,6 +1662,8 @@ constructor(
                         fixedPriceQuantity,
                         invoiceGroupingKey,
                         cadence,
+                        billingCycleConfiguration,
+                        invoicingCycleConfiguration,
                         conversionRate,
                         modelType,
                         unitConfig,
@@ -1657,7 +1675,7 @@ constructor(
         }
 
         override fun toString() =
-            "NewFloatingUnitPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, unitConfig=$unitConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            "NewFloatingUnitPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, unitConfig=$unitConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -1675,6 +1693,8 @@ constructor(
             private var fixedPriceQuantity: Double? = null
             private var invoiceGroupingKey: String? = null
             private var cadence: Cadence? = null
+            private var billingCycleConfiguration: BillingCycleConfiguration? = null
+            private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
             private var conversionRate: Double? = null
             private var modelType: ModelType? = null
             private var unitConfig: UnitConfig? = null
@@ -1692,6 +1712,8 @@ constructor(
                 this.fixedPriceQuantity = newFloatingUnitPrice.fixedPriceQuantity
                 this.invoiceGroupingKey = newFloatingUnitPrice.invoiceGroupingKey
                 this.cadence = newFloatingUnitPrice.cadence
+                this.billingCycleConfiguration = newFloatingUnitPrice.billingCycleConfiguration
+                this.invoicingCycleConfiguration = newFloatingUnitPrice.invoicingCycleConfiguration
                 this.conversionRate = newFloatingUnitPrice.conversionRate
                 this.modelType = newFloatingUnitPrice.modelType
                 this.unitConfig = newFloatingUnitPrice.unitConfig
@@ -1754,6 +1776,24 @@ constructor(
             @JsonProperty("cadence")
             fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
+            /**
+             * For custom cadence: specifies the duration of the billing period in days or months.
+             */
+            @JsonProperty("billing_cycle_configuration")
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                apply {
+                    this.billingCycleConfiguration = billingCycleConfiguration
+                }
+
+            /**
+             * Within each billing cycle, specifies the cadence at which invoices are produced. If
+             * unspecified, a single invoice is produced per billing cycle.
+             */
+            @JsonProperty("invoicing_cycle_configuration")
+            fun invoicingCycleConfiguration(
+                invoicingCycleConfiguration: InvoicingCycleConfiguration
+            ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
             /** The per unit conversion rate of the price currency to the invoicing currency. */
             @JsonProperty("conversion_rate")
             fun conversionRate(conversionRate: Double) = apply {
@@ -1795,6 +1835,8 @@ constructor(
                     fixedPriceQuantity,
                     invoiceGroupingKey,
                     checkNotNull(cadence) { "`cadence` is required but was not set" },
+                    billingCycleConfiguration,
+                    invoicingCycleConfiguration,
                     conversionRate,
                     checkNotNull(modelType) { "`modelType` is required but was not set" },
                     checkNotNull(unitConfig) { "`unitConfig` is required but was not set" },
@@ -2017,6 +2059,328 @@ constructor(
             }
         }
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonDeserialize(builder = InvoicingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class InvoicingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is InvoicingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "InvoicingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(invoicingCycleConfiguration: InvoicingCycleConfiguration) =
+                    apply {
+                        this.duration = invoicingCycleConfiguration.duration
+                        this.durationUnit = invoicingCycleConfiguration.durationUnit
+                        additionalProperties(invoicingCycleConfiguration.additionalProperties)
+                    }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): InvoicingCycleConfiguration =
+                    InvoicingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
@@ -2101,6 +2465,8 @@ constructor(
         private val fixedPriceQuantity: Double?,
         private val invoiceGroupingKey: String?,
         private val cadence: Cadence?,
+        private val billingCycleConfiguration: BillingCycleConfiguration?,
+        private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
         private val conversionRate: Double?,
         private val modelType: ModelType?,
         private val packageConfig: PackageConfig?,
@@ -2144,6 +2510,18 @@ constructor(
         /** The cadence to bill for this price on. */
         @JsonProperty("cadence") fun cadence(): Cadence? = cadence
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonProperty("billing_cycle_configuration")
+        fun billingCycleConfiguration(): BillingCycleConfiguration? = billingCycleConfiguration
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonProperty("invoicing_cycle_configuration")
+        fun invoicingCycleConfiguration(): InvoicingCycleConfiguration? =
+            invoicingCycleConfiguration
+
         /** The per unit conversion rate of the price currency to the invoicing currency. */
         @JsonProperty("conversion_rate") fun conversionRate(): Double? = conversionRate
 
@@ -2175,6 +2553,8 @@ constructor(
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.invoiceGroupingKey == other.invoiceGroupingKey &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
+                this.invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
                 this.conversionRate == other.conversionRate &&
                 this.modelType == other.modelType &&
                 this.packageConfig == other.packageConfig &&
@@ -2195,6 +2575,8 @@ constructor(
                         fixedPriceQuantity,
                         invoiceGroupingKey,
                         cadence,
+                        billingCycleConfiguration,
+                        invoicingCycleConfiguration,
                         conversionRate,
                         modelType,
                         packageConfig,
@@ -2206,7 +2588,7 @@ constructor(
         }
 
         override fun toString() =
-            "NewFloatingPackagePrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, packageConfig=$packageConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            "NewFloatingPackagePrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, packageConfig=$packageConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -2224,6 +2606,8 @@ constructor(
             private var fixedPriceQuantity: Double? = null
             private var invoiceGroupingKey: String? = null
             private var cadence: Cadence? = null
+            private var billingCycleConfiguration: BillingCycleConfiguration? = null
+            private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
             private var conversionRate: Double? = null
             private var modelType: ModelType? = null
             private var packageConfig: PackageConfig? = null
@@ -2241,6 +2625,9 @@ constructor(
                 this.fixedPriceQuantity = newFloatingPackagePrice.fixedPriceQuantity
                 this.invoiceGroupingKey = newFloatingPackagePrice.invoiceGroupingKey
                 this.cadence = newFloatingPackagePrice.cadence
+                this.billingCycleConfiguration = newFloatingPackagePrice.billingCycleConfiguration
+                this.invoicingCycleConfiguration =
+                    newFloatingPackagePrice.invoicingCycleConfiguration
                 this.conversionRate = newFloatingPackagePrice.conversionRate
                 this.modelType = newFloatingPackagePrice.modelType
                 this.packageConfig = newFloatingPackagePrice.packageConfig
@@ -2303,6 +2690,24 @@ constructor(
             @JsonProperty("cadence")
             fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
+            /**
+             * For custom cadence: specifies the duration of the billing period in days or months.
+             */
+            @JsonProperty("billing_cycle_configuration")
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                apply {
+                    this.billingCycleConfiguration = billingCycleConfiguration
+                }
+
+            /**
+             * Within each billing cycle, specifies the cadence at which invoices are produced. If
+             * unspecified, a single invoice is produced per billing cycle.
+             */
+            @JsonProperty("invoicing_cycle_configuration")
+            fun invoicingCycleConfiguration(
+                invoicingCycleConfiguration: InvoicingCycleConfiguration
+            ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
             /** The per unit conversion rate of the price currency to the invoicing currency. */
             @JsonProperty("conversion_rate")
             fun conversionRate(conversionRate: Double) = apply {
@@ -2346,6 +2751,8 @@ constructor(
                     fixedPriceQuantity,
                     invoiceGroupingKey,
                     checkNotNull(cadence) { "`cadence` is required but was not set" },
+                    billingCycleConfiguration,
+                    invoicingCycleConfiguration,
                     conversionRate,
                     checkNotNull(modelType) { "`modelType` is required but was not set" },
                     checkNotNull(packageConfig) { "`packageConfig` is required but was not set" },
@@ -2595,6 +3002,328 @@ constructor(
             }
         }
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonDeserialize(builder = InvoicingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class InvoicingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is InvoicingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "InvoicingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(invoicingCycleConfiguration: InvoicingCycleConfiguration) =
+                    apply {
+                        this.duration = invoicingCycleConfiguration.duration
+                        this.durationUnit = invoicingCycleConfiguration.durationUnit
+                        additionalProperties(invoicingCycleConfiguration.additionalProperties)
+                    }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): InvoicingCycleConfiguration =
+                    InvoicingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
@@ -2679,6 +3408,8 @@ constructor(
         private val fixedPriceQuantity: Double?,
         private val invoiceGroupingKey: String?,
         private val cadence: Cadence?,
+        private val billingCycleConfiguration: BillingCycleConfiguration?,
+        private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
         private val conversionRate: Double?,
         private val modelType: ModelType?,
         private val matrixConfig: MatrixConfig?,
@@ -2722,6 +3453,18 @@ constructor(
         /** The cadence to bill for this price on. */
         @JsonProperty("cadence") fun cadence(): Cadence? = cadence
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonProperty("billing_cycle_configuration")
+        fun billingCycleConfiguration(): BillingCycleConfiguration? = billingCycleConfiguration
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonProperty("invoicing_cycle_configuration")
+        fun invoicingCycleConfiguration(): InvoicingCycleConfiguration? =
+            invoicingCycleConfiguration
+
         /** The per unit conversion rate of the price currency to the invoicing currency. */
         @JsonProperty("conversion_rate") fun conversionRate(): Double? = conversionRate
 
@@ -2753,6 +3496,8 @@ constructor(
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.invoiceGroupingKey == other.invoiceGroupingKey &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
+                this.invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
                 this.conversionRate == other.conversionRate &&
                 this.modelType == other.modelType &&
                 this.matrixConfig == other.matrixConfig &&
@@ -2773,6 +3518,8 @@ constructor(
                         fixedPriceQuantity,
                         invoiceGroupingKey,
                         cadence,
+                        billingCycleConfiguration,
+                        invoicingCycleConfiguration,
                         conversionRate,
                         modelType,
                         matrixConfig,
@@ -2784,7 +3531,7 @@ constructor(
         }
 
         override fun toString() =
-            "NewFloatingMatrixPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, matrixConfig=$matrixConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            "NewFloatingMatrixPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, matrixConfig=$matrixConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -2802,6 +3549,8 @@ constructor(
             private var fixedPriceQuantity: Double? = null
             private var invoiceGroupingKey: String? = null
             private var cadence: Cadence? = null
+            private var billingCycleConfiguration: BillingCycleConfiguration? = null
+            private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
             private var conversionRate: Double? = null
             private var modelType: ModelType? = null
             private var matrixConfig: MatrixConfig? = null
@@ -2819,6 +3568,9 @@ constructor(
                 this.fixedPriceQuantity = newFloatingMatrixPrice.fixedPriceQuantity
                 this.invoiceGroupingKey = newFloatingMatrixPrice.invoiceGroupingKey
                 this.cadence = newFloatingMatrixPrice.cadence
+                this.billingCycleConfiguration = newFloatingMatrixPrice.billingCycleConfiguration
+                this.invoicingCycleConfiguration =
+                    newFloatingMatrixPrice.invoicingCycleConfiguration
                 this.conversionRate = newFloatingMatrixPrice.conversionRate
                 this.modelType = newFloatingMatrixPrice.modelType
                 this.matrixConfig = newFloatingMatrixPrice.matrixConfig
@@ -2881,6 +3633,24 @@ constructor(
             @JsonProperty("cadence")
             fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
+            /**
+             * For custom cadence: specifies the duration of the billing period in days or months.
+             */
+            @JsonProperty("billing_cycle_configuration")
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                apply {
+                    this.billingCycleConfiguration = billingCycleConfiguration
+                }
+
+            /**
+             * Within each billing cycle, specifies the cadence at which invoices are produced. If
+             * unspecified, a single invoice is produced per billing cycle.
+             */
+            @JsonProperty("invoicing_cycle_configuration")
+            fun invoicingCycleConfiguration(
+                invoicingCycleConfiguration: InvoicingCycleConfiguration
+            ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
             /** The per unit conversion rate of the price currency to the invoicing currency. */
             @JsonProperty("conversion_rate")
             fun conversionRate(conversionRate: Double) = apply {
@@ -2924,6 +3694,8 @@ constructor(
                     fixedPriceQuantity,
                     invoiceGroupingKey,
                     checkNotNull(cadence) { "`cadence` is required but was not set" },
+                    billingCycleConfiguration,
+                    invoicingCycleConfiguration,
                     conversionRate,
                     checkNotNull(modelType) { "`modelType` is required but was not set" },
                     checkNotNull(matrixConfig) { "`matrixConfig` is required but was not set" },
@@ -3300,6 +4072,328 @@ constructor(
             fun asString(): String = _value().asStringOrThrow()
         }
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonDeserialize(builder = InvoicingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class InvoicingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is InvoicingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "InvoicingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(invoicingCycleConfiguration: InvoicingCycleConfiguration) =
+                    apply {
+                        this.duration = invoicingCycleConfiguration.duration
+                        this.durationUnit = invoicingCycleConfiguration.durationUnit
+                        additionalProperties(invoicingCycleConfiguration.additionalProperties)
+                    }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): InvoicingCycleConfiguration =
+                    InvoicingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
@@ -3384,6 +4478,8 @@ constructor(
         private val fixedPriceQuantity: Double?,
         private val invoiceGroupingKey: String?,
         private val cadence: Cadence?,
+        private val billingCycleConfiguration: BillingCycleConfiguration?,
+        private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
         private val conversionRate: Double?,
         private val modelType: ModelType?,
         private val matrixWithAllocationConfig: MatrixWithAllocationConfig?,
@@ -3427,6 +4523,18 @@ constructor(
         /** The cadence to bill for this price on. */
         @JsonProperty("cadence") fun cadence(): Cadence? = cadence
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonProperty("billing_cycle_configuration")
+        fun billingCycleConfiguration(): BillingCycleConfiguration? = billingCycleConfiguration
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonProperty("invoicing_cycle_configuration")
+        fun invoicingCycleConfiguration(): InvoicingCycleConfiguration? =
+            invoicingCycleConfiguration
+
         /** The per unit conversion rate of the price currency to the invoicing currency. */
         @JsonProperty("conversion_rate") fun conversionRate(): Double? = conversionRate
 
@@ -3459,6 +4567,8 @@ constructor(
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.invoiceGroupingKey == other.invoiceGroupingKey &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
+                this.invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
                 this.conversionRate == other.conversionRate &&
                 this.modelType == other.modelType &&
                 this.matrixWithAllocationConfig == other.matrixWithAllocationConfig &&
@@ -3479,6 +4589,8 @@ constructor(
                         fixedPriceQuantity,
                         invoiceGroupingKey,
                         cadence,
+                        billingCycleConfiguration,
+                        invoicingCycleConfiguration,
                         conversionRate,
                         modelType,
                         matrixWithAllocationConfig,
@@ -3490,7 +4602,7 @@ constructor(
         }
 
         override fun toString() =
-            "NewFloatingMatrixWithAllocationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, matrixWithAllocationConfig=$matrixWithAllocationConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            "NewFloatingMatrixWithAllocationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, matrixWithAllocationConfig=$matrixWithAllocationConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -3508,6 +4620,8 @@ constructor(
             private var fixedPriceQuantity: Double? = null
             private var invoiceGroupingKey: String? = null
             private var cadence: Cadence? = null
+            private var billingCycleConfiguration: BillingCycleConfiguration? = null
+            private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
             private var conversionRate: Double? = null
             private var modelType: ModelType? = null
             private var matrixWithAllocationConfig: MatrixWithAllocationConfig? = null
@@ -3527,6 +4641,10 @@ constructor(
                 this.fixedPriceQuantity = newFloatingMatrixWithAllocationPrice.fixedPriceQuantity
                 this.invoiceGroupingKey = newFloatingMatrixWithAllocationPrice.invoiceGroupingKey
                 this.cadence = newFloatingMatrixWithAllocationPrice.cadence
+                this.billingCycleConfiguration =
+                    newFloatingMatrixWithAllocationPrice.billingCycleConfiguration
+                this.invoicingCycleConfiguration =
+                    newFloatingMatrixWithAllocationPrice.invoicingCycleConfiguration
                 this.conversionRate = newFloatingMatrixWithAllocationPrice.conversionRate
                 this.modelType = newFloatingMatrixWithAllocationPrice.modelType
                 this.matrixWithAllocationConfig =
@@ -3590,6 +4708,24 @@ constructor(
             @JsonProperty("cadence")
             fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
+            /**
+             * For custom cadence: specifies the duration of the billing period in days or months.
+             */
+            @JsonProperty("billing_cycle_configuration")
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                apply {
+                    this.billingCycleConfiguration = billingCycleConfiguration
+                }
+
+            /**
+             * Within each billing cycle, specifies the cadence at which invoices are produced. If
+             * unspecified, a single invoice is produced per billing cycle.
+             */
+            @JsonProperty("invoicing_cycle_configuration")
+            fun invoicingCycleConfiguration(
+                invoicingCycleConfiguration: InvoicingCycleConfiguration
+            ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
             /** The per unit conversion rate of the price currency to the invoicing currency. */
             @JsonProperty("conversion_rate")
             fun conversionRate(conversionRate: Double) = apply {
@@ -3634,6 +4770,8 @@ constructor(
                     fixedPriceQuantity,
                     invoiceGroupingKey,
                     checkNotNull(cadence) { "`cadence` is required but was not set" },
+                    billingCycleConfiguration,
+                    invoicingCycleConfiguration,
                     conversionRate,
                     checkNotNull(modelType) { "`modelType` is required but was not set" },
                     checkNotNull(matrixWithAllocationConfig) {
@@ -4026,6 +5164,328 @@ constructor(
             fun asString(): String = _value().asStringOrThrow()
         }
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonDeserialize(builder = InvoicingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class InvoicingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is InvoicingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "InvoicingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(invoicingCycleConfiguration: InvoicingCycleConfiguration) =
+                    apply {
+                        this.duration = invoicingCycleConfiguration.duration
+                        this.durationUnit = invoicingCycleConfiguration.durationUnit
+                        additionalProperties(invoicingCycleConfiguration.additionalProperties)
+                    }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): InvoicingCycleConfiguration =
+                    InvoicingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
@@ -4110,6 +5570,8 @@ constructor(
         private val fixedPriceQuantity: Double?,
         private val invoiceGroupingKey: String?,
         private val cadence: Cadence?,
+        private val billingCycleConfiguration: BillingCycleConfiguration?,
+        private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
         private val conversionRate: Double?,
         private val modelType: ModelType?,
         private val tieredConfig: TieredConfig?,
@@ -4153,6 +5615,18 @@ constructor(
         /** The cadence to bill for this price on. */
         @JsonProperty("cadence") fun cadence(): Cadence? = cadence
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonProperty("billing_cycle_configuration")
+        fun billingCycleConfiguration(): BillingCycleConfiguration? = billingCycleConfiguration
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonProperty("invoicing_cycle_configuration")
+        fun invoicingCycleConfiguration(): InvoicingCycleConfiguration? =
+            invoicingCycleConfiguration
+
         /** The per unit conversion rate of the price currency to the invoicing currency. */
         @JsonProperty("conversion_rate") fun conversionRate(): Double? = conversionRate
 
@@ -4184,6 +5658,8 @@ constructor(
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.invoiceGroupingKey == other.invoiceGroupingKey &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
+                this.invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
                 this.conversionRate == other.conversionRate &&
                 this.modelType == other.modelType &&
                 this.tieredConfig == other.tieredConfig &&
@@ -4204,6 +5680,8 @@ constructor(
                         fixedPriceQuantity,
                         invoiceGroupingKey,
                         cadence,
+                        billingCycleConfiguration,
+                        invoicingCycleConfiguration,
                         conversionRate,
                         modelType,
                         tieredConfig,
@@ -4215,7 +5693,7 @@ constructor(
         }
 
         override fun toString() =
-            "NewFloatingTieredPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, tieredConfig=$tieredConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            "NewFloatingTieredPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, tieredConfig=$tieredConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -4233,6 +5711,8 @@ constructor(
             private var fixedPriceQuantity: Double? = null
             private var invoiceGroupingKey: String? = null
             private var cadence: Cadence? = null
+            private var billingCycleConfiguration: BillingCycleConfiguration? = null
+            private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
             private var conversionRate: Double? = null
             private var modelType: ModelType? = null
             private var tieredConfig: TieredConfig? = null
@@ -4250,6 +5730,9 @@ constructor(
                 this.fixedPriceQuantity = newFloatingTieredPrice.fixedPriceQuantity
                 this.invoiceGroupingKey = newFloatingTieredPrice.invoiceGroupingKey
                 this.cadence = newFloatingTieredPrice.cadence
+                this.billingCycleConfiguration = newFloatingTieredPrice.billingCycleConfiguration
+                this.invoicingCycleConfiguration =
+                    newFloatingTieredPrice.invoicingCycleConfiguration
                 this.conversionRate = newFloatingTieredPrice.conversionRate
                 this.modelType = newFloatingTieredPrice.modelType
                 this.tieredConfig = newFloatingTieredPrice.tieredConfig
@@ -4312,6 +5795,24 @@ constructor(
             @JsonProperty("cadence")
             fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
+            /**
+             * For custom cadence: specifies the duration of the billing period in days or months.
+             */
+            @JsonProperty("billing_cycle_configuration")
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                apply {
+                    this.billingCycleConfiguration = billingCycleConfiguration
+                }
+
+            /**
+             * Within each billing cycle, specifies the cadence at which invoices are produced. If
+             * unspecified, a single invoice is produced per billing cycle.
+             */
+            @JsonProperty("invoicing_cycle_configuration")
+            fun invoicingCycleConfiguration(
+                invoicingCycleConfiguration: InvoicingCycleConfiguration
+            ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
             /** The per unit conversion rate of the price currency to the invoicing currency. */
             @JsonProperty("conversion_rate")
             fun conversionRate(conversionRate: Double) = apply {
@@ -4355,6 +5856,8 @@ constructor(
                     fixedPriceQuantity,
                     invoiceGroupingKey,
                     checkNotNull(cadence) { "`cadence` is required but was not set" },
+                    billingCycleConfiguration,
+                    invoicingCycleConfiguration,
                     conversionRate,
                     checkNotNull(modelType) { "`modelType` is required but was not set" },
                     checkNotNull(tieredConfig) { "`tieredConfig` is required but was not set" },
@@ -4689,6 +6192,328 @@ constructor(
             }
         }
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonDeserialize(builder = InvoicingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class InvoicingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is InvoicingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "InvoicingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(invoicingCycleConfiguration: InvoicingCycleConfiguration) =
+                    apply {
+                        this.duration = invoicingCycleConfiguration.duration
+                        this.durationUnit = invoicingCycleConfiguration.durationUnit
+                        additionalProperties(invoicingCycleConfiguration.additionalProperties)
+                    }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): InvoicingCycleConfiguration =
+                    InvoicingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
@@ -4773,6 +6598,8 @@ constructor(
         private val fixedPriceQuantity: Double?,
         private val invoiceGroupingKey: String?,
         private val cadence: Cadence?,
+        private val billingCycleConfiguration: BillingCycleConfiguration?,
+        private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
         private val conversionRate: Double?,
         private val modelType: ModelType?,
         private val tieredBpsConfig: TieredBpsConfig?,
@@ -4816,6 +6643,18 @@ constructor(
         /** The cadence to bill for this price on. */
         @JsonProperty("cadence") fun cadence(): Cadence? = cadence
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonProperty("billing_cycle_configuration")
+        fun billingCycleConfiguration(): BillingCycleConfiguration? = billingCycleConfiguration
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonProperty("invoicing_cycle_configuration")
+        fun invoicingCycleConfiguration(): InvoicingCycleConfiguration? =
+            invoicingCycleConfiguration
+
         /** The per unit conversion rate of the price currency to the invoicing currency. */
         @JsonProperty("conversion_rate") fun conversionRate(): Double? = conversionRate
 
@@ -4847,6 +6686,8 @@ constructor(
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.invoiceGroupingKey == other.invoiceGroupingKey &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
+                this.invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
                 this.conversionRate == other.conversionRate &&
                 this.modelType == other.modelType &&
                 this.tieredBpsConfig == other.tieredBpsConfig &&
@@ -4867,6 +6708,8 @@ constructor(
                         fixedPriceQuantity,
                         invoiceGroupingKey,
                         cadence,
+                        billingCycleConfiguration,
+                        invoicingCycleConfiguration,
                         conversionRate,
                         modelType,
                         tieredBpsConfig,
@@ -4878,7 +6721,7 @@ constructor(
         }
 
         override fun toString() =
-            "NewFloatingTieredBpsPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, tieredBpsConfig=$tieredBpsConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            "NewFloatingTieredBpsPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, tieredBpsConfig=$tieredBpsConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -4896,6 +6739,8 @@ constructor(
             private var fixedPriceQuantity: Double? = null
             private var invoiceGroupingKey: String? = null
             private var cadence: Cadence? = null
+            private var billingCycleConfiguration: BillingCycleConfiguration? = null
+            private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
             private var conversionRate: Double? = null
             private var modelType: ModelType? = null
             private var tieredBpsConfig: TieredBpsConfig? = null
@@ -4913,6 +6758,9 @@ constructor(
                 this.fixedPriceQuantity = newFloatingTieredBpsPrice.fixedPriceQuantity
                 this.invoiceGroupingKey = newFloatingTieredBpsPrice.invoiceGroupingKey
                 this.cadence = newFloatingTieredBpsPrice.cadence
+                this.billingCycleConfiguration = newFloatingTieredBpsPrice.billingCycleConfiguration
+                this.invoicingCycleConfiguration =
+                    newFloatingTieredBpsPrice.invoicingCycleConfiguration
                 this.conversionRate = newFloatingTieredBpsPrice.conversionRate
                 this.modelType = newFloatingTieredBpsPrice.modelType
                 this.tieredBpsConfig = newFloatingTieredBpsPrice.tieredBpsConfig
@@ -4975,6 +6823,24 @@ constructor(
             @JsonProperty("cadence")
             fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
+            /**
+             * For custom cadence: specifies the duration of the billing period in days or months.
+             */
+            @JsonProperty("billing_cycle_configuration")
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                apply {
+                    this.billingCycleConfiguration = billingCycleConfiguration
+                }
+
+            /**
+             * Within each billing cycle, specifies the cadence at which invoices are produced. If
+             * unspecified, a single invoice is produced per billing cycle.
+             */
+            @JsonProperty("invoicing_cycle_configuration")
+            fun invoicingCycleConfiguration(
+                invoicingCycleConfiguration: InvoicingCycleConfiguration
+            ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
             /** The per unit conversion rate of the price currency to the invoicing currency. */
             @JsonProperty("conversion_rate")
             fun conversionRate(conversionRate: Double) = apply {
@@ -5018,6 +6884,8 @@ constructor(
                     fixedPriceQuantity,
                     invoiceGroupingKey,
                     checkNotNull(cadence) { "`cadence` is required but was not set" },
+                    billingCycleConfiguration,
+                    invoicingCycleConfiguration,
                     conversionRate,
                     checkNotNull(modelType) { "`modelType` is required but was not set" },
                     checkNotNull(tieredBpsConfig) {
@@ -5379,6 +7247,328 @@ constructor(
             }
         }
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonDeserialize(builder = InvoicingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class InvoicingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is InvoicingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "InvoicingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(invoicingCycleConfiguration: InvoicingCycleConfiguration) =
+                    apply {
+                        this.duration = invoicingCycleConfiguration.duration
+                        this.durationUnit = invoicingCycleConfiguration.durationUnit
+                        additionalProperties(invoicingCycleConfiguration.additionalProperties)
+                    }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): InvoicingCycleConfiguration =
+                    InvoicingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
@@ -5463,6 +7653,8 @@ constructor(
         private val fixedPriceQuantity: Double?,
         private val invoiceGroupingKey: String?,
         private val cadence: Cadence?,
+        private val billingCycleConfiguration: BillingCycleConfiguration?,
+        private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
         private val conversionRate: Double?,
         private val modelType: ModelType?,
         private val bpsConfig: BpsConfig?,
@@ -5506,6 +7698,18 @@ constructor(
         /** The cadence to bill for this price on. */
         @JsonProperty("cadence") fun cadence(): Cadence? = cadence
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonProperty("billing_cycle_configuration")
+        fun billingCycleConfiguration(): BillingCycleConfiguration? = billingCycleConfiguration
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonProperty("invoicing_cycle_configuration")
+        fun invoicingCycleConfiguration(): InvoicingCycleConfiguration? =
+            invoicingCycleConfiguration
+
         /** The per unit conversion rate of the price currency to the invoicing currency. */
         @JsonProperty("conversion_rate") fun conversionRate(): Double? = conversionRate
 
@@ -5537,6 +7741,8 @@ constructor(
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.invoiceGroupingKey == other.invoiceGroupingKey &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
+                this.invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
                 this.conversionRate == other.conversionRate &&
                 this.modelType == other.modelType &&
                 this.bpsConfig == other.bpsConfig &&
@@ -5557,6 +7763,8 @@ constructor(
                         fixedPriceQuantity,
                         invoiceGroupingKey,
                         cadence,
+                        billingCycleConfiguration,
+                        invoicingCycleConfiguration,
                         conversionRate,
                         modelType,
                         bpsConfig,
@@ -5568,7 +7776,7 @@ constructor(
         }
 
         override fun toString() =
-            "NewFloatingBpsPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, bpsConfig=$bpsConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            "NewFloatingBpsPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, bpsConfig=$bpsConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -5586,6 +7794,8 @@ constructor(
             private var fixedPriceQuantity: Double? = null
             private var invoiceGroupingKey: String? = null
             private var cadence: Cadence? = null
+            private var billingCycleConfiguration: BillingCycleConfiguration? = null
+            private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
             private var conversionRate: Double? = null
             private var modelType: ModelType? = null
             private var bpsConfig: BpsConfig? = null
@@ -5603,6 +7813,8 @@ constructor(
                 this.fixedPriceQuantity = newFloatingBpsPrice.fixedPriceQuantity
                 this.invoiceGroupingKey = newFloatingBpsPrice.invoiceGroupingKey
                 this.cadence = newFloatingBpsPrice.cadence
+                this.billingCycleConfiguration = newFloatingBpsPrice.billingCycleConfiguration
+                this.invoicingCycleConfiguration = newFloatingBpsPrice.invoicingCycleConfiguration
                 this.conversionRate = newFloatingBpsPrice.conversionRate
                 this.modelType = newFloatingBpsPrice.modelType
                 this.bpsConfig = newFloatingBpsPrice.bpsConfig
@@ -5665,6 +7877,24 @@ constructor(
             @JsonProperty("cadence")
             fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
+            /**
+             * For custom cadence: specifies the duration of the billing period in days or months.
+             */
+            @JsonProperty("billing_cycle_configuration")
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                apply {
+                    this.billingCycleConfiguration = billingCycleConfiguration
+                }
+
+            /**
+             * Within each billing cycle, specifies the cadence at which invoices are produced. If
+             * unspecified, a single invoice is produced per billing cycle.
+             */
+            @JsonProperty("invoicing_cycle_configuration")
+            fun invoicingCycleConfiguration(
+                invoicingCycleConfiguration: InvoicingCycleConfiguration
+            ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
             /** The per unit conversion rate of the price currency to the invoicing currency. */
             @JsonProperty("conversion_rate")
             fun conversionRate(conversionRate: Double) = apply {
@@ -5706,6 +7936,8 @@ constructor(
                     fixedPriceQuantity,
                     invoiceGroupingKey,
                     checkNotNull(cadence) { "`cadence` is required but was not set" },
+                    billingCycleConfiguration,
+                    invoicingCycleConfiguration,
                     conversionRate,
                     checkNotNull(modelType) { "`modelType` is required but was not set" },
                     checkNotNull(bpsConfig) { "`bpsConfig` is required but was not set" },
@@ -5946,6 +8178,328 @@ constructor(
             fun asString(): String = _value().asStringOrThrow()
         }
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonDeserialize(builder = InvoicingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class InvoicingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is InvoicingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "InvoicingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(invoicingCycleConfiguration: InvoicingCycleConfiguration) =
+                    apply {
+                        this.duration = invoicingCycleConfiguration.duration
+                        this.durationUnit = invoicingCycleConfiguration.durationUnit
+                        additionalProperties(invoicingCycleConfiguration.additionalProperties)
+                    }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): InvoicingCycleConfiguration =
+                    InvoicingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
@@ -6030,6 +8584,8 @@ constructor(
         private val fixedPriceQuantity: Double?,
         private val invoiceGroupingKey: String?,
         private val cadence: Cadence?,
+        private val billingCycleConfiguration: BillingCycleConfiguration?,
+        private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
         private val conversionRate: Double?,
         private val modelType: ModelType?,
         private val bulkBpsConfig: BulkBpsConfig?,
@@ -6073,6 +8629,18 @@ constructor(
         /** The cadence to bill for this price on. */
         @JsonProperty("cadence") fun cadence(): Cadence? = cadence
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonProperty("billing_cycle_configuration")
+        fun billingCycleConfiguration(): BillingCycleConfiguration? = billingCycleConfiguration
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonProperty("invoicing_cycle_configuration")
+        fun invoicingCycleConfiguration(): InvoicingCycleConfiguration? =
+            invoicingCycleConfiguration
+
         /** The per unit conversion rate of the price currency to the invoicing currency. */
         @JsonProperty("conversion_rate") fun conversionRate(): Double? = conversionRate
 
@@ -6104,6 +8672,8 @@ constructor(
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.invoiceGroupingKey == other.invoiceGroupingKey &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
+                this.invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
                 this.conversionRate == other.conversionRate &&
                 this.modelType == other.modelType &&
                 this.bulkBpsConfig == other.bulkBpsConfig &&
@@ -6124,6 +8694,8 @@ constructor(
                         fixedPriceQuantity,
                         invoiceGroupingKey,
                         cadence,
+                        billingCycleConfiguration,
+                        invoicingCycleConfiguration,
                         conversionRate,
                         modelType,
                         bulkBpsConfig,
@@ -6135,7 +8707,7 @@ constructor(
         }
 
         override fun toString() =
-            "NewFloatingBulkBpsPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, bulkBpsConfig=$bulkBpsConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            "NewFloatingBulkBpsPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, bulkBpsConfig=$bulkBpsConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -6153,6 +8725,8 @@ constructor(
             private var fixedPriceQuantity: Double? = null
             private var invoiceGroupingKey: String? = null
             private var cadence: Cadence? = null
+            private var billingCycleConfiguration: BillingCycleConfiguration? = null
+            private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
             private var conversionRate: Double? = null
             private var modelType: ModelType? = null
             private var bulkBpsConfig: BulkBpsConfig? = null
@@ -6170,6 +8744,9 @@ constructor(
                 this.fixedPriceQuantity = newFloatingBulkBpsPrice.fixedPriceQuantity
                 this.invoiceGroupingKey = newFloatingBulkBpsPrice.invoiceGroupingKey
                 this.cadence = newFloatingBulkBpsPrice.cadence
+                this.billingCycleConfiguration = newFloatingBulkBpsPrice.billingCycleConfiguration
+                this.invoicingCycleConfiguration =
+                    newFloatingBulkBpsPrice.invoicingCycleConfiguration
                 this.conversionRate = newFloatingBulkBpsPrice.conversionRate
                 this.modelType = newFloatingBulkBpsPrice.modelType
                 this.bulkBpsConfig = newFloatingBulkBpsPrice.bulkBpsConfig
@@ -6232,6 +8809,24 @@ constructor(
             @JsonProperty("cadence")
             fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
+            /**
+             * For custom cadence: specifies the duration of the billing period in days or months.
+             */
+            @JsonProperty("billing_cycle_configuration")
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                apply {
+                    this.billingCycleConfiguration = billingCycleConfiguration
+                }
+
+            /**
+             * Within each billing cycle, specifies the cadence at which invoices are produced. If
+             * unspecified, a single invoice is produced per billing cycle.
+             */
+            @JsonProperty("invoicing_cycle_configuration")
+            fun invoicingCycleConfiguration(
+                invoicingCycleConfiguration: InvoicingCycleConfiguration
+            ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
             /** The per unit conversion rate of the price currency to the invoicing currency. */
             @JsonProperty("conversion_rate")
             fun conversionRate(conversionRate: Double) = apply {
@@ -6275,6 +8870,8 @@ constructor(
                     fixedPriceQuantity,
                     invoiceGroupingKey,
                     checkNotNull(cadence) { "`cadence` is required but was not set" },
+                    billingCycleConfiguration,
+                    invoicingCycleConfiguration,
                     conversionRate,
                     checkNotNull(modelType) { "`modelType` is required but was not set" },
                     checkNotNull(bulkBpsConfig) { "`bulkBpsConfig` is required but was not set" },
@@ -6618,6 +9215,328 @@ constructor(
             fun asString(): String = _value().asStringOrThrow()
         }
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonDeserialize(builder = InvoicingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class InvoicingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is InvoicingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "InvoicingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(invoicingCycleConfiguration: InvoicingCycleConfiguration) =
+                    apply {
+                        this.duration = invoicingCycleConfiguration.duration
+                        this.durationUnit = invoicingCycleConfiguration.durationUnit
+                        additionalProperties(invoicingCycleConfiguration.additionalProperties)
+                    }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): InvoicingCycleConfiguration =
+                    InvoicingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
@@ -6702,6 +9621,8 @@ constructor(
         private val fixedPriceQuantity: Double?,
         private val invoiceGroupingKey: String?,
         private val cadence: Cadence?,
+        private val billingCycleConfiguration: BillingCycleConfiguration?,
+        private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
         private val conversionRate: Double?,
         private val modelType: ModelType?,
         private val bulkConfig: BulkConfig?,
@@ -6745,6 +9666,18 @@ constructor(
         /** The cadence to bill for this price on. */
         @JsonProperty("cadence") fun cadence(): Cadence? = cadence
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonProperty("billing_cycle_configuration")
+        fun billingCycleConfiguration(): BillingCycleConfiguration? = billingCycleConfiguration
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonProperty("invoicing_cycle_configuration")
+        fun invoicingCycleConfiguration(): InvoicingCycleConfiguration? =
+            invoicingCycleConfiguration
+
         /** The per unit conversion rate of the price currency to the invoicing currency. */
         @JsonProperty("conversion_rate") fun conversionRate(): Double? = conversionRate
 
@@ -6776,6 +9709,8 @@ constructor(
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.invoiceGroupingKey == other.invoiceGroupingKey &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
+                this.invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
                 this.conversionRate == other.conversionRate &&
                 this.modelType == other.modelType &&
                 this.bulkConfig == other.bulkConfig &&
@@ -6796,6 +9731,8 @@ constructor(
                         fixedPriceQuantity,
                         invoiceGroupingKey,
                         cadence,
+                        billingCycleConfiguration,
+                        invoicingCycleConfiguration,
                         conversionRate,
                         modelType,
                         bulkConfig,
@@ -6807,7 +9744,7 @@ constructor(
         }
 
         override fun toString() =
-            "NewFloatingBulkPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, bulkConfig=$bulkConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            "NewFloatingBulkPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, bulkConfig=$bulkConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -6825,6 +9762,8 @@ constructor(
             private var fixedPriceQuantity: Double? = null
             private var invoiceGroupingKey: String? = null
             private var cadence: Cadence? = null
+            private var billingCycleConfiguration: BillingCycleConfiguration? = null
+            private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
             private var conversionRate: Double? = null
             private var modelType: ModelType? = null
             private var bulkConfig: BulkConfig? = null
@@ -6842,6 +9781,8 @@ constructor(
                 this.fixedPriceQuantity = newFloatingBulkPrice.fixedPriceQuantity
                 this.invoiceGroupingKey = newFloatingBulkPrice.invoiceGroupingKey
                 this.cadence = newFloatingBulkPrice.cadence
+                this.billingCycleConfiguration = newFloatingBulkPrice.billingCycleConfiguration
+                this.invoicingCycleConfiguration = newFloatingBulkPrice.invoicingCycleConfiguration
                 this.conversionRate = newFloatingBulkPrice.conversionRate
                 this.modelType = newFloatingBulkPrice.modelType
                 this.bulkConfig = newFloatingBulkPrice.bulkConfig
@@ -6904,6 +9845,24 @@ constructor(
             @JsonProperty("cadence")
             fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
+            /**
+             * For custom cadence: specifies the duration of the billing period in days or months.
+             */
+            @JsonProperty("billing_cycle_configuration")
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                apply {
+                    this.billingCycleConfiguration = billingCycleConfiguration
+                }
+
+            /**
+             * Within each billing cycle, specifies the cadence at which invoices are produced. If
+             * unspecified, a single invoice is produced per billing cycle.
+             */
+            @JsonProperty("invoicing_cycle_configuration")
+            fun invoicingCycleConfiguration(
+                invoicingCycleConfiguration: InvoicingCycleConfiguration
+            ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
             /** The per unit conversion rate of the price currency to the invoicing currency. */
             @JsonProperty("conversion_rate")
             fun conversionRate(conversionRate: Double) = apply {
@@ -6945,6 +9904,8 @@ constructor(
                     fixedPriceQuantity,
                     invoiceGroupingKey,
                     checkNotNull(cadence) { "`cadence` is required but was not set" },
+                    billingCycleConfiguration,
+                    invoicingCycleConfiguration,
                     conversionRate,
                     checkNotNull(modelType) { "`modelType` is required but was not set" },
                     checkNotNull(bulkConfig) { "`bulkConfig` is required but was not set" },
@@ -7268,6 +10229,328 @@ constructor(
             fun asString(): String = _value().asStringOrThrow()
         }
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonDeserialize(builder = InvoicingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class InvoicingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is InvoicingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "InvoicingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(invoicingCycleConfiguration: InvoicingCycleConfiguration) =
+                    apply {
+                        this.duration = invoicingCycleConfiguration.duration
+                        this.durationUnit = invoicingCycleConfiguration.durationUnit
+                        additionalProperties(invoicingCycleConfiguration.additionalProperties)
+                    }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): InvoicingCycleConfiguration =
+                    InvoicingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
@@ -7352,6 +10635,8 @@ constructor(
         private val fixedPriceQuantity: Double?,
         private val invoiceGroupingKey: String?,
         private val cadence: Cadence?,
+        private val billingCycleConfiguration: BillingCycleConfiguration?,
+        private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
         private val conversionRate: Double?,
         private val modelType: ModelType?,
         private val thresholdTotalAmountConfig: ThresholdTotalAmountConfig?,
@@ -7395,6 +10680,18 @@ constructor(
         /** The cadence to bill for this price on. */
         @JsonProperty("cadence") fun cadence(): Cadence? = cadence
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonProperty("billing_cycle_configuration")
+        fun billingCycleConfiguration(): BillingCycleConfiguration? = billingCycleConfiguration
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonProperty("invoicing_cycle_configuration")
+        fun invoicingCycleConfiguration(): InvoicingCycleConfiguration? =
+            invoicingCycleConfiguration
+
         /** The per unit conversion rate of the price currency to the invoicing currency. */
         @JsonProperty("conversion_rate") fun conversionRate(): Double? = conversionRate
 
@@ -7427,6 +10724,8 @@ constructor(
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.invoiceGroupingKey == other.invoiceGroupingKey &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
+                this.invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
                 this.conversionRate == other.conversionRate &&
                 this.modelType == other.modelType &&
                 this.thresholdTotalAmountConfig == other.thresholdTotalAmountConfig &&
@@ -7447,6 +10746,8 @@ constructor(
                         fixedPriceQuantity,
                         invoiceGroupingKey,
                         cadence,
+                        billingCycleConfiguration,
+                        invoicingCycleConfiguration,
                         conversionRate,
                         modelType,
                         thresholdTotalAmountConfig,
@@ -7458,7 +10759,7 @@ constructor(
         }
 
         override fun toString() =
-            "NewFloatingThresholdTotalAmountPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, thresholdTotalAmountConfig=$thresholdTotalAmountConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            "NewFloatingThresholdTotalAmountPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, thresholdTotalAmountConfig=$thresholdTotalAmountConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -7476,6 +10777,8 @@ constructor(
             private var fixedPriceQuantity: Double? = null
             private var invoiceGroupingKey: String? = null
             private var cadence: Cadence? = null
+            private var billingCycleConfiguration: BillingCycleConfiguration? = null
+            private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
             private var conversionRate: Double? = null
             private var modelType: ModelType? = null
             private var thresholdTotalAmountConfig: ThresholdTotalAmountConfig? = null
@@ -7495,6 +10798,10 @@ constructor(
                 this.fixedPriceQuantity = newFloatingThresholdTotalAmountPrice.fixedPriceQuantity
                 this.invoiceGroupingKey = newFloatingThresholdTotalAmountPrice.invoiceGroupingKey
                 this.cadence = newFloatingThresholdTotalAmountPrice.cadence
+                this.billingCycleConfiguration =
+                    newFloatingThresholdTotalAmountPrice.billingCycleConfiguration
+                this.invoicingCycleConfiguration =
+                    newFloatingThresholdTotalAmountPrice.invoicingCycleConfiguration
                 this.conversionRate = newFloatingThresholdTotalAmountPrice.conversionRate
                 this.modelType = newFloatingThresholdTotalAmountPrice.modelType
                 this.thresholdTotalAmountConfig =
@@ -7558,6 +10865,24 @@ constructor(
             @JsonProperty("cadence")
             fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
+            /**
+             * For custom cadence: specifies the duration of the billing period in days or months.
+             */
+            @JsonProperty("billing_cycle_configuration")
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                apply {
+                    this.billingCycleConfiguration = billingCycleConfiguration
+                }
+
+            /**
+             * Within each billing cycle, specifies the cadence at which invoices are produced. If
+             * unspecified, a single invoice is produced per billing cycle.
+             */
+            @JsonProperty("invoicing_cycle_configuration")
+            fun invoicingCycleConfiguration(
+                invoicingCycleConfiguration: InvoicingCycleConfiguration
+            ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
             /** The per unit conversion rate of the price currency to the invoicing currency. */
             @JsonProperty("conversion_rate")
             fun conversionRate(conversionRate: Double) = apply {
@@ -7602,6 +10927,8 @@ constructor(
                     fixedPriceQuantity,
                     invoiceGroupingKey,
                     checkNotNull(cadence) { "`cadence` is required but was not set" },
+                    billingCycleConfiguration,
+                    invoicingCycleConfiguration,
                     conversionRate,
                     checkNotNull(modelType) { "`modelType` is required but was not set" },
                     checkNotNull(thresholdTotalAmountConfig) {
@@ -7813,6 +11140,328 @@ constructor(
             }
         }
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonDeserialize(builder = InvoicingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class InvoicingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is InvoicingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "InvoicingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(invoicingCycleConfiguration: InvoicingCycleConfiguration) =
+                    apply {
+                        this.duration = invoicingCycleConfiguration.duration
+                        this.durationUnit = invoicingCycleConfiguration.durationUnit
+                        additionalProperties(invoicingCycleConfiguration.additionalProperties)
+                    }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): InvoicingCycleConfiguration =
+                    InvoicingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
@@ -7897,6 +11546,8 @@ constructor(
         private val fixedPriceQuantity: Double?,
         private val invoiceGroupingKey: String?,
         private val cadence: Cadence?,
+        private val billingCycleConfiguration: BillingCycleConfiguration?,
+        private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
         private val conversionRate: Double?,
         private val modelType: ModelType?,
         private val tieredPackageConfig: TieredPackageConfig?,
@@ -7940,6 +11591,18 @@ constructor(
         /** The cadence to bill for this price on. */
         @JsonProperty("cadence") fun cadence(): Cadence? = cadence
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonProperty("billing_cycle_configuration")
+        fun billingCycleConfiguration(): BillingCycleConfiguration? = billingCycleConfiguration
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonProperty("invoicing_cycle_configuration")
+        fun invoicingCycleConfiguration(): InvoicingCycleConfiguration? =
+            invoicingCycleConfiguration
+
         /** The per unit conversion rate of the price currency to the invoicing currency. */
         @JsonProperty("conversion_rate") fun conversionRate(): Double? = conversionRate
 
@@ -7972,6 +11635,8 @@ constructor(
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.invoiceGroupingKey == other.invoiceGroupingKey &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
+                this.invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
                 this.conversionRate == other.conversionRate &&
                 this.modelType == other.modelType &&
                 this.tieredPackageConfig == other.tieredPackageConfig &&
@@ -7992,6 +11657,8 @@ constructor(
                         fixedPriceQuantity,
                         invoiceGroupingKey,
                         cadence,
+                        billingCycleConfiguration,
+                        invoicingCycleConfiguration,
                         conversionRate,
                         modelType,
                         tieredPackageConfig,
@@ -8003,7 +11670,7 @@ constructor(
         }
 
         override fun toString() =
-            "NewFloatingTieredPackagePrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, tieredPackageConfig=$tieredPackageConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            "NewFloatingTieredPackagePrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, tieredPackageConfig=$tieredPackageConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -8021,6 +11688,8 @@ constructor(
             private var fixedPriceQuantity: Double? = null
             private var invoiceGroupingKey: String? = null
             private var cadence: Cadence? = null
+            private var billingCycleConfiguration: BillingCycleConfiguration? = null
+            private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
             private var conversionRate: Double? = null
             private var modelType: ModelType? = null
             private var tieredPackageConfig: TieredPackageConfig? = null
@@ -8039,6 +11708,10 @@ constructor(
                     this.fixedPriceQuantity = newFloatingTieredPackagePrice.fixedPriceQuantity
                     this.invoiceGroupingKey = newFloatingTieredPackagePrice.invoiceGroupingKey
                     this.cadence = newFloatingTieredPackagePrice.cadence
+                    this.billingCycleConfiguration =
+                        newFloatingTieredPackagePrice.billingCycleConfiguration
+                    this.invoicingCycleConfiguration =
+                        newFloatingTieredPackagePrice.invoicingCycleConfiguration
                     this.conversionRate = newFloatingTieredPackagePrice.conversionRate
                     this.modelType = newFloatingTieredPackagePrice.modelType
                     this.tieredPackageConfig = newFloatingTieredPackagePrice.tieredPackageConfig
@@ -8101,6 +11774,24 @@ constructor(
             @JsonProperty("cadence")
             fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
+            /**
+             * For custom cadence: specifies the duration of the billing period in days or months.
+             */
+            @JsonProperty("billing_cycle_configuration")
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                apply {
+                    this.billingCycleConfiguration = billingCycleConfiguration
+                }
+
+            /**
+             * Within each billing cycle, specifies the cadence at which invoices are produced. If
+             * unspecified, a single invoice is produced per billing cycle.
+             */
+            @JsonProperty("invoicing_cycle_configuration")
+            fun invoicingCycleConfiguration(
+                invoicingCycleConfiguration: InvoicingCycleConfiguration
+            ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
             /** The per unit conversion rate of the price currency to the invoicing currency. */
             @JsonProperty("conversion_rate")
             fun conversionRate(conversionRate: Double) = apply {
@@ -8144,6 +11835,8 @@ constructor(
                     fixedPriceQuantity,
                     invoiceGroupingKey,
                     checkNotNull(cadence) { "`cadence` is required but was not set" },
+                    billingCycleConfiguration,
+                    invoicingCycleConfiguration,
                     conversionRate,
                     checkNotNull(modelType) { "`modelType` is required but was not set" },
                     checkNotNull(tieredPackageConfig) {
@@ -8354,6 +12047,328 @@ constructor(
             }
         }
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonDeserialize(builder = InvoicingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class InvoicingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is InvoicingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "InvoicingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(invoicingCycleConfiguration: InvoicingCycleConfiguration) =
+                    apply {
+                        this.duration = invoicingCycleConfiguration.duration
+                        this.durationUnit = invoicingCycleConfiguration.durationUnit
+                        additionalProperties(invoicingCycleConfiguration.additionalProperties)
+                    }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): InvoicingCycleConfiguration =
+                    InvoicingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
@@ -8438,6 +12453,8 @@ constructor(
         private val fixedPriceQuantity: Double?,
         private val invoiceGroupingKey: String?,
         private val cadence: Cadence?,
+        private val billingCycleConfiguration: BillingCycleConfiguration?,
+        private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
         private val conversionRate: Double?,
         private val modelType: ModelType?,
         private val groupedTieredConfig: GroupedTieredConfig?,
@@ -8481,6 +12498,18 @@ constructor(
         /** The cadence to bill for this price on. */
         @JsonProperty("cadence") fun cadence(): Cadence? = cadence
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonProperty("billing_cycle_configuration")
+        fun billingCycleConfiguration(): BillingCycleConfiguration? = billingCycleConfiguration
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonProperty("invoicing_cycle_configuration")
+        fun invoicingCycleConfiguration(): InvoicingCycleConfiguration? =
+            invoicingCycleConfiguration
+
         /** The per unit conversion rate of the price currency to the invoicing currency. */
         @JsonProperty("conversion_rate") fun conversionRate(): Double? = conversionRate
 
@@ -8513,6 +12542,8 @@ constructor(
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.invoiceGroupingKey == other.invoiceGroupingKey &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
+                this.invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
                 this.conversionRate == other.conversionRate &&
                 this.modelType == other.modelType &&
                 this.groupedTieredConfig == other.groupedTieredConfig &&
@@ -8533,6 +12564,8 @@ constructor(
                         fixedPriceQuantity,
                         invoiceGroupingKey,
                         cadence,
+                        billingCycleConfiguration,
+                        invoicingCycleConfiguration,
                         conversionRate,
                         modelType,
                         groupedTieredConfig,
@@ -8544,7 +12577,7 @@ constructor(
         }
 
         override fun toString() =
-            "NewFloatingGroupedTieredPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, groupedTieredConfig=$groupedTieredConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            "NewFloatingGroupedTieredPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, groupedTieredConfig=$groupedTieredConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -8562,6 +12595,8 @@ constructor(
             private var fixedPriceQuantity: Double? = null
             private var invoiceGroupingKey: String? = null
             private var cadence: Cadence? = null
+            private var billingCycleConfiguration: BillingCycleConfiguration? = null
+            private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
             private var conversionRate: Double? = null
             private var modelType: ModelType? = null
             private var groupedTieredConfig: GroupedTieredConfig? = null
@@ -8580,6 +12615,10 @@ constructor(
                     this.fixedPriceQuantity = newFloatingGroupedTieredPrice.fixedPriceQuantity
                     this.invoiceGroupingKey = newFloatingGroupedTieredPrice.invoiceGroupingKey
                     this.cadence = newFloatingGroupedTieredPrice.cadence
+                    this.billingCycleConfiguration =
+                        newFloatingGroupedTieredPrice.billingCycleConfiguration
+                    this.invoicingCycleConfiguration =
+                        newFloatingGroupedTieredPrice.invoicingCycleConfiguration
                     this.conversionRate = newFloatingGroupedTieredPrice.conversionRate
                     this.modelType = newFloatingGroupedTieredPrice.modelType
                     this.groupedTieredConfig = newFloatingGroupedTieredPrice.groupedTieredConfig
@@ -8642,6 +12681,24 @@ constructor(
             @JsonProperty("cadence")
             fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
+            /**
+             * For custom cadence: specifies the duration of the billing period in days or months.
+             */
+            @JsonProperty("billing_cycle_configuration")
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                apply {
+                    this.billingCycleConfiguration = billingCycleConfiguration
+                }
+
+            /**
+             * Within each billing cycle, specifies the cadence at which invoices are produced. If
+             * unspecified, a single invoice is produced per billing cycle.
+             */
+            @JsonProperty("invoicing_cycle_configuration")
+            fun invoicingCycleConfiguration(
+                invoicingCycleConfiguration: InvoicingCycleConfiguration
+            ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
             /** The per unit conversion rate of the price currency to the invoicing currency. */
             @JsonProperty("conversion_rate")
             fun conversionRate(conversionRate: Double) = apply {
@@ -8685,6 +12742,8 @@ constructor(
                     fixedPriceQuantity,
                     invoiceGroupingKey,
                     checkNotNull(cadence) { "`cadence` is required but was not set" },
+                    billingCycleConfiguration,
+                    invoicingCycleConfiguration,
                     conversionRate,
                     checkNotNull(modelType) { "`modelType` is required but was not set" },
                     checkNotNull(groupedTieredConfig) {
@@ -8895,6 +12954,328 @@ constructor(
             fun asString(): String = _value().asStringOrThrow()
         }
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonDeserialize(builder = InvoicingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class InvoicingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is InvoicingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "InvoicingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(invoicingCycleConfiguration: InvoicingCycleConfiguration) =
+                    apply {
+                        this.duration = invoicingCycleConfiguration.duration
+                        this.durationUnit = invoicingCycleConfiguration.durationUnit
+                        additionalProperties(invoicingCycleConfiguration.additionalProperties)
+                    }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): InvoicingCycleConfiguration =
+                    InvoicingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
@@ -8979,6 +13360,8 @@ constructor(
         private val fixedPriceQuantity: Double?,
         private val invoiceGroupingKey: String?,
         private val cadence: Cadence?,
+        private val billingCycleConfiguration: BillingCycleConfiguration?,
+        private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
         private val conversionRate: Double?,
         private val modelType: ModelType?,
         private val tieredWithMinimumConfig: TieredWithMinimumConfig?,
@@ -9022,6 +13405,18 @@ constructor(
         /** The cadence to bill for this price on. */
         @JsonProperty("cadence") fun cadence(): Cadence? = cadence
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonProperty("billing_cycle_configuration")
+        fun billingCycleConfiguration(): BillingCycleConfiguration? = billingCycleConfiguration
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonProperty("invoicing_cycle_configuration")
+        fun invoicingCycleConfiguration(): InvoicingCycleConfiguration? =
+            invoicingCycleConfiguration
+
         /** The per unit conversion rate of the price currency to the invoicing currency. */
         @JsonProperty("conversion_rate") fun conversionRate(): Double? = conversionRate
 
@@ -9054,6 +13449,8 @@ constructor(
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.invoiceGroupingKey == other.invoiceGroupingKey &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
+                this.invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
                 this.conversionRate == other.conversionRate &&
                 this.modelType == other.modelType &&
                 this.tieredWithMinimumConfig == other.tieredWithMinimumConfig &&
@@ -9074,6 +13471,8 @@ constructor(
                         fixedPriceQuantity,
                         invoiceGroupingKey,
                         cadence,
+                        billingCycleConfiguration,
+                        invoicingCycleConfiguration,
                         conversionRate,
                         modelType,
                         tieredWithMinimumConfig,
@@ -9085,7 +13484,7 @@ constructor(
         }
 
         override fun toString() =
-            "NewFloatingTieredWithMinimumPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, tieredWithMinimumConfig=$tieredWithMinimumConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            "NewFloatingTieredWithMinimumPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, tieredWithMinimumConfig=$tieredWithMinimumConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -9103,6 +13502,8 @@ constructor(
             private var fixedPriceQuantity: Double? = null
             private var invoiceGroupingKey: String? = null
             private var cadence: Cadence? = null
+            private var billingCycleConfiguration: BillingCycleConfiguration? = null
+            private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
             private var conversionRate: Double? = null
             private var modelType: ModelType? = null
             private var tieredWithMinimumConfig: TieredWithMinimumConfig? = null
@@ -9122,6 +13523,10 @@ constructor(
                 this.fixedPriceQuantity = newFloatingTieredWithMinimumPrice.fixedPriceQuantity
                 this.invoiceGroupingKey = newFloatingTieredWithMinimumPrice.invoiceGroupingKey
                 this.cadence = newFloatingTieredWithMinimumPrice.cadence
+                this.billingCycleConfiguration =
+                    newFloatingTieredWithMinimumPrice.billingCycleConfiguration
+                this.invoicingCycleConfiguration =
+                    newFloatingTieredWithMinimumPrice.invoicingCycleConfiguration
                 this.conversionRate = newFloatingTieredWithMinimumPrice.conversionRate
                 this.modelType = newFloatingTieredWithMinimumPrice.modelType
                 this.tieredWithMinimumConfig =
@@ -9185,6 +13590,24 @@ constructor(
             @JsonProperty("cadence")
             fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
+            /**
+             * For custom cadence: specifies the duration of the billing period in days or months.
+             */
+            @JsonProperty("billing_cycle_configuration")
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                apply {
+                    this.billingCycleConfiguration = billingCycleConfiguration
+                }
+
+            /**
+             * Within each billing cycle, specifies the cadence at which invoices are produced. If
+             * unspecified, a single invoice is produced per billing cycle.
+             */
+            @JsonProperty("invoicing_cycle_configuration")
+            fun invoicingCycleConfiguration(
+                invoicingCycleConfiguration: InvoicingCycleConfiguration
+            ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
             /** The per unit conversion rate of the price currency to the invoicing currency. */
             @JsonProperty("conversion_rate")
             fun conversionRate(conversionRate: Double) = apply {
@@ -9228,6 +13651,8 @@ constructor(
                     fixedPriceQuantity,
                     invoiceGroupingKey,
                     checkNotNull(cadence) { "`cadence` is required but was not set" },
+                    billingCycleConfiguration,
+                    invoicingCycleConfiguration,
                     conversionRate,
                     checkNotNull(modelType) { "`modelType` is required but was not set" },
                     checkNotNull(tieredWithMinimumConfig) {
@@ -9438,6 +13863,328 @@ constructor(
             }
         }
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonDeserialize(builder = InvoicingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class InvoicingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is InvoicingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "InvoicingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(invoicingCycleConfiguration: InvoicingCycleConfiguration) =
+                    apply {
+                        this.duration = invoicingCycleConfiguration.duration
+                        this.durationUnit = invoicingCycleConfiguration.durationUnit
+                        additionalProperties(invoicingCycleConfiguration.additionalProperties)
+                    }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): InvoicingCycleConfiguration =
+                    InvoicingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
@@ -9522,6 +14269,8 @@ constructor(
         private val fixedPriceQuantity: Double?,
         private val invoiceGroupingKey: String?,
         private val cadence: Cadence?,
+        private val billingCycleConfiguration: BillingCycleConfiguration?,
+        private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
         private val conversionRate: Double?,
         private val modelType: ModelType?,
         private val packageWithAllocationConfig: PackageWithAllocationConfig?,
@@ -9565,6 +14314,18 @@ constructor(
         /** The cadence to bill for this price on. */
         @JsonProperty("cadence") fun cadence(): Cadence? = cadence
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonProperty("billing_cycle_configuration")
+        fun billingCycleConfiguration(): BillingCycleConfiguration? = billingCycleConfiguration
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonProperty("invoicing_cycle_configuration")
+        fun invoicingCycleConfiguration(): InvoicingCycleConfiguration? =
+            invoicingCycleConfiguration
+
         /** The per unit conversion rate of the price currency to the invoicing currency. */
         @JsonProperty("conversion_rate") fun conversionRate(): Double? = conversionRate
 
@@ -9598,6 +14359,8 @@ constructor(
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.invoiceGroupingKey == other.invoiceGroupingKey &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
+                this.invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
                 this.conversionRate == other.conversionRate &&
                 this.modelType == other.modelType &&
                 this.packageWithAllocationConfig == other.packageWithAllocationConfig &&
@@ -9618,6 +14381,8 @@ constructor(
                         fixedPriceQuantity,
                         invoiceGroupingKey,
                         cadence,
+                        billingCycleConfiguration,
+                        invoicingCycleConfiguration,
                         conversionRate,
                         modelType,
                         packageWithAllocationConfig,
@@ -9629,7 +14394,7 @@ constructor(
         }
 
         override fun toString() =
-            "NewFloatingPackageWithAllocationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, packageWithAllocationConfig=$packageWithAllocationConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            "NewFloatingPackageWithAllocationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, packageWithAllocationConfig=$packageWithAllocationConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -9647,6 +14412,8 @@ constructor(
             private var fixedPriceQuantity: Double? = null
             private var invoiceGroupingKey: String? = null
             private var cadence: Cadence? = null
+            private var billingCycleConfiguration: BillingCycleConfiguration? = null
+            private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
             private var conversionRate: Double? = null
             private var modelType: ModelType? = null
             private var packageWithAllocationConfig: PackageWithAllocationConfig? = null
@@ -9666,6 +14433,10 @@ constructor(
                 this.fixedPriceQuantity = newFloatingPackageWithAllocationPrice.fixedPriceQuantity
                 this.invoiceGroupingKey = newFloatingPackageWithAllocationPrice.invoiceGroupingKey
                 this.cadence = newFloatingPackageWithAllocationPrice.cadence
+                this.billingCycleConfiguration =
+                    newFloatingPackageWithAllocationPrice.billingCycleConfiguration
+                this.invoicingCycleConfiguration =
+                    newFloatingPackageWithAllocationPrice.invoicingCycleConfiguration
                 this.conversionRate = newFloatingPackageWithAllocationPrice.conversionRate
                 this.modelType = newFloatingPackageWithAllocationPrice.modelType
                 this.packageWithAllocationConfig =
@@ -9729,6 +14500,24 @@ constructor(
             @JsonProperty("cadence")
             fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
+            /**
+             * For custom cadence: specifies the duration of the billing period in days or months.
+             */
+            @JsonProperty("billing_cycle_configuration")
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                apply {
+                    this.billingCycleConfiguration = billingCycleConfiguration
+                }
+
+            /**
+             * Within each billing cycle, specifies the cadence at which invoices are produced. If
+             * unspecified, a single invoice is produced per billing cycle.
+             */
+            @JsonProperty("invoicing_cycle_configuration")
+            fun invoicingCycleConfiguration(
+                invoicingCycleConfiguration: InvoicingCycleConfiguration
+            ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
             /** The per unit conversion rate of the price currency to the invoicing currency. */
             @JsonProperty("conversion_rate")
             fun conversionRate(conversionRate: Double) = apply {
@@ -9772,6 +14561,8 @@ constructor(
                     fixedPriceQuantity,
                     invoiceGroupingKey,
                     checkNotNull(cadence) { "`cadence` is required but was not set" },
+                    billingCycleConfiguration,
+                    invoicingCycleConfiguration,
                     conversionRate,
                     checkNotNull(modelType) { "`modelType` is required but was not set" },
                     checkNotNull(packageWithAllocationConfig) {
@@ -9984,6 +14775,328 @@ constructor(
             }
         }
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonDeserialize(builder = InvoicingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class InvoicingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is InvoicingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "InvoicingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(invoicingCycleConfiguration: InvoicingCycleConfiguration) =
+                    apply {
+                        this.duration = invoicingCycleConfiguration.duration
+                        this.durationUnit = invoicingCycleConfiguration.durationUnit
+                        additionalProperties(invoicingCycleConfiguration.additionalProperties)
+                    }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): InvoicingCycleConfiguration =
+                    InvoicingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
@@ -10068,6 +15181,8 @@ constructor(
         private val fixedPriceQuantity: Double?,
         private val invoiceGroupingKey: String?,
         private val cadence: Cadence?,
+        private val billingCycleConfiguration: BillingCycleConfiguration?,
+        private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
         private val conversionRate: Double?,
         private val modelType: ModelType?,
         private val tieredPackageWithMinimumConfig: TieredPackageWithMinimumConfig?,
@@ -10111,6 +15226,18 @@ constructor(
         /** The cadence to bill for this price on. */
         @JsonProperty("cadence") fun cadence(): Cadence? = cadence
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonProperty("billing_cycle_configuration")
+        fun billingCycleConfiguration(): BillingCycleConfiguration? = billingCycleConfiguration
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonProperty("invoicing_cycle_configuration")
+        fun invoicingCycleConfiguration(): InvoicingCycleConfiguration? =
+            invoicingCycleConfiguration
+
         /** The per unit conversion rate of the price currency to the invoicing currency. */
         @JsonProperty("conversion_rate") fun conversionRate(): Double? = conversionRate
 
@@ -10144,6 +15271,8 @@ constructor(
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.invoiceGroupingKey == other.invoiceGroupingKey &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
+                this.invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
                 this.conversionRate == other.conversionRate &&
                 this.modelType == other.modelType &&
                 this.tieredPackageWithMinimumConfig == other.tieredPackageWithMinimumConfig &&
@@ -10164,6 +15293,8 @@ constructor(
                         fixedPriceQuantity,
                         invoiceGroupingKey,
                         cadence,
+                        billingCycleConfiguration,
+                        invoicingCycleConfiguration,
                         conversionRate,
                         modelType,
                         tieredPackageWithMinimumConfig,
@@ -10175,7 +15306,7 @@ constructor(
         }
 
         override fun toString() =
-            "NewFloatingTieredPackageWithMinimumPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, tieredPackageWithMinimumConfig=$tieredPackageWithMinimumConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            "NewFloatingTieredPackageWithMinimumPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, tieredPackageWithMinimumConfig=$tieredPackageWithMinimumConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -10193,6 +15324,8 @@ constructor(
             private var fixedPriceQuantity: Double? = null
             private var invoiceGroupingKey: String? = null
             private var cadence: Cadence? = null
+            private var billingCycleConfiguration: BillingCycleConfiguration? = null
+            private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
             private var conversionRate: Double? = null
             private var modelType: ModelType? = null
             private var tieredPackageWithMinimumConfig: TieredPackageWithMinimumConfig? = null
@@ -10214,6 +15347,10 @@ constructor(
                 this.invoiceGroupingKey =
                     newFloatingTieredPackageWithMinimumPrice.invoiceGroupingKey
                 this.cadence = newFloatingTieredPackageWithMinimumPrice.cadence
+                this.billingCycleConfiguration =
+                    newFloatingTieredPackageWithMinimumPrice.billingCycleConfiguration
+                this.invoicingCycleConfiguration =
+                    newFloatingTieredPackageWithMinimumPrice.invoicingCycleConfiguration
                 this.conversionRate = newFloatingTieredPackageWithMinimumPrice.conversionRate
                 this.modelType = newFloatingTieredPackageWithMinimumPrice.modelType
                 this.tieredPackageWithMinimumConfig =
@@ -10277,6 +15414,24 @@ constructor(
             @JsonProperty("cadence")
             fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
+            /**
+             * For custom cadence: specifies the duration of the billing period in days or months.
+             */
+            @JsonProperty("billing_cycle_configuration")
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                apply {
+                    this.billingCycleConfiguration = billingCycleConfiguration
+                }
+
+            /**
+             * Within each billing cycle, specifies the cadence at which invoices are produced. If
+             * unspecified, a single invoice is produced per billing cycle.
+             */
+            @JsonProperty("invoicing_cycle_configuration")
+            fun invoicingCycleConfiguration(
+                invoicingCycleConfiguration: InvoicingCycleConfiguration
+            ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
             /** The per unit conversion rate of the price currency to the invoicing currency. */
             @JsonProperty("conversion_rate")
             fun conversionRate(conversionRate: Double) = apply {
@@ -10320,6 +15475,8 @@ constructor(
                     fixedPriceQuantity,
                     invoiceGroupingKey,
                     checkNotNull(cadence) { "`cadence` is required but was not set" },
+                    billingCycleConfiguration,
+                    invoicingCycleConfiguration,
                     conversionRate,
                     checkNotNull(modelType) { "`modelType` is required but was not set" },
                     checkNotNull(tieredPackageWithMinimumConfig) {
@@ -10533,6 +15690,328 @@ constructor(
             }
         }
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonDeserialize(builder = InvoicingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class InvoicingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is InvoicingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "InvoicingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(invoicingCycleConfiguration: InvoicingCycleConfiguration) =
+                    apply {
+                        this.duration = invoicingCycleConfiguration.duration
+                        this.durationUnit = invoicingCycleConfiguration.durationUnit
+                        additionalProperties(invoicingCycleConfiguration.additionalProperties)
+                    }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): InvoicingCycleConfiguration =
+                    InvoicingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
@@ -10617,6 +16096,8 @@ constructor(
         private val fixedPriceQuantity: Double?,
         private val invoiceGroupingKey: String?,
         private val cadence: Cadence?,
+        private val billingCycleConfiguration: BillingCycleConfiguration?,
+        private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
         private val conversionRate: Double?,
         private val modelType: ModelType?,
         private val unitWithPercentConfig: UnitWithPercentConfig?,
@@ -10660,6 +16141,18 @@ constructor(
         /** The cadence to bill for this price on. */
         @JsonProperty("cadence") fun cadence(): Cadence? = cadence
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonProperty("billing_cycle_configuration")
+        fun billingCycleConfiguration(): BillingCycleConfiguration? = billingCycleConfiguration
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonProperty("invoicing_cycle_configuration")
+        fun invoicingCycleConfiguration(): InvoicingCycleConfiguration? =
+            invoicingCycleConfiguration
+
         /** The per unit conversion rate of the price currency to the invoicing currency. */
         @JsonProperty("conversion_rate") fun conversionRate(): Double? = conversionRate
 
@@ -10692,6 +16185,8 @@ constructor(
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.invoiceGroupingKey == other.invoiceGroupingKey &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
+                this.invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
                 this.conversionRate == other.conversionRate &&
                 this.modelType == other.modelType &&
                 this.unitWithPercentConfig == other.unitWithPercentConfig &&
@@ -10712,6 +16207,8 @@ constructor(
                         fixedPriceQuantity,
                         invoiceGroupingKey,
                         cadence,
+                        billingCycleConfiguration,
+                        invoicingCycleConfiguration,
                         conversionRate,
                         modelType,
                         unitWithPercentConfig,
@@ -10723,7 +16220,7 @@ constructor(
         }
 
         override fun toString() =
-            "NewFloatingUnitWithPercentPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, unitWithPercentConfig=$unitWithPercentConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            "NewFloatingUnitWithPercentPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, unitWithPercentConfig=$unitWithPercentConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -10741,6 +16238,8 @@ constructor(
             private var fixedPriceQuantity: Double? = null
             private var invoiceGroupingKey: String? = null
             private var cadence: Cadence? = null
+            private var billingCycleConfiguration: BillingCycleConfiguration? = null
+            private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
             private var conversionRate: Double? = null
             private var modelType: ModelType? = null
             private var unitWithPercentConfig: UnitWithPercentConfig? = null
@@ -10759,6 +16258,10 @@ constructor(
                     this.fixedPriceQuantity = newFloatingUnitWithPercentPrice.fixedPriceQuantity
                     this.invoiceGroupingKey = newFloatingUnitWithPercentPrice.invoiceGroupingKey
                     this.cadence = newFloatingUnitWithPercentPrice.cadence
+                    this.billingCycleConfiguration =
+                        newFloatingUnitWithPercentPrice.billingCycleConfiguration
+                    this.invoicingCycleConfiguration =
+                        newFloatingUnitWithPercentPrice.invoicingCycleConfiguration
                     this.conversionRate = newFloatingUnitWithPercentPrice.conversionRate
                     this.modelType = newFloatingUnitWithPercentPrice.modelType
                     this.unitWithPercentConfig =
@@ -10822,6 +16325,24 @@ constructor(
             @JsonProperty("cadence")
             fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
+            /**
+             * For custom cadence: specifies the duration of the billing period in days or months.
+             */
+            @JsonProperty("billing_cycle_configuration")
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                apply {
+                    this.billingCycleConfiguration = billingCycleConfiguration
+                }
+
+            /**
+             * Within each billing cycle, specifies the cadence at which invoices are produced. If
+             * unspecified, a single invoice is produced per billing cycle.
+             */
+            @JsonProperty("invoicing_cycle_configuration")
+            fun invoicingCycleConfiguration(
+                invoicingCycleConfiguration: InvoicingCycleConfiguration
+            ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
             /** The per unit conversion rate of the price currency to the invoicing currency. */
             @JsonProperty("conversion_rate")
             fun conversionRate(conversionRate: Double) = apply {
@@ -10865,6 +16386,8 @@ constructor(
                     fixedPriceQuantity,
                     invoiceGroupingKey,
                     checkNotNull(cadence) { "`cadence` is required but was not set" },
+                    billingCycleConfiguration,
+                    invoicingCycleConfiguration,
                     conversionRate,
                     checkNotNull(modelType) { "`modelType` is required but was not set" },
                     checkNotNull(unitWithPercentConfig) {
@@ -11075,6 +16598,328 @@ constructor(
             }
         }
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonDeserialize(builder = InvoicingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class InvoicingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is InvoicingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "InvoicingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(invoicingCycleConfiguration: InvoicingCycleConfiguration) =
+                    apply {
+                        this.duration = invoicingCycleConfiguration.duration
+                        this.durationUnit = invoicingCycleConfiguration.durationUnit
+                        additionalProperties(invoicingCycleConfiguration.additionalProperties)
+                    }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): InvoicingCycleConfiguration =
+                    InvoicingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
@@ -11159,6 +17004,8 @@ constructor(
         private val fixedPriceQuantity: Double?,
         private val invoiceGroupingKey: String?,
         private val cadence: Cadence?,
+        private val billingCycleConfiguration: BillingCycleConfiguration?,
+        private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
         private val conversionRate: Double?,
         private val modelType: ModelType?,
         private val tieredWithProrationConfig: TieredWithProrationConfig?,
@@ -11202,6 +17049,18 @@ constructor(
         /** The cadence to bill for this price on. */
         @JsonProperty("cadence") fun cadence(): Cadence? = cadence
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonProperty("billing_cycle_configuration")
+        fun billingCycleConfiguration(): BillingCycleConfiguration? = billingCycleConfiguration
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonProperty("invoicing_cycle_configuration")
+        fun invoicingCycleConfiguration(): InvoicingCycleConfiguration? =
+            invoicingCycleConfiguration
+
         /** The per unit conversion rate of the price currency to the invoicing currency. */
         @JsonProperty("conversion_rate") fun conversionRate(): Double? = conversionRate
 
@@ -11234,6 +17093,8 @@ constructor(
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.invoiceGroupingKey == other.invoiceGroupingKey &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
+                this.invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
                 this.conversionRate == other.conversionRate &&
                 this.modelType == other.modelType &&
                 this.tieredWithProrationConfig == other.tieredWithProrationConfig &&
@@ -11254,6 +17115,8 @@ constructor(
                         fixedPriceQuantity,
                         invoiceGroupingKey,
                         cadence,
+                        billingCycleConfiguration,
+                        invoicingCycleConfiguration,
                         conversionRate,
                         modelType,
                         tieredWithProrationConfig,
@@ -11265,7 +17128,7 @@ constructor(
         }
 
         override fun toString() =
-            "NewFloatingTieredWithProrationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, tieredWithProrationConfig=$tieredWithProrationConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            "NewFloatingTieredWithProrationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, tieredWithProrationConfig=$tieredWithProrationConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -11283,6 +17146,8 @@ constructor(
             private var fixedPriceQuantity: Double? = null
             private var invoiceGroupingKey: String? = null
             private var cadence: Cadence? = null
+            private var billingCycleConfiguration: BillingCycleConfiguration? = null
+            private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
             private var conversionRate: Double? = null
             private var modelType: ModelType? = null
             private var tieredWithProrationConfig: TieredWithProrationConfig? = null
@@ -11302,6 +17167,10 @@ constructor(
                 this.fixedPriceQuantity = newFloatingTieredWithProrationPrice.fixedPriceQuantity
                 this.invoiceGroupingKey = newFloatingTieredWithProrationPrice.invoiceGroupingKey
                 this.cadence = newFloatingTieredWithProrationPrice.cadence
+                this.billingCycleConfiguration =
+                    newFloatingTieredWithProrationPrice.billingCycleConfiguration
+                this.invoicingCycleConfiguration =
+                    newFloatingTieredWithProrationPrice.invoicingCycleConfiguration
                 this.conversionRate = newFloatingTieredWithProrationPrice.conversionRate
                 this.modelType = newFloatingTieredWithProrationPrice.modelType
                 this.tieredWithProrationConfig =
@@ -11365,6 +17234,24 @@ constructor(
             @JsonProperty("cadence")
             fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
+            /**
+             * For custom cadence: specifies the duration of the billing period in days or months.
+             */
+            @JsonProperty("billing_cycle_configuration")
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                apply {
+                    this.billingCycleConfiguration = billingCycleConfiguration
+                }
+
+            /**
+             * Within each billing cycle, specifies the cadence at which invoices are produced. If
+             * unspecified, a single invoice is produced per billing cycle.
+             */
+            @JsonProperty("invoicing_cycle_configuration")
+            fun invoicingCycleConfiguration(
+                invoicingCycleConfiguration: InvoicingCycleConfiguration
+            ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
             /** The per unit conversion rate of the price currency to the invoicing currency. */
             @JsonProperty("conversion_rate")
             fun conversionRate(conversionRate: Double) = apply {
@@ -11409,6 +17296,8 @@ constructor(
                     fixedPriceQuantity,
                     invoiceGroupingKey,
                     checkNotNull(cadence) { "`cadence` is required but was not set" },
+                    billingCycleConfiguration,
+                    invoicingCycleConfiguration,
                     conversionRate,
                     checkNotNull(modelType) { "`modelType` is required but was not set" },
                     checkNotNull(tieredWithProrationConfig) {
@@ -11620,6 +17509,328 @@ constructor(
             }
         }
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonDeserialize(builder = InvoicingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class InvoicingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is InvoicingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "InvoicingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(invoicingCycleConfiguration: InvoicingCycleConfiguration) =
+                    apply {
+                        this.duration = invoicingCycleConfiguration.duration
+                        this.durationUnit = invoicingCycleConfiguration.durationUnit
+                        additionalProperties(invoicingCycleConfiguration.additionalProperties)
+                    }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): InvoicingCycleConfiguration =
+                    InvoicingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
@@ -11704,6 +17915,8 @@ constructor(
         private val fixedPriceQuantity: Double?,
         private val invoiceGroupingKey: String?,
         private val cadence: Cadence?,
+        private val billingCycleConfiguration: BillingCycleConfiguration?,
+        private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
         private val conversionRate: Double?,
         private val modelType: ModelType?,
         private val unitWithProrationConfig: UnitWithProrationConfig?,
@@ -11747,6 +17960,18 @@ constructor(
         /** The cadence to bill for this price on. */
         @JsonProperty("cadence") fun cadence(): Cadence? = cadence
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonProperty("billing_cycle_configuration")
+        fun billingCycleConfiguration(): BillingCycleConfiguration? = billingCycleConfiguration
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonProperty("invoicing_cycle_configuration")
+        fun invoicingCycleConfiguration(): InvoicingCycleConfiguration? =
+            invoicingCycleConfiguration
+
         /** The per unit conversion rate of the price currency to the invoicing currency. */
         @JsonProperty("conversion_rate") fun conversionRate(): Double? = conversionRate
 
@@ -11779,6 +18004,8 @@ constructor(
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.invoiceGroupingKey == other.invoiceGroupingKey &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
+                this.invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
                 this.conversionRate == other.conversionRate &&
                 this.modelType == other.modelType &&
                 this.unitWithProrationConfig == other.unitWithProrationConfig &&
@@ -11799,6 +18026,8 @@ constructor(
                         fixedPriceQuantity,
                         invoiceGroupingKey,
                         cadence,
+                        billingCycleConfiguration,
+                        invoicingCycleConfiguration,
                         conversionRate,
                         modelType,
                         unitWithProrationConfig,
@@ -11810,7 +18039,7 @@ constructor(
         }
 
         override fun toString() =
-            "NewFloatingUnitWithProrationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, unitWithProrationConfig=$unitWithProrationConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            "NewFloatingUnitWithProrationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, unitWithProrationConfig=$unitWithProrationConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -11828,6 +18057,8 @@ constructor(
             private var fixedPriceQuantity: Double? = null
             private var invoiceGroupingKey: String? = null
             private var cadence: Cadence? = null
+            private var billingCycleConfiguration: BillingCycleConfiguration? = null
+            private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
             private var conversionRate: Double? = null
             private var modelType: ModelType? = null
             private var unitWithProrationConfig: UnitWithProrationConfig? = null
@@ -11847,6 +18078,10 @@ constructor(
                 this.fixedPriceQuantity = newFloatingUnitWithProrationPrice.fixedPriceQuantity
                 this.invoiceGroupingKey = newFloatingUnitWithProrationPrice.invoiceGroupingKey
                 this.cadence = newFloatingUnitWithProrationPrice.cadence
+                this.billingCycleConfiguration =
+                    newFloatingUnitWithProrationPrice.billingCycleConfiguration
+                this.invoicingCycleConfiguration =
+                    newFloatingUnitWithProrationPrice.invoicingCycleConfiguration
                 this.conversionRate = newFloatingUnitWithProrationPrice.conversionRate
                 this.modelType = newFloatingUnitWithProrationPrice.modelType
                 this.unitWithProrationConfig =
@@ -11910,6 +18145,24 @@ constructor(
             @JsonProperty("cadence")
             fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
+            /**
+             * For custom cadence: specifies the duration of the billing period in days or months.
+             */
+            @JsonProperty("billing_cycle_configuration")
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                apply {
+                    this.billingCycleConfiguration = billingCycleConfiguration
+                }
+
+            /**
+             * Within each billing cycle, specifies the cadence at which invoices are produced. If
+             * unspecified, a single invoice is produced per billing cycle.
+             */
+            @JsonProperty("invoicing_cycle_configuration")
+            fun invoicingCycleConfiguration(
+                invoicingCycleConfiguration: InvoicingCycleConfiguration
+            ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
             /** The per unit conversion rate of the price currency to the invoicing currency. */
             @JsonProperty("conversion_rate")
             fun conversionRate(conversionRate: Double) = apply {
@@ -11953,6 +18206,8 @@ constructor(
                     fixedPriceQuantity,
                     invoiceGroupingKey,
                     checkNotNull(cadence) { "`cadence` is required but was not set" },
+                    billingCycleConfiguration,
+                    invoicingCycleConfiguration,
                     conversionRate,
                     checkNotNull(modelType) { "`modelType` is required but was not set" },
                     checkNotNull(unitWithProrationConfig) {
@@ -12163,6 +18418,328 @@ constructor(
             }
         }
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonDeserialize(builder = InvoicingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class InvoicingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is InvoicingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "InvoicingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(invoicingCycleConfiguration: InvoicingCycleConfiguration) =
+                    apply {
+                        this.duration = invoicingCycleConfiguration.duration
+                        this.durationUnit = invoicingCycleConfiguration.durationUnit
+                        additionalProperties(invoicingCycleConfiguration.additionalProperties)
+                    }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): InvoicingCycleConfiguration =
+                    InvoicingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
@@ -12247,6 +18824,8 @@ constructor(
         private val fixedPriceQuantity: Double?,
         private val invoiceGroupingKey: String?,
         private val cadence: Cadence?,
+        private val billingCycleConfiguration: BillingCycleConfiguration?,
+        private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
         private val conversionRate: Double?,
         private val modelType: ModelType?,
         private val groupedAllocationConfig: GroupedAllocationConfig?,
@@ -12290,6 +18869,18 @@ constructor(
         /** The cadence to bill for this price on. */
         @JsonProperty("cadence") fun cadence(): Cadence? = cadence
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonProperty("billing_cycle_configuration")
+        fun billingCycleConfiguration(): BillingCycleConfiguration? = billingCycleConfiguration
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonProperty("invoicing_cycle_configuration")
+        fun invoicingCycleConfiguration(): InvoicingCycleConfiguration? =
+            invoicingCycleConfiguration
+
         /** The per unit conversion rate of the price currency to the invoicing currency. */
         @JsonProperty("conversion_rate") fun conversionRate(): Double? = conversionRate
 
@@ -12322,6 +18913,8 @@ constructor(
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.invoiceGroupingKey == other.invoiceGroupingKey &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
+                this.invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
                 this.conversionRate == other.conversionRate &&
                 this.modelType == other.modelType &&
                 this.groupedAllocationConfig == other.groupedAllocationConfig &&
@@ -12342,6 +18935,8 @@ constructor(
                         fixedPriceQuantity,
                         invoiceGroupingKey,
                         cadence,
+                        billingCycleConfiguration,
+                        invoicingCycleConfiguration,
                         conversionRate,
                         modelType,
                         groupedAllocationConfig,
@@ -12353,7 +18948,7 @@ constructor(
         }
 
         override fun toString() =
-            "NewFloatingGroupedAllocationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, groupedAllocationConfig=$groupedAllocationConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            "NewFloatingGroupedAllocationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, groupedAllocationConfig=$groupedAllocationConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -12371,6 +18966,8 @@ constructor(
             private var fixedPriceQuantity: Double? = null
             private var invoiceGroupingKey: String? = null
             private var cadence: Cadence? = null
+            private var billingCycleConfiguration: BillingCycleConfiguration? = null
+            private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
             private var conversionRate: Double? = null
             private var modelType: ModelType? = null
             private var groupedAllocationConfig: GroupedAllocationConfig? = null
@@ -12390,6 +18987,10 @@ constructor(
                 this.fixedPriceQuantity = newFloatingGroupedAllocationPrice.fixedPriceQuantity
                 this.invoiceGroupingKey = newFloatingGroupedAllocationPrice.invoiceGroupingKey
                 this.cadence = newFloatingGroupedAllocationPrice.cadence
+                this.billingCycleConfiguration =
+                    newFloatingGroupedAllocationPrice.billingCycleConfiguration
+                this.invoicingCycleConfiguration =
+                    newFloatingGroupedAllocationPrice.invoicingCycleConfiguration
                 this.conversionRate = newFloatingGroupedAllocationPrice.conversionRate
                 this.modelType = newFloatingGroupedAllocationPrice.modelType
                 this.groupedAllocationConfig =
@@ -12453,6 +19054,24 @@ constructor(
             @JsonProperty("cadence")
             fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
+            /**
+             * For custom cadence: specifies the duration of the billing period in days or months.
+             */
+            @JsonProperty("billing_cycle_configuration")
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                apply {
+                    this.billingCycleConfiguration = billingCycleConfiguration
+                }
+
+            /**
+             * Within each billing cycle, specifies the cadence at which invoices are produced. If
+             * unspecified, a single invoice is produced per billing cycle.
+             */
+            @JsonProperty("invoicing_cycle_configuration")
+            fun invoicingCycleConfiguration(
+                invoicingCycleConfiguration: InvoicingCycleConfiguration
+            ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
             /** The per unit conversion rate of the price currency to the invoicing currency. */
             @JsonProperty("conversion_rate")
             fun conversionRate(conversionRate: Double) = apply {
@@ -12496,6 +19115,8 @@ constructor(
                     fixedPriceQuantity,
                     invoiceGroupingKey,
                     checkNotNull(cadence) { "`cadence` is required but was not set" },
+                    billingCycleConfiguration,
+                    invoicingCycleConfiguration,
                     conversionRate,
                     checkNotNull(modelType) { "`modelType` is required but was not set" },
                     checkNotNull(groupedAllocationConfig) {
@@ -12706,6 +19327,328 @@ constructor(
             fun asString(): String = _value().asStringOrThrow()
         }
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonDeserialize(builder = InvoicingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class InvoicingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is InvoicingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "InvoicingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(invoicingCycleConfiguration: InvoicingCycleConfiguration) =
+                    apply {
+                        this.duration = invoicingCycleConfiguration.duration
+                        this.durationUnit = invoicingCycleConfiguration.durationUnit
+                        additionalProperties(invoicingCycleConfiguration.additionalProperties)
+                    }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): InvoicingCycleConfiguration =
+                    InvoicingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
@@ -12790,6 +19733,8 @@ constructor(
         private val fixedPriceQuantity: Double?,
         private val invoiceGroupingKey: String?,
         private val cadence: Cadence?,
+        private val billingCycleConfiguration: BillingCycleConfiguration?,
+        private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
         private val conversionRate: Double?,
         private val modelType: ModelType?,
         private val bulkWithProrationConfig: BulkWithProrationConfig?,
@@ -12833,6 +19778,18 @@ constructor(
         /** The cadence to bill for this price on. */
         @JsonProperty("cadence") fun cadence(): Cadence? = cadence
 
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonProperty("billing_cycle_configuration")
+        fun billingCycleConfiguration(): BillingCycleConfiguration? = billingCycleConfiguration
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonProperty("invoicing_cycle_configuration")
+        fun invoicingCycleConfiguration(): InvoicingCycleConfiguration? =
+            invoicingCycleConfiguration
+
         /** The per unit conversion rate of the price currency to the invoicing currency. */
         @JsonProperty("conversion_rate") fun conversionRate(): Double? = conversionRate
 
@@ -12865,6 +19822,8 @@ constructor(
                 this.fixedPriceQuantity == other.fixedPriceQuantity &&
                 this.invoiceGroupingKey == other.invoiceGroupingKey &&
                 this.cadence == other.cadence &&
+                this.billingCycleConfiguration == other.billingCycleConfiguration &&
+                this.invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
                 this.conversionRate == other.conversionRate &&
                 this.modelType == other.modelType &&
                 this.bulkWithProrationConfig == other.bulkWithProrationConfig &&
@@ -12885,6 +19844,8 @@ constructor(
                         fixedPriceQuantity,
                         invoiceGroupingKey,
                         cadence,
+                        billingCycleConfiguration,
+                        invoicingCycleConfiguration,
                         conversionRate,
                         modelType,
                         bulkWithProrationConfig,
@@ -12896,7 +19857,7 @@ constructor(
         }
 
         override fun toString() =
-            "NewFloatingBulkWithProrationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, conversionRate=$conversionRate, modelType=$modelType, bulkWithProrationConfig=$bulkWithProrationConfig, currency=$currency, additionalProperties=$additionalProperties}"
+            "NewFloatingBulkWithProrationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, bulkWithProrationConfig=$bulkWithProrationConfig, currency=$currency, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -12914,6 +19875,8 @@ constructor(
             private var fixedPriceQuantity: Double? = null
             private var invoiceGroupingKey: String? = null
             private var cadence: Cadence? = null
+            private var billingCycleConfiguration: BillingCycleConfiguration? = null
+            private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
             private var conversionRate: Double? = null
             private var modelType: ModelType? = null
             private var bulkWithProrationConfig: BulkWithProrationConfig? = null
@@ -12933,6 +19896,10 @@ constructor(
                 this.fixedPriceQuantity = newFloatingBulkWithProrationPrice.fixedPriceQuantity
                 this.invoiceGroupingKey = newFloatingBulkWithProrationPrice.invoiceGroupingKey
                 this.cadence = newFloatingBulkWithProrationPrice.cadence
+                this.billingCycleConfiguration =
+                    newFloatingBulkWithProrationPrice.billingCycleConfiguration
+                this.invoicingCycleConfiguration =
+                    newFloatingBulkWithProrationPrice.invoicingCycleConfiguration
                 this.conversionRate = newFloatingBulkWithProrationPrice.conversionRate
                 this.modelType = newFloatingBulkWithProrationPrice.modelType
                 this.bulkWithProrationConfig =
@@ -12996,6 +19963,24 @@ constructor(
             @JsonProperty("cadence")
             fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
+            /**
+             * For custom cadence: specifies the duration of the billing period in days or months.
+             */
+            @JsonProperty("billing_cycle_configuration")
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                apply {
+                    this.billingCycleConfiguration = billingCycleConfiguration
+                }
+
+            /**
+             * Within each billing cycle, specifies the cadence at which invoices are produced. If
+             * unspecified, a single invoice is produced per billing cycle.
+             */
+            @JsonProperty("invoicing_cycle_configuration")
+            fun invoicingCycleConfiguration(
+                invoicingCycleConfiguration: InvoicingCycleConfiguration
+            ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
             /** The per unit conversion rate of the price currency to the invoicing currency. */
             @JsonProperty("conversion_rate")
             fun conversionRate(conversionRate: Double) = apply {
@@ -13039,6 +20024,8 @@ constructor(
                     fixedPriceQuantity,
                     invoiceGroupingKey,
                     checkNotNull(cadence) { "`cadence` is required but was not set" },
+                    billingCycleConfiguration,
+                    invoicingCycleConfiguration,
                     conversionRate,
                     checkNotNull(modelType) { "`modelType` is required but was not set" },
                     checkNotNull(bulkWithProrationConfig) {
@@ -13247,6 +20234,328 @@ constructor(
                 }
 
             fun asString(): String = _value().asStringOrThrow()
+        }
+
+        /** For custom cadence: specifies the duration of the billing period in days or months. */
+        @JsonDeserialize(builder = BillingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class BillingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "BillingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(billingCycleConfiguration: BillingCycleConfiguration) = apply {
+                    this.duration = billingCycleConfiguration.duration
+                    this.durationUnit = billingCycleConfiguration.durationUnit
+                    additionalProperties(billingCycleConfiguration.additionalProperties)
+                }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): BillingCycleConfiguration =
+                    BillingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+        }
+
+        /**
+         * Within each billing cycle, specifies the cadence at which invoices are produced. If
+         * unspecified, a single invoice is produced per billing cycle.
+         */
+        @JsonDeserialize(builder = InvoicingCycleConfiguration.Builder::class)
+        @NoAutoDetect
+        class InvoicingCycleConfiguration
+        private constructor(
+            private val duration: Long?,
+            private val durationUnit: DurationUnit?,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var hashCode: Int = 0
+
+            /** The duration of the billing period. */
+            @JsonProperty("duration") fun duration(): Long? = duration
+
+            /** The unit of billing period duration. */
+            @JsonProperty("duration_unit") fun durationUnit(): DurationUnit? = durationUnit
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is InvoicingCycleConfiguration &&
+                    this.duration == other.duration &&
+                    this.durationUnit == other.durationUnit &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            duration,
+                            durationUnit,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "InvoicingCycleConfiguration{duration=$duration, durationUnit=$durationUnit, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var duration: Long? = null
+                private var durationUnit: DurationUnit? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(invoicingCycleConfiguration: InvoicingCycleConfiguration) =
+                    apply {
+                        this.duration = invoicingCycleConfiguration.duration
+                        this.durationUnit = invoicingCycleConfiguration.durationUnit
+                        additionalProperties(invoicingCycleConfiguration.additionalProperties)
+                    }
+
+                /** The duration of the billing period. */
+                @JsonProperty("duration")
+                fun duration(duration: Long) = apply { this.duration = duration }
+
+                /** The unit of billing period duration. */
+                @JsonProperty("duration_unit")
+                fun durationUnit(durationUnit: DurationUnit) = apply {
+                    this.durationUnit = durationUnit
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): InvoicingCycleConfiguration =
+                    InvoicingCycleConfiguration(
+                        checkNotNull(duration) { "`duration` is required but was not set" },
+                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class DurationUnit
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is DurationUnit && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val DAY = DurationUnit(JsonField.of("day"))
+
+                    @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+
+                    @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
+                }
+
+                enum class Known {
+                    DAY,
+                    MONTH,
+                }
+
+                enum class Value {
+                    DAY,
+                    MONTH,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        DAY -> Value.DAY
+                        MONTH -> Value.MONTH
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        DAY -> Known.DAY
+                        MONTH -> Known.MONTH
+                        else -> throw OrbInvalidDataException("Unknown DurationUnit: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
         }
 
         /**
