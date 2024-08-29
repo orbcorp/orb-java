@@ -68,6 +68,7 @@ private constructor(
     private val netTerms: JsonField<Long>,
     private val redeemedCoupon: JsonField<RedeemedCoupon>,
     private val billingCycleDay: JsonField<Long>,
+    private val billingCycleAnchorConfiguration: JsonField<BillingCycleAnchorConfiguration>,
     private val invoicingThreshold: JsonField<String>,
     private val priceIntervals: JsonField<List<PriceInterval>>,
     private val adjustmentIntervals: JsonField<List<AdjustmentInterval>>,
@@ -187,6 +188,9 @@ private constructor(
      * billing_cycle_day=31 for April means the billing period begins on the 30th.
      */
     fun billingCycleDay(): Long = billingCycleDay.getRequired("billing_cycle_day")
+
+    fun billingCycleAnchorConfiguration(): BillingCycleAnchorConfiguration =
+        billingCycleAnchorConfiguration.getRequired("billing_cycle_anchor_configuration")
 
     fun invoicingThreshold(): Optional<String> =
         Optional.ofNullable(invoicingThreshold.getNullable("invoicing_threshold"))
@@ -316,6 +320,10 @@ private constructor(
      */
     @JsonProperty("billing_cycle_day") @ExcludeMissing fun _billingCycleDay() = billingCycleDay
 
+    @JsonProperty("billing_cycle_anchor_configuration")
+    @ExcludeMissing
+    fun _billingCycleAnchorConfiguration() = billingCycleAnchorConfiguration
+
     @JsonProperty("invoicing_threshold")
     @ExcludeMissing
     fun _invoicingThreshold() = invoicingThreshold
@@ -361,6 +369,7 @@ private constructor(
             netTerms()
             redeemedCoupon().map { it.validate() }
             billingCycleDay()
+            billingCycleAnchorConfiguration().validate()
             invoicingThreshold()
             priceIntervals().forEach { it.validate() }
             adjustmentIntervals().forEach { it.validate() }
@@ -397,6 +406,7 @@ private constructor(
             this.netTerms == other.netTerms &&
             this.redeemedCoupon == other.redeemedCoupon &&
             this.billingCycleDay == other.billingCycleDay &&
+            this.billingCycleAnchorConfiguration == other.billingCycleAnchorConfiguration &&
             this.invoicingThreshold == other.invoicingThreshold &&
             this.priceIntervals == other.priceIntervals &&
             this.adjustmentIntervals == other.adjustmentIntervals &&
@@ -428,6 +438,7 @@ private constructor(
                     netTerms,
                     redeemedCoupon,
                     billingCycleDay,
+                    billingCycleAnchorConfiguration,
                     invoicingThreshold,
                     priceIntervals,
                     adjustmentIntervals,
@@ -441,7 +452,7 @@ private constructor(
     }
 
     override fun toString() =
-        "Subscription{metadata=$metadata, id=$id, customer=$customer, plan=$plan, startDate=$startDate, endDate=$endDate, createdAt=$createdAt, currentBillingPeriodStartDate=$currentBillingPeriodStartDate, currentBillingPeriodEndDate=$currentBillingPeriodEndDate, status=$status, trialInfo=$trialInfo, activePlanPhaseOrder=$activePlanPhaseOrder, fixedFeeQuantitySchedule=$fixedFeeQuantitySchedule, defaultInvoiceMemo=$defaultInvoiceMemo, autoCollection=$autoCollection, netTerms=$netTerms, redeemedCoupon=$redeemedCoupon, billingCycleDay=$billingCycleDay, invoicingThreshold=$invoicingThreshold, priceIntervals=$priceIntervals, adjustmentIntervals=$adjustmentIntervals, discountIntervals=$discountIntervals, minimumIntervals=$minimumIntervals, maximumIntervals=$maximumIntervals, additionalProperties=$additionalProperties}"
+        "Subscription{metadata=$metadata, id=$id, customer=$customer, plan=$plan, startDate=$startDate, endDate=$endDate, createdAt=$createdAt, currentBillingPeriodStartDate=$currentBillingPeriodStartDate, currentBillingPeriodEndDate=$currentBillingPeriodEndDate, status=$status, trialInfo=$trialInfo, activePlanPhaseOrder=$activePlanPhaseOrder, fixedFeeQuantitySchedule=$fixedFeeQuantitySchedule, defaultInvoiceMemo=$defaultInvoiceMemo, autoCollection=$autoCollection, netTerms=$netTerms, redeemedCoupon=$redeemedCoupon, billingCycleDay=$billingCycleDay, billingCycleAnchorConfiguration=$billingCycleAnchorConfiguration, invoicingThreshold=$invoicingThreshold, priceIntervals=$priceIntervals, adjustmentIntervals=$adjustmentIntervals, discountIntervals=$discountIntervals, minimumIntervals=$minimumIntervals, maximumIntervals=$maximumIntervals, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -469,6 +480,8 @@ private constructor(
         private var netTerms: JsonField<Long> = JsonMissing.of()
         private var redeemedCoupon: JsonField<RedeemedCoupon> = JsonMissing.of()
         private var billingCycleDay: JsonField<Long> = JsonMissing.of()
+        private var billingCycleAnchorConfiguration: JsonField<BillingCycleAnchorConfiguration> =
+            JsonMissing.of()
         private var invoicingThreshold: JsonField<String> = JsonMissing.of()
         private var priceIntervals: JsonField<List<PriceInterval>> = JsonMissing.of()
         private var adjustmentIntervals: JsonField<List<AdjustmentInterval>> = JsonMissing.of()
@@ -497,6 +510,7 @@ private constructor(
             this.netTerms = subscription.netTerms
             this.redeemedCoupon = subscription.redeemedCoupon
             this.billingCycleDay = subscription.billingCycleDay
+            this.billingCycleAnchorConfiguration = subscription.billingCycleAnchorConfiguration
             this.invoicingThreshold = subscription.invoicingThreshold
             this.priceIntervals = subscription.priceIntervals
             this.adjustmentIntervals = subscription.adjustmentIntervals
@@ -759,6 +773,16 @@ private constructor(
             this.billingCycleDay = billingCycleDay
         }
 
+        fun billingCycleAnchorConfiguration(
+            billingCycleAnchorConfiguration: BillingCycleAnchorConfiguration
+        ) = billingCycleAnchorConfiguration(JsonField.of(billingCycleAnchorConfiguration))
+
+        @JsonProperty("billing_cycle_anchor_configuration")
+        @ExcludeMissing
+        fun billingCycleAnchorConfiguration(
+            billingCycleAnchorConfiguration: JsonField<BillingCycleAnchorConfiguration>
+        ) = apply { this.billingCycleAnchorConfiguration = billingCycleAnchorConfiguration }
+
         fun invoicingThreshold(invoicingThreshold: String) =
             invoicingThreshold(JsonField.of(invoicingThreshold))
 
@@ -857,6 +881,7 @@ private constructor(
                 netTerms,
                 redeemedCoupon,
                 billingCycleDay,
+                billingCycleAnchorConfiguration,
                 invoicingThreshold,
                 priceIntervals.map { it.toUnmodifiable() },
                 adjustmentIntervals.map { it.toUnmodifiable() },
@@ -2515,6 +2540,194 @@ private constructor(
                     fun asString(): String = _value().asStringOrThrow()
                 }
             }
+        }
+    }
+
+    @JsonDeserialize(builder = BillingCycleAnchorConfiguration.Builder::class)
+    @NoAutoDetect
+    class BillingCycleAnchorConfiguration
+    private constructor(
+        private val day: JsonField<Long>,
+        private val month: JsonField<Long>,
+        private val year: JsonField<Long>,
+        private val additionalProperties: Map<String, JsonValue>,
+    ) {
+
+        private var validated: Boolean = false
+
+        private var hashCode: Int = 0
+
+        /**
+         * The day of the month on which the billing cycle is anchored. If the maximum number of
+         * days in a month is greater than this value, the last day of the month is the billing
+         * cycle day (e.g. billing_cycle_day=31 for April means the billing period begins on the
+         * 30th.
+         */
+        fun day(): Long = day.getRequired("day")
+
+        /**
+         * The month on which the billing cycle is anchored (e.g. a quarterly price anchored in
+         * February would have cycles starting February, May, August, and November).
+         */
+        fun month(): Optional<Long> = Optional.ofNullable(month.getNullable("month"))
+
+        /**
+         * The year on which the billing cycle is anchored (e.g. a 2 year billing cycle anchored on
+         * 2021 would have cycles starting on 2021, 2023, 2025, etc.).
+         */
+        fun year(): Optional<Long> = Optional.ofNullable(year.getNullable("year"))
+
+        /**
+         * The day of the month on which the billing cycle is anchored. If the maximum number of
+         * days in a month is greater than this value, the last day of the month is the billing
+         * cycle day (e.g. billing_cycle_day=31 for April means the billing period begins on the
+         * 30th.
+         */
+        @JsonProperty("day") @ExcludeMissing fun _day() = day
+
+        /**
+         * The month on which the billing cycle is anchored (e.g. a quarterly price anchored in
+         * February would have cycles starting February, May, August, and November).
+         */
+        @JsonProperty("month") @ExcludeMissing fun _month() = month
+
+        /**
+         * The year on which the billing cycle is anchored (e.g. a 2 year billing cycle anchored on
+         * 2021 would have cycles starting on 2021, 2023, 2025, etc.).
+         */
+        @JsonProperty("year") @ExcludeMissing fun _year() = year
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun validate(): BillingCycleAnchorConfiguration = apply {
+            if (!validated) {
+                day()
+                month()
+                year()
+                validated = true
+            }
+        }
+
+        fun toBuilder() = Builder().from(this)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is BillingCycleAnchorConfiguration &&
+                this.day == other.day &&
+                this.month == other.month &&
+                this.year == other.year &&
+                this.additionalProperties == other.additionalProperties
+        }
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode =
+                    Objects.hash(
+                        day,
+                        month,
+                        year,
+                        additionalProperties,
+                    )
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "BillingCycleAnchorConfiguration{day=$day, month=$month, year=$year, additionalProperties=$additionalProperties}"
+
+        companion object {
+
+            @JvmStatic fun builder() = Builder()
+        }
+
+        class Builder {
+
+            private var day: JsonField<Long> = JsonMissing.of()
+            private var month: JsonField<Long> = JsonMissing.of()
+            private var year: JsonField<Long> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(billingCycleAnchorConfiguration: BillingCycleAnchorConfiguration) =
+                apply {
+                    this.day = billingCycleAnchorConfiguration.day
+                    this.month = billingCycleAnchorConfiguration.month
+                    this.year = billingCycleAnchorConfiguration.year
+                    additionalProperties(billingCycleAnchorConfiguration.additionalProperties)
+                }
+
+            /**
+             * The day of the month on which the billing cycle is anchored. If the maximum number of
+             * days in a month is greater than this value, the last day of the month is the billing
+             * cycle day (e.g. billing_cycle_day=31 for April means the billing period begins on the
+             * 30th.
+             */
+            fun day(day: Long) = day(JsonField.of(day))
+
+            /**
+             * The day of the month on which the billing cycle is anchored. If the maximum number of
+             * days in a month is greater than this value, the last day of the month is the billing
+             * cycle day (e.g. billing_cycle_day=31 for April means the billing period begins on the
+             * 30th.
+             */
+            @JsonProperty("day")
+            @ExcludeMissing
+            fun day(day: JsonField<Long>) = apply { this.day = day }
+
+            /**
+             * The month on which the billing cycle is anchored (e.g. a quarterly price anchored in
+             * February would have cycles starting February, May, August, and November).
+             */
+            fun month(month: Long) = month(JsonField.of(month))
+
+            /**
+             * The month on which the billing cycle is anchored (e.g. a quarterly price anchored in
+             * February would have cycles starting February, May, August, and November).
+             */
+            @JsonProperty("month")
+            @ExcludeMissing
+            fun month(month: JsonField<Long>) = apply { this.month = month }
+
+            /**
+             * The year on which the billing cycle is anchored (e.g. a 2 year billing cycle anchored
+             * on 2021 would have cycles starting on 2021, 2023, 2025, etc.).
+             */
+            fun year(year: Long) = year(JsonField.of(year))
+
+            /**
+             * The year on which the billing cycle is anchored (e.g. a 2 year billing cycle anchored
+             * on 2021 would have cycles starting on 2021, 2023, 2025, etc.).
+             */
+            @JsonProperty("year")
+            @ExcludeMissing
+            fun year(year: JsonField<Long>) = apply { this.year = year }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            @JsonAnySetter
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                this.additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun build(): BillingCycleAnchorConfiguration =
+                BillingCycleAnchorConfiguration(
+                    day,
+                    month,
+                    year,
+                    additionalProperties.toUnmodifiable(),
+                )
         }
     }
 
