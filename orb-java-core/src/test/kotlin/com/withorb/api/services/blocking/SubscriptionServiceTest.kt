@@ -47,7 +47,7 @@ class SubscriptionServiceTest {
                     .externalMarketplaceReportingId("external_marketplace_reporting_id")
                     .externalPlanId("ZMwNQefe7J3ecf7W")
                     .initialPhaseOrder(123L)
-                    .invoicingThreshold("invoicing_threshold")
+                    .invoicingThreshold("10.00")
                     .metadata(SubscriptionCreateParams.Metadata.builder().build())
                     .netTerms(123L)
                     .perCreditOverageAmount(42.23)
@@ -501,15 +501,18 @@ class SubscriptionServiceTest {
                     .subscriptionId("subscription_id")
                     .changeOption(SubscriptionSchedulePlanChangeParams.ChangeOption.REQUESTED_DATE)
                     .alignBillingWithPlanChangeDate(true)
+                    .autoCollection(true)
                     .billingCycleAlignment(
                         SubscriptionSchedulePlanChangeParams.BillingCycleAlignment.UNCHANGED
                     )
                     .changeDate(OffsetDateTime.parse("2017-07-21T17:32:28Z"))
                     .couponRedemptionCode("coupon_redemption_code")
                     .creditsOverageRate(42.23)
+                    .defaultInvoiceMemo("default_invoice_memo")
                     .externalPlanId("ZMwNQefe7J3ecf7W")
                     .initialPhaseOrder(123L)
                     .invoicingThreshold("10.00")
+                    .netTerms(123L)
                     .perCreditOverageAmount(42.23)
                     .planId("ZMwNQefe7J3ecf7W")
                     .priceOverrides(

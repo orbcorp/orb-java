@@ -169,6 +169,11 @@ constructor(
         fun alignBillingWithSubscriptionStartDate(): Boolean? =
             alignBillingWithSubscriptionStartDate
 
+        /**
+         * Determines whether issued invoices for this subscription will automatically be charged
+         * with the saved payment method on the due date. If not specified, this defaults to the
+         * behavior configured for this customer.
+         */
         @JsonProperty("auto_collection") fun autoCollection(): Boolean? = autoCollection
 
         @JsonProperty("aws_region") fun awsRegion(): String? = awsRegion
@@ -177,6 +182,11 @@ constructor(
         fun billingCycleAnchorConfiguration(): BillingCycleAnchorConfiguration? =
             billingCycleAnchorConfiguration
 
+        /**
+         * Redemption code to be used for this subscription. If the coupon cannot be found by its
+         * redemption code, or cannot be redeemed, an error response will be returned and the
+         * subscription creation or plan change will not be scheduled.
+         */
         @JsonProperty("coupon_redemption_code")
         fun couponRedemptionCode(): String? = couponRedemptionCode
 
@@ -184,6 +194,10 @@ constructor(
 
         @JsonProperty("customer_id") fun customerId(): String? = customerId
 
+        /**
+         * Determines the default memo on this subscription's invoices. Note that if this is not
+         * provided, it is determined by the plan configuration.
+         */
         @JsonProperty("default_invoice_memo") fun defaultInvoiceMemo(): String? = defaultInvoiceMemo
 
         @JsonProperty("end_date") fun endDate(): OffsetDateTime? = endDate
@@ -202,8 +216,14 @@ constructor(
          */
         @JsonProperty("external_plan_id") fun externalPlanId(): String? = externalPlanId
 
+        /** The phase of the plan to start with */
         @JsonProperty("initial_phase_order") fun initialPhaseOrder(): Long? = initialPhaseOrder
 
+        /**
+         * When this subscription's accrued usage reaches this threshold, an invoice will be issued
+         * for the subscription. If not specified, invoices will only be issued at the end of the
+         * billing period.
+         */
         @JsonProperty("invoicing_threshold") fun invoicingThreshold(): String? = invoicingThreshold
 
         /**
@@ -213,6 +233,11 @@ constructor(
          */
         @JsonProperty("metadata") fun metadata(): Metadata? = metadata
 
+        /**
+         * The net terms determines the difference between the invoice date and the issue date for
+         * the invoice. If you intend the invoice to be due on issue, set this to 0. If not
+         * provided, this defaults to the value specified in the plan.
+         */
         @JsonProperty("net_terms") fun netTerms(): Long? = netTerms
 
         @JsonProperty("per_credit_overage_amount")
@@ -366,6 +391,11 @@ constructor(
                 this.alignBillingWithSubscriptionStartDate = alignBillingWithSubscriptionStartDate
             }
 
+            /**
+             * Determines whether issued invoices for this subscription will automatically be
+             * charged with the saved payment method on the due date. If not specified, this
+             * defaults to the behavior configured for this customer.
+             */
             @JsonProperty("auto_collection")
             fun autoCollection(autoCollection: Boolean) = apply {
                 this.autoCollection = autoCollection
@@ -379,6 +409,11 @@ constructor(
                 billingCycleAnchorConfiguration: BillingCycleAnchorConfiguration
             ) = apply { this.billingCycleAnchorConfiguration = billingCycleAnchorConfiguration }
 
+            /**
+             * Redemption code to be used for this subscription. If the coupon cannot be found by
+             * its redemption code, or cannot be redeemed, an error response will be returned and
+             * the subscription creation or plan change will not be scheduled.
+             */
             @JsonProperty("coupon_redemption_code")
             fun couponRedemptionCode(couponRedemptionCode: String) = apply {
                 this.couponRedemptionCode = couponRedemptionCode
@@ -392,6 +427,10 @@ constructor(
             @JsonProperty("customer_id")
             fun customerId(customerId: String) = apply { this.customerId = customerId }
 
+            /**
+             * Determines the default memo on this subscription's invoices. Note that if this is not
+             * provided, it is determined by the plan configuration.
+             */
             @JsonProperty("default_invoice_memo")
             fun defaultInvoiceMemo(defaultInvoiceMemo: String) = apply {
                 this.defaultInvoiceMemo = defaultInvoiceMemo
@@ -424,11 +463,17 @@ constructor(
                 this.externalPlanId = externalPlanId
             }
 
+            /** The phase of the plan to start with */
             @JsonProperty("initial_phase_order")
             fun initialPhaseOrder(initialPhaseOrder: Long) = apply {
                 this.initialPhaseOrder = initialPhaseOrder
             }
 
+            /**
+             * When this subscription's accrued usage reaches this threshold, an invoice will be
+             * issued for the subscription. If not specified, invoices will only be issued at the
+             * end of the billing period.
+             */
             @JsonProperty("invoicing_threshold")
             fun invoicingThreshold(invoicingThreshold: String) = apply {
                 this.invoicingThreshold = invoicingThreshold
@@ -442,6 +487,11 @@ constructor(
             @JsonProperty("metadata")
             fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
+            /**
+             * The net terms determines the difference between the invoice date and the issue date
+             * for the invoice. If you intend the invoice to be due on issue, set this to 0. If not
+             * provided, this defaults to the value specified in the plan.
+             */
             @JsonProperty("net_terms")
             fun netTerms(netTerms: Long) = apply { this.netTerms = netTerms }
 
@@ -649,6 +699,11 @@ constructor(
                 this.alignBillingWithSubscriptionStartDate = alignBillingWithSubscriptionStartDate
             }
 
+        /**
+         * Determines whether issued invoices for this subscription will automatically be charged
+         * with the saved payment method on the due date. If not specified, this defaults to the
+         * behavior configured for this customer.
+         */
         fun autoCollection(autoCollection: Boolean) = apply { this.autoCollection = autoCollection }
 
         fun awsRegion(awsRegion: String) = apply { this.awsRegion = awsRegion }
@@ -657,6 +712,11 @@ constructor(
             billingCycleAnchorConfiguration: BillingCycleAnchorConfiguration
         ) = apply { this.billingCycleAnchorConfiguration = billingCycleAnchorConfiguration }
 
+        /**
+         * Redemption code to be used for this subscription. If the coupon cannot be found by its
+         * redemption code, or cannot be redeemed, an error response will be returned and the
+         * subscription creation or plan change will not be scheduled.
+         */
         fun couponRedemptionCode(couponRedemptionCode: String) = apply {
             this.couponRedemptionCode = couponRedemptionCode
         }
@@ -667,6 +727,10 @@ constructor(
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
 
+        /**
+         * Determines the default memo on this subscription's invoices. Note that if this is not
+         * provided, it is determined by the plan configuration.
+         */
         fun defaultInvoiceMemo(defaultInvoiceMemo: String) = apply {
             this.defaultInvoiceMemo = defaultInvoiceMemo
         }
@@ -691,10 +755,16 @@ constructor(
          */
         fun externalPlanId(externalPlanId: String) = apply { this.externalPlanId = externalPlanId }
 
+        /** The phase of the plan to start with */
         fun initialPhaseOrder(initialPhaseOrder: Long) = apply {
             this.initialPhaseOrder = initialPhaseOrder
         }
 
+        /**
+         * When this subscription's accrued usage reaches this threshold, an invoice will be issued
+         * for the subscription. If not specified, invoices will only be issued at the end of the
+         * billing period.
+         */
         fun invoicingThreshold(invoicingThreshold: String) = apply {
             this.invoicingThreshold = invoicingThreshold
         }
@@ -706,6 +776,11 @@ constructor(
          */
         fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
+        /**
+         * The net terms determines the difference between the invoice date and the issue date for
+         * the invoice. If you intend the invoice to be due on issue, set this to 0. If not
+         * provided, this defaults to the value specified in the plan.
+         */
         fun netTerms(netTerms: Long) = apply { this.netTerms = netTerms }
 
         fun perCreditOverageAmount(perCreditOverageAmount: Double) = apply {
