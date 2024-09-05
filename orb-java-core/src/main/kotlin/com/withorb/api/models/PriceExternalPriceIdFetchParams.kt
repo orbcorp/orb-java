@@ -2,55 +2,29 @@
 
 package com.withorb.api.models
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.ObjectCodec
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
-import org.apache.hc.core5.http.ContentType
-import java.time.LocalDate
-import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Objects
-import java.util.Optional
-import java.util.UUID
-import com.withorb.api.core.BaseDeserializer
-import com.withorb.api.core.BaseSerializer
-import com.withorb.api.core.getOrThrow
-import com.withorb.api.core.ExcludeMissing
-import com.withorb.api.core.JsonField
-import com.withorb.api.core.JsonMissing
-import com.withorb.api.core.JsonValue
-import com.withorb.api.core.MultipartFormValue
-import com.withorb.api.core.toUnmodifiable
 import com.withorb.api.core.NoAutoDetect
-import com.withorb.api.core.Enum
-import com.withorb.api.core.ContentTypes
-import com.withorb.api.errors.OrbInvalidDataException
+import com.withorb.api.core.toUnmodifiable
 import com.withorb.api.models.*
+import java.util.Objects
 
-class PriceExternalPriceIdFetchParams constructor(private val externalPriceId: String, private val additionalQueryParams: Map<String, List<String>>, private val additionalHeaders: Map<String, List<String>>, ) {
+class PriceExternalPriceIdFetchParams
+constructor(
+    private val externalPriceId: String,
+    private val additionalQueryParams: Map<String, List<String>>,
+    private val additionalHeaders: Map<String, List<String>>,
+) {
 
     fun externalPriceId(): String = externalPriceId
 
-    @JvmSynthetic
-    internal fun getQueryParams(): Map<String, List<String>> = additionalQueryParams
+    @JvmSynthetic internal fun getQueryParams(): Map<String, List<String>> = additionalQueryParams
 
-    @JvmSynthetic
-    internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
+    @JvmSynthetic internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
 
     fun getPathParam(index: Int): String {
-      return when (index) {
-          0 -> externalPriceId
-          else -> ""
-      }
+        return when (index) {
+            0 -> externalPriceId
+            else -> ""
+        }
     }
 
     fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -58,32 +32,32 @@ class PriceExternalPriceIdFetchParams constructor(private val externalPriceId: S
     fun _additionalHeaders(): Map<String, List<String>> = additionalHeaders
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is PriceExternalPriceIdFetchParams &&
-          this.externalPriceId == other.externalPriceId &&
-          this.additionalQueryParams == other.additionalQueryParams &&
-          this.additionalHeaders == other.additionalHeaders
+        return other is PriceExternalPriceIdFetchParams &&
+            this.externalPriceId == other.externalPriceId &&
+            this.additionalQueryParams == other.additionalQueryParams &&
+            this.additionalHeaders == other.additionalHeaders
     }
 
     override fun hashCode(): Int {
-      return Objects.hash(
-          externalPriceId,
-          additionalQueryParams,
-          additionalHeaders,
-      )
+        return Objects.hash(
+            externalPriceId,
+            additionalQueryParams,
+            additionalHeaders,
+        )
     }
 
-    override fun toString() = "PriceExternalPriceIdFetchParams{externalPriceId=$externalPriceId, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders}"
+    override fun toString() =
+        "PriceExternalPriceIdFetchParams{externalPriceId=$externalPriceId, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders}"
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     @NoAutoDetect
@@ -94,11 +68,12 @@ class PriceExternalPriceIdFetchParams constructor(private val externalPriceId: S
         private var additionalHeaders: MutableMap<String, MutableList<String>> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(priceExternalPriceIdFetchParams: PriceExternalPriceIdFetchParams) = apply {
-            this.externalPriceId = priceExternalPriceIdFetchParams.externalPriceId
-            additionalQueryParams(priceExternalPriceIdFetchParams.additionalQueryParams)
-            additionalHeaders(priceExternalPriceIdFetchParams.additionalHeaders)
-        }
+        internal fun from(priceExternalPriceIdFetchParams: PriceExternalPriceIdFetchParams) =
+            apply {
+                this.externalPriceId = priceExternalPriceIdFetchParams.externalPriceId
+                additionalQueryParams(priceExternalPriceIdFetchParams.additionalQueryParams)
+                additionalHeaders(priceExternalPriceIdFetchParams.additionalHeaders)
+            }
 
         fun externalPriceId(externalPriceId: String) = apply {
             this.externalPriceId = externalPriceId
@@ -142,16 +117,13 @@ class PriceExternalPriceIdFetchParams constructor(private val externalPriceId: S
             additionalHeaders.forEach(this::putHeaders)
         }
 
-        fun removeHeader(name: String) = apply {
-            this.additionalHeaders.put(name, mutableListOf())
-        }
+        fun removeHeader(name: String) = apply { this.additionalHeaders.put(name, mutableListOf()) }
 
-        fun build(): PriceExternalPriceIdFetchParams = PriceExternalPriceIdFetchParams(
-            checkNotNull(externalPriceId) {
-                "`externalPriceId` is required but was not set"
-            },
-            additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-            additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-        )
+        fun build(): PriceExternalPriceIdFetchParams =
+            PriceExternalPriceIdFetchParams(
+                checkNotNull(externalPriceId) { "`externalPriceId` is required but was not set" },
+                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+            )
     }
 }
