@@ -34,13 +34,16 @@ constructor(
     private val subscriptionId: String,
     private val changeOption: ChangeOption,
     private val alignBillingWithPlanChangeDate: Boolean?,
+    private val autoCollection: Boolean?,
     private val billingCycleAlignment: BillingCycleAlignment?,
     private val changeDate: OffsetDateTime?,
     private val couponRedemptionCode: String?,
     private val creditsOverageRate: Double?,
+    private val defaultInvoiceMemo: String?,
     private val externalPlanId: String?,
     private val initialPhaseOrder: Long?,
     private val invoicingThreshold: String?,
+    private val netTerms: Long?,
     private val perCreditOverageAmount: Double?,
     private val planId: String?,
     private val priceOverrides: List<PriceOverride>?,
@@ -56,6 +59,8 @@ constructor(
     fun alignBillingWithPlanChangeDate(): Optional<Boolean> =
         Optional.ofNullable(alignBillingWithPlanChangeDate)
 
+    fun autoCollection(): Optional<Boolean> = Optional.ofNullable(autoCollection)
+
     fun billingCycleAlignment(): Optional<BillingCycleAlignment> =
         Optional.ofNullable(billingCycleAlignment)
 
@@ -65,11 +70,15 @@ constructor(
 
     fun creditsOverageRate(): Optional<Double> = Optional.ofNullable(creditsOverageRate)
 
+    fun defaultInvoiceMemo(): Optional<String> = Optional.ofNullable(defaultInvoiceMemo)
+
     fun externalPlanId(): Optional<String> = Optional.ofNullable(externalPlanId)
 
     fun initialPhaseOrder(): Optional<Long> = Optional.ofNullable(initialPhaseOrder)
 
     fun invoicingThreshold(): Optional<String> = Optional.ofNullable(invoicingThreshold)
+
+    fun netTerms(): Optional<Long> = Optional.ofNullable(netTerms)
 
     fun perCreditOverageAmount(): Optional<Double> = Optional.ofNullable(perCreditOverageAmount)
 
@@ -82,13 +91,16 @@ constructor(
         return SubscriptionSchedulePlanChangeBody(
             changeOption,
             alignBillingWithPlanChangeDate,
+            autoCollection,
             billingCycleAlignment,
             changeDate,
             couponRedemptionCode,
             creditsOverageRate,
+            defaultInvoiceMemo,
             externalPlanId,
             initialPhaseOrder,
             invoicingThreshold,
+            netTerms,
             perCreditOverageAmount,
             planId,
             priceOverrides,
@@ -113,13 +125,16 @@ constructor(
     internal constructor(
         private val changeOption: ChangeOption?,
         private val alignBillingWithPlanChangeDate: Boolean?,
+        private val autoCollection: Boolean?,
         private val billingCycleAlignment: BillingCycleAlignment?,
         private val changeDate: OffsetDateTime?,
         private val couponRedemptionCode: String?,
         private val creditsOverageRate: Double?,
+        private val defaultInvoiceMemo: String?,
         private val externalPlanId: String?,
         private val initialPhaseOrder: Long?,
         private val invoicingThreshold: String?,
+        private val netTerms: Long?,
         private val perCreditOverageAmount: Double?,
         private val planId: String?,
         private val priceOverrides: List<PriceOverride>?,
@@ -138,6 +153,13 @@ constructor(
         fun alignBillingWithPlanChangeDate(): Boolean? = alignBillingWithPlanChangeDate
 
         /**
+         * Determines whether issued invoices for this subscription will automatically be charged
+         * with the saved payment method on the due date. If not specified, this defaults to the
+         * behavior configured for this customer.
+         */
+        @JsonProperty("auto_collection") fun autoCollection(): Boolean? = autoCollection
+
+        /**
          * Reset billing periods to be aligned with the plan change's effective date or start of the
          * month. Defaults to `unchanged` which keeps subscription's existing billing cycle
          * alignment.
@@ -153,13 +175,19 @@ constructor(
 
         /**
          * Redemption code to be used for this subscription. If the coupon cannot be found by its
-         * redemption code, or cannot be redeemed, an error response will be returned and the plan
-         * change will not be scheduled.
+         * redemption code, or cannot be redeemed, an error response will be returned and the
+         * subscription creation or plan change will not be scheduled.
          */
         @JsonProperty("coupon_redemption_code")
         fun couponRedemptionCode(): String? = couponRedemptionCode
 
         @JsonProperty("credits_overage_rate") fun creditsOverageRate(): Double? = creditsOverageRate
+
+        /**
+         * Determines the default memo on this subscription's invoices. Note that if this is not
+         * provided, it is determined by the plan configuration.
+         */
+        @JsonProperty("default_invoice_memo") fun defaultInvoiceMemo(): String? = defaultInvoiceMemo
 
         /**
          * The external_plan_id of the plan that the given subscription should be switched to. Note
@@ -176,6 +204,13 @@ constructor(
          * billing period.
          */
         @JsonProperty("invoicing_threshold") fun invoicingThreshold(): String? = invoicingThreshold
+
+        /**
+         * The net terms determines the difference between the invoice date and the issue date for
+         * the invoice. If you intend the invoice to be due on issue, set this to 0. If not
+         * provided, this defaults to the value specified in the plan.
+         */
+        @JsonProperty("net_terms") fun netTerms(): Long? = netTerms
 
         @JsonProperty("per_credit_overage_amount")
         fun perCreditOverageAmount(): Double? = perCreditOverageAmount
@@ -203,13 +238,16 @@ constructor(
             return other is SubscriptionSchedulePlanChangeBody &&
                 this.changeOption == other.changeOption &&
                 this.alignBillingWithPlanChangeDate == other.alignBillingWithPlanChangeDate &&
+                this.autoCollection == other.autoCollection &&
                 this.billingCycleAlignment == other.billingCycleAlignment &&
                 this.changeDate == other.changeDate &&
                 this.couponRedemptionCode == other.couponRedemptionCode &&
                 this.creditsOverageRate == other.creditsOverageRate &&
+                this.defaultInvoiceMemo == other.defaultInvoiceMemo &&
                 this.externalPlanId == other.externalPlanId &&
                 this.initialPhaseOrder == other.initialPhaseOrder &&
                 this.invoicingThreshold == other.invoicingThreshold &&
+                this.netTerms == other.netTerms &&
                 this.perCreditOverageAmount == other.perCreditOverageAmount &&
                 this.planId == other.planId &&
                 this.priceOverrides == other.priceOverrides &&
@@ -222,13 +260,16 @@ constructor(
                     Objects.hash(
                         changeOption,
                         alignBillingWithPlanChangeDate,
+                        autoCollection,
                         billingCycleAlignment,
                         changeDate,
                         couponRedemptionCode,
                         creditsOverageRate,
+                        defaultInvoiceMemo,
                         externalPlanId,
                         initialPhaseOrder,
                         invoicingThreshold,
+                        netTerms,
                         perCreditOverageAmount,
                         planId,
                         priceOverrides,
@@ -239,7 +280,7 @@ constructor(
         }
 
         override fun toString() =
-            "SubscriptionSchedulePlanChangeBody{changeOption=$changeOption, alignBillingWithPlanChangeDate=$alignBillingWithPlanChangeDate, billingCycleAlignment=$billingCycleAlignment, changeDate=$changeDate, couponRedemptionCode=$couponRedemptionCode, creditsOverageRate=$creditsOverageRate, externalPlanId=$externalPlanId, initialPhaseOrder=$initialPhaseOrder, invoicingThreshold=$invoicingThreshold, perCreditOverageAmount=$perCreditOverageAmount, planId=$planId, priceOverrides=$priceOverrides, additionalProperties=$additionalProperties}"
+            "SubscriptionSchedulePlanChangeBody{changeOption=$changeOption, alignBillingWithPlanChangeDate=$alignBillingWithPlanChangeDate, autoCollection=$autoCollection, billingCycleAlignment=$billingCycleAlignment, changeDate=$changeDate, couponRedemptionCode=$couponRedemptionCode, creditsOverageRate=$creditsOverageRate, defaultInvoiceMemo=$defaultInvoiceMemo, externalPlanId=$externalPlanId, initialPhaseOrder=$initialPhaseOrder, invoicingThreshold=$invoicingThreshold, netTerms=$netTerms, perCreditOverageAmount=$perCreditOverageAmount, planId=$planId, priceOverrides=$priceOverrides, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -250,13 +291,16 @@ constructor(
 
             private var changeOption: ChangeOption? = null
             private var alignBillingWithPlanChangeDate: Boolean? = null
+            private var autoCollection: Boolean? = null
             private var billingCycleAlignment: BillingCycleAlignment? = null
             private var changeDate: OffsetDateTime? = null
             private var couponRedemptionCode: String? = null
             private var creditsOverageRate: Double? = null
+            private var defaultInvoiceMemo: String? = null
             private var externalPlanId: String? = null
             private var initialPhaseOrder: Long? = null
             private var invoicingThreshold: String? = null
+            private var netTerms: Long? = null
             private var perCreditOverageAmount: Double? = null
             private var planId: String? = null
             private var priceOverrides: List<PriceOverride>? = null
@@ -269,14 +313,17 @@ constructor(
                 this.changeOption = subscriptionSchedulePlanChangeBody.changeOption
                 this.alignBillingWithPlanChangeDate =
                     subscriptionSchedulePlanChangeBody.alignBillingWithPlanChangeDate
+                this.autoCollection = subscriptionSchedulePlanChangeBody.autoCollection
                 this.billingCycleAlignment =
                     subscriptionSchedulePlanChangeBody.billingCycleAlignment
                 this.changeDate = subscriptionSchedulePlanChangeBody.changeDate
                 this.couponRedemptionCode = subscriptionSchedulePlanChangeBody.couponRedemptionCode
                 this.creditsOverageRate = subscriptionSchedulePlanChangeBody.creditsOverageRate
+                this.defaultInvoiceMemo = subscriptionSchedulePlanChangeBody.defaultInvoiceMemo
                 this.externalPlanId = subscriptionSchedulePlanChangeBody.externalPlanId
                 this.initialPhaseOrder = subscriptionSchedulePlanChangeBody.initialPhaseOrder
                 this.invoicingThreshold = subscriptionSchedulePlanChangeBody.invoicingThreshold
+                this.netTerms = subscriptionSchedulePlanChangeBody.netTerms
                 this.perCreditOverageAmount =
                     subscriptionSchedulePlanChangeBody.perCreditOverageAmount
                 this.planId = subscriptionSchedulePlanChangeBody.planId
@@ -299,6 +346,16 @@ constructor(
             }
 
             /**
+             * Determines whether issued invoices for this subscription will automatically be
+             * charged with the saved payment method on the due date. If not specified, this
+             * defaults to the behavior configured for this customer.
+             */
+            @JsonProperty("auto_collection")
+            fun autoCollection(autoCollection: Boolean) = apply {
+                this.autoCollection = autoCollection
+            }
+
+            /**
              * Reset billing periods to be aligned with the plan change's effective date or start of
              * the month. Defaults to `unchanged` which keeps subscription's existing billing cycle
              * alignment.
@@ -318,7 +375,7 @@ constructor(
             /**
              * Redemption code to be used for this subscription. If the coupon cannot be found by
              * its redemption code, or cannot be redeemed, an error response will be returned and
-             * the plan change will not be scheduled.
+             * the subscription creation or plan change will not be scheduled.
              */
             @JsonProperty("coupon_redemption_code")
             fun couponRedemptionCode(couponRedemptionCode: String) = apply {
@@ -328,6 +385,15 @@ constructor(
             @JsonProperty("credits_overage_rate")
             fun creditsOverageRate(creditsOverageRate: Double) = apply {
                 this.creditsOverageRate = creditsOverageRate
+            }
+
+            /**
+             * Determines the default memo on this subscription's invoices. Note that if this is not
+             * provided, it is determined by the plan configuration.
+             */
+            @JsonProperty("default_invoice_memo")
+            fun defaultInvoiceMemo(defaultInvoiceMemo: String) = apply {
+                this.defaultInvoiceMemo = defaultInvoiceMemo
             }
 
             /**
@@ -354,6 +420,14 @@ constructor(
             fun invoicingThreshold(invoicingThreshold: String) = apply {
                 this.invoicingThreshold = invoicingThreshold
             }
+
+            /**
+             * The net terms determines the difference between the invoice date and the issue date
+             * for the invoice. If you intend the invoice to be due on issue, set this to 0. If not
+             * provided, this defaults to the value specified in the plan.
+             */
+            @JsonProperty("net_terms")
+            fun netTerms(netTerms: Long) = apply { this.netTerms = netTerms }
 
             @JsonProperty("per_credit_overage_amount")
             fun perCreditOverageAmount(perCreditOverageAmount: Double) = apply {
@@ -390,13 +464,16 @@ constructor(
                 SubscriptionSchedulePlanChangeBody(
                     checkNotNull(changeOption) { "`changeOption` is required but was not set" },
                     alignBillingWithPlanChangeDate,
+                    autoCollection,
                     billingCycleAlignment,
                     changeDate,
                     couponRedemptionCode,
                     creditsOverageRate,
+                    defaultInvoiceMemo,
                     externalPlanId,
                     initialPhaseOrder,
                     invoicingThreshold,
+                    netTerms,
                     perCreditOverageAmount,
                     planId,
                     priceOverrides?.toUnmodifiable(),
@@ -420,13 +497,16 @@ constructor(
             this.subscriptionId == other.subscriptionId &&
             this.changeOption == other.changeOption &&
             this.alignBillingWithPlanChangeDate == other.alignBillingWithPlanChangeDate &&
+            this.autoCollection == other.autoCollection &&
             this.billingCycleAlignment == other.billingCycleAlignment &&
             this.changeDate == other.changeDate &&
             this.couponRedemptionCode == other.couponRedemptionCode &&
             this.creditsOverageRate == other.creditsOverageRate &&
+            this.defaultInvoiceMemo == other.defaultInvoiceMemo &&
             this.externalPlanId == other.externalPlanId &&
             this.initialPhaseOrder == other.initialPhaseOrder &&
             this.invoicingThreshold == other.invoicingThreshold &&
+            this.netTerms == other.netTerms &&
             this.perCreditOverageAmount == other.perCreditOverageAmount &&
             this.planId == other.planId &&
             this.priceOverrides == other.priceOverrides &&
@@ -440,13 +520,16 @@ constructor(
             subscriptionId,
             changeOption,
             alignBillingWithPlanChangeDate,
+            autoCollection,
             billingCycleAlignment,
             changeDate,
             couponRedemptionCode,
             creditsOverageRate,
+            defaultInvoiceMemo,
             externalPlanId,
             initialPhaseOrder,
             invoicingThreshold,
+            netTerms,
             perCreditOverageAmount,
             planId,
             priceOverrides,
@@ -457,7 +540,7 @@ constructor(
     }
 
     override fun toString() =
-        "SubscriptionSchedulePlanChangeParams{subscriptionId=$subscriptionId, changeOption=$changeOption, alignBillingWithPlanChangeDate=$alignBillingWithPlanChangeDate, billingCycleAlignment=$billingCycleAlignment, changeDate=$changeDate, couponRedemptionCode=$couponRedemptionCode, creditsOverageRate=$creditsOverageRate, externalPlanId=$externalPlanId, initialPhaseOrder=$initialPhaseOrder, invoicingThreshold=$invoicingThreshold, perCreditOverageAmount=$perCreditOverageAmount, planId=$planId, priceOverrides=$priceOverrides, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+        "SubscriptionSchedulePlanChangeParams{subscriptionId=$subscriptionId, changeOption=$changeOption, alignBillingWithPlanChangeDate=$alignBillingWithPlanChangeDate, autoCollection=$autoCollection, billingCycleAlignment=$billingCycleAlignment, changeDate=$changeDate, couponRedemptionCode=$couponRedemptionCode, creditsOverageRate=$creditsOverageRate, defaultInvoiceMemo=$defaultInvoiceMemo, externalPlanId=$externalPlanId, initialPhaseOrder=$initialPhaseOrder, invoicingThreshold=$invoicingThreshold, netTerms=$netTerms, perCreditOverageAmount=$perCreditOverageAmount, planId=$planId, priceOverrides=$priceOverrides, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -472,13 +555,16 @@ constructor(
         private var subscriptionId: String? = null
         private var changeOption: ChangeOption? = null
         private var alignBillingWithPlanChangeDate: Boolean? = null
+        private var autoCollection: Boolean? = null
         private var billingCycleAlignment: BillingCycleAlignment? = null
         private var changeDate: OffsetDateTime? = null
         private var couponRedemptionCode: String? = null
         private var creditsOverageRate: Double? = null
+        private var defaultInvoiceMemo: String? = null
         private var externalPlanId: String? = null
         private var initialPhaseOrder: Long? = null
         private var invoicingThreshold: String? = null
+        private var netTerms: Long? = null
         private var perCreditOverageAmount: Double? = null
         private var planId: String? = null
         private var priceOverrides: MutableList<PriceOverride> = mutableListOf()
@@ -494,13 +580,16 @@ constructor(
             this.changeOption = subscriptionSchedulePlanChangeParams.changeOption
             this.alignBillingWithPlanChangeDate =
                 subscriptionSchedulePlanChangeParams.alignBillingWithPlanChangeDate
+            this.autoCollection = subscriptionSchedulePlanChangeParams.autoCollection
             this.billingCycleAlignment = subscriptionSchedulePlanChangeParams.billingCycleAlignment
             this.changeDate = subscriptionSchedulePlanChangeParams.changeDate
             this.couponRedemptionCode = subscriptionSchedulePlanChangeParams.couponRedemptionCode
             this.creditsOverageRate = subscriptionSchedulePlanChangeParams.creditsOverageRate
+            this.defaultInvoiceMemo = subscriptionSchedulePlanChangeParams.defaultInvoiceMemo
             this.externalPlanId = subscriptionSchedulePlanChangeParams.externalPlanId
             this.initialPhaseOrder = subscriptionSchedulePlanChangeParams.initialPhaseOrder
             this.invoicingThreshold = subscriptionSchedulePlanChangeParams.invoicingThreshold
+            this.netTerms = subscriptionSchedulePlanChangeParams.netTerms
             this.perCreditOverageAmount =
                 subscriptionSchedulePlanChangeParams.perCreditOverageAmount
             this.planId = subscriptionSchedulePlanChangeParams.planId
@@ -523,6 +612,13 @@ constructor(
         }
 
         /**
+         * Determines whether issued invoices for this subscription will automatically be charged
+         * with the saved payment method on the due date. If not specified, this defaults to the
+         * behavior configured for this customer.
+         */
+        fun autoCollection(autoCollection: Boolean) = apply { this.autoCollection = autoCollection }
+
+        /**
          * Reset billing periods to be aligned with the plan change's effective date or start of the
          * month. Defaults to `unchanged` which keeps subscription's existing billing cycle
          * alignment.
@@ -539,8 +635,8 @@ constructor(
 
         /**
          * Redemption code to be used for this subscription. If the coupon cannot be found by its
-         * redemption code, or cannot be redeemed, an error response will be returned and the plan
-         * change will not be scheduled.
+         * redemption code, or cannot be redeemed, an error response will be returned and the
+         * subscription creation or plan change will not be scheduled.
          */
         fun couponRedemptionCode(couponRedemptionCode: String) = apply {
             this.couponRedemptionCode = couponRedemptionCode
@@ -548,6 +644,14 @@ constructor(
 
         fun creditsOverageRate(creditsOverageRate: Double) = apply {
             this.creditsOverageRate = creditsOverageRate
+        }
+
+        /**
+         * Determines the default memo on this subscription's invoices. Note that if this is not
+         * provided, it is determined by the plan configuration.
+         */
+        fun defaultInvoiceMemo(defaultInvoiceMemo: String) = apply {
+            this.defaultInvoiceMemo = defaultInvoiceMemo
         }
 
         /**
@@ -569,6 +673,13 @@ constructor(
         fun invoicingThreshold(invoicingThreshold: String) = apply {
             this.invoicingThreshold = invoicingThreshold
         }
+
+        /**
+         * The net terms determines the difference between the invoice date and the issue date for
+         * the invoice. If you intend the invoice to be due on issue, set this to 0. If not
+         * provided, this defaults to the value specified in the plan.
+         */
+        fun netTerms(netTerms: Long) = apply { this.netTerms = netTerms }
 
         fun perCreditOverageAmount(perCreditOverageAmount: Double) = apply {
             this.perCreditOverageAmount = perCreditOverageAmount
@@ -650,13 +761,16 @@ constructor(
                 checkNotNull(subscriptionId) { "`subscriptionId` is required but was not set" },
                 checkNotNull(changeOption) { "`changeOption` is required but was not set" },
                 alignBillingWithPlanChangeDate,
+                autoCollection,
                 billingCycleAlignment,
                 changeDate,
                 couponRedemptionCode,
                 creditsOverageRate,
+                defaultInvoiceMemo,
                 externalPlanId,
                 initialPhaseOrder,
                 invoicingThreshold,
+                netTerms,
                 perCreditOverageAmount,
                 planId,
                 if (priceOverrides.size == 0) null else priceOverrides.toUnmodifiable(),
