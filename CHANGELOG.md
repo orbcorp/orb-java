@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.1.0-alpha.6 (2024-09-06)
+
+Full Changelog: [v0.1.0-alpha.5...v0.1.0-alpha.6](https://github.com/orbcorp/orb-java/compare/v0.1.0-alpha.5...v0.1.0-alpha.6)
+
+### Features
+
+* **api:** codegen changes ([#48](https://github.com/orbcorp/orb-java/issues/48)) ([8a0190e](https://github.com/orbcorp/orb-java/commit/8a0190e72457485174719ab58948dc474d53ca25))
+* **api:** OpenAPI spec update via Stainless API ([#45](https://github.com/orbcorp/orb-java/issues/45)) ([055d0a8](https://github.com/orbcorp/orb-java/commit/055d0a81db48729e99980b83ac275338d6aa1e7b))
+* **api:** OpenAPI spec update via Stainless API ([#47](https://github.com/orbcorp/orb-java/issues/47)) ([cbb6cca](https://github.com/orbcorp/orb-java/commit/cbb6cca7e31e1c44ae3b00811fb5979e2912d5e8))
+* **api:** OpenAPI spec update via Stainless API ([#50](https://github.com/orbcorp/orb-java/issues/50)) ([2bd0af6](https://github.com/orbcorp/orb-java/commit/2bd0af6f644d5f0273003f22af55c4116ea325a0))
+* **api:** OpenAPI spec update via Stainless API ([#51](https://github.com/orbcorp/orb-java/issues/51)) ([c4e232e](https://github.com/orbcorp/orb-java/commit/c4e232ed8a840f5f0da7618f489fa3c24d9c5af4))
+* **api:** OpenAPI spec update via Stainless API ([#52](https://github.com/orbcorp/orb-java/issues/52)) ([773d7e7](https://github.com/orbcorp/orb-java/commit/773d7e71970a4629fbfd32c92ebfd1c8288c3327))
+* **api:** OpenAPI spec update via Stainless API ([#53](https://github.com/orbcorp/orb-java/issues/53)) ([7efa5f4](https://github.com/orbcorp/orb-java/commit/7efa5f4042e763b642d99e3b41dcf5350ceb97b8))
+* **api:** OpenAPI spec update via Stainless API ([#54](https://github.com/orbcorp/orb-java/issues/54)) ([f9006eb](https://github.com/orbcorp/orb-java/commit/f9006ebdc60bb00a77a7d574c82601b32f86ac4c))
+* **api:** OpenAPI spec update via Stainless API ([#55](https://github.com/orbcorp/orb-java/issues/55)) ([73ed069](https://github.com/orbcorp/orb-java/commit/73ed069286d3e6e23081f31bcae1c4739f3ef5c3))
+* **api:** OpenAPI spec update via Stainless API ([#57](https://github.com/orbcorp/orb-java/issues/57)) ([4a3ce75](https://github.com/orbcorp/orb-java/commit/4a3ce752daa3fc63a858b3f94c033b5e2bde0288))
+
+
+### Chores
+
+* consistent string literal escaping ([#49](https://github.com/orbcorp/orb-java/issues/49)) ([556e69d](https://github.com/orbcorp/orb-java/commit/556e69d08db6005e58612fc83828329c9beb608c))
+* **internal:** codegen related update ([#56](https://github.com/orbcorp/orb-java/issues/56)) ([837e1ed](https://github.com/orbcorp/orb-java/commit/837e1ed1619d993c680581d3dc6a9e02e1c9f8a6))
+
 ## 0.1.0-alpha.5 (2024-08-22)
 
 Full Changelog: [v0.1.0-alpha.4...v0.1.0-alpha.5](https://github.com/orbcorp/orb-java/compare/v0.1.0-alpha.4...v0.1.0-alpha.5)

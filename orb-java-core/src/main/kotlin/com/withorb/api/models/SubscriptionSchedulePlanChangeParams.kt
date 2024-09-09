@@ -34,13 +34,16 @@ constructor(
     private val subscriptionId: String,
     private val changeOption: ChangeOption,
     private val alignBillingWithPlanChangeDate: Boolean?,
+    private val autoCollection: Boolean?,
     private val billingCycleAlignment: BillingCycleAlignment?,
     private val changeDate: OffsetDateTime?,
     private val couponRedemptionCode: String?,
     private val creditsOverageRate: Double?,
+    private val defaultInvoiceMemo: String?,
     private val externalPlanId: String?,
     private val initialPhaseOrder: Long?,
     private val invoicingThreshold: String?,
+    private val netTerms: Long?,
     private val perCreditOverageAmount: Double?,
     private val planId: String?,
     private val priceOverrides: List<PriceOverride>?,
@@ -56,6 +59,8 @@ constructor(
     fun alignBillingWithPlanChangeDate(): Optional<Boolean> =
         Optional.ofNullable(alignBillingWithPlanChangeDate)
 
+    fun autoCollection(): Optional<Boolean> = Optional.ofNullable(autoCollection)
+
     fun billingCycleAlignment(): Optional<BillingCycleAlignment> =
         Optional.ofNullable(billingCycleAlignment)
 
@@ -65,11 +70,15 @@ constructor(
 
     fun creditsOverageRate(): Optional<Double> = Optional.ofNullable(creditsOverageRate)
 
+    fun defaultInvoiceMemo(): Optional<String> = Optional.ofNullable(defaultInvoiceMemo)
+
     fun externalPlanId(): Optional<String> = Optional.ofNullable(externalPlanId)
 
     fun initialPhaseOrder(): Optional<Long> = Optional.ofNullable(initialPhaseOrder)
 
     fun invoicingThreshold(): Optional<String> = Optional.ofNullable(invoicingThreshold)
+
+    fun netTerms(): Optional<Long> = Optional.ofNullable(netTerms)
 
     fun perCreditOverageAmount(): Optional<Double> = Optional.ofNullable(perCreditOverageAmount)
 
@@ -82,13 +91,16 @@ constructor(
         return SubscriptionSchedulePlanChangeBody(
             changeOption,
             alignBillingWithPlanChangeDate,
+            autoCollection,
             billingCycleAlignment,
             changeDate,
             couponRedemptionCode,
             creditsOverageRate,
+            defaultInvoiceMemo,
             externalPlanId,
             initialPhaseOrder,
             invoicingThreshold,
+            netTerms,
             perCreditOverageAmount,
             planId,
             priceOverrides,
@@ -113,13 +125,16 @@ constructor(
     internal constructor(
         private val changeOption: ChangeOption?,
         private val alignBillingWithPlanChangeDate: Boolean?,
+        private val autoCollection: Boolean?,
         private val billingCycleAlignment: BillingCycleAlignment?,
         private val changeDate: OffsetDateTime?,
         private val couponRedemptionCode: String?,
         private val creditsOverageRate: Double?,
+        private val defaultInvoiceMemo: String?,
         private val externalPlanId: String?,
         private val initialPhaseOrder: Long?,
         private val invoicingThreshold: String?,
+        private val netTerms: Long?,
         private val perCreditOverageAmount: Double?,
         private val planId: String?,
         private val priceOverrides: List<PriceOverride>?,
@@ -138,6 +153,13 @@ constructor(
         fun alignBillingWithPlanChangeDate(): Boolean? = alignBillingWithPlanChangeDate
 
         /**
+         * Determines whether issued invoices for this subscription will automatically be charged
+         * with the saved payment method on the due date. If not specified, this defaults to the
+         * behavior configured for this customer.
+         */
+        @JsonProperty("auto_collection") fun autoCollection(): Boolean? = autoCollection
+
+        /**
          * Reset billing periods to be aligned with the plan change's effective date or start of the
          * month. Defaults to `unchanged` which keeps subscription's existing billing cycle
          * alignment.
@@ -153,13 +175,19 @@ constructor(
 
         /**
          * Redemption code to be used for this subscription. If the coupon cannot be found by its
-         * redemption code, or cannot be redeemed, an error response will be returned and the plan
-         * change will not be scheduled.
+         * redemption code, or cannot be redeemed, an error response will be returned and the
+         * subscription creation or plan change will not be scheduled.
          */
         @JsonProperty("coupon_redemption_code")
         fun couponRedemptionCode(): String? = couponRedemptionCode
 
         @JsonProperty("credits_overage_rate") fun creditsOverageRate(): Double? = creditsOverageRate
+
+        /**
+         * Determines the default memo on this subscription's invoices. Note that if this is not
+         * provided, it is determined by the plan configuration.
+         */
+        @JsonProperty("default_invoice_memo") fun defaultInvoiceMemo(): String? = defaultInvoiceMemo
 
         /**
          * The external_plan_id of the plan that the given subscription should be switched to. Note
@@ -176,6 +204,13 @@ constructor(
          * billing period.
          */
         @JsonProperty("invoicing_threshold") fun invoicingThreshold(): String? = invoicingThreshold
+
+        /**
+         * The net terms determines the difference between the invoice date and the issue date for
+         * the invoice. If you intend the invoice to be due on issue, set this to 0. If not
+         * provided, this defaults to the value specified in the plan.
+         */
+        @JsonProperty("net_terms") fun netTerms(): Long? = netTerms
 
         @JsonProperty("per_credit_overage_amount")
         fun perCreditOverageAmount(): Double? = perCreditOverageAmount
@@ -203,13 +238,16 @@ constructor(
             return other is SubscriptionSchedulePlanChangeBody &&
                 this.changeOption == other.changeOption &&
                 this.alignBillingWithPlanChangeDate == other.alignBillingWithPlanChangeDate &&
+                this.autoCollection == other.autoCollection &&
                 this.billingCycleAlignment == other.billingCycleAlignment &&
                 this.changeDate == other.changeDate &&
                 this.couponRedemptionCode == other.couponRedemptionCode &&
                 this.creditsOverageRate == other.creditsOverageRate &&
+                this.defaultInvoiceMemo == other.defaultInvoiceMemo &&
                 this.externalPlanId == other.externalPlanId &&
                 this.initialPhaseOrder == other.initialPhaseOrder &&
                 this.invoicingThreshold == other.invoicingThreshold &&
+                this.netTerms == other.netTerms &&
                 this.perCreditOverageAmount == other.perCreditOverageAmount &&
                 this.planId == other.planId &&
                 this.priceOverrides == other.priceOverrides &&
@@ -222,13 +260,16 @@ constructor(
                     Objects.hash(
                         changeOption,
                         alignBillingWithPlanChangeDate,
+                        autoCollection,
                         billingCycleAlignment,
                         changeDate,
                         couponRedemptionCode,
                         creditsOverageRate,
+                        defaultInvoiceMemo,
                         externalPlanId,
                         initialPhaseOrder,
                         invoicingThreshold,
+                        netTerms,
                         perCreditOverageAmount,
                         planId,
                         priceOverrides,
@@ -239,7 +280,7 @@ constructor(
         }
 
         override fun toString() =
-            "SubscriptionSchedulePlanChangeBody{changeOption=$changeOption, alignBillingWithPlanChangeDate=$alignBillingWithPlanChangeDate, billingCycleAlignment=$billingCycleAlignment, changeDate=$changeDate, couponRedemptionCode=$couponRedemptionCode, creditsOverageRate=$creditsOverageRate, externalPlanId=$externalPlanId, initialPhaseOrder=$initialPhaseOrder, invoicingThreshold=$invoicingThreshold, perCreditOverageAmount=$perCreditOverageAmount, planId=$planId, priceOverrides=$priceOverrides, additionalProperties=$additionalProperties}"
+            "SubscriptionSchedulePlanChangeBody{changeOption=$changeOption, alignBillingWithPlanChangeDate=$alignBillingWithPlanChangeDate, autoCollection=$autoCollection, billingCycleAlignment=$billingCycleAlignment, changeDate=$changeDate, couponRedemptionCode=$couponRedemptionCode, creditsOverageRate=$creditsOverageRate, defaultInvoiceMemo=$defaultInvoiceMemo, externalPlanId=$externalPlanId, initialPhaseOrder=$initialPhaseOrder, invoicingThreshold=$invoicingThreshold, netTerms=$netTerms, perCreditOverageAmount=$perCreditOverageAmount, planId=$planId, priceOverrides=$priceOverrides, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -250,13 +291,16 @@ constructor(
 
             private var changeOption: ChangeOption? = null
             private var alignBillingWithPlanChangeDate: Boolean? = null
+            private var autoCollection: Boolean? = null
             private var billingCycleAlignment: BillingCycleAlignment? = null
             private var changeDate: OffsetDateTime? = null
             private var couponRedemptionCode: String? = null
             private var creditsOverageRate: Double? = null
+            private var defaultInvoiceMemo: String? = null
             private var externalPlanId: String? = null
             private var initialPhaseOrder: Long? = null
             private var invoicingThreshold: String? = null
+            private var netTerms: Long? = null
             private var perCreditOverageAmount: Double? = null
             private var planId: String? = null
             private var priceOverrides: List<PriceOverride>? = null
@@ -269,14 +313,17 @@ constructor(
                 this.changeOption = subscriptionSchedulePlanChangeBody.changeOption
                 this.alignBillingWithPlanChangeDate =
                     subscriptionSchedulePlanChangeBody.alignBillingWithPlanChangeDate
+                this.autoCollection = subscriptionSchedulePlanChangeBody.autoCollection
                 this.billingCycleAlignment =
                     subscriptionSchedulePlanChangeBody.billingCycleAlignment
                 this.changeDate = subscriptionSchedulePlanChangeBody.changeDate
                 this.couponRedemptionCode = subscriptionSchedulePlanChangeBody.couponRedemptionCode
                 this.creditsOverageRate = subscriptionSchedulePlanChangeBody.creditsOverageRate
+                this.defaultInvoiceMemo = subscriptionSchedulePlanChangeBody.defaultInvoiceMemo
                 this.externalPlanId = subscriptionSchedulePlanChangeBody.externalPlanId
                 this.initialPhaseOrder = subscriptionSchedulePlanChangeBody.initialPhaseOrder
                 this.invoicingThreshold = subscriptionSchedulePlanChangeBody.invoicingThreshold
+                this.netTerms = subscriptionSchedulePlanChangeBody.netTerms
                 this.perCreditOverageAmount =
                     subscriptionSchedulePlanChangeBody.perCreditOverageAmount
                 this.planId = subscriptionSchedulePlanChangeBody.planId
@@ -299,6 +346,16 @@ constructor(
             }
 
             /**
+             * Determines whether issued invoices for this subscription will automatically be
+             * charged with the saved payment method on the due date. If not specified, this
+             * defaults to the behavior configured for this customer.
+             */
+            @JsonProperty("auto_collection")
+            fun autoCollection(autoCollection: Boolean) = apply {
+                this.autoCollection = autoCollection
+            }
+
+            /**
              * Reset billing periods to be aligned with the plan change's effective date or start of
              * the month. Defaults to `unchanged` which keeps subscription's existing billing cycle
              * alignment.
@@ -318,7 +375,7 @@ constructor(
             /**
              * Redemption code to be used for this subscription. If the coupon cannot be found by
              * its redemption code, or cannot be redeemed, an error response will be returned and
-             * the plan change will not be scheduled.
+             * the subscription creation or plan change will not be scheduled.
              */
             @JsonProperty("coupon_redemption_code")
             fun couponRedemptionCode(couponRedemptionCode: String) = apply {
@@ -328,6 +385,15 @@ constructor(
             @JsonProperty("credits_overage_rate")
             fun creditsOverageRate(creditsOverageRate: Double) = apply {
                 this.creditsOverageRate = creditsOverageRate
+            }
+
+            /**
+             * Determines the default memo on this subscription's invoices. Note that if this is not
+             * provided, it is determined by the plan configuration.
+             */
+            @JsonProperty("default_invoice_memo")
+            fun defaultInvoiceMemo(defaultInvoiceMemo: String) = apply {
+                this.defaultInvoiceMemo = defaultInvoiceMemo
             }
 
             /**
@@ -354,6 +420,14 @@ constructor(
             fun invoicingThreshold(invoicingThreshold: String) = apply {
                 this.invoicingThreshold = invoicingThreshold
             }
+
+            /**
+             * The net terms determines the difference between the invoice date and the issue date
+             * for the invoice. If you intend the invoice to be due on issue, set this to 0. If not
+             * provided, this defaults to the value specified in the plan.
+             */
+            @JsonProperty("net_terms")
+            fun netTerms(netTerms: Long) = apply { this.netTerms = netTerms }
 
             @JsonProperty("per_credit_overage_amount")
             fun perCreditOverageAmount(perCreditOverageAmount: Double) = apply {
@@ -390,13 +464,16 @@ constructor(
                 SubscriptionSchedulePlanChangeBody(
                     checkNotNull(changeOption) { "`changeOption` is required but was not set" },
                     alignBillingWithPlanChangeDate,
+                    autoCollection,
                     billingCycleAlignment,
                     changeDate,
                     couponRedemptionCode,
                     creditsOverageRate,
+                    defaultInvoiceMemo,
                     externalPlanId,
                     initialPhaseOrder,
                     invoicingThreshold,
+                    netTerms,
                     perCreditOverageAmount,
                     planId,
                     priceOverrides?.toUnmodifiable(),
@@ -420,13 +497,16 @@ constructor(
             this.subscriptionId == other.subscriptionId &&
             this.changeOption == other.changeOption &&
             this.alignBillingWithPlanChangeDate == other.alignBillingWithPlanChangeDate &&
+            this.autoCollection == other.autoCollection &&
             this.billingCycleAlignment == other.billingCycleAlignment &&
             this.changeDate == other.changeDate &&
             this.couponRedemptionCode == other.couponRedemptionCode &&
             this.creditsOverageRate == other.creditsOverageRate &&
+            this.defaultInvoiceMemo == other.defaultInvoiceMemo &&
             this.externalPlanId == other.externalPlanId &&
             this.initialPhaseOrder == other.initialPhaseOrder &&
             this.invoicingThreshold == other.invoicingThreshold &&
+            this.netTerms == other.netTerms &&
             this.perCreditOverageAmount == other.perCreditOverageAmount &&
             this.planId == other.planId &&
             this.priceOverrides == other.priceOverrides &&
@@ -440,13 +520,16 @@ constructor(
             subscriptionId,
             changeOption,
             alignBillingWithPlanChangeDate,
+            autoCollection,
             billingCycleAlignment,
             changeDate,
             couponRedemptionCode,
             creditsOverageRate,
+            defaultInvoiceMemo,
             externalPlanId,
             initialPhaseOrder,
             invoicingThreshold,
+            netTerms,
             perCreditOverageAmount,
             planId,
             priceOverrides,
@@ -457,7 +540,7 @@ constructor(
     }
 
     override fun toString() =
-        "SubscriptionSchedulePlanChangeParams{subscriptionId=$subscriptionId, changeOption=$changeOption, alignBillingWithPlanChangeDate=$alignBillingWithPlanChangeDate, billingCycleAlignment=$billingCycleAlignment, changeDate=$changeDate, couponRedemptionCode=$couponRedemptionCode, creditsOverageRate=$creditsOverageRate, externalPlanId=$externalPlanId, initialPhaseOrder=$initialPhaseOrder, invoicingThreshold=$invoicingThreshold, perCreditOverageAmount=$perCreditOverageAmount, planId=$planId, priceOverrides=$priceOverrides, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+        "SubscriptionSchedulePlanChangeParams{subscriptionId=$subscriptionId, changeOption=$changeOption, alignBillingWithPlanChangeDate=$alignBillingWithPlanChangeDate, autoCollection=$autoCollection, billingCycleAlignment=$billingCycleAlignment, changeDate=$changeDate, couponRedemptionCode=$couponRedemptionCode, creditsOverageRate=$creditsOverageRate, defaultInvoiceMemo=$defaultInvoiceMemo, externalPlanId=$externalPlanId, initialPhaseOrder=$initialPhaseOrder, invoicingThreshold=$invoicingThreshold, netTerms=$netTerms, perCreditOverageAmount=$perCreditOverageAmount, planId=$planId, priceOverrides=$priceOverrides, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -472,13 +555,16 @@ constructor(
         private var subscriptionId: String? = null
         private var changeOption: ChangeOption? = null
         private var alignBillingWithPlanChangeDate: Boolean? = null
+        private var autoCollection: Boolean? = null
         private var billingCycleAlignment: BillingCycleAlignment? = null
         private var changeDate: OffsetDateTime? = null
         private var couponRedemptionCode: String? = null
         private var creditsOverageRate: Double? = null
+        private var defaultInvoiceMemo: String? = null
         private var externalPlanId: String? = null
         private var initialPhaseOrder: Long? = null
         private var invoicingThreshold: String? = null
+        private var netTerms: Long? = null
         private var perCreditOverageAmount: Double? = null
         private var planId: String? = null
         private var priceOverrides: MutableList<PriceOverride> = mutableListOf()
@@ -494,13 +580,16 @@ constructor(
             this.changeOption = subscriptionSchedulePlanChangeParams.changeOption
             this.alignBillingWithPlanChangeDate =
                 subscriptionSchedulePlanChangeParams.alignBillingWithPlanChangeDate
+            this.autoCollection = subscriptionSchedulePlanChangeParams.autoCollection
             this.billingCycleAlignment = subscriptionSchedulePlanChangeParams.billingCycleAlignment
             this.changeDate = subscriptionSchedulePlanChangeParams.changeDate
             this.couponRedemptionCode = subscriptionSchedulePlanChangeParams.couponRedemptionCode
             this.creditsOverageRate = subscriptionSchedulePlanChangeParams.creditsOverageRate
+            this.defaultInvoiceMemo = subscriptionSchedulePlanChangeParams.defaultInvoiceMemo
             this.externalPlanId = subscriptionSchedulePlanChangeParams.externalPlanId
             this.initialPhaseOrder = subscriptionSchedulePlanChangeParams.initialPhaseOrder
             this.invoicingThreshold = subscriptionSchedulePlanChangeParams.invoicingThreshold
+            this.netTerms = subscriptionSchedulePlanChangeParams.netTerms
             this.perCreditOverageAmount =
                 subscriptionSchedulePlanChangeParams.perCreditOverageAmount
             this.planId = subscriptionSchedulePlanChangeParams.planId
@@ -523,6 +612,13 @@ constructor(
         }
 
         /**
+         * Determines whether issued invoices for this subscription will automatically be charged
+         * with the saved payment method on the due date. If not specified, this defaults to the
+         * behavior configured for this customer.
+         */
+        fun autoCollection(autoCollection: Boolean) = apply { this.autoCollection = autoCollection }
+
+        /**
          * Reset billing periods to be aligned with the plan change's effective date or start of the
          * month. Defaults to `unchanged` which keeps subscription's existing billing cycle
          * alignment.
@@ -539,8 +635,8 @@ constructor(
 
         /**
          * Redemption code to be used for this subscription. If the coupon cannot be found by its
-         * redemption code, or cannot be redeemed, an error response will be returned and the plan
-         * change will not be scheduled.
+         * redemption code, or cannot be redeemed, an error response will be returned and the
+         * subscription creation or plan change will not be scheduled.
          */
         fun couponRedemptionCode(couponRedemptionCode: String) = apply {
             this.couponRedemptionCode = couponRedemptionCode
@@ -548,6 +644,14 @@ constructor(
 
         fun creditsOverageRate(creditsOverageRate: Double) = apply {
             this.creditsOverageRate = creditsOverageRate
+        }
+
+        /**
+         * Determines the default memo on this subscription's invoices. Note that if this is not
+         * provided, it is determined by the plan configuration.
+         */
+        fun defaultInvoiceMemo(defaultInvoiceMemo: String) = apply {
+            this.defaultInvoiceMemo = defaultInvoiceMemo
         }
 
         /**
@@ -569,6 +673,13 @@ constructor(
         fun invoicingThreshold(invoicingThreshold: String) = apply {
             this.invoicingThreshold = invoicingThreshold
         }
+
+        /**
+         * The net terms determines the difference between the invoice date and the issue date for
+         * the invoice. If you intend the invoice to be due on issue, set this to 0. If not
+         * provided, this defaults to the value specified in the plan.
+         */
+        fun netTerms(netTerms: Long) = apply { this.netTerms = netTerms }
 
         fun perCreditOverageAmount(perCreditOverageAmount: Double) = apply {
             this.perCreditOverageAmount = perCreditOverageAmount
@@ -650,13 +761,16 @@ constructor(
                 checkNotNull(subscriptionId) { "`subscriptionId` is required but was not set" },
                 checkNotNull(changeOption) { "`changeOption` is required but was not set" },
                 alignBillingWithPlanChangeDate,
+                autoCollection,
                 billingCycleAlignment,
                 changeDate,
                 couponRedemptionCode,
                 creditsOverageRate,
+                defaultInvoiceMemo,
                 externalPlanId,
                 initialPhaseOrder,
                 invoicingThreshold,
+                netTerms,
                 perCreditOverageAmount,
                 planId,
                 if (priceOverrides.size == 0) null else priceOverrides.toUnmodifiable(),
@@ -810,6 +924,13 @@ constructor(
         private val overrideTieredWithMinimumPrice: OverrideTieredWithMinimumPrice? = null,
         private val overridePackageWithAllocationPrice: OverridePackageWithAllocationPrice? = null,
         private val overrideUnitWithPercentPrice: OverrideUnitWithPercentPrice? = null,
+        private val overrideGroupedAllocationPrice: OverrideGroupedAllocationPrice? = null,
+        private val overrideGroupedWithProratedMinimumPrice:
+            OverrideGroupedWithProratedMinimumPrice? =
+            null,
+        private val overrideBulkWithProrationPrice: OverrideBulkWithProrationPrice? = null,
+        private val overrideUnitWithProrationPrice: OverrideUnitWithProrationPrice? = null,
+        private val overrideTieredWithProrationPrice: OverrideTieredWithProrationPrice? = null,
         private val _json: JsonValue? = null,
     ) {
 
@@ -853,6 +974,22 @@ constructor(
         fun overrideUnitWithPercentPrice(): Optional<OverrideUnitWithPercentPrice> =
             Optional.ofNullable(overrideUnitWithPercentPrice)
 
+        fun overrideGroupedAllocationPrice(): Optional<OverrideGroupedAllocationPrice> =
+            Optional.ofNullable(overrideGroupedAllocationPrice)
+
+        fun overrideGroupedWithProratedMinimumPrice():
+            Optional<OverrideGroupedWithProratedMinimumPrice> =
+            Optional.ofNullable(overrideGroupedWithProratedMinimumPrice)
+
+        fun overrideBulkWithProrationPrice(): Optional<OverrideBulkWithProrationPrice> =
+            Optional.ofNullable(overrideBulkWithProrationPrice)
+
+        fun overrideUnitWithProrationPrice(): Optional<OverrideUnitWithProrationPrice> =
+            Optional.ofNullable(overrideUnitWithProrationPrice)
+
+        fun overrideTieredWithProrationPrice(): Optional<OverrideTieredWithProrationPrice> =
+            Optional.ofNullable(overrideTieredWithProrationPrice)
+
         fun isOverrideUnitPrice(): Boolean = overrideUnitPrice != null
 
         fun isOverridePackagePrice(): Boolean = overridePackagePrice != null
@@ -880,6 +1017,17 @@ constructor(
             overridePackageWithAllocationPrice != null
 
         fun isOverrideUnitWithPercentPrice(): Boolean = overrideUnitWithPercentPrice != null
+
+        fun isOverrideGroupedAllocationPrice(): Boolean = overrideGroupedAllocationPrice != null
+
+        fun isOverrideGroupedWithProratedMinimumPrice(): Boolean =
+            overrideGroupedWithProratedMinimumPrice != null
+
+        fun isOverrideBulkWithProrationPrice(): Boolean = overrideBulkWithProrationPrice != null
+
+        fun isOverrideUnitWithProrationPrice(): Boolean = overrideUnitWithProrationPrice != null
+
+        fun isOverrideTieredWithProrationPrice(): Boolean = overrideTieredWithProrationPrice != null
 
         fun asOverrideUnitPrice(): OverrideUnitPrice =
             overrideUnitPrice.getOrThrow("overrideUnitPrice")
@@ -919,6 +1067,23 @@ constructor(
         fun asOverrideUnitWithPercentPrice(): OverrideUnitWithPercentPrice =
             overrideUnitWithPercentPrice.getOrThrow("overrideUnitWithPercentPrice")
 
+        fun asOverrideGroupedAllocationPrice(): OverrideGroupedAllocationPrice =
+            overrideGroupedAllocationPrice.getOrThrow("overrideGroupedAllocationPrice")
+
+        fun asOverrideGroupedWithProratedMinimumPrice(): OverrideGroupedWithProratedMinimumPrice =
+            overrideGroupedWithProratedMinimumPrice.getOrThrow(
+                "overrideGroupedWithProratedMinimumPrice"
+            )
+
+        fun asOverrideBulkWithProrationPrice(): OverrideBulkWithProrationPrice =
+            overrideBulkWithProrationPrice.getOrThrow("overrideBulkWithProrationPrice")
+
+        fun asOverrideUnitWithProrationPrice(): OverrideUnitWithProrationPrice =
+            overrideUnitWithProrationPrice.getOrThrow("overrideUnitWithProrationPrice")
+
+        fun asOverrideTieredWithProrationPrice(): OverrideTieredWithProrationPrice =
+            overrideTieredWithProrationPrice.getOrThrow("overrideTieredWithProrationPrice")
+
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
         fun <T> accept(visitor: Visitor<T>): T {
@@ -948,6 +1113,18 @@ constructor(
                     )
                 overrideUnitWithPercentPrice != null ->
                     visitor.visitOverrideUnitWithPercentPrice(overrideUnitWithPercentPrice)
+                overrideGroupedAllocationPrice != null ->
+                    visitor.visitOverrideGroupedAllocationPrice(overrideGroupedAllocationPrice)
+                overrideGroupedWithProratedMinimumPrice != null ->
+                    visitor.visitOverrideGroupedWithProratedMinimumPrice(
+                        overrideGroupedWithProratedMinimumPrice
+                    )
+                overrideBulkWithProrationPrice != null ->
+                    visitor.visitOverrideBulkWithProrationPrice(overrideBulkWithProrationPrice)
+                overrideUnitWithProrationPrice != null ->
+                    visitor.visitOverrideUnitWithProrationPrice(overrideUnitWithProrationPrice)
+                overrideTieredWithProrationPrice != null ->
+                    visitor.visitOverrideTieredWithProrationPrice(overrideTieredWithProrationPrice)
                 else -> visitor.unknown(_json)
             }
         }
@@ -967,7 +1144,12 @@ constructor(
                         overrideTieredPackagePrice == null &&
                         overrideTieredWithMinimumPrice == null &&
                         overridePackageWithAllocationPrice == null &&
-                        overrideUnitWithPercentPrice == null
+                        overrideUnitWithPercentPrice == null &&
+                        overrideGroupedAllocationPrice == null &&
+                        overrideGroupedWithProratedMinimumPrice == null &&
+                        overrideBulkWithProrationPrice == null &&
+                        overrideUnitWithProrationPrice == null &&
+                        overrideTieredWithProrationPrice == null
                 ) {
                     throw OrbInvalidDataException("Unknown PriceOverride: $_json")
                 }
@@ -984,6 +1166,11 @@ constructor(
                 overrideTieredWithMinimumPrice?.validate()
                 overridePackageWithAllocationPrice?.validate()
                 overrideUnitWithPercentPrice?.validate()
+                overrideGroupedAllocationPrice?.validate()
+                overrideGroupedWithProratedMinimumPrice?.validate()
+                overrideBulkWithProrationPrice?.validate()
+                overrideUnitWithProrationPrice?.validate()
+                overrideTieredWithProrationPrice?.validate()
                 validated = true
             }
         }
@@ -1007,7 +1194,13 @@ constructor(
                 this.overrideTieredWithMinimumPrice == other.overrideTieredWithMinimumPrice &&
                 this.overridePackageWithAllocationPrice ==
                     other.overridePackageWithAllocationPrice &&
-                this.overrideUnitWithPercentPrice == other.overrideUnitWithPercentPrice
+                this.overrideUnitWithPercentPrice == other.overrideUnitWithPercentPrice &&
+                this.overrideGroupedAllocationPrice == other.overrideGroupedAllocationPrice &&
+                this.overrideGroupedWithProratedMinimumPrice ==
+                    other.overrideGroupedWithProratedMinimumPrice &&
+                this.overrideBulkWithProrationPrice == other.overrideBulkWithProrationPrice &&
+                this.overrideUnitWithProrationPrice == other.overrideUnitWithProrationPrice &&
+                this.overrideTieredWithProrationPrice == other.overrideTieredWithProrationPrice
         }
 
         override fun hashCode(): Int {
@@ -1025,6 +1218,11 @@ constructor(
                 overrideTieredWithMinimumPrice,
                 overridePackageWithAllocationPrice,
                 overrideUnitWithPercentPrice,
+                overrideGroupedAllocationPrice,
+                overrideGroupedWithProratedMinimumPrice,
+                overrideBulkWithProrationPrice,
+                overrideUnitWithProrationPrice,
+                overrideTieredWithProrationPrice,
             )
         }
 
@@ -1053,6 +1251,16 @@ constructor(
                     "PriceOverride{overridePackageWithAllocationPrice=$overridePackageWithAllocationPrice}"
                 overrideUnitWithPercentPrice != null ->
                     "PriceOverride{overrideUnitWithPercentPrice=$overrideUnitWithPercentPrice}"
+                overrideGroupedAllocationPrice != null ->
+                    "PriceOverride{overrideGroupedAllocationPrice=$overrideGroupedAllocationPrice}"
+                overrideGroupedWithProratedMinimumPrice != null ->
+                    "PriceOverride{overrideGroupedWithProratedMinimumPrice=$overrideGroupedWithProratedMinimumPrice}"
+                overrideBulkWithProrationPrice != null ->
+                    "PriceOverride{overrideBulkWithProrationPrice=$overrideBulkWithProrationPrice}"
+                overrideUnitWithProrationPrice != null ->
+                    "PriceOverride{overrideUnitWithProrationPrice=$overrideUnitWithProrationPrice}"
+                overrideTieredWithProrationPrice != null ->
+                    "PriceOverride{overrideTieredWithProrationPrice=$overrideTieredWithProrationPrice}"
                 _json != null -> "PriceOverride{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid PriceOverride")
             }
@@ -1119,6 +1327,35 @@ constructor(
             fun ofOverrideUnitWithPercentPrice(
                 overrideUnitWithPercentPrice: OverrideUnitWithPercentPrice
             ) = PriceOverride(overrideUnitWithPercentPrice = overrideUnitWithPercentPrice)
+
+            @JvmStatic
+            fun ofOverrideGroupedAllocationPrice(
+                overrideGroupedAllocationPrice: OverrideGroupedAllocationPrice
+            ) = PriceOverride(overrideGroupedAllocationPrice = overrideGroupedAllocationPrice)
+
+            @JvmStatic
+            fun ofOverrideGroupedWithProratedMinimumPrice(
+                overrideGroupedWithProratedMinimumPrice: OverrideGroupedWithProratedMinimumPrice
+            ) =
+                PriceOverride(
+                    overrideGroupedWithProratedMinimumPrice =
+                        overrideGroupedWithProratedMinimumPrice
+                )
+
+            @JvmStatic
+            fun ofOverrideBulkWithProrationPrice(
+                overrideBulkWithProrationPrice: OverrideBulkWithProrationPrice
+            ) = PriceOverride(overrideBulkWithProrationPrice = overrideBulkWithProrationPrice)
+
+            @JvmStatic
+            fun ofOverrideUnitWithProrationPrice(
+                overrideUnitWithProrationPrice: OverrideUnitWithProrationPrice
+            ) = PriceOverride(overrideUnitWithProrationPrice = overrideUnitWithProrationPrice)
+
+            @JvmStatic
+            fun ofOverrideTieredWithProrationPrice(
+                overrideTieredWithProrationPrice: OverrideTieredWithProrationPrice
+            ) = PriceOverride(overrideTieredWithProrationPrice = overrideTieredWithProrationPrice)
         }
 
         interface Visitor<out T> {
@@ -1157,6 +1394,26 @@ constructor(
 
             fun visitOverrideUnitWithPercentPrice(
                 overrideUnitWithPercentPrice: OverrideUnitWithPercentPrice
+            ): T
+
+            fun visitOverrideGroupedAllocationPrice(
+                overrideGroupedAllocationPrice: OverrideGroupedAllocationPrice
+            ): T
+
+            fun visitOverrideGroupedWithProratedMinimumPrice(
+                overrideGroupedWithProratedMinimumPrice: OverrideGroupedWithProratedMinimumPrice
+            ): T
+
+            fun visitOverrideBulkWithProrationPrice(
+                overrideBulkWithProrationPrice: OverrideBulkWithProrationPrice
+            ): T
+
+            fun visitOverrideUnitWithProrationPrice(
+                overrideUnitWithProrationPrice: OverrideUnitWithProrationPrice
+            ): T
+
+            fun visitOverrideTieredWithProrationPrice(
+                overrideTieredWithProrationPrice: OverrideTieredWithProrationPrice
             ): T
 
             fun unknown(json: JsonValue?): T {
@@ -1228,6 +1485,39 @@ constructor(
                     ?.let {
                         return PriceOverride(overrideUnitWithPercentPrice = it, _json = json)
                     }
+                tryDeserialize(node, jacksonTypeRef<OverrideGroupedAllocationPrice>()) {
+                        it.validate()
+                    }
+                    ?.let {
+                        return PriceOverride(overrideGroupedAllocationPrice = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<OverrideGroupedWithProratedMinimumPrice>()) {
+                        it.validate()
+                    }
+                    ?.let {
+                        return PriceOverride(
+                            overrideGroupedWithProratedMinimumPrice = it,
+                            _json = json
+                        )
+                    }
+                tryDeserialize(node, jacksonTypeRef<OverrideBulkWithProrationPrice>()) {
+                        it.validate()
+                    }
+                    ?.let {
+                        return PriceOverride(overrideBulkWithProrationPrice = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<OverrideUnitWithProrationPrice>()) {
+                        it.validate()
+                    }
+                    ?.let {
+                        return PriceOverride(overrideUnitWithProrationPrice = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<OverrideTieredWithProrationPrice>()) {
+                        it.validate()
+                    }
+                    ?.let {
+                        return PriceOverride(overrideTieredWithProrationPrice = it, _json = json)
+                    }
 
                 return PriceOverride(_json = json)
             }
@@ -1266,6 +1556,16 @@ constructor(
                         generator.writeObject(value.overridePackageWithAllocationPrice)
                     value.overrideUnitWithPercentPrice != null ->
                         generator.writeObject(value.overrideUnitWithPercentPrice)
+                    value.overrideGroupedAllocationPrice != null ->
+                        generator.writeObject(value.overrideGroupedAllocationPrice)
+                    value.overrideGroupedWithProratedMinimumPrice != null ->
+                        generator.writeObject(value.overrideGroupedWithProratedMinimumPrice)
+                    value.overrideBulkWithProrationPrice != null ->
+                        generator.writeObject(value.overrideBulkWithProrationPrice)
+                    value.overrideUnitWithProrationPrice != null ->
+                        generator.writeObject(value.overrideUnitWithProrationPrice)
+                    value.overrideTieredWithProrationPrice != null ->
+                        generator.writeObject(value.overrideTieredWithProrationPrice)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid PriceOverride")
                 }
@@ -11960,6 +12260,3856 @@ constructor(
 
                     fun build(): UnitWithPercentConfig =
                         UnitWithPercentConfig(additionalProperties.toUnmodifiable())
+                }
+            }
+
+            /** The subscription's override discount for the plan. */
+            @JsonDeserialize(builder = Discount.Builder::class)
+            @NoAutoDetect
+            class Discount
+            private constructor(
+                private val discountType: JsonField<DiscountType>,
+                private val percentageDiscount: JsonField<Double>,
+                private val trialAmountDiscount: JsonField<String>,
+                private val usageDiscount: JsonField<Double>,
+                private val amountDiscount: JsonField<String>,
+                private val appliesToPriceIds: JsonField<List<String>>,
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
+
+                private var validated: Boolean = false
+
+                private var hashCode: Int = 0
+
+                fun discountType(): DiscountType = discountType.getRequired("discount_type")
+
+                /**
+                 * Only available if discount_type is `percentage`. This is a number between 0
+                 * and 1.
+                 */
+                fun percentageDiscount(): Optional<Double> =
+                    Optional.ofNullable(percentageDiscount.getNullable("percentage_discount"))
+
+                /** Only available if discount_type is `trial` */
+                fun trialAmountDiscount(): Optional<String> =
+                    Optional.ofNullable(trialAmountDiscount.getNullable("trial_amount_discount"))
+
+                /**
+                 * Only available if discount_type is `usage`. Number of usage units that this
+                 * discount is for
+                 */
+                fun usageDiscount(): Optional<Double> =
+                    Optional.ofNullable(usageDiscount.getNullable("usage_discount"))
+
+                /** Only available if discount_type is `amount`. */
+                fun amountDiscount(): Optional<String> =
+                    Optional.ofNullable(amountDiscount.getNullable("amount_discount"))
+
+                /**
+                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
+                 * this can be a subset of prices.
+                 */
+                fun appliesToPriceIds(): Optional<List<String>> =
+                    Optional.ofNullable(appliesToPriceIds.getNullable("applies_to_price_ids"))
+
+                @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
+
+                /**
+                 * Only available if discount_type is `percentage`. This is a number between 0
+                 * and 1.
+                 */
+                @JsonProperty("percentage_discount")
+                @ExcludeMissing
+                fun _percentageDiscount() = percentageDiscount
+
+                /** Only available if discount_type is `trial` */
+                @JsonProperty("trial_amount_discount")
+                @ExcludeMissing
+                fun _trialAmountDiscount() = trialAmountDiscount
+
+                /**
+                 * Only available if discount_type is `usage`. Number of usage units that this
+                 * discount is for
+                 */
+                @JsonProperty("usage_discount") @ExcludeMissing fun _usageDiscount() = usageDiscount
+
+                /** Only available if discount_type is `amount`. */
+                @JsonProperty("amount_discount")
+                @ExcludeMissing
+                fun _amountDiscount() = amountDiscount
+
+                /**
+                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
+                 * this can be a subset of prices.
+                 */
+                @JsonProperty("applies_to_price_ids")
+                @ExcludeMissing
+                fun _appliesToPriceIds() = appliesToPriceIds
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                fun validate(): Discount = apply {
+                    if (!validated) {
+                        discountType()
+                        percentageDiscount()
+                        trialAmountDiscount()
+                        usageDiscount()
+                        amountDiscount()
+                        appliesToPriceIds()
+                        validated = true
+                    }
+                }
+
+                fun toBuilder() = Builder().from(this)
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is Discount &&
+                        this.discountType == other.discountType &&
+                        this.percentageDiscount == other.percentageDiscount &&
+                        this.trialAmountDiscount == other.trialAmountDiscount &&
+                        this.usageDiscount == other.usageDiscount &&
+                        this.amountDiscount == other.amountDiscount &&
+                        this.appliesToPriceIds == other.appliesToPriceIds &&
+                        this.additionalProperties == other.additionalProperties
+                }
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode =
+                            Objects.hash(
+                                discountType,
+                                percentageDiscount,
+                                trialAmountDiscount,
+                                usageDiscount,
+                                amountDiscount,
+                                appliesToPriceIds,
+                                additionalProperties,
+                            )
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, trialAmountDiscount=$trialAmountDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
+
+                companion object {
+
+                    @JvmStatic fun builder() = Builder()
+                }
+
+                class Builder {
+
+                    private var discountType: JsonField<DiscountType> = JsonMissing.of()
+                    private var percentageDiscount: JsonField<Double> = JsonMissing.of()
+                    private var trialAmountDiscount: JsonField<String> = JsonMissing.of()
+                    private var usageDiscount: JsonField<Double> = JsonMissing.of()
+                    private var amountDiscount: JsonField<String> = JsonMissing.of()
+                    private var appliesToPriceIds: JsonField<List<String>> = JsonMissing.of()
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    @JvmSynthetic
+                    internal fun from(discount: Discount) = apply {
+                        this.discountType = discount.discountType
+                        this.percentageDiscount = discount.percentageDiscount
+                        this.trialAmountDiscount = discount.trialAmountDiscount
+                        this.usageDiscount = discount.usageDiscount
+                        this.amountDiscount = discount.amountDiscount
+                        this.appliesToPriceIds = discount.appliesToPriceIds
+                        additionalProperties(discount.additionalProperties)
+                    }
+
+                    fun discountType(discountType: DiscountType) =
+                        discountType(JsonField.of(discountType))
+
+                    @JsonProperty("discount_type")
+                    @ExcludeMissing
+                    fun discountType(discountType: JsonField<DiscountType>) = apply {
+                        this.discountType = discountType
+                    }
+
+                    /**
+                     * Only available if discount_type is `percentage`. This is a number between 0
+                     * and 1.
+                     */
+                    fun percentageDiscount(percentageDiscount: Double) =
+                        percentageDiscount(JsonField.of(percentageDiscount))
+
+                    /**
+                     * Only available if discount_type is `percentage`. This is a number between 0
+                     * and 1.
+                     */
+                    @JsonProperty("percentage_discount")
+                    @ExcludeMissing
+                    fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
+                        this.percentageDiscount = percentageDiscount
+                    }
+
+                    /** Only available if discount_type is `trial` */
+                    fun trialAmountDiscount(trialAmountDiscount: String) =
+                        trialAmountDiscount(JsonField.of(trialAmountDiscount))
+
+                    /** Only available if discount_type is `trial` */
+                    @JsonProperty("trial_amount_discount")
+                    @ExcludeMissing
+                    fun trialAmountDiscount(trialAmountDiscount: JsonField<String>) = apply {
+                        this.trialAmountDiscount = trialAmountDiscount
+                    }
+
+                    /**
+                     * Only available if discount_type is `usage`. Number of usage units that this
+                     * discount is for
+                     */
+                    fun usageDiscount(usageDiscount: Double) =
+                        usageDiscount(JsonField.of(usageDiscount))
+
+                    /**
+                     * Only available if discount_type is `usage`. Number of usage units that this
+                     * discount is for
+                     */
+                    @JsonProperty("usage_discount")
+                    @ExcludeMissing
+                    fun usageDiscount(usageDiscount: JsonField<Double>) = apply {
+                        this.usageDiscount = usageDiscount
+                    }
+
+                    /** Only available if discount_type is `amount`. */
+                    fun amountDiscount(amountDiscount: String) =
+                        amountDiscount(JsonField.of(amountDiscount))
+
+                    /** Only available if discount_type is `amount`. */
+                    @JsonProperty("amount_discount")
+                    @ExcludeMissing
+                    fun amountDiscount(amountDiscount: JsonField<String>) = apply {
+                        this.amountDiscount = amountDiscount
+                    }
+
+                    /**
+                     * List of price_ids that this discount applies to. For plan/plan phase
+                     * discounts, this can be a subset of prices.
+                     */
+                    fun appliesToPriceIds(appliesToPriceIds: List<String>) =
+                        appliesToPriceIds(JsonField.of(appliesToPriceIds))
+
+                    /**
+                     * List of price_ids that this discount applies to. For plan/plan phase
+                     * discounts, this can be a subset of prices.
+                     */
+                    @JsonProperty("applies_to_price_ids")
+                    @ExcludeMissing
+                    fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
+                        this.appliesToPriceIds = appliesToPriceIds
+                    }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                    @JsonAnySetter
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        this.additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun build(): Discount =
+                        Discount(
+                            discountType,
+                            percentageDiscount,
+                            trialAmountDiscount,
+                            usageDiscount,
+                            amountDiscount,
+                            appliesToPriceIds.map { it.toUnmodifiable() },
+                            additionalProperties.toUnmodifiable(),
+                        )
+                }
+
+                class DiscountType
+                @JsonCreator
+                private constructor(
+                    private val value: JsonField<String>,
+                ) : Enum {
+
+                    @com.fasterxml.jackson.annotation.JsonValue
+                    fun _value(): JsonField<String> = value
+
+                    override fun equals(other: Any?): Boolean {
+                        if (this === other) {
+                            return true
+                        }
+
+                        return other is DiscountType && this.value == other.value
+                    }
+
+                    override fun hashCode() = value.hashCode()
+
+                    override fun toString() = value.toString()
+
+                    companion object {
+
+                        @JvmField val PERCENTAGE = DiscountType(JsonField.of("percentage"))
+
+                        @JvmField val TRIAL = DiscountType(JsonField.of("trial"))
+
+                        @JvmField val USAGE = DiscountType(JsonField.of("usage"))
+
+                        @JvmField val AMOUNT = DiscountType(JsonField.of("amount"))
+
+                        @JvmStatic fun of(value: String) = DiscountType(JsonField.of(value))
+                    }
+
+                    enum class Known {
+                        PERCENTAGE,
+                        TRIAL,
+                        USAGE,
+                        AMOUNT,
+                    }
+
+                    enum class Value {
+                        PERCENTAGE,
+                        TRIAL,
+                        USAGE,
+                        AMOUNT,
+                        _UNKNOWN,
+                    }
+
+                    fun value(): Value =
+                        when (this) {
+                            PERCENTAGE -> Value.PERCENTAGE
+                            TRIAL -> Value.TRIAL
+                            USAGE -> Value.USAGE
+                            AMOUNT -> Value.AMOUNT
+                            else -> Value._UNKNOWN
+                        }
+
+                    fun known(): Known =
+                        when (this) {
+                            PERCENTAGE -> Known.PERCENTAGE
+                            TRIAL -> Known.TRIAL
+                            USAGE -> Known.USAGE
+                            AMOUNT -> Known.AMOUNT
+                            else -> throw OrbInvalidDataException("Unknown DiscountType: $value")
+                        }
+
+                    fun asString(): String = _value().asStringOrThrow()
+                }
+            }
+        }
+
+        @JsonDeserialize(builder = OverrideGroupedAllocationPrice.Builder::class)
+        @NoAutoDetect
+        class OverrideGroupedAllocationPrice
+        private constructor(
+            private val id: JsonField<String>,
+            private val modelType: JsonField<ModelType>,
+            private val minimumAmount: JsonField<String>,
+            private val maximumAmount: JsonField<String>,
+            private val currency: JsonField<String>,
+            private val conversionRate: JsonField<Double>,
+            private val discount: JsonField<Discount>,
+            private val fixedPriceQuantity: JsonField<Double>,
+            private val groupedAllocationConfig: JsonField<GroupedAllocationConfig>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            fun id(): String = id.getRequired("id")
+
+            fun modelType(): ModelType = modelType.getRequired("model_type")
+
+            /** The subscription's override minimum amount for the plan. */
+            fun minimumAmount(): Optional<String> =
+                Optional.ofNullable(minimumAmount.getNullable("minimum_amount"))
+
+            /** The subscription's override maximum amount for the plan. */
+            fun maximumAmount(): Optional<String> =
+                Optional.ofNullable(maximumAmount.getNullable("maximum_amount"))
+
+            /**
+             * The currency of the price. If not provided, the currency of the plan will be used.
+             */
+            fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
+
+            /** The per unit conversion rate of the price currency to the invoicing currency. */
+            fun conversionRate(): Optional<Double> =
+                Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+
+            /** The subscription's override discount for the plan. */
+            fun discount(): Optional<Discount> =
+                Optional.ofNullable(discount.getNullable("discount"))
+
+            /** The starting quantity of the price, if the price is a fixed price. */
+            fun fixedPriceQuantity(): Optional<Double> =
+                Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+
+            fun groupedAllocationConfig(): GroupedAllocationConfig =
+                groupedAllocationConfig.getRequired("grouped_allocation_config")
+
+            @JsonProperty("id") @ExcludeMissing fun _id() = id
+
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType() = modelType
+
+            /** The subscription's override minimum amount for the plan. */
+            @JsonProperty("minimum_amount") @ExcludeMissing fun _minimumAmount() = minimumAmount
+
+            /** The subscription's override maximum amount for the plan. */
+            @JsonProperty("maximum_amount") @ExcludeMissing fun _maximumAmount() = maximumAmount
+
+            /**
+             * The currency of the price. If not provided, the currency of the plan will be used.
+             */
+            @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
+
+            /** The per unit conversion rate of the price currency to the invoicing currency. */
+            @JsonProperty("conversion_rate") @ExcludeMissing fun _conversionRate() = conversionRate
+
+            /** The subscription's override discount for the plan. */
+            @JsonProperty("discount") @ExcludeMissing fun _discount() = discount
+
+            /** The starting quantity of the price, if the price is a fixed price. */
+            @JsonProperty("fixed_price_quantity")
+            @ExcludeMissing
+            fun _fixedPriceQuantity() = fixedPriceQuantity
+
+            @JsonProperty("grouped_allocation_config")
+            @ExcludeMissing
+            fun _groupedAllocationConfig() = groupedAllocationConfig
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): OverrideGroupedAllocationPrice = apply {
+                if (!validated) {
+                    id()
+                    modelType()
+                    minimumAmount()
+                    maximumAmount()
+                    currency()
+                    conversionRate()
+                    discount().map { it.validate() }
+                    fixedPriceQuantity()
+                    groupedAllocationConfig().validate()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is OverrideGroupedAllocationPrice &&
+                    this.id == other.id &&
+                    this.modelType == other.modelType &&
+                    this.minimumAmount == other.minimumAmount &&
+                    this.maximumAmount == other.maximumAmount &&
+                    this.currency == other.currency &&
+                    this.conversionRate == other.conversionRate &&
+                    this.discount == other.discount &&
+                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
+                    this.groupedAllocationConfig == other.groupedAllocationConfig &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            id,
+                            modelType,
+                            minimumAmount,
+                            maximumAmount,
+                            currency,
+                            conversionRate,
+                            discount,
+                            fixedPriceQuantity,
+                            groupedAllocationConfig,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "OverrideGroupedAllocationPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, groupedAllocationConfig=$groupedAllocationConfig, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var id: JsonField<String> = JsonMissing.of()
+                private var modelType: JsonField<ModelType> = JsonMissing.of()
+                private var minimumAmount: JsonField<String> = JsonMissing.of()
+                private var maximumAmount: JsonField<String> = JsonMissing.of()
+                private var currency: JsonField<String> = JsonMissing.of()
+                private var conversionRate: JsonField<Double> = JsonMissing.of()
+                private var discount: JsonField<Discount> = JsonMissing.of()
+                private var fixedPriceQuantity: JsonField<Double> = JsonMissing.of()
+                private var groupedAllocationConfig: JsonField<GroupedAllocationConfig> =
+                    JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(overrideGroupedAllocationPrice: OverrideGroupedAllocationPrice) =
+                    apply {
+                        this.id = overrideGroupedAllocationPrice.id
+                        this.modelType = overrideGroupedAllocationPrice.modelType
+                        this.minimumAmount = overrideGroupedAllocationPrice.minimumAmount
+                        this.maximumAmount = overrideGroupedAllocationPrice.maximumAmount
+                        this.currency = overrideGroupedAllocationPrice.currency
+                        this.conversionRate = overrideGroupedAllocationPrice.conversionRate
+                        this.discount = overrideGroupedAllocationPrice.discount
+                        this.fixedPriceQuantity = overrideGroupedAllocationPrice.fixedPriceQuantity
+                        this.groupedAllocationConfig =
+                            overrideGroupedAllocationPrice.groupedAllocationConfig
+                        additionalProperties(overrideGroupedAllocationPrice.additionalProperties)
+                    }
+
+                fun id(id: String) = id(JsonField.of(id))
+
+                @JsonProperty("id")
+                @ExcludeMissing
+                fun id(id: JsonField<String>) = apply { this.id = id }
+
+                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
+
+                @JsonProperty("model_type")
+                @ExcludeMissing
+                fun modelType(modelType: JsonField<ModelType>) = apply {
+                    this.modelType = modelType
+                }
+
+                /** The subscription's override minimum amount for the plan. */
+                fun minimumAmount(minimumAmount: String) =
+                    minimumAmount(JsonField.of(minimumAmount))
+
+                /** The subscription's override minimum amount for the plan. */
+                @JsonProperty("minimum_amount")
+                @ExcludeMissing
+                fun minimumAmount(minimumAmount: JsonField<String>) = apply {
+                    this.minimumAmount = minimumAmount
+                }
+
+                /** The subscription's override maximum amount for the plan. */
+                fun maximumAmount(maximumAmount: String) =
+                    maximumAmount(JsonField.of(maximumAmount))
+
+                /** The subscription's override maximum amount for the plan. */
+                @JsonProperty("maximum_amount")
+                @ExcludeMissing
+                fun maximumAmount(maximumAmount: JsonField<String>) = apply {
+                    this.maximumAmount = maximumAmount
+                }
+
+                /**
+                 * The currency of the price. If not provided, the currency of the plan will be
+                 * used.
+                 */
+                fun currency(currency: String) = currency(JsonField.of(currency))
+
+                /**
+                 * The currency of the price. If not provided, the currency of the plan will be
+                 * used.
+                 */
+                @JsonProperty("currency")
+                @ExcludeMissing
+                fun currency(currency: JsonField<String>) = apply { this.currency = currency }
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                fun conversionRate(conversionRate: Double) =
+                    conversionRate(JsonField.of(conversionRate))
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                @ExcludeMissing
+                fun conversionRate(conversionRate: JsonField<Double>) = apply {
+                    this.conversionRate = conversionRate
+                }
+
+                /** The subscription's override discount for the plan. */
+                fun discount(discount: Discount) = discount(JsonField.of(discount))
+
+                /** The subscription's override discount for the plan. */
+                @JsonProperty("discount")
+                @ExcludeMissing
+                fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
+
+                /** The starting quantity of the price, if the price is a fixed price. */
+                fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                    fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
+
+                /** The starting quantity of the price, if the price is a fixed price. */
+                @JsonProperty("fixed_price_quantity")
+                @ExcludeMissing
+                fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
+                    this.fixedPriceQuantity = fixedPriceQuantity
+                }
+
+                fun groupedAllocationConfig(groupedAllocationConfig: GroupedAllocationConfig) =
+                    groupedAllocationConfig(JsonField.of(groupedAllocationConfig))
+
+                @JsonProperty("grouped_allocation_config")
+                @ExcludeMissing
+                fun groupedAllocationConfig(
+                    groupedAllocationConfig: JsonField<GroupedAllocationConfig>
+                ) = apply { this.groupedAllocationConfig = groupedAllocationConfig }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): OverrideGroupedAllocationPrice =
+                    OverrideGroupedAllocationPrice(
+                        id,
+                        modelType,
+                        minimumAmount,
+                        maximumAmount,
+                        currency,
+                        conversionRate,
+                        discount,
+                        fixedPriceQuantity,
+                        groupedAllocationConfig,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            @JsonDeserialize(builder = GroupedAllocationConfig.Builder::class)
+            @NoAutoDetect
+            class GroupedAllocationConfig
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
+
+                private var validated: Boolean = false
+
+                private var hashCode: Int = 0
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                fun validate(): GroupedAllocationConfig = apply {
+                    if (!validated) {
+                        validated = true
+                    }
+                }
+
+                fun toBuilder() = Builder().from(this)
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is GroupedAllocationConfig &&
+                        this.additionalProperties == other.additionalProperties
+                }
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "GroupedAllocationConfig{additionalProperties=$additionalProperties}"
+
+                companion object {
+
+                    @JvmStatic fun builder() = Builder()
+                }
+
+                class Builder {
+
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    @JvmSynthetic
+                    internal fun from(groupedAllocationConfig: GroupedAllocationConfig) = apply {
+                        additionalProperties(groupedAllocationConfig.additionalProperties)
+                    }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                    @JsonAnySetter
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        this.additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun build(): GroupedAllocationConfig =
+                        GroupedAllocationConfig(additionalProperties.toUnmodifiable())
+                }
+            }
+
+            class ModelType
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is ModelType && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField val GROUPED_ALLOCATION = ModelType(JsonField.of("grouped_allocation"))
+
+                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
+                }
+
+                enum class Known {
+                    GROUPED_ALLOCATION,
+                }
+
+                enum class Value {
+                    GROUPED_ALLOCATION,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        GROUPED_ALLOCATION -> Value.GROUPED_ALLOCATION
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        GROUPED_ALLOCATION -> Known.GROUPED_ALLOCATION
+                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+
+            /** The subscription's override discount for the plan. */
+            @JsonDeserialize(builder = Discount.Builder::class)
+            @NoAutoDetect
+            class Discount
+            private constructor(
+                private val discountType: JsonField<DiscountType>,
+                private val percentageDiscount: JsonField<Double>,
+                private val trialAmountDiscount: JsonField<String>,
+                private val usageDiscount: JsonField<Double>,
+                private val amountDiscount: JsonField<String>,
+                private val appliesToPriceIds: JsonField<List<String>>,
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
+
+                private var validated: Boolean = false
+
+                private var hashCode: Int = 0
+
+                fun discountType(): DiscountType = discountType.getRequired("discount_type")
+
+                /**
+                 * Only available if discount_type is `percentage`. This is a number between 0
+                 * and 1.
+                 */
+                fun percentageDiscount(): Optional<Double> =
+                    Optional.ofNullable(percentageDiscount.getNullable("percentage_discount"))
+
+                /** Only available if discount_type is `trial` */
+                fun trialAmountDiscount(): Optional<String> =
+                    Optional.ofNullable(trialAmountDiscount.getNullable("trial_amount_discount"))
+
+                /**
+                 * Only available if discount_type is `usage`. Number of usage units that this
+                 * discount is for
+                 */
+                fun usageDiscount(): Optional<Double> =
+                    Optional.ofNullable(usageDiscount.getNullable("usage_discount"))
+
+                /** Only available if discount_type is `amount`. */
+                fun amountDiscount(): Optional<String> =
+                    Optional.ofNullable(amountDiscount.getNullable("amount_discount"))
+
+                /**
+                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
+                 * this can be a subset of prices.
+                 */
+                fun appliesToPriceIds(): Optional<List<String>> =
+                    Optional.ofNullable(appliesToPriceIds.getNullable("applies_to_price_ids"))
+
+                @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
+
+                /**
+                 * Only available if discount_type is `percentage`. This is a number between 0
+                 * and 1.
+                 */
+                @JsonProperty("percentage_discount")
+                @ExcludeMissing
+                fun _percentageDiscount() = percentageDiscount
+
+                /** Only available if discount_type is `trial` */
+                @JsonProperty("trial_amount_discount")
+                @ExcludeMissing
+                fun _trialAmountDiscount() = trialAmountDiscount
+
+                /**
+                 * Only available if discount_type is `usage`. Number of usage units that this
+                 * discount is for
+                 */
+                @JsonProperty("usage_discount") @ExcludeMissing fun _usageDiscount() = usageDiscount
+
+                /** Only available if discount_type is `amount`. */
+                @JsonProperty("amount_discount")
+                @ExcludeMissing
+                fun _amountDiscount() = amountDiscount
+
+                /**
+                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
+                 * this can be a subset of prices.
+                 */
+                @JsonProperty("applies_to_price_ids")
+                @ExcludeMissing
+                fun _appliesToPriceIds() = appliesToPriceIds
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                fun validate(): Discount = apply {
+                    if (!validated) {
+                        discountType()
+                        percentageDiscount()
+                        trialAmountDiscount()
+                        usageDiscount()
+                        amountDiscount()
+                        appliesToPriceIds()
+                        validated = true
+                    }
+                }
+
+                fun toBuilder() = Builder().from(this)
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is Discount &&
+                        this.discountType == other.discountType &&
+                        this.percentageDiscount == other.percentageDiscount &&
+                        this.trialAmountDiscount == other.trialAmountDiscount &&
+                        this.usageDiscount == other.usageDiscount &&
+                        this.amountDiscount == other.amountDiscount &&
+                        this.appliesToPriceIds == other.appliesToPriceIds &&
+                        this.additionalProperties == other.additionalProperties
+                }
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode =
+                            Objects.hash(
+                                discountType,
+                                percentageDiscount,
+                                trialAmountDiscount,
+                                usageDiscount,
+                                amountDiscount,
+                                appliesToPriceIds,
+                                additionalProperties,
+                            )
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, trialAmountDiscount=$trialAmountDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
+
+                companion object {
+
+                    @JvmStatic fun builder() = Builder()
+                }
+
+                class Builder {
+
+                    private var discountType: JsonField<DiscountType> = JsonMissing.of()
+                    private var percentageDiscount: JsonField<Double> = JsonMissing.of()
+                    private var trialAmountDiscount: JsonField<String> = JsonMissing.of()
+                    private var usageDiscount: JsonField<Double> = JsonMissing.of()
+                    private var amountDiscount: JsonField<String> = JsonMissing.of()
+                    private var appliesToPriceIds: JsonField<List<String>> = JsonMissing.of()
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    @JvmSynthetic
+                    internal fun from(discount: Discount) = apply {
+                        this.discountType = discount.discountType
+                        this.percentageDiscount = discount.percentageDiscount
+                        this.trialAmountDiscount = discount.trialAmountDiscount
+                        this.usageDiscount = discount.usageDiscount
+                        this.amountDiscount = discount.amountDiscount
+                        this.appliesToPriceIds = discount.appliesToPriceIds
+                        additionalProperties(discount.additionalProperties)
+                    }
+
+                    fun discountType(discountType: DiscountType) =
+                        discountType(JsonField.of(discountType))
+
+                    @JsonProperty("discount_type")
+                    @ExcludeMissing
+                    fun discountType(discountType: JsonField<DiscountType>) = apply {
+                        this.discountType = discountType
+                    }
+
+                    /**
+                     * Only available if discount_type is `percentage`. This is a number between 0
+                     * and 1.
+                     */
+                    fun percentageDiscount(percentageDiscount: Double) =
+                        percentageDiscount(JsonField.of(percentageDiscount))
+
+                    /**
+                     * Only available if discount_type is `percentage`. This is a number between 0
+                     * and 1.
+                     */
+                    @JsonProperty("percentage_discount")
+                    @ExcludeMissing
+                    fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
+                        this.percentageDiscount = percentageDiscount
+                    }
+
+                    /** Only available if discount_type is `trial` */
+                    fun trialAmountDiscount(trialAmountDiscount: String) =
+                        trialAmountDiscount(JsonField.of(trialAmountDiscount))
+
+                    /** Only available if discount_type is `trial` */
+                    @JsonProperty("trial_amount_discount")
+                    @ExcludeMissing
+                    fun trialAmountDiscount(trialAmountDiscount: JsonField<String>) = apply {
+                        this.trialAmountDiscount = trialAmountDiscount
+                    }
+
+                    /**
+                     * Only available if discount_type is `usage`. Number of usage units that this
+                     * discount is for
+                     */
+                    fun usageDiscount(usageDiscount: Double) =
+                        usageDiscount(JsonField.of(usageDiscount))
+
+                    /**
+                     * Only available if discount_type is `usage`. Number of usage units that this
+                     * discount is for
+                     */
+                    @JsonProperty("usage_discount")
+                    @ExcludeMissing
+                    fun usageDiscount(usageDiscount: JsonField<Double>) = apply {
+                        this.usageDiscount = usageDiscount
+                    }
+
+                    /** Only available if discount_type is `amount`. */
+                    fun amountDiscount(amountDiscount: String) =
+                        amountDiscount(JsonField.of(amountDiscount))
+
+                    /** Only available if discount_type is `amount`. */
+                    @JsonProperty("amount_discount")
+                    @ExcludeMissing
+                    fun amountDiscount(amountDiscount: JsonField<String>) = apply {
+                        this.amountDiscount = amountDiscount
+                    }
+
+                    /**
+                     * List of price_ids that this discount applies to. For plan/plan phase
+                     * discounts, this can be a subset of prices.
+                     */
+                    fun appliesToPriceIds(appliesToPriceIds: List<String>) =
+                        appliesToPriceIds(JsonField.of(appliesToPriceIds))
+
+                    /**
+                     * List of price_ids that this discount applies to. For plan/plan phase
+                     * discounts, this can be a subset of prices.
+                     */
+                    @JsonProperty("applies_to_price_ids")
+                    @ExcludeMissing
+                    fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
+                        this.appliesToPriceIds = appliesToPriceIds
+                    }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                    @JsonAnySetter
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        this.additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun build(): Discount =
+                        Discount(
+                            discountType,
+                            percentageDiscount,
+                            trialAmountDiscount,
+                            usageDiscount,
+                            amountDiscount,
+                            appliesToPriceIds.map { it.toUnmodifiable() },
+                            additionalProperties.toUnmodifiable(),
+                        )
+                }
+
+                class DiscountType
+                @JsonCreator
+                private constructor(
+                    private val value: JsonField<String>,
+                ) : Enum {
+
+                    @com.fasterxml.jackson.annotation.JsonValue
+                    fun _value(): JsonField<String> = value
+
+                    override fun equals(other: Any?): Boolean {
+                        if (this === other) {
+                            return true
+                        }
+
+                        return other is DiscountType && this.value == other.value
+                    }
+
+                    override fun hashCode() = value.hashCode()
+
+                    override fun toString() = value.toString()
+
+                    companion object {
+
+                        @JvmField val PERCENTAGE = DiscountType(JsonField.of("percentage"))
+
+                        @JvmField val TRIAL = DiscountType(JsonField.of("trial"))
+
+                        @JvmField val USAGE = DiscountType(JsonField.of("usage"))
+
+                        @JvmField val AMOUNT = DiscountType(JsonField.of("amount"))
+
+                        @JvmStatic fun of(value: String) = DiscountType(JsonField.of(value))
+                    }
+
+                    enum class Known {
+                        PERCENTAGE,
+                        TRIAL,
+                        USAGE,
+                        AMOUNT,
+                    }
+
+                    enum class Value {
+                        PERCENTAGE,
+                        TRIAL,
+                        USAGE,
+                        AMOUNT,
+                        _UNKNOWN,
+                    }
+
+                    fun value(): Value =
+                        when (this) {
+                            PERCENTAGE -> Value.PERCENTAGE
+                            TRIAL -> Value.TRIAL
+                            USAGE -> Value.USAGE
+                            AMOUNT -> Value.AMOUNT
+                            else -> Value._UNKNOWN
+                        }
+
+                    fun known(): Known =
+                        when (this) {
+                            PERCENTAGE -> Known.PERCENTAGE
+                            TRIAL -> Known.TRIAL
+                            USAGE -> Known.USAGE
+                            AMOUNT -> Known.AMOUNT
+                            else -> throw OrbInvalidDataException("Unknown DiscountType: $value")
+                        }
+
+                    fun asString(): String = _value().asStringOrThrow()
+                }
+            }
+        }
+
+        @JsonDeserialize(builder = OverrideGroupedWithProratedMinimumPrice.Builder::class)
+        @NoAutoDetect
+        class OverrideGroupedWithProratedMinimumPrice
+        private constructor(
+            private val id: JsonField<String>,
+            private val modelType: JsonField<ModelType>,
+            private val minimumAmount: JsonField<String>,
+            private val maximumAmount: JsonField<String>,
+            private val currency: JsonField<String>,
+            private val conversionRate: JsonField<Double>,
+            private val discount: JsonField<Discount>,
+            private val fixedPriceQuantity: JsonField<Double>,
+            private val groupedWithProratedMinimumConfig:
+                JsonField<GroupedWithProratedMinimumConfig>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            fun id(): String = id.getRequired("id")
+
+            fun modelType(): ModelType = modelType.getRequired("model_type")
+
+            /** The subscription's override minimum amount for the plan. */
+            fun minimumAmount(): Optional<String> =
+                Optional.ofNullable(minimumAmount.getNullable("minimum_amount"))
+
+            /** The subscription's override maximum amount for the plan. */
+            fun maximumAmount(): Optional<String> =
+                Optional.ofNullable(maximumAmount.getNullable("maximum_amount"))
+
+            /**
+             * The currency of the price. If not provided, the currency of the plan will be used.
+             */
+            fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
+
+            /** The per unit conversion rate of the price currency to the invoicing currency. */
+            fun conversionRate(): Optional<Double> =
+                Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+
+            /** The subscription's override discount for the plan. */
+            fun discount(): Optional<Discount> =
+                Optional.ofNullable(discount.getNullable("discount"))
+
+            /** The starting quantity of the price, if the price is a fixed price. */
+            fun fixedPriceQuantity(): Optional<Double> =
+                Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+
+            fun groupedWithProratedMinimumConfig(): GroupedWithProratedMinimumConfig =
+                groupedWithProratedMinimumConfig.getRequired("grouped_with_prorated_minimum_config")
+
+            @JsonProperty("id") @ExcludeMissing fun _id() = id
+
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType() = modelType
+
+            /** The subscription's override minimum amount for the plan. */
+            @JsonProperty("minimum_amount") @ExcludeMissing fun _minimumAmount() = minimumAmount
+
+            /** The subscription's override maximum amount for the plan. */
+            @JsonProperty("maximum_amount") @ExcludeMissing fun _maximumAmount() = maximumAmount
+
+            /**
+             * The currency of the price. If not provided, the currency of the plan will be used.
+             */
+            @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
+
+            /** The per unit conversion rate of the price currency to the invoicing currency. */
+            @JsonProperty("conversion_rate") @ExcludeMissing fun _conversionRate() = conversionRate
+
+            /** The subscription's override discount for the plan. */
+            @JsonProperty("discount") @ExcludeMissing fun _discount() = discount
+
+            /** The starting quantity of the price, if the price is a fixed price. */
+            @JsonProperty("fixed_price_quantity")
+            @ExcludeMissing
+            fun _fixedPriceQuantity() = fixedPriceQuantity
+
+            @JsonProperty("grouped_with_prorated_minimum_config")
+            @ExcludeMissing
+            fun _groupedWithProratedMinimumConfig() = groupedWithProratedMinimumConfig
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): OverrideGroupedWithProratedMinimumPrice = apply {
+                if (!validated) {
+                    id()
+                    modelType()
+                    minimumAmount()
+                    maximumAmount()
+                    currency()
+                    conversionRate()
+                    discount().map { it.validate() }
+                    fixedPriceQuantity()
+                    groupedWithProratedMinimumConfig().validate()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is OverrideGroupedWithProratedMinimumPrice &&
+                    this.id == other.id &&
+                    this.modelType == other.modelType &&
+                    this.minimumAmount == other.minimumAmount &&
+                    this.maximumAmount == other.maximumAmount &&
+                    this.currency == other.currency &&
+                    this.conversionRate == other.conversionRate &&
+                    this.discount == other.discount &&
+                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
+                    this.groupedWithProratedMinimumConfig ==
+                        other.groupedWithProratedMinimumConfig &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            id,
+                            modelType,
+                            minimumAmount,
+                            maximumAmount,
+                            currency,
+                            conversionRate,
+                            discount,
+                            fixedPriceQuantity,
+                            groupedWithProratedMinimumConfig,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "OverrideGroupedWithProratedMinimumPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, groupedWithProratedMinimumConfig=$groupedWithProratedMinimumConfig, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var id: JsonField<String> = JsonMissing.of()
+                private var modelType: JsonField<ModelType> = JsonMissing.of()
+                private var minimumAmount: JsonField<String> = JsonMissing.of()
+                private var maximumAmount: JsonField<String> = JsonMissing.of()
+                private var currency: JsonField<String> = JsonMissing.of()
+                private var conversionRate: JsonField<Double> = JsonMissing.of()
+                private var discount: JsonField<Discount> = JsonMissing.of()
+                private var fixedPriceQuantity: JsonField<Double> = JsonMissing.of()
+                private var groupedWithProratedMinimumConfig:
+                    JsonField<GroupedWithProratedMinimumConfig> =
+                    JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(
+                    overrideGroupedWithProratedMinimumPrice: OverrideGroupedWithProratedMinimumPrice
+                ) = apply {
+                    this.id = overrideGroupedWithProratedMinimumPrice.id
+                    this.modelType = overrideGroupedWithProratedMinimumPrice.modelType
+                    this.minimumAmount = overrideGroupedWithProratedMinimumPrice.minimumAmount
+                    this.maximumAmount = overrideGroupedWithProratedMinimumPrice.maximumAmount
+                    this.currency = overrideGroupedWithProratedMinimumPrice.currency
+                    this.conversionRate = overrideGroupedWithProratedMinimumPrice.conversionRate
+                    this.discount = overrideGroupedWithProratedMinimumPrice.discount
+                    this.fixedPriceQuantity =
+                        overrideGroupedWithProratedMinimumPrice.fixedPriceQuantity
+                    this.groupedWithProratedMinimumConfig =
+                        overrideGroupedWithProratedMinimumPrice.groupedWithProratedMinimumConfig
+                    additionalProperties(
+                        overrideGroupedWithProratedMinimumPrice.additionalProperties
+                    )
+                }
+
+                fun id(id: String) = id(JsonField.of(id))
+
+                @JsonProperty("id")
+                @ExcludeMissing
+                fun id(id: JsonField<String>) = apply { this.id = id }
+
+                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
+
+                @JsonProperty("model_type")
+                @ExcludeMissing
+                fun modelType(modelType: JsonField<ModelType>) = apply {
+                    this.modelType = modelType
+                }
+
+                /** The subscription's override minimum amount for the plan. */
+                fun minimumAmount(minimumAmount: String) =
+                    minimumAmount(JsonField.of(minimumAmount))
+
+                /** The subscription's override minimum amount for the plan. */
+                @JsonProperty("minimum_amount")
+                @ExcludeMissing
+                fun minimumAmount(minimumAmount: JsonField<String>) = apply {
+                    this.minimumAmount = minimumAmount
+                }
+
+                /** The subscription's override maximum amount for the plan. */
+                fun maximumAmount(maximumAmount: String) =
+                    maximumAmount(JsonField.of(maximumAmount))
+
+                /** The subscription's override maximum amount for the plan. */
+                @JsonProperty("maximum_amount")
+                @ExcludeMissing
+                fun maximumAmount(maximumAmount: JsonField<String>) = apply {
+                    this.maximumAmount = maximumAmount
+                }
+
+                /**
+                 * The currency of the price. If not provided, the currency of the plan will be
+                 * used.
+                 */
+                fun currency(currency: String) = currency(JsonField.of(currency))
+
+                /**
+                 * The currency of the price. If not provided, the currency of the plan will be
+                 * used.
+                 */
+                @JsonProperty("currency")
+                @ExcludeMissing
+                fun currency(currency: JsonField<String>) = apply { this.currency = currency }
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                fun conversionRate(conversionRate: Double) =
+                    conversionRate(JsonField.of(conversionRate))
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                @ExcludeMissing
+                fun conversionRate(conversionRate: JsonField<Double>) = apply {
+                    this.conversionRate = conversionRate
+                }
+
+                /** The subscription's override discount for the plan. */
+                fun discount(discount: Discount) = discount(JsonField.of(discount))
+
+                /** The subscription's override discount for the plan. */
+                @JsonProperty("discount")
+                @ExcludeMissing
+                fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
+
+                /** The starting quantity of the price, if the price is a fixed price. */
+                fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                    fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
+
+                /** The starting quantity of the price, if the price is a fixed price. */
+                @JsonProperty("fixed_price_quantity")
+                @ExcludeMissing
+                fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
+                    this.fixedPriceQuantity = fixedPriceQuantity
+                }
+
+                fun groupedWithProratedMinimumConfig(
+                    groupedWithProratedMinimumConfig: GroupedWithProratedMinimumConfig
+                ) = groupedWithProratedMinimumConfig(JsonField.of(groupedWithProratedMinimumConfig))
+
+                @JsonProperty("grouped_with_prorated_minimum_config")
+                @ExcludeMissing
+                fun groupedWithProratedMinimumConfig(
+                    groupedWithProratedMinimumConfig: JsonField<GroupedWithProratedMinimumConfig>
+                ) = apply {
+                    this.groupedWithProratedMinimumConfig = groupedWithProratedMinimumConfig
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): OverrideGroupedWithProratedMinimumPrice =
+                    OverrideGroupedWithProratedMinimumPrice(
+                        id,
+                        modelType,
+                        minimumAmount,
+                        maximumAmount,
+                        currency,
+                        conversionRate,
+                        discount,
+                        fixedPriceQuantity,
+                        groupedWithProratedMinimumConfig,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            @JsonDeserialize(builder = GroupedWithProratedMinimumConfig.Builder::class)
+            @NoAutoDetect
+            class GroupedWithProratedMinimumConfig
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
+
+                private var validated: Boolean = false
+
+                private var hashCode: Int = 0
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                fun validate(): GroupedWithProratedMinimumConfig = apply {
+                    if (!validated) {
+                        validated = true
+                    }
+                }
+
+                fun toBuilder() = Builder().from(this)
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is GroupedWithProratedMinimumConfig &&
+                        this.additionalProperties == other.additionalProperties
+                }
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "GroupedWithProratedMinimumConfig{additionalProperties=$additionalProperties}"
+
+                companion object {
+
+                    @JvmStatic fun builder() = Builder()
+                }
+
+                class Builder {
+
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    @JvmSynthetic
+                    internal fun from(
+                        groupedWithProratedMinimumConfig: GroupedWithProratedMinimumConfig
+                    ) = apply {
+                        additionalProperties(groupedWithProratedMinimumConfig.additionalProperties)
+                    }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                    @JsonAnySetter
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        this.additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun build(): GroupedWithProratedMinimumConfig =
+                        GroupedWithProratedMinimumConfig(additionalProperties.toUnmodifiable())
+                }
+            }
+
+            class ModelType
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is ModelType && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField
+                    val GROUPED_WITH_PRORATED_MINIMUM =
+                        ModelType(JsonField.of("grouped_with_prorated_minimum"))
+
+                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
+                }
+
+                enum class Known {
+                    GROUPED_WITH_PRORATED_MINIMUM,
+                }
+
+                enum class Value {
+                    GROUPED_WITH_PRORATED_MINIMUM,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        GROUPED_WITH_PRORATED_MINIMUM -> Value.GROUPED_WITH_PRORATED_MINIMUM
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        GROUPED_WITH_PRORATED_MINIMUM -> Known.GROUPED_WITH_PRORATED_MINIMUM
+                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+
+            /** The subscription's override discount for the plan. */
+            @JsonDeserialize(builder = Discount.Builder::class)
+            @NoAutoDetect
+            class Discount
+            private constructor(
+                private val discountType: JsonField<DiscountType>,
+                private val percentageDiscount: JsonField<Double>,
+                private val trialAmountDiscount: JsonField<String>,
+                private val usageDiscount: JsonField<Double>,
+                private val amountDiscount: JsonField<String>,
+                private val appliesToPriceIds: JsonField<List<String>>,
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
+
+                private var validated: Boolean = false
+
+                private var hashCode: Int = 0
+
+                fun discountType(): DiscountType = discountType.getRequired("discount_type")
+
+                /**
+                 * Only available if discount_type is `percentage`. This is a number between 0
+                 * and 1.
+                 */
+                fun percentageDiscount(): Optional<Double> =
+                    Optional.ofNullable(percentageDiscount.getNullable("percentage_discount"))
+
+                /** Only available if discount_type is `trial` */
+                fun trialAmountDiscount(): Optional<String> =
+                    Optional.ofNullable(trialAmountDiscount.getNullable("trial_amount_discount"))
+
+                /**
+                 * Only available if discount_type is `usage`. Number of usage units that this
+                 * discount is for
+                 */
+                fun usageDiscount(): Optional<Double> =
+                    Optional.ofNullable(usageDiscount.getNullable("usage_discount"))
+
+                /** Only available if discount_type is `amount`. */
+                fun amountDiscount(): Optional<String> =
+                    Optional.ofNullable(amountDiscount.getNullable("amount_discount"))
+
+                /**
+                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
+                 * this can be a subset of prices.
+                 */
+                fun appliesToPriceIds(): Optional<List<String>> =
+                    Optional.ofNullable(appliesToPriceIds.getNullable("applies_to_price_ids"))
+
+                @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
+
+                /**
+                 * Only available if discount_type is `percentage`. This is a number between 0
+                 * and 1.
+                 */
+                @JsonProperty("percentage_discount")
+                @ExcludeMissing
+                fun _percentageDiscount() = percentageDiscount
+
+                /** Only available if discount_type is `trial` */
+                @JsonProperty("trial_amount_discount")
+                @ExcludeMissing
+                fun _trialAmountDiscount() = trialAmountDiscount
+
+                /**
+                 * Only available if discount_type is `usage`. Number of usage units that this
+                 * discount is for
+                 */
+                @JsonProperty("usage_discount") @ExcludeMissing fun _usageDiscount() = usageDiscount
+
+                /** Only available if discount_type is `amount`. */
+                @JsonProperty("amount_discount")
+                @ExcludeMissing
+                fun _amountDiscount() = amountDiscount
+
+                /**
+                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
+                 * this can be a subset of prices.
+                 */
+                @JsonProperty("applies_to_price_ids")
+                @ExcludeMissing
+                fun _appliesToPriceIds() = appliesToPriceIds
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                fun validate(): Discount = apply {
+                    if (!validated) {
+                        discountType()
+                        percentageDiscount()
+                        trialAmountDiscount()
+                        usageDiscount()
+                        amountDiscount()
+                        appliesToPriceIds()
+                        validated = true
+                    }
+                }
+
+                fun toBuilder() = Builder().from(this)
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is Discount &&
+                        this.discountType == other.discountType &&
+                        this.percentageDiscount == other.percentageDiscount &&
+                        this.trialAmountDiscount == other.trialAmountDiscount &&
+                        this.usageDiscount == other.usageDiscount &&
+                        this.amountDiscount == other.amountDiscount &&
+                        this.appliesToPriceIds == other.appliesToPriceIds &&
+                        this.additionalProperties == other.additionalProperties
+                }
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode =
+                            Objects.hash(
+                                discountType,
+                                percentageDiscount,
+                                trialAmountDiscount,
+                                usageDiscount,
+                                amountDiscount,
+                                appliesToPriceIds,
+                                additionalProperties,
+                            )
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, trialAmountDiscount=$trialAmountDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
+
+                companion object {
+
+                    @JvmStatic fun builder() = Builder()
+                }
+
+                class Builder {
+
+                    private var discountType: JsonField<DiscountType> = JsonMissing.of()
+                    private var percentageDiscount: JsonField<Double> = JsonMissing.of()
+                    private var trialAmountDiscount: JsonField<String> = JsonMissing.of()
+                    private var usageDiscount: JsonField<Double> = JsonMissing.of()
+                    private var amountDiscount: JsonField<String> = JsonMissing.of()
+                    private var appliesToPriceIds: JsonField<List<String>> = JsonMissing.of()
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    @JvmSynthetic
+                    internal fun from(discount: Discount) = apply {
+                        this.discountType = discount.discountType
+                        this.percentageDiscount = discount.percentageDiscount
+                        this.trialAmountDiscount = discount.trialAmountDiscount
+                        this.usageDiscount = discount.usageDiscount
+                        this.amountDiscount = discount.amountDiscount
+                        this.appliesToPriceIds = discount.appliesToPriceIds
+                        additionalProperties(discount.additionalProperties)
+                    }
+
+                    fun discountType(discountType: DiscountType) =
+                        discountType(JsonField.of(discountType))
+
+                    @JsonProperty("discount_type")
+                    @ExcludeMissing
+                    fun discountType(discountType: JsonField<DiscountType>) = apply {
+                        this.discountType = discountType
+                    }
+
+                    /**
+                     * Only available if discount_type is `percentage`. This is a number between 0
+                     * and 1.
+                     */
+                    fun percentageDiscount(percentageDiscount: Double) =
+                        percentageDiscount(JsonField.of(percentageDiscount))
+
+                    /**
+                     * Only available if discount_type is `percentage`. This is a number between 0
+                     * and 1.
+                     */
+                    @JsonProperty("percentage_discount")
+                    @ExcludeMissing
+                    fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
+                        this.percentageDiscount = percentageDiscount
+                    }
+
+                    /** Only available if discount_type is `trial` */
+                    fun trialAmountDiscount(trialAmountDiscount: String) =
+                        trialAmountDiscount(JsonField.of(trialAmountDiscount))
+
+                    /** Only available if discount_type is `trial` */
+                    @JsonProperty("trial_amount_discount")
+                    @ExcludeMissing
+                    fun trialAmountDiscount(trialAmountDiscount: JsonField<String>) = apply {
+                        this.trialAmountDiscount = trialAmountDiscount
+                    }
+
+                    /**
+                     * Only available if discount_type is `usage`. Number of usage units that this
+                     * discount is for
+                     */
+                    fun usageDiscount(usageDiscount: Double) =
+                        usageDiscount(JsonField.of(usageDiscount))
+
+                    /**
+                     * Only available if discount_type is `usage`. Number of usage units that this
+                     * discount is for
+                     */
+                    @JsonProperty("usage_discount")
+                    @ExcludeMissing
+                    fun usageDiscount(usageDiscount: JsonField<Double>) = apply {
+                        this.usageDiscount = usageDiscount
+                    }
+
+                    /** Only available if discount_type is `amount`. */
+                    fun amountDiscount(amountDiscount: String) =
+                        amountDiscount(JsonField.of(amountDiscount))
+
+                    /** Only available if discount_type is `amount`. */
+                    @JsonProperty("amount_discount")
+                    @ExcludeMissing
+                    fun amountDiscount(amountDiscount: JsonField<String>) = apply {
+                        this.amountDiscount = amountDiscount
+                    }
+
+                    /**
+                     * List of price_ids that this discount applies to. For plan/plan phase
+                     * discounts, this can be a subset of prices.
+                     */
+                    fun appliesToPriceIds(appliesToPriceIds: List<String>) =
+                        appliesToPriceIds(JsonField.of(appliesToPriceIds))
+
+                    /**
+                     * List of price_ids that this discount applies to. For plan/plan phase
+                     * discounts, this can be a subset of prices.
+                     */
+                    @JsonProperty("applies_to_price_ids")
+                    @ExcludeMissing
+                    fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
+                        this.appliesToPriceIds = appliesToPriceIds
+                    }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                    @JsonAnySetter
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        this.additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun build(): Discount =
+                        Discount(
+                            discountType,
+                            percentageDiscount,
+                            trialAmountDiscount,
+                            usageDiscount,
+                            amountDiscount,
+                            appliesToPriceIds.map { it.toUnmodifiable() },
+                            additionalProperties.toUnmodifiable(),
+                        )
+                }
+
+                class DiscountType
+                @JsonCreator
+                private constructor(
+                    private val value: JsonField<String>,
+                ) : Enum {
+
+                    @com.fasterxml.jackson.annotation.JsonValue
+                    fun _value(): JsonField<String> = value
+
+                    override fun equals(other: Any?): Boolean {
+                        if (this === other) {
+                            return true
+                        }
+
+                        return other is DiscountType && this.value == other.value
+                    }
+
+                    override fun hashCode() = value.hashCode()
+
+                    override fun toString() = value.toString()
+
+                    companion object {
+
+                        @JvmField val PERCENTAGE = DiscountType(JsonField.of("percentage"))
+
+                        @JvmField val TRIAL = DiscountType(JsonField.of("trial"))
+
+                        @JvmField val USAGE = DiscountType(JsonField.of("usage"))
+
+                        @JvmField val AMOUNT = DiscountType(JsonField.of("amount"))
+
+                        @JvmStatic fun of(value: String) = DiscountType(JsonField.of(value))
+                    }
+
+                    enum class Known {
+                        PERCENTAGE,
+                        TRIAL,
+                        USAGE,
+                        AMOUNT,
+                    }
+
+                    enum class Value {
+                        PERCENTAGE,
+                        TRIAL,
+                        USAGE,
+                        AMOUNT,
+                        _UNKNOWN,
+                    }
+
+                    fun value(): Value =
+                        when (this) {
+                            PERCENTAGE -> Value.PERCENTAGE
+                            TRIAL -> Value.TRIAL
+                            USAGE -> Value.USAGE
+                            AMOUNT -> Value.AMOUNT
+                            else -> Value._UNKNOWN
+                        }
+
+                    fun known(): Known =
+                        when (this) {
+                            PERCENTAGE -> Known.PERCENTAGE
+                            TRIAL -> Known.TRIAL
+                            USAGE -> Known.USAGE
+                            AMOUNT -> Known.AMOUNT
+                            else -> throw OrbInvalidDataException("Unknown DiscountType: $value")
+                        }
+
+                    fun asString(): String = _value().asStringOrThrow()
+                }
+            }
+        }
+
+        @JsonDeserialize(builder = OverrideBulkWithProrationPrice.Builder::class)
+        @NoAutoDetect
+        class OverrideBulkWithProrationPrice
+        private constructor(
+            private val id: JsonField<String>,
+            private val modelType: JsonField<ModelType>,
+            private val minimumAmount: JsonField<String>,
+            private val maximumAmount: JsonField<String>,
+            private val currency: JsonField<String>,
+            private val conversionRate: JsonField<Double>,
+            private val discount: JsonField<Discount>,
+            private val fixedPriceQuantity: JsonField<Double>,
+            private val bulkWithProrationConfig: JsonField<BulkWithProrationConfig>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            fun id(): String = id.getRequired("id")
+
+            fun modelType(): ModelType = modelType.getRequired("model_type")
+
+            /** The subscription's override minimum amount for the plan. */
+            fun minimumAmount(): Optional<String> =
+                Optional.ofNullable(minimumAmount.getNullable("minimum_amount"))
+
+            /** The subscription's override maximum amount for the plan. */
+            fun maximumAmount(): Optional<String> =
+                Optional.ofNullable(maximumAmount.getNullable("maximum_amount"))
+
+            /**
+             * The currency of the price. If not provided, the currency of the plan will be used.
+             */
+            fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
+
+            /** The per unit conversion rate of the price currency to the invoicing currency. */
+            fun conversionRate(): Optional<Double> =
+                Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+
+            /** The subscription's override discount for the plan. */
+            fun discount(): Optional<Discount> =
+                Optional.ofNullable(discount.getNullable("discount"))
+
+            /** The starting quantity of the price, if the price is a fixed price. */
+            fun fixedPriceQuantity(): Optional<Double> =
+                Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+
+            fun bulkWithProrationConfig(): BulkWithProrationConfig =
+                bulkWithProrationConfig.getRequired("bulk_with_proration_config")
+
+            @JsonProperty("id") @ExcludeMissing fun _id() = id
+
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType() = modelType
+
+            /** The subscription's override minimum amount for the plan. */
+            @JsonProperty("minimum_amount") @ExcludeMissing fun _minimumAmount() = minimumAmount
+
+            /** The subscription's override maximum amount for the plan. */
+            @JsonProperty("maximum_amount") @ExcludeMissing fun _maximumAmount() = maximumAmount
+
+            /**
+             * The currency of the price. If not provided, the currency of the plan will be used.
+             */
+            @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
+
+            /** The per unit conversion rate of the price currency to the invoicing currency. */
+            @JsonProperty("conversion_rate") @ExcludeMissing fun _conversionRate() = conversionRate
+
+            /** The subscription's override discount for the plan. */
+            @JsonProperty("discount") @ExcludeMissing fun _discount() = discount
+
+            /** The starting quantity of the price, if the price is a fixed price. */
+            @JsonProperty("fixed_price_quantity")
+            @ExcludeMissing
+            fun _fixedPriceQuantity() = fixedPriceQuantity
+
+            @JsonProperty("bulk_with_proration_config")
+            @ExcludeMissing
+            fun _bulkWithProrationConfig() = bulkWithProrationConfig
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): OverrideBulkWithProrationPrice = apply {
+                if (!validated) {
+                    id()
+                    modelType()
+                    minimumAmount()
+                    maximumAmount()
+                    currency()
+                    conversionRate()
+                    discount().map { it.validate() }
+                    fixedPriceQuantity()
+                    bulkWithProrationConfig().validate()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is OverrideBulkWithProrationPrice &&
+                    this.id == other.id &&
+                    this.modelType == other.modelType &&
+                    this.minimumAmount == other.minimumAmount &&
+                    this.maximumAmount == other.maximumAmount &&
+                    this.currency == other.currency &&
+                    this.conversionRate == other.conversionRate &&
+                    this.discount == other.discount &&
+                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
+                    this.bulkWithProrationConfig == other.bulkWithProrationConfig &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            id,
+                            modelType,
+                            minimumAmount,
+                            maximumAmount,
+                            currency,
+                            conversionRate,
+                            discount,
+                            fixedPriceQuantity,
+                            bulkWithProrationConfig,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "OverrideBulkWithProrationPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, bulkWithProrationConfig=$bulkWithProrationConfig, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var id: JsonField<String> = JsonMissing.of()
+                private var modelType: JsonField<ModelType> = JsonMissing.of()
+                private var minimumAmount: JsonField<String> = JsonMissing.of()
+                private var maximumAmount: JsonField<String> = JsonMissing.of()
+                private var currency: JsonField<String> = JsonMissing.of()
+                private var conversionRate: JsonField<Double> = JsonMissing.of()
+                private var discount: JsonField<Discount> = JsonMissing.of()
+                private var fixedPriceQuantity: JsonField<Double> = JsonMissing.of()
+                private var bulkWithProrationConfig: JsonField<BulkWithProrationConfig> =
+                    JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(overrideBulkWithProrationPrice: OverrideBulkWithProrationPrice) =
+                    apply {
+                        this.id = overrideBulkWithProrationPrice.id
+                        this.modelType = overrideBulkWithProrationPrice.modelType
+                        this.minimumAmount = overrideBulkWithProrationPrice.minimumAmount
+                        this.maximumAmount = overrideBulkWithProrationPrice.maximumAmount
+                        this.currency = overrideBulkWithProrationPrice.currency
+                        this.conversionRate = overrideBulkWithProrationPrice.conversionRate
+                        this.discount = overrideBulkWithProrationPrice.discount
+                        this.fixedPriceQuantity = overrideBulkWithProrationPrice.fixedPriceQuantity
+                        this.bulkWithProrationConfig =
+                            overrideBulkWithProrationPrice.bulkWithProrationConfig
+                        additionalProperties(overrideBulkWithProrationPrice.additionalProperties)
+                    }
+
+                fun id(id: String) = id(JsonField.of(id))
+
+                @JsonProperty("id")
+                @ExcludeMissing
+                fun id(id: JsonField<String>) = apply { this.id = id }
+
+                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
+
+                @JsonProperty("model_type")
+                @ExcludeMissing
+                fun modelType(modelType: JsonField<ModelType>) = apply {
+                    this.modelType = modelType
+                }
+
+                /** The subscription's override minimum amount for the plan. */
+                fun minimumAmount(minimumAmount: String) =
+                    minimumAmount(JsonField.of(minimumAmount))
+
+                /** The subscription's override minimum amount for the plan. */
+                @JsonProperty("minimum_amount")
+                @ExcludeMissing
+                fun minimumAmount(minimumAmount: JsonField<String>) = apply {
+                    this.minimumAmount = minimumAmount
+                }
+
+                /** The subscription's override maximum amount for the plan. */
+                fun maximumAmount(maximumAmount: String) =
+                    maximumAmount(JsonField.of(maximumAmount))
+
+                /** The subscription's override maximum amount for the plan. */
+                @JsonProperty("maximum_amount")
+                @ExcludeMissing
+                fun maximumAmount(maximumAmount: JsonField<String>) = apply {
+                    this.maximumAmount = maximumAmount
+                }
+
+                /**
+                 * The currency of the price. If not provided, the currency of the plan will be
+                 * used.
+                 */
+                fun currency(currency: String) = currency(JsonField.of(currency))
+
+                /**
+                 * The currency of the price. If not provided, the currency of the plan will be
+                 * used.
+                 */
+                @JsonProperty("currency")
+                @ExcludeMissing
+                fun currency(currency: JsonField<String>) = apply { this.currency = currency }
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                fun conversionRate(conversionRate: Double) =
+                    conversionRate(JsonField.of(conversionRate))
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                @ExcludeMissing
+                fun conversionRate(conversionRate: JsonField<Double>) = apply {
+                    this.conversionRate = conversionRate
+                }
+
+                /** The subscription's override discount for the plan. */
+                fun discount(discount: Discount) = discount(JsonField.of(discount))
+
+                /** The subscription's override discount for the plan. */
+                @JsonProperty("discount")
+                @ExcludeMissing
+                fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
+
+                /** The starting quantity of the price, if the price is a fixed price. */
+                fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                    fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
+
+                /** The starting quantity of the price, if the price is a fixed price. */
+                @JsonProperty("fixed_price_quantity")
+                @ExcludeMissing
+                fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
+                    this.fixedPriceQuantity = fixedPriceQuantity
+                }
+
+                fun bulkWithProrationConfig(bulkWithProrationConfig: BulkWithProrationConfig) =
+                    bulkWithProrationConfig(JsonField.of(bulkWithProrationConfig))
+
+                @JsonProperty("bulk_with_proration_config")
+                @ExcludeMissing
+                fun bulkWithProrationConfig(
+                    bulkWithProrationConfig: JsonField<BulkWithProrationConfig>
+                ) = apply { this.bulkWithProrationConfig = bulkWithProrationConfig }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): OverrideBulkWithProrationPrice =
+                    OverrideBulkWithProrationPrice(
+                        id,
+                        modelType,
+                        minimumAmount,
+                        maximumAmount,
+                        currency,
+                        conversionRate,
+                        discount,
+                        fixedPriceQuantity,
+                        bulkWithProrationConfig,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            @JsonDeserialize(builder = BulkWithProrationConfig.Builder::class)
+            @NoAutoDetect
+            class BulkWithProrationConfig
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
+
+                private var validated: Boolean = false
+
+                private var hashCode: Int = 0
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                fun validate(): BulkWithProrationConfig = apply {
+                    if (!validated) {
+                        validated = true
+                    }
+                }
+
+                fun toBuilder() = Builder().from(this)
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is BulkWithProrationConfig &&
+                        this.additionalProperties == other.additionalProperties
+                }
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "BulkWithProrationConfig{additionalProperties=$additionalProperties}"
+
+                companion object {
+
+                    @JvmStatic fun builder() = Builder()
+                }
+
+                class Builder {
+
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    @JvmSynthetic
+                    internal fun from(bulkWithProrationConfig: BulkWithProrationConfig) = apply {
+                        additionalProperties(bulkWithProrationConfig.additionalProperties)
+                    }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                    @JsonAnySetter
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        this.additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun build(): BulkWithProrationConfig =
+                        BulkWithProrationConfig(additionalProperties.toUnmodifiable())
+                }
+            }
+
+            class ModelType
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is ModelType && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField
+                    val BULK_WITH_PRORATION = ModelType(JsonField.of("bulk_with_proration"))
+
+                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
+                }
+
+                enum class Known {
+                    BULK_WITH_PRORATION,
+                }
+
+                enum class Value {
+                    BULK_WITH_PRORATION,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        BULK_WITH_PRORATION -> Value.BULK_WITH_PRORATION
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        BULK_WITH_PRORATION -> Known.BULK_WITH_PRORATION
+                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+
+            /** The subscription's override discount for the plan. */
+            @JsonDeserialize(builder = Discount.Builder::class)
+            @NoAutoDetect
+            class Discount
+            private constructor(
+                private val discountType: JsonField<DiscountType>,
+                private val percentageDiscount: JsonField<Double>,
+                private val trialAmountDiscount: JsonField<String>,
+                private val usageDiscount: JsonField<Double>,
+                private val amountDiscount: JsonField<String>,
+                private val appliesToPriceIds: JsonField<List<String>>,
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
+
+                private var validated: Boolean = false
+
+                private var hashCode: Int = 0
+
+                fun discountType(): DiscountType = discountType.getRequired("discount_type")
+
+                /**
+                 * Only available if discount_type is `percentage`. This is a number between 0
+                 * and 1.
+                 */
+                fun percentageDiscount(): Optional<Double> =
+                    Optional.ofNullable(percentageDiscount.getNullable("percentage_discount"))
+
+                /** Only available if discount_type is `trial` */
+                fun trialAmountDiscount(): Optional<String> =
+                    Optional.ofNullable(trialAmountDiscount.getNullable("trial_amount_discount"))
+
+                /**
+                 * Only available if discount_type is `usage`. Number of usage units that this
+                 * discount is for
+                 */
+                fun usageDiscount(): Optional<Double> =
+                    Optional.ofNullable(usageDiscount.getNullable("usage_discount"))
+
+                /** Only available if discount_type is `amount`. */
+                fun amountDiscount(): Optional<String> =
+                    Optional.ofNullable(amountDiscount.getNullable("amount_discount"))
+
+                /**
+                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
+                 * this can be a subset of prices.
+                 */
+                fun appliesToPriceIds(): Optional<List<String>> =
+                    Optional.ofNullable(appliesToPriceIds.getNullable("applies_to_price_ids"))
+
+                @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
+
+                /**
+                 * Only available if discount_type is `percentage`. This is a number between 0
+                 * and 1.
+                 */
+                @JsonProperty("percentage_discount")
+                @ExcludeMissing
+                fun _percentageDiscount() = percentageDiscount
+
+                /** Only available if discount_type is `trial` */
+                @JsonProperty("trial_amount_discount")
+                @ExcludeMissing
+                fun _trialAmountDiscount() = trialAmountDiscount
+
+                /**
+                 * Only available if discount_type is `usage`. Number of usage units that this
+                 * discount is for
+                 */
+                @JsonProperty("usage_discount") @ExcludeMissing fun _usageDiscount() = usageDiscount
+
+                /** Only available if discount_type is `amount`. */
+                @JsonProperty("amount_discount")
+                @ExcludeMissing
+                fun _amountDiscount() = amountDiscount
+
+                /**
+                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
+                 * this can be a subset of prices.
+                 */
+                @JsonProperty("applies_to_price_ids")
+                @ExcludeMissing
+                fun _appliesToPriceIds() = appliesToPriceIds
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                fun validate(): Discount = apply {
+                    if (!validated) {
+                        discountType()
+                        percentageDiscount()
+                        trialAmountDiscount()
+                        usageDiscount()
+                        amountDiscount()
+                        appliesToPriceIds()
+                        validated = true
+                    }
+                }
+
+                fun toBuilder() = Builder().from(this)
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is Discount &&
+                        this.discountType == other.discountType &&
+                        this.percentageDiscount == other.percentageDiscount &&
+                        this.trialAmountDiscount == other.trialAmountDiscount &&
+                        this.usageDiscount == other.usageDiscount &&
+                        this.amountDiscount == other.amountDiscount &&
+                        this.appliesToPriceIds == other.appliesToPriceIds &&
+                        this.additionalProperties == other.additionalProperties
+                }
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode =
+                            Objects.hash(
+                                discountType,
+                                percentageDiscount,
+                                trialAmountDiscount,
+                                usageDiscount,
+                                amountDiscount,
+                                appliesToPriceIds,
+                                additionalProperties,
+                            )
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, trialAmountDiscount=$trialAmountDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
+
+                companion object {
+
+                    @JvmStatic fun builder() = Builder()
+                }
+
+                class Builder {
+
+                    private var discountType: JsonField<DiscountType> = JsonMissing.of()
+                    private var percentageDiscount: JsonField<Double> = JsonMissing.of()
+                    private var trialAmountDiscount: JsonField<String> = JsonMissing.of()
+                    private var usageDiscount: JsonField<Double> = JsonMissing.of()
+                    private var amountDiscount: JsonField<String> = JsonMissing.of()
+                    private var appliesToPriceIds: JsonField<List<String>> = JsonMissing.of()
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    @JvmSynthetic
+                    internal fun from(discount: Discount) = apply {
+                        this.discountType = discount.discountType
+                        this.percentageDiscount = discount.percentageDiscount
+                        this.trialAmountDiscount = discount.trialAmountDiscount
+                        this.usageDiscount = discount.usageDiscount
+                        this.amountDiscount = discount.amountDiscount
+                        this.appliesToPriceIds = discount.appliesToPriceIds
+                        additionalProperties(discount.additionalProperties)
+                    }
+
+                    fun discountType(discountType: DiscountType) =
+                        discountType(JsonField.of(discountType))
+
+                    @JsonProperty("discount_type")
+                    @ExcludeMissing
+                    fun discountType(discountType: JsonField<DiscountType>) = apply {
+                        this.discountType = discountType
+                    }
+
+                    /**
+                     * Only available if discount_type is `percentage`. This is a number between 0
+                     * and 1.
+                     */
+                    fun percentageDiscount(percentageDiscount: Double) =
+                        percentageDiscount(JsonField.of(percentageDiscount))
+
+                    /**
+                     * Only available if discount_type is `percentage`. This is a number between 0
+                     * and 1.
+                     */
+                    @JsonProperty("percentage_discount")
+                    @ExcludeMissing
+                    fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
+                        this.percentageDiscount = percentageDiscount
+                    }
+
+                    /** Only available if discount_type is `trial` */
+                    fun trialAmountDiscount(trialAmountDiscount: String) =
+                        trialAmountDiscount(JsonField.of(trialAmountDiscount))
+
+                    /** Only available if discount_type is `trial` */
+                    @JsonProperty("trial_amount_discount")
+                    @ExcludeMissing
+                    fun trialAmountDiscount(trialAmountDiscount: JsonField<String>) = apply {
+                        this.trialAmountDiscount = trialAmountDiscount
+                    }
+
+                    /**
+                     * Only available if discount_type is `usage`. Number of usage units that this
+                     * discount is for
+                     */
+                    fun usageDiscount(usageDiscount: Double) =
+                        usageDiscount(JsonField.of(usageDiscount))
+
+                    /**
+                     * Only available if discount_type is `usage`. Number of usage units that this
+                     * discount is for
+                     */
+                    @JsonProperty("usage_discount")
+                    @ExcludeMissing
+                    fun usageDiscount(usageDiscount: JsonField<Double>) = apply {
+                        this.usageDiscount = usageDiscount
+                    }
+
+                    /** Only available if discount_type is `amount`. */
+                    fun amountDiscount(amountDiscount: String) =
+                        amountDiscount(JsonField.of(amountDiscount))
+
+                    /** Only available if discount_type is `amount`. */
+                    @JsonProperty("amount_discount")
+                    @ExcludeMissing
+                    fun amountDiscount(amountDiscount: JsonField<String>) = apply {
+                        this.amountDiscount = amountDiscount
+                    }
+
+                    /**
+                     * List of price_ids that this discount applies to. For plan/plan phase
+                     * discounts, this can be a subset of prices.
+                     */
+                    fun appliesToPriceIds(appliesToPriceIds: List<String>) =
+                        appliesToPriceIds(JsonField.of(appliesToPriceIds))
+
+                    /**
+                     * List of price_ids that this discount applies to. For plan/plan phase
+                     * discounts, this can be a subset of prices.
+                     */
+                    @JsonProperty("applies_to_price_ids")
+                    @ExcludeMissing
+                    fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
+                        this.appliesToPriceIds = appliesToPriceIds
+                    }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                    @JsonAnySetter
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        this.additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun build(): Discount =
+                        Discount(
+                            discountType,
+                            percentageDiscount,
+                            trialAmountDiscount,
+                            usageDiscount,
+                            amountDiscount,
+                            appliesToPriceIds.map { it.toUnmodifiable() },
+                            additionalProperties.toUnmodifiable(),
+                        )
+                }
+
+                class DiscountType
+                @JsonCreator
+                private constructor(
+                    private val value: JsonField<String>,
+                ) : Enum {
+
+                    @com.fasterxml.jackson.annotation.JsonValue
+                    fun _value(): JsonField<String> = value
+
+                    override fun equals(other: Any?): Boolean {
+                        if (this === other) {
+                            return true
+                        }
+
+                        return other is DiscountType && this.value == other.value
+                    }
+
+                    override fun hashCode() = value.hashCode()
+
+                    override fun toString() = value.toString()
+
+                    companion object {
+
+                        @JvmField val PERCENTAGE = DiscountType(JsonField.of("percentage"))
+
+                        @JvmField val TRIAL = DiscountType(JsonField.of("trial"))
+
+                        @JvmField val USAGE = DiscountType(JsonField.of("usage"))
+
+                        @JvmField val AMOUNT = DiscountType(JsonField.of("amount"))
+
+                        @JvmStatic fun of(value: String) = DiscountType(JsonField.of(value))
+                    }
+
+                    enum class Known {
+                        PERCENTAGE,
+                        TRIAL,
+                        USAGE,
+                        AMOUNT,
+                    }
+
+                    enum class Value {
+                        PERCENTAGE,
+                        TRIAL,
+                        USAGE,
+                        AMOUNT,
+                        _UNKNOWN,
+                    }
+
+                    fun value(): Value =
+                        when (this) {
+                            PERCENTAGE -> Value.PERCENTAGE
+                            TRIAL -> Value.TRIAL
+                            USAGE -> Value.USAGE
+                            AMOUNT -> Value.AMOUNT
+                            else -> Value._UNKNOWN
+                        }
+
+                    fun known(): Known =
+                        when (this) {
+                            PERCENTAGE -> Known.PERCENTAGE
+                            TRIAL -> Known.TRIAL
+                            USAGE -> Known.USAGE
+                            AMOUNT -> Known.AMOUNT
+                            else -> throw OrbInvalidDataException("Unknown DiscountType: $value")
+                        }
+
+                    fun asString(): String = _value().asStringOrThrow()
+                }
+            }
+        }
+
+        @JsonDeserialize(builder = OverrideUnitWithProrationPrice.Builder::class)
+        @NoAutoDetect
+        class OverrideUnitWithProrationPrice
+        private constructor(
+            private val id: JsonField<String>,
+            private val modelType: JsonField<ModelType>,
+            private val minimumAmount: JsonField<String>,
+            private val maximumAmount: JsonField<String>,
+            private val currency: JsonField<String>,
+            private val conversionRate: JsonField<Double>,
+            private val discount: JsonField<Discount>,
+            private val fixedPriceQuantity: JsonField<Double>,
+            private val unitWithProrationConfig: JsonField<UnitWithProrationConfig>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            fun id(): String = id.getRequired("id")
+
+            fun modelType(): ModelType = modelType.getRequired("model_type")
+
+            /** The subscription's override minimum amount for the plan. */
+            fun minimumAmount(): Optional<String> =
+                Optional.ofNullable(minimumAmount.getNullable("minimum_amount"))
+
+            /** The subscription's override maximum amount for the plan. */
+            fun maximumAmount(): Optional<String> =
+                Optional.ofNullable(maximumAmount.getNullable("maximum_amount"))
+
+            /**
+             * The currency of the price. If not provided, the currency of the plan will be used.
+             */
+            fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
+
+            /** The per unit conversion rate of the price currency to the invoicing currency. */
+            fun conversionRate(): Optional<Double> =
+                Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+
+            /** The subscription's override discount for the plan. */
+            fun discount(): Optional<Discount> =
+                Optional.ofNullable(discount.getNullable("discount"))
+
+            /** The starting quantity of the price, if the price is a fixed price. */
+            fun fixedPriceQuantity(): Optional<Double> =
+                Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+
+            fun unitWithProrationConfig(): UnitWithProrationConfig =
+                unitWithProrationConfig.getRequired("unit_with_proration_config")
+
+            @JsonProperty("id") @ExcludeMissing fun _id() = id
+
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType() = modelType
+
+            /** The subscription's override minimum amount for the plan. */
+            @JsonProperty("minimum_amount") @ExcludeMissing fun _minimumAmount() = minimumAmount
+
+            /** The subscription's override maximum amount for the plan. */
+            @JsonProperty("maximum_amount") @ExcludeMissing fun _maximumAmount() = maximumAmount
+
+            /**
+             * The currency of the price. If not provided, the currency of the plan will be used.
+             */
+            @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
+
+            /** The per unit conversion rate of the price currency to the invoicing currency. */
+            @JsonProperty("conversion_rate") @ExcludeMissing fun _conversionRate() = conversionRate
+
+            /** The subscription's override discount for the plan. */
+            @JsonProperty("discount") @ExcludeMissing fun _discount() = discount
+
+            /** The starting quantity of the price, if the price is a fixed price. */
+            @JsonProperty("fixed_price_quantity")
+            @ExcludeMissing
+            fun _fixedPriceQuantity() = fixedPriceQuantity
+
+            @JsonProperty("unit_with_proration_config")
+            @ExcludeMissing
+            fun _unitWithProrationConfig() = unitWithProrationConfig
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): OverrideUnitWithProrationPrice = apply {
+                if (!validated) {
+                    id()
+                    modelType()
+                    minimumAmount()
+                    maximumAmount()
+                    currency()
+                    conversionRate()
+                    discount().map { it.validate() }
+                    fixedPriceQuantity()
+                    unitWithProrationConfig().validate()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is OverrideUnitWithProrationPrice &&
+                    this.id == other.id &&
+                    this.modelType == other.modelType &&
+                    this.minimumAmount == other.minimumAmount &&
+                    this.maximumAmount == other.maximumAmount &&
+                    this.currency == other.currency &&
+                    this.conversionRate == other.conversionRate &&
+                    this.discount == other.discount &&
+                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
+                    this.unitWithProrationConfig == other.unitWithProrationConfig &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            id,
+                            modelType,
+                            minimumAmount,
+                            maximumAmount,
+                            currency,
+                            conversionRate,
+                            discount,
+                            fixedPriceQuantity,
+                            unitWithProrationConfig,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "OverrideUnitWithProrationPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, unitWithProrationConfig=$unitWithProrationConfig, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var id: JsonField<String> = JsonMissing.of()
+                private var modelType: JsonField<ModelType> = JsonMissing.of()
+                private var minimumAmount: JsonField<String> = JsonMissing.of()
+                private var maximumAmount: JsonField<String> = JsonMissing.of()
+                private var currency: JsonField<String> = JsonMissing.of()
+                private var conversionRate: JsonField<Double> = JsonMissing.of()
+                private var discount: JsonField<Discount> = JsonMissing.of()
+                private var fixedPriceQuantity: JsonField<Double> = JsonMissing.of()
+                private var unitWithProrationConfig: JsonField<UnitWithProrationConfig> =
+                    JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(overrideUnitWithProrationPrice: OverrideUnitWithProrationPrice) =
+                    apply {
+                        this.id = overrideUnitWithProrationPrice.id
+                        this.modelType = overrideUnitWithProrationPrice.modelType
+                        this.minimumAmount = overrideUnitWithProrationPrice.minimumAmount
+                        this.maximumAmount = overrideUnitWithProrationPrice.maximumAmount
+                        this.currency = overrideUnitWithProrationPrice.currency
+                        this.conversionRate = overrideUnitWithProrationPrice.conversionRate
+                        this.discount = overrideUnitWithProrationPrice.discount
+                        this.fixedPriceQuantity = overrideUnitWithProrationPrice.fixedPriceQuantity
+                        this.unitWithProrationConfig =
+                            overrideUnitWithProrationPrice.unitWithProrationConfig
+                        additionalProperties(overrideUnitWithProrationPrice.additionalProperties)
+                    }
+
+                fun id(id: String) = id(JsonField.of(id))
+
+                @JsonProperty("id")
+                @ExcludeMissing
+                fun id(id: JsonField<String>) = apply { this.id = id }
+
+                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
+
+                @JsonProperty("model_type")
+                @ExcludeMissing
+                fun modelType(modelType: JsonField<ModelType>) = apply {
+                    this.modelType = modelType
+                }
+
+                /** The subscription's override minimum amount for the plan. */
+                fun minimumAmount(minimumAmount: String) =
+                    minimumAmount(JsonField.of(minimumAmount))
+
+                /** The subscription's override minimum amount for the plan. */
+                @JsonProperty("minimum_amount")
+                @ExcludeMissing
+                fun minimumAmount(minimumAmount: JsonField<String>) = apply {
+                    this.minimumAmount = minimumAmount
+                }
+
+                /** The subscription's override maximum amount for the plan. */
+                fun maximumAmount(maximumAmount: String) =
+                    maximumAmount(JsonField.of(maximumAmount))
+
+                /** The subscription's override maximum amount for the plan. */
+                @JsonProperty("maximum_amount")
+                @ExcludeMissing
+                fun maximumAmount(maximumAmount: JsonField<String>) = apply {
+                    this.maximumAmount = maximumAmount
+                }
+
+                /**
+                 * The currency of the price. If not provided, the currency of the plan will be
+                 * used.
+                 */
+                fun currency(currency: String) = currency(JsonField.of(currency))
+
+                /**
+                 * The currency of the price. If not provided, the currency of the plan will be
+                 * used.
+                 */
+                @JsonProperty("currency")
+                @ExcludeMissing
+                fun currency(currency: JsonField<String>) = apply { this.currency = currency }
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                fun conversionRate(conversionRate: Double) =
+                    conversionRate(JsonField.of(conversionRate))
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                @ExcludeMissing
+                fun conversionRate(conversionRate: JsonField<Double>) = apply {
+                    this.conversionRate = conversionRate
+                }
+
+                /** The subscription's override discount for the plan. */
+                fun discount(discount: Discount) = discount(JsonField.of(discount))
+
+                /** The subscription's override discount for the plan. */
+                @JsonProperty("discount")
+                @ExcludeMissing
+                fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
+
+                /** The starting quantity of the price, if the price is a fixed price. */
+                fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                    fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
+
+                /** The starting quantity of the price, if the price is a fixed price. */
+                @JsonProperty("fixed_price_quantity")
+                @ExcludeMissing
+                fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
+                    this.fixedPriceQuantity = fixedPriceQuantity
+                }
+
+                fun unitWithProrationConfig(unitWithProrationConfig: UnitWithProrationConfig) =
+                    unitWithProrationConfig(JsonField.of(unitWithProrationConfig))
+
+                @JsonProperty("unit_with_proration_config")
+                @ExcludeMissing
+                fun unitWithProrationConfig(
+                    unitWithProrationConfig: JsonField<UnitWithProrationConfig>
+                ) = apply { this.unitWithProrationConfig = unitWithProrationConfig }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): OverrideUnitWithProrationPrice =
+                    OverrideUnitWithProrationPrice(
+                        id,
+                        modelType,
+                        minimumAmount,
+                        maximumAmount,
+                        currency,
+                        conversionRate,
+                        discount,
+                        fixedPriceQuantity,
+                        unitWithProrationConfig,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class ModelType
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is ModelType && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField
+                    val UNIT_WITH_PRORATION = ModelType(JsonField.of("unit_with_proration"))
+
+                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
+                }
+
+                enum class Known {
+                    UNIT_WITH_PRORATION,
+                }
+
+                enum class Value {
+                    UNIT_WITH_PRORATION,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        UNIT_WITH_PRORATION -> Value.UNIT_WITH_PRORATION
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        UNIT_WITH_PRORATION -> Known.UNIT_WITH_PRORATION
+                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+
+            @JsonDeserialize(builder = UnitWithProrationConfig.Builder::class)
+            @NoAutoDetect
+            class UnitWithProrationConfig
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
+
+                private var validated: Boolean = false
+
+                private var hashCode: Int = 0
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                fun validate(): UnitWithProrationConfig = apply {
+                    if (!validated) {
+                        validated = true
+                    }
+                }
+
+                fun toBuilder() = Builder().from(this)
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is UnitWithProrationConfig &&
+                        this.additionalProperties == other.additionalProperties
+                }
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "UnitWithProrationConfig{additionalProperties=$additionalProperties}"
+
+                companion object {
+
+                    @JvmStatic fun builder() = Builder()
+                }
+
+                class Builder {
+
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    @JvmSynthetic
+                    internal fun from(unitWithProrationConfig: UnitWithProrationConfig) = apply {
+                        additionalProperties(unitWithProrationConfig.additionalProperties)
+                    }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                    @JsonAnySetter
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        this.additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun build(): UnitWithProrationConfig =
+                        UnitWithProrationConfig(additionalProperties.toUnmodifiable())
+                }
+            }
+
+            /** The subscription's override discount for the plan. */
+            @JsonDeserialize(builder = Discount.Builder::class)
+            @NoAutoDetect
+            class Discount
+            private constructor(
+                private val discountType: JsonField<DiscountType>,
+                private val percentageDiscount: JsonField<Double>,
+                private val trialAmountDiscount: JsonField<String>,
+                private val usageDiscount: JsonField<Double>,
+                private val amountDiscount: JsonField<String>,
+                private val appliesToPriceIds: JsonField<List<String>>,
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
+
+                private var validated: Boolean = false
+
+                private var hashCode: Int = 0
+
+                fun discountType(): DiscountType = discountType.getRequired("discount_type")
+
+                /**
+                 * Only available if discount_type is `percentage`. This is a number between 0
+                 * and 1.
+                 */
+                fun percentageDiscount(): Optional<Double> =
+                    Optional.ofNullable(percentageDiscount.getNullable("percentage_discount"))
+
+                /** Only available if discount_type is `trial` */
+                fun trialAmountDiscount(): Optional<String> =
+                    Optional.ofNullable(trialAmountDiscount.getNullable("trial_amount_discount"))
+
+                /**
+                 * Only available if discount_type is `usage`. Number of usage units that this
+                 * discount is for
+                 */
+                fun usageDiscount(): Optional<Double> =
+                    Optional.ofNullable(usageDiscount.getNullable("usage_discount"))
+
+                /** Only available if discount_type is `amount`. */
+                fun amountDiscount(): Optional<String> =
+                    Optional.ofNullable(amountDiscount.getNullable("amount_discount"))
+
+                /**
+                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
+                 * this can be a subset of prices.
+                 */
+                fun appliesToPriceIds(): Optional<List<String>> =
+                    Optional.ofNullable(appliesToPriceIds.getNullable("applies_to_price_ids"))
+
+                @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
+
+                /**
+                 * Only available if discount_type is `percentage`. This is a number between 0
+                 * and 1.
+                 */
+                @JsonProperty("percentage_discount")
+                @ExcludeMissing
+                fun _percentageDiscount() = percentageDiscount
+
+                /** Only available if discount_type is `trial` */
+                @JsonProperty("trial_amount_discount")
+                @ExcludeMissing
+                fun _trialAmountDiscount() = trialAmountDiscount
+
+                /**
+                 * Only available if discount_type is `usage`. Number of usage units that this
+                 * discount is for
+                 */
+                @JsonProperty("usage_discount") @ExcludeMissing fun _usageDiscount() = usageDiscount
+
+                /** Only available if discount_type is `amount`. */
+                @JsonProperty("amount_discount")
+                @ExcludeMissing
+                fun _amountDiscount() = amountDiscount
+
+                /**
+                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
+                 * this can be a subset of prices.
+                 */
+                @JsonProperty("applies_to_price_ids")
+                @ExcludeMissing
+                fun _appliesToPriceIds() = appliesToPriceIds
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                fun validate(): Discount = apply {
+                    if (!validated) {
+                        discountType()
+                        percentageDiscount()
+                        trialAmountDiscount()
+                        usageDiscount()
+                        amountDiscount()
+                        appliesToPriceIds()
+                        validated = true
+                    }
+                }
+
+                fun toBuilder() = Builder().from(this)
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is Discount &&
+                        this.discountType == other.discountType &&
+                        this.percentageDiscount == other.percentageDiscount &&
+                        this.trialAmountDiscount == other.trialAmountDiscount &&
+                        this.usageDiscount == other.usageDiscount &&
+                        this.amountDiscount == other.amountDiscount &&
+                        this.appliesToPriceIds == other.appliesToPriceIds &&
+                        this.additionalProperties == other.additionalProperties
+                }
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode =
+                            Objects.hash(
+                                discountType,
+                                percentageDiscount,
+                                trialAmountDiscount,
+                                usageDiscount,
+                                amountDiscount,
+                                appliesToPriceIds,
+                                additionalProperties,
+                            )
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, trialAmountDiscount=$trialAmountDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
+
+                companion object {
+
+                    @JvmStatic fun builder() = Builder()
+                }
+
+                class Builder {
+
+                    private var discountType: JsonField<DiscountType> = JsonMissing.of()
+                    private var percentageDiscount: JsonField<Double> = JsonMissing.of()
+                    private var trialAmountDiscount: JsonField<String> = JsonMissing.of()
+                    private var usageDiscount: JsonField<Double> = JsonMissing.of()
+                    private var amountDiscount: JsonField<String> = JsonMissing.of()
+                    private var appliesToPriceIds: JsonField<List<String>> = JsonMissing.of()
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    @JvmSynthetic
+                    internal fun from(discount: Discount) = apply {
+                        this.discountType = discount.discountType
+                        this.percentageDiscount = discount.percentageDiscount
+                        this.trialAmountDiscount = discount.trialAmountDiscount
+                        this.usageDiscount = discount.usageDiscount
+                        this.amountDiscount = discount.amountDiscount
+                        this.appliesToPriceIds = discount.appliesToPriceIds
+                        additionalProperties(discount.additionalProperties)
+                    }
+
+                    fun discountType(discountType: DiscountType) =
+                        discountType(JsonField.of(discountType))
+
+                    @JsonProperty("discount_type")
+                    @ExcludeMissing
+                    fun discountType(discountType: JsonField<DiscountType>) = apply {
+                        this.discountType = discountType
+                    }
+
+                    /**
+                     * Only available if discount_type is `percentage`. This is a number between 0
+                     * and 1.
+                     */
+                    fun percentageDiscount(percentageDiscount: Double) =
+                        percentageDiscount(JsonField.of(percentageDiscount))
+
+                    /**
+                     * Only available if discount_type is `percentage`. This is a number between 0
+                     * and 1.
+                     */
+                    @JsonProperty("percentage_discount")
+                    @ExcludeMissing
+                    fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
+                        this.percentageDiscount = percentageDiscount
+                    }
+
+                    /** Only available if discount_type is `trial` */
+                    fun trialAmountDiscount(trialAmountDiscount: String) =
+                        trialAmountDiscount(JsonField.of(trialAmountDiscount))
+
+                    /** Only available if discount_type is `trial` */
+                    @JsonProperty("trial_amount_discount")
+                    @ExcludeMissing
+                    fun trialAmountDiscount(trialAmountDiscount: JsonField<String>) = apply {
+                        this.trialAmountDiscount = trialAmountDiscount
+                    }
+
+                    /**
+                     * Only available if discount_type is `usage`. Number of usage units that this
+                     * discount is for
+                     */
+                    fun usageDiscount(usageDiscount: Double) =
+                        usageDiscount(JsonField.of(usageDiscount))
+
+                    /**
+                     * Only available if discount_type is `usage`. Number of usage units that this
+                     * discount is for
+                     */
+                    @JsonProperty("usage_discount")
+                    @ExcludeMissing
+                    fun usageDiscount(usageDiscount: JsonField<Double>) = apply {
+                        this.usageDiscount = usageDiscount
+                    }
+
+                    /** Only available if discount_type is `amount`. */
+                    fun amountDiscount(amountDiscount: String) =
+                        amountDiscount(JsonField.of(amountDiscount))
+
+                    /** Only available if discount_type is `amount`. */
+                    @JsonProperty("amount_discount")
+                    @ExcludeMissing
+                    fun amountDiscount(amountDiscount: JsonField<String>) = apply {
+                        this.amountDiscount = amountDiscount
+                    }
+
+                    /**
+                     * List of price_ids that this discount applies to. For plan/plan phase
+                     * discounts, this can be a subset of prices.
+                     */
+                    fun appliesToPriceIds(appliesToPriceIds: List<String>) =
+                        appliesToPriceIds(JsonField.of(appliesToPriceIds))
+
+                    /**
+                     * List of price_ids that this discount applies to. For plan/plan phase
+                     * discounts, this can be a subset of prices.
+                     */
+                    @JsonProperty("applies_to_price_ids")
+                    @ExcludeMissing
+                    fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
+                        this.appliesToPriceIds = appliesToPriceIds
+                    }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                    @JsonAnySetter
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        this.additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun build(): Discount =
+                        Discount(
+                            discountType,
+                            percentageDiscount,
+                            trialAmountDiscount,
+                            usageDiscount,
+                            amountDiscount,
+                            appliesToPriceIds.map { it.toUnmodifiable() },
+                            additionalProperties.toUnmodifiable(),
+                        )
+                }
+
+                class DiscountType
+                @JsonCreator
+                private constructor(
+                    private val value: JsonField<String>,
+                ) : Enum {
+
+                    @com.fasterxml.jackson.annotation.JsonValue
+                    fun _value(): JsonField<String> = value
+
+                    override fun equals(other: Any?): Boolean {
+                        if (this === other) {
+                            return true
+                        }
+
+                        return other is DiscountType && this.value == other.value
+                    }
+
+                    override fun hashCode() = value.hashCode()
+
+                    override fun toString() = value.toString()
+
+                    companion object {
+
+                        @JvmField val PERCENTAGE = DiscountType(JsonField.of("percentage"))
+
+                        @JvmField val TRIAL = DiscountType(JsonField.of("trial"))
+
+                        @JvmField val USAGE = DiscountType(JsonField.of("usage"))
+
+                        @JvmField val AMOUNT = DiscountType(JsonField.of("amount"))
+
+                        @JvmStatic fun of(value: String) = DiscountType(JsonField.of(value))
+                    }
+
+                    enum class Known {
+                        PERCENTAGE,
+                        TRIAL,
+                        USAGE,
+                        AMOUNT,
+                    }
+
+                    enum class Value {
+                        PERCENTAGE,
+                        TRIAL,
+                        USAGE,
+                        AMOUNT,
+                        _UNKNOWN,
+                    }
+
+                    fun value(): Value =
+                        when (this) {
+                            PERCENTAGE -> Value.PERCENTAGE
+                            TRIAL -> Value.TRIAL
+                            USAGE -> Value.USAGE
+                            AMOUNT -> Value.AMOUNT
+                            else -> Value._UNKNOWN
+                        }
+
+                    fun known(): Known =
+                        when (this) {
+                            PERCENTAGE -> Known.PERCENTAGE
+                            TRIAL -> Known.TRIAL
+                            USAGE -> Known.USAGE
+                            AMOUNT -> Known.AMOUNT
+                            else -> throw OrbInvalidDataException("Unknown DiscountType: $value")
+                        }
+
+                    fun asString(): String = _value().asStringOrThrow()
+                }
+            }
+        }
+
+        @JsonDeserialize(builder = OverrideTieredWithProrationPrice.Builder::class)
+        @NoAutoDetect
+        class OverrideTieredWithProrationPrice
+        private constructor(
+            private val id: JsonField<String>,
+            private val modelType: JsonField<ModelType>,
+            private val minimumAmount: JsonField<String>,
+            private val maximumAmount: JsonField<String>,
+            private val currency: JsonField<String>,
+            private val conversionRate: JsonField<Double>,
+            private val discount: JsonField<Discount>,
+            private val fixedPriceQuantity: JsonField<Double>,
+            private val tieredWithProrationConfig: JsonField<TieredWithProrationConfig>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            fun id(): String = id.getRequired("id")
+
+            fun modelType(): ModelType = modelType.getRequired("model_type")
+
+            /** The subscription's override minimum amount for the plan. */
+            fun minimumAmount(): Optional<String> =
+                Optional.ofNullable(minimumAmount.getNullable("minimum_amount"))
+
+            /** The subscription's override maximum amount for the plan. */
+            fun maximumAmount(): Optional<String> =
+                Optional.ofNullable(maximumAmount.getNullable("maximum_amount"))
+
+            /**
+             * The currency of the price. If not provided, the currency of the plan will be used.
+             */
+            fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
+
+            /** The per unit conversion rate of the price currency to the invoicing currency. */
+            fun conversionRate(): Optional<Double> =
+                Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+
+            /** The subscription's override discount for the plan. */
+            fun discount(): Optional<Discount> =
+                Optional.ofNullable(discount.getNullable("discount"))
+
+            /** The starting quantity of the price, if the price is a fixed price. */
+            fun fixedPriceQuantity(): Optional<Double> =
+                Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+
+            fun tieredWithProrationConfig(): TieredWithProrationConfig =
+                tieredWithProrationConfig.getRequired("tiered_with_proration_config")
+
+            @JsonProperty("id") @ExcludeMissing fun _id() = id
+
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType() = modelType
+
+            /** The subscription's override minimum amount for the plan. */
+            @JsonProperty("minimum_amount") @ExcludeMissing fun _minimumAmount() = minimumAmount
+
+            /** The subscription's override maximum amount for the plan. */
+            @JsonProperty("maximum_amount") @ExcludeMissing fun _maximumAmount() = maximumAmount
+
+            /**
+             * The currency of the price. If not provided, the currency of the plan will be used.
+             */
+            @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
+
+            /** The per unit conversion rate of the price currency to the invoicing currency. */
+            @JsonProperty("conversion_rate") @ExcludeMissing fun _conversionRate() = conversionRate
+
+            /** The subscription's override discount for the plan. */
+            @JsonProperty("discount") @ExcludeMissing fun _discount() = discount
+
+            /** The starting quantity of the price, if the price is a fixed price. */
+            @JsonProperty("fixed_price_quantity")
+            @ExcludeMissing
+            fun _fixedPriceQuantity() = fixedPriceQuantity
+
+            @JsonProperty("tiered_with_proration_config")
+            @ExcludeMissing
+            fun _tieredWithProrationConfig() = tieredWithProrationConfig
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): OverrideTieredWithProrationPrice = apply {
+                if (!validated) {
+                    id()
+                    modelType()
+                    minimumAmount()
+                    maximumAmount()
+                    currency()
+                    conversionRate()
+                    discount().map { it.validate() }
+                    fixedPriceQuantity()
+                    tieredWithProrationConfig().validate()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is OverrideTieredWithProrationPrice &&
+                    this.id == other.id &&
+                    this.modelType == other.modelType &&
+                    this.minimumAmount == other.minimumAmount &&
+                    this.maximumAmount == other.maximumAmount &&
+                    this.currency == other.currency &&
+                    this.conversionRate == other.conversionRate &&
+                    this.discount == other.discount &&
+                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
+                    this.tieredWithProrationConfig == other.tieredWithProrationConfig &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            id,
+                            modelType,
+                            minimumAmount,
+                            maximumAmount,
+                            currency,
+                            conversionRate,
+                            discount,
+                            fixedPriceQuantity,
+                            tieredWithProrationConfig,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "OverrideTieredWithProrationPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, tieredWithProrationConfig=$tieredWithProrationConfig, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var id: JsonField<String> = JsonMissing.of()
+                private var modelType: JsonField<ModelType> = JsonMissing.of()
+                private var minimumAmount: JsonField<String> = JsonMissing.of()
+                private var maximumAmount: JsonField<String> = JsonMissing.of()
+                private var currency: JsonField<String> = JsonMissing.of()
+                private var conversionRate: JsonField<Double> = JsonMissing.of()
+                private var discount: JsonField<Discount> = JsonMissing.of()
+                private var fixedPriceQuantity: JsonField<Double> = JsonMissing.of()
+                private var tieredWithProrationConfig: JsonField<TieredWithProrationConfig> =
+                    JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(
+                    overrideTieredWithProrationPrice: OverrideTieredWithProrationPrice
+                ) = apply {
+                    this.id = overrideTieredWithProrationPrice.id
+                    this.modelType = overrideTieredWithProrationPrice.modelType
+                    this.minimumAmount = overrideTieredWithProrationPrice.minimumAmount
+                    this.maximumAmount = overrideTieredWithProrationPrice.maximumAmount
+                    this.currency = overrideTieredWithProrationPrice.currency
+                    this.conversionRate = overrideTieredWithProrationPrice.conversionRate
+                    this.discount = overrideTieredWithProrationPrice.discount
+                    this.fixedPriceQuantity = overrideTieredWithProrationPrice.fixedPriceQuantity
+                    this.tieredWithProrationConfig =
+                        overrideTieredWithProrationPrice.tieredWithProrationConfig
+                    additionalProperties(overrideTieredWithProrationPrice.additionalProperties)
+                }
+
+                fun id(id: String) = id(JsonField.of(id))
+
+                @JsonProperty("id")
+                @ExcludeMissing
+                fun id(id: JsonField<String>) = apply { this.id = id }
+
+                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
+
+                @JsonProperty("model_type")
+                @ExcludeMissing
+                fun modelType(modelType: JsonField<ModelType>) = apply {
+                    this.modelType = modelType
+                }
+
+                /** The subscription's override minimum amount for the plan. */
+                fun minimumAmount(minimumAmount: String) =
+                    minimumAmount(JsonField.of(minimumAmount))
+
+                /** The subscription's override minimum amount for the plan. */
+                @JsonProperty("minimum_amount")
+                @ExcludeMissing
+                fun minimumAmount(minimumAmount: JsonField<String>) = apply {
+                    this.minimumAmount = minimumAmount
+                }
+
+                /** The subscription's override maximum amount for the plan. */
+                fun maximumAmount(maximumAmount: String) =
+                    maximumAmount(JsonField.of(maximumAmount))
+
+                /** The subscription's override maximum amount for the plan. */
+                @JsonProperty("maximum_amount")
+                @ExcludeMissing
+                fun maximumAmount(maximumAmount: JsonField<String>) = apply {
+                    this.maximumAmount = maximumAmount
+                }
+
+                /**
+                 * The currency of the price. If not provided, the currency of the plan will be
+                 * used.
+                 */
+                fun currency(currency: String) = currency(JsonField.of(currency))
+
+                /**
+                 * The currency of the price. If not provided, the currency of the plan will be
+                 * used.
+                 */
+                @JsonProperty("currency")
+                @ExcludeMissing
+                fun currency(currency: JsonField<String>) = apply { this.currency = currency }
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                fun conversionRate(conversionRate: Double) =
+                    conversionRate(JsonField.of(conversionRate))
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                @ExcludeMissing
+                fun conversionRate(conversionRate: JsonField<Double>) = apply {
+                    this.conversionRate = conversionRate
+                }
+
+                /** The subscription's override discount for the plan. */
+                fun discount(discount: Discount) = discount(JsonField.of(discount))
+
+                /** The subscription's override discount for the plan. */
+                @JsonProperty("discount")
+                @ExcludeMissing
+                fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
+
+                /** The starting quantity of the price, if the price is a fixed price. */
+                fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                    fixedPriceQuantity(JsonField.of(fixedPriceQuantity))
+
+                /** The starting quantity of the price, if the price is a fixed price. */
+                @JsonProperty("fixed_price_quantity")
+                @ExcludeMissing
+                fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
+                    this.fixedPriceQuantity = fixedPriceQuantity
+                }
+
+                fun tieredWithProrationConfig(
+                    tieredWithProrationConfig: TieredWithProrationConfig
+                ) = tieredWithProrationConfig(JsonField.of(tieredWithProrationConfig))
+
+                @JsonProperty("tiered_with_proration_config")
+                @ExcludeMissing
+                fun tieredWithProrationConfig(
+                    tieredWithProrationConfig: JsonField<TieredWithProrationConfig>
+                ) = apply { this.tieredWithProrationConfig = tieredWithProrationConfig }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): OverrideTieredWithProrationPrice =
+                    OverrideTieredWithProrationPrice(
+                        id,
+                        modelType,
+                        minimumAmount,
+                        maximumAmount,
+                        currency,
+                        conversionRate,
+                        discount,
+                        fixedPriceQuantity,
+                        tieredWithProrationConfig,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+
+            class ModelType
+            @JsonCreator
+            private constructor(
+                private val value: JsonField<String>,
+            ) : Enum {
+
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is ModelType && this.value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+
+                companion object {
+
+                    @JvmField
+                    val TIERED_WITH_PRORATION = ModelType(JsonField.of("tiered_with_proration"))
+
+                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
+                }
+
+                enum class Known {
+                    TIERED_WITH_PRORATION,
+                }
+
+                enum class Value {
+                    TIERED_WITH_PRORATION,
+                    _UNKNOWN,
+                }
+
+                fun value(): Value =
+                    when (this) {
+                        TIERED_WITH_PRORATION -> Value.TIERED_WITH_PRORATION
+                        else -> Value._UNKNOWN
+                    }
+
+                fun known(): Known =
+                    when (this) {
+                        TIERED_WITH_PRORATION -> Known.TIERED_WITH_PRORATION
+                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
+                    }
+
+                fun asString(): String = _value().asStringOrThrow()
+            }
+
+            @JsonDeserialize(builder = TieredWithProrationConfig.Builder::class)
+            @NoAutoDetect
+            class TieredWithProrationConfig
+            private constructor(
+                private val additionalProperties: Map<String, JsonValue>,
+            ) {
+
+                private var validated: Boolean = false
+
+                private var hashCode: Int = 0
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                fun validate(): TieredWithProrationConfig = apply {
+                    if (!validated) {
+                        validated = true
+                    }
+                }
+
+                fun toBuilder() = Builder().from(this)
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is TieredWithProrationConfig &&
+                        this.additionalProperties == other.additionalProperties
+                }
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = Objects.hash(additionalProperties)
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "TieredWithProrationConfig{additionalProperties=$additionalProperties}"
+
+                companion object {
+
+                    @JvmStatic fun builder() = Builder()
+                }
+
+                class Builder {
+
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    @JvmSynthetic
+                    internal fun from(tieredWithProrationConfig: TieredWithProrationConfig) =
+                        apply {
+                            additionalProperties(tieredWithProrationConfig.additionalProperties)
+                        }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                    @JsonAnySetter
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        this.additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun build(): TieredWithProrationConfig =
+                        TieredWithProrationConfig(additionalProperties.toUnmodifiable())
                 }
             }
 
