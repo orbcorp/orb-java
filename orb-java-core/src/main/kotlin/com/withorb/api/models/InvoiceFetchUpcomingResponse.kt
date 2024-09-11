@@ -154,6 +154,10 @@ private constructor(
 
     fun customer(): Customer = customer.getRequired("customer")
 
+    /**
+     * This field is deprecated in favor of `discounts`. If a `discounts` list is provided, the
+     * first discount in the list will be returned. If the list is empty, `None` will be returned.
+     */
     fun discount(): Optional<Discount> = Optional.ofNullable(discount.getNullable("discount"))
 
     fun discounts(): List<Discount> = discounts.getRequired("discounts")
@@ -410,6 +414,10 @@ private constructor(
 
     @JsonProperty("customer") @ExcludeMissing fun _customer() = customer
 
+    /**
+     * This field is deprecated in favor of `discounts`. If a `discounts` list is provided, the
+     * first discount in the list will be returned. If the list is empty, `None` will be returned.
+     */
     @JsonProperty("discount") @ExcludeMissing fun _discount() = discount
 
     @JsonProperty("discounts") @ExcludeMissing fun _discounts() = discounts
@@ -1030,8 +1038,18 @@ private constructor(
         @ExcludeMissing
         fun customer(customer: JsonField<Customer>) = apply { this.customer = customer }
 
+        /**
+         * This field is deprecated in favor of `discounts`. If a `discounts` list is provided, the
+         * first discount in the list will be returned. If the list is empty, `None` will be
+         * returned.
+         */
         fun discount(discount: Discount) = discount(JsonField.of(discount))
 
+        /**
+         * This field is deprecated in favor of `discounts`. If a `discounts` list is provided, the
+         * first discount in the list will be returned. If the list is empty, `None` will be
+         * returned.
+         */
         @JsonProperty("discount")
         @ExcludeMissing
         fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
