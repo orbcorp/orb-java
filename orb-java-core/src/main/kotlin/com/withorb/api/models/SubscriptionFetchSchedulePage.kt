@@ -58,7 +58,7 @@ private constructor(
             return false
         }
 
-        return paginationMetadata().nextCursor().isPresent()
+        return paginationMetadata().nextCursor().isPresent
     }
 
     fun getNextPageParams(): Optional<SubscriptionFetchScheduleParams> {
