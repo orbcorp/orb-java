@@ -56,6 +56,7 @@ private constructor(
     private val currency: JsonField<String>,
     private val taxId: JsonField<TaxId>,
     private val autoCollection: JsonField<Boolean>,
+    private val exemptFromAutomatedTax: JsonField<Boolean>,
     private val emailDelivery: JsonField<Boolean>,
     private val additionalEmails: JsonField<List<String>>,
     private val portalUrl: JsonField<String>,
@@ -237,6 +238,9 @@ private constructor(
     fun taxId(): Optional<TaxId> = Optional.ofNullable(taxId.getNullable("tax_id"))
 
     fun autoCollection(): Boolean = autoCollection.getRequired("auto_collection")
+
+    fun exemptFromAutomatedTax(): Optional<Boolean> =
+        Optional.ofNullable(exemptFromAutomatedTax.getNullable("exempt_from_automated_tax"))
 
     fun emailDelivery(): Boolean = emailDelivery.getRequired("email_delivery")
 
@@ -421,6 +425,10 @@ private constructor(
 
     @JsonProperty("auto_collection") @ExcludeMissing fun _autoCollection() = autoCollection
 
+    @JsonProperty("exempt_from_automated_tax")
+    @ExcludeMissing
+    fun _exemptFromAutomatedTax() = exemptFromAutomatedTax
+
     @JsonProperty("email_delivery") @ExcludeMissing fun _emailDelivery() = emailDelivery
 
     @JsonProperty("additional_emails") @ExcludeMissing fun _additionalEmails() = additionalEmails
@@ -456,6 +464,7 @@ private constructor(
             currency()
             taxId().map { it.validate() }
             autoCollection()
+            exemptFromAutomatedTax()
             emailDelivery()
             additionalEmails()
             portalUrl()
@@ -488,6 +497,7 @@ private constructor(
             this.currency == other.currency &&
             this.taxId == other.taxId &&
             this.autoCollection == other.autoCollection &&
+            this.exemptFromAutomatedTax == other.exemptFromAutomatedTax &&
             this.emailDelivery == other.emailDelivery &&
             this.additionalEmails == other.additionalEmails &&
             this.portalUrl == other.portalUrl &&
@@ -515,6 +525,7 @@ private constructor(
                     currency,
                     taxId,
                     autoCollection,
+                    exemptFromAutomatedTax,
                     emailDelivery,
                     additionalEmails,
                     portalUrl,
@@ -527,7 +538,7 @@ private constructor(
     }
 
     override fun toString() =
-        "Customer{metadata=$metadata, id=$id, externalCustomerId=$externalCustomerId, name=$name, email=$email, timezone=$timezone, paymentProviderId=$paymentProviderId, paymentProvider=$paymentProvider, createdAt=$createdAt, shippingAddress=$shippingAddress, billingAddress=$billingAddress, balance=$balance, currency=$currency, taxId=$taxId, autoCollection=$autoCollection, emailDelivery=$emailDelivery, additionalEmails=$additionalEmails, portalUrl=$portalUrl, accountingSyncConfiguration=$accountingSyncConfiguration, reportingConfiguration=$reportingConfiguration, additionalProperties=$additionalProperties}"
+        "Customer{metadata=$metadata, id=$id, externalCustomerId=$externalCustomerId, name=$name, email=$email, timezone=$timezone, paymentProviderId=$paymentProviderId, paymentProvider=$paymentProvider, createdAt=$createdAt, shippingAddress=$shippingAddress, billingAddress=$billingAddress, balance=$balance, currency=$currency, taxId=$taxId, autoCollection=$autoCollection, exemptFromAutomatedTax=$exemptFromAutomatedTax, emailDelivery=$emailDelivery, additionalEmails=$additionalEmails, portalUrl=$portalUrl, accountingSyncConfiguration=$accountingSyncConfiguration, reportingConfiguration=$reportingConfiguration, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -551,6 +562,7 @@ private constructor(
         private var currency: JsonField<String> = JsonMissing.of()
         private var taxId: JsonField<TaxId> = JsonMissing.of()
         private var autoCollection: JsonField<Boolean> = JsonMissing.of()
+        private var exemptFromAutomatedTax: JsonField<Boolean> = JsonMissing.of()
         private var emailDelivery: JsonField<Boolean> = JsonMissing.of()
         private var additionalEmails: JsonField<List<String>> = JsonMissing.of()
         private var portalUrl: JsonField<String> = JsonMissing.of()
@@ -576,6 +588,7 @@ private constructor(
             this.currency = customer.currency
             this.taxId = customer.taxId
             this.autoCollection = customer.autoCollection
+            this.exemptFromAutomatedTax = customer.exemptFromAutomatedTax
             this.emailDelivery = customer.emailDelivery
             this.additionalEmails = customer.additionalEmails
             this.portalUrl = customer.portalUrl
@@ -959,6 +972,15 @@ private constructor(
             this.autoCollection = autoCollection
         }
 
+        fun exemptFromAutomatedTax(exemptFromAutomatedTax: Boolean) =
+            exemptFromAutomatedTax(JsonField.of(exemptFromAutomatedTax))
+
+        @JsonProperty("exempt_from_automated_tax")
+        @ExcludeMissing
+        fun exemptFromAutomatedTax(exemptFromAutomatedTax: JsonField<Boolean>) = apply {
+            this.exemptFromAutomatedTax = exemptFromAutomatedTax
+        }
+
         fun emailDelivery(emailDelivery: Boolean) = emailDelivery(JsonField.of(emailDelivery))
 
         @JsonProperty("email_delivery")
@@ -1032,6 +1054,7 @@ private constructor(
                 currency,
                 taxId,
                 autoCollection,
+                exemptFromAutomatedTax,
                 emailDelivery,
                 additionalEmails.map { it.toUnmodifiable() },
                 portalUrl,
