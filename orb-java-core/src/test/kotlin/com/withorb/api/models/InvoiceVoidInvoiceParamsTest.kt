@@ -6,16 +6,16 @@ import com.withorb.api.models.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class InvoiceVoidParamsTest {
+class InvoiceVoidInvoiceParamsTest {
 
     @Test
-    fun createInvoiceVoidParams() {
-        InvoiceVoidParams.builder().invoiceId("invoice_id").build()
+    fun createInvoiceVoidInvoiceParams() {
+        InvoiceVoidInvoiceParams.builder().invoiceId("invoice_id").build()
     }
 
     @Test
     fun getPathParam() {
-        val params = InvoiceVoidParams.builder().invoiceId("invoice_id").build()
+        val params = InvoiceVoidInvoiceParams.builder().invoiceId("invoice_id").build()
         assertThat(params).isNotNull
         // path param "invoiceId"
         assertThat(params.getPathParam(0)).isEqualTo("invoice_id")
