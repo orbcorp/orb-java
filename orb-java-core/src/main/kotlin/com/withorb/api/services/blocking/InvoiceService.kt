@@ -15,7 +15,7 @@ import com.withorb.api.models.InvoiceListPage
 import com.withorb.api.models.InvoiceListParams
 import com.withorb.api.models.InvoiceMarkPaidParams
 import com.withorb.api.models.InvoiceUpdateParams
-import com.withorb.api.models.InvoiceVoidParams
+import com.withorb.api.models.InvoiceVoidInvoiceParams
 
 interface InvoiceService {
 
@@ -110,8 +110,8 @@ interface InvoiceService {
      * balance, that amount will be added back to the customer balance upon voiding.
      */
     @JvmOverloads
-    fun void(
-        params: InvoiceVoidParams,
+    fun voidInvoice(
+        params: InvoiceVoidInvoiceParams,
         requestOptions: RequestOptions = RequestOptions.none()
     ): Invoice
 }
