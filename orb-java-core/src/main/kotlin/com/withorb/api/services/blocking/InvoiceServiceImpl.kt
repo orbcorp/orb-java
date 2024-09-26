@@ -18,7 +18,7 @@ import com.withorb.api.models.InvoiceListPage
 import com.withorb.api.models.InvoiceListParams
 import com.withorb.api.models.InvoiceMarkPaidParams
 import com.withorb.api.models.InvoiceUpdateParams
-import com.withorb.api.models.InvoiceVoidParams
+import com.withorb.api.models.InvoiceVoidInvoiceParams
 import com.withorb.api.services.errorHandler
 import com.withorb.api.services.json
 import com.withorb.api.services.jsonHandler
@@ -101,6 +101,10 @@ constructor(
      * caller retrieve the next page of results if they exist.
      *
      * By default, this only returns invoices that are `issued`, `paid`, or `synced`.
+     *
+     * When fetching any `draft` invoices, this returns the last-computed invoice values for each
+     * draft invoice, which may not always be up-to-date since Orb regularly refreshes invoices
+     * asynchronously.
      */
     override fun list(params: InvoiceListParams, requestOptions: RequestOptions): InvoiceListPage {
         val request =
@@ -245,7 +249,7 @@ constructor(
         }
     }
 
-    private val voidHandler: Handler<Invoice> =
+    private val voidInvoiceHandler: Handler<Invoice> =
         jsonHandler<Invoice>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
     /**
@@ -256,7 +260,10 @@ constructor(
      * customer balance operation will be reverted. For example, if the invoice used $10 of customer
      * balance, that amount will be added back to the customer balance upon voiding.
      */
-    override fun void(params: InvoiceVoidParams, requestOptions: RequestOptions): Invoice {
+    override fun voidInvoice(
+        params: InvoiceVoidInvoiceParams,
+        requestOptions: RequestOptions
+    ): Invoice {
         val request =
             HttpRequest.builder()
                 .method(HttpMethod.POST)
@@ -269,7 +276,7 @@ constructor(
                 .build()
         return clientOptions.httpClient.execute(request, requestOptions).let { response ->
             response
-                .use { voidHandler.handle(it) }
+                .use { voidInvoiceHandler.handle(it) }
                 .apply {
                     if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
                         validate()

@@ -1,5 +1,35 @@
 # Changelog
 
+## 0.1.0-alpha.7 (2024-09-26)
+
+Full Changelog: [v0.1.0-alpha.6...v0.1.0-alpha.7](https://github.com/orbcorp/orb-java/compare/v0.1.0-alpha.6...v0.1.0-alpha.7)
+
+### Features
+
+* **api:** OpenAPI spec update via Stainless API ([#59](https://github.com/orbcorp/orb-java/issues/59)) ([8e8574c](https://github.com/orbcorp/orb-java/commit/8e8574cb159e45ab036088048a1362a6a8c32cc2))
+* **api:** OpenAPI spec update via Stainless API ([#61](https://github.com/orbcorp/orb-java/issues/61)) ([b48f9fe](https://github.com/orbcorp/orb-java/commit/b48f9fe87aae83b2bb028a4c8216a66f26af8801))
+* **api:** OpenAPI spec update via Stainless API ([#63](https://github.com/orbcorp/orb-java/issues/63)) ([fd13223](https://github.com/orbcorp/orb-java/commit/fd13223cd190ecee0312f5d64d74522db567d864))
+* **api:** OpenAPI spec update via Stainless API ([#67](https://github.com/orbcorp/orb-java/issues/67)) ([afffd96](https://github.com/orbcorp/orb-java/commit/afffd968e135d74d899c0377b0f6e5bf1787ae33))
+* **api:** OpenAPI spec update via Stainless API ([#68](https://github.com/orbcorp/orb-java/issues/68)) ([bd66065](https://github.com/orbcorp/orb-java/commit/bd6606510bf4dad9be78d019b9130542d0a9a532))
+* **api:** OpenAPI spec update via Stainless API ([#70](https://github.com/orbcorp/orb-java/issues/70)) ([8ab0aab](https://github.com/orbcorp/orb-java/commit/8ab0aab0ebea8a4d147a9c93b0e30917192743a6))
+* **api:** OpenAPI spec update via Stainless API ([#76](https://github.com/orbcorp/orb-java/issues/76)) ([5013205](https://github.com/orbcorp/orb-java/commit/50132057be8af15e443e6c6ee6a3828d24b888c0))
+* **client:** added structured fields to errors ([#65](https://github.com/orbcorp/orb-java/issues/65)) ([e6226f9](https://github.com/orbcorp/orb-java/commit/e6226f9a57e42c1786353757aca5b32744a24ffb))
+
+
+### Chores
+
+* **api:** rename `void` to `void_invoice` in Java SDK ([#72](https://github.com/orbcorp/orb-java/issues/72)) ([61d300a](https://github.com/orbcorp/orb-java/commit/61d300a474bca6fc47658bb3daa9dc7f1de44a16))
+* **docs:** internal update ([#74](https://github.com/orbcorp/orb-java/issues/74)) ([577588d](https://github.com/orbcorp/orb-java/commit/577588daa262f51547de5eb6785226fdca41be2b))
+* **docs:** internal update ([#75](https://github.com/orbcorp/orb-java/issues/75)) ([6905912](https://github.com/orbcorp/orb-java/commit/69059129d10672b1806b2288e044ff986c53d0c8))
+* **internal:** codegen related update ([#71](https://github.com/orbcorp/orb-java/issues/71)) ([99ddc03](https://github.com/orbcorp/orb-java/commit/99ddc031f02c7fe5648bfad4b6de0481864707cc))
+* **internal:** codegen related update ([#73](https://github.com/orbcorp/orb-java/issues/73)) ([5021325](https://github.com/orbcorp/orb-java/commit/50213258784197ba307bfe34f7c82a8ee821439a))
+* **internal:** fix lint warning for isPresent ([#66](https://github.com/orbcorp/orb-java/issues/66)) ([ff81eb6](https://github.com/orbcorp/orb-java/commit/ff81eb6ab227a308b45b0fa961ce3a8759826fdf))
+
+
+### Documentation
+
+* adjust additional properties example ([#64](https://github.com/orbcorp/orb-java/issues/64)) ([f200314](https://github.com/orbcorp/orb-java/commit/f20031470e553f4e414375e536e1366c2316dfb2))
+
 ## 0.1.0-alpha.6 (2024-09-06)
 
 Full Changelog: [v0.1.0-alpha.5...v0.1.0-alpha.6](https://github.com/orbcorp/orb-java/compare/v0.1.0-alpha.5...v0.1.0-alpha.6)

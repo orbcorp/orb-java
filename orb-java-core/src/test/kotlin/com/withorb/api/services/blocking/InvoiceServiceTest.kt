@@ -48,9 +48,9 @@ class InvoiceServiceTest {
                     .customerId("4khy3nwzktxv7")
                     .discount(
                         Discount.ofPercentageDiscount(
-                            Discount.PercentageDiscount.builder()
+                            PercentageDiscount.builder()
                                 .appliesToPriceIds(listOf("string"))
-                                .discountType(Discount.PercentageDiscount.DiscountType.PERCENTAGE)
+                                .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
                                 .percentageDiscount(1.0)
                                 .reason("reason")
                                 .build()
@@ -164,7 +164,7 @@ class InvoiceServiceTest {
     }
 
     @Test
-    fun callVoid() {
+    fun callVoidInvoice() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
@@ -172,7 +172,9 @@ class InvoiceServiceTest {
                 .build()
         val invoiceService = client.invoices()
         val invoice =
-            invoiceService.void(InvoiceVoidParams.builder().invoiceId("invoice_id").build())
+            invoiceService.voidInvoice(
+                InvoiceVoidInvoiceParams.builder().invoiceId("invoice_id").build()
+            )
         println(invoice)
         invoice.validate()
     }

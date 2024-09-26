@@ -9,7 +9,7 @@ import com.withorb.api.models.*
 import java.util.Objects
 import java.util.Optional
 
-class InvoiceVoidParams
+class InvoiceVoidInvoiceParams
 constructor(
     private val invoiceId: String,
     private val additionalQueryParams: Map<String, List<String>>,
@@ -46,7 +46,7 @@ constructor(
             return true
         }
 
-        return other is InvoiceVoidParams &&
+        return other is InvoiceVoidInvoiceParams &&
             this.invoiceId == other.invoiceId &&
             this.additionalQueryParams == other.additionalQueryParams &&
             this.additionalHeaders == other.additionalHeaders &&
@@ -63,7 +63,7 @@ constructor(
     }
 
     override fun toString() =
-        "InvoiceVoidParams{invoiceId=$invoiceId, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+        "InvoiceVoidInvoiceParams{invoiceId=$invoiceId, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -81,11 +81,11 @@ constructor(
         private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(invoiceVoidParams: InvoiceVoidParams) = apply {
-            this.invoiceId = invoiceVoidParams.invoiceId
-            additionalQueryParams(invoiceVoidParams.additionalQueryParams)
-            additionalHeaders(invoiceVoidParams.additionalHeaders)
-            additionalBodyProperties(invoiceVoidParams.additionalBodyProperties)
+        internal fun from(invoiceVoidInvoiceParams: InvoiceVoidInvoiceParams) = apply {
+            this.invoiceId = invoiceVoidInvoiceParams.invoiceId
+            additionalQueryParams(invoiceVoidInvoiceParams.additionalQueryParams)
+            additionalHeaders(invoiceVoidInvoiceParams.additionalHeaders)
+            additionalBodyProperties(invoiceVoidInvoiceParams.additionalBodyProperties)
         }
 
         fun invoiceId(invoiceId: String) = apply { this.invoiceId = invoiceId }
@@ -144,8 +144,8 @@ constructor(
                 this.additionalBodyProperties.putAll(additionalBodyProperties)
             }
 
-        fun build(): InvoiceVoidParams =
-            InvoiceVoidParams(
+        fun build(): InvoiceVoidInvoiceParams =
+            InvoiceVoidInvoiceParams(
                 checkNotNull(invoiceId) { "`invoiceId` is required but was not set" },
                 additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
                 additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
