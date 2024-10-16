@@ -73,8 +73,6 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         @JsonProperty("discount") fun discount(): Discount? = discount
 
         /** This string can be used to redeem this coupon for a given subscription. */
@@ -97,36 +95,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is CouponCreateBody &&
-                this.discount == other.discount &&
-                this.redemptionCode == other.redemptionCode &&
-                this.durationInMonths == other.durationInMonths &&
-                this.maxRedemptions == other.maxRedemptions &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        discount,
-                        redemptionCode,
-                        durationInMonths,
-                        maxRedemptions,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "CouponCreateBody{discount=$discount, redemptionCode=$redemptionCode, durationInMonths=$durationInMonths, maxRedemptions=$maxRedemptions, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -200,6 +168,26 @@ constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is CouponCreateBody && this.discount == other.discount && this.redemptionCode == other.redemptionCode && this.durationInMonths == other.durationInMonths && this.maxRedemptions == other.maxRedemptions && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(discount, redemptionCode, durationInMonths, maxRedemptions, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "CouponCreateBody{discount=$discount, redemptionCode=$redemptionCode, durationInMonths=$durationInMonths, maxRedemptions=$maxRedemptions, additionalProperties=$additionalProperties}"
     }
 
     fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -213,26 +201,11 @@ constructor(
             return true
         }
 
-        return other is CouponCreateParams &&
-            this.discount == other.discount &&
-            this.redemptionCode == other.redemptionCode &&
-            this.durationInMonths == other.durationInMonths &&
-            this.maxRedemptions == other.maxRedemptions &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+        return /* spotless:off */ other is CouponCreateParams && this.discount == other.discount && this.redemptionCode == other.redemptionCode && this.durationInMonths == other.durationInMonths && this.maxRedemptions == other.maxRedemptions && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            discount,
-            redemptionCode,
-            durationInMonths,
-            maxRedemptions,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+        return /* spotless:off */ Objects.hash(discount, redemptionCode, durationInMonths, maxRedemptions, additionalQueryParams, additionalHeaders, additionalBodyProperties) /* spotless:on */
     }
 
     override fun toString() =
@@ -415,13 +388,11 @@ constructor(
                 return true
             }
 
-            return other is Discount &&
-                this.newCouponPercentageDiscount == other.newCouponPercentageDiscount &&
-                this.newCouponAmountDiscount == other.newCouponAmountDiscount
+            return /* spotless:off */ other is Discount && this.newCouponPercentageDiscount == other.newCouponPercentageDiscount && this.newCouponAmountDiscount == other.newCouponAmountDiscount /* spotless:on */
         }
 
         override fun hashCode(): Int {
-            return Objects.hash(newCouponPercentageDiscount, newCouponAmountDiscount)
+            return /* spotless:off */ Objects.hash(newCouponPercentageDiscount, newCouponAmountDiscount) /* spotless:on */
         }
 
         override fun toString(): String {
@@ -508,8 +479,6 @@ constructor(
 
             private var validated: Boolean = false
 
-            private var hashCode: Int = 0
-
             fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
             fun percentageDiscount(): Double = percentageDiscount.getRequired("percentage_discount")
@@ -533,32 +502,6 @@ constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is NewCouponPercentageDiscount &&
-                    this.discountType == other.discountType &&
-                    this.percentageDiscount == other.percentageDiscount &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            discountType,
-                            percentageDiscount,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "NewCouponPercentageDiscount{discountType=$discountType, percentageDiscount=$percentageDiscount, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -633,7 +576,7 @@ constructor(
                         return true
                     }
 
-                    return other is DiscountType && this.value == other.value
+                    return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -670,6 +613,26 @@ constructor(
 
                 fun asString(): String = _value().asStringOrThrow()
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is NewCouponPercentageDiscount && this.discountType == other.discountType && this.percentageDiscount == other.percentageDiscount && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(discountType, percentageDiscount, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "NewCouponPercentageDiscount{discountType=$discountType, percentageDiscount=$percentageDiscount, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = NewCouponAmountDiscount.Builder::class)
@@ -682,8 +645,6 @@ constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
@@ -706,32 +667,6 @@ constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is NewCouponAmountDiscount &&
-                    this.discountType == other.discountType &&
-                    this.amountDiscount == other.amountDiscount &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            discountType,
-                            amountDiscount,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "NewCouponAmountDiscount{discountType=$discountType, amountDiscount=$amountDiscount, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -805,7 +740,7 @@ constructor(
                         return true
                     }
 
-                    return other is DiscountType && this.value == other.value
+                    return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -842,6 +777,26 @@ constructor(
 
                 fun asString(): String = _value().asStringOrThrow()
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is NewCouponAmountDiscount && this.discountType == other.discountType && this.amountDiscount == other.amountDiscount && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(discountType, amountDiscount, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "NewCouponAmountDiscount{discountType=$discountType, amountDiscount=$amountDiscount, additionalProperties=$additionalProperties}"
         }
     }
 }

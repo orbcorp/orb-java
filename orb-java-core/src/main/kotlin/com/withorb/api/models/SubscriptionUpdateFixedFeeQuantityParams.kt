@@ -74,8 +74,6 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         /** Price for which the quantity should be updated. Must be a fixed fee. */
         @JsonProperty("price_id") fun priceId(): String? = priceId
 
@@ -100,36 +98,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is SubscriptionUpdateFixedFeeQuantityBody &&
-                this.priceId == other.priceId &&
-                this.quantity == other.quantity &&
-                this.changeOption == other.changeOption &&
-                this.effectiveDate == other.effectiveDate &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        priceId,
-                        quantity,
-                        changeOption,
-                        effectiveDate,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "SubscriptionUpdateFixedFeeQuantityBody{priceId=$priceId, quantity=$quantity, changeOption=$changeOption, effectiveDate=$effectiveDate, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -205,6 +173,26 @@ constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is SubscriptionUpdateFixedFeeQuantityBody && this.priceId == other.priceId && this.quantity == other.quantity && this.changeOption == other.changeOption && this.effectiveDate == other.effectiveDate && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(priceId, quantity, changeOption, effectiveDate, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "SubscriptionUpdateFixedFeeQuantityBody{priceId=$priceId, quantity=$quantity, changeOption=$changeOption, effectiveDate=$effectiveDate, additionalProperties=$additionalProperties}"
     }
 
     fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -218,28 +206,11 @@ constructor(
             return true
         }
 
-        return other is SubscriptionUpdateFixedFeeQuantityParams &&
-            this.subscriptionId == other.subscriptionId &&
-            this.priceId == other.priceId &&
-            this.quantity == other.quantity &&
-            this.changeOption == other.changeOption &&
-            this.effectiveDate == other.effectiveDate &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+        return /* spotless:off */ other is SubscriptionUpdateFixedFeeQuantityParams && this.subscriptionId == other.subscriptionId && this.priceId == other.priceId && this.quantity == other.quantity && this.changeOption == other.changeOption && this.effectiveDate == other.effectiveDate && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            subscriptionId,
-            priceId,
-            quantity,
-            changeOption,
-            effectiveDate,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+        return /* spotless:off */ Objects.hash(subscriptionId, priceId, quantity, changeOption, effectiveDate, additionalQueryParams, additionalHeaders, additionalBodyProperties) /* spotless:on */
     }
 
     override fun toString() =
@@ -381,7 +352,7 @@ constructor(
                 return true
             }
 
-            return other is ChangeOption && this.value == other.value
+            return /* spotless:off */ other is ChangeOption && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
