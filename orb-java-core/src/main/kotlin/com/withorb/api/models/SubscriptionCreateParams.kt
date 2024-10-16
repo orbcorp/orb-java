@@ -163,8 +163,6 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         @JsonProperty("align_billing_with_subscription_start_date")
         fun alignBillingWithSubscriptionStartDate(): Boolean? =
             alignBillingWithSubscriptionStartDate
@@ -259,71 +257,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is SubscriptionCreateBody &&
-                this.alignBillingWithSubscriptionStartDate ==
-                    other.alignBillingWithSubscriptionStartDate &&
-                this.autoCollection == other.autoCollection &&
-                this.awsRegion == other.awsRegion &&
-                this.billingCycleAnchorConfiguration == other.billingCycleAnchorConfiguration &&
-                this.couponRedemptionCode == other.couponRedemptionCode &&
-                this.creditsOverageRate == other.creditsOverageRate &&
-                this.customerId == other.customerId &&
-                this.defaultInvoiceMemo == other.defaultInvoiceMemo &&
-                this.endDate == other.endDate &&
-                this.externalCustomerId == other.externalCustomerId &&
-                this.externalMarketplace == other.externalMarketplace &&
-                this.externalMarketplaceReportingId == other.externalMarketplaceReportingId &&
-                this.externalPlanId == other.externalPlanId &&
-                this.initialPhaseOrder == other.initialPhaseOrder &&
-                this.invoicingThreshold == other.invoicingThreshold &&
-                this.metadata == other.metadata &&
-                this.netTerms == other.netTerms &&
-                this.perCreditOverageAmount == other.perCreditOverageAmount &&
-                this.planId == other.planId &&
-                this.priceOverrides == other.priceOverrides &&
-                this.startDate == other.startDate &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        alignBillingWithSubscriptionStartDate,
-                        autoCollection,
-                        awsRegion,
-                        billingCycleAnchorConfiguration,
-                        couponRedemptionCode,
-                        creditsOverageRate,
-                        customerId,
-                        defaultInvoiceMemo,
-                        endDate,
-                        externalCustomerId,
-                        externalMarketplace,
-                        externalMarketplaceReportingId,
-                        externalPlanId,
-                        initialPhaseOrder,
-                        invoicingThreshold,
-                        metadata,
-                        netTerms,
-                        perCreditOverageAmount,
-                        planId,
-                        priceOverrides,
-                        startDate,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "SubscriptionCreateBody{alignBillingWithSubscriptionStartDate=$alignBillingWithSubscriptionStartDate, autoCollection=$autoCollection, awsRegion=$awsRegion, billingCycleAnchorConfiguration=$billingCycleAnchorConfiguration, couponRedemptionCode=$couponRedemptionCode, creditsOverageRate=$creditsOverageRate, customerId=$customerId, defaultInvoiceMemo=$defaultInvoiceMemo, endDate=$endDate, externalCustomerId=$externalCustomerId, externalMarketplace=$externalMarketplace, externalMarketplaceReportingId=$externalMarketplaceReportingId, externalPlanId=$externalPlanId, initialPhaseOrder=$initialPhaseOrder, invoicingThreshold=$invoicingThreshold, metadata=$metadata, netTerms=$netTerms, perCreditOverageAmount=$perCreditOverageAmount, planId=$planId, priceOverrides=$priceOverrides, startDate=$startDate, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -555,6 +488,26 @@ constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is SubscriptionCreateBody && this.alignBillingWithSubscriptionStartDate == other.alignBillingWithSubscriptionStartDate && this.autoCollection == other.autoCollection && this.awsRegion == other.awsRegion && this.billingCycleAnchorConfiguration == other.billingCycleAnchorConfiguration && this.couponRedemptionCode == other.couponRedemptionCode && this.creditsOverageRate == other.creditsOverageRate && this.customerId == other.customerId && this.defaultInvoiceMemo == other.defaultInvoiceMemo && this.endDate == other.endDate && this.externalCustomerId == other.externalCustomerId && this.externalMarketplace == other.externalMarketplace && this.externalMarketplaceReportingId == other.externalMarketplaceReportingId && this.externalPlanId == other.externalPlanId && this.initialPhaseOrder == other.initialPhaseOrder && this.invoicingThreshold == other.invoicingThreshold && this.metadata == other.metadata && this.netTerms == other.netTerms && this.perCreditOverageAmount == other.perCreditOverageAmount && this.planId == other.planId && this.priceOverrides == other.priceOverrides && this.startDate == other.startDate && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(alignBillingWithSubscriptionStartDate, autoCollection, awsRegion, billingCycleAnchorConfiguration, couponRedemptionCode, creditsOverageRate, customerId, defaultInvoiceMemo, endDate, externalCustomerId, externalMarketplace, externalMarketplaceReportingId, externalPlanId, initialPhaseOrder, invoicingThreshold, metadata, netTerms, perCreditOverageAmount, planId, priceOverrides, startDate, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "SubscriptionCreateBody{alignBillingWithSubscriptionStartDate=$alignBillingWithSubscriptionStartDate, autoCollection=$autoCollection, awsRegion=$awsRegion, billingCycleAnchorConfiguration=$billingCycleAnchorConfiguration, couponRedemptionCode=$couponRedemptionCode, creditsOverageRate=$creditsOverageRate, customerId=$customerId, defaultInvoiceMemo=$defaultInvoiceMemo, endDate=$endDate, externalCustomerId=$externalCustomerId, externalMarketplace=$externalMarketplace, externalMarketplaceReportingId=$externalMarketplaceReportingId, externalPlanId=$externalPlanId, initialPhaseOrder=$initialPhaseOrder, invoicingThreshold=$invoicingThreshold, metadata=$metadata, netTerms=$netTerms, perCreditOverageAmount=$perCreditOverageAmount, planId=$planId, priceOverrides=$priceOverrides, startDate=$startDate, additionalProperties=$additionalProperties}"
     }
 
     fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -568,61 +521,11 @@ constructor(
             return true
         }
 
-        return other is SubscriptionCreateParams &&
-            this.alignBillingWithSubscriptionStartDate ==
-                other.alignBillingWithSubscriptionStartDate &&
-            this.autoCollection == other.autoCollection &&
-            this.awsRegion == other.awsRegion &&
-            this.billingCycleAnchorConfiguration == other.billingCycleAnchorConfiguration &&
-            this.couponRedemptionCode == other.couponRedemptionCode &&
-            this.creditsOverageRate == other.creditsOverageRate &&
-            this.customerId == other.customerId &&
-            this.defaultInvoiceMemo == other.defaultInvoiceMemo &&
-            this.endDate == other.endDate &&
-            this.externalCustomerId == other.externalCustomerId &&
-            this.externalMarketplace == other.externalMarketplace &&
-            this.externalMarketplaceReportingId == other.externalMarketplaceReportingId &&
-            this.externalPlanId == other.externalPlanId &&
-            this.initialPhaseOrder == other.initialPhaseOrder &&
-            this.invoicingThreshold == other.invoicingThreshold &&
-            this.metadata == other.metadata &&
-            this.netTerms == other.netTerms &&
-            this.perCreditOverageAmount == other.perCreditOverageAmount &&
-            this.planId == other.planId &&
-            this.priceOverrides == other.priceOverrides &&
-            this.startDate == other.startDate &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+        return /* spotless:off */ other is SubscriptionCreateParams && this.alignBillingWithSubscriptionStartDate == other.alignBillingWithSubscriptionStartDate && this.autoCollection == other.autoCollection && this.awsRegion == other.awsRegion && this.billingCycleAnchorConfiguration == other.billingCycleAnchorConfiguration && this.couponRedemptionCode == other.couponRedemptionCode && this.creditsOverageRate == other.creditsOverageRate && this.customerId == other.customerId && this.defaultInvoiceMemo == other.defaultInvoiceMemo && this.endDate == other.endDate && this.externalCustomerId == other.externalCustomerId && this.externalMarketplace == other.externalMarketplace && this.externalMarketplaceReportingId == other.externalMarketplaceReportingId && this.externalPlanId == other.externalPlanId && this.initialPhaseOrder == other.initialPhaseOrder && this.invoicingThreshold == other.invoicingThreshold && this.metadata == other.metadata && this.netTerms == other.netTerms && this.perCreditOverageAmount == other.perCreditOverageAmount && this.planId == other.planId && this.priceOverrides == other.priceOverrides && this.startDate == other.startDate && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            alignBillingWithSubscriptionStartDate,
-            autoCollection,
-            awsRegion,
-            billingCycleAnchorConfiguration,
-            couponRedemptionCode,
-            creditsOverageRate,
-            customerId,
-            defaultInvoiceMemo,
-            endDate,
-            externalCustomerId,
-            externalMarketplace,
-            externalMarketplaceReportingId,
-            externalPlanId,
-            initialPhaseOrder,
-            invoicingThreshold,
-            metadata,
-            netTerms,
-            perCreditOverageAmount,
-            planId,
-            priceOverrides,
-            startDate,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+        return /* spotless:off */ Objects.hash(alignBillingWithSubscriptionStartDate, autoCollection, awsRegion, billingCycleAnchorConfiguration, couponRedemptionCode, creditsOverageRate, customerId, defaultInvoiceMemo, endDate, externalCustomerId, externalMarketplace, externalMarketplaceReportingId, externalPlanId, initialPhaseOrder, invoicingThreshold, metadata, netTerms, perCreditOverageAmount, planId, priceOverrides, startDate, additionalQueryParams, additionalHeaders, additionalBodyProperties) /* spotless:on */
     }
 
     override fun toString() =
@@ -899,8 +802,6 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         /**
          * The day of the month on which the billing cycle is anchored. If the maximum number of
          * days in a month is greater than this value, the last day of the month is the billing
@@ -926,34 +827,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is BillingCycleAnchorConfiguration &&
-                this.day == other.day &&
-                this.month == other.month &&
-                this.year == other.year &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        day,
-                        month,
-                        year,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "BillingCycleAnchorConfiguration{day=$day, month=$month, year=$year, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -1018,6 +891,26 @@ constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is BillingCycleAnchorConfiguration && this.day == other.day && this.month == other.month && this.year == other.year && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(day, month, year, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "BillingCycleAnchorConfiguration{day=$day, month=$month, year=$year, additionalProperties=$additionalProperties}"
     }
 
     class ExternalMarketplace
@@ -1033,7 +926,7 @@ constructor(
                 return true
             }
 
-            return other is ExternalMarketplace && this.value == other.value
+            return /* spotless:off */ other is ExternalMarketplace && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -1095,30 +988,11 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Metadata && this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(additionalProperties)
-            }
-            return hashCode
-        }
-
-        override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -1150,6 +1024,25 @@ constructor(
 
             fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Metadata && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
     }
 
     @JsonDeserialize(using = PriceOverride.Deserializer::class)
@@ -1446,53 +1339,11 @@ constructor(
                 return true
             }
 
-            return other is PriceOverride &&
-                this.overrideUnitPrice == other.overrideUnitPrice &&
-                this.overridePackagePrice == other.overridePackagePrice &&
-                this.overrideMatrixPrice == other.overrideMatrixPrice &&
-                this.overrideTieredPrice == other.overrideTieredPrice &&
-                this.overrideTieredBpsPrice == other.overrideTieredBpsPrice &&
-                this.overrideBpsPrice == other.overrideBpsPrice &&
-                this.overrideBulkBpsPrice == other.overrideBulkBpsPrice &&
-                this.overrideBulkPrice == other.overrideBulkPrice &&
-                this.overrideThresholdTotalAmountPrice == other.overrideThresholdTotalAmountPrice &&
-                this.overrideTieredPackagePrice == other.overrideTieredPackagePrice &&
-                this.overrideTieredWithMinimumPrice == other.overrideTieredWithMinimumPrice &&
-                this.overridePackageWithAllocationPrice ==
-                    other.overridePackageWithAllocationPrice &&
-                this.overrideUnitWithPercentPrice == other.overrideUnitWithPercentPrice &&
-                this.overrideGroupedAllocationPrice == other.overrideGroupedAllocationPrice &&
-                this.overrideGroupedWithProratedMinimumPrice ==
-                    other.overrideGroupedWithProratedMinimumPrice &&
-                this.overrideGroupedWithMeteredMinimumPrice ==
-                    other.overrideGroupedWithMeteredMinimumPrice &&
-                this.overrideBulkWithProrationPrice == other.overrideBulkWithProrationPrice &&
-                this.overrideUnitWithProrationPrice == other.overrideUnitWithProrationPrice &&
-                this.overrideTieredWithProrationPrice == other.overrideTieredWithProrationPrice
+            return /* spotless:off */ other is PriceOverride && this.overrideUnitPrice == other.overrideUnitPrice && this.overridePackagePrice == other.overridePackagePrice && this.overrideMatrixPrice == other.overrideMatrixPrice && this.overrideTieredPrice == other.overrideTieredPrice && this.overrideTieredBpsPrice == other.overrideTieredBpsPrice && this.overrideBpsPrice == other.overrideBpsPrice && this.overrideBulkBpsPrice == other.overrideBulkBpsPrice && this.overrideBulkPrice == other.overrideBulkPrice && this.overrideThresholdTotalAmountPrice == other.overrideThresholdTotalAmountPrice && this.overrideTieredPackagePrice == other.overrideTieredPackagePrice && this.overrideTieredWithMinimumPrice == other.overrideTieredWithMinimumPrice && this.overridePackageWithAllocationPrice == other.overridePackageWithAllocationPrice && this.overrideUnitWithPercentPrice == other.overrideUnitWithPercentPrice && this.overrideGroupedAllocationPrice == other.overrideGroupedAllocationPrice && this.overrideGroupedWithProratedMinimumPrice == other.overrideGroupedWithProratedMinimumPrice && this.overrideGroupedWithMeteredMinimumPrice == other.overrideGroupedWithMeteredMinimumPrice && this.overrideBulkWithProrationPrice == other.overrideBulkWithProrationPrice && this.overrideUnitWithProrationPrice == other.overrideUnitWithProrationPrice && this.overrideTieredWithProrationPrice == other.overrideTieredWithProrationPrice /* spotless:on */
         }
 
         override fun hashCode(): Int {
-            return Objects.hash(
-                overrideUnitPrice,
-                overridePackagePrice,
-                overrideMatrixPrice,
-                overrideTieredPrice,
-                overrideTieredBpsPrice,
-                overrideBpsPrice,
-                overrideBulkBpsPrice,
-                overrideBulkPrice,
-                overrideThresholdTotalAmountPrice,
-                overrideTieredPackagePrice,
-                overrideTieredWithMinimumPrice,
-                overridePackageWithAllocationPrice,
-                overrideUnitWithPercentPrice,
-                overrideGroupedAllocationPrice,
-                overrideGroupedWithProratedMinimumPrice,
-                overrideGroupedWithMeteredMinimumPrice,
-                overrideBulkWithProrationPrice,
-                overrideUnitWithProrationPrice,
-                overrideTieredWithProrationPrice,
-            )
+            return /* spotless:off */ Objects.hash(overrideUnitPrice, overridePackagePrice, overrideMatrixPrice, overrideTieredPrice, overrideTieredBpsPrice, overrideBpsPrice, overrideBulkBpsPrice, overrideBulkPrice, overrideThresholdTotalAmountPrice, overrideTieredPackagePrice, overrideTieredWithMinimumPrice, overridePackageWithAllocationPrice, overrideUnitWithPercentPrice, overrideGroupedAllocationPrice, overrideGroupedWithProratedMinimumPrice, overrideGroupedWithMeteredMinimumPrice, overrideBulkWithProrationPrice, overrideUnitWithProrationPrice, overrideTieredWithProrationPrice) /* spotless:on */
         }
 
         override fun toString(): String {
@@ -1884,8 +1735,6 @@ constructor(
 
             private var validated: Boolean = false
 
-            private var hashCode: Int = 0
-
             fun id(): String = id.getRequired("id")
 
             fun modelType(): ModelType = modelType.getRequired("model_type")
@@ -1965,46 +1814,6 @@ constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is OverrideUnitPrice &&
-                    this.id == other.id &&
-                    this.modelType == other.modelType &&
-                    this.minimumAmount == other.minimumAmount &&
-                    this.maximumAmount == other.maximumAmount &&
-                    this.currency == other.currency &&
-                    this.conversionRate == other.conversionRate &&
-                    this.discount == other.discount &&
-                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                    this.unitConfig == other.unitConfig &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            id,
-                            modelType,
-                            minimumAmount,
-                            maximumAmount,
-                            currency,
-                            conversionRate,
-                            discount,
-                            fixedPriceQuantity,
-                            unitConfig,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "OverrideUnitPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, unitConfig=$unitConfig, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -2169,7 +1978,7 @@ constructor(
                         return true
                     }
 
-                    return other is ModelType && this.value == other.value
+                    return /* spotless:off */ other is ModelType && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -2217,8 +2026,6 @@ constructor(
 
                 private var validated: Boolean = false
 
-                private var hashCode: Int = 0
-
                 /** Rate per unit of usage */
                 fun unitAmount(): String = unitAmount.getRequired("unit_amount")
 
@@ -2237,26 +2044,6 @@ constructor(
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is UnitConfig &&
-                        this.unitAmount == other.unitAmount &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode = Objects.hash(unitAmount, additionalProperties)
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "UnitConfig{unitAmount=$unitAmount, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -2302,6 +2089,26 @@ constructor(
                     fun build(): UnitConfig =
                         UnitConfig(unitAmount, additionalProperties.toUnmodifiable())
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is UnitConfig && this.unitAmount == other.unitAmount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(unitAmount, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "UnitConfig{unitAmount=$unitAmount, additionalProperties=$additionalProperties}"
             }
 
             /** The subscription's override discount for the plan. */
@@ -2311,16 +2118,12 @@ constructor(
             private constructor(
                 private val discountType: JsonField<DiscountType>,
                 private val percentageDiscount: JsonField<Double>,
-                private val trialAmountDiscount: JsonField<String>,
                 private val usageDiscount: JsonField<Double>,
                 private val amountDiscount: JsonField<String>,
-                private val appliesToPriceIds: JsonField<List<String>>,
                 private val additionalProperties: Map<String, JsonValue>,
             ) {
 
                 private var validated: Boolean = false
-
-                private var hashCode: Int = 0
 
                 fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
@@ -2330,10 +2133,6 @@ constructor(
                  */
                 fun percentageDiscount(): Optional<Double> =
                     Optional.ofNullable(percentageDiscount.getNullable("percentage_discount"))
-
-                /** Only available if discount_type is `trial` */
-                fun trialAmountDiscount(): Optional<String> =
-                    Optional.ofNullable(trialAmountDiscount.getNullable("trial_amount_discount"))
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -2346,13 +2145,6 @@ constructor(
                 fun amountDiscount(): Optional<String> =
                     Optional.ofNullable(amountDiscount.getNullable("amount_discount"))
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                fun appliesToPriceIds(): Optional<List<String>> =
-                    Optional.ofNullable(appliesToPriceIds.getNullable("applies_to_price_ids"))
-
                 @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
 
                 /**
@@ -2362,11 +2154,6 @@ constructor(
                 @JsonProperty("percentage_discount")
                 @ExcludeMissing
                 fun _percentageDiscount() = percentageDiscount
-
-                /** Only available if discount_type is `trial` */
-                @JsonProperty("trial_amount_discount")
-                @ExcludeMissing
-                fun _trialAmountDiscount() = trialAmountDiscount
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -2379,14 +2166,6 @@ constructor(
                 @ExcludeMissing
                 fun _amountDiscount() = amountDiscount
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                @JsonProperty("applies_to_price_ids")
-                @ExcludeMissing
-                fun _appliesToPriceIds() = appliesToPriceIds
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -2395,49 +2174,13 @@ constructor(
                     if (!validated) {
                         discountType()
                         percentageDiscount()
-                        trialAmountDiscount()
                         usageDiscount()
                         amountDiscount()
-                        appliesToPriceIds()
                         validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Discount &&
-                        this.discountType == other.discountType &&
-                        this.percentageDiscount == other.percentageDiscount &&
-                        this.trialAmountDiscount == other.trialAmountDiscount &&
-                        this.usageDiscount == other.usageDiscount &&
-                        this.amountDiscount == other.amountDiscount &&
-                        this.appliesToPriceIds == other.appliesToPriceIds &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                discountType,
-                                percentageDiscount,
-                                trialAmountDiscount,
-                                usageDiscount,
-                                amountDiscount,
-                                appliesToPriceIds,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, trialAmountDiscount=$trialAmountDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -2448,20 +2191,16 @@ constructor(
 
                     private var discountType: JsonField<DiscountType> = JsonMissing.of()
                     private var percentageDiscount: JsonField<Double> = JsonMissing.of()
-                    private var trialAmountDiscount: JsonField<String> = JsonMissing.of()
                     private var usageDiscount: JsonField<Double> = JsonMissing.of()
                     private var amountDiscount: JsonField<String> = JsonMissing.of()
-                    private var appliesToPriceIds: JsonField<List<String>> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(discount: Discount) = apply {
                         this.discountType = discount.discountType
                         this.percentageDiscount = discount.percentageDiscount
-                        this.trialAmountDiscount = discount.trialAmountDiscount
                         this.usageDiscount = discount.usageDiscount
                         this.amountDiscount = discount.amountDiscount
-                        this.appliesToPriceIds = discount.appliesToPriceIds
                         additionalProperties(discount.additionalProperties)
                     }
 
@@ -2489,17 +2228,6 @@ constructor(
                     @ExcludeMissing
                     fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
                         this.percentageDiscount = percentageDiscount
-                    }
-
-                    /** Only available if discount_type is `trial` */
-                    fun trialAmountDiscount(trialAmountDiscount: String) =
-                        trialAmountDiscount(JsonField.of(trialAmountDiscount))
-
-                    /** Only available if discount_type is `trial` */
-                    @JsonProperty("trial_amount_discount")
-                    @ExcludeMissing
-                    fun trialAmountDiscount(trialAmountDiscount: JsonField<String>) = apply {
-                        this.trialAmountDiscount = trialAmountDiscount
                     }
 
                     /**
@@ -2530,23 +2258,6 @@ constructor(
                         this.amountDiscount = amountDiscount
                     }
 
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    fun appliesToPriceIds(appliesToPriceIds: List<String>) =
-                        appliesToPriceIds(JsonField.of(appliesToPriceIds))
-
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    @JsonProperty("applies_to_price_ids")
-                    @ExcludeMissing
-                    fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
-                    }
-
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
                         this.additionalProperties.putAll(additionalProperties)
@@ -2566,10 +2277,8 @@ constructor(
                         Discount(
                             discountType,
                             percentageDiscount,
-                            trialAmountDiscount,
                             usageDiscount,
                             amountDiscount,
-                            appliesToPriceIds.map { it.toUnmodifiable() },
                             additionalProperties.toUnmodifiable(),
                         )
                 }
@@ -2588,7 +2297,7 @@ constructor(
                             return true
                         }
 
-                        return other is DiscountType && this.value == other.value
+                        return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
                     }
 
                     override fun hashCode() = value.hashCode()
@@ -2643,7 +2352,47 @@ constructor(
 
                     fun asString(): String = _value().asStringOrThrow()
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Discount && this.discountType == other.discountType && this.percentageDiscount == other.percentageDiscount && this.usageDiscount == other.usageDiscount && this.amountDiscount == other.amountDiscount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(discountType, percentageDiscount, usageDiscount, amountDiscount, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, additionalProperties=$additionalProperties}"
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is OverrideUnitPrice && this.id == other.id && this.modelType == other.modelType && this.minimumAmount == other.minimumAmount && this.maximumAmount == other.maximumAmount && this.currency == other.currency && this.conversionRate == other.conversionRate && this.discount == other.discount && this.fixedPriceQuantity == other.fixedPriceQuantity && this.unitConfig == other.unitConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(id, modelType, minimumAmount, maximumAmount, currency, conversionRate, discount, fixedPriceQuantity, unitConfig, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "OverrideUnitPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, unitConfig=$unitConfig, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = OverridePackagePrice.Builder::class)
@@ -2663,8 +2412,6 @@ constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun id(): String = id.getRequired("id")
 
@@ -2745,46 +2492,6 @@ constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is OverridePackagePrice &&
-                    this.id == other.id &&
-                    this.modelType == other.modelType &&
-                    this.minimumAmount == other.minimumAmount &&
-                    this.maximumAmount == other.maximumAmount &&
-                    this.currency == other.currency &&
-                    this.conversionRate == other.conversionRate &&
-                    this.discount == other.discount &&
-                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                    this.packageConfig == other.packageConfig &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            id,
-                            modelType,
-                            minimumAmount,
-                            maximumAmount,
-                            currency,
-                            conversionRate,
-                            discount,
-                            fixedPriceQuantity,
-                            packageConfig,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "OverridePackagePrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, packageConfig=$packageConfig, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -2950,7 +2657,7 @@ constructor(
                         return true
                     }
 
-                    return other is ModelType && this.value == other.value
+                    return /* spotless:off */ other is ModelType && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -2999,8 +2706,6 @@ constructor(
 
                 private var validated: Boolean = false
 
-                private var hashCode: Int = 0
-
                 /** A currency amount to rate usage by */
                 fun packageAmount(): String = packageAmount.getRequired("package_amount")
 
@@ -3032,32 +2737,6 @@ constructor(
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is PackageConfig &&
-                        this.packageAmount == other.packageAmount &&
-                        this.packageSize == other.packageSize &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                packageAmount,
-                                packageSize,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "PackageConfig{packageAmount=$packageAmount, packageSize=$packageSize, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -3126,6 +2805,26 @@ constructor(
                             additionalProperties.toUnmodifiable(),
                         )
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is PackageConfig && this.packageAmount == other.packageAmount && this.packageSize == other.packageSize && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(packageAmount, packageSize, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "PackageConfig{packageAmount=$packageAmount, packageSize=$packageSize, additionalProperties=$additionalProperties}"
             }
 
             /** The subscription's override discount for the plan. */
@@ -3135,16 +2834,12 @@ constructor(
             private constructor(
                 private val discountType: JsonField<DiscountType>,
                 private val percentageDiscount: JsonField<Double>,
-                private val trialAmountDiscount: JsonField<String>,
                 private val usageDiscount: JsonField<Double>,
                 private val amountDiscount: JsonField<String>,
-                private val appliesToPriceIds: JsonField<List<String>>,
                 private val additionalProperties: Map<String, JsonValue>,
             ) {
 
                 private var validated: Boolean = false
-
-                private var hashCode: Int = 0
 
                 fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
@@ -3154,10 +2849,6 @@ constructor(
                  */
                 fun percentageDiscount(): Optional<Double> =
                     Optional.ofNullable(percentageDiscount.getNullable("percentage_discount"))
-
-                /** Only available if discount_type is `trial` */
-                fun trialAmountDiscount(): Optional<String> =
-                    Optional.ofNullable(trialAmountDiscount.getNullable("trial_amount_discount"))
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -3170,13 +2861,6 @@ constructor(
                 fun amountDiscount(): Optional<String> =
                     Optional.ofNullable(amountDiscount.getNullable("amount_discount"))
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                fun appliesToPriceIds(): Optional<List<String>> =
-                    Optional.ofNullable(appliesToPriceIds.getNullable("applies_to_price_ids"))
-
                 @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
 
                 /**
@@ -3186,11 +2870,6 @@ constructor(
                 @JsonProperty("percentage_discount")
                 @ExcludeMissing
                 fun _percentageDiscount() = percentageDiscount
-
-                /** Only available if discount_type is `trial` */
-                @JsonProperty("trial_amount_discount")
-                @ExcludeMissing
-                fun _trialAmountDiscount() = trialAmountDiscount
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -3203,14 +2882,6 @@ constructor(
                 @ExcludeMissing
                 fun _amountDiscount() = amountDiscount
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                @JsonProperty("applies_to_price_ids")
-                @ExcludeMissing
-                fun _appliesToPriceIds() = appliesToPriceIds
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -3219,49 +2890,13 @@ constructor(
                     if (!validated) {
                         discountType()
                         percentageDiscount()
-                        trialAmountDiscount()
                         usageDiscount()
                         amountDiscount()
-                        appliesToPriceIds()
                         validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Discount &&
-                        this.discountType == other.discountType &&
-                        this.percentageDiscount == other.percentageDiscount &&
-                        this.trialAmountDiscount == other.trialAmountDiscount &&
-                        this.usageDiscount == other.usageDiscount &&
-                        this.amountDiscount == other.amountDiscount &&
-                        this.appliesToPriceIds == other.appliesToPriceIds &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                discountType,
-                                percentageDiscount,
-                                trialAmountDiscount,
-                                usageDiscount,
-                                amountDiscount,
-                                appliesToPriceIds,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, trialAmountDiscount=$trialAmountDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -3272,20 +2907,16 @@ constructor(
 
                     private var discountType: JsonField<DiscountType> = JsonMissing.of()
                     private var percentageDiscount: JsonField<Double> = JsonMissing.of()
-                    private var trialAmountDiscount: JsonField<String> = JsonMissing.of()
                     private var usageDiscount: JsonField<Double> = JsonMissing.of()
                     private var amountDiscount: JsonField<String> = JsonMissing.of()
-                    private var appliesToPriceIds: JsonField<List<String>> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(discount: Discount) = apply {
                         this.discountType = discount.discountType
                         this.percentageDiscount = discount.percentageDiscount
-                        this.trialAmountDiscount = discount.trialAmountDiscount
                         this.usageDiscount = discount.usageDiscount
                         this.amountDiscount = discount.amountDiscount
-                        this.appliesToPriceIds = discount.appliesToPriceIds
                         additionalProperties(discount.additionalProperties)
                     }
 
@@ -3313,17 +2944,6 @@ constructor(
                     @ExcludeMissing
                     fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
                         this.percentageDiscount = percentageDiscount
-                    }
-
-                    /** Only available if discount_type is `trial` */
-                    fun trialAmountDiscount(trialAmountDiscount: String) =
-                        trialAmountDiscount(JsonField.of(trialAmountDiscount))
-
-                    /** Only available if discount_type is `trial` */
-                    @JsonProperty("trial_amount_discount")
-                    @ExcludeMissing
-                    fun trialAmountDiscount(trialAmountDiscount: JsonField<String>) = apply {
-                        this.trialAmountDiscount = trialAmountDiscount
                     }
 
                     /**
@@ -3354,23 +2974,6 @@ constructor(
                         this.amountDiscount = amountDiscount
                     }
 
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    fun appliesToPriceIds(appliesToPriceIds: List<String>) =
-                        appliesToPriceIds(JsonField.of(appliesToPriceIds))
-
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    @JsonProperty("applies_to_price_ids")
-                    @ExcludeMissing
-                    fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
-                    }
-
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
                         this.additionalProperties.putAll(additionalProperties)
@@ -3390,10 +2993,8 @@ constructor(
                         Discount(
                             discountType,
                             percentageDiscount,
-                            trialAmountDiscount,
                             usageDiscount,
                             amountDiscount,
-                            appliesToPriceIds.map { it.toUnmodifiable() },
                             additionalProperties.toUnmodifiable(),
                         )
                 }
@@ -3412,7 +3013,7 @@ constructor(
                             return true
                         }
 
-                        return other is DiscountType && this.value == other.value
+                        return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
                     }
 
                     override fun hashCode() = value.hashCode()
@@ -3467,7 +3068,47 @@ constructor(
 
                     fun asString(): String = _value().asStringOrThrow()
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Discount && this.discountType == other.discountType && this.percentageDiscount == other.percentageDiscount && this.usageDiscount == other.usageDiscount && this.amountDiscount == other.amountDiscount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(discountType, percentageDiscount, usageDiscount, amountDiscount, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, additionalProperties=$additionalProperties}"
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is OverridePackagePrice && this.id == other.id && this.modelType == other.modelType && this.minimumAmount == other.minimumAmount && this.maximumAmount == other.maximumAmount && this.currency == other.currency && this.conversionRate == other.conversionRate && this.discount == other.discount && this.fixedPriceQuantity == other.fixedPriceQuantity && this.packageConfig == other.packageConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(id, modelType, minimumAmount, maximumAmount, currency, conversionRate, discount, fixedPriceQuantity, packageConfig, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "OverridePackagePrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, packageConfig=$packageConfig, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = OverrideMatrixPrice.Builder::class)
@@ -3487,8 +3128,6 @@ constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun id(): String = id.getRequired("id")
 
@@ -3569,46 +3208,6 @@ constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is OverrideMatrixPrice &&
-                    this.id == other.id &&
-                    this.modelType == other.modelType &&
-                    this.minimumAmount == other.minimumAmount &&
-                    this.maximumAmount == other.maximumAmount &&
-                    this.currency == other.currency &&
-                    this.conversionRate == other.conversionRate &&
-                    this.discount == other.discount &&
-                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                    this.matrixConfig == other.matrixConfig &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            id,
-                            modelType,
-                            minimumAmount,
-                            maximumAmount,
-                            currency,
-                            conversionRate,
-                            discount,
-                            fixedPriceQuantity,
-                            matrixConfig,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "OverrideMatrixPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, matrixConfig=$matrixConfig, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -3773,8 +3372,6 @@ constructor(
 
                 private var validated: Boolean = false
 
-                private var hashCode: Int = 0
-
                 /** One or two event property values to evaluate matrix groups by */
                 fun dimensions(): List<String?> = dimensions.getRequired("dimensions")
 
@@ -3814,34 +3411,6 @@ constructor(
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is MatrixConfig &&
-                        this.dimensions == other.dimensions &&
-                        this.defaultUnitAmount == other.defaultUnitAmount &&
-                        this.matrixValues == other.matrixValues &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                dimensions,
-                                defaultUnitAmount,
-                                matrixValues,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "MatrixConfig{dimensions=$dimensions, defaultUnitAmount=$defaultUnitAmount, matrixValues=$matrixValues, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -3936,8 +3505,6 @@ constructor(
 
                     private var validated: Boolean = false
 
-                    private var hashCode: Int = 0
-
                     /** Unit price for the specified dimension_values */
                     fun unitAmount(): String = unitAmount.getRequired("unit_amount")
 
@@ -3974,32 +3541,6 @@ constructor(
                     }
 
                     fun toBuilder() = Builder().from(this)
-
-                    override fun equals(other: Any?): Boolean {
-                        if (this === other) {
-                            return true
-                        }
-
-                        return other is MatrixValue &&
-                            this.unitAmount == other.unitAmount &&
-                            this.dimensionValues == other.dimensionValues &&
-                            this.additionalProperties == other.additionalProperties
-                    }
-
-                    override fun hashCode(): Int {
-                        if (hashCode == 0) {
-                            hashCode =
-                                Objects.hash(
-                                    unitAmount,
-                                    dimensionValues,
-                                    additionalProperties,
-                                )
-                        }
-                        return hashCode
-                    }
-
-                    override fun toString() =
-                        "MatrixValue{unitAmount=$unitAmount, dimensionValues=$dimensionValues, additionalProperties=$additionalProperties}"
 
                     companion object {
 
@@ -4071,7 +3612,47 @@ constructor(
                                 additionalProperties.toUnmodifiable(),
                             )
                     }
+
+                    override fun equals(other: Any?): Boolean {
+                        if (this === other) {
+                            return true
+                        }
+
+                        return /* spotless:off */ other is MatrixValue && this.unitAmount == other.unitAmount && this.dimensionValues == other.dimensionValues && this.additionalProperties == other.additionalProperties /* spotless:on */
+                    }
+
+                    private var hashCode: Int = 0
+
+                    override fun hashCode(): Int {
+                        if (hashCode == 0) {
+                            hashCode = /* spotless:off */ Objects.hash(unitAmount, dimensionValues, additionalProperties) /* spotless:on */
+                        }
+                        return hashCode
+                    }
+
+                    override fun toString() =
+                        "MatrixValue{unitAmount=$unitAmount, dimensionValues=$dimensionValues, additionalProperties=$additionalProperties}"
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is MatrixConfig && this.dimensions == other.dimensions && this.defaultUnitAmount == other.defaultUnitAmount && this.matrixValues == other.matrixValues && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(dimensions, defaultUnitAmount, matrixValues, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "MatrixConfig{dimensions=$dimensions, defaultUnitAmount=$defaultUnitAmount, matrixValues=$matrixValues, additionalProperties=$additionalProperties}"
             }
 
             class ModelType
@@ -4087,7 +3668,7 @@ constructor(
                         return true
                     }
 
-                    return other is ModelType && this.value == other.value
+                    return /* spotless:off */ other is ModelType && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -4132,16 +3713,12 @@ constructor(
             private constructor(
                 private val discountType: JsonField<DiscountType>,
                 private val percentageDiscount: JsonField<Double>,
-                private val trialAmountDiscount: JsonField<String>,
                 private val usageDiscount: JsonField<Double>,
                 private val amountDiscount: JsonField<String>,
-                private val appliesToPriceIds: JsonField<List<String>>,
                 private val additionalProperties: Map<String, JsonValue>,
             ) {
 
                 private var validated: Boolean = false
-
-                private var hashCode: Int = 0
 
                 fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
@@ -4151,10 +3728,6 @@ constructor(
                  */
                 fun percentageDiscount(): Optional<Double> =
                     Optional.ofNullable(percentageDiscount.getNullable("percentage_discount"))
-
-                /** Only available if discount_type is `trial` */
-                fun trialAmountDiscount(): Optional<String> =
-                    Optional.ofNullable(trialAmountDiscount.getNullable("trial_amount_discount"))
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -4167,13 +3740,6 @@ constructor(
                 fun amountDiscount(): Optional<String> =
                     Optional.ofNullable(amountDiscount.getNullable("amount_discount"))
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                fun appliesToPriceIds(): Optional<List<String>> =
-                    Optional.ofNullable(appliesToPriceIds.getNullable("applies_to_price_ids"))
-
                 @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
 
                 /**
@@ -4183,11 +3749,6 @@ constructor(
                 @JsonProperty("percentage_discount")
                 @ExcludeMissing
                 fun _percentageDiscount() = percentageDiscount
-
-                /** Only available if discount_type is `trial` */
-                @JsonProperty("trial_amount_discount")
-                @ExcludeMissing
-                fun _trialAmountDiscount() = trialAmountDiscount
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -4200,14 +3761,6 @@ constructor(
                 @ExcludeMissing
                 fun _amountDiscount() = amountDiscount
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                @JsonProperty("applies_to_price_ids")
-                @ExcludeMissing
-                fun _appliesToPriceIds() = appliesToPriceIds
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -4216,49 +3769,13 @@ constructor(
                     if (!validated) {
                         discountType()
                         percentageDiscount()
-                        trialAmountDiscount()
                         usageDiscount()
                         amountDiscount()
-                        appliesToPriceIds()
                         validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Discount &&
-                        this.discountType == other.discountType &&
-                        this.percentageDiscount == other.percentageDiscount &&
-                        this.trialAmountDiscount == other.trialAmountDiscount &&
-                        this.usageDiscount == other.usageDiscount &&
-                        this.amountDiscount == other.amountDiscount &&
-                        this.appliesToPriceIds == other.appliesToPriceIds &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                discountType,
-                                percentageDiscount,
-                                trialAmountDiscount,
-                                usageDiscount,
-                                amountDiscount,
-                                appliesToPriceIds,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, trialAmountDiscount=$trialAmountDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -4269,20 +3786,16 @@ constructor(
 
                     private var discountType: JsonField<DiscountType> = JsonMissing.of()
                     private var percentageDiscount: JsonField<Double> = JsonMissing.of()
-                    private var trialAmountDiscount: JsonField<String> = JsonMissing.of()
                     private var usageDiscount: JsonField<Double> = JsonMissing.of()
                     private var amountDiscount: JsonField<String> = JsonMissing.of()
-                    private var appliesToPriceIds: JsonField<List<String>> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(discount: Discount) = apply {
                         this.discountType = discount.discountType
                         this.percentageDiscount = discount.percentageDiscount
-                        this.trialAmountDiscount = discount.trialAmountDiscount
                         this.usageDiscount = discount.usageDiscount
                         this.amountDiscount = discount.amountDiscount
-                        this.appliesToPriceIds = discount.appliesToPriceIds
                         additionalProperties(discount.additionalProperties)
                     }
 
@@ -4310,17 +3823,6 @@ constructor(
                     @ExcludeMissing
                     fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
                         this.percentageDiscount = percentageDiscount
-                    }
-
-                    /** Only available if discount_type is `trial` */
-                    fun trialAmountDiscount(trialAmountDiscount: String) =
-                        trialAmountDiscount(JsonField.of(trialAmountDiscount))
-
-                    /** Only available if discount_type is `trial` */
-                    @JsonProperty("trial_amount_discount")
-                    @ExcludeMissing
-                    fun trialAmountDiscount(trialAmountDiscount: JsonField<String>) = apply {
-                        this.trialAmountDiscount = trialAmountDiscount
                     }
 
                     /**
@@ -4351,23 +3853,6 @@ constructor(
                         this.amountDiscount = amountDiscount
                     }
 
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    fun appliesToPriceIds(appliesToPriceIds: List<String>) =
-                        appliesToPriceIds(JsonField.of(appliesToPriceIds))
-
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    @JsonProperty("applies_to_price_ids")
-                    @ExcludeMissing
-                    fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
-                    }
-
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
                         this.additionalProperties.putAll(additionalProperties)
@@ -4387,10 +3872,8 @@ constructor(
                         Discount(
                             discountType,
                             percentageDiscount,
-                            trialAmountDiscount,
                             usageDiscount,
                             amountDiscount,
-                            appliesToPriceIds.map { it.toUnmodifiable() },
                             additionalProperties.toUnmodifiable(),
                         )
                 }
@@ -4409,7 +3892,7 @@ constructor(
                             return true
                         }
 
-                        return other is DiscountType && this.value == other.value
+                        return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
                     }
 
                     override fun hashCode() = value.hashCode()
@@ -4464,7 +3947,47 @@ constructor(
 
                     fun asString(): String = _value().asStringOrThrow()
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Discount && this.discountType == other.discountType && this.percentageDiscount == other.percentageDiscount && this.usageDiscount == other.usageDiscount && this.amountDiscount == other.amountDiscount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(discountType, percentageDiscount, usageDiscount, amountDiscount, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, additionalProperties=$additionalProperties}"
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is OverrideMatrixPrice && this.id == other.id && this.modelType == other.modelType && this.minimumAmount == other.minimumAmount && this.maximumAmount == other.maximumAmount && this.currency == other.currency && this.conversionRate == other.conversionRate && this.discount == other.discount && this.fixedPriceQuantity == other.fixedPriceQuantity && this.matrixConfig == other.matrixConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(id, modelType, minimumAmount, maximumAmount, currency, conversionRate, discount, fixedPriceQuantity, matrixConfig, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "OverrideMatrixPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, matrixConfig=$matrixConfig, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = OverrideTieredPrice.Builder::class)
@@ -4484,8 +4007,6 @@ constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun id(): String = id.getRequired("id")
 
@@ -4566,46 +4087,6 @@ constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is OverrideTieredPrice &&
-                    this.id == other.id &&
-                    this.modelType == other.modelType &&
-                    this.minimumAmount == other.minimumAmount &&
-                    this.maximumAmount == other.maximumAmount &&
-                    this.currency == other.currency &&
-                    this.conversionRate == other.conversionRate &&
-                    this.discount == other.discount &&
-                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                    this.tieredConfig == other.tieredConfig &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            id,
-                            modelType,
-                            minimumAmount,
-                            maximumAmount,
-                            currency,
-                            conversionRate,
-                            discount,
-                            fixedPriceQuantity,
-                            tieredConfig,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "OverrideTieredPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, tieredConfig=$tieredConfig, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -4771,7 +4252,7 @@ constructor(
                         return true
                     }
 
-                    return other is ModelType && this.value == other.value
+                    return /* spotless:off */ other is ModelType && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -4819,8 +4300,6 @@ constructor(
 
                 private var validated: Boolean = false
 
-                private var hashCode: Int = 0
-
                 /** Tiers for rating based on total usage quantities into the specified tier */
                 fun tiers(): List<Tier> = tiers.getRequired("tiers")
 
@@ -4839,26 +4318,6 @@ constructor(
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is TieredConfig &&
-                        this.tiers == other.tiers &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode = Objects.hash(tiers, additionalProperties)
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "TieredConfig{tiers=$tiers, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -4918,8 +4377,6 @@ constructor(
 
                     private var validated: Boolean = false
 
-                    private var hashCode: Int = 0
-
                     /** Inclusive tier starting value */
                     fun firstUnit(): Double = firstUnit.getRequired("first_unit")
 
@@ -4953,34 +4410,6 @@ constructor(
                     }
 
                     fun toBuilder() = Builder().from(this)
-
-                    override fun equals(other: Any?): Boolean {
-                        if (this === other) {
-                            return true
-                        }
-
-                        return other is Tier &&
-                            this.firstUnit == other.firstUnit &&
-                            this.lastUnit == other.lastUnit &&
-                            this.unitAmount == other.unitAmount &&
-                            this.additionalProperties == other.additionalProperties
-                    }
-
-                    override fun hashCode(): Int {
-                        if (hashCode == 0) {
-                            hashCode =
-                                Objects.hash(
-                                    firstUnit,
-                                    lastUnit,
-                                    unitAmount,
-                                    additionalProperties,
-                                )
-                        }
-                        return hashCode
-                    }
-
-                    override fun toString() =
-                        "Tier{firstUnit=$firstUnit, lastUnit=$lastUnit, unitAmount=$unitAmount, additionalProperties=$additionalProperties}"
 
                     companion object {
 
@@ -5060,7 +4489,47 @@ constructor(
                                 additionalProperties.toUnmodifiable(),
                             )
                     }
+
+                    override fun equals(other: Any?): Boolean {
+                        if (this === other) {
+                            return true
+                        }
+
+                        return /* spotless:off */ other is Tier && this.firstUnit == other.firstUnit && this.lastUnit == other.lastUnit && this.unitAmount == other.unitAmount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                    }
+
+                    private var hashCode: Int = 0
+
+                    override fun hashCode(): Int {
+                        if (hashCode == 0) {
+                            hashCode = /* spotless:off */ Objects.hash(firstUnit, lastUnit, unitAmount, additionalProperties) /* spotless:on */
+                        }
+                        return hashCode
+                    }
+
+                    override fun toString() =
+                        "Tier{firstUnit=$firstUnit, lastUnit=$lastUnit, unitAmount=$unitAmount, additionalProperties=$additionalProperties}"
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is TieredConfig && this.tiers == other.tiers && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(tiers, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "TieredConfig{tiers=$tiers, additionalProperties=$additionalProperties}"
             }
 
             /** The subscription's override discount for the plan. */
@@ -5070,16 +4539,12 @@ constructor(
             private constructor(
                 private val discountType: JsonField<DiscountType>,
                 private val percentageDiscount: JsonField<Double>,
-                private val trialAmountDiscount: JsonField<String>,
                 private val usageDiscount: JsonField<Double>,
                 private val amountDiscount: JsonField<String>,
-                private val appliesToPriceIds: JsonField<List<String>>,
                 private val additionalProperties: Map<String, JsonValue>,
             ) {
 
                 private var validated: Boolean = false
-
-                private var hashCode: Int = 0
 
                 fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
@@ -5089,10 +4554,6 @@ constructor(
                  */
                 fun percentageDiscount(): Optional<Double> =
                     Optional.ofNullable(percentageDiscount.getNullable("percentage_discount"))
-
-                /** Only available if discount_type is `trial` */
-                fun trialAmountDiscount(): Optional<String> =
-                    Optional.ofNullable(trialAmountDiscount.getNullable("trial_amount_discount"))
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -5105,13 +4566,6 @@ constructor(
                 fun amountDiscount(): Optional<String> =
                     Optional.ofNullable(amountDiscount.getNullable("amount_discount"))
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                fun appliesToPriceIds(): Optional<List<String>> =
-                    Optional.ofNullable(appliesToPriceIds.getNullable("applies_to_price_ids"))
-
                 @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
 
                 /**
@@ -5121,11 +4575,6 @@ constructor(
                 @JsonProperty("percentage_discount")
                 @ExcludeMissing
                 fun _percentageDiscount() = percentageDiscount
-
-                /** Only available if discount_type is `trial` */
-                @JsonProperty("trial_amount_discount")
-                @ExcludeMissing
-                fun _trialAmountDiscount() = trialAmountDiscount
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -5138,14 +4587,6 @@ constructor(
                 @ExcludeMissing
                 fun _amountDiscount() = amountDiscount
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                @JsonProperty("applies_to_price_ids")
-                @ExcludeMissing
-                fun _appliesToPriceIds() = appliesToPriceIds
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -5154,49 +4595,13 @@ constructor(
                     if (!validated) {
                         discountType()
                         percentageDiscount()
-                        trialAmountDiscount()
                         usageDiscount()
                         amountDiscount()
-                        appliesToPriceIds()
                         validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Discount &&
-                        this.discountType == other.discountType &&
-                        this.percentageDiscount == other.percentageDiscount &&
-                        this.trialAmountDiscount == other.trialAmountDiscount &&
-                        this.usageDiscount == other.usageDiscount &&
-                        this.amountDiscount == other.amountDiscount &&
-                        this.appliesToPriceIds == other.appliesToPriceIds &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                discountType,
-                                percentageDiscount,
-                                trialAmountDiscount,
-                                usageDiscount,
-                                amountDiscount,
-                                appliesToPriceIds,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, trialAmountDiscount=$trialAmountDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -5207,20 +4612,16 @@ constructor(
 
                     private var discountType: JsonField<DiscountType> = JsonMissing.of()
                     private var percentageDiscount: JsonField<Double> = JsonMissing.of()
-                    private var trialAmountDiscount: JsonField<String> = JsonMissing.of()
                     private var usageDiscount: JsonField<Double> = JsonMissing.of()
                     private var amountDiscount: JsonField<String> = JsonMissing.of()
-                    private var appliesToPriceIds: JsonField<List<String>> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(discount: Discount) = apply {
                         this.discountType = discount.discountType
                         this.percentageDiscount = discount.percentageDiscount
-                        this.trialAmountDiscount = discount.trialAmountDiscount
                         this.usageDiscount = discount.usageDiscount
                         this.amountDiscount = discount.amountDiscount
-                        this.appliesToPriceIds = discount.appliesToPriceIds
                         additionalProperties(discount.additionalProperties)
                     }
 
@@ -5248,17 +4649,6 @@ constructor(
                     @ExcludeMissing
                     fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
                         this.percentageDiscount = percentageDiscount
-                    }
-
-                    /** Only available if discount_type is `trial` */
-                    fun trialAmountDiscount(trialAmountDiscount: String) =
-                        trialAmountDiscount(JsonField.of(trialAmountDiscount))
-
-                    /** Only available if discount_type is `trial` */
-                    @JsonProperty("trial_amount_discount")
-                    @ExcludeMissing
-                    fun trialAmountDiscount(trialAmountDiscount: JsonField<String>) = apply {
-                        this.trialAmountDiscount = trialAmountDiscount
                     }
 
                     /**
@@ -5289,23 +4679,6 @@ constructor(
                         this.amountDiscount = amountDiscount
                     }
 
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    fun appliesToPriceIds(appliesToPriceIds: List<String>) =
-                        appliesToPriceIds(JsonField.of(appliesToPriceIds))
-
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    @JsonProperty("applies_to_price_ids")
-                    @ExcludeMissing
-                    fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
-                    }
-
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
                         this.additionalProperties.putAll(additionalProperties)
@@ -5325,10 +4698,8 @@ constructor(
                         Discount(
                             discountType,
                             percentageDiscount,
-                            trialAmountDiscount,
                             usageDiscount,
                             amountDiscount,
-                            appliesToPriceIds.map { it.toUnmodifiable() },
                             additionalProperties.toUnmodifiable(),
                         )
                 }
@@ -5347,7 +4718,7 @@ constructor(
                             return true
                         }
 
-                        return other is DiscountType && this.value == other.value
+                        return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
                     }
 
                     override fun hashCode() = value.hashCode()
@@ -5402,7 +4773,47 @@ constructor(
 
                     fun asString(): String = _value().asStringOrThrow()
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Discount && this.discountType == other.discountType && this.percentageDiscount == other.percentageDiscount && this.usageDiscount == other.usageDiscount && this.amountDiscount == other.amountDiscount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(discountType, percentageDiscount, usageDiscount, amountDiscount, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, additionalProperties=$additionalProperties}"
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is OverrideTieredPrice && this.id == other.id && this.modelType == other.modelType && this.minimumAmount == other.minimumAmount && this.maximumAmount == other.maximumAmount && this.currency == other.currency && this.conversionRate == other.conversionRate && this.discount == other.discount && this.fixedPriceQuantity == other.fixedPriceQuantity && this.tieredConfig == other.tieredConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(id, modelType, minimumAmount, maximumAmount, currency, conversionRate, discount, fixedPriceQuantity, tieredConfig, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "OverrideTieredPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, tieredConfig=$tieredConfig, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = OverrideTieredBpsPrice.Builder::class)
@@ -5422,8 +4833,6 @@ constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun id(): String = id.getRequired("id")
 
@@ -5507,46 +4916,6 @@ constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is OverrideTieredBpsPrice &&
-                    this.id == other.id &&
-                    this.modelType == other.modelType &&
-                    this.minimumAmount == other.minimumAmount &&
-                    this.maximumAmount == other.maximumAmount &&
-                    this.currency == other.currency &&
-                    this.conversionRate == other.conversionRate &&
-                    this.discount == other.discount &&
-                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                    this.tieredBpsConfig == other.tieredBpsConfig &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            id,
-                            modelType,
-                            minimumAmount,
-                            maximumAmount,
-                            currency,
-                            conversionRate,
-                            discount,
-                            fixedPriceQuantity,
-                            tieredBpsConfig,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "OverrideTieredBpsPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, tieredBpsConfig=$tieredBpsConfig, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -5712,7 +5081,7 @@ constructor(
                         return true
                     }
 
-                    return other is ModelType && this.value == other.value
+                    return /* spotless:off */ other is ModelType && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -5760,8 +5129,6 @@ constructor(
 
                 private var validated: Boolean = false
 
-                private var hashCode: Int = 0
-
                 /**
                  * Tiers for a Graduated BPS pricing model, where usage is bucketed into specified
                  * tiers
@@ -5786,26 +5153,6 @@ constructor(
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is TieredBpsConfig &&
-                        this.tiers == other.tiers &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode = Objects.hash(tiers, additionalProperties)
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "TieredBpsConfig{tiers=$tiers, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -5872,8 +5219,6 @@ constructor(
 
                     private var validated: Boolean = false
 
-                    private var hashCode: Int = 0
-
                     /** Inclusive tier starting value */
                     fun minimumAmount(): String = minimumAmount.getRequired("minimum_amount")
 
@@ -5921,36 +5266,6 @@ constructor(
                     }
 
                     fun toBuilder() = Builder().from(this)
-
-                    override fun equals(other: Any?): Boolean {
-                        if (this === other) {
-                            return true
-                        }
-
-                        return other is Tier &&
-                            this.minimumAmount == other.minimumAmount &&
-                            this.maximumAmount == other.maximumAmount &&
-                            this.bps == other.bps &&
-                            this.perUnitMaximum == other.perUnitMaximum &&
-                            this.additionalProperties == other.additionalProperties
-                    }
-
-                    override fun hashCode(): Int {
-                        if (hashCode == 0) {
-                            hashCode =
-                                Objects.hash(
-                                    minimumAmount,
-                                    maximumAmount,
-                                    bps,
-                                    perUnitMaximum,
-                                    additionalProperties,
-                                )
-                        }
-                        return hashCode
-                    }
-
-                    override fun toString() =
-                        "Tier{minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, bps=$bps, perUnitMaximum=$perUnitMaximum, additionalProperties=$additionalProperties}"
 
                     companion object {
 
@@ -6040,7 +5355,47 @@ constructor(
                                 additionalProperties.toUnmodifiable(),
                             )
                     }
+
+                    override fun equals(other: Any?): Boolean {
+                        if (this === other) {
+                            return true
+                        }
+
+                        return /* spotless:off */ other is Tier && this.minimumAmount == other.minimumAmount && this.maximumAmount == other.maximumAmount && this.bps == other.bps && this.perUnitMaximum == other.perUnitMaximum && this.additionalProperties == other.additionalProperties /* spotless:on */
+                    }
+
+                    private var hashCode: Int = 0
+
+                    override fun hashCode(): Int {
+                        if (hashCode == 0) {
+                            hashCode = /* spotless:off */ Objects.hash(minimumAmount, maximumAmount, bps, perUnitMaximum, additionalProperties) /* spotless:on */
+                        }
+                        return hashCode
+                    }
+
+                    override fun toString() =
+                        "Tier{minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, bps=$bps, perUnitMaximum=$perUnitMaximum, additionalProperties=$additionalProperties}"
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is TieredBpsConfig && this.tiers == other.tiers && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(tiers, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "TieredBpsConfig{tiers=$tiers, additionalProperties=$additionalProperties}"
             }
 
             /** The subscription's override discount for the plan. */
@@ -6050,16 +5405,12 @@ constructor(
             private constructor(
                 private val discountType: JsonField<DiscountType>,
                 private val percentageDiscount: JsonField<Double>,
-                private val trialAmountDiscount: JsonField<String>,
                 private val usageDiscount: JsonField<Double>,
                 private val amountDiscount: JsonField<String>,
-                private val appliesToPriceIds: JsonField<List<String>>,
                 private val additionalProperties: Map<String, JsonValue>,
             ) {
 
                 private var validated: Boolean = false
-
-                private var hashCode: Int = 0
 
                 fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
@@ -6069,10 +5420,6 @@ constructor(
                  */
                 fun percentageDiscount(): Optional<Double> =
                     Optional.ofNullable(percentageDiscount.getNullable("percentage_discount"))
-
-                /** Only available if discount_type is `trial` */
-                fun trialAmountDiscount(): Optional<String> =
-                    Optional.ofNullable(trialAmountDiscount.getNullable("trial_amount_discount"))
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -6085,13 +5432,6 @@ constructor(
                 fun amountDiscount(): Optional<String> =
                     Optional.ofNullable(amountDiscount.getNullable("amount_discount"))
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                fun appliesToPriceIds(): Optional<List<String>> =
-                    Optional.ofNullable(appliesToPriceIds.getNullable("applies_to_price_ids"))
-
                 @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
 
                 /**
@@ -6101,11 +5441,6 @@ constructor(
                 @JsonProperty("percentage_discount")
                 @ExcludeMissing
                 fun _percentageDiscount() = percentageDiscount
-
-                /** Only available if discount_type is `trial` */
-                @JsonProperty("trial_amount_discount")
-                @ExcludeMissing
-                fun _trialAmountDiscount() = trialAmountDiscount
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -6118,14 +5453,6 @@ constructor(
                 @ExcludeMissing
                 fun _amountDiscount() = amountDiscount
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                @JsonProperty("applies_to_price_ids")
-                @ExcludeMissing
-                fun _appliesToPriceIds() = appliesToPriceIds
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -6134,49 +5461,13 @@ constructor(
                     if (!validated) {
                         discountType()
                         percentageDiscount()
-                        trialAmountDiscount()
                         usageDiscount()
                         amountDiscount()
-                        appliesToPriceIds()
                         validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Discount &&
-                        this.discountType == other.discountType &&
-                        this.percentageDiscount == other.percentageDiscount &&
-                        this.trialAmountDiscount == other.trialAmountDiscount &&
-                        this.usageDiscount == other.usageDiscount &&
-                        this.amountDiscount == other.amountDiscount &&
-                        this.appliesToPriceIds == other.appliesToPriceIds &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                discountType,
-                                percentageDiscount,
-                                trialAmountDiscount,
-                                usageDiscount,
-                                amountDiscount,
-                                appliesToPriceIds,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, trialAmountDiscount=$trialAmountDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -6187,20 +5478,16 @@ constructor(
 
                     private var discountType: JsonField<DiscountType> = JsonMissing.of()
                     private var percentageDiscount: JsonField<Double> = JsonMissing.of()
-                    private var trialAmountDiscount: JsonField<String> = JsonMissing.of()
                     private var usageDiscount: JsonField<Double> = JsonMissing.of()
                     private var amountDiscount: JsonField<String> = JsonMissing.of()
-                    private var appliesToPriceIds: JsonField<List<String>> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(discount: Discount) = apply {
                         this.discountType = discount.discountType
                         this.percentageDiscount = discount.percentageDiscount
-                        this.trialAmountDiscount = discount.trialAmountDiscount
                         this.usageDiscount = discount.usageDiscount
                         this.amountDiscount = discount.amountDiscount
-                        this.appliesToPriceIds = discount.appliesToPriceIds
                         additionalProperties(discount.additionalProperties)
                     }
 
@@ -6228,17 +5515,6 @@ constructor(
                     @ExcludeMissing
                     fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
                         this.percentageDiscount = percentageDiscount
-                    }
-
-                    /** Only available if discount_type is `trial` */
-                    fun trialAmountDiscount(trialAmountDiscount: String) =
-                        trialAmountDiscount(JsonField.of(trialAmountDiscount))
-
-                    /** Only available if discount_type is `trial` */
-                    @JsonProperty("trial_amount_discount")
-                    @ExcludeMissing
-                    fun trialAmountDiscount(trialAmountDiscount: JsonField<String>) = apply {
-                        this.trialAmountDiscount = trialAmountDiscount
                     }
 
                     /**
@@ -6269,23 +5545,6 @@ constructor(
                         this.amountDiscount = amountDiscount
                     }
 
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    fun appliesToPriceIds(appliesToPriceIds: List<String>) =
-                        appliesToPriceIds(JsonField.of(appliesToPriceIds))
-
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    @JsonProperty("applies_to_price_ids")
-                    @ExcludeMissing
-                    fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
-                    }
-
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
                         this.additionalProperties.putAll(additionalProperties)
@@ -6305,10 +5564,8 @@ constructor(
                         Discount(
                             discountType,
                             percentageDiscount,
-                            trialAmountDiscount,
                             usageDiscount,
                             amountDiscount,
-                            appliesToPriceIds.map { it.toUnmodifiable() },
                             additionalProperties.toUnmodifiable(),
                         )
                 }
@@ -6327,7 +5584,7 @@ constructor(
                             return true
                         }
 
-                        return other is DiscountType && this.value == other.value
+                        return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
                     }
 
                     override fun hashCode() = value.hashCode()
@@ -6382,7 +5639,47 @@ constructor(
 
                     fun asString(): String = _value().asStringOrThrow()
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Discount && this.discountType == other.discountType && this.percentageDiscount == other.percentageDiscount && this.usageDiscount == other.usageDiscount && this.amountDiscount == other.amountDiscount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(discountType, percentageDiscount, usageDiscount, amountDiscount, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, additionalProperties=$additionalProperties}"
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is OverrideTieredBpsPrice && this.id == other.id && this.modelType == other.modelType && this.minimumAmount == other.minimumAmount && this.maximumAmount == other.maximumAmount && this.currency == other.currency && this.conversionRate == other.conversionRate && this.discount == other.discount && this.fixedPriceQuantity == other.fixedPriceQuantity && this.tieredBpsConfig == other.tieredBpsConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(id, modelType, minimumAmount, maximumAmount, currency, conversionRate, discount, fixedPriceQuantity, tieredBpsConfig, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "OverrideTieredBpsPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, tieredBpsConfig=$tieredBpsConfig, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = OverrideBpsPrice.Builder::class)
@@ -6402,8 +5699,6 @@ constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun id(): String = id.getRequired("id")
 
@@ -6484,46 +5779,6 @@ constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is OverrideBpsPrice &&
-                    this.id == other.id &&
-                    this.modelType == other.modelType &&
-                    this.minimumAmount == other.minimumAmount &&
-                    this.maximumAmount == other.maximumAmount &&
-                    this.currency == other.currency &&
-                    this.conversionRate == other.conversionRate &&
-                    this.discount == other.discount &&
-                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                    this.bpsConfig == other.bpsConfig &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            id,
-                            modelType,
-                            minimumAmount,
-                            maximumAmount,
-                            currency,
-                            conversionRate,
-                            discount,
-                            fixedPriceQuantity,
-                            bpsConfig,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "OverrideBpsPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, bpsConfig=$bpsConfig, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -6686,8 +5941,6 @@ constructor(
 
                 private var validated: Boolean = false
 
-                private var hashCode: Int = 0
-
                 /** Basis point take rate per event */
                 fun bps(): Double = bps.getRequired("bps")
 
@@ -6716,32 +5969,6 @@ constructor(
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is BpsConfig &&
-                        this.bps == other.bps &&
-                        this.perUnitMaximum == other.perUnitMaximum &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                bps,
-                                perUnitMaximum,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "BpsConfig{bps=$bps, perUnitMaximum=$perUnitMaximum, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -6802,6 +6029,26 @@ constructor(
                             additionalProperties.toUnmodifiable(),
                         )
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is BpsConfig && this.bps == other.bps && this.perUnitMaximum == other.perUnitMaximum && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(bps, perUnitMaximum, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "BpsConfig{bps=$bps, perUnitMaximum=$perUnitMaximum, additionalProperties=$additionalProperties}"
             }
 
             class ModelType
@@ -6817,7 +6064,7 @@ constructor(
                         return true
                     }
 
-                    return other is ModelType && this.value == other.value
+                    return /* spotless:off */ other is ModelType && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -6862,16 +6109,12 @@ constructor(
             private constructor(
                 private val discountType: JsonField<DiscountType>,
                 private val percentageDiscount: JsonField<Double>,
-                private val trialAmountDiscount: JsonField<String>,
                 private val usageDiscount: JsonField<Double>,
                 private val amountDiscount: JsonField<String>,
-                private val appliesToPriceIds: JsonField<List<String>>,
                 private val additionalProperties: Map<String, JsonValue>,
             ) {
 
                 private var validated: Boolean = false
-
-                private var hashCode: Int = 0
 
                 fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
@@ -6881,10 +6124,6 @@ constructor(
                  */
                 fun percentageDiscount(): Optional<Double> =
                     Optional.ofNullable(percentageDiscount.getNullable("percentage_discount"))
-
-                /** Only available if discount_type is `trial` */
-                fun trialAmountDiscount(): Optional<String> =
-                    Optional.ofNullable(trialAmountDiscount.getNullable("trial_amount_discount"))
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -6897,13 +6136,6 @@ constructor(
                 fun amountDiscount(): Optional<String> =
                     Optional.ofNullable(amountDiscount.getNullable("amount_discount"))
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                fun appliesToPriceIds(): Optional<List<String>> =
-                    Optional.ofNullable(appliesToPriceIds.getNullable("applies_to_price_ids"))
-
                 @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
 
                 /**
@@ -6913,11 +6145,6 @@ constructor(
                 @JsonProperty("percentage_discount")
                 @ExcludeMissing
                 fun _percentageDiscount() = percentageDiscount
-
-                /** Only available if discount_type is `trial` */
-                @JsonProperty("trial_amount_discount")
-                @ExcludeMissing
-                fun _trialAmountDiscount() = trialAmountDiscount
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -6930,14 +6157,6 @@ constructor(
                 @ExcludeMissing
                 fun _amountDiscount() = amountDiscount
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                @JsonProperty("applies_to_price_ids")
-                @ExcludeMissing
-                fun _appliesToPriceIds() = appliesToPriceIds
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -6946,49 +6165,13 @@ constructor(
                     if (!validated) {
                         discountType()
                         percentageDiscount()
-                        trialAmountDiscount()
                         usageDiscount()
                         amountDiscount()
-                        appliesToPriceIds()
                         validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Discount &&
-                        this.discountType == other.discountType &&
-                        this.percentageDiscount == other.percentageDiscount &&
-                        this.trialAmountDiscount == other.trialAmountDiscount &&
-                        this.usageDiscount == other.usageDiscount &&
-                        this.amountDiscount == other.amountDiscount &&
-                        this.appliesToPriceIds == other.appliesToPriceIds &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                discountType,
-                                percentageDiscount,
-                                trialAmountDiscount,
-                                usageDiscount,
-                                amountDiscount,
-                                appliesToPriceIds,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, trialAmountDiscount=$trialAmountDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -6999,20 +6182,16 @@ constructor(
 
                     private var discountType: JsonField<DiscountType> = JsonMissing.of()
                     private var percentageDiscount: JsonField<Double> = JsonMissing.of()
-                    private var trialAmountDiscount: JsonField<String> = JsonMissing.of()
                     private var usageDiscount: JsonField<Double> = JsonMissing.of()
                     private var amountDiscount: JsonField<String> = JsonMissing.of()
-                    private var appliesToPriceIds: JsonField<List<String>> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(discount: Discount) = apply {
                         this.discountType = discount.discountType
                         this.percentageDiscount = discount.percentageDiscount
-                        this.trialAmountDiscount = discount.trialAmountDiscount
                         this.usageDiscount = discount.usageDiscount
                         this.amountDiscount = discount.amountDiscount
-                        this.appliesToPriceIds = discount.appliesToPriceIds
                         additionalProperties(discount.additionalProperties)
                     }
 
@@ -7040,17 +6219,6 @@ constructor(
                     @ExcludeMissing
                     fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
                         this.percentageDiscount = percentageDiscount
-                    }
-
-                    /** Only available if discount_type is `trial` */
-                    fun trialAmountDiscount(trialAmountDiscount: String) =
-                        trialAmountDiscount(JsonField.of(trialAmountDiscount))
-
-                    /** Only available if discount_type is `trial` */
-                    @JsonProperty("trial_amount_discount")
-                    @ExcludeMissing
-                    fun trialAmountDiscount(trialAmountDiscount: JsonField<String>) = apply {
-                        this.trialAmountDiscount = trialAmountDiscount
                     }
 
                     /**
@@ -7081,23 +6249,6 @@ constructor(
                         this.amountDiscount = amountDiscount
                     }
 
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    fun appliesToPriceIds(appliesToPriceIds: List<String>) =
-                        appliesToPriceIds(JsonField.of(appliesToPriceIds))
-
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    @JsonProperty("applies_to_price_ids")
-                    @ExcludeMissing
-                    fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
-                    }
-
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
                         this.additionalProperties.putAll(additionalProperties)
@@ -7117,10 +6268,8 @@ constructor(
                         Discount(
                             discountType,
                             percentageDiscount,
-                            trialAmountDiscount,
                             usageDiscount,
                             amountDiscount,
-                            appliesToPriceIds.map { it.toUnmodifiable() },
                             additionalProperties.toUnmodifiable(),
                         )
                 }
@@ -7139,7 +6288,7 @@ constructor(
                             return true
                         }
 
-                        return other is DiscountType && this.value == other.value
+                        return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
                     }
 
                     override fun hashCode() = value.hashCode()
@@ -7194,7 +6343,47 @@ constructor(
 
                     fun asString(): String = _value().asStringOrThrow()
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Discount && this.discountType == other.discountType && this.percentageDiscount == other.percentageDiscount && this.usageDiscount == other.usageDiscount && this.amountDiscount == other.amountDiscount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(discountType, percentageDiscount, usageDiscount, amountDiscount, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, additionalProperties=$additionalProperties}"
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is OverrideBpsPrice && this.id == other.id && this.modelType == other.modelType && this.minimumAmount == other.minimumAmount && this.maximumAmount == other.maximumAmount && this.currency == other.currency && this.conversionRate == other.conversionRate && this.discount == other.discount && this.fixedPriceQuantity == other.fixedPriceQuantity && this.bpsConfig == other.bpsConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(id, modelType, minimumAmount, maximumAmount, currency, conversionRate, discount, fixedPriceQuantity, bpsConfig, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "OverrideBpsPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, bpsConfig=$bpsConfig, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = OverrideBulkBpsPrice.Builder::class)
@@ -7214,8 +6403,6 @@ constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun id(): String = id.getRequired("id")
 
@@ -7296,46 +6483,6 @@ constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is OverrideBulkBpsPrice &&
-                    this.id == other.id &&
-                    this.modelType == other.modelType &&
-                    this.minimumAmount == other.minimumAmount &&
-                    this.maximumAmount == other.maximumAmount &&
-                    this.currency == other.currency &&
-                    this.conversionRate == other.conversionRate &&
-                    this.discount == other.discount &&
-                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                    this.bulkBpsConfig == other.bulkBpsConfig &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            id,
-                            modelType,
-                            minimumAmount,
-                            maximumAmount,
-                            currency,
-                            conversionRate,
-                            discount,
-                            fixedPriceQuantity,
-                            bulkBpsConfig,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "OverrideBulkBpsPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, bulkBpsConfig=$bulkBpsConfig, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -7498,8 +6645,6 @@ constructor(
 
                 private var validated: Boolean = false
 
-                private var hashCode: Int = 0
-
                 /**
                  * Tiers for a bulk BPS pricing model where all usage is aggregated to a single tier
                  * based on total volume
@@ -7524,26 +6669,6 @@ constructor(
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is BulkBpsConfig &&
-                        this.tiers == other.tiers &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode = Objects.hash(tiers, additionalProperties)
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "BulkBpsConfig{tiers=$tiers, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -7609,8 +6734,6 @@ constructor(
 
                     private var validated: Boolean = false
 
-                    private var hashCode: Int = 0
-
                     /** Upper bound for tier */
                     fun maximumAmount(): Optional<String> =
                         Optional.ofNullable(maximumAmount.getNullable("maximum_amount"))
@@ -7649,34 +6772,6 @@ constructor(
                     }
 
                     fun toBuilder() = Builder().from(this)
-
-                    override fun equals(other: Any?): Boolean {
-                        if (this === other) {
-                            return true
-                        }
-
-                        return other is Tier &&
-                            this.maximumAmount == other.maximumAmount &&
-                            this.bps == other.bps &&
-                            this.perUnitMaximum == other.perUnitMaximum &&
-                            this.additionalProperties == other.additionalProperties
-                    }
-
-                    override fun hashCode(): Int {
-                        if (hashCode == 0) {
-                            hashCode =
-                                Objects.hash(
-                                    maximumAmount,
-                                    bps,
-                                    perUnitMaximum,
-                                    additionalProperties,
-                                )
-                        }
-                        return hashCode
-                    }
-
-                    override fun toString() =
-                        "Tier{maximumAmount=$maximumAmount, bps=$bps, perUnitMaximum=$perUnitMaximum, additionalProperties=$additionalProperties}"
 
                     companion object {
 
@@ -7752,7 +6847,47 @@ constructor(
                                 additionalProperties.toUnmodifiable(),
                             )
                     }
+
+                    override fun equals(other: Any?): Boolean {
+                        if (this === other) {
+                            return true
+                        }
+
+                        return /* spotless:off */ other is Tier && this.maximumAmount == other.maximumAmount && this.bps == other.bps && this.perUnitMaximum == other.perUnitMaximum && this.additionalProperties == other.additionalProperties /* spotless:on */
+                    }
+
+                    private var hashCode: Int = 0
+
+                    override fun hashCode(): Int {
+                        if (hashCode == 0) {
+                            hashCode = /* spotless:off */ Objects.hash(maximumAmount, bps, perUnitMaximum, additionalProperties) /* spotless:on */
+                        }
+                        return hashCode
+                    }
+
+                    override fun toString() =
+                        "Tier{maximumAmount=$maximumAmount, bps=$bps, perUnitMaximum=$perUnitMaximum, additionalProperties=$additionalProperties}"
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is BulkBpsConfig && this.tiers == other.tiers && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(tiers, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "BulkBpsConfig{tiers=$tiers, additionalProperties=$additionalProperties}"
             }
 
             class ModelType
@@ -7768,7 +6903,7 @@ constructor(
                         return true
                     }
 
-                    return other is ModelType && this.value == other.value
+                    return /* spotless:off */ other is ModelType && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -7813,16 +6948,12 @@ constructor(
             private constructor(
                 private val discountType: JsonField<DiscountType>,
                 private val percentageDiscount: JsonField<Double>,
-                private val trialAmountDiscount: JsonField<String>,
                 private val usageDiscount: JsonField<Double>,
                 private val amountDiscount: JsonField<String>,
-                private val appliesToPriceIds: JsonField<List<String>>,
                 private val additionalProperties: Map<String, JsonValue>,
             ) {
 
                 private var validated: Boolean = false
-
-                private var hashCode: Int = 0
 
                 fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
@@ -7832,10 +6963,6 @@ constructor(
                  */
                 fun percentageDiscount(): Optional<Double> =
                     Optional.ofNullable(percentageDiscount.getNullable("percentage_discount"))
-
-                /** Only available if discount_type is `trial` */
-                fun trialAmountDiscount(): Optional<String> =
-                    Optional.ofNullable(trialAmountDiscount.getNullable("trial_amount_discount"))
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -7848,13 +6975,6 @@ constructor(
                 fun amountDiscount(): Optional<String> =
                     Optional.ofNullable(amountDiscount.getNullable("amount_discount"))
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                fun appliesToPriceIds(): Optional<List<String>> =
-                    Optional.ofNullable(appliesToPriceIds.getNullable("applies_to_price_ids"))
-
                 @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
 
                 /**
@@ -7864,11 +6984,6 @@ constructor(
                 @JsonProperty("percentage_discount")
                 @ExcludeMissing
                 fun _percentageDiscount() = percentageDiscount
-
-                /** Only available if discount_type is `trial` */
-                @JsonProperty("trial_amount_discount")
-                @ExcludeMissing
-                fun _trialAmountDiscount() = trialAmountDiscount
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -7881,14 +6996,6 @@ constructor(
                 @ExcludeMissing
                 fun _amountDiscount() = amountDiscount
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                @JsonProperty("applies_to_price_ids")
-                @ExcludeMissing
-                fun _appliesToPriceIds() = appliesToPriceIds
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -7897,49 +7004,13 @@ constructor(
                     if (!validated) {
                         discountType()
                         percentageDiscount()
-                        trialAmountDiscount()
                         usageDiscount()
                         amountDiscount()
-                        appliesToPriceIds()
                         validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Discount &&
-                        this.discountType == other.discountType &&
-                        this.percentageDiscount == other.percentageDiscount &&
-                        this.trialAmountDiscount == other.trialAmountDiscount &&
-                        this.usageDiscount == other.usageDiscount &&
-                        this.amountDiscount == other.amountDiscount &&
-                        this.appliesToPriceIds == other.appliesToPriceIds &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                discountType,
-                                percentageDiscount,
-                                trialAmountDiscount,
-                                usageDiscount,
-                                amountDiscount,
-                                appliesToPriceIds,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, trialAmountDiscount=$trialAmountDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -7950,20 +7021,16 @@ constructor(
 
                     private var discountType: JsonField<DiscountType> = JsonMissing.of()
                     private var percentageDiscount: JsonField<Double> = JsonMissing.of()
-                    private var trialAmountDiscount: JsonField<String> = JsonMissing.of()
                     private var usageDiscount: JsonField<Double> = JsonMissing.of()
                     private var amountDiscount: JsonField<String> = JsonMissing.of()
-                    private var appliesToPriceIds: JsonField<List<String>> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(discount: Discount) = apply {
                         this.discountType = discount.discountType
                         this.percentageDiscount = discount.percentageDiscount
-                        this.trialAmountDiscount = discount.trialAmountDiscount
                         this.usageDiscount = discount.usageDiscount
                         this.amountDiscount = discount.amountDiscount
-                        this.appliesToPriceIds = discount.appliesToPriceIds
                         additionalProperties(discount.additionalProperties)
                     }
 
@@ -7991,17 +7058,6 @@ constructor(
                     @ExcludeMissing
                     fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
                         this.percentageDiscount = percentageDiscount
-                    }
-
-                    /** Only available if discount_type is `trial` */
-                    fun trialAmountDiscount(trialAmountDiscount: String) =
-                        trialAmountDiscount(JsonField.of(trialAmountDiscount))
-
-                    /** Only available if discount_type is `trial` */
-                    @JsonProperty("trial_amount_discount")
-                    @ExcludeMissing
-                    fun trialAmountDiscount(trialAmountDiscount: JsonField<String>) = apply {
-                        this.trialAmountDiscount = trialAmountDiscount
                     }
 
                     /**
@@ -8032,23 +7088,6 @@ constructor(
                         this.amountDiscount = amountDiscount
                     }
 
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    fun appliesToPriceIds(appliesToPriceIds: List<String>) =
-                        appliesToPriceIds(JsonField.of(appliesToPriceIds))
-
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    @JsonProperty("applies_to_price_ids")
-                    @ExcludeMissing
-                    fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
-                    }
-
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
                         this.additionalProperties.putAll(additionalProperties)
@@ -8068,10 +7107,8 @@ constructor(
                         Discount(
                             discountType,
                             percentageDiscount,
-                            trialAmountDiscount,
                             usageDiscount,
                             amountDiscount,
-                            appliesToPriceIds.map { it.toUnmodifiable() },
                             additionalProperties.toUnmodifiable(),
                         )
                 }
@@ -8090,7 +7127,7 @@ constructor(
                             return true
                         }
 
-                        return other is DiscountType && this.value == other.value
+                        return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
                     }
 
                     override fun hashCode() = value.hashCode()
@@ -8145,7 +7182,47 @@ constructor(
 
                     fun asString(): String = _value().asStringOrThrow()
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Discount && this.discountType == other.discountType && this.percentageDiscount == other.percentageDiscount && this.usageDiscount == other.usageDiscount && this.amountDiscount == other.amountDiscount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(discountType, percentageDiscount, usageDiscount, amountDiscount, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, additionalProperties=$additionalProperties}"
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is OverrideBulkBpsPrice && this.id == other.id && this.modelType == other.modelType && this.minimumAmount == other.minimumAmount && this.maximumAmount == other.maximumAmount && this.currency == other.currency && this.conversionRate == other.conversionRate && this.discount == other.discount && this.fixedPriceQuantity == other.fixedPriceQuantity && this.bulkBpsConfig == other.bulkBpsConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(id, modelType, minimumAmount, maximumAmount, currency, conversionRate, discount, fixedPriceQuantity, bulkBpsConfig, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "OverrideBulkBpsPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, bulkBpsConfig=$bulkBpsConfig, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = OverrideBulkPrice.Builder::class)
@@ -8165,8 +7242,6 @@ constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun id(): String = id.getRequired("id")
 
@@ -8247,46 +7322,6 @@ constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is OverrideBulkPrice &&
-                    this.id == other.id &&
-                    this.modelType == other.modelType &&
-                    this.minimumAmount == other.minimumAmount &&
-                    this.maximumAmount == other.maximumAmount &&
-                    this.currency == other.currency &&
-                    this.conversionRate == other.conversionRate &&
-                    this.discount == other.discount &&
-                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                    this.bulkConfig == other.bulkConfig &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            id,
-                            modelType,
-                            minimumAmount,
-                            maximumAmount,
-                            currency,
-                            conversionRate,
-                            discount,
-                            fixedPriceQuantity,
-                            bulkConfig,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "OverrideBulkPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, bulkConfig=$bulkConfig, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -8448,8 +7483,6 @@ constructor(
 
                 private var validated: Boolean = false
 
-                private var hashCode: Int = 0
-
                 /** Bulk tiers for rating based on total usage volume */
                 fun tiers(): List<Tier> = tiers.getRequired("tiers")
 
@@ -8468,26 +7501,6 @@ constructor(
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is BulkConfig &&
-                        this.tiers == other.tiers &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode = Objects.hash(tiers, additionalProperties)
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "BulkConfig{tiers=$tiers, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -8546,8 +7559,6 @@ constructor(
 
                     private var validated: Boolean = false
 
-                    private var hashCode: Int = 0
-
                     /** Upper bound for this tier */
                     fun maximumUnits(): Optional<Double> =
                         Optional.ofNullable(maximumUnits.getNullable("maximum_units"))
@@ -8576,32 +7587,6 @@ constructor(
                     }
 
                     fun toBuilder() = Builder().from(this)
-
-                    override fun equals(other: Any?): Boolean {
-                        if (this === other) {
-                            return true
-                        }
-
-                        return other is Tier &&
-                            this.maximumUnits == other.maximumUnits &&
-                            this.unitAmount == other.unitAmount &&
-                            this.additionalProperties == other.additionalProperties
-                    }
-
-                    override fun hashCode(): Int {
-                        if (hashCode == 0) {
-                            hashCode =
-                                Objects.hash(
-                                    maximumUnits,
-                                    unitAmount,
-                                    additionalProperties,
-                                )
-                        }
-                        return hashCode
-                    }
-
-                    override fun toString() =
-                        "Tier{maximumUnits=$maximumUnits, unitAmount=$unitAmount, additionalProperties=$additionalProperties}"
 
                     companion object {
 
@@ -8665,7 +7650,47 @@ constructor(
                                 additionalProperties.toUnmodifiable(),
                             )
                     }
+
+                    override fun equals(other: Any?): Boolean {
+                        if (this === other) {
+                            return true
+                        }
+
+                        return /* spotless:off */ other is Tier && this.maximumUnits == other.maximumUnits && this.unitAmount == other.unitAmount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                    }
+
+                    private var hashCode: Int = 0
+
+                    override fun hashCode(): Int {
+                        if (hashCode == 0) {
+                            hashCode = /* spotless:off */ Objects.hash(maximumUnits, unitAmount, additionalProperties) /* spotless:on */
+                        }
+                        return hashCode
+                    }
+
+                    override fun toString() =
+                        "Tier{maximumUnits=$maximumUnits, unitAmount=$unitAmount, additionalProperties=$additionalProperties}"
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is BulkConfig && this.tiers == other.tiers && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(tiers, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "BulkConfig{tiers=$tiers, additionalProperties=$additionalProperties}"
             }
 
             class ModelType
@@ -8681,7 +7706,7 @@ constructor(
                         return true
                     }
 
-                    return other is ModelType && this.value == other.value
+                    return /* spotless:off */ other is ModelType && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -8726,16 +7751,12 @@ constructor(
             private constructor(
                 private val discountType: JsonField<DiscountType>,
                 private val percentageDiscount: JsonField<Double>,
-                private val trialAmountDiscount: JsonField<String>,
                 private val usageDiscount: JsonField<Double>,
                 private val amountDiscount: JsonField<String>,
-                private val appliesToPriceIds: JsonField<List<String>>,
                 private val additionalProperties: Map<String, JsonValue>,
             ) {
 
                 private var validated: Boolean = false
-
-                private var hashCode: Int = 0
 
                 fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
@@ -8745,10 +7766,6 @@ constructor(
                  */
                 fun percentageDiscount(): Optional<Double> =
                     Optional.ofNullable(percentageDiscount.getNullable("percentage_discount"))
-
-                /** Only available if discount_type is `trial` */
-                fun trialAmountDiscount(): Optional<String> =
-                    Optional.ofNullable(trialAmountDiscount.getNullable("trial_amount_discount"))
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -8761,13 +7778,6 @@ constructor(
                 fun amountDiscount(): Optional<String> =
                     Optional.ofNullable(amountDiscount.getNullable("amount_discount"))
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                fun appliesToPriceIds(): Optional<List<String>> =
-                    Optional.ofNullable(appliesToPriceIds.getNullable("applies_to_price_ids"))
-
                 @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
 
                 /**
@@ -8777,11 +7787,6 @@ constructor(
                 @JsonProperty("percentage_discount")
                 @ExcludeMissing
                 fun _percentageDiscount() = percentageDiscount
-
-                /** Only available if discount_type is `trial` */
-                @JsonProperty("trial_amount_discount")
-                @ExcludeMissing
-                fun _trialAmountDiscount() = trialAmountDiscount
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -8794,14 +7799,6 @@ constructor(
                 @ExcludeMissing
                 fun _amountDiscount() = amountDiscount
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                @JsonProperty("applies_to_price_ids")
-                @ExcludeMissing
-                fun _appliesToPriceIds() = appliesToPriceIds
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -8810,49 +7807,13 @@ constructor(
                     if (!validated) {
                         discountType()
                         percentageDiscount()
-                        trialAmountDiscount()
                         usageDiscount()
                         amountDiscount()
-                        appliesToPriceIds()
                         validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Discount &&
-                        this.discountType == other.discountType &&
-                        this.percentageDiscount == other.percentageDiscount &&
-                        this.trialAmountDiscount == other.trialAmountDiscount &&
-                        this.usageDiscount == other.usageDiscount &&
-                        this.amountDiscount == other.amountDiscount &&
-                        this.appliesToPriceIds == other.appliesToPriceIds &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                discountType,
-                                percentageDiscount,
-                                trialAmountDiscount,
-                                usageDiscount,
-                                amountDiscount,
-                                appliesToPriceIds,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, trialAmountDiscount=$trialAmountDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -8863,20 +7824,16 @@ constructor(
 
                     private var discountType: JsonField<DiscountType> = JsonMissing.of()
                     private var percentageDiscount: JsonField<Double> = JsonMissing.of()
-                    private var trialAmountDiscount: JsonField<String> = JsonMissing.of()
                     private var usageDiscount: JsonField<Double> = JsonMissing.of()
                     private var amountDiscount: JsonField<String> = JsonMissing.of()
-                    private var appliesToPriceIds: JsonField<List<String>> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(discount: Discount) = apply {
                         this.discountType = discount.discountType
                         this.percentageDiscount = discount.percentageDiscount
-                        this.trialAmountDiscount = discount.trialAmountDiscount
                         this.usageDiscount = discount.usageDiscount
                         this.amountDiscount = discount.amountDiscount
-                        this.appliesToPriceIds = discount.appliesToPriceIds
                         additionalProperties(discount.additionalProperties)
                     }
 
@@ -8904,17 +7861,6 @@ constructor(
                     @ExcludeMissing
                     fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
                         this.percentageDiscount = percentageDiscount
-                    }
-
-                    /** Only available if discount_type is `trial` */
-                    fun trialAmountDiscount(trialAmountDiscount: String) =
-                        trialAmountDiscount(JsonField.of(trialAmountDiscount))
-
-                    /** Only available if discount_type is `trial` */
-                    @JsonProperty("trial_amount_discount")
-                    @ExcludeMissing
-                    fun trialAmountDiscount(trialAmountDiscount: JsonField<String>) = apply {
-                        this.trialAmountDiscount = trialAmountDiscount
                     }
 
                     /**
@@ -8945,23 +7891,6 @@ constructor(
                         this.amountDiscount = amountDiscount
                     }
 
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    fun appliesToPriceIds(appliesToPriceIds: List<String>) =
-                        appliesToPriceIds(JsonField.of(appliesToPriceIds))
-
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    @JsonProperty("applies_to_price_ids")
-                    @ExcludeMissing
-                    fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
-                    }
-
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
                         this.additionalProperties.putAll(additionalProperties)
@@ -8981,10 +7910,8 @@ constructor(
                         Discount(
                             discountType,
                             percentageDiscount,
-                            trialAmountDiscount,
                             usageDiscount,
                             amountDiscount,
-                            appliesToPriceIds.map { it.toUnmodifiable() },
                             additionalProperties.toUnmodifiable(),
                         )
                 }
@@ -9003,7 +7930,7 @@ constructor(
                             return true
                         }
 
-                        return other is DiscountType && this.value == other.value
+                        return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
                     }
 
                     override fun hashCode() = value.hashCode()
@@ -9058,7 +7985,47 @@ constructor(
 
                     fun asString(): String = _value().asStringOrThrow()
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Discount && this.discountType == other.discountType && this.percentageDiscount == other.percentageDiscount && this.usageDiscount == other.usageDiscount && this.amountDiscount == other.amountDiscount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(discountType, percentageDiscount, usageDiscount, amountDiscount, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, additionalProperties=$additionalProperties}"
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is OverrideBulkPrice && this.id == other.id && this.modelType == other.modelType && this.minimumAmount == other.minimumAmount && this.maximumAmount == other.maximumAmount && this.currency == other.currency && this.conversionRate == other.conversionRate && this.discount == other.discount && this.fixedPriceQuantity == other.fixedPriceQuantity && this.bulkConfig == other.bulkConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(id, modelType, minimumAmount, maximumAmount, currency, conversionRate, discount, fixedPriceQuantity, bulkConfig, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "OverrideBulkPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, bulkConfig=$bulkConfig, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = OverrideThresholdTotalAmountPrice.Builder::class)
@@ -9078,8 +8045,6 @@ constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun id(): String = id.getRequired("id")
 
@@ -9163,46 +8128,6 @@ constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is OverrideThresholdTotalAmountPrice &&
-                    this.id == other.id &&
-                    this.modelType == other.modelType &&
-                    this.minimumAmount == other.minimumAmount &&
-                    this.maximumAmount == other.maximumAmount &&
-                    this.currency == other.currency &&
-                    this.conversionRate == other.conversionRate &&
-                    this.discount == other.discount &&
-                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                    this.thresholdTotalAmountConfig == other.thresholdTotalAmountConfig &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            id,
-                            modelType,
-                            minimumAmount,
-                            maximumAmount,
-                            currency,
-                            conversionRate,
-                            discount,
-                            fixedPriceQuantity,
-                            thresholdTotalAmountConfig,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "OverrideThresholdTotalAmountPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, thresholdTotalAmountConfig=$thresholdTotalAmountConfig, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -9373,7 +8298,7 @@ constructor(
                         return true
                     }
 
-                    return other is ModelType && this.value == other.value
+                    return /* spotless:off */ other is ModelType && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -9421,8 +8346,6 @@ constructor(
 
                 private var validated: Boolean = false
 
-                private var hashCode: Int = 0
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -9434,25 +8357,6 @@ constructor(
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is ThresholdTotalAmountConfig &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode = Objects.hash(additionalProperties)
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "ThresholdTotalAmountConfig{additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -9487,6 +8391,26 @@ constructor(
                     fun build(): ThresholdTotalAmountConfig =
                         ThresholdTotalAmountConfig(additionalProperties.toUnmodifiable())
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is ThresholdTotalAmountConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "ThresholdTotalAmountConfig{additionalProperties=$additionalProperties}"
             }
 
             /** The subscription's override discount for the plan. */
@@ -9496,16 +8420,12 @@ constructor(
             private constructor(
                 private val discountType: JsonField<DiscountType>,
                 private val percentageDiscount: JsonField<Double>,
-                private val trialAmountDiscount: JsonField<String>,
                 private val usageDiscount: JsonField<Double>,
                 private val amountDiscount: JsonField<String>,
-                private val appliesToPriceIds: JsonField<List<String>>,
                 private val additionalProperties: Map<String, JsonValue>,
             ) {
 
                 private var validated: Boolean = false
-
-                private var hashCode: Int = 0
 
                 fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
@@ -9515,10 +8435,6 @@ constructor(
                  */
                 fun percentageDiscount(): Optional<Double> =
                     Optional.ofNullable(percentageDiscount.getNullable("percentage_discount"))
-
-                /** Only available if discount_type is `trial` */
-                fun trialAmountDiscount(): Optional<String> =
-                    Optional.ofNullable(trialAmountDiscount.getNullable("trial_amount_discount"))
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -9531,13 +8447,6 @@ constructor(
                 fun amountDiscount(): Optional<String> =
                     Optional.ofNullable(amountDiscount.getNullable("amount_discount"))
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                fun appliesToPriceIds(): Optional<List<String>> =
-                    Optional.ofNullable(appliesToPriceIds.getNullable("applies_to_price_ids"))
-
                 @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
 
                 /**
@@ -9547,11 +8456,6 @@ constructor(
                 @JsonProperty("percentage_discount")
                 @ExcludeMissing
                 fun _percentageDiscount() = percentageDiscount
-
-                /** Only available if discount_type is `trial` */
-                @JsonProperty("trial_amount_discount")
-                @ExcludeMissing
-                fun _trialAmountDiscount() = trialAmountDiscount
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -9564,14 +8468,6 @@ constructor(
                 @ExcludeMissing
                 fun _amountDiscount() = amountDiscount
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                @JsonProperty("applies_to_price_ids")
-                @ExcludeMissing
-                fun _appliesToPriceIds() = appliesToPriceIds
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -9580,49 +8476,13 @@ constructor(
                     if (!validated) {
                         discountType()
                         percentageDiscount()
-                        trialAmountDiscount()
                         usageDiscount()
                         amountDiscount()
-                        appliesToPriceIds()
                         validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Discount &&
-                        this.discountType == other.discountType &&
-                        this.percentageDiscount == other.percentageDiscount &&
-                        this.trialAmountDiscount == other.trialAmountDiscount &&
-                        this.usageDiscount == other.usageDiscount &&
-                        this.amountDiscount == other.amountDiscount &&
-                        this.appliesToPriceIds == other.appliesToPriceIds &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                discountType,
-                                percentageDiscount,
-                                trialAmountDiscount,
-                                usageDiscount,
-                                amountDiscount,
-                                appliesToPriceIds,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, trialAmountDiscount=$trialAmountDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -9633,20 +8493,16 @@ constructor(
 
                     private var discountType: JsonField<DiscountType> = JsonMissing.of()
                     private var percentageDiscount: JsonField<Double> = JsonMissing.of()
-                    private var trialAmountDiscount: JsonField<String> = JsonMissing.of()
                     private var usageDiscount: JsonField<Double> = JsonMissing.of()
                     private var amountDiscount: JsonField<String> = JsonMissing.of()
-                    private var appliesToPriceIds: JsonField<List<String>> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(discount: Discount) = apply {
                         this.discountType = discount.discountType
                         this.percentageDiscount = discount.percentageDiscount
-                        this.trialAmountDiscount = discount.trialAmountDiscount
                         this.usageDiscount = discount.usageDiscount
                         this.amountDiscount = discount.amountDiscount
-                        this.appliesToPriceIds = discount.appliesToPriceIds
                         additionalProperties(discount.additionalProperties)
                     }
 
@@ -9674,17 +8530,6 @@ constructor(
                     @ExcludeMissing
                     fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
                         this.percentageDiscount = percentageDiscount
-                    }
-
-                    /** Only available if discount_type is `trial` */
-                    fun trialAmountDiscount(trialAmountDiscount: String) =
-                        trialAmountDiscount(JsonField.of(trialAmountDiscount))
-
-                    /** Only available if discount_type is `trial` */
-                    @JsonProperty("trial_amount_discount")
-                    @ExcludeMissing
-                    fun trialAmountDiscount(trialAmountDiscount: JsonField<String>) = apply {
-                        this.trialAmountDiscount = trialAmountDiscount
                     }
 
                     /**
@@ -9715,23 +8560,6 @@ constructor(
                         this.amountDiscount = amountDiscount
                     }
 
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    fun appliesToPriceIds(appliesToPriceIds: List<String>) =
-                        appliesToPriceIds(JsonField.of(appliesToPriceIds))
-
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    @JsonProperty("applies_to_price_ids")
-                    @ExcludeMissing
-                    fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
-                    }
-
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
                         this.additionalProperties.putAll(additionalProperties)
@@ -9751,10 +8579,8 @@ constructor(
                         Discount(
                             discountType,
                             percentageDiscount,
-                            trialAmountDiscount,
                             usageDiscount,
                             amountDiscount,
-                            appliesToPriceIds.map { it.toUnmodifiable() },
                             additionalProperties.toUnmodifiable(),
                         )
                 }
@@ -9773,7 +8599,7 @@ constructor(
                             return true
                         }
 
-                        return other is DiscountType && this.value == other.value
+                        return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
                     }
 
                     override fun hashCode() = value.hashCode()
@@ -9828,7 +8654,47 @@ constructor(
 
                     fun asString(): String = _value().asStringOrThrow()
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Discount && this.discountType == other.discountType && this.percentageDiscount == other.percentageDiscount && this.usageDiscount == other.usageDiscount && this.amountDiscount == other.amountDiscount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(discountType, percentageDiscount, usageDiscount, amountDiscount, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, additionalProperties=$additionalProperties}"
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is OverrideThresholdTotalAmountPrice && this.id == other.id && this.modelType == other.modelType && this.minimumAmount == other.minimumAmount && this.maximumAmount == other.maximumAmount && this.currency == other.currency && this.conversionRate == other.conversionRate && this.discount == other.discount && this.fixedPriceQuantity == other.fixedPriceQuantity && this.thresholdTotalAmountConfig == other.thresholdTotalAmountConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(id, modelType, minimumAmount, maximumAmount, currency, conversionRate, discount, fixedPriceQuantity, thresholdTotalAmountConfig, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "OverrideThresholdTotalAmountPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, thresholdTotalAmountConfig=$thresholdTotalAmountConfig, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = OverrideTieredPackagePrice.Builder::class)
@@ -9848,8 +8714,6 @@ constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun id(): String = id.getRequired("id")
 
@@ -9933,46 +8797,6 @@ constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is OverrideTieredPackagePrice &&
-                    this.id == other.id &&
-                    this.modelType == other.modelType &&
-                    this.minimumAmount == other.minimumAmount &&
-                    this.maximumAmount == other.maximumAmount &&
-                    this.currency == other.currency &&
-                    this.conversionRate == other.conversionRate &&
-                    this.discount == other.discount &&
-                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                    this.tieredPackageConfig == other.tieredPackageConfig &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            id,
-                            modelType,
-                            minimumAmount,
-                            maximumAmount,
-                            currency,
-                            conversionRate,
-                            discount,
-                            fixedPriceQuantity,
-                            tieredPackageConfig,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "OverrideTieredPackagePrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, tieredPackageConfig=$tieredPackageConfig, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -10139,7 +8963,7 @@ constructor(
                         return true
                     }
 
-                    return other is ModelType && this.value == other.value
+                    return /* spotless:off */ other is ModelType && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -10186,8 +9010,6 @@ constructor(
 
                 private var validated: Boolean = false
 
-                private var hashCode: Int = 0
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -10199,25 +9021,6 @@ constructor(
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is TieredPackageConfig &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode = Objects.hash(additionalProperties)
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "TieredPackageConfig{additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -10251,6 +9054,26 @@ constructor(
                     fun build(): TieredPackageConfig =
                         TieredPackageConfig(additionalProperties.toUnmodifiable())
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is TieredPackageConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "TieredPackageConfig{additionalProperties=$additionalProperties}"
             }
 
             /** The subscription's override discount for the plan. */
@@ -10260,16 +9083,12 @@ constructor(
             private constructor(
                 private val discountType: JsonField<DiscountType>,
                 private val percentageDiscount: JsonField<Double>,
-                private val trialAmountDiscount: JsonField<String>,
                 private val usageDiscount: JsonField<Double>,
                 private val amountDiscount: JsonField<String>,
-                private val appliesToPriceIds: JsonField<List<String>>,
                 private val additionalProperties: Map<String, JsonValue>,
             ) {
 
                 private var validated: Boolean = false
-
-                private var hashCode: Int = 0
 
                 fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
@@ -10279,10 +9098,6 @@ constructor(
                  */
                 fun percentageDiscount(): Optional<Double> =
                     Optional.ofNullable(percentageDiscount.getNullable("percentage_discount"))
-
-                /** Only available if discount_type is `trial` */
-                fun trialAmountDiscount(): Optional<String> =
-                    Optional.ofNullable(trialAmountDiscount.getNullable("trial_amount_discount"))
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -10295,13 +9110,6 @@ constructor(
                 fun amountDiscount(): Optional<String> =
                     Optional.ofNullable(amountDiscount.getNullable("amount_discount"))
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                fun appliesToPriceIds(): Optional<List<String>> =
-                    Optional.ofNullable(appliesToPriceIds.getNullable("applies_to_price_ids"))
-
                 @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
 
                 /**
@@ -10311,11 +9119,6 @@ constructor(
                 @JsonProperty("percentage_discount")
                 @ExcludeMissing
                 fun _percentageDiscount() = percentageDiscount
-
-                /** Only available if discount_type is `trial` */
-                @JsonProperty("trial_amount_discount")
-                @ExcludeMissing
-                fun _trialAmountDiscount() = trialAmountDiscount
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -10328,14 +9131,6 @@ constructor(
                 @ExcludeMissing
                 fun _amountDiscount() = amountDiscount
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                @JsonProperty("applies_to_price_ids")
-                @ExcludeMissing
-                fun _appliesToPriceIds() = appliesToPriceIds
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -10344,49 +9139,13 @@ constructor(
                     if (!validated) {
                         discountType()
                         percentageDiscount()
-                        trialAmountDiscount()
                         usageDiscount()
                         amountDiscount()
-                        appliesToPriceIds()
                         validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Discount &&
-                        this.discountType == other.discountType &&
-                        this.percentageDiscount == other.percentageDiscount &&
-                        this.trialAmountDiscount == other.trialAmountDiscount &&
-                        this.usageDiscount == other.usageDiscount &&
-                        this.amountDiscount == other.amountDiscount &&
-                        this.appliesToPriceIds == other.appliesToPriceIds &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                discountType,
-                                percentageDiscount,
-                                trialAmountDiscount,
-                                usageDiscount,
-                                amountDiscount,
-                                appliesToPriceIds,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, trialAmountDiscount=$trialAmountDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -10397,20 +9156,16 @@ constructor(
 
                     private var discountType: JsonField<DiscountType> = JsonMissing.of()
                     private var percentageDiscount: JsonField<Double> = JsonMissing.of()
-                    private var trialAmountDiscount: JsonField<String> = JsonMissing.of()
                     private var usageDiscount: JsonField<Double> = JsonMissing.of()
                     private var amountDiscount: JsonField<String> = JsonMissing.of()
-                    private var appliesToPriceIds: JsonField<List<String>> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(discount: Discount) = apply {
                         this.discountType = discount.discountType
                         this.percentageDiscount = discount.percentageDiscount
-                        this.trialAmountDiscount = discount.trialAmountDiscount
                         this.usageDiscount = discount.usageDiscount
                         this.amountDiscount = discount.amountDiscount
-                        this.appliesToPriceIds = discount.appliesToPriceIds
                         additionalProperties(discount.additionalProperties)
                     }
 
@@ -10438,17 +9193,6 @@ constructor(
                     @ExcludeMissing
                     fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
                         this.percentageDiscount = percentageDiscount
-                    }
-
-                    /** Only available if discount_type is `trial` */
-                    fun trialAmountDiscount(trialAmountDiscount: String) =
-                        trialAmountDiscount(JsonField.of(trialAmountDiscount))
-
-                    /** Only available if discount_type is `trial` */
-                    @JsonProperty("trial_amount_discount")
-                    @ExcludeMissing
-                    fun trialAmountDiscount(trialAmountDiscount: JsonField<String>) = apply {
-                        this.trialAmountDiscount = trialAmountDiscount
                     }
 
                     /**
@@ -10479,23 +9223,6 @@ constructor(
                         this.amountDiscount = amountDiscount
                     }
 
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    fun appliesToPriceIds(appliesToPriceIds: List<String>) =
-                        appliesToPriceIds(JsonField.of(appliesToPriceIds))
-
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    @JsonProperty("applies_to_price_ids")
-                    @ExcludeMissing
-                    fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
-                    }
-
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
                         this.additionalProperties.putAll(additionalProperties)
@@ -10515,10 +9242,8 @@ constructor(
                         Discount(
                             discountType,
                             percentageDiscount,
-                            trialAmountDiscount,
                             usageDiscount,
                             amountDiscount,
-                            appliesToPriceIds.map { it.toUnmodifiable() },
                             additionalProperties.toUnmodifiable(),
                         )
                 }
@@ -10537,7 +9262,7 @@ constructor(
                             return true
                         }
 
-                        return other is DiscountType && this.value == other.value
+                        return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
                     }
 
                     override fun hashCode() = value.hashCode()
@@ -10592,7 +9317,47 @@ constructor(
 
                     fun asString(): String = _value().asStringOrThrow()
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Discount && this.discountType == other.discountType && this.percentageDiscount == other.percentageDiscount && this.usageDiscount == other.usageDiscount && this.amountDiscount == other.amountDiscount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(discountType, percentageDiscount, usageDiscount, amountDiscount, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, additionalProperties=$additionalProperties}"
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is OverrideTieredPackagePrice && this.id == other.id && this.modelType == other.modelType && this.minimumAmount == other.minimumAmount && this.maximumAmount == other.maximumAmount && this.currency == other.currency && this.conversionRate == other.conversionRate && this.discount == other.discount && this.fixedPriceQuantity == other.fixedPriceQuantity && this.tieredPackageConfig == other.tieredPackageConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(id, modelType, minimumAmount, maximumAmount, currency, conversionRate, discount, fixedPriceQuantity, tieredPackageConfig, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "OverrideTieredPackagePrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, tieredPackageConfig=$tieredPackageConfig, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = OverrideTieredWithMinimumPrice.Builder::class)
@@ -10612,8 +9377,6 @@ constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun id(): String = id.getRequired("id")
 
@@ -10697,46 +9460,6 @@ constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is OverrideTieredWithMinimumPrice &&
-                    this.id == other.id &&
-                    this.modelType == other.modelType &&
-                    this.minimumAmount == other.minimumAmount &&
-                    this.maximumAmount == other.maximumAmount &&
-                    this.currency == other.currency &&
-                    this.conversionRate == other.conversionRate &&
-                    this.discount == other.discount &&
-                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                    this.tieredWithMinimumConfig == other.tieredWithMinimumConfig &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            id,
-                            modelType,
-                            minimumAmount,
-                            maximumAmount,
-                            currency,
-                            conversionRate,
-                            discount,
-                            fixedPriceQuantity,
-                            tieredWithMinimumConfig,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "OverrideTieredWithMinimumPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, tieredWithMinimumConfig=$tieredWithMinimumConfig, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -10905,7 +9628,7 @@ constructor(
                         return true
                     }
 
-                    return other is ModelType && this.value == other.value
+                    return /* spotless:off */ other is ModelType && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -10953,8 +9676,6 @@ constructor(
 
                 private var validated: Boolean = false
 
-                private var hashCode: Int = 0
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -10966,25 +9687,6 @@ constructor(
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is TieredWithMinimumConfig &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode = Objects.hash(additionalProperties)
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "TieredWithMinimumConfig{additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -11018,6 +9720,26 @@ constructor(
                     fun build(): TieredWithMinimumConfig =
                         TieredWithMinimumConfig(additionalProperties.toUnmodifiable())
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is TieredWithMinimumConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "TieredWithMinimumConfig{additionalProperties=$additionalProperties}"
             }
 
             /** The subscription's override discount for the plan. */
@@ -11027,16 +9749,12 @@ constructor(
             private constructor(
                 private val discountType: JsonField<DiscountType>,
                 private val percentageDiscount: JsonField<Double>,
-                private val trialAmountDiscount: JsonField<String>,
                 private val usageDiscount: JsonField<Double>,
                 private val amountDiscount: JsonField<String>,
-                private val appliesToPriceIds: JsonField<List<String>>,
                 private val additionalProperties: Map<String, JsonValue>,
             ) {
 
                 private var validated: Boolean = false
-
-                private var hashCode: Int = 0
 
                 fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
@@ -11046,10 +9764,6 @@ constructor(
                  */
                 fun percentageDiscount(): Optional<Double> =
                     Optional.ofNullable(percentageDiscount.getNullable("percentage_discount"))
-
-                /** Only available if discount_type is `trial` */
-                fun trialAmountDiscount(): Optional<String> =
-                    Optional.ofNullable(trialAmountDiscount.getNullable("trial_amount_discount"))
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -11062,13 +9776,6 @@ constructor(
                 fun amountDiscount(): Optional<String> =
                     Optional.ofNullable(amountDiscount.getNullable("amount_discount"))
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                fun appliesToPriceIds(): Optional<List<String>> =
-                    Optional.ofNullable(appliesToPriceIds.getNullable("applies_to_price_ids"))
-
                 @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
 
                 /**
@@ -11078,11 +9785,6 @@ constructor(
                 @JsonProperty("percentage_discount")
                 @ExcludeMissing
                 fun _percentageDiscount() = percentageDiscount
-
-                /** Only available if discount_type is `trial` */
-                @JsonProperty("trial_amount_discount")
-                @ExcludeMissing
-                fun _trialAmountDiscount() = trialAmountDiscount
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -11095,14 +9797,6 @@ constructor(
                 @ExcludeMissing
                 fun _amountDiscount() = amountDiscount
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                @JsonProperty("applies_to_price_ids")
-                @ExcludeMissing
-                fun _appliesToPriceIds() = appliesToPriceIds
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -11111,49 +9805,13 @@ constructor(
                     if (!validated) {
                         discountType()
                         percentageDiscount()
-                        trialAmountDiscount()
                         usageDiscount()
                         amountDiscount()
-                        appliesToPriceIds()
                         validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Discount &&
-                        this.discountType == other.discountType &&
-                        this.percentageDiscount == other.percentageDiscount &&
-                        this.trialAmountDiscount == other.trialAmountDiscount &&
-                        this.usageDiscount == other.usageDiscount &&
-                        this.amountDiscount == other.amountDiscount &&
-                        this.appliesToPriceIds == other.appliesToPriceIds &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                discountType,
-                                percentageDiscount,
-                                trialAmountDiscount,
-                                usageDiscount,
-                                amountDiscount,
-                                appliesToPriceIds,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, trialAmountDiscount=$trialAmountDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -11164,20 +9822,16 @@ constructor(
 
                     private var discountType: JsonField<DiscountType> = JsonMissing.of()
                     private var percentageDiscount: JsonField<Double> = JsonMissing.of()
-                    private var trialAmountDiscount: JsonField<String> = JsonMissing.of()
                     private var usageDiscount: JsonField<Double> = JsonMissing.of()
                     private var amountDiscount: JsonField<String> = JsonMissing.of()
-                    private var appliesToPriceIds: JsonField<List<String>> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(discount: Discount) = apply {
                         this.discountType = discount.discountType
                         this.percentageDiscount = discount.percentageDiscount
-                        this.trialAmountDiscount = discount.trialAmountDiscount
                         this.usageDiscount = discount.usageDiscount
                         this.amountDiscount = discount.amountDiscount
-                        this.appliesToPriceIds = discount.appliesToPriceIds
                         additionalProperties(discount.additionalProperties)
                     }
 
@@ -11205,17 +9859,6 @@ constructor(
                     @ExcludeMissing
                     fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
                         this.percentageDiscount = percentageDiscount
-                    }
-
-                    /** Only available if discount_type is `trial` */
-                    fun trialAmountDiscount(trialAmountDiscount: String) =
-                        trialAmountDiscount(JsonField.of(trialAmountDiscount))
-
-                    /** Only available if discount_type is `trial` */
-                    @JsonProperty("trial_amount_discount")
-                    @ExcludeMissing
-                    fun trialAmountDiscount(trialAmountDiscount: JsonField<String>) = apply {
-                        this.trialAmountDiscount = trialAmountDiscount
                     }
 
                     /**
@@ -11246,23 +9889,6 @@ constructor(
                         this.amountDiscount = amountDiscount
                     }
 
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    fun appliesToPriceIds(appliesToPriceIds: List<String>) =
-                        appliesToPriceIds(JsonField.of(appliesToPriceIds))
-
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    @JsonProperty("applies_to_price_ids")
-                    @ExcludeMissing
-                    fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
-                    }
-
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
                         this.additionalProperties.putAll(additionalProperties)
@@ -11282,10 +9908,8 @@ constructor(
                         Discount(
                             discountType,
                             percentageDiscount,
-                            trialAmountDiscount,
                             usageDiscount,
                             amountDiscount,
-                            appliesToPriceIds.map { it.toUnmodifiable() },
                             additionalProperties.toUnmodifiable(),
                         )
                 }
@@ -11304,7 +9928,7 @@ constructor(
                             return true
                         }
 
-                        return other is DiscountType && this.value == other.value
+                        return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
                     }
 
                     override fun hashCode() = value.hashCode()
@@ -11359,7 +9983,47 @@ constructor(
 
                     fun asString(): String = _value().asStringOrThrow()
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Discount && this.discountType == other.discountType && this.percentageDiscount == other.percentageDiscount && this.usageDiscount == other.usageDiscount && this.amountDiscount == other.amountDiscount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(discountType, percentageDiscount, usageDiscount, amountDiscount, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, additionalProperties=$additionalProperties}"
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is OverrideTieredWithMinimumPrice && this.id == other.id && this.modelType == other.modelType && this.minimumAmount == other.minimumAmount && this.maximumAmount == other.maximumAmount && this.currency == other.currency && this.conversionRate == other.conversionRate && this.discount == other.discount && this.fixedPriceQuantity == other.fixedPriceQuantity && this.tieredWithMinimumConfig == other.tieredWithMinimumConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(id, modelType, minimumAmount, maximumAmount, currency, conversionRate, discount, fixedPriceQuantity, tieredWithMinimumConfig, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "OverrideTieredWithMinimumPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, tieredWithMinimumConfig=$tieredWithMinimumConfig, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = OverridePackageWithAllocationPrice.Builder::class)
@@ -11379,8 +10043,6 @@ constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun id(): String = id.getRequired("id")
 
@@ -11464,46 +10126,6 @@ constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is OverridePackageWithAllocationPrice &&
-                    this.id == other.id &&
-                    this.modelType == other.modelType &&
-                    this.minimumAmount == other.minimumAmount &&
-                    this.maximumAmount == other.maximumAmount &&
-                    this.currency == other.currency &&
-                    this.conversionRate == other.conversionRate &&
-                    this.discount == other.discount &&
-                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                    this.packageWithAllocationConfig == other.packageWithAllocationConfig &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            id,
-                            modelType,
-                            minimumAmount,
-                            maximumAmount,
-                            currency,
-                            conversionRate,
-                            discount,
-                            fixedPriceQuantity,
-                            packageWithAllocationConfig,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "OverridePackageWithAllocationPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, packageWithAllocationConfig=$packageWithAllocationConfig, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -11674,7 +10296,7 @@ constructor(
                         return true
                     }
 
-                    return other is ModelType && this.value == other.value
+                    return /* spotless:off */ other is ModelType && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -11722,8 +10344,6 @@ constructor(
 
                 private var validated: Boolean = false
 
-                private var hashCode: Int = 0
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -11735,25 +10355,6 @@ constructor(
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is PackageWithAllocationConfig &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode = Objects.hash(additionalProperties)
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "PackageWithAllocationConfig{additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -11788,6 +10389,26 @@ constructor(
                     fun build(): PackageWithAllocationConfig =
                         PackageWithAllocationConfig(additionalProperties.toUnmodifiable())
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is PackageWithAllocationConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "PackageWithAllocationConfig{additionalProperties=$additionalProperties}"
             }
 
             /** The subscription's override discount for the plan. */
@@ -11797,16 +10418,12 @@ constructor(
             private constructor(
                 private val discountType: JsonField<DiscountType>,
                 private val percentageDiscount: JsonField<Double>,
-                private val trialAmountDiscount: JsonField<String>,
                 private val usageDiscount: JsonField<Double>,
                 private val amountDiscount: JsonField<String>,
-                private val appliesToPriceIds: JsonField<List<String>>,
                 private val additionalProperties: Map<String, JsonValue>,
             ) {
 
                 private var validated: Boolean = false
-
-                private var hashCode: Int = 0
 
                 fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
@@ -11816,10 +10433,6 @@ constructor(
                  */
                 fun percentageDiscount(): Optional<Double> =
                     Optional.ofNullable(percentageDiscount.getNullable("percentage_discount"))
-
-                /** Only available if discount_type is `trial` */
-                fun trialAmountDiscount(): Optional<String> =
-                    Optional.ofNullable(trialAmountDiscount.getNullable("trial_amount_discount"))
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -11832,13 +10445,6 @@ constructor(
                 fun amountDiscount(): Optional<String> =
                     Optional.ofNullable(amountDiscount.getNullable("amount_discount"))
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                fun appliesToPriceIds(): Optional<List<String>> =
-                    Optional.ofNullable(appliesToPriceIds.getNullable("applies_to_price_ids"))
-
                 @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
 
                 /**
@@ -11848,11 +10454,6 @@ constructor(
                 @JsonProperty("percentage_discount")
                 @ExcludeMissing
                 fun _percentageDiscount() = percentageDiscount
-
-                /** Only available if discount_type is `trial` */
-                @JsonProperty("trial_amount_discount")
-                @ExcludeMissing
-                fun _trialAmountDiscount() = trialAmountDiscount
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -11865,14 +10466,6 @@ constructor(
                 @ExcludeMissing
                 fun _amountDiscount() = amountDiscount
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                @JsonProperty("applies_to_price_ids")
-                @ExcludeMissing
-                fun _appliesToPriceIds() = appliesToPriceIds
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -11881,49 +10474,13 @@ constructor(
                     if (!validated) {
                         discountType()
                         percentageDiscount()
-                        trialAmountDiscount()
                         usageDiscount()
                         amountDiscount()
-                        appliesToPriceIds()
                         validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Discount &&
-                        this.discountType == other.discountType &&
-                        this.percentageDiscount == other.percentageDiscount &&
-                        this.trialAmountDiscount == other.trialAmountDiscount &&
-                        this.usageDiscount == other.usageDiscount &&
-                        this.amountDiscount == other.amountDiscount &&
-                        this.appliesToPriceIds == other.appliesToPriceIds &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                discountType,
-                                percentageDiscount,
-                                trialAmountDiscount,
-                                usageDiscount,
-                                amountDiscount,
-                                appliesToPriceIds,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, trialAmountDiscount=$trialAmountDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -11934,20 +10491,16 @@ constructor(
 
                     private var discountType: JsonField<DiscountType> = JsonMissing.of()
                     private var percentageDiscount: JsonField<Double> = JsonMissing.of()
-                    private var trialAmountDiscount: JsonField<String> = JsonMissing.of()
                     private var usageDiscount: JsonField<Double> = JsonMissing.of()
                     private var amountDiscount: JsonField<String> = JsonMissing.of()
-                    private var appliesToPriceIds: JsonField<List<String>> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(discount: Discount) = apply {
                         this.discountType = discount.discountType
                         this.percentageDiscount = discount.percentageDiscount
-                        this.trialAmountDiscount = discount.trialAmountDiscount
                         this.usageDiscount = discount.usageDiscount
                         this.amountDiscount = discount.amountDiscount
-                        this.appliesToPriceIds = discount.appliesToPriceIds
                         additionalProperties(discount.additionalProperties)
                     }
 
@@ -11975,17 +10528,6 @@ constructor(
                     @ExcludeMissing
                     fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
                         this.percentageDiscount = percentageDiscount
-                    }
-
-                    /** Only available if discount_type is `trial` */
-                    fun trialAmountDiscount(trialAmountDiscount: String) =
-                        trialAmountDiscount(JsonField.of(trialAmountDiscount))
-
-                    /** Only available if discount_type is `trial` */
-                    @JsonProperty("trial_amount_discount")
-                    @ExcludeMissing
-                    fun trialAmountDiscount(trialAmountDiscount: JsonField<String>) = apply {
-                        this.trialAmountDiscount = trialAmountDiscount
                     }
 
                     /**
@@ -12016,23 +10558,6 @@ constructor(
                         this.amountDiscount = amountDiscount
                     }
 
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    fun appliesToPriceIds(appliesToPriceIds: List<String>) =
-                        appliesToPriceIds(JsonField.of(appliesToPriceIds))
-
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    @JsonProperty("applies_to_price_ids")
-                    @ExcludeMissing
-                    fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
-                    }
-
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
                         this.additionalProperties.putAll(additionalProperties)
@@ -12052,10 +10577,8 @@ constructor(
                         Discount(
                             discountType,
                             percentageDiscount,
-                            trialAmountDiscount,
                             usageDiscount,
                             amountDiscount,
-                            appliesToPriceIds.map { it.toUnmodifiable() },
                             additionalProperties.toUnmodifiable(),
                         )
                 }
@@ -12074,7 +10597,7 @@ constructor(
                             return true
                         }
 
-                        return other is DiscountType && this.value == other.value
+                        return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
                     }
 
                     override fun hashCode() = value.hashCode()
@@ -12129,7 +10652,47 @@ constructor(
 
                     fun asString(): String = _value().asStringOrThrow()
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Discount && this.discountType == other.discountType && this.percentageDiscount == other.percentageDiscount && this.usageDiscount == other.usageDiscount && this.amountDiscount == other.amountDiscount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(discountType, percentageDiscount, usageDiscount, amountDiscount, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, additionalProperties=$additionalProperties}"
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is OverridePackageWithAllocationPrice && this.id == other.id && this.modelType == other.modelType && this.minimumAmount == other.minimumAmount && this.maximumAmount == other.maximumAmount && this.currency == other.currency && this.conversionRate == other.conversionRate && this.discount == other.discount && this.fixedPriceQuantity == other.fixedPriceQuantity && this.packageWithAllocationConfig == other.packageWithAllocationConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(id, modelType, minimumAmount, maximumAmount, currency, conversionRate, discount, fixedPriceQuantity, packageWithAllocationConfig, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "OverridePackageWithAllocationPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, packageWithAllocationConfig=$packageWithAllocationConfig, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = OverrideUnitWithPercentPrice.Builder::class)
@@ -12149,8 +10712,6 @@ constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun id(): String = id.getRequired("id")
 
@@ -12234,46 +10795,6 @@ constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is OverrideUnitWithPercentPrice &&
-                    this.id == other.id &&
-                    this.modelType == other.modelType &&
-                    this.minimumAmount == other.minimumAmount &&
-                    this.maximumAmount == other.maximumAmount &&
-                    this.currency == other.currency &&
-                    this.conversionRate == other.conversionRate &&
-                    this.discount == other.discount &&
-                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                    this.unitWithPercentConfig == other.unitWithPercentConfig &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            id,
-                            modelType,
-                            minimumAmount,
-                            maximumAmount,
-                            currency,
-                            conversionRate,
-                            discount,
-                            fixedPriceQuantity,
-                            unitWithPercentConfig,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "OverrideUnitWithPercentPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, unitWithPercentConfig=$unitWithPercentConfig, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -12443,7 +10964,7 @@ constructor(
                         return true
                     }
 
-                    return other is ModelType && this.value == other.value
+                    return /* spotless:off */ other is ModelType && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -12490,8 +11011,6 @@ constructor(
 
                 private var validated: Boolean = false
 
-                private var hashCode: Int = 0
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -12503,25 +11022,6 @@ constructor(
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is UnitWithPercentConfig &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode = Objects.hash(additionalProperties)
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "UnitWithPercentConfig{additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -12555,6 +11055,26 @@ constructor(
                     fun build(): UnitWithPercentConfig =
                         UnitWithPercentConfig(additionalProperties.toUnmodifiable())
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is UnitWithPercentConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "UnitWithPercentConfig{additionalProperties=$additionalProperties}"
             }
 
             /** The subscription's override discount for the plan. */
@@ -12564,16 +11084,12 @@ constructor(
             private constructor(
                 private val discountType: JsonField<DiscountType>,
                 private val percentageDiscount: JsonField<Double>,
-                private val trialAmountDiscount: JsonField<String>,
                 private val usageDiscount: JsonField<Double>,
                 private val amountDiscount: JsonField<String>,
-                private val appliesToPriceIds: JsonField<List<String>>,
                 private val additionalProperties: Map<String, JsonValue>,
             ) {
 
                 private var validated: Boolean = false
-
-                private var hashCode: Int = 0
 
                 fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
@@ -12583,10 +11099,6 @@ constructor(
                  */
                 fun percentageDiscount(): Optional<Double> =
                     Optional.ofNullable(percentageDiscount.getNullable("percentage_discount"))
-
-                /** Only available if discount_type is `trial` */
-                fun trialAmountDiscount(): Optional<String> =
-                    Optional.ofNullable(trialAmountDiscount.getNullable("trial_amount_discount"))
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -12599,13 +11111,6 @@ constructor(
                 fun amountDiscount(): Optional<String> =
                     Optional.ofNullable(amountDiscount.getNullable("amount_discount"))
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                fun appliesToPriceIds(): Optional<List<String>> =
-                    Optional.ofNullable(appliesToPriceIds.getNullable("applies_to_price_ids"))
-
                 @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
 
                 /**
@@ -12615,11 +11120,6 @@ constructor(
                 @JsonProperty("percentage_discount")
                 @ExcludeMissing
                 fun _percentageDiscount() = percentageDiscount
-
-                /** Only available if discount_type is `trial` */
-                @JsonProperty("trial_amount_discount")
-                @ExcludeMissing
-                fun _trialAmountDiscount() = trialAmountDiscount
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -12632,14 +11132,6 @@ constructor(
                 @ExcludeMissing
                 fun _amountDiscount() = amountDiscount
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                @JsonProperty("applies_to_price_ids")
-                @ExcludeMissing
-                fun _appliesToPriceIds() = appliesToPriceIds
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -12648,49 +11140,13 @@ constructor(
                     if (!validated) {
                         discountType()
                         percentageDiscount()
-                        trialAmountDiscount()
                         usageDiscount()
                         amountDiscount()
-                        appliesToPriceIds()
                         validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Discount &&
-                        this.discountType == other.discountType &&
-                        this.percentageDiscount == other.percentageDiscount &&
-                        this.trialAmountDiscount == other.trialAmountDiscount &&
-                        this.usageDiscount == other.usageDiscount &&
-                        this.amountDiscount == other.amountDiscount &&
-                        this.appliesToPriceIds == other.appliesToPriceIds &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                discountType,
-                                percentageDiscount,
-                                trialAmountDiscount,
-                                usageDiscount,
-                                amountDiscount,
-                                appliesToPriceIds,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, trialAmountDiscount=$trialAmountDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -12701,20 +11157,16 @@ constructor(
 
                     private var discountType: JsonField<DiscountType> = JsonMissing.of()
                     private var percentageDiscount: JsonField<Double> = JsonMissing.of()
-                    private var trialAmountDiscount: JsonField<String> = JsonMissing.of()
                     private var usageDiscount: JsonField<Double> = JsonMissing.of()
                     private var amountDiscount: JsonField<String> = JsonMissing.of()
-                    private var appliesToPriceIds: JsonField<List<String>> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(discount: Discount) = apply {
                         this.discountType = discount.discountType
                         this.percentageDiscount = discount.percentageDiscount
-                        this.trialAmountDiscount = discount.trialAmountDiscount
                         this.usageDiscount = discount.usageDiscount
                         this.amountDiscount = discount.amountDiscount
-                        this.appliesToPriceIds = discount.appliesToPriceIds
                         additionalProperties(discount.additionalProperties)
                     }
 
@@ -12742,17 +11194,6 @@ constructor(
                     @ExcludeMissing
                     fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
                         this.percentageDiscount = percentageDiscount
-                    }
-
-                    /** Only available if discount_type is `trial` */
-                    fun trialAmountDiscount(trialAmountDiscount: String) =
-                        trialAmountDiscount(JsonField.of(trialAmountDiscount))
-
-                    /** Only available if discount_type is `trial` */
-                    @JsonProperty("trial_amount_discount")
-                    @ExcludeMissing
-                    fun trialAmountDiscount(trialAmountDiscount: JsonField<String>) = apply {
-                        this.trialAmountDiscount = trialAmountDiscount
                     }
 
                     /**
@@ -12783,23 +11224,6 @@ constructor(
                         this.amountDiscount = amountDiscount
                     }
 
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    fun appliesToPriceIds(appliesToPriceIds: List<String>) =
-                        appliesToPriceIds(JsonField.of(appliesToPriceIds))
-
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    @JsonProperty("applies_to_price_ids")
-                    @ExcludeMissing
-                    fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
-                    }
-
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
                         this.additionalProperties.putAll(additionalProperties)
@@ -12819,10 +11243,8 @@ constructor(
                         Discount(
                             discountType,
                             percentageDiscount,
-                            trialAmountDiscount,
                             usageDiscount,
                             amountDiscount,
-                            appliesToPriceIds.map { it.toUnmodifiable() },
                             additionalProperties.toUnmodifiable(),
                         )
                 }
@@ -12841,7 +11263,7 @@ constructor(
                             return true
                         }
 
-                        return other is DiscountType && this.value == other.value
+                        return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
                     }
 
                     override fun hashCode() = value.hashCode()
@@ -12896,7 +11318,47 @@ constructor(
 
                     fun asString(): String = _value().asStringOrThrow()
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Discount && this.discountType == other.discountType && this.percentageDiscount == other.percentageDiscount && this.usageDiscount == other.usageDiscount && this.amountDiscount == other.amountDiscount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(discountType, percentageDiscount, usageDiscount, amountDiscount, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, additionalProperties=$additionalProperties}"
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is OverrideUnitWithPercentPrice && this.id == other.id && this.modelType == other.modelType && this.minimumAmount == other.minimumAmount && this.maximumAmount == other.maximumAmount && this.currency == other.currency && this.conversionRate == other.conversionRate && this.discount == other.discount && this.fixedPriceQuantity == other.fixedPriceQuantity && this.unitWithPercentConfig == other.unitWithPercentConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(id, modelType, minimumAmount, maximumAmount, currency, conversionRate, discount, fixedPriceQuantity, unitWithPercentConfig, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "OverrideUnitWithPercentPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, unitWithPercentConfig=$unitWithPercentConfig, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = OverrideGroupedAllocationPrice.Builder::class)
@@ -12916,8 +11378,6 @@ constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun id(): String = id.getRequired("id")
 
@@ -13001,46 +11461,6 @@ constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is OverrideGroupedAllocationPrice &&
-                    this.id == other.id &&
-                    this.modelType == other.modelType &&
-                    this.minimumAmount == other.minimumAmount &&
-                    this.maximumAmount == other.maximumAmount &&
-                    this.currency == other.currency &&
-                    this.conversionRate == other.conversionRate &&
-                    this.discount == other.discount &&
-                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                    this.groupedAllocationConfig == other.groupedAllocationConfig &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            id,
-                            modelType,
-                            minimumAmount,
-                            maximumAmount,
-                            currency,
-                            conversionRate,
-                            discount,
-                            fixedPriceQuantity,
-                            groupedAllocationConfig,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "OverrideGroupedAllocationPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, groupedAllocationConfig=$groupedAllocationConfig, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -13205,8 +11625,6 @@ constructor(
 
                 private var validated: Boolean = false
 
-                private var hashCode: Int = 0
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -13218,25 +11636,6 @@ constructor(
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is GroupedAllocationConfig &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode = Objects.hash(additionalProperties)
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "GroupedAllocationConfig{additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -13270,6 +11669,26 @@ constructor(
                     fun build(): GroupedAllocationConfig =
                         GroupedAllocationConfig(additionalProperties.toUnmodifiable())
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is GroupedAllocationConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "GroupedAllocationConfig{additionalProperties=$additionalProperties}"
             }
 
             class ModelType
@@ -13285,7 +11704,7 @@ constructor(
                         return true
                     }
 
-                    return other is ModelType && this.value == other.value
+                    return /* spotless:off */ other is ModelType && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -13330,16 +11749,12 @@ constructor(
             private constructor(
                 private val discountType: JsonField<DiscountType>,
                 private val percentageDiscount: JsonField<Double>,
-                private val trialAmountDiscount: JsonField<String>,
                 private val usageDiscount: JsonField<Double>,
                 private val amountDiscount: JsonField<String>,
-                private val appliesToPriceIds: JsonField<List<String>>,
                 private val additionalProperties: Map<String, JsonValue>,
             ) {
 
                 private var validated: Boolean = false
-
-                private var hashCode: Int = 0
 
                 fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
@@ -13349,10 +11764,6 @@ constructor(
                  */
                 fun percentageDiscount(): Optional<Double> =
                     Optional.ofNullable(percentageDiscount.getNullable("percentage_discount"))
-
-                /** Only available if discount_type is `trial` */
-                fun trialAmountDiscount(): Optional<String> =
-                    Optional.ofNullable(trialAmountDiscount.getNullable("trial_amount_discount"))
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -13365,13 +11776,6 @@ constructor(
                 fun amountDiscount(): Optional<String> =
                     Optional.ofNullable(amountDiscount.getNullable("amount_discount"))
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                fun appliesToPriceIds(): Optional<List<String>> =
-                    Optional.ofNullable(appliesToPriceIds.getNullable("applies_to_price_ids"))
-
                 @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
 
                 /**
@@ -13381,11 +11785,6 @@ constructor(
                 @JsonProperty("percentage_discount")
                 @ExcludeMissing
                 fun _percentageDiscount() = percentageDiscount
-
-                /** Only available if discount_type is `trial` */
-                @JsonProperty("trial_amount_discount")
-                @ExcludeMissing
-                fun _trialAmountDiscount() = trialAmountDiscount
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -13398,14 +11797,6 @@ constructor(
                 @ExcludeMissing
                 fun _amountDiscount() = amountDiscount
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                @JsonProperty("applies_to_price_ids")
-                @ExcludeMissing
-                fun _appliesToPriceIds() = appliesToPriceIds
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -13414,49 +11805,13 @@ constructor(
                     if (!validated) {
                         discountType()
                         percentageDiscount()
-                        trialAmountDiscount()
                         usageDiscount()
                         amountDiscount()
-                        appliesToPriceIds()
                         validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Discount &&
-                        this.discountType == other.discountType &&
-                        this.percentageDiscount == other.percentageDiscount &&
-                        this.trialAmountDiscount == other.trialAmountDiscount &&
-                        this.usageDiscount == other.usageDiscount &&
-                        this.amountDiscount == other.amountDiscount &&
-                        this.appliesToPriceIds == other.appliesToPriceIds &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                discountType,
-                                percentageDiscount,
-                                trialAmountDiscount,
-                                usageDiscount,
-                                amountDiscount,
-                                appliesToPriceIds,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, trialAmountDiscount=$trialAmountDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -13467,20 +11822,16 @@ constructor(
 
                     private var discountType: JsonField<DiscountType> = JsonMissing.of()
                     private var percentageDiscount: JsonField<Double> = JsonMissing.of()
-                    private var trialAmountDiscount: JsonField<String> = JsonMissing.of()
                     private var usageDiscount: JsonField<Double> = JsonMissing.of()
                     private var amountDiscount: JsonField<String> = JsonMissing.of()
-                    private var appliesToPriceIds: JsonField<List<String>> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(discount: Discount) = apply {
                         this.discountType = discount.discountType
                         this.percentageDiscount = discount.percentageDiscount
-                        this.trialAmountDiscount = discount.trialAmountDiscount
                         this.usageDiscount = discount.usageDiscount
                         this.amountDiscount = discount.amountDiscount
-                        this.appliesToPriceIds = discount.appliesToPriceIds
                         additionalProperties(discount.additionalProperties)
                     }
 
@@ -13508,17 +11859,6 @@ constructor(
                     @ExcludeMissing
                     fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
                         this.percentageDiscount = percentageDiscount
-                    }
-
-                    /** Only available if discount_type is `trial` */
-                    fun trialAmountDiscount(trialAmountDiscount: String) =
-                        trialAmountDiscount(JsonField.of(trialAmountDiscount))
-
-                    /** Only available if discount_type is `trial` */
-                    @JsonProperty("trial_amount_discount")
-                    @ExcludeMissing
-                    fun trialAmountDiscount(trialAmountDiscount: JsonField<String>) = apply {
-                        this.trialAmountDiscount = trialAmountDiscount
                     }
 
                     /**
@@ -13549,23 +11889,6 @@ constructor(
                         this.amountDiscount = amountDiscount
                     }
 
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    fun appliesToPriceIds(appliesToPriceIds: List<String>) =
-                        appliesToPriceIds(JsonField.of(appliesToPriceIds))
-
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    @JsonProperty("applies_to_price_ids")
-                    @ExcludeMissing
-                    fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
-                    }
-
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
                         this.additionalProperties.putAll(additionalProperties)
@@ -13585,10 +11908,8 @@ constructor(
                         Discount(
                             discountType,
                             percentageDiscount,
-                            trialAmountDiscount,
                             usageDiscount,
                             amountDiscount,
-                            appliesToPriceIds.map { it.toUnmodifiable() },
                             additionalProperties.toUnmodifiable(),
                         )
                 }
@@ -13607,7 +11928,7 @@ constructor(
                             return true
                         }
 
-                        return other is DiscountType && this.value == other.value
+                        return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
                     }
 
                     override fun hashCode() = value.hashCode()
@@ -13662,7 +11983,47 @@ constructor(
 
                     fun asString(): String = _value().asStringOrThrow()
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Discount && this.discountType == other.discountType && this.percentageDiscount == other.percentageDiscount && this.usageDiscount == other.usageDiscount && this.amountDiscount == other.amountDiscount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(discountType, percentageDiscount, usageDiscount, amountDiscount, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, additionalProperties=$additionalProperties}"
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is OverrideGroupedAllocationPrice && this.id == other.id && this.modelType == other.modelType && this.minimumAmount == other.minimumAmount && this.maximumAmount == other.maximumAmount && this.currency == other.currency && this.conversionRate == other.conversionRate && this.discount == other.discount && this.fixedPriceQuantity == other.fixedPriceQuantity && this.groupedAllocationConfig == other.groupedAllocationConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(id, modelType, minimumAmount, maximumAmount, currency, conversionRate, discount, fixedPriceQuantity, groupedAllocationConfig, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "OverrideGroupedAllocationPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, groupedAllocationConfig=$groupedAllocationConfig, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = OverrideGroupedWithProratedMinimumPrice.Builder::class)
@@ -13683,8 +12044,6 @@ constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun id(): String = id.getRequired("id")
 
@@ -13768,47 +12127,6 @@ constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is OverrideGroupedWithProratedMinimumPrice &&
-                    this.id == other.id &&
-                    this.modelType == other.modelType &&
-                    this.minimumAmount == other.minimumAmount &&
-                    this.maximumAmount == other.maximumAmount &&
-                    this.currency == other.currency &&
-                    this.conversionRate == other.conversionRate &&
-                    this.discount == other.discount &&
-                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                    this.groupedWithProratedMinimumConfig ==
-                        other.groupedWithProratedMinimumConfig &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            id,
-                            modelType,
-                            minimumAmount,
-                            maximumAmount,
-                            currency,
-                            conversionRate,
-                            discount,
-                            fixedPriceQuantity,
-                            groupedWithProratedMinimumConfig,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "OverrideGroupedWithProratedMinimumPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, groupedWithProratedMinimumConfig=$groupedWithProratedMinimumConfig, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -13981,8 +12299,6 @@ constructor(
 
                 private var validated: Boolean = false
 
-                private var hashCode: Int = 0
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -13994,25 +12310,6 @@ constructor(
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is GroupedWithProratedMinimumConfig &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode = Objects.hash(additionalProperties)
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "GroupedWithProratedMinimumConfig{additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -14048,6 +12345,26 @@ constructor(
                     fun build(): GroupedWithProratedMinimumConfig =
                         GroupedWithProratedMinimumConfig(additionalProperties.toUnmodifiable())
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is GroupedWithProratedMinimumConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "GroupedWithProratedMinimumConfig{additionalProperties=$additionalProperties}"
             }
 
             class ModelType
@@ -14063,7 +12380,7 @@ constructor(
                         return true
                     }
 
-                    return other is ModelType && this.value == other.value
+                    return /* spotless:off */ other is ModelType && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -14110,16 +12427,12 @@ constructor(
             private constructor(
                 private val discountType: JsonField<DiscountType>,
                 private val percentageDiscount: JsonField<Double>,
-                private val trialAmountDiscount: JsonField<String>,
                 private val usageDiscount: JsonField<Double>,
                 private val amountDiscount: JsonField<String>,
-                private val appliesToPriceIds: JsonField<List<String>>,
                 private val additionalProperties: Map<String, JsonValue>,
             ) {
 
                 private var validated: Boolean = false
-
-                private var hashCode: Int = 0
 
                 fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
@@ -14129,10 +12442,6 @@ constructor(
                  */
                 fun percentageDiscount(): Optional<Double> =
                     Optional.ofNullable(percentageDiscount.getNullable("percentage_discount"))
-
-                /** Only available if discount_type is `trial` */
-                fun trialAmountDiscount(): Optional<String> =
-                    Optional.ofNullable(trialAmountDiscount.getNullable("trial_amount_discount"))
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -14145,13 +12454,6 @@ constructor(
                 fun amountDiscount(): Optional<String> =
                     Optional.ofNullable(amountDiscount.getNullable("amount_discount"))
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                fun appliesToPriceIds(): Optional<List<String>> =
-                    Optional.ofNullable(appliesToPriceIds.getNullable("applies_to_price_ids"))
-
                 @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
 
                 /**
@@ -14161,11 +12463,6 @@ constructor(
                 @JsonProperty("percentage_discount")
                 @ExcludeMissing
                 fun _percentageDiscount() = percentageDiscount
-
-                /** Only available if discount_type is `trial` */
-                @JsonProperty("trial_amount_discount")
-                @ExcludeMissing
-                fun _trialAmountDiscount() = trialAmountDiscount
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -14178,14 +12475,6 @@ constructor(
                 @ExcludeMissing
                 fun _amountDiscount() = amountDiscount
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                @JsonProperty("applies_to_price_ids")
-                @ExcludeMissing
-                fun _appliesToPriceIds() = appliesToPriceIds
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -14194,49 +12483,13 @@ constructor(
                     if (!validated) {
                         discountType()
                         percentageDiscount()
-                        trialAmountDiscount()
                         usageDiscount()
                         amountDiscount()
-                        appliesToPriceIds()
                         validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Discount &&
-                        this.discountType == other.discountType &&
-                        this.percentageDiscount == other.percentageDiscount &&
-                        this.trialAmountDiscount == other.trialAmountDiscount &&
-                        this.usageDiscount == other.usageDiscount &&
-                        this.amountDiscount == other.amountDiscount &&
-                        this.appliesToPriceIds == other.appliesToPriceIds &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                discountType,
-                                percentageDiscount,
-                                trialAmountDiscount,
-                                usageDiscount,
-                                amountDiscount,
-                                appliesToPriceIds,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, trialAmountDiscount=$trialAmountDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -14247,20 +12500,16 @@ constructor(
 
                     private var discountType: JsonField<DiscountType> = JsonMissing.of()
                     private var percentageDiscount: JsonField<Double> = JsonMissing.of()
-                    private var trialAmountDiscount: JsonField<String> = JsonMissing.of()
                     private var usageDiscount: JsonField<Double> = JsonMissing.of()
                     private var amountDiscount: JsonField<String> = JsonMissing.of()
-                    private var appliesToPriceIds: JsonField<List<String>> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(discount: Discount) = apply {
                         this.discountType = discount.discountType
                         this.percentageDiscount = discount.percentageDiscount
-                        this.trialAmountDiscount = discount.trialAmountDiscount
                         this.usageDiscount = discount.usageDiscount
                         this.amountDiscount = discount.amountDiscount
-                        this.appliesToPriceIds = discount.appliesToPriceIds
                         additionalProperties(discount.additionalProperties)
                     }
 
@@ -14288,17 +12537,6 @@ constructor(
                     @ExcludeMissing
                     fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
                         this.percentageDiscount = percentageDiscount
-                    }
-
-                    /** Only available if discount_type is `trial` */
-                    fun trialAmountDiscount(trialAmountDiscount: String) =
-                        trialAmountDiscount(JsonField.of(trialAmountDiscount))
-
-                    /** Only available if discount_type is `trial` */
-                    @JsonProperty("trial_amount_discount")
-                    @ExcludeMissing
-                    fun trialAmountDiscount(trialAmountDiscount: JsonField<String>) = apply {
-                        this.trialAmountDiscount = trialAmountDiscount
                     }
 
                     /**
@@ -14329,23 +12567,6 @@ constructor(
                         this.amountDiscount = amountDiscount
                     }
 
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    fun appliesToPriceIds(appliesToPriceIds: List<String>) =
-                        appliesToPriceIds(JsonField.of(appliesToPriceIds))
-
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    @JsonProperty("applies_to_price_ids")
-                    @ExcludeMissing
-                    fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
-                    }
-
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
                         this.additionalProperties.putAll(additionalProperties)
@@ -14365,10 +12586,8 @@ constructor(
                         Discount(
                             discountType,
                             percentageDiscount,
-                            trialAmountDiscount,
                             usageDiscount,
                             amountDiscount,
-                            appliesToPriceIds.map { it.toUnmodifiable() },
                             additionalProperties.toUnmodifiable(),
                         )
                 }
@@ -14387,7 +12606,7 @@ constructor(
                             return true
                         }
 
-                        return other is DiscountType && this.value == other.value
+                        return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
                     }
 
                     override fun hashCode() = value.hashCode()
@@ -14442,7 +12661,47 @@ constructor(
 
                     fun asString(): String = _value().asStringOrThrow()
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Discount && this.discountType == other.discountType && this.percentageDiscount == other.percentageDiscount && this.usageDiscount == other.usageDiscount && this.amountDiscount == other.amountDiscount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(discountType, percentageDiscount, usageDiscount, amountDiscount, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, additionalProperties=$additionalProperties}"
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is OverrideGroupedWithProratedMinimumPrice && this.id == other.id && this.modelType == other.modelType && this.minimumAmount == other.minimumAmount && this.maximumAmount == other.maximumAmount && this.currency == other.currency && this.conversionRate == other.conversionRate && this.discount == other.discount && this.fixedPriceQuantity == other.fixedPriceQuantity && this.groupedWithProratedMinimumConfig == other.groupedWithProratedMinimumConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(id, modelType, minimumAmount, maximumAmount, currency, conversionRate, discount, fixedPriceQuantity, groupedWithProratedMinimumConfig, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "OverrideGroupedWithProratedMinimumPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, groupedWithProratedMinimumConfig=$groupedWithProratedMinimumConfig, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = OverrideGroupedWithMeteredMinimumPrice.Builder::class)
@@ -14462,8 +12721,6 @@ constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun id(): String = id.getRequired("id")
 
@@ -14547,46 +12804,6 @@ constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is OverrideGroupedWithMeteredMinimumPrice &&
-                    this.id == other.id &&
-                    this.modelType == other.modelType &&
-                    this.minimumAmount == other.minimumAmount &&
-                    this.maximumAmount == other.maximumAmount &&
-                    this.currency == other.currency &&
-                    this.conversionRate == other.conversionRate &&
-                    this.discount == other.discount &&
-                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                    this.groupedWithMeteredMinimumConfig == other.groupedWithMeteredMinimumConfig &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            id,
-                            modelType,
-                            minimumAmount,
-                            maximumAmount,
-                            currency,
-                            conversionRate,
-                            discount,
-                            fixedPriceQuantity,
-                            groupedWithMeteredMinimumConfig,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "OverrideGroupedWithMeteredMinimumPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, groupedWithMeteredMinimumConfig=$groupedWithMeteredMinimumConfig, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -14757,8 +12974,6 @@ constructor(
 
                 private var validated: Boolean = false
 
-                private var hashCode: Int = 0
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -14770,25 +12985,6 @@ constructor(
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is GroupedWithMeteredMinimumConfig &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode = Objects.hash(additionalProperties)
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "GroupedWithMeteredMinimumConfig{additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -14824,6 +13020,26 @@ constructor(
                     fun build(): GroupedWithMeteredMinimumConfig =
                         GroupedWithMeteredMinimumConfig(additionalProperties.toUnmodifiable())
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is GroupedWithMeteredMinimumConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "GroupedWithMeteredMinimumConfig{additionalProperties=$additionalProperties}"
             }
 
             class ModelType
@@ -14839,7 +13055,7 @@ constructor(
                         return true
                     }
 
-                    return other is ModelType && this.value == other.value
+                    return /* spotless:off */ other is ModelType && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -14886,16 +13102,12 @@ constructor(
             private constructor(
                 private val discountType: JsonField<DiscountType>,
                 private val percentageDiscount: JsonField<Double>,
-                private val trialAmountDiscount: JsonField<String>,
                 private val usageDiscount: JsonField<Double>,
                 private val amountDiscount: JsonField<String>,
-                private val appliesToPriceIds: JsonField<List<String>>,
                 private val additionalProperties: Map<String, JsonValue>,
             ) {
 
                 private var validated: Boolean = false
-
-                private var hashCode: Int = 0
 
                 fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
@@ -14905,10 +13117,6 @@ constructor(
                  */
                 fun percentageDiscount(): Optional<Double> =
                     Optional.ofNullable(percentageDiscount.getNullable("percentage_discount"))
-
-                /** Only available if discount_type is `trial` */
-                fun trialAmountDiscount(): Optional<String> =
-                    Optional.ofNullable(trialAmountDiscount.getNullable("trial_amount_discount"))
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -14921,13 +13129,6 @@ constructor(
                 fun amountDiscount(): Optional<String> =
                     Optional.ofNullable(amountDiscount.getNullable("amount_discount"))
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                fun appliesToPriceIds(): Optional<List<String>> =
-                    Optional.ofNullable(appliesToPriceIds.getNullable("applies_to_price_ids"))
-
                 @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
 
                 /**
@@ -14937,11 +13138,6 @@ constructor(
                 @JsonProperty("percentage_discount")
                 @ExcludeMissing
                 fun _percentageDiscount() = percentageDiscount
-
-                /** Only available if discount_type is `trial` */
-                @JsonProperty("trial_amount_discount")
-                @ExcludeMissing
-                fun _trialAmountDiscount() = trialAmountDiscount
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -14954,14 +13150,6 @@ constructor(
                 @ExcludeMissing
                 fun _amountDiscount() = amountDiscount
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                @JsonProperty("applies_to_price_ids")
-                @ExcludeMissing
-                fun _appliesToPriceIds() = appliesToPriceIds
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -14970,49 +13158,13 @@ constructor(
                     if (!validated) {
                         discountType()
                         percentageDiscount()
-                        trialAmountDiscount()
                         usageDiscount()
                         amountDiscount()
-                        appliesToPriceIds()
                         validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Discount &&
-                        this.discountType == other.discountType &&
-                        this.percentageDiscount == other.percentageDiscount &&
-                        this.trialAmountDiscount == other.trialAmountDiscount &&
-                        this.usageDiscount == other.usageDiscount &&
-                        this.amountDiscount == other.amountDiscount &&
-                        this.appliesToPriceIds == other.appliesToPriceIds &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                discountType,
-                                percentageDiscount,
-                                trialAmountDiscount,
-                                usageDiscount,
-                                amountDiscount,
-                                appliesToPriceIds,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, trialAmountDiscount=$trialAmountDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -15023,20 +13175,16 @@ constructor(
 
                     private var discountType: JsonField<DiscountType> = JsonMissing.of()
                     private var percentageDiscount: JsonField<Double> = JsonMissing.of()
-                    private var trialAmountDiscount: JsonField<String> = JsonMissing.of()
                     private var usageDiscount: JsonField<Double> = JsonMissing.of()
                     private var amountDiscount: JsonField<String> = JsonMissing.of()
-                    private var appliesToPriceIds: JsonField<List<String>> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(discount: Discount) = apply {
                         this.discountType = discount.discountType
                         this.percentageDiscount = discount.percentageDiscount
-                        this.trialAmountDiscount = discount.trialAmountDiscount
                         this.usageDiscount = discount.usageDiscount
                         this.amountDiscount = discount.amountDiscount
-                        this.appliesToPriceIds = discount.appliesToPriceIds
                         additionalProperties(discount.additionalProperties)
                     }
 
@@ -15064,17 +13212,6 @@ constructor(
                     @ExcludeMissing
                     fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
                         this.percentageDiscount = percentageDiscount
-                    }
-
-                    /** Only available if discount_type is `trial` */
-                    fun trialAmountDiscount(trialAmountDiscount: String) =
-                        trialAmountDiscount(JsonField.of(trialAmountDiscount))
-
-                    /** Only available if discount_type is `trial` */
-                    @JsonProperty("trial_amount_discount")
-                    @ExcludeMissing
-                    fun trialAmountDiscount(trialAmountDiscount: JsonField<String>) = apply {
-                        this.trialAmountDiscount = trialAmountDiscount
                     }
 
                     /**
@@ -15105,23 +13242,6 @@ constructor(
                         this.amountDiscount = amountDiscount
                     }
 
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    fun appliesToPriceIds(appliesToPriceIds: List<String>) =
-                        appliesToPriceIds(JsonField.of(appliesToPriceIds))
-
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    @JsonProperty("applies_to_price_ids")
-                    @ExcludeMissing
-                    fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
-                    }
-
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
                         this.additionalProperties.putAll(additionalProperties)
@@ -15141,10 +13261,8 @@ constructor(
                         Discount(
                             discountType,
                             percentageDiscount,
-                            trialAmountDiscount,
                             usageDiscount,
                             amountDiscount,
-                            appliesToPriceIds.map { it.toUnmodifiable() },
                             additionalProperties.toUnmodifiable(),
                         )
                 }
@@ -15163,7 +13281,7 @@ constructor(
                             return true
                         }
 
-                        return other is DiscountType && this.value == other.value
+                        return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
                     }
 
                     override fun hashCode() = value.hashCode()
@@ -15218,7 +13336,47 @@ constructor(
 
                     fun asString(): String = _value().asStringOrThrow()
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Discount && this.discountType == other.discountType && this.percentageDiscount == other.percentageDiscount && this.usageDiscount == other.usageDiscount && this.amountDiscount == other.amountDiscount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(discountType, percentageDiscount, usageDiscount, amountDiscount, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, additionalProperties=$additionalProperties}"
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is OverrideGroupedWithMeteredMinimumPrice && this.id == other.id && this.modelType == other.modelType && this.minimumAmount == other.minimumAmount && this.maximumAmount == other.maximumAmount && this.currency == other.currency && this.conversionRate == other.conversionRate && this.discount == other.discount && this.fixedPriceQuantity == other.fixedPriceQuantity && this.groupedWithMeteredMinimumConfig == other.groupedWithMeteredMinimumConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(id, modelType, minimumAmount, maximumAmount, currency, conversionRate, discount, fixedPriceQuantity, groupedWithMeteredMinimumConfig, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "OverrideGroupedWithMeteredMinimumPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, groupedWithMeteredMinimumConfig=$groupedWithMeteredMinimumConfig, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = OverrideBulkWithProrationPrice.Builder::class)
@@ -15238,8 +13396,6 @@ constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun id(): String = id.getRequired("id")
 
@@ -15323,46 +13479,6 @@ constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is OverrideBulkWithProrationPrice &&
-                    this.id == other.id &&
-                    this.modelType == other.modelType &&
-                    this.minimumAmount == other.minimumAmount &&
-                    this.maximumAmount == other.maximumAmount &&
-                    this.currency == other.currency &&
-                    this.conversionRate == other.conversionRate &&
-                    this.discount == other.discount &&
-                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                    this.bulkWithProrationConfig == other.bulkWithProrationConfig &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            id,
-                            modelType,
-                            minimumAmount,
-                            maximumAmount,
-                            currency,
-                            conversionRate,
-                            discount,
-                            fixedPriceQuantity,
-                            bulkWithProrationConfig,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "OverrideBulkWithProrationPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, bulkWithProrationConfig=$bulkWithProrationConfig, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -15527,8 +13643,6 @@ constructor(
 
                 private var validated: Boolean = false
 
-                private var hashCode: Int = 0
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -15540,25 +13654,6 @@ constructor(
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is BulkWithProrationConfig &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode = Objects.hash(additionalProperties)
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "BulkWithProrationConfig{additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -15592,6 +13687,26 @@ constructor(
                     fun build(): BulkWithProrationConfig =
                         BulkWithProrationConfig(additionalProperties.toUnmodifiable())
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is BulkWithProrationConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "BulkWithProrationConfig{additionalProperties=$additionalProperties}"
             }
 
             class ModelType
@@ -15607,7 +13722,7 @@ constructor(
                         return true
                     }
 
-                    return other is ModelType && this.value == other.value
+                    return /* spotless:off */ other is ModelType && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -15653,16 +13768,12 @@ constructor(
             private constructor(
                 private val discountType: JsonField<DiscountType>,
                 private val percentageDiscount: JsonField<Double>,
-                private val trialAmountDiscount: JsonField<String>,
                 private val usageDiscount: JsonField<Double>,
                 private val amountDiscount: JsonField<String>,
-                private val appliesToPriceIds: JsonField<List<String>>,
                 private val additionalProperties: Map<String, JsonValue>,
             ) {
 
                 private var validated: Boolean = false
-
-                private var hashCode: Int = 0
 
                 fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
@@ -15672,10 +13783,6 @@ constructor(
                  */
                 fun percentageDiscount(): Optional<Double> =
                     Optional.ofNullable(percentageDiscount.getNullable("percentage_discount"))
-
-                /** Only available if discount_type is `trial` */
-                fun trialAmountDiscount(): Optional<String> =
-                    Optional.ofNullable(trialAmountDiscount.getNullable("trial_amount_discount"))
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -15688,13 +13795,6 @@ constructor(
                 fun amountDiscount(): Optional<String> =
                     Optional.ofNullable(amountDiscount.getNullable("amount_discount"))
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                fun appliesToPriceIds(): Optional<List<String>> =
-                    Optional.ofNullable(appliesToPriceIds.getNullable("applies_to_price_ids"))
-
                 @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
 
                 /**
@@ -15704,11 +13804,6 @@ constructor(
                 @JsonProperty("percentage_discount")
                 @ExcludeMissing
                 fun _percentageDiscount() = percentageDiscount
-
-                /** Only available if discount_type is `trial` */
-                @JsonProperty("trial_amount_discount")
-                @ExcludeMissing
-                fun _trialAmountDiscount() = trialAmountDiscount
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -15721,14 +13816,6 @@ constructor(
                 @ExcludeMissing
                 fun _amountDiscount() = amountDiscount
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                @JsonProperty("applies_to_price_ids")
-                @ExcludeMissing
-                fun _appliesToPriceIds() = appliesToPriceIds
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -15737,49 +13824,13 @@ constructor(
                     if (!validated) {
                         discountType()
                         percentageDiscount()
-                        trialAmountDiscount()
                         usageDiscount()
                         amountDiscount()
-                        appliesToPriceIds()
                         validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Discount &&
-                        this.discountType == other.discountType &&
-                        this.percentageDiscount == other.percentageDiscount &&
-                        this.trialAmountDiscount == other.trialAmountDiscount &&
-                        this.usageDiscount == other.usageDiscount &&
-                        this.amountDiscount == other.amountDiscount &&
-                        this.appliesToPriceIds == other.appliesToPriceIds &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                discountType,
-                                percentageDiscount,
-                                trialAmountDiscount,
-                                usageDiscount,
-                                amountDiscount,
-                                appliesToPriceIds,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, trialAmountDiscount=$trialAmountDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -15790,20 +13841,16 @@ constructor(
 
                     private var discountType: JsonField<DiscountType> = JsonMissing.of()
                     private var percentageDiscount: JsonField<Double> = JsonMissing.of()
-                    private var trialAmountDiscount: JsonField<String> = JsonMissing.of()
                     private var usageDiscount: JsonField<Double> = JsonMissing.of()
                     private var amountDiscount: JsonField<String> = JsonMissing.of()
-                    private var appliesToPriceIds: JsonField<List<String>> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(discount: Discount) = apply {
                         this.discountType = discount.discountType
                         this.percentageDiscount = discount.percentageDiscount
-                        this.trialAmountDiscount = discount.trialAmountDiscount
                         this.usageDiscount = discount.usageDiscount
                         this.amountDiscount = discount.amountDiscount
-                        this.appliesToPriceIds = discount.appliesToPriceIds
                         additionalProperties(discount.additionalProperties)
                     }
 
@@ -15831,17 +13878,6 @@ constructor(
                     @ExcludeMissing
                     fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
                         this.percentageDiscount = percentageDiscount
-                    }
-
-                    /** Only available if discount_type is `trial` */
-                    fun trialAmountDiscount(trialAmountDiscount: String) =
-                        trialAmountDiscount(JsonField.of(trialAmountDiscount))
-
-                    /** Only available if discount_type is `trial` */
-                    @JsonProperty("trial_amount_discount")
-                    @ExcludeMissing
-                    fun trialAmountDiscount(trialAmountDiscount: JsonField<String>) = apply {
-                        this.trialAmountDiscount = trialAmountDiscount
                     }
 
                     /**
@@ -15872,23 +13908,6 @@ constructor(
                         this.amountDiscount = amountDiscount
                     }
 
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    fun appliesToPriceIds(appliesToPriceIds: List<String>) =
-                        appliesToPriceIds(JsonField.of(appliesToPriceIds))
-
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    @JsonProperty("applies_to_price_ids")
-                    @ExcludeMissing
-                    fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
-                    }
-
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
                         this.additionalProperties.putAll(additionalProperties)
@@ -15908,10 +13927,8 @@ constructor(
                         Discount(
                             discountType,
                             percentageDiscount,
-                            trialAmountDiscount,
                             usageDiscount,
                             amountDiscount,
-                            appliesToPriceIds.map { it.toUnmodifiable() },
                             additionalProperties.toUnmodifiable(),
                         )
                 }
@@ -15930,7 +13947,7 @@ constructor(
                             return true
                         }
 
-                        return other is DiscountType && this.value == other.value
+                        return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
                     }
 
                     override fun hashCode() = value.hashCode()
@@ -15985,7 +14002,47 @@ constructor(
 
                     fun asString(): String = _value().asStringOrThrow()
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Discount && this.discountType == other.discountType && this.percentageDiscount == other.percentageDiscount && this.usageDiscount == other.usageDiscount && this.amountDiscount == other.amountDiscount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(discountType, percentageDiscount, usageDiscount, amountDiscount, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, additionalProperties=$additionalProperties}"
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is OverrideBulkWithProrationPrice && this.id == other.id && this.modelType == other.modelType && this.minimumAmount == other.minimumAmount && this.maximumAmount == other.maximumAmount && this.currency == other.currency && this.conversionRate == other.conversionRate && this.discount == other.discount && this.fixedPriceQuantity == other.fixedPriceQuantity && this.bulkWithProrationConfig == other.bulkWithProrationConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(id, modelType, minimumAmount, maximumAmount, currency, conversionRate, discount, fixedPriceQuantity, bulkWithProrationConfig, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "OverrideBulkWithProrationPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, bulkWithProrationConfig=$bulkWithProrationConfig, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = OverrideUnitWithProrationPrice.Builder::class)
@@ -16005,8 +14062,6 @@ constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun id(): String = id.getRequired("id")
 
@@ -16090,46 +14145,6 @@ constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is OverrideUnitWithProrationPrice &&
-                    this.id == other.id &&
-                    this.modelType == other.modelType &&
-                    this.minimumAmount == other.minimumAmount &&
-                    this.maximumAmount == other.maximumAmount &&
-                    this.currency == other.currency &&
-                    this.conversionRate == other.conversionRate &&
-                    this.discount == other.discount &&
-                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                    this.unitWithProrationConfig == other.unitWithProrationConfig &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            id,
-                            modelType,
-                            minimumAmount,
-                            maximumAmount,
-                            currency,
-                            conversionRate,
-                            discount,
-                            fixedPriceQuantity,
-                            unitWithProrationConfig,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "OverrideUnitWithProrationPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, unitWithProrationConfig=$unitWithProrationConfig, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -16298,7 +14313,7 @@ constructor(
                         return true
                     }
 
-                    return other is ModelType && this.value == other.value
+                    return /* spotless:off */ other is ModelType && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -16346,8 +14361,6 @@ constructor(
 
                 private var validated: Boolean = false
 
-                private var hashCode: Int = 0
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -16359,25 +14372,6 @@ constructor(
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is UnitWithProrationConfig &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode = Objects.hash(additionalProperties)
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "UnitWithProrationConfig{additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -16411,6 +14405,26 @@ constructor(
                     fun build(): UnitWithProrationConfig =
                         UnitWithProrationConfig(additionalProperties.toUnmodifiable())
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is UnitWithProrationConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "UnitWithProrationConfig{additionalProperties=$additionalProperties}"
             }
 
             /** The subscription's override discount for the plan. */
@@ -16420,16 +14434,12 @@ constructor(
             private constructor(
                 private val discountType: JsonField<DiscountType>,
                 private val percentageDiscount: JsonField<Double>,
-                private val trialAmountDiscount: JsonField<String>,
                 private val usageDiscount: JsonField<Double>,
                 private val amountDiscount: JsonField<String>,
-                private val appliesToPriceIds: JsonField<List<String>>,
                 private val additionalProperties: Map<String, JsonValue>,
             ) {
 
                 private var validated: Boolean = false
-
-                private var hashCode: Int = 0
 
                 fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
@@ -16439,10 +14449,6 @@ constructor(
                  */
                 fun percentageDiscount(): Optional<Double> =
                     Optional.ofNullable(percentageDiscount.getNullable("percentage_discount"))
-
-                /** Only available if discount_type is `trial` */
-                fun trialAmountDiscount(): Optional<String> =
-                    Optional.ofNullable(trialAmountDiscount.getNullable("trial_amount_discount"))
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -16455,13 +14461,6 @@ constructor(
                 fun amountDiscount(): Optional<String> =
                     Optional.ofNullable(amountDiscount.getNullable("amount_discount"))
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                fun appliesToPriceIds(): Optional<List<String>> =
-                    Optional.ofNullable(appliesToPriceIds.getNullable("applies_to_price_ids"))
-
                 @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
 
                 /**
@@ -16471,11 +14470,6 @@ constructor(
                 @JsonProperty("percentage_discount")
                 @ExcludeMissing
                 fun _percentageDiscount() = percentageDiscount
-
-                /** Only available if discount_type is `trial` */
-                @JsonProperty("trial_amount_discount")
-                @ExcludeMissing
-                fun _trialAmountDiscount() = trialAmountDiscount
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -16488,14 +14482,6 @@ constructor(
                 @ExcludeMissing
                 fun _amountDiscount() = amountDiscount
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                @JsonProperty("applies_to_price_ids")
-                @ExcludeMissing
-                fun _appliesToPriceIds() = appliesToPriceIds
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -16504,49 +14490,13 @@ constructor(
                     if (!validated) {
                         discountType()
                         percentageDiscount()
-                        trialAmountDiscount()
                         usageDiscount()
                         amountDiscount()
-                        appliesToPriceIds()
                         validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Discount &&
-                        this.discountType == other.discountType &&
-                        this.percentageDiscount == other.percentageDiscount &&
-                        this.trialAmountDiscount == other.trialAmountDiscount &&
-                        this.usageDiscount == other.usageDiscount &&
-                        this.amountDiscount == other.amountDiscount &&
-                        this.appliesToPriceIds == other.appliesToPriceIds &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                discountType,
-                                percentageDiscount,
-                                trialAmountDiscount,
-                                usageDiscount,
-                                amountDiscount,
-                                appliesToPriceIds,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, trialAmountDiscount=$trialAmountDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -16557,20 +14507,16 @@ constructor(
 
                     private var discountType: JsonField<DiscountType> = JsonMissing.of()
                     private var percentageDiscount: JsonField<Double> = JsonMissing.of()
-                    private var trialAmountDiscount: JsonField<String> = JsonMissing.of()
                     private var usageDiscount: JsonField<Double> = JsonMissing.of()
                     private var amountDiscount: JsonField<String> = JsonMissing.of()
-                    private var appliesToPriceIds: JsonField<List<String>> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(discount: Discount) = apply {
                         this.discountType = discount.discountType
                         this.percentageDiscount = discount.percentageDiscount
-                        this.trialAmountDiscount = discount.trialAmountDiscount
                         this.usageDiscount = discount.usageDiscount
                         this.amountDiscount = discount.amountDiscount
-                        this.appliesToPriceIds = discount.appliesToPriceIds
                         additionalProperties(discount.additionalProperties)
                     }
 
@@ -16598,17 +14544,6 @@ constructor(
                     @ExcludeMissing
                     fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
                         this.percentageDiscount = percentageDiscount
-                    }
-
-                    /** Only available if discount_type is `trial` */
-                    fun trialAmountDiscount(trialAmountDiscount: String) =
-                        trialAmountDiscount(JsonField.of(trialAmountDiscount))
-
-                    /** Only available if discount_type is `trial` */
-                    @JsonProperty("trial_amount_discount")
-                    @ExcludeMissing
-                    fun trialAmountDiscount(trialAmountDiscount: JsonField<String>) = apply {
-                        this.trialAmountDiscount = trialAmountDiscount
                     }
 
                     /**
@@ -16639,23 +14574,6 @@ constructor(
                         this.amountDiscount = amountDiscount
                     }
 
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    fun appliesToPriceIds(appliesToPriceIds: List<String>) =
-                        appliesToPriceIds(JsonField.of(appliesToPriceIds))
-
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    @JsonProperty("applies_to_price_ids")
-                    @ExcludeMissing
-                    fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
-                    }
-
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
                         this.additionalProperties.putAll(additionalProperties)
@@ -16675,10 +14593,8 @@ constructor(
                         Discount(
                             discountType,
                             percentageDiscount,
-                            trialAmountDiscount,
                             usageDiscount,
                             amountDiscount,
-                            appliesToPriceIds.map { it.toUnmodifiable() },
                             additionalProperties.toUnmodifiable(),
                         )
                 }
@@ -16697,7 +14613,7 @@ constructor(
                             return true
                         }
 
-                        return other is DiscountType && this.value == other.value
+                        return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
                     }
 
                     override fun hashCode() = value.hashCode()
@@ -16752,7 +14668,47 @@ constructor(
 
                     fun asString(): String = _value().asStringOrThrow()
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Discount && this.discountType == other.discountType && this.percentageDiscount == other.percentageDiscount && this.usageDiscount == other.usageDiscount && this.amountDiscount == other.amountDiscount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(discountType, percentageDiscount, usageDiscount, amountDiscount, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, additionalProperties=$additionalProperties}"
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is OverrideUnitWithProrationPrice && this.id == other.id && this.modelType == other.modelType && this.minimumAmount == other.minimumAmount && this.maximumAmount == other.maximumAmount && this.currency == other.currency && this.conversionRate == other.conversionRate && this.discount == other.discount && this.fixedPriceQuantity == other.fixedPriceQuantity && this.unitWithProrationConfig == other.unitWithProrationConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(id, modelType, minimumAmount, maximumAmount, currency, conversionRate, discount, fixedPriceQuantity, unitWithProrationConfig, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "OverrideUnitWithProrationPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, unitWithProrationConfig=$unitWithProrationConfig, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = OverrideTieredWithProrationPrice.Builder::class)
@@ -16772,8 +14728,6 @@ constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun id(): String = id.getRequired("id")
 
@@ -16857,46 +14811,6 @@ constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is OverrideTieredWithProrationPrice &&
-                    this.id == other.id &&
-                    this.modelType == other.modelType &&
-                    this.minimumAmount == other.minimumAmount &&
-                    this.maximumAmount == other.maximumAmount &&
-                    this.currency == other.currency &&
-                    this.conversionRate == other.conversionRate &&
-                    this.discount == other.discount &&
-                    this.fixedPriceQuantity == other.fixedPriceQuantity &&
-                    this.tieredWithProrationConfig == other.tieredWithProrationConfig &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            id,
-                            modelType,
-                            minimumAmount,
-                            maximumAmount,
-                            currency,
-                            conversionRate,
-                            discount,
-                            fixedPriceQuantity,
-                            tieredWithProrationConfig,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "OverrideTieredWithProrationPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, tieredWithProrationConfig=$tieredWithProrationConfig, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -17067,7 +14981,7 @@ constructor(
                         return true
                     }
 
-                    return other is ModelType && this.value == other.value
+                    return /* spotless:off */ other is ModelType && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -17115,8 +15029,6 @@ constructor(
 
                 private var validated: Boolean = false
 
-                private var hashCode: Int = 0
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -17128,25 +15040,6 @@ constructor(
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is TieredWithProrationConfig &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode = Objects.hash(additionalProperties)
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "TieredWithProrationConfig{additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -17181,6 +15074,26 @@ constructor(
                     fun build(): TieredWithProrationConfig =
                         TieredWithProrationConfig(additionalProperties.toUnmodifiable())
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is TieredWithProrationConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "TieredWithProrationConfig{additionalProperties=$additionalProperties}"
             }
 
             /** The subscription's override discount for the plan. */
@@ -17190,16 +15103,12 @@ constructor(
             private constructor(
                 private val discountType: JsonField<DiscountType>,
                 private val percentageDiscount: JsonField<Double>,
-                private val trialAmountDiscount: JsonField<String>,
                 private val usageDiscount: JsonField<Double>,
                 private val amountDiscount: JsonField<String>,
-                private val appliesToPriceIds: JsonField<List<String>>,
                 private val additionalProperties: Map<String, JsonValue>,
             ) {
 
                 private var validated: Boolean = false
-
-                private var hashCode: Int = 0
 
                 fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
@@ -17209,10 +15118,6 @@ constructor(
                  */
                 fun percentageDiscount(): Optional<Double> =
                     Optional.ofNullable(percentageDiscount.getNullable("percentage_discount"))
-
-                /** Only available if discount_type is `trial` */
-                fun trialAmountDiscount(): Optional<String> =
-                    Optional.ofNullable(trialAmountDiscount.getNullable("trial_amount_discount"))
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -17225,13 +15130,6 @@ constructor(
                 fun amountDiscount(): Optional<String> =
                     Optional.ofNullable(amountDiscount.getNullable("amount_discount"))
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                fun appliesToPriceIds(): Optional<List<String>> =
-                    Optional.ofNullable(appliesToPriceIds.getNullable("applies_to_price_ids"))
-
                 @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
 
                 /**
@@ -17241,11 +15139,6 @@ constructor(
                 @JsonProperty("percentage_discount")
                 @ExcludeMissing
                 fun _percentageDiscount() = percentageDiscount
-
-                /** Only available if discount_type is `trial` */
-                @JsonProperty("trial_amount_discount")
-                @ExcludeMissing
-                fun _trialAmountDiscount() = trialAmountDiscount
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
@@ -17258,14 +15151,6 @@ constructor(
                 @ExcludeMissing
                 fun _amountDiscount() = amountDiscount
 
-                /**
-                 * List of price_ids that this discount applies to. For plan/plan phase discounts,
-                 * this can be a subset of prices.
-                 */
-                @JsonProperty("applies_to_price_ids")
-                @ExcludeMissing
-                fun _appliesToPriceIds() = appliesToPriceIds
-
                 @JsonAnyGetter
                 @ExcludeMissing
                 fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -17274,49 +15159,13 @@ constructor(
                     if (!validated) {
                         discountType()
                         percentageDiscount()
-                        trialAmountDiscount()
                         usageDiscount()
                         amountDiscount()
-                        appliesToPriceIds()
                         validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Discount &&
-                        this.discountType == other.discountType &&
-                        this.percentageDiscount == other.percentageDiscount &&
-                        this.trialAmountDiscount == other.trialAmountDiscount &&
-                        this.usageDiscount == other.usageDiscount &&
-                        this.amountDiscount == other.amountDiscount &&
-                        this.appliesToPriceIds == other.appliesToPriceIds &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                discountType,
-                                percentageDiscount,
-                                trialAmountDiscount,
-                                usageDiscount,
-                                amountDiscount,
-                                appliesToPriceIds,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, trialAmountDiscount=$trialAmountDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -17327,20 +15176,16 @@ constructor(
 
                     private var discountType: JsonField<DiscountType> = JsonMissing.of()
                     private var percentageDiscount: JsonField<Double> = JsonMissing.of()
-                    private var trialAmountDiscount: JsonField<String> = JsonMissing.of()
                     private var usageDiscount: JsonField<Double> = JsonMissing.of()
                     private var amountDiscount: JsonField<String> = JsonMissing.of()
-                    private var appliesToPriceIds: JsonField<List<String>> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(discount: Discount) = apply {
                         this.discountType = discount.discountType
                         this.percentageDiscount = discount.percentageDiscount
-                        this.trialAmountDiscount = discount.trialAmountDiscount
                         this.usageDiscount = discount.usageDiscount
                         this.amountDiscount = discount.amountDiscount
-                        this.appliesToPriceIds = discount.appliesToPriceIds
                         additionalProperties(discount.additionalProperties)
                     }
 
@@ -17368,17 +15213,6 @@ constructor(
                     @ExcludeMissing
                     fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
                         this.percentageDiscount = percentageDiscount
-                    }
-
-                    /** Only available if discount_type is `trial` */
-                    fun trialAmountDiscount(trialAmountDiscount: String) =
-                        trialAmountDiscount(JsonField.of(trialAmountDiscount))
-
-                    /** Only available if discount_type is `trial` */
-                    @JsonProperty("trial_amount_discount")
-                    @ExcludeMissing
-                    fun trialAmountDiscount(trialAmountDiscount: JsonField<String>) = apply {
-                        this.trialAmountDiscount = trialAmountDiscount
                     }
 
                     /**
@@ -17409,23 +15243,6 @@ constructor(
                         this.amountDiscount = amountDiscount
                     }
 
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    fun appliesToPriceIds(appliesToPriceIds: List<String>) =
-                        appliesToPriceIds(JsonField.of(appliesToPriceIds))
-
-                    /**
-                     * List of price_ids that this discount applies to. For plan/plan phase
-                     * discounts, this can be a subset of prices.
-                     */
-                    @JsonProperty("applies_to_price_ids")
-                    @ExcludeMissing
-                    fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
-                    }
-
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
                         this.additionalProperties.putAll(additionalProperties)
@@ -17445,10 +15262,8 @@ constructor(
                         Discount(
                             discountType,
                             percentageDiscount,
-                            trialAmountDiscount,
                             usageDiscount,
                             amountDiscount,
-                            appliesToPriceIds.map { it.toUnmodifiable() },
                             additionalProperties.toUnmodifiable(),
                         )
                 }
@@ -17467,7 +15282,7 @@ constructor(
                             return true
                         }
 
-                        return other is DiscountType && this.value == other.value
+                        return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
                     }
 
                     override fun hashCode() = value.hashCode()
@@ -17522,7 +15337,47 @@ constructor(
 
                     fun asString(): String = _value().asStringOrThrow()
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Discount && this.discountType == other.discountType && this.percentageDiscount == other.percentageDiscount && this.usageDiscount == other.usageDiscount && this.amountDiscount == other.amountDiscount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(discountType, percentageDiscount, usageDiscount, amountDiscount, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, additionalProperties=$additionalProperties}"
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is OverrideTieredWithProrationPrice && this.id == other.id && this.modelType == other.modelType && this.minimumAmount == other.minimumAmount && this.maximumAmount == other.maximumAmount && this.currency == other.currency && this.conversionRate == other.conversionRate && this.discount == other.discount && this.fixedPriceQuantity == other.fixedPriceQuantity && this.tieredWithProrationConfig == other.tieredWithProrationConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(id, modelType, minimumAmount, maximumAmount, currency, conversionRate, discount, fixedPriceQuantity, tieredWithProrationConfig, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "OverrideTieredWithProrationPrice{id=$id, modelType=$modelType, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, currency=$currency, conversionRate=$conversionRate, discount=$discount, fixedPriceQuantity=$fixedPriceQuantity, tieredWithProrationConfig=$tieredWithProrationConfig, additionalProperties=$additionalProperties}"
         }
     }
 }
