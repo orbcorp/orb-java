@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.0-alpha.8 (2024-10-16)
+
+Full Changelog: [v0.1.0-alpha.7...v0.1.0-alpha.8](https://github.com/orbcorp/orb-java/compare/v0.1.0-alpha.7...v0.1.0-alpha.8)
+
+### Features
+
+* **api:** api update ([#81](https://github.com/orbcorp/orb-java/issues/81)) ([6b595ca](https://github.com/orbcorp/orb-java/commit/6b595caf0ced6da64742883efae7ff55aa3a74b6))
+* **api:** api update ([#82](https://github.com/orbcorp/orb-java/issues/82)) ([3d2aa72](https://github.com/orbcorp/orb-java/commit/3d2aa72926de34616e5c622197204f32c48462bf))
+* **api:** api update ([#84](https://github.com/orbcorp/orb-java/issues/84)) ([89db90d](https://github.com/orbcorp/orb-java/commit/89db90d6b9ca93f3469b8095f193e943e2580c83))
+* **api:** api update ([#85](https://github.com/orbcorp/orb-java/issues/85)) ([ccb4f21](https://github.com/orbcorp/orb-java/commit/ccb4f21cabdd7a8db4a57fe7a8de1570ce4a1863))
+* **api:** OpenAPI spec update via Stainless API ([#78](https://github.com/orbcorp/orb-java/issues/78)) ([e745d41](https://github.com/orbcorp/orb-java/commit/e745d410327507e514b35968c97b29c7983b90df))
+* **api:** OpenAPI spec update via Stainless API ([#80](https://github.com/orbcorp/orb-java/issues/80)) ([e1fc9e9](https://github.com/orbcorp/orb-java/commit/e1fc9e9f9b9f38313e051194e430880cfa46dad4))
+
 ## 0.1.0-alpha.7 (2024-09-26)
 
 Full Changelog: [v0.1.0-alpha.6...v0.1.0-alpha.7](https://github.com/orbcorp/orb-java/compare/v0.1.0-alpha.6...v0.1.0-alpha.7)
