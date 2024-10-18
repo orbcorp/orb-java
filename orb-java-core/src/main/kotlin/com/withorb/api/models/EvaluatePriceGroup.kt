@@ -37,8 +37,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     /** The values for the group in the order specified by `grouping_keys` */
     fun groupingValues(): List<GroupingValue> = groupingValues.getRequired("grouping_values")
 
@@ -71,34 +69,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is EvaluatePriceGroup &&
-            this.groupingValues == other.groupingValues &&
-            this.quantity == other.quantity &&
-            this.amount == other.amount &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    groupingValues,
-                    quantity,
-                    amount,
-                    additionalProperties,
-                )
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "EvaluatePriceGroup{groupingValues=$groupingValues, quantity=$quantity, amount=$amount, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -175,8 +145,8 @@ private constructor(
     class GroupingValue
     private constructor(
         private val string: String? = null,
-        private val double: Double? = null,
-        private val boolean: Boolean? = null,
+        private val number: Double? = null,
+        private val bool: Boolean? = null,
         private val _json: JsonValue? = null,
     ) {
 
@@ -184,36 +154,36 @@ private constructor(
 
         fun string(): Optional<String> = Optional.ofNullable(string)
 
-        fun double(): Optional<Double> = Optional.ofNullable(double)
+        fun number(): Optional<Double> = Optional.ofNullable(number)
 
-        fun boolean(): Optional<Boolean> = Optional.ofNullable(boolean)
+        fun bool(): Optional<Boolean> = Optional.ofNullable(bool)
 
         fun isString(): Boolean = string != null
 
-        fun isDouble(): Boolean = double != null
+        fun isNumber(): Boolean = number != null
 
-        fun isBoolean(): Boolean = boolean != null
+        fun isBool(): Boolean = bool != null
 
         fun asString(): String = string.getOrThrow("string")
 
-        fun asDouble(): Double = double.getOrThrow("double")
+        fun asNumber(): Double = number.getOrThrow("number")
 
-        fun asBoolean(): Boolean = boolean.getOrThrow("boolean")
+        fun asBool(): Boolean = bool.getOrThrow("bool")
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
         fun <T> accept(visitor: Visitor<T>): T {
             return when {
                 string != null -> visitor.visitString(string)
-                double != null -> visitor.visitDouble(double)
-                boolean != null -> visitor.visitBoolean(boolean)
+                number != null -> visitor.visitNumber(number)
+                bool != null -> visitor.visitBool(bool)
                 else -> visitor.unknown(_json)
             }
         }
 
         fun validate(): GroupingValue = apply {
             if (!validated) {
-                if (string == null && double == null && boolean == null) {
+                if (string == null && number == null && bool == null) {
                     throw OrbInvalidDataException("Unknown GroupingValue: $_json")
                 }
                 validated = true
@@ -225,25 +195,18 @@ private constructor(
                 return true
             }
 
-            return other is GroupingValue &&
-                this.string == other.string &&
-                this.double == other.double &&
-                this.boolean == other.boolean
+            return /* spotless:off */ other is GroupingValue && this.string == other.string && this.number == other.number && this.bool == other.bool /* spotless:on */
         }
 
         override fun hashCode(): Int {
-            return Objects.hash(
-                string,
-                double,
-                boolean,
-            )
+            return /* spotless:off */ Objects.hash(string, number, bool) /* spotless:on */
         }
 
         override fun toString(): String {
             return when {
                 string != null -> "GroupingValue{string=$string}"
-                double != null -> "GroupingValue{double=$double}"
-                boolean != null -> "GroupingValue{boolean=$boolean}"
+                number != null -> "GroupingValue{number=$number}"
+                bool != null -> "GroupingValue{bool=$bool}"
                 _json != null -> "GroupingValue{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid GroupingValue")
             }
@@ -253,18 +216,18 @@ private constructor(
 
             @JvmStatic fun ofString(string: String) = GroupingValue(string = string)
 
-            @JvmStatic fun ofDouble(double: Double) = GroupingValue(double = double)
+            @JvmStatic fun ofNumber(number: Double) = GroupingValue(number = number)
 
-            @JvmStatic fun ofBoolean(boolean: Boolean) = GroupingValue(boolean = boolean)
+            @JvmStatic fun ofBool(bool: Boolean) = GroupingValue(bool = bool)
         }
 
         interface Visitor<out T> {
 
             fun visitString(string: String): T
 
-            fun visitDouble(double: Double): T
+            fun visitNumber(number: Double): T
 
-            fun visitBoolean(boolean: Boolean): T
+            fun visitBool(bool: Boolean): T
 
             fun unknown(json: JsonValue?): T {
                 throw OrbInvalidDataException("Unknown GroupingValue: $json")
@@ -279,10 +242,10 @@ private constructor(
                     return GroupingValue(string = it, _json = json)
                 }
                 tryDeserialize(node, jacksonTypeRef<Double>())?.let {
-                    return GroupingValue(double = it, _json = json)
+                    return GroupingValue(number = it, _json = json)
                 }
                 tryDeserialize(node, jacksonTypeRef<Boolean>())?.let {
-                    return GroupingValue(boolean = it, _json = json)
+                    return GroupingValue(bool = it, _json = json)
                 }
 
                 return GroupingValue(_json = json)
@@ -298,12 +261,32 @@ private constructor(
             ) {
                 when {
                     value.string != null -> generator.writeObject(value.string)
-                    value.double != null -> generator.writeObject(value.double)
-                    value.boolean != null -> generator.writeObject(value.boolean)
+                    value.number != null -> generator.writeObject(value.number)
+                    value.bool != null -> generator.writeObject(value.bool)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid GroupingValue")
                 }
             }
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is EvaluatePriceGroup && this.groupingValues == other.groupingValues && this.quantity == other.quantity && this.amount == other.amount && this.additionalProperties == other.additionalProperties /* spotless:on */
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode = /* spotless:off */ Objects.hash(groupingValues, quantity, amount, additionalProperties) /* spotless:on */
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "EvaluatePriceGroup{groupingValues=$groupingValues, quantity=$quantity, amount=$amount, additionalProperties=$additionalProperties}"
 }
