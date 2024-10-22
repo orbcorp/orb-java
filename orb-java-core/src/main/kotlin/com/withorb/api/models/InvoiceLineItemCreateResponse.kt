@@ -27,6 +27,7 @@ import com.withorb.api.errors.OrbInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 @JsonDeserialize(builder = InvoiceLineItemCreateResponse.Builder::class)
 @NoAutoDetect
@@ -52,8 +53,6 @@ private constructor(
 ) {
 
     private var validated: Boolean = false
-
-    private var hashCode: Int = 0
 
     /** The final amount after any discounts or minimums. */
     fun amount(): String = amount.getRequired("amount")
@@ -640,60 +639,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is InvoiceLineItemCreateResponse &&
-            this.amount == other.amount &&
-            this.discount == other.discount &&
-            this.endDate == other.endDate &&
-            this.grouping == other.grouping &&
-            this.minimum == other.minimum &&
-            this.minimumAmount == other.minimumAmount &&
-            this.maximum == other.maximum &&
-            this.maximumAmount == other.maximumAmount &&
-            this.name == other.name &&
-            this.quantity == other.quantity &&
-            this.startDate == other.startDate &&
-            this.subtotal == other.subtotal &&
-            this.subLineItems == other.subLineItems &&
-            this.taxAmounts == other.taxAmounts &&
-            this.id == other.id &&
-            this.price == other.price &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    amount,
-                    discount,
-                    endDate,
-                    grouping,
-                    minimum,
-                    minimumAmount,
-                    maximum,
-                    maximumAmount,
-                    name,
-                    quantity,
-                    startDate,
-                    subtotal,
-                    subLineItems,
-                    taxAmounts,
-                    id,
-                    price,
-                    additionalProperties,
-                )
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "InvoiceLineItemCreateResponse{amount=$amount, discount=$discount, endDate=$endDate, grouping=$grouping, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, name=$name, quantity=$quantity, startDate=$startDate, subtotal=$subtotal, subLineItems=$subLineItems, taxAmounts=$taxAmounts, id=$id, price=$price, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -1384,8 +1329,6 @@ private constructor(
 
         private var validated: Boolean = false
 
-        private var hashCode: Int = 0
-
         /** Maximum amount applied */
         fun maximumAmount(): String = maximumAmount.getRequired("maximum_amount")
 
@@ -1420,32 +1363,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Maximum &&
-                this.maximumAmount == other.maximumAmount &&
-                this.appliesToPriceIds == other.appliesToPriceIds &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        maximumAmount,
-                        appliesToPriceIds,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "Maximum{maximumAmount=$maximumAmount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -1513,6 +1430,26 @@ private constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Maximum && this.maximumAmount == other.maximumAmount && this.appliesToPriceIds == other.appliesToPriceIds && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(maximumAmount, appliesToPriceIds, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "Maximum{maximumAmount=$maximumAmount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
     }
 
     @JsonDeserialize(builder = Minimum.Builder::class)
@@ -1525,8 +1462,6 @@ private constructor(
     ) {
 
         private var validated: Boolean = false
-
-        private var hashCode: Int = 0
 
         /** Minimum amount applied */
         fun minimumAmount(): String = minimumAmount.getRequired("minimum_amount")
@@ -1562,32 +1497,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Minimum &&
-                this.minimumAmount == other.minimumAmount &&
-                this.appliesToPriceIds == other.appliesToPriceIds &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        minimumAmount,
-                        appliesToPriceIds,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "Minimum{minimumAmount=$minimumAmount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -1655,6 +1564,26 @@ private constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Minimum && this.minimumAmount == other.minimumAmount && this.appliesToPriceIds == other.appliesToPriceIds && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(minimumAmount, appliesToPriceIds, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "Minimum{minimumAmount=$minimumAmount, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
     }
 
     @JsonDeserialize(using = SubLineItem.Deserializer::class)
@@ -1719,18 +1648,11 @@ private constructor(
                 return true
             }
 
-            return other is SubLineItem &&
-                this.matrixSubLineItem == other.matrixSubLineItem &&
-                this.tierSubLineItem == other.tierSubLineItem &&
-                this.otherSubLineItem == other.otherSubLineItem
+            return /* spotless:off */ other is SubLineItem && this.matrixSubLineItem == other.matrixSubLineItem && this.tierSubLineItem == other.tierSubLineItem && this.otherSubLineItem == other.otherSubLineItem /* spotless:on */
         }
 
         override fun hashCode(): Int {
-            return Objects.hash(
-                matrixSubLineItem,
-                tierSubLineItem,
-                otherSubLineItem,
-            )
+            return /* spotless:off */ Objects.hash(matrixSubLineItem, tierSubLineItem, otherSubLineItem) /* spotless:on */
         }
 
         override fun toString(): String {
@@ -1775,18 +1697,28 @@ private constructor(
 
             override fun ObjectCodec.deserialize(node: JsonNode): SubLineItem {
                 val json = JsonValue.fromJsonNode(node)
-                tryDeserialize(node, jacksonTypeRef<MatrixSubLineItem>()) { it.validate() }
-                    ?.let {
-                        return SubLineItem(matrixSubLineItem = it, _json = json)
+                val type = json.asObject().getOrNull()?.get("type")?.asString()?.getOrNull()
+
+                when (type) {
+                    "matrix" -> {
+                        tryDeserialize(node, jacksonTypeRef<MatrixSubLineItem>()) { it.validate() }
+                            ?.let {
+                                return SubLineItem(matrixSubLineItem = it, _json = json)
+                            }
                     }
-                tryDeserialize(node, jacksonTypeRef<TierSubLineItem>()) { it.validate() }
-                    ?.let {
-                        return SubLineItem(tierSubLineItem = it, _json = json)
+                    "tier" -> {
+                        tryDeserialize(node, jacksonTypeRef<TierSubLineItem>()) { it.validate() }
+                            ?.let {
+                                return SubLineItem(tierSubLineItem = it, _json = json)
+                            }
                     }
-                tryDeserialize(node, jacksonTypeRef<OtherSubLineItem>()) { it.validate() }
-                    ?.let {
-                        return SubLineItem(otherSubLineItem = it, _json = json)
+                    "'null'" -> {
+                        tryDeserialize(node, jacksonTypeRef<OtherSubLineItem>()) { it.validate() }
+                            ?.let {
+                                return SubLineItem(otherSubLineItem = it, _json = json)
+                            }
                     }
+                }
 
                 return SubLineItem(_json = json)
             }
@@ -1824,8 +1756,6 @@ private constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             /** The total amount for this sub line item. */
             fun amount(): String = amount.getRequired("amount")
@@ -1871,40 +1801,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is MatrixSubLineItem &&
-                    this.amount == other.amount &&
-                    this.name == other.name &&
-                    this.quantity == other.quantity &&
-                    this.grouping == other.grouping &&
-                    this.type == other.type &&
-                    this.matrixConfig == other.matrixConfig &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            amount,
-                            name,
-                            quantity,
-                            grouping,
-                            type,
-                            matrixConfig,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "MatrixSubLineItem{amount=$amount, name=$name, quantity=$quantity, grouping=$grouping, type=$type, matrixConfig=$matrixConfig, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -2011,8 +1907,6 @@ private constructor(
 
                 private var validated: Boolean = false
 
-                private var hashCode: Int = 0
-
                 fun key(): String = key.getRequired("key")
 
                 /** No value indicates the default group */
@@ -2036,32 +1930,6 @@ private constructor(
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Grouping &&
-                        this.key == other.key &&
-                        this.value == other.value &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                key,
-                                value,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "Grouping{key=$key, value=$value, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -2117,6 +1985,26 @@ private constructor(
                             additionalProperties.toUnmodifiable(),
                         )
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Grouping && this.key == other.key && this.value == other.value && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(key, value, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Grouping{key=$key, value=$value, additionalProperties=$additionalProperties}"
             }
 
             @JsonDeserialize(builder = MatrixConfig.Builder::class)
@@ -2128,8 +2016,6 @@ private constructor(
             ) {
 
                 private var validated: Boolean = false
-
-                private var hashCode: Int = 0
 
                 /** The ordered dimension values for this line item. */
                 fun dimensionValues(): List<String?> =
@@ -2152,26 +2038,6 @@ private constructor(
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is MatrixConfig &&
-                        this.dimensionValues == other.dimensionValues &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode = Objects.hash(dimensionValues, additionalProperties)
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "MatrixConfig{dimensionValues=$dimensionValues, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -2221,6 +2087,26 @@ private constructor(
                             additionalProperties.toUnmodifiable()
                         )
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is MatrixConfig && this.dimensionValues == other.dimensionValues && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(dimensionValues, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "MatrixConfig{dimensionValues=$dimensionValues, additionalProperties=$additionalProperties}"
             }
 
             class Type
@@ -2236,7 +2122,7 @@ private constructor(
                         return true
                     }
 
-                    return other is Type && this.value == other.value
+                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -2273,6 +2159,26 @@ private constructor(
 
                 fun asString(): String = _value().asStringOrThrow()
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is MatrixSubLineItem && this.amount == other.amount && this.name == other.name && this.quantity == other.quantity && this.grouping == other.grouping && this.type == other.type && this.matrixConfig == other.matrixConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(amount, name, quantity, grouping, type, matrixConfig, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "MatrixSubLineItem{amount=$amount, name=$name, quantity=$quantity, grouping=$grouping, type=$type, matrixConfig=$matrixConfig, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = TierSubLineItem.Builder::class)
@@ -2289,8 +2195,6 @@ private constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             /** The total amount for this sub line item. */
             fun amount(): String = amount.getRequired("amount")
@@ -2336,40 +2240,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is TierSubLineItem &&
-                    this.amount == other.amount &&
-                    this.name == other.name &&
-                    this.quantity == other.quantity &&
-                    this.grouping == other.grouping &&
-                    this.type == other.type &&
-                    this.tierConfig == other.tierConfig &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            amount,
-                            name,
-                            quantity,
-                            grouping,
-                            type,
-                            tierConfig,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "TierSubLineItem{amount=$amount, name=$name, quantity=$quantity, grouping=$grouping, type=$type, tierConfig=$tierConfig, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -2475,8 +2345,6 @@ private constructor(
 
                 private var validated: Boolean = false
 
-                private var hashCode: Int = 0
-
                 fun key(): String = key.getRequired("key")
 
                 /** No value indicates the default group */
@@ -2500,32 +2368,6 @@ private constructor(
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Grouping &&
-                        this.key == other.key &&
-                        this.value == other.value &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                key,
-                                value,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "Grouping{key=$key, value=$value, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -2581,6 +2423,26 @@ private constructor(
                             additionalProperties.toUnmodifiable(),
                         )
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Grouping && this.key == other.key && this.value == other.value && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(key, value, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Grouping{key=$key, value=$value, additionalProperties=$additionalProperties}"
             }
 
             @JsonDeserialize(builder = TierConfig.Builder::class)
@@ -2594,8 +2456,6 @@ private constructor(
             ) {
 
                 private var validated: Boolean = false
-
-                private var hashCode: Int = 0
 
                 fun firstUnit(): Double = firstUnit.getRequired("first_unit")
 
@@ -2624,34 +2484,6 @@ private constructor(
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is TierConfig &&
-                        this.firstUnit == other.firstUnit &&
-                        this.lastUnit == other.lastUnit &&
-                        this.unitAmount == other.unitAmount &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                firstUnit,
-                                lastUnit,
-                                unitAmount,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "TierConfig{firstUnit=$firstUnit, lastUnit=$lastUnit, unitAmount=$unitAmount, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -2718,6 +2550,26 @@ private constructor(
                             additionalProperties.toUnmodifiable(),
                         )
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is TierConfig && this.firstUnit == other.firstUnit && this.lastUnit == other.lastUnit && this.unitAmount == other.unitAmount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(firstUnit, lastUnit, unitAmount, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "TierConfig{firstUnit=$firstUnit, lastUnit=$lastUnit, unitAmount=$unitAmount, additionalProperties=$additionalProperties}"
             }
 
             class Type
@@ -2733,7 +2585,7 @@ private constructor(
                         return true
                     }
 
-                    return other is Type && this.value == other.value
+                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -2770,6 +2622,26 @@ private constructor(
 
                 fun asString(): String = _value().asStringOrThrow()
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is TierSubLineItem && this.amount == other.amount && this.name == other.name && this.quantity == other.quantity && this.grouping == other.grouping && this.type == other.type && this.tierConfig == other.tierConfig && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(amount, name, quantity, grouping, type, tierConfig, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "TierSubLineItem{amount=$amount, name=$name, quantity=$quantity, grouping=$grouping, type=$type, tierConfig=$tierConfig, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = OtherSubLineItem.Builder::class)
@@ -2785,8 +2657,6 @@ private constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             /** The total amount for this sub line item. */
             fun amount(): String = amount.getRequired("amount")
@@ -2827,38 +2697,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is OtherSubLineItem &&
-                    this.amount == other.amount &&
-                    this.name == other.name &&
-                    this.quantity == other.quantity &&
-                    this.grouping == other.grouping &&
-                    this.type == other.type &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            amount,
-                            name,
-                            quantity,
-                            grouping,
-                            type,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "OtherSubLineItem{amount=$amount, name=$name, quantity=$quantity, grouping=$grouping, type=$type, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -2953,8 +2791,6 @@ private constructor(
 
                 private var validated: Boolean = false
 
-                private var hashCode: Int = 0
-
                 fun key(): String = key.getRequired("key")
 
                 /** No value indicates the default group */
@@ -2978,32 +2814,6 @@ private constructor(
                 }
 
                 fun toBuilder() = Builder().from(this)
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Grouping &&
-                        this.key == other.key &&
-                        this.value == other.value &&
-                        this.additionalProperties == other.additionalProperties
-                }
-
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                key,
-                                value,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
-                }
-
-                override fun toString() =
-                    "Grouping{key=$key, value=$value, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -3059,6 +2869,26 @@ private constructor(
                             additionalProperties.toUnmodifiable(),
                         )
                 }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Grouping && this.key == other.key && this.value == other.value && this.additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                private var hashCode: Int = 0
+
+                override fun hashCode(): Int {
+                    if (hashCode == 0) {
+                        hashCode = /* spotless:off */ Objects.hash(key, value, additionalProperties) /* spotless:on */
+                    }
+                    return hashCode
+                }
+
+                override fun toString() =
+                    "Grouping{key=$key, value=$value, additionalProperties=$additionalProperties}"
             }
 
             class Type
@@ -3074,7 +2904,7 @@ private constructor(
                         return true
                     }
 
-                    return other is Type && this.value == other.value
+                    return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -3111,6 +2941,26 @@ private constructor(
 
                 fun asString(): String = _value().asStringOrThrow()
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is OtherSubLineItem && this.amount == other.amount && this.name == other.name && this.quantity == other.quantity && this.grouping == other.grouping && this.type == other.type && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(amount, name, quantity, grouping, type, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "OtherSubLineItem{amount=$amount, name=$name, quantity=$quantity, grouping=$grouping, type=$type, additionalProperties=$additionalProperties}"
         }
     }
 
@@ -3125,8 +2975,6 @@ private constructor(
     ) {
 
         private var validated: Boolean = false
-
-        private var hashCode: Int = 0
 
         /** The human-readable description of the applied tax rate. */
         fun taxRateDescription(): String = taxRateDescription.getRequired("tax_rate_description")
@@ -3165,34 +3013,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is TaxAmount &&
-                this.taxRateDescription == other.taxRateDescription &&
-                this.taxRatePercentage == other.taxRatePercentage &&
-                this.amount == other.amount &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        taxRateDescription,
-                        taxRatePercentage,
-                        amount,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "TaxAmount{taxRateDescription=$taxRateDescription, taxRatePercentage=$taxRatePercentage, amount=$amount, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -3266,5 +3086,45 @@ private constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is TaxAmount && this.taxRateDescription == other.taxRateDescription && this.taxRatePercentage == other.taxRatePercentage && this.amount == other.amount && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(taxRateDescription, taxRatePercentage, amount, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "TaxAmount{taxRateDescription=$taxRateDescription, taxRatePercentage=$taxRatePercentage, amount=$amount, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is InvoiceLineItemCreateResponse && this.amount == other.amount && this.discount == other.discount && this.endDate == other.endDate && this.grouping == other.grouping && this.minimum == other.minimum && this.minimumAmount == other.minimumAmount && this.maximum == other.maximum && this.maximumAmount == other.maximumAmount && this.name == other.name && this.quantity == other.quantity && this.startDate == other.startDate && this.subtotal == other.subtotal && this.subLineItems == other.subLineItems && this.taxAmounts == other.taxAmounts && this.id == other.id && this.price == other.price && this.additionalProperties == other.additionalProperties /* spotless:on */
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode = /* spotless:off */ Objects.hash(amount, discount, endDate, grouping, minimum, minimumAmount, maximum, maximumAmount, name, quantity, startDate, subtotal, subLineItems, taxAmounts, id, price, additionalProperties) /* spotless:on */
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "InvoiceLineItemCreateResponse{amount=$amount, discount=$discount, endDate=$endDate, grouping=$grouping, minimum=$minimum, minimumAmount=$minimumAmount, maximum=$maximum, maximumAmount=$maximumAmount, name=$name, quantity=$quantity, startDate=$startDate, subtotal=$subtotal, subLineItems=$subLineItems, taxAmounts=$taxAmounts, id=$id, price=$price, additionalProperties=$additionalProperties}"
 }

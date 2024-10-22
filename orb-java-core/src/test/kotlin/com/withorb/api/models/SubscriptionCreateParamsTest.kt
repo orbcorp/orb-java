@@ -2,6 +2,7 @@
 
 package com.withorb.api.models
 
+import com.withorb.api.core.JsonValue
 import com.withorb.api.models.*
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -41,8 +42,23 @@ class SubscriptionCreateParamsTest {
             .addPrices(
                 listOf(
                     SubscriptionCreateParams.AddPrice.builder()
+                        .discounts(
+                            listOf(
+                                SubscriptionCreateParams.AddPrice.Discount.builder()
+                                    .discountType(
+                                        SubscriptionCreateParams.AddPrice.Discount.DiscountType
+                                            .PERCENTAGE
+                                    )
+                                    .amountDiscount("amount_discount")
+                                    .percentageDiscount(42.23)
+                                    .usageDiscount(42.23)
+                                    .build()
+                            )
+                        )
                         .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .externalPriceId("external_price_id")
+                        .maximumAmount("1.23")
+                        .minimumAmount("1.23")
                         .planPhaseOrder(123L)
                         .price(
                             SubscriptionCreateParams.AddPrice.Price.ofNewSubscriptionUnitPrice(
@@ -114,6 +130,7 @@ class SubscriptionCreateParamsTest {
                                             .builder()
                                             .build()
                                     )
+                                    .referenceId("reference_id")
                                     .build()
                             )
                         )
@@ -147,46 +164,8 @@ class SubscriptionCreateParamsTest {
             .netTerms(123L)
             .perCreditOverageAmount(42.23)
             .planId("ZMwNQefe7J3ecf7W")
-            .priceOverrides(
-                listOf(
-                    SubscriptionCreateParams.PriceOverride.ofOverrideUnitPrice(
-                        SubscriptionCreateParams.PriceOverride.OverrideUnitPrice.builder()
-                            .id("id")
-                            .modelType(
-                                SubscriptionCreateParams.PriceOverride.OverrideUnitPrice.ModelType
-                                    .UNIT
-                            )
-                            .unitConfig(
-                                SubscriptionCreateParams.PriceOverride.OverrideUnitPrice.UnitConfig
-                                    .builder()
-                                    .unitAmount("unit_amount")
-                                    .build()
-                            )
-                            .conversionRate(42.23)
-                            .currency("currency")
-                            .discount(
-                                SubscriptionCreateParams.PriceOverride.OverrideUnitPrice.Discount
-                                    .builder()
-                                    .discountType(
-                                        SubscriptionCreateParams.PriceOverride.OverrideUnitPrice
-                                            .Discount
-                                            .DiscountType
-                                            .PERCENTAGE
-                                    )
-                                    .amountDiscount("amount_discount")
-                                    .appliesToPriceIds(listOf("string"))
-                                    .percentageDiscount(42.23)
-                                    .trialAmountDiscount("trial_amount_discount")
-                                    .usageDiscount(42.23)
-                                    .build()
-                            )
-                            .fixedPriceQuantity(42.23)
-                            .maximumAmount("1.23")
-                            .minimumAmount("1.23")
-                            .build()
-                    )
-                )
-            )
+            .planVersionNumber(123L)
+            .priceOverrides(listOf(JsonValue.from(mapOf<String, Any>())))
             .removeAdjustments(
                 listOf(
                     SubscriptionCreateParams.RemoveAdjustment.builder()
@@ -229,6 +208,24 @@ class SubscriptionCreateParamsTest {
             .replacePrices(
                 listOf(
                     SubscriptionCreateParams.ReplacePrice.builder()
+                        .replacesPriceId("replaces_price_id")
+                        .discounts(
+                            listOf(
+                                SubscriptionCreateParams.ReplacePrice.Discount.builder()
+                                    .discountType(
+                                        SubscriptionCreateParams.ReplacePrice.Discount.DiscountType
+                                            .PERCENTAGE
+                                    )
+                                    .amountDiscount("amount_discount")
+                                    .percentageDiscount(42.23)
+                                    .usageDiscount(42.23)
+                                    .build()
+                            )
+                        )
+                        .externalPriceId("external_price_id")
+                        .fixedPriceQuantity(42.23)
+                        .maximumAmount("1.23")
+                        .minimumAmount("1.23")
                         .price(
                             SubscriptionCreateParams.ReplacePrice.Price.ofNewSubscriptionUnitPrice(
                                 SubscriptionCreateParams.ReplacePrice.Price.NewSubscriptionUnitPrice
@@ -299,14 +296,16 @@ class SubscriptionCreateParamsTest {
                                             .builder()
                                             .build()
                                     )
+                                    .referenceId("reference_id")
                                     .build()
                             )
                         )
-                        .replacesPriceId("replaces_price_id")
+                        .priceId("h74gfhdjvn7ujokd")
                         .build()
                 )
             )
             .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+            .trialDurationDays(123L)
             .build()
     }
 
@@ -343,8 +342,23 @@ class SubscriptionCreateParamsTest {
                 .addPrices(
                     listOf(
                         SubscriptionCreateParams.AddPrice.builder()
+                            .discounts(
+                                listOf(
+                                    SubscriptionCreateParams.AddPrice.Discount.builder()
+                                        .discountType(
+                                            SubscriptionCreateParams.AddPrice.Discount.DiscountType
+                                                .PERCENTAGE
+                                        )
+                                        .amountDiscount("amount_discount")
+                                        .percentageDiscount(42.23)
+                                        .usageDiscount(42.23)
+                                        .build()
+                                )
+                            )
                             .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .externalPriceId("external_price_id")
+                            .maximumAmount("1.23")
+                            .minimumAmount("1.23")
                             .planPhaseOrder(123L)
                             .price(
                                 SubscriptionCreateParams.AddPrice.Price.ofNewSubscriptionUnitPrice(
@@ -416,6 +430,7 @@ class SubscriptionCreateParamsTest {
                                                 .builder()
                                                 .build()
                                         )
+                                        .referenceId("reference_id")
                                         .build()
                                 )
                             )
@@ -449,49 +464,8 @@ class SubscriptionCreateParamsTest {
                 .netTerms(123L)
                 .perCreditOverageAmount(42.23)
                 .planId("ZMwNQefe7J3ecf7W")
-                .priceOverrides(
-                    listOf(
-                        SubscriptionCreateParams.PriceOverride.ofOverrideUnitPrice(
-                            SubscriptionCreateParams.PriceOverride.OverrideUnitPrice.builder()
-                                .id("id")
-                                .modelType(
-                                    SubscriptionCreateParams.PriceOverride.OverrideUnitPrice
-                                        .ModelType
-                                        .UNIT
-                                )
-                                .unitConfig(
-                                    SubscriptionCreateParams.PriceOverride.OverrideUnitPrice
-                                        .UnitConfig
-                                        .builder()
-                                        .unitAmount("unit_amount")
-                                        .build()
-                                )
-                                .conversionRate(42.23)
-                                .currency("currency")
-                                .discount(
-                                    SubscriptionCreateParams.PriceOverride.OverrideUnitPrice
-                                        .Discount
-                                        .builder()
-                                        .discountType(
-                                            SubscriptionCreateParams.PriceOverride.OverrideUnitPrice
-                                                .Discount
-                                                .DiscountType
-                                                .PERCENTAGE
-                                        )
-                                        .amountDiscount("amount_discount")
-                                        .appliesToPriceIds(listOf("string"))
-                                        .percentageDiscount(42.23)
-                                        .trialAmountDiscount("trial_amount_discount")
-                                        .usageDiscount(42.23)
-                                        .build()
-                                )
-                                .fixedPriceQuantity(42.23)
-                                .maximumAmount("1.23")
-                                .minimumAmount("1.23")
-                                .build()
-                        )
-                    )
-                )
+                .planVersionNumber(123L)
+                .priceOverrides(listOf(JsonValue.from(mapOf<String, Any>())))
                 .removeAdjustments(
                     listOf(
                         SubscriptionCreateParams.RemoveAdjustment.builder()
@@ -535,6 +509,25 @@ class SubscriptionCreateParamsTest {
                 .replacePrices(
                     listOf(
                         SubscriptionCreateParams.ReplacePrice.builder()
+                            .replacesPriceId("replaces_price_id")
+                            .discounts(
+                                listOf(
+                                    SubscriptionCreateParams.ReplacePrice.Discount.builder()
+                                        .discountType(
+                                            SubscriptionCreateParams.ReplacePrice.Discount
+                                                .DiscountType
+                                                .PERCENTAGE
+                                        )
+                                        .amountDiscount("amount_discount")
+                                        .percentageDiscount(42.23)
+                                        .usageDiscount(42.23)
+                                        .build()
+                                )
+                            )
+                            .externalPriceId("external_price_id")
+                            .fixedPriceQuantity(42.23)
+                            .maximumAmount("1.23")
+                            .minimumAmount("1.23")
                             .price(
                                 SubscriptionCreateParams.ReplacePrice.Price
                                     .ofNewSubscriptionUnitPrice(
@@ -607,14 +600,16 @@ class SubscriptionCreateParamsTest {
                                                     .builder()
                                                     .build()
                                             )
+                                            .referenceId("reference_id")
                                             .build()
                                     )
                             )
-                            .replacesPriceId("replaces_price_id")
+                            .priceId("h74gfhdjvn7ujokd")
                             .build()
                     )
                 )
                 .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .trialDurationDays(123L)
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
@@ -649,8 +644,23 @@ class SubscriptionCreateParamsTest {
             .isEqualTo(
                 listOf(
                     SubscriptionCreateParams.AddPrice.builder()
+                        .discounts(
+                            listOf(
+                                SubscriptionCreateParams.AddPrice.Discount.builder()
+                                    .discountType(
+                                        SubscriptionCreateParams.AddPrice.Discount.DiscountType
+                                            .PERCENTAGE
+                                    )
+                                    .amountDiscount("amount_discount")
+                                    .percentageDiscount(42.23)
+                                    .usageDiscount(42.23)
+                                    .build()
+                            )
+                        )
                         .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .externalPriceId("external_price_id")
+                        .maximumAmount("1.23")
+                        .minimumAmount("1.23")
                         .planPhaseOrder(123L)
                         .price(
                             SubscriptionCreateParams.AddPrice.Price.ofNewSubscriptionUnitPrice(
@@ -722,6 +732,7 @@ class SubscriptionCreateParamsTest {
                                             .builder()
                                             .build()
                                     )
+                                    .referenceId("reference_id")
                                     .build()
                             )
                         )
@@ -758,47 +769,8 @@ class SubscriptionCreateParamsTest {
         assertThat(body.netTerms()).isEqualTo(123L)
         assertThat(body.perCreditOverageAmount()).isEqualTo(42.23)
         assertThat(body.planId()).isEqualTo("ZMwNQefe7J3ecf7W")
-        assertThat(body.priceOverrides())
-            .isEqualTo(
-                listOf(
-                    SubscriptionCreateParams.PriceOverride.ofOverrideUnitPrice(
-                        SubscriptionCreateParams.PriceOverride.OverrideUnitPrice.builder()
-                            .id("id")
-                            .modelType(
-                                SubscriptionCreateParams.PriceOverride.OverrideUnitPrice.ModelType
-                                    .UNIT
-                            )
-                            .unitConfig(
-                                SubscriptionCreateParams.PriceOverride.OverrideUnitPrice.UnitConfig
-                                    .builder()
-                                    .unitAmount("unit_amount")
-                                    .build()
-                            )
-                            .conversionRate(42.23)
-                            .currency("currency")
-                            .discount(
-                                SubscriptionCreateParams.PriceOverride.OverrideUnitPrice.Discount
-                                    .builder()
-                                    .discountType(
-                                        SubscriptionCreateParams.PriceOverride.OverrideUnitPrice
-                                            .Discount
-                                            .DiscountType
-                                            .PERCENTAGE
-                                    )
-                                    .amountDiscount("amount_discount")
-                                    .appliesToPriceIds(listOf("string"))
-                                    .percentageDiscount(42.23)
-                                    .trialAmountDiscount("trial_amount_discount")
-                                    .usageDiscount(42.23)
-                                    .build()
-                            )
-                            .fixedPriceQuantity(42.23)
-                            .maximumAmount("1.23")
-                            .minimumAmount("1.23")
-                            .build()
-                    )
-                )
-            )
+        assertThat(body.planVersionNumber()).isEqualTo(123L)
+        assertThat(body.priceOverrides()).isEqualTo(listOf(JsonValue.from(mapOf<String, Any>())))
         assertThat(body.removeAdjustments())
             .isEqualTo(
                 listOf(
@@ -845,6 +817,24 @@ class SubscriptionCreateParamsTest {
             .isEqualTo(
                 listOf(
                     SubscriptionCreateParams.ReplacePrice.builder()
+                        .replacesPriceId("replaces_price_id")
+                        .discounts(
+                            listOf(
+                                SubscriptionCreateParams.ReplacePrice.Discount.builder()
+                                    .discountType(
+                                        SubscriptionCreateParams.ReplacePrice.Discount.DiscountType
+                                            .PERCENTAGE
+                                    )
+                                    .amountDiscount("amount_discount")
+                                    .percentageDiscount(42.23)
+                                    .usageDiscount(42.23)
+                                    .build()
+                            )
+                        )
+                        .externalPriceId("external_price_id")
+                        .fixedPriceQuantity(42.23)
+                        .maximumAmount("1.23")
+                        .minimumAmount("1.23")
                         .price(
                             SubscriptionCreateParams.ReplacePrice.Price.ofNewSubscriptionUnitPrice(
                                 SubscriptionCreateParams.ReplacePrice.Price.NewSubscriptionUnitPrice
@@ -915,14 +905,16 @@ class SubscriptionCreateParamsTest {
                                             .builder()
                                             .build()
                                     )
+                                    .referenceId("reference_id")
                                     .build()
                             )
                         )
-                        .replacesPriceId("replaces_price_id")
+                        .priceId("h74gfhdjvn7ujokd")
                         .build()
                 )
             )
         assertThat(body.startDate()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.trialDurationDays()).isEqualTo(123L)
     }
 
     @Test

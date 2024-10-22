@@ -25,6 +25,7 @@ import com.withorb.api.errors.OrbInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * A coupon represents a reusable discount configuration that can be applied either as a fixed or
@@ -78,8 +79,6 @@ private constructor(
 ) {
 
     private var validated: Boolean = false
-
-    private var hashCode: Int = 0
 
     /** Also referred to as coupon_id in this documentation. */
     fun id(): String = id.getRequired("id")
@@ -160,42 +159,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is Coupon &&
-            this.id == other.id &&
-            this.redemptionCode == other.redemptionCode &&
-            this.discount == other.discount &&
-            this.timesRedeemed == other.timesRedeemed &&
-            this.durationInMonths == other.durationInMonths &&
-            this.maxRedemptions == other.maxRedemptions &&
-            this.archivedAt == other.archivedAt &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    id,
-                    redemptionCode,
-                    discount,
-                    timesRedeemed,
-                    durationInMonths,
-                    maxRedemptions,
-                    archivedAt,
-                    additionalProperties,
-                )
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "Coupon{id=$id, redemptionCode=$redemptionCode, discount=$discount, timesRedeemed=$timesRedeemed, durationInMonths=$durationInMonths, maxRedemptions=$maxRedemptions, archivedAt=$archivedAt, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -384,13 +347,11 @@ private constructor(
                 return true
             }
 
-            return other is Discount &&
-                this.percentageDiscount == other.percentageDiscount &&
-                this.amountDiscount == other.amountDiscount
+            return /* spotless:off */ other is Discount && this.percentageDiscount == other.percentageDiscount && this.amountDiscount == other.amountDiscount /* spotless:on */
         }
 
         override fun hashCode(): Int {
-            return Objects.hash(percentageDiscount, amountDiscount)
+            return /* spotless:off */ Objects.hash(percentageDiscount, amountDiscount) /* spotless:on */
         }
 
         override fun toString(): String {
@@ -428,14 +389,23 @@ private constructor(
 
             override fun ObjectCodec.deserialize(node: JsonNode): Discount {
                 val json = JsonValue.fromJsonNode(node)
-                tryDeserialize(node, jacksonTypeRef<PercentageDiscount>()) { it.validate() }
-                    ?.let {
-                        return Discount(percentageDiscount = it, _json = json)
+                val discountType =
+                    json.asObject().getOrNull()?.get("discount_type")?.asString()?.getOrNull()
+
+                when (discountType) {
+                    "percentage" -> {
+                        tryDeserialize(node, jacksonTypeRef<PercentageDiscount>()) { it.validate() }
+                            ?.let {
+                                return Discount(percentageDiscount = it, _json = json)
+                            }
                     }
-                tryDeserialize(node, jacksonTypeRef<AmountDiscount>()) { it.validate() }
-                    ?.let {
-                        return Discount(amountDiscount = it, _json = json)
+                    "amount" -> {
+                        tryDeserialize(node, jacksonTypeRef<AmountDiscount>()) { it.validate() }
+                            ?.let {
+                                return Discount(amountDiscount = it, _json = json)
+                            }
                     }
+                }
 
                 return Discount(_json = json)
             }
@@ -458,4 +428,24 @@ private constructor(
             }
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is Coupon && this.id == other.id && this.redemptionCode == other.redemptionCode && this.discount == other.discount && this.timesRedeemed == other.timesRedeemed && this.durationInMonths == other.durationInMonths && this.maxRedemptions == other.maxRedemptions && this.archivedAt == other.archivedAt && this.additionalProperties == other.additionalProperties /* spotless:on */
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode = /* spotless:off */ Objects.hash(id, redemptionCode, discount, timesRedeemed, durationInMonths, maxRedemptions, archivedAt, additionalProperties) /* spotless:on */
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "Coupon{id=$id, redemptionCode=$redemptionCode, discount=$discount, timesRedeemed=$timesRedeemed, durationInMonths=$durationInMonths, maxRedemptions=$maxRedemptions, archivedAt=$archivedAt, additionalProperties=$additionalProperties}"
 }
