@@ -25,6 +25,7 @@ import com.withorb.api.errors.OrbInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * A coupon represents a reusable discount configuration that can be applied either as a fixed or
@@ -388,14 +389,23 @@ private constructor(
 
             override fun ObjectCodec.deserialize(node: JsonNode): Discount {
                 val json = JsonValue.fromJsonNode(node)
-                tryDeserialize(node, jacksonTypeRef<PercentageDiscount>()) { it.validate() }
-                    ?.let {
-                        return Discount(percentageDiscount = it, _json = json)
+                val discountType =
+                    json.asObject().getOrNull()?.get("discount_type")?.asString()?.getOrNull()
+
+                when (discountType) {
+                    "percentage" -> {
+                        tryDeserialize(node, jacksonTypeRef<PercentageDiscount>()) { it.validate() }
+                            ?.let {
+                                return Discount(percentageDiscount = it, _json = json)
+                            }
                     }
-                tryDeserialize(node, jacksonTypeRef<AmountDiscount>()) { it.validate() }
-                    ?.let {
-                        return Discount(amountDiscount = it, _json = json)
+                    "amount" -> {
+                        tryDeserialize(node, jacksonTypeRef<AmountDiscount>()) { it.validate() }
+                            ?.let {
+                                return Discount(amountDiscount = it, _json = json)
+                            }
                     }
+                }
 
                 return Discount(_json = json)
             }
