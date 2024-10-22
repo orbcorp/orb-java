@@ -27,6 +27,7 @@ import com.withorb.api.errors.OrbInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 @JsonDeserialize(using = CustomerCreditLedgerListByExternalIdResponse.Deserializer::class)
 @JsonSerialize(using = CustomerCreditLedgerListByExternalIdResponse.Serializer::class)
@@ -259,55 +260,79 @@ private constructor(
             node: JsonNode
         ): CustomerCreditLedgerListByExternalIdResponse {
             val json = JsonValue.fromJsonNode(node)
-            tryDeserialize(node, jacksonTypeRef<IncrementLedgerEntry>()) { it.validate() }
-                ?.let {
-                    return CustomerCreditLedgerListByExternalIdResponse(
-                        incrementLedgerEntry = it,
-                        _json = json
-                    )
+            val entryType = json.asObject().getOrNull()?.get("entry_type")?.asString()?.getOrNull()
+
+            when (entryType) {
+                "increment" -> {
+                    tryDeserialize(node, jacksonTypeRef<IncrementLedgerEntry>()) { it.validate() }
+                        ?.let {
+                            return CustomerCreditLedgerListByExternalIdResponse(
+                                incrementLedgerEntry = it,
+                                _json = json
+                            )
+                        }
                 }
-            tryDeserialize(node, jacksonTypeRef<DecrementLedgerEntry>()) { it.validate() }
-                ?.let {
-                    return CustomerCreditLedgerListByExternalIdResponse(
-                        decrementLedgerEntry = it,
-                        _json = json
-                    )
+                "decrement" -> {
+                    tryDeserialize(node, jacksonTypeRef<DecrementLedgerEntry>()) { it.validate() }
+                        ?.let {
+                            return CustomerCreditLedgerListByExternalIdResponse(
+                                decrementLedgerEntry = it,
+                                _json = json
+                            )
+                        }
                 }
-            tryDeserialize(node, jacksonTypeRef<ExpirationChangeLedgerEntry>()) { it.validate() }
-                ?.let {
-                    return CustomerCreditLedgerListByExternalIdResponse(
-                        expirationChangeLedgerEntry = it,
-                        _json = json
-                    )
+                "expiration_change" -> {
+                    tryDeserialize(node, jacksonTypeRef<ExpirationChangeLedgerEntry>()) {
+                            it.validate()
+                        }
+                        ?.let {
+                            return CustomerCreditLedgerListByExternalIdResponse(
+                                expirationChangeLedgerEntry = it,
+                                _json = json
+                            )
+                        }
                 }
-            tryDeserialize(node, jacksonTypeRef<CreditBlockExpiryLedgerEntry>()) { it.validate() }
-                ?.let {
-                    return CustomerCreditLedgerListByExternalIdResponse(
-                        creditBlockExpiryLedgerEntry = it,
-                        _json = json
-                    )
+                "credit_block_expiry" -> {
+                    tryDeserialize(node, jacksonTypeRef<CreditBlockExpiryLedgerEntry>()) {
+                            it.validate()
+                        }
+                        ?.let {
+                            return CustomerCreditLedgerListByExternalIdResponse(
+                                creditBlockExpiryLedgerEntry = it,
+                                _json = json
+                            )
+                        }
                 }
-            tryDeserialize(node, jacksonTypeRef<VoidLedgerEntry>()) { it.validate() }
-                ?.let {
-                    return CustomerCreditLedgerListByExternalIdResponse(
-                        voidLedgerEntry = it,
-                        _json = json
-                    )
+                "void" -> {
+                    tryDeserialize(node, jacksonTypeRef<VoidLedgerEntry>()) { it.validate() }
+                        ?.let {
+                            return CustomerCreditLedgerListByExternalIdResponse(
+                                voidLedgerEntry = it,
+                                _json = json
+                            )
+                        }
                 }
-            tryDeserialize(node, jacksonTypeRef<VoidInitiatedLedgerEntry>()) { it.validate() }
-                ?.let {
-                    return CustomerCreditLedgerListByExternalIdResponse(
-                        voidInitiatedLedgerEntry = it,
-                        _json = json
-                    )
+                "void_initiated" -> {
+                    tryDeserialize(node, jacksonTypeRef<VoidInitiatedLedgerEntry>()) {
+                            it.validate()
+                        }
+                        ?.let {
+                            return CustomerCreditLedgerListByExternalIdResponse(
+                                voidInitiatedLedgerEntry = it,
+                                _json = json
+                            )
+                        }
                 }
-            tryDeserialize(node, jacksonTypeRef<AmendmentLedgerEntry>()) { it.validate() }
-                ?.let {
-                    return CustomerCreditLedgerListByExternalIdResponse(
-                        amendmentLedgerEntry = it,
-                        _json = json
-                    )
+                "amendment" -> {
+                    tryDeserialize(node, jacksonTypeRef<AmendmentLedgerEntry>()) { it.validate() }
+                        ?.let {
+                            return CustomerCreditLedgerListByExternalIdResponse(
+                                amendmentLedgerEntry = it,
+                                _json = json
+                            )
+                        }
                 }
+            }
 
             return CustomerCreditLedgerListByExternalIdResponse(_json = json)
         }

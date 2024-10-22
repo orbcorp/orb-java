@@ -27,6 +27,7 @@ import com.withorb.api.errors.OrbInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * A [subscription](../guides/core-concepts.mdx#subscription) represents the purchase of a plan by a
@@ -1140,32 +1141,54 @@ private constructor(
 
                 override fun ObjectCodec.deserialize(node: JsonNode): Adjustment {
                     val json = JsonValue.fromJsonNode(node)
-                    tryDeserialize(node, jacksonTypeRef<AmountDiscountAdjustment>()) {
-                            it.validate()
+                    val adjustmentType =
+                        json.asObject().getOrNull()?.get("adjustment_type")?.asString()?.getOrNull()
+
+                    when (adjustmentType) {
+                        "amount_discount" -> {
+                            tryDeserialize(node, jacksonTypeRef<AmountDiscountAdjustment>()) {
+                                    it.validate()
+                                }
+                                ?.let {
+                                    return Adjustment(amountDiscountAdjustment = it, _json = json)
+                                }
                         }
-                        ?.let {
-                            return Adjustment(amountDiscountAdjustment = it, _json = json)
+                        "percentage_discount" -> {
+                            tryDeserialize(node, jacksonTypeRef<PercentageDiscountAdjustment>()) {
+                                    it.validate()
+                                }
+                                ?.let {
+                                    return Adjustment(
+                                        percentageDiscountAdjustment = it,
+                                        _json = json
+                                    )
+                                }
                         }
-                    tryDeserialize(node, jacksonTypeRef<PercentageDiscountAdjustment>()) {
-                            it.validate()
+                        "usage_discount" -> {
+                            tryDeserialize(node, jacksonTypeRef<UsageDiscountAdjustment>()) {
+                                    it.validate()
+                                }
+                                ?.let {
+                                    return Adjustment(usageDiscountAdjustment = it, _json = json)
+                                }
                         }
-                        ?.let {
-                            return Adjustment(percentageDiscountAdjustment = it, _json = json)
+                        "minimum" -> {
+                            tryDeserialize(node, jacksonTypeRef<MinimumAdjustment>()) {
+                                    it.validate()
+                                }
+                                ?.let {
+                                    return Adjustment(minimumAdjustment = it, _json = json)
+                                }
                         }
-                    tryDeserialize(node, jacksonTypeRef<UsageDiscountAdjustment>()) {
-                            it.validate()
+                        "maximum" -> {
+                            tryDeserialize(node, jacksonTypeRef<MaximumAdjustment>()) {
+                                    it.validate()
+                                }
+                                ?.let {
+                                    return Adjustment(maximumAdjustment = it, _json = json)
+                                }
                         }
-                        ?.let {
-                            return Adjustment(usageDiscountAdjustment = it, _json = json)
-                        }
-                    tryDeserialize(node, jacksonTypeRef<MinimumAdjustment>()) { it.validate() }
-                        ?.let {
-                            return Adjustment(minimumAdjustment = it, _json = json)
-                        }
-                    tryDeserialize(node, jacksonTypeRef<MaximumAdjustment>()) { it.validate() }
-                        ?.let {
-                            return Adjustment(maximumAdjustment = it, _json = json)
-                        }
+                    }
 
                     return Adjustment(_json = json)
                 }
@@ -2686,18 +2709,38 @@ private constructor(
 
             override fun ObjectCodec.deserialize(node: JsonNode): DiscountInterval {
                 val json = JsonValue.fromJsonNode(node)
-                tryDeserialize(node, jacksonTypeRef<AmountDiscountInterval>()) { it.validate() }
-                    ?.let {
-                        return DiscountInterval(amountDiscountInterval = it, _json = json)
+                val discountType =
+                    json.asObject().getOrNull()?.get("discount_type")?.asString()?.getOrNull()
+
+                when (discountType) {
+                    "amount" -> {
+                        tryDeserialize(node, jacksonTypeRef<AmountDiscountInterval>()) {
+                                it.validate()
+                            }
+                            ?.let {
+                                return DiscountInterval(amountDiscountInterval = it, _json = json)
+                            }
                     }
-                tryDeserialize(node, jacksonTypeRef<PercentageDiscountInterval>()) { it.validate() }
-                    ?.let {
-                        return DiscountInterval(percentageDiscountInterval = it, _json = json)
+                    "percentage" -> {
+                        tryDeserialize(node, jacksonTypeRef<PercentageDiscountInterval>()) {
+                                it.validate()
+                            }
+                            ?.let {
+                                return DiscountInterval(
+                                    percentageDiscountInterval = it,
+                                    _json = json
+                                )
+                            }
                     }
-                tryDeserialize(node, jacksonTypeRef<UsageDiscountInterval>()) { it.validate() }
-                    ?.let {
-                        return DiscountInterval(usageDiscountInterval = it, _json = json)
+                    "usage" -> {
+                        tryDeserialize(node, jacksonTypeRef<UsageDiscountInterval>()) {
+                                it.validate()
+                            }
+                            ?.let {
+                                return DiscountInterval(usageDiscountInterval = it, _json = json)
+                            }
                     }
+                }
 
                 return DiscountInterval(_json = json)
             }

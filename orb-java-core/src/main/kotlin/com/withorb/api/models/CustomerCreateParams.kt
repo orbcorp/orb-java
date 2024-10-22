@@ -27,6 +27,7 @@ import com.withorb.api.errors.OrbInvalidDataException
 import com.withorb.api.models.*
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 class CustomerCreateParams
 constructor(
@@ -1767,14 +1768,30 @@ constructor(
 
             override fun ObjectCodec.deserialize(node: JsonNode): TaxConfiguration {
                 val json = JsonValue.fromJsonNode(node)
-                tryDeserialize(node, jacksonTypeRef<NewAvalaraTaxConfiguration>()) { it.validate() }
-                    ?.let {
-                        return TaxConfiguration(newAvalaraTaxConfiguration = it, _json = json)
+                val taxProvider =
+                    json.asObject().getOrNull()?.get("tax_provider")?.asString()?.getOrNull()
+
+                when (taxProvider) {
+                    "avalara" -> {
+                        tryDeserialize(node, jacksonTypeRef<NewAvalaraTaxConfiguration>()) {
+                                it.validate()
+                            }
+                            ?.let {
+                                return TaxConfiguration(
+                                    newAvalaraTaxConfiguration = it,
+                                    _json = json
+                                )
+                            }
                     }
-                tryDeserialize(node, jacksonTypeRef<NewTaxJarConfiguration>()) { it.validate() }
-                    ?.let {
-                        return TaxConfiguration(newTaxJarConfiguration = it, _json = json)
+                    "taxjar" -> {
+                        tryDeserialize(node, jacksonTypeRef<NewTaxJarConfiguration>()) {
+                                it.validate()
+                            }
+                            ?.let {
+                                return TaxConfiguration(newTaxJarConfiguration = it, _json = json)
+                            }
                     }
+                }
 
                 return TaxConfiguration(_json = json)
             }

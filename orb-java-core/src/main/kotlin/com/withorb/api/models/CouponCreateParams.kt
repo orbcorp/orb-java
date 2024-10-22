@@ -27,6 +27,7 @@ import com.withorb.api.errors.OrbInvalidDataException
 import com.withorb.api.models.*
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 class CouponCreateParams
 constructor(
@@ -435,16 +436,27 @@ constructor(
 
             override fun ObjectCodec.deserialize(node: JsonNode): Discount {
                 val json = JsonValue.fromJsonNode(node)
-                tryDeserialize(node, jacksonTypeRef<NewCouponPercentageDiscount>()) {
-                        it.validate()
+                val discountType =
+                    json.asObject().getOrNull()?.get("discount_type")?.asString()?.getOrNull()
+
+                when (discountType) {
+                    "percentage" -> {
+                        tryDeserialize(node, jacksonTypeRef<NewCouponPercentageDiscount>()) {
+                                it.validate()
+                            }
+                            ?.let {
+                                return Discount(newCouponPercentageDiscount = it, _json = json)
+                            }
                     }
-                    ?.let {
-                        return Discount(newCouponPercentageDiscount = it, _json = json)
+                    "amount" -> {
+                        tryDeserialize(node, jacksonTypeRef<NewCouponAmountDiscount>()) {
+                                it.validate()
+                            }
+                            ?.let {
+                                return Discount(newCouponAmountDiscount = it, _json = json)
+                            }
                     }
-                tryDeserialize(node, jacksonTypeRef<NewCouponAmountDiscount>()) { it.validate() }
-                    ?.let {
-                        return Discount(newCouponAmountDiscount = it, _json = json)
-                    }
+                }
 
                 return Discount(_json = json)
             }
