@@ -16,6 +16,7 @@ import com.withorb.api.core.getOrThrow
 import com.withorb.api.errors.OrbInvalidDataException
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 @JsonDeserialize(using = InvoiceLevelDiscount.Deserializer::class)
 @JsonSerialize(using = InvoiceLevelDiscount.Serializer::class)
@@ -76,18 +77,11 @@ private constructor(
             return true
         }
 
-        return other is InvoiceLevelDiscount &&
-            this.percentageDiscount == other.percentageDiscount &&
-            this.amountDiscount == other.amountDiscount &&
-            this.trialDiscount == other.trialDiscount
+        return /* spotless:off */ other is InvoiceLevelDiscount && this.percentageDiscount == other.percentageDiscount && this.amountDiscount == other.amountDiscount && this.trialDiscount == other.trialDiscount /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            percentageDiscount,
-            amountDiscount,
-            trialDiscount,
-        )
+        return /* spotless:off */ Objects.hash(percentageDiscount, amountDiscount, trialDiscount) /* spotless:on */
     }
 
     override fun toString(): String {
@@ -133,18 +127,29 @@ private constructor(
 
         override fun ObjectCodec.deserialize(node: JsonNode): InvoiceLevelDiscount {
             val json = JsonValue.fromJsonNode(node)
-            tryDeserialize(node, jacksonTypeRef<PercentageDiscount>()) { it.validate() }
-                ?.let {
-                    return InvoiceLevelDiscount(percentageDiscount = it, _json = json)
+            val discountType =
+                json.asObject().getOrNull()?.get("discount_type")?.asString()?.getOrNull()
+
+            when (discountType) {
+                "percentage" -> {
+                    tryDeserialize(node, jacksonTypeRef<PercentageDiscount>()) { it.validate() }
+                        ?.let {
+                            return InvoiceLevelDiscount(percentageDiscount = it, _json = json)
+                        }
                 }
-            tryDeserialize(node, jacksonTypeRef<AmountDiscount>()) { it.validate() }
-                ?.let {
-                    return InvoiceLevelDiscount(amountDiscount = it, _json = json)
+                "amount" -> {
+                    tryDeserialize(node, jacksonTypeRef<AmountDiscount>()) { it.validate() }
+                        ?.let {
+                            return InvoiceLevelDiscount(amountDiscount = it, _json = json)
+                        }
                 }
-            tryDeserialize(node, jacksonTypeRef<TrialDiscount>()) { it.validate() }
-                ?.let {
-                    return InvoiceLevelDiscount(trialDiscount = it, _json = json)
+                "trial" -> {
+                    tryDeserialize(node, jacksonTypeRef<TrialDiscount>()) { it.validate() }
+                        ?.let {
+                            return InvoiceLevelDiscount(trialDiscount = it, _json = json)
+                        }
                 }
+            }
 
             return InvoiceLevelDiscount(_json = json)
         }

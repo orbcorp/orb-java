@@ -2,6 +2,7 @@
 
 package com.withorb.api.models
 
+import com.withorb.api.core.JsonValue
 import com.withorb.api.models.*
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -44,8 +45,24 @@ class SubscriptionSchedulePlanChangeParamsTest {
             .addPrices(
                 listOf(
                     SubscriptionSchedulePlanChangeParams.AddPrice.builder()
+                        .discounts(
+                            listOf(
+                                SubscriptionSchedulePlanChangeParams.AddPrice.Discount.builder()
+                                    .discountType(
+                                        SubscriptionSchedulePlanChangeParams.AddPrice.Discount
+                                            .DiscountType
+                                            .PERCENTAGE
+                                    )
+                                    .amountDiscount("amount_discount")
+                                    .percentageDiscount(42.23)
+                                    .usageDiscount(42.23)
+                                    .build()
+                            )
+                        )
                         .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .externalPriceId("external_price_id")
+                        .maximumAmount("1.23")
+                        .minimumAmount("1.23")
                         .planPhaseOrder(123L)
                         .price(
                             SubscriptionSchedulePlanChangeParams.AddPrice.Price
@@ -121,6 +138,7 @@ class SubscriptionSchedulePlanChangeParamsTest {
                                                 .builder()
                                                 .build()
                                         )
+                                        .referenceId("reference_id")
                                         .build()
                                 )
                         )
@@ -144,51 +162,8 @@ class SubscriptionSchedulePlanChangeParamsTest {
             .netTerms(123L)
             .perCreditOverageAmount(42.23)
             .planId("ZMwNQefe7J3ecf7W")
-            .priceOverrides(
-                listOf(
-                    SubscriptionSchedulePlanChangeParams.PriceOverride.ofOverrideUnitPrice(
-                        SubscriptionSchedulePlanChangeParams.PriceOverride.OverrideUnitPrice
-                            .builder()
-                            .id("id")
-                            .modelType(
-                                SubscriptionSchedulePlanChangeParams.PriceOverride.OverrideUnitPrice
-                                    .ModelType
-                                    .UNIT
-                            )
-                            .unitConfig(
-                                SubscriptionSchedulePlanChangeParams.PriceOverride.OverrideUnitPrice
-                                    .UnitConfig
-                                    .builder()
-                                    .unitAmount("unit_amount")
-                                    .build()
-                            )
-                            .conversionRate(42.23)
-                            .currency("currency")
-                            .discount(
-                                SubscriptionSchedulePlanChangeParams.PriceOverride.OverrideUnitPrice
-                                    .Discount
-                                    .builder()
-                                    .discountType(
-                                        SubscriptionSchedulePlanChangeParams.PriceOverride
-                                            .OverrideUnitPrice
-                                            .Discount
-                                            .DiscountType
-                                            .PERCENTAGE
-                                    )
-                                    .amountDiscount("amount_discount")
-                                    .appliesToPriceIds(listOf("string"))
-                                    .percentageDiscount(42.23)
-                                    .trialAmountDiscount("trial_amount_discount")
-                                    .usageDiscount(42.23)
-                                    .build()
-                            )
-                            .fixedPriceQuantity(42.23)
-                            .maximumAmount("1.23")
-                            .minimumAmount("1.23")
-                            .build()
-                    )
-                )
-            )
+            .planVersionNumber(123L)
+            .priceOverrides(listOf(JsonValue.from(mapOf<String, Any>())))
             .removeAdjustments(
                 listOf(
                     SubscriptionSchedulePlanChangeParams.RemoveAdjustment.builder()
@@ -233,6 +208,25 @@ class SubscriptionSchedulePlanChangeParamsTest {
             .replacePrices(
                 listOf(
                     SubscriptionSchedulePlanChangeParams.ReplacePrice.builder()
+                        .replacesPriceId("replaces_price_id")
+                        .discounts(
+                            listOf(
+                                SubscriptionSchedulePlanChangeParams.ReplacePrice.Discount.builder()
+                                    .discountType(
+                                        SubscriptionSchedulePlanChangeParams.ReplacePrice.Discount
+                                            .DiscountType
+                                            .PERCENTAGE
+                                    )
+                                    .amountDiscount("amount_discount")
+                                    .percentageDiscount(42.23)
+                                    .usageDiscount(42.23)
+                                    .build()
+                            )
+                        )
+                        .externalPriceId("external_price_id")
+                        .fixedPriceQuantity(42.23)
+                        .maximumAmount("1.23")
+                        .minimumAmount("1.23")
                         .price(
                             SubscriptionSchedulePlanChangeParams.ReplacePrice.Price
                                 .ofNewSubscriptionUnitPrice(
@@ -309,13 +303,15 @@ class SubscriptionSchedulePlanChangeParamsTest {
                                                 .builder()
                                                 .build()
                                         )
+                                        .referenceId("reference_id")
                                         .build()
                                 )
                         )
-                        .replacesPriceId("replaces_price_id")
+                        .priceId("h74gfhdjvn7ujokd")
                         .build()
                 )
             )
+            .trialDurationDays(123L)
             .build()
     }
 
@@ -356,8 +352,24 @@ class SubscriptionSchedulePlanChangeParamsTest {
                 .addPrices(
                     listOf(
                         SubscriptionSchedulePlanChangeParams.AddPrice.builder()
+                            .discounts(
+                                listOf(
+                                    SubscriptionSchedulePlanChangeParams.AddPrice.Discount.builder()
+                                        .discountType(
+                                            SubscriptionSchedulePlanChangeParams.AddPrice.Discount
+                                                .DiscountType
+                                                .PERCENTAGE
+                                        )
+                                        .amountDiscount("amount_discount")
+                                        .percentageDiscount(42.23)
+                                        .usageDiscount(42.23)
+                                        .build()
+                                )
+                            )
                             .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .externalPriceId("external_price_id")
+                            .maximumAmount("1.23")
+                            .minimumAmount("1.23")
                             .planPhaseOrder(123L)
                             .price(
                                 SubscriptionSchedulePlanChangeParams.AddPrice.Price
@@ -435,6 +447,7 @@ class SubscriptionSchedulePlanChangeParamsTest {
                                                     .builder()
                                                     .build()
                                             )
+                                            .referenceId("reference_id")
                                             .build()
                                     )
                             )
@@ -458,54 +471,8 @@ class SubscriptionSchedulePlanChangeParamsTest {
                 .netTerms(123L)
                 .perCreditOverageAmount(42.23)
                 .planId("ZMwNQefe7J3ecf7W")
-                .priceOverrides(
-                    listOf(
-                        SubscriptionSchedulePlanChangeParams.PriceOverride.ofOverrideUnitPrice(
-                            SubscriptionSchedulePlanChangeParams.PriceOverride.OverrideUnitPrice
-                                .builder()
-                                .id("id")
-                                .modelType(
-                                    SubscriptionSchedulePlanChangeParams.PriceOverride
-                                        .OverrideUnitPrice
-                                        .ModelType
-                                        .UNIT
-                                )
-                                .unitConfig(
-                                    SubscriptionSchedulePlanChangeParams.PriceOverride
-                                        .OverrideUnitPrice
-                                        .UnitConfig
-                                        .builder()
-                                        .unitAmount("unit_amount")
-                                        .build()
-                                )
-                                .conversionRate(42.23)
-                                .currency("currency")
-                                .discount(
-                                    SubscriptionSchedulePlanChangeParams.PriceOverride
-                                        .OverrideUnitPrice
-                                        .Discount
-                                        .builder()
-                                        .discountType(
-                                            SubscriptionSchedulePlanChangeParams.PriceOverride
-                                                .OverrideUnitPrice
-                                                .Discount
-                                                .DiscountType
-                                                .PERCENTAGE
-                                        )
-                                        .amountDiscount("amount_discount")
-                                        .appliesToPriceIds(listOf("string"))
-                                        .percentageDiscount(42.23)
-                                        .trialAmountDiscount("trial_amount_discount")
-                                        .usageDiscount(42.23)
-                                        .build()
-                                )
-                                .fixedPriceQuantity(42.23)
-                                .maximumAmount("1.23")
-                                .minimumAmount("1.23")
-                                .build()
-                        )
-                    )
-                )
+                .planVersionNumber(123L)
+                .priceOverrides(listOf(JsonValue.from(mapOf<String, Any>())))
                 .removeAdjustments(
                     listOf(
                         SubscriptionSchedulePlanChangeParams.RemoveAdjustment.builder()
@@ -551,6 +518,27 @@ class SubscriptionSchedulePlanChangeParamsTest {
                 .replacePrices(
                     listOf(
                         SubscriptionSchedulePlanChangeParams.ReplacePrice.builder()
+                            .replacesPriceId("replaces_price_id")
+                            .discounts(
+                                listOf(
+                                    SubscriptionSchedulePlanChangeParams.ReplacePrice.Discount
+                                        .builder()
+                                        .discountType(
+                                            SubscriptionSchedulePlanChangeParams.ReplacePrice
+                                                .Discount
+                                                .DiscountType
+                                                .PERCENTAGE
+                                        )
+                                        .amountDiscount("amount_discount")
+                                        .percentageDiscount(42.23)
+                                        .usageDiscount(42.23)
+                                        .build()
+                                )
+                            )
+                            .externalPriceId("external_price_id")
+                            .fixedPriceQuantity(42.23)
+                            .maximumAmount("1.23")
+                            .minimumAmount("1.23")
                             .price(
                                 SubscriptionSchedulePlanChangeParams.ReplacePrice.Price
                                     .ofNewSubscriptionUnitPrice(
@@ -633,13 +621,15 @@ class SubscriptionSchedulePlanChangeParamsTest {
                                                     .builder()
                                                     .build()
                                             )
+                                            .referenceId("reference_id")
                                             .build()
                                     )
                             )
-                            .replacesPriceId("replaces_price_id")
+                            .priceId("h74gfhdjvn7ujokd")
                             .build()
                     )
                 )
+                .trialDurationDays(123L)
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
@@ -677,8 +667,24 @@ class SubscriptionSchedulePlanChangeParamsTest {
             .isEqualTo(
                 listOf(
                     SubscriptionSchedulePlanChangeParams.AddPrice.builder()
+                        .discounts(
+                            listOf(
+                                SubscriptionSchedulePlanChangeParams.AddPrice.Discount.builder()
+                                    .discountType(
+                                        SubscriptionSchedulePlanChangeParams.AddPrice.Discount
+                                            .DiscountType
+                                            .PERCENTAGE
+                                    )
+                                    .amountDiscount("amount_discount")
+                                    .percentageDiscount(42.23)
+                                    .usageDiscount(42.23)
+                                    .build()
+                            )
+                        )
                         .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .externalPriceId("external_price_id")
+                        .maximumAmount("1.23")
+                        .minimumAmount("1.23")
                         .planPhaseOrder(123L)
                         .price(
                             SubscriptionSchedulePlanChangeParams.AddPrice.Price
@@ -754,6 +760,7 @@ class SubscriptionSchedulePlanChangeParamsTest {
                                                 .builder()
                                                 .build()
                                         )
+                                        .referenceId("reference_id")
                                         .build()
                                 )
                         )
@@ -776,52 +783,8 @@ class SubscriptionSchedulePlanChangeParamsTest {
         assertThat(body.netTerms()).isEqualTo(123L)
         assertThat(body.perCreditOverageAmount()).isEqualTo(42.23)
         assertThat(body.planId()).isEqualTo("ZMwNQefe7J3ecf7W")
-        assertThat(body.priceOverrides())
-            .isEqualTo(
-                listOf(
-                    SubscriptionSchedulePlanChangeParams.PriceOverride.ofOverrideUnitPrice(
-                        SubscriptionSchedulePlanChangeParams.PriceOverride.OverrideUnitPrice
-                            .builder()
-                            .id("id")
-                            .modelType(
-                                SubscriptionSchedulePlanChangeParams.PriceOverride.OverrideUnitPrice
-                                    .ModelType
-                                    .UNIT
-                            )
-                            .unitConfig(
-                                SubscriptionSchedulePlanChangeParams.PriceOverride.OverrideUnitPrice
-                                    .UnitConfig
-                                    .builder()
-                                    .unitAmount("unit_amount")
-                                    .build()
-                            )
-                            .conversionRate(42.23)
-                            .currency("currency")
-                            .discount(
-                                SubscriptionSchedulePlanChangeParams.PriceOverride.OverrideUnitPrice
-                                    .Discount
-                                    .builder()
-                                    .discountType(
-                                        SubscriptionSchedulePlanChangeParams.PriceOverride
-                                            .OverrideUnitPrice
-                                            .Discount
-                                            .DiscountType
-                                            .PERCENTAGE
-                                    )
-                                    .amountDiscount("amount_discount")
-                                    .appliesToPriceIds(listOf("string"))
-                                    .percentageDiscount(42.23)
-                                    .trialAmountDiscount("trial_amount_discount")
-                                    .usageDiscount(42.23)
-                                    .build()
-                            )
-                            .fixedPriceQuantity(42.23)
-                            .maximumAmount("1.23")
-                            .minimumAmount("1.23")
-                            .build()
-                    )
-                )
-            )
+        assertThat(body.planVersionNumber()).isEqualTo(123L)
+        assertThat(body.priceOverrides()).isEqualTo(listOf(JsonValue.from(mapOf<String, Any>())))
         assertThat(body.removeAdjustments())
             .isEqualTo(
                 listOf(
@@ -870,6 +833,25 @@ class SubscriptionSchedulePlanChangeParamsTest {
             .isEqualTo(
                 listOf(
                     SubscriptionSchedulePlanChangeParams.ReplacePrice.builder()
+                        .replacesPriceId("replaces_price_id")
+                        .discounts(
+                            listOf(
+                                SubscriptionSchedulePlanChangeParams.ReplacePrice.Discount.builder()
+                                    .discountType(
+                                        SubscriptionSchedulePlanChangeParams.ReplacePrice.Discount
+                                            .DiscountType
+                                            .PERCENTAGE
+                                    )
+                                    .amountDiscount("amount_discount")
+                                    .percentageDiscount(42.23)
+                                    .usageDiscount(42.23)
+                                    .build()
+                            )
+                        )
+                        .externalPriceId("external_price_id")
+                        .fixedPriceQuantity(42.23)
+                        .maximumAmount("1.23")
+                        .minimumAmount("1.23")
                         .price(
                             SubscriptionSchedulePlanChangeParams.ReplacePrice.Price
                                 .ofNewSubscriptionUnitPrice(
@@ -946,13 +928,15 @@ class SubscriptionSchedulePlanChangeParamsTest {
                                                 .builder()
                                                 .build()
                                         )
+                                        .referenceId("reference_id")
                                         .build()
                                 )
                         )
-                        .replacesPriceId("replaces_price_id")
+                        .priceId("h74gfhdjvn7ujokd")
                         .build()
                 )
             )
+        assertThat(body.trialDurationDays()).isEqualTo(123L)
     }
 
     @Test

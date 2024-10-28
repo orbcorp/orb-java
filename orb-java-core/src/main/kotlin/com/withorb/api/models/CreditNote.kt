@@ -48,8 +48,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     /** The Orb id of this credit note. */
     fun id(): String = id.getRequired("id")
 
@@ -176,60 +174,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is CreditNote &&
-            this.id == other.id &&
-            this.createdAt == other.createdAt &&
-            this.voidedAt == other.voidedAt &&
-            this.creditNoteNumber == other.creditNoteNumber &&
-            this.invoiceId == other.invoiceId &&
-            this.memo == other.memo &&
-            this.reason == other.reason &&
-            this.type == other.type &&
-            this.subtotal == other.subtotal &&
-            this.total == other.total &&
-            this.customer == other.customer &&
-            this.creditNotePdf == other.creditNotePdf &&
-            this.minimumAmountRefunded == other.minimumAmountRefunded &&
-            this.discounts == other.discounts &&
-            this.maximumAmountAdjustment == other.maximumAmountAdjustment &&
-            this.lineItems == other.lineItems &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    id,
-                    createdAt,
-                    voidedAt,
-                    creditNoteNumber,
-                    invoiceId,
-                    memo,
-                    reason,
-                    type,
-                    subtotal,
-                    total,
-                    customer,
-                    creditNotePdf,
-                    minimumAmountRefunded,
-                    discounts,
-                    maximumAmountAdjustment,
-                    lineItems,
-                    additionalProperties,
-                )
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "CreditNote{id=$id, createdAt=$createdAt, voidedAt=$voidedAt, creditNoteNumber=$creditNoteNumber, invoiceId=$invoiceId, memo=$memo, reason=$reason, type=$type, subtotal=$subtotal, total=$total, customer=$customer, creditNotePdf=$creditNotePdf, minimumAmountRefunded=$minimumAmountRefunded, discounts=$discounts, maximumAmountAdjustment=$maximumAmountAdjustment, lineItems=$lineItems, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -456,8 +400,6 @@ private constructor(
 
         private var validated: Boolean = false
 
-        private var hashCode: Int = 0
-
         fun id(): String = id.getRequired("id")
 
         fun externalCustomerId(): Optional<String> =
@@ -482,32 +424,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Customer &&
-                this.id == other.id &&
-                this.externalCustomerId == other.externalCustomerId &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        id,
-                        externalCustomerId,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "Customer{id=$id, externalCustomerId=$externalCustomerId, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -563,6 +479,26 @@ private constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Customer && this.id == other.id && this.externalCustomerId == other.externalCustomerId && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(id, externalCustomerId, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "Customer{id=$id, externalCustomerId=$externalCustomerId, additionalProperties=$additionalProperties}"
     }
 
     @JsonDeserialize(builder = LineItem.Builder::class)
@@ -580,8 +516,6 @@ private constructor(
     ) {
 
         private var validated: Boolean = false
-
-        private var hashCode: Int = 0
 
         /** The Orb id of this resource. */
         fun id(): String = id.getRequired("id")
@@ -644,42 +578,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is LineItem &&
-                this.id == other.id &&
-                this.name == other.name &&
-                this.subtotal == other.subtotal &&
-                this.amount == other.amount &&
-                this.quantity == other.quantity &&
-                this.discounts == other.discounts &&
-                this.taxAmounts == other.taxAmounts &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        id,
-                        name,
-                        subtotal,
-                        amount,
-                        quantity,
-                        discounts,
-                        taxAmounts,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "LineItem{id=$id, name=$name, subtotal=$subtotal, amount=$amount, quantity=$quantity, discounts=$discounts, taxAmounts=$taxAmounts, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -808,8 +706,6 @@ private constructor(
 
             private var validated: Boolean = false
 
-            private var hashCode: Int = 0
-
             /** The human-readable description of the applied tax rate. */
             fun taxRateDescription(): String =
                 taxRateDescription.getRequired("tax_rate_description")
@@ -848,34 +744,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is TaxAmount &&
-                    this.taxRateDescription == other.taxRateDescription &&
-                    this.taxRatePercentage == other.taxRatePercentage &&
-                    this.amount == other.amount &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            taxRateDescription,
-                            taxRatePercentage,
-                            amount,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "TaxAmount{taxRateDescription=$taxRateDescription, taxRatePercentage=$taxRatePercentage, amount=$amount, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -950,6 +818,26 @@ private constructor(
                         additionalProperties.toUnmodifiable(),
                     )
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is TaxAmount && this.taxRateDescription == other.taxRateDescription && this.taxRatePercentage == other.taxRatePercentage && this.amount == other.amount && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(taxRateDescription, taxRatePercentage, amount, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "TaxAmount{taxRateDescription=$taxRateDescription, taxRatePercentage=$taxRatePercentage, amount=$amount, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(builder = Discount.Builder::class)
@@ -967,8 +855,6 @@ private constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             fun id(): String = id.getRequired("id")
 
@@ -1022,42 +908,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Discount &&
-                    this.id == other.id &&
-                    this.discountType == other.discountType &&
-                    this.percentageDiscount == other.percentageDiscount &&
-                    this.amountDiscount == other.amountDiscount &&
-                    this.amountApplied == other.amountApplied &&
-                    this.reason == other.reason &&
-                    this.appliesToPriceIds == other.appliesToPriceIds &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            id,
-                            discountType,
-                            percentageDiscount,
-                            amountDiscount,
-                            amountApplied,
-                            reason,
-                            appliesToPriceIds,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "Discount{id=$id, discountType=$discountType, percentageDiscount=$percentageDiscount, amountDiscount=$amountDiscount, amountApplied=$amountApplied, reason=$reason, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -1185,7 +1035,7 @@ private constructor(
                         return true
                     }
 
-                    return other is DiscountType && this.value == other.value
+                    return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -1228,7 +1078,47 @@ private constructor(
 
                 fun asString(): String = _value().asStringOrThrow()
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is Discount && this.id == other.id && this.discountType == other.discountType && this.percentageDiscount == other.percentageDiscount && this.amountDiscount == other.amountDiscount && this.amountApplied == other.amountApplied && this.reason == other.reason && this.appliesToPriceIds == other.appliesToPriceIds && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(id, discountType, percentageDiscount, amountDiscount, amountApplied, reason, appliesToPriceIds, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "Discount{id=$id, discountType=$discountType, percentageDiscount=$percentageDiscount, amountDiscount=$amountDiscount, amountApplied=$amountApplied, reason=$reason, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is LineItem && this.id == other.id && this.name == other.name && this.subtotal == other.subtotal && this.amount == other.amount && this.quantity == other.quantity && this.discounts == other.discounts && this.taxAmounts == other.taxAmounts && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(id, name, subtotal, amount, quantity, discounts, taxAmounts, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "LineItem{id=$id, name=$name, subtotal=$subtotal, amount=$amount, quantity=$quantity, discounts=$discounts, taxAmounts=$taxAmounts, additionalProperties=$additionalProperties}"
     }
 
     /** The maximum amount applied on the original invoice */
@@ -1245,8 +1135,6 @@ private constructor(
     ) {
 
         private var validated: Boolean = false
-
-        private var hashCode: Int = 0
 
         fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
@@ -1287,38 +1175,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is MaximumAmountAdjustment &&
-                this.discountType == other.discountType &&
-                this.percentageDiscount == other.percentageDiscount &&
-                this.amountApplied == other.amountApplied &&
-                this.reason == other.reason &&
-                this.appliesToPrices == other.appliesToPrices &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        discountType,
-                        percentageDiscount,
-                        amountApplied,
-                        reason,
-                        appliesToPrices,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "MaximumAmountAdjustment{discountType=$discountType, percentageDiscount=$percentageDiscount, amountApplied=$amountApplied, reason=$reason, appliesToPrices=$appliesToPrices, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -1422,7 +1278,7 @@ private constructor(
                     return true
                 }
 
-                return other is DiscountType && this.value == other.value
+                return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -1471,8 +1327,6 @@ private constructor(
 
             private var validated: Boolean = false
 
-            private var hashCode: Int = 0
-
             fun id(): String = id.getRequired("id")
 
             fun name(): String = name.getRequired("name")
@@ -1494,32 +1348,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is AppliesToPrice &&
-                    this.id == other.id &&
-                    this.name == other.name &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            id,
-                            name,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "AppliesToPrice{id=$id, name=$name, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -1573,7 +1401,47 @@ private constructor(
                         additionalProperties.toUnmodifiable(),
                     )
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is AppliesToPrice && this.id == other.id && this.name == other.name && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(id, name, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "AppliesToPrice{id=$id, name=$name, additionalProperties=$additionalProperties}"
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is MaximumAmountAdjustment && this.discountType == other.discountType && this.percentageDiscount == other.percentageDiscount && this.amountApplied == other.amountApplied && this.reason == other.reason && this.appliesToPrices == other.appliesToPrices && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(discountType, percentageDiscount, amountApplied, reason, appliesToPrices, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "MaximumAmountAdjustment{discountType=$discountType, percentageDiscount=$percentageDiscount, amountApplied=$amountApplied, reason=$reason, appliesToPrices=$appliesToPrices, additionalProperties=$additionalProperties}"
     }
 
     class Reason
@@ -1589,7 +1457,7 @@ private constructor(
                 return true
             }
 
-            return other is Reason && this.value == other.value
+            return /* spotless:off */ other is Reason && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -1658,7 +1526,7 @@ private constructor(
                 return true
             }
 
-            return other is Type && this.value == other.value
+            return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -1716,8 +1584,6 @@ private constructor(
 
         private var validated: Boolean = false
 
-        private var hashCode: Int = 0
-
         fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
         fun percentageDiscount(): Double = percentageDiscount.getRequired("percentage_discount")
@@ -1757,38 +1623,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Discount &&
-                this.discountType == other.discountType &&
-                this.percentageDiscount == other.percentageDiscount &&
-                this.amountApplied == other.amountApplied &&
-                this.reason == other.reason &&
-                this.appliesToPrices == other.appliesToPrices &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        discountType,
-                        percentageDiscount,
-                        amountApplied,
-                        reason,
-                        appliesToPrices,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, amountApplied=$amountApplied, reason=$reason, appliesToPrices=$appliesToPrices, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -1892,7 +1726,7 @@ private constructor(
                     return true
                 }
 
-                return other is DiscountType && this.value == other.value
+                return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -1941,8 +1775,6 @@ private constructor(
 
             private var validated: Boolean = false
 
-            private var hashCode: Int = 0
-
             fun id(): String = id.getRequired("id")
 
             fun name(): String = name.getRequired("name")
@@ -1964,32 +1796,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is AppliesToPrice &&
-                    this.id == other.id &&
-                    this.name == other.name &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            id,
-                            name,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "AppliesToPrice{id=$id, name=$name, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -2043,6 +1849,66 @@ private constructor(
                         additionalProperties.toUnmodifiable(),
                     )
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is AppliesToPrice && this.id == other.id && this.name == other.name && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(id, name, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "AppliesToPrice{id=$id, name=$name, additionalProperties=$additionalProperties}"
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Discount && this.discountType == other.discountType && this.percentageDiscount == other.percentageDiscount && this.amountApplied == other.amountApplied && this.reason == other.reason && this.appliesToPrices == other.appliesToPrices && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(discountType, percentageDiscount, amountApplied, reason, appliesToPrices, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, amountApplied=$amountApplied, reason=$reason, appliesToPrices=$appliesToPrices, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CreditNote && this.id == other.id && this.createdAt == other.createdAt && this.voidedAt == other.voidedAt && this.creditNoteNumber == other.creditNoteNumber && this.invoiceId == other.invoiceId && this.memo == other.memo && this.reason == other.reason && this.type == other.type && this.subtotal == other.subtotal && this.total == other.total && this.customer == other.customer && this.creditNotePdf == other.creditNotePdf && this.minimumAmountRefunded == other.minimumAmountRefunded && this.discounts == other.discounts && this.maximumAmountAdjustment == other.maximumAmountAdjustment && this.lineItems == other.lineItems && this.additionalProperties == other.additionalProperties /* spotless:on */
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode = /* spotless:off */ Objects.hash(id, createdAt, voidedAt, creditNoteNumber, invoiceId, memo, reason, type, subtotal, total, customer, creditNotePdf, minimumAmountRefunded, discounts, maximumAmountAdjustment, lineItems, additionalProperties) /* spotless:on */
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "CreditNote{id=$id, createdAt=$createdAt, voidedAt=$voidedAt, creditNoteNumber=$creditNoteNumber, invoiceId=$invoiceId, memo=$memo, reason=$reason, type=$type, subtotal=$subtotal, total=$total, customer=$customer, creditNotePdf=$creditNotePdf, minimumAmountRefunded=$minimumAmountRefunded, discounts=$discounts, maximumAmountAdjustment=$maximumAmountAdjustment, lineItems=$lineItems, additionalProperties=$additionalProperties}"
 }

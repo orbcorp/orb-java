@@ -67,8 +67,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     /**
      * User specified key-value pairs for the resource. If not present, this defaults to an empty
      * dictionary. Individual keys can be removed by setting the value to `null`, and the entire
@@ -475,70 +473,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is Customer &&
-            this.metadata == other.metadata &&
-            this.id == other.id &&
-            this.externalCustomerId == other.externalCustomerId &&
-            this.name == other.name &&
-            this.email == other.email &&
-            this.timezone == other.timezone &&
-            this.paymentProviderId == other.paymentProviderId &&
-            this.paymentProvider == other.paymentProvider &&
-            this.createdAt == other.createdAt &&
-            this.shippingAddress == other.shippingAddress &&
-            this.billingAddress == other.billingAddress &&
-            this.balance == other.balance &&
-            this.currency == other.currency &&
-            this.taxId == other.taxId &&
-            this.autoCollection == other.autoCollection &&
-            this.exemptFromAutomatedTax == other.exemptFromAutomatedTax &&
-            this.emailDelivery == other.emailDelivery &&
-            this.additionalEmails == other.additionalEmails &&
-            this.portalUrl == other.portalUrl &&
-            this.accountingSyncConfiguration == other.accountingSyncConfiguration &&
-            this.reportingConfiguration == other.reportingConfiguration &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    metadata,
-                    id,
-                    externalCustomerId,
-                    name,
-                    email,
-                    timezone,
-                    paymentProviderId,
-                    paymentProvider,
-                    createdAt,
-                    shippingAddress,
-                    billingAddress,
-                    balance,
-                    currency,
-                    taxId,
-                    autoCollection,
-                    exemptFromAutomatedTax,
-                    emailDelivery,
-                    additionalEmails,
-                    portalUrl,
-                    accountingSyncConfiguration,
-                    reportingConfiguration,
-                    additionalProperties,
-                )
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "Customer{metadata=$metadata, id=$id, externalCustomerId=$externalCustomerId, name=$name, email=$email, timezone=$timezone, paymentProviderId=$paymentProviderId, paymentProvider=$paymentProvider, createdAt=$createdAt, shippingAddress=$shippingAddress, billingAddress=$billingAddress, balance=$balance, currency=$currency, taxId=$taxId, autoCollection=$autoCollection, exemptFromAutomatedTax=$exemptFromAutomatedTax, emailDelivery=$emailDelivery, additionalEmails=$additionalEmails, portalUrl=$portalUrl, accountingSyncConfiguration=$accountingSyncConfiguration, reportingConfiguration=$reportingConfiguration, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -1079,8 +1013,6 @@ private constructor(
 
         private var validated: Boolean = false
 
-        private var hashCode: Int = 0
-
         fun line1(): Optional<String> = Optional.ofNullable(line1.getNullable("line1"))
 
         fun line2(): Optional<String> = Optional.ofNullable(line2.getNullable("line2"))
@@ -1123,40 +1055,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is BillingAddress &&
-                this.line1 == other.line1 &&
-                this.line2 == other.line2 &&
-                this.city == other.city &&
-                this.state == other.state &&
-                this.postalCode == other.postalCode &&
-                this.country == other.country &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        line1,
-                        line2,
-                        city,
-                        state,
-                        postalCode,
-                        country,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "BillingAddress{line1=$line1, line2=$line2, city=$city, state=$state, postalCode=$postalCode, country=$country, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -1245,6 +1143,26 @@ private constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is BillingAddress && this.line1 == other.line1 && this.line2 == other.line2 && this.city == other.city && this.state == other.state && this.postalCode == other.postalCode && this.country == other.country && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(line1, line2, city, state, postalCode, country, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "BillingAddress{line1=$line1, line2=$line2, city=$city, state=$state, postalCode=$postalCode, country=$country, additionalProperties=$additionalProperties}"
     }
 
     /**
@@ -1261,8 +1179,6 @@ private constructor(
 
         private var validated: Boolean = false
 
-        private var hashCode: Int = 0
-
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -1274,23 +1190,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Metadata && this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(additionalProperties)
-            }
-            return hashCode
-        }
-
-        override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -1322,6 +1221,25 @@ private constructor(
 
             fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Metadata && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
     }
 
     class PaymentProvider
@@ -1337,7 +1255,7 @@ private constructor(
                 return true
             }
 
-            return other is PaymentProvider && this.value == other.value
+            return /* spotless:off */ other is PaymentProvider && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -1414,8 +1332,6 @@ private constructor(
 
         private var validated: Boolean = false
 
-        private var hashCode: Int = 0
-
         fun line1(): Optional<String> = Optional.ofNullable(line1.getNullable("line1"))
 
         fun line2(): Optional<String> = Optional.ofNullable(line2.getNullable("line2"))
@@ -1458,40 +1374,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is ShippingAddress &&
-                this.line1 == other.line1 &&
-                this.line2 == other.line2 &&
-                this.city == other.city &&
-                this.state == other.state &&
-                this.postalCode == other.postalCode &&
-                this.country == other.country &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        line1,
-                        line2,
-                        city,
-                        state,
-                        postalCode,
-                        country,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "ShippingAddress{line1=$line1, line2=$line2, city=$city, state=$state, postalCode=$postalCode, country=$country, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -1580,6 +1462,26 @@ private constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is ShippingAddress && this.line1 == other.line1 && this.line2 == other.line2 && this.city == other.city && this.state == other.state && this.postalCode == other.postalCode && this.country == other.country && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(line1, line2, city, state, postalCode, country, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "ShippingAddress{line1=$line1, line2=$line2, city=$city, state=$state, postalCode=$postalCode, country=$country, additionalProperties=$additionalProperties}"
     }
 
     /**
@@ -1700,8 +1602,6 @@ private constructor(
 
         private var validated: Boolean = false
 
-        private var hashCode: Int = 0
-
         fun country(): Country = country.getRequired("country")
 
         fun type(): Type = type.getRequired("type")
@@ -1728,34 +1628,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is TaxId &&
-                this.country == other.country &&
-                this.type == other.type &&
-                this.value == other.value &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        country,
-                        type,
-                        value,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "TaxId{country=$country, type=$type, value=$value, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -1831,7 +1703,7 @@ private constructor(
                     return true
                 }
 
-                return other is Country && this.value == other.value
+                return /* spotless:off */ other is Country && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -2344,7 +2216,7 @@ private constructor(
                     return true
                 }
 
-                return other is Type && this.value == other.value
+                return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -2801,6 +2673,26 @@ private constructor(
 
             fun asString(): String = _value().asStringOrThrow()
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is TaxId && this.country == other.country && this.type == other.type && this.value == other.value && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(country, type, value, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "TaxId{country=$country, type=$type, value=$value, additionalProperties=$additionalProperties}"
     }
 
     @JsonDeserialize(builder = AccountingSyncConfiguration.Builder::class)
@@ -2813,8 +2705,6 @@ private constructor(
     ) {
 
         private var validated: Boolean = false
-
-        private var hashCode: Int = 0
 
         fun excluded(): Boolean = excluded.getRequired("excluded")
 
@@ -2840,32 +2730,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is AccountingSyncConfiguration &&
-                this.excluded == other.excluded &&
-                this.accountingProviders == other.accountingProviders &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        excluded,
-                        accountingProviders,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "AccountingSyncConfiguration{excluded=$excluded, accountingProviders=$accountingProviders, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -2934,8 +2798,6 @@ private constructor(
 
             private var validated: Boolean = false
 
-            private var hashCode: Int = 0
-
             fun providerType(): ProviderType = providerType.getRequired("provider_type")
 
             fun externalProviderId(): Optional<String> =
@@ -2960,32 +2822,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is AccountingProvider &&
-                    this.providerType == other.providerType &&
-                    this.externalProviderId == other.externalProviderId &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            providerType,
-                            externalProviderId,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "AccountingProvider{providerType=$providerType, externalProviderId=$externalProviderId, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -3059,7 +2895,7 @@ private constructor(
                         return true
                     }
 
-                    return other is ProviderType && this.value == other.value
+                    return /* spotless:off */ other is ProviderType && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -3102,7 +2938,47 @@ private constructor(
 
                 fun asString(): String = _value().asStringOrThrow()
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is AccountingProvider && this.providerType == other.providerType && this.externalProviderId == other.externalProviderId && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(providerType, externalProviderId, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "AccountingProvider{providerType=$providerType, externalProviderId=$externalProviderId, additionalProperties=$additionalProperties}"
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is AccountingSyncConfiguration && this.excluded == other.excluded && this.accountingProviders == other.accountingProviders && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(excluded, accountingProviders, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "AccountingSyncConfiguration{excluded=$excluded, accountingProviders=$accountingProviders, additionalProperties=$additionalProperties}"
     }
 
     @JsonDeserialize(builder = ReportingConfiguration.Builder::class)
@@ -3114,8 +2990,6 @@ private constructor(
     ) {
 
         private var validated: Boolean = false
-
-        private var hashCode: Int = 0
 
         fun exempt(): Boolean = exempt.getRequired("exempt")
 
@@ -3133,26 +3007,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is ReportingConfiguration &&
-                this.exempt == other.exempt &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(exempt, additionalProperties)
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "ReportingConfiguration{exempt=$exempt, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -3193,5 +3047,45 @@ private constructor(
             fun build(): ReportingConfiguration =
                 ReportingConfiguration(exempt, additionalProperties.toUnmodifiable())
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is ReportingConfiguration && this.exempt == other.exempt && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(exempt, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "ReportingConfiguration{exempt=$exempt, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is Customer && this.metadata == other.metadata && this.id == other.id && this.externalCustomerId == other.externalCustomerId && this.name == other.name && this.email == other.email && this.timezone == other.timezone && this.paymentProviderId == other.paymentProviderId && this.paymentProvider == other.paymentProvider && this.createdAt == other.createdAt && this.shippingAddress == other.shippingAddress && this.billingAddress == other.billingAddress && this.balance == other.balance && this.currency == other.currency && this.taxId == other.taxId && this.autoCollection == other.autoCollection && this.exemptFromAutomatedTax == other.exemptFromAutomatedTax && this.emailDelivery == other.emailDelivery && this.additionalEmails == other.additionalEmails && this.portalUrl == other.portalUrl && this.accountingSyncConfiguration == other.accountingSyncConfiguration && this.reportingConfiguration == other.reportingConfiguration && this.additionalProperties == other.additionalProperties /* spotless:on */
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode = /* spotless:off */ Objects.hash(metadata, id, externalCustomerId, name, email, timezone, paymentProviderId, paymentProvider, createdAt, shippingAddress, billingAddress, balance, currency, taxId, autoCollection, exemptFromAutomatedTax, emailDelivery, additionalEmails, portalUrl, accountingSyncConfiguration, reportingConfiguration, additionalProperties) /* spotless:on */
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "Customer{metadata=$metadata, id=$id, externalCustomerId=$externalCustomerId, name=$name, email=$email, timezone=$timezone, paymentProviderId=$paymentProviderId, paymentProvider=$paymentProvider, createdAt=$createdAt, shippingAddress=$shippingAddress, billingAddress=$billingAddress, balance=$balance, currency=$currency, taxId=$taxId, autoCollection=$autoCollection, exemptFromAutomatedTax=$exemptFromAutomatedTax, emailDelivery=$emailDelivery, additionalEmails=$additionalEmails, portalUrl=$portalUrl, accountingSyncConfiguration=$accountingSyncConfiguration, reportingConfiguration=$reportingConfiguration, additionalProperties=$additionalProperties}"
 }

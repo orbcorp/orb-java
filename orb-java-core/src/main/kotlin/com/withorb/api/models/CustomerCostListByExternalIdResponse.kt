@@ -26,8 +26,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     fun data(): List<Data> = data.getRequired("data")
 
     @JsonProperty("data") @ExcludeMissing fun _data() = data
@@ -44,26 +42,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is CustomerCostListByExternalIdResponse &&
-            this.data == other.data &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = Objects.hash(data, additionalProperties)
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "CustomerCostListByExternalIdResponse{data=$data, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -124,8 +102,6 @@ private constructor(
 
         private var validated: Boolean = false
 
-        private var hashCode: Int = 0
-
         /** Total costs for the timeframe, excluding any minimums and discounts. */
         fun subtotal(): String = subtotal.getRequired("subtotal")
 
@@ -166,38 +142,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Data &&
-                this.subtotal == other.subtotal &&
-                this.total == other.total &&
-                this.timeframeStart == other.timeframeStart &&
-                this.timeframeEnd == other.timeframeEnd &&
-                this.perPriceCosts == other.perPriceCosts &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        subtotal,
-                        total,
-                        timeframeStart,
-                        timeframeEnd,
-                        perPriceCosts,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "Data{subtotal=$subtotal, total=$total, timeframeStart=$timeframeStart, timeframeEnd=$timeframeEnd, perPriceCosts=$perPriceCosts, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -303,8 +247,6 @@ private constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             /** The price's quantity for the timeframe */
             fun quantity(): Optional<Double> = Optional.ofNullable(quantity.getNullable("quantity"))
@@ -799,36 +741,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is PerPriceCost &&
-                    this.quantity == other.quantity &&
-                    this.subtotal == other.subtotal &&
-                    this.total == other.total &&
-                    this.price == other.price &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            quantity,
-                            subtotal,
-                            total,
-                            price,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "PerPriceCost{quantity=$quantity, subtotal=$subtotal, total=$total, price=$price, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -1374,6 +1286,66 @@ private constructor(
                         additionalProperties.toUnmodifiable(),
                     )
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is PerPriceCost && this.quantity == other.quantity && this.subtotal == other.subtotal && this.total == other.total && this.price == other.price && this.additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = /* spotless:off */ Objects.hash(quantity, subtotal, total, price, additionalProperties) /* spotless:on */
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "PerPriceCost{quantity=$quantity, subtotal=$subtotal, total=$total, price=$price, additionalProperties=$additionalProperties}"
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Data && this.subtotal == other.subtotal && this.total == other.total && this.timeframeStart == other.timeframeStart && this.timeframeEnd == other.timeframeEnd && this.perPriceCosts == other.perPriceCosts && this.additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = /* spotless:off */ Objects.hash(subtotal, total, timeframeStart, timeframeEnd, perPriceCosts, additionalProperties) /* spotless:on */
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "Data{subtotal=$subtotal, total=$total, timeframeStart=$timeframeStart, timeframeEnd=$timeframeEnd, perPriceCosts=$perPriceCosts, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerCostListByExternalIdResponse && this.data == other.data && this.additionalProperties == other.additionalProperties /* spotless:on */
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode = /* spotless:off */ Objects.hash(data, additionalProperties) /* spotless:on */
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "CustomerCostListByExternalIdResponse{data=$data, additionalProperties=$additionalProperties}"
 }
