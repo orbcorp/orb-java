@@ -1,6 +1,5 @@
 package com.withorb.api.core.http
 
-import com.google.common.util.concurrent.MoreExecutors
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.errors.OrbIoException
 import java.io.IOException
@@ -116,8 +115,10 @@ private constructor(
                             executeWithRetries(request, requestOptions)
                         }
                     },
-                    MoreExecutors.directExecutor()
-                )
+                ) {
+                    // Run in the same thread.
+                    it.run()
+                }
                 .thenCompose(Function.identity())
         }
 
