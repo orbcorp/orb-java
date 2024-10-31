@@ -22,7 +22,7 @@ import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
 import com.withorb.api.core.getOrThrow
-import com.withorb.api.core.toUnmodifiable
+import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import com.withorb.api.models.*
 import java.util.Objects
@@ -615,7 +615,7 @@ constructor(
                     checkNotNull(email) { "`email` is required but was not set" },
                     checkNotNull(name) { "`name` is required but was not set" },
                     accountingSyncConfiguration,
-                    additionalEmails?.toUnmodifiable(),
+                    additionalEmails?.toImmutable(),
                     autoCollection,
                     billingAddress,
                     currency,
@@ -629,7 +629,7 @@ constructor(
                     taxConfiguration,
                     taxId,
                     timezone,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -1011,7 +1011,7 @@ constructor(
                 checkNotNull(email) { "`email` is required but was not set" },
                 checkNotNull(name) { "`name` is required but was not set" },
                 accountingSyncConfiguration,
-                if (additionalEmails.size == 0) null else additionalEmails.toUnmodifiable(),
+                if (additionalEmails.size == 0) null else additionalEmails.toImmutable(),
                 autoCollection,
                 billingAddress,
                 currency,
@@ -1025,9 +1025,9 @@ constructor(
                 taxConfiguration,
                 taxId,
                 timezone,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -1094,8 +1094,8 @@ constructor(
             fun build(): AccountingSyncConfiguration =
                 AccountingSyncConfiguration(
                     excluded,
-                    accountingProviders?.toUnmodifiable(),
-                    additionalProperties.toUnmodifiable(),
+                    accountingProviders?.toImmutable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -1166,7 +1166,7 @@ constructor(
                         checkNotNull(externalProviderId) {
                             "`externalProviderId` is required but was not set"
                         },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -1304,7 +1304,7 @@ constructor(
                     state,
                     postalCode,
                     country,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -1375,7 +1375,7 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+            fun build(): Metadata = Metadata(additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -1524,7 +1524,7 @@ constructor(
             fun build(): ReportingConfiguration =
                 ReportingConfiguration(
                     checkNotNull(exempt) { "`exempt` is required but was not set" },
-                    additionalProperties.toUnmodifiable()
+                    additionalProperties.toImmutable()
                 )
         }
 
@@ -1641,7 +1641,7 @@ constructor(
                     state,
                     postalCode,
                     country,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -1920,7 +1920,7 @@ constructor(
                         taxExempt,
                         taxProvider,
                         taxExemptionCode,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -2080,7 +2080,7 @@ constructor(
                     NewTaxJarConfiguration(
                         taxExempt,
                         taxProvider,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -2331,7 +2331,7 @@ constructor(
                     checkNotNull(country) { "`country` is required but was not set" },
                     checkNotNull(type) { "`type` is required but was not set" },
                     checkNotNull(value) { "`value` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 

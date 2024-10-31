@@ -3,7 +3,7 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.NoAutoDetect
-import com.withorb.api.core.toUnmodifiable
+import com.withorb.api.core.toImmutable
 import com.withorb.api.models.*
 import java.util.Objects
 import java.util.Optional
@@ -29,7 +29,7 @@ constructor(
         this.cursor?.let { params.put("cursor", listOf(it.toString())) }
         this.limit?.let { params.put("limit", listOf(it.toString())) }
         params.putAll(additionalQueryParams)
-        return params.toUnmodifiable()
+        return params.toImmutable()
     }
 
     @JvmSynthetic internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
@@ -141,8 +141,8 @@ constructor(
                 checkNotNull(customerId) { "`customerId` is required but was not set" },
                 cursor,
                 limit,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
             )
     }
 }

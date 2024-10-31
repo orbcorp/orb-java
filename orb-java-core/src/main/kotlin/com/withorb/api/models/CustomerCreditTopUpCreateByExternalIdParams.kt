@@ -12,7 +12,7 @@ import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
-import com.withorb.api.core.toUnmodifiable
+import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import com.withorb.api.models.*
 import java.util.Objects
@@ -224,7 +224,7 @@ constructor(
                     checkNotNull(threshold) { "`threshold` is required but was not set" },
                     expiresAfter,
                     expiresAfterUnit,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -417,9 +417,9 @@ constructor(
                 checkNotNull(threshold) { "`threshold` is required but was not set" },
                 expiresAfter,
                 expiresAfterUnit,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -533,7 +533,7 @@ constructor(
                     checkNotNull(netTerms) { "`netTerms` is required but was not set" },
                     memo,
                     requireSuccessfulPayment,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
