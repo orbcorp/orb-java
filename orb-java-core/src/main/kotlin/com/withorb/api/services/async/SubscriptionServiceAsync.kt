@@ -7,7 +7,9 @@ package com.withorb.api.services.async
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.models.Subscription
 import com.withorb.api.models.SubscriptionCancelParams
+import com.withorb.api.models.SubscriptionCancelResponse
 import com.withorb.api.models.SubscriptionCreateParams
+import com.withorb.api.models.SubscriptionCreateResponse
 import com.withorb.api.models.SubscriptionFetchCostsParams
 import com.withorb.api.models.SubscriptionFetchCostsResponse
 import com.withorb.api.models.SubscriptionFetchParams
@@ -17,14 +19,22 @@ import com.withorb.api.models.SubscriptionFetchUsageParams
 import com.withorb.api.models.SubscriptionListPageAsync
 import com.withorb.api.models.SubscriptionListParams
 import com.withorb.api.models.SubscriptionPriceIntervalsParams
+import com.withorb.api.models.SubscriptionPriceIntervalsResponse
 import com.withorb.api.models.SubscriptionSchedulePlanChangeParams
+import com.withorb.api.models.SubscriptionSchedulePlanChangeResponse
 import com.withorb.api.models.SubscriptionTriggerPhaseParams
+import com.withorb.api.models.SubscriptionTriggerPhaseResponse
 import com.withorb.api.models.SubscriptionUnscheduleCancellationParams
+import com.withorb.api.models.SubscriptionUnscheduleCancellationResponse
 import com.withorb.api.models.SubscriptionUnscheduleFixedFeeQuantityUpdatesParams
+import com.withorb.api.models.SubscriptionUnscheduleFixedFeeQuantityUpdatesResponse
 import com.withorb.api.models.SubscriptionUnschedulePendingPlanChangesParams
+import com.withorb.api.models.SubscriptionUnschedulePendingPlanChangesResponse
 import com.withorb.api.models.SubscriptionUpdateFixedFeeQuantityParams
+import com.withorb.api.models.SubscriptionUpdateFixedFeeQuantityResponse
 import com.withorb.api.models.SubscriptionUpdateParams
 import com.withorb.api.models.SubscriptionUpdateTrialParams
+import com.withorb.api.models.SubscriptionUpdateTrialResponse
 import com.withorb.api.models.SubscriptionUsage
 import java.util.concurrent.CompletableFuture
 
@@ -269,7 +279,7 @@ interface SubscriptionServiceAsync {
     fun create(
         params: SubscriptionCreateParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<Subscription>
+    ): CompletableFuture<SubscriptionCreateResponse>
 
     /**
      * This endpoint can be used to update the `metadata`, `net terms`, `auto_collection`,
@@ -355,7 +365,7 @@ interface SubscriptionServiceAsync {
     fun cancel(
         params: SubscriptionCancelParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<Subscription>
+    ): CompletableFuture<SubscriptionCancelResponse>
 
     /**
      * This endpoint is used to fetch a [Subscription](../guides/concepts#subscription) given an
@@ -649,7 +659,7 @@ interface SubscriptionServiceAsync {
     fun priceIntervals(
         params: SubscriptionPriceIntervalsParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<Subscription>
+    ): CompletableFuture<SubscriptionPriceIntervalsResponse>
 
     /**
      * This endpoint can be used to change an existing subscription's plan. It returns the
@@ -818,7 +828,7 @@ interface SubscriptionServiceAsync {
     fun schedulePlanChange(
         params: SubscriptionSchedulePlanChangeParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<Subscription>
+    ): CompletableFuture<SubscriptionSchedulePlanChangeResponse>
 
     /**
      * Manually trigger a phase, effective the given date (or the current time, if not specified).
@@ -827,7 +837,7 @@ interface SubscriptionServiceAsync {
     fun triggerPhase(
         params: SubscriptionTriggerPhaseParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<Subscription>
+    ): CompletableFuture<SubscriptionTriggerPhaseResponse>
 
     /**
      * This endpoint can be used to unschedule any pending cancellations for a subscription.
@@ -840,7 +850,7 @@ interface SubscriptionServiceAsync {
     fun unscheduleCancellation(
         params: SubscriptionUnscheduleCancellationParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<Subscription>
+    ): CompletableFuture<SubscriptionUnscheduleCancellationResponse>
 
     /**
      * This endpoint can be used to clear scheduled updates to the quantity for a fixed fee.
@@ -852,7 +862,7 @@ interface SubscriptionServiceAsync {
     fun unscheduleFixedFeeQuantityUpdates(
         params: SubscriptionUnscheduleFixedFeeQuantityUpdatesParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<Subscription>
+    ): CompletableFuture<SubscriptionUnscheduleFixedFeeQuantityUpdatesResponse>
 
     /**
      * This endpoint can be used to unschedule any pending plan changes on an existing subscription.
@@ -861,7 +871,7 @@ interface SubscriptionServiceAsync {
     fun unschedulePendingPlanChanges(
         params: SubscriptionUnschedulePendingPlanChangesParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<Subscription>
+    ): CompletableFuture<SubscriptionUnschedulePendingPlanChangesResponse>
 
     /**
      * This endpoint can be used to update the quantity for a fixed fee.
@@ -881,7 +891,7 @@ interface SubscriptionServiceAsync {
     fun updateFixedFeeQuantity(
         params: SubscriptionUpdateFixedFeeQuantityParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<Subscription>
+    ): CompletableFuture<SubscriptionUpdateFixedFeeQuantityResponse>
 
     /**
      * This endpoint is used to update the trial end date for a subscription. The new trial end date
@@ -905,5 +915,5 @@ interface SubscriptionServiceAsync {
     fun updateTrial(
         params: SubscriptionUpdateTrialParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<Subscription>
+    ): CompletableFuture<SubscriptionUpdateTrialResponse>
 }
