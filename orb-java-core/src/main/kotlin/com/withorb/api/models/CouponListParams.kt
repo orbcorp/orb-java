@@ -3,7 +3,7 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.NoAutoDetect
-import com.withorb.api.core.toUnmodifiable
+import com.withorb.api.core.toImmutable
 import com.withorb.api.models.*
 import java.util.Objects
 import java.util.Optional
@@ -34,7 +34,7 @@ constructor(
         this.redemptionCode?.let { params.put("redemption_code", listOf(it.toString())) }
         this.showArchived?.let { params.put("show_archived", listOf(it.toString())) }
         params.putAll(additionalQueryParams)
-        return params.toUnmodifiable()
+        return params.toImmutable()
     }
 
     @JvmSynthetic internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
@@ -148,8 +148,8 @@ constructor(
                 limit,
                 redemptionCode,
                 showArchived,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
             )
     }
 }

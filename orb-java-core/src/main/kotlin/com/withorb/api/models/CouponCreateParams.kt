@@ -22,7 +22,7 @@ import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
 import com.withorb.api.core.getOrThrow
-import com.withorb.api.core.toUnmodifiable
+import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import com.withorb.api.models.*
 import java.util.Objects
@@ -166,7 +166,7 @@ constructor(
                     checkNotNull(redemptionCode) { "`redemptionCode` is required but was not set" },
                     durationInMonths,
                     maxRedemptions,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -328,9 +328,9 @@ constructor(
                 checkNotNull(redemptionCode) { "`redemptionCode` is required but was not set" },
                 durationInMonths,
                 maxRedemptions,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -571,7 +571,7 @@ constructor(
                     NewCouponPercentageDiscount(
                         discountType,
                         percentageDiscount,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -735,7 +735,7 @@ constructor(
                     NewCouponAmountDiscount(
                         discountType,
                         amountDiscount,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 

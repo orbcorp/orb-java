@@ -11,7 +11,7 @@ import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
-import com.withorb.api.core.toUnmodifiable
+import com.withorb.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 
@@ -79,7 +79,7 @@ private constructor(
         }
 
         fun build(): EventVolumes =
-            EventVolumes(data.map { it.toUnmodifiable() }, additionalProperties.toUnmodifiable())
+            EventVolumes(data.map { it.toImmutable() }, additionalProperties.toImmutable())
     }
 
     /**
@@ -192,7 +192,7 @@ private constructor(
                     timeframeStart,
                     timeframeEnd,
                     count,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
