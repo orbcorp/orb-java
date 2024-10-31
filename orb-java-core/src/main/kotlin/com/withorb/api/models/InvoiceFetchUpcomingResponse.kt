@@ -22,7 +22,7 @@ import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
 import com.withorb.api.core.getOrThrow
-import com.withorb.api.core.toUnmodifiable
+import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -1420,7 +1420,7 @@ private constructor(
                 currency,
                 customer,
                 discount,
-                discounts.map { it.toUnmodifiable() },
+                discounts.map { it.toImmutable() },
                 dueDate,
                 id,
                 invoicePdf,
@@ -1429,11 +1429,11 @@ private constructor(
                 minimumAmount,
                 maximum,
                 maximumAmount,
-                lineItems.map { it.toUnmodifiable() },
+                lineItems.map { it.toImmutable() },
                 subscription,
                 subtotal,
                 total,
-                customerBalanceTransactions.map { it.toUnmodifiable() },
+                customerBalanceTransactions.map { it.toImmutable() },
                 status,
                 invoiceSource,
                 shippingAddress,
@@ -1443,9 +1443,9 @@ private constructor(
                 eligibleToIssueAt,
                 customerTaxId,
                 memo,
-                creditNotes.map { it.toUnmodifiable() },
+                creditNotes.map { it.toImmutable() },
                 targetDate,
-                additionalProperties.toUnmodifiable(),
+                additionalProperties.toImmutable(),
             )
     }
 
@@ -1631,7 +1631,7 @@ private constructor(
                     previouslyAttemptedAt,
                     enabled,
                     numAttempts,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -1798,7 +1798,7 @@ private constructor(
                     state,
                     postalCode,
                     country,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -2005,7 +2005,7 @@ private constructor(
                     voidedAt,
                     type,
                     memo,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -2117,7 +2117,7 @@ private constructor(
                 Customer(
                     id,
                     externalCustomerId,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -2404,7 +2404,7 @@ private constructor(
                     invoice,
                     type,
                     creditNote,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -2570,7 +2570,7 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): CreditNote = CreditNote(id, additionalProperties.toUnmodifiable())
+                fun build(): CreditNote = CreditNote(id, additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -2662,7 +2662,7 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): Invoice = Invoice(id, additionalProperties.toUnmodifiable())
+                fun build(): Invoice = Invoice(id, additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -2965,7 +2965,7 @@ private constructor(
                     country,
                     type,
                     value,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -5325,11 +5325,11 @@ private constructor(
                     quantity,
                     startDate,
                     subtotal,
-                    subLineItems.map { it.toUnmodifiable() },
-                    taxAmounts.map { it.toUnmodifiable() },
+                    subLineItems.map { it.toImmutable() },
+                    taxAmounts.map { it.toImmutable() },
                     id,
                     price,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -5443,8 +5443,8 @@ private constructor(
                 fun build(): Maximum =
                     Maximum(
                         maximumAmount,
-                        appliesToPriceIds.map { it.toUnmodifiable() },
-                        additionalProperties.toUnmodifiable(),
+                        appliesToPriceIds.map { it.toImmutable() },
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -5579,8 +5579,8 @@ private constructor(
                 fun build(): Minimum =
                     Minimum(
                         minimumAmount,
-                        appliesToPriceIds.map { it.toUnmodifiable() },
-                        additionalProperties.toUnmodifiable(),
+                        appliesToPriceIds.map { it.toImmutable() },
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -5923,7 +5923,7 @@ private constructor(
                             grouping,
                             type,
                             matrixConfig,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -6014,7 +6014,7 @@ private constructor(
                             Grouping(
                                 key,
                                 value,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -6116,8 +6116,8 @@ private constructor(
 
                         fun build(): MatrixConfig =
                             MatrixConfig(
-                                dimensionValues.map { it.toUnmodifiable() },
-                                additionalProperties.toUnmodifiable()
+                                dimensionValues.map { it.toImmutable() },
+                                additionalProperties.toImmutable()
                             )
                     }
 
@@ -6364,7 +6364,7 @@ private constructor(
                             grouping,
                             type,
                             tierConfig,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -6455,7 +6455,7 @@ private constructor(
                             Grouping(
                                 key,
                                 value,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -6585,7 +6585,7 @@ private constructor(
                                 firstUnit,
                                 lastUnit,
                                 unitAmount,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -6815,7 +6815,7 @@ private constructor(
                             quantity,
                             grouping,
                             type,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -6906,7 +6906,7 @@ private constructor(
                             Grouping(
                                 key,
                                 value,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -7126,7 +7126,7 @@ private constructor(
                         taxRateDescription,
                         taxRatePercentage,
                         amount,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -7280,8 +7280,8 @@ private constructor(
             fun build(): Maximum =
                 Maximum(
                     maximumAmount,
-                    appliesToPriceIds.map { it.toUnmodifiable() },
-                    additionalProperties.toUnmodifiable(),
+                    appliesToPriceIds.map { it.toImmutable() },
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -7360,7 +7360,7 @@ private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+            fun build(): Metadata = Metadata(additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -7491,8 +7491,8 @@ private constructor(
             fun build(): Minimum =
                 Minimum(
                     minimumAmount,
-                    appliesToPriceIds.map { it.toUnmodifiable() },
-                    additionalProperties.toUnmodifiable(),
+                    appliesToPriceIds.map { it.toImmutable() },
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -7659,7 +7659,7 @@ private constructor(
                     state,
                     postalCode,
                     country,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -7822,7 +7822,7 @@ private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): Subscription = Subscription(id, additionalProperties.toUnmodifiable())
+            fun build(): Subscription = Subscription(id, additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {

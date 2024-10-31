@@ -21,7 +21,7 @@ import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
 import com.withorb.api.core.getOrThrow
-import com.withorb.api.core.toUnmodifiable
+import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import com.withorb.api.models.*
 import java.util.Objects
@@ -1855,8 +1855,8 @@ constructor(
                 newFloatingGroupedWithMeteredMinimumPrice,
                 newFloatingMatrixWithDisplayNamePrice,
                 newFloatingBulkWithProrationPrice,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
             )
     }
 
@@ -2108,7 +2108,7 @@ constructor(
                     checkNotNull(modelType) { "`modelType` is required but was not set" },
                     checkNotNull(unitConfig) { "`unitConfig` is required but was not set" },
                     checkNotNull(currency) { "`currency` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -2299,7 +2299,7 @@ constructor(
                 fun build(): UnitConfig =
                     UnitConfig(
                         checkNotNull(unitAmount) { "`unitAmount` is required but was not set" },
-                        additionalProperties.toUnmodifiable()
+                        additionalProperties.toImmutable()
                     )
             }
 
@@ -2393,7 +2393,7 @@ constructor(
                     BillingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -2548,7 +2548,7 @@ constructor(
                     InvoicingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -2677,7 +2677,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -2972,7 +2972,7 @@ constructor(
                     checkNotNull(modelType) { "`modelType` is required but was not set" },
                     checkNotNull(packageConfig) { "`packageConfig` is required but was not set" },
                     checkNotNull(currency) { "`currency` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -3184,7 +3184,7 @@ constructor(
                             "`packageAmount` is required but was not set"
                         },
                         checkNotNull(packageSize) { "`packageSize` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -3278,7 +3278,7 @@ constructor(
                     BillingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -3433,7 +3433,7 @@ constructor(
                     InvoicingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -3562,7 +3562,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -3857,7 +3857,7 @@ constructor(
                     checkNotNull(modelType) { "`modelType` is required but was not set" },
                     checkNotNull(matrixConfig) { "`matrixConfig` is required but was not set" },
                     checkNotNull(currency) { "`currency` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -4024,13 +4024,13 @@ constructor(
                 fun build(): MatrixConfig =
                     MatrixConfig(
                         checkNotNull(dimensions) { "`dimensions` is required but was not set" }
-                            .toUnmodifiable(),
+                            .toImmutable(),
                         checkNotNull(defaultUnitAmount) {
                             "`defaultUnitAmount` is required but was not set"
                         },
                         checkNotNull(matrixValues) { "`matrixValues` is required but was not set" }
-                            .toUnmodifiable(),
-                        additionalProperties.toUnmodifiable(),
+                            .toImmutable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -4113,8 +4113,8 @@ constructor(
                             checkNotNull(dimensionValues) {
                                     "`dimensionValues` is required but was not set"
                                 }
-                                .toUnmodifiable(),
-                            additionalProperties.toUnmodifiable(),
+                                .toImmutable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -4280,7 +4280,7 @@ constructor(
                     BillingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -4435,7 +4435,7 @@ constructor(
                     InvoicingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -4564,7 +4564,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -4867,7 +4867,7 @@ constructor(
                         "`matrixWithAllocationConfig` is required but was not set"
                     },
                     checkNotNull(currency) { "`currency` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -5044,14 +5044,14 @@ constructor(
                 fun build(): MatrixWithAllocationConfig =
                     MatrixWithAllocationConfig(
                         checkNotNull(dimensions) { "`dimensions` is required but was not set" }
-                            .toUnmodifiable(),
+                            .toImmutable(),
                         checkNotNull(defaultUnitAmount) {
                             "`defaultUnitAmount` is required but was not set"
                         },
                         checkNotNull(matrixValues) { "`matrixValues` is required but was not set" }
-                            .toUnmodifiable(),
+                            .toImmutable(),
                         checkNotNull(allocation) { "`allocation` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -5134,8 +5134,8 @@ constructor(
                             checkNotNull(dimensionValues) {
                                     "`dimensionValues` is required but was not set"
                                 }
-                                .toUnmodifiable(),
-                            additionalProperties.toUnmodifiable(),
+                                .toImmutable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -5302,7 +5302,7 @@ constructor(
                     BillingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -5457,7 +5457,7 @@ constructor(
                     InvoicingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -5586,7 +5586,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -5881,7 +5881,7 @@ constructor(
                     checkNotNull(modelType) { "`modelType` is required but was not set" },
                     checkNotNull(tieredConfig) { "`tieredConfig` is required but was not set" },
                     checkNotNull(currency) { "`currency` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -6070,9 +6070,8 @@ constructor(
 
                 fun build(): TieredConfig =
                     TieredConfig(
-                        checkNotNull(tiers) { "`tiers` is required but was not set" }
-                            .toUnmodifiable(),
-                        additionalProperties.toUnmodifiable()
+                        checkNotNull(tiers) { "`tiers` is required but was not set" }.toImmutable(),
+                        additionalProperties.toImmutable()
                     )
             }
 
@@ -6153,7 +6152,7 @@ constructor(
                             checkNotNull(firstUnit) { "`firstUnit` is required but was not set" },
                             lastUnit,
                             checkNotNull(unitAmount) { "`unitAmount` is required but was not set" },
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -6268,7 +6267,7 @@ constructor(
                     BillingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -6423,7 +6422,7 @@ constructor(
                     InvoicingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -6552,7 +6551,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -6849,7 +6848,7 @@ constructor(
                         "`tieredBpsConfig` is required but was not set"
                     },
                     checkNotNull(currency) { "`currency` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -7043,9 +7042,8 @@ constructor(
 
                 fun build(): TieredBpsConfig =
                     TieredBpsConfig(
-                        checkNotNull(tiers) { "`tiers` is required but was not set" }
-                            .toUnmodifiable(),
-                        additionalProperties.toUnmodifiable()
+                        checkNotNull(tiers) { "`tiers` is required but was not set" }.toImmutable(),
+                        additionalProperties.toImmutable()
                     )
             }
 
@@ -7144,7 +7142,7 @@ constructor(
                             maximumAmount,
                             checkNotNull(bps) { "`bps` is required but was not set" },
                             perUnitMaximum,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -7259,7 +7257,7 @@ constructor(
                     BillingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -7414,7 +7412,7 @@ constructor(
                     InvoicingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -7543,7 +7541,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -7835,7 +7833,7 @@ constructor(
                     checkNotNull(modelType) { "`modelType` is required but was not set" },
                     checkNotNull(bpsConfig) { "`bpsConfig` is required but was not set" },
                     checkNotNull(currency) { "`currency` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -7906,7 +7904,7 @@ constructor(
                     BpsConfig(
                         checkNotNull(bps) { "`bps` is required but was not set" },
                         perUnitMaximum,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -8132,7 +8130,7 @@ constructor(
                     BillingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -8287,7 +8285,7 @@ constructor(
                     InvoicingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -8416,7 +8414,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -8711,7 +8709,7 @@ constructor(
                     checkNotNull(modelType) { "`modelType` is required but was not set" },
                     checkNotNull(bulkBpsConfig) { "`bulkBpsConfig` is required but was not set" },
                     checkNotNull(currency) { "`currency` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -8774,9 +8772,8 @@ constructor(
 
                 fun build(): BulkBpsConfig =
                     BulkBpsConfig(
-                        checkNotNull(tiers) { "`tiers` is required but was not set" }
-                            .toUnmodifiable(),
-                        additionalProperties.toUnmodifiable()
+                        checkNotNull(tiers) { "`tiers` is required but was not set" }.toImmutable(),
+                        additionalProperties.toImmutable()
                     )
             }
 
@@ -8860,7 +8857,7 @@ constructor(
                             maximumAmount,
                             checkNotNull(bps) { "`bps` is required but was not set" },
                             perUnitMaximum,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -9107,7 +9104,7 @@ constructor(
                     BillingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -9262,7 +9259,7 @@ constructor(
                     InvoicingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -9391,7 +9388,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -9683,7 +9680,7 @@ constructor(
                     checkNotNull(modelType) { "`modelType` is required but was not set" },
                     checkNotNull(bulkConfig) { "`bulkConfig` is required but was not set" },
                     checkNotNull(currency) { "`currency` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -9740,9 +9737,8 @@ constructor(
 
                 fun build(): BulkConfig =
                     BulkConfig(
-                        checkNotNull(tiers) { "`tiers` is required but was not set" }
-                            .toUnmodifiable(),
-                        additionalProperties.toUnmodifiable()
+                        checkNotNull(tiers) { "`tiers` is required but was not set" }.toImmutable(),
+                        additionalProperties.toImmutable()
                     )
             }
 
@@ -9814,7 +9810,7 @@ constructor(
                         Tier(
                             maximumUnits,
                             checkNotNull(unitAmount) { "`unitAmount` is required but was not set" },
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -10061,7 +10057,7 @@ constructor(
                     BillingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -10216,7 +10212,7 @@ constructor(
                     InvoicingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -10345,7 +10341,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -10648,7 +10644,7 @@ constructor(
                         "`thresholdTotalAmountConfig` is required but was not set"
                     },
                     checkNotNull(currency) { "`currency` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -10828,7 +10824,7 @@ constructor(
                     }
 
                 fun build(): ThresholdTotalAmountConfig =
-                    ThresholdTotalAmountConfig(additionalProperties.toUnmodifiable())
+                    ThresholdTotalAmountConfig(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -10921,7 +10917,7 @@ constructor(
                     BillingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -11076,7 +11072,7 @@ constructor(
                     InvoicingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -11205,7 +11201,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -11505,7 +11501,7 @@ constructor(
                         "`tieredPackageConfig` is required but was not set"
                     },
                     checkNotNull(currency) { "`currency` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -11684,7 +11680,7 @@ constructor(
                     }
 
                 fun build(): TieredPackageConfig =
-                    TieredPackageConfig(additionalProperties.toUnmodifiable())
+                    TieredPackageConfig(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -11777,7 +11773,7 @@ constructor(
                     BillingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -11932,7 +11928,7 @@ constructor(
                     InvoicingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -12061,7 +12057,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -12361,7 +12357,7 @@ constructor(
                         "`groupedTieredConfig` is required but was not set"
                     },
                     checkNotNull(currency) { "`currency` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -12489,7 +12485,7 @@ constructor(
                     }
 
                 fun build(): GroupedTieredConfig =
-                    GroupedTieredConfig(additionalProperties.toUnmodifiable())
+                    GroupedTieredConfig(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -12633,7 +12629,7 @@ constructor(
                     BillingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -12788,7 +12784,7 @@ constructor(
                     InvoicingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -12917,7 +12913,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -13219,7 +13215,7 @@ constructor(
                         "`tieredWithMinimumConfig` is required but was not set"
                     },
                     checkNotNull(currency) { "`currency` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -13398,7 +13394,7 @@ constructor(
                     }
 
                 fun build(): TieredWithMinimumConfig =
-                    TieredWithMinimumConfig(additionalProperties.toUnmodifiable())
+                    TieredWithMinimumConfig(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -13491,7 +13487,7 @@ constructor(
                     BillingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -13646,7 +13642,7 @@ constructor(
                     InvoicingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -13775,7 +13771,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -14078,7 +14074,7 @@ constructor(
                         "`packageWithAllocationConfig` is required but was not set"
                     },
                     checkNotNull(currency) { "`currency` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -14259,7 +14255,7 @@ constructor(
                     }
 
                 fun build(): PackageWithAllocationConfig =
-                    PackageWithAllocationConfig(additionalProperties.toUnmodifiable())
+                    PackageWithAllocationConfig(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -14352,7 +14348,7 @@ constructor(
                     BillingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -14507,7 +14503,7 @@ constructor(
                     InvoicingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -14636,7 +14632,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -14941,7 +14937,7 @@ constructor(
                         "`tieredPackageWithMinimumConfig` is required but was not set"
                     },
                     checkNotNull(currency) { "`currency` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -15123,7 +15119,7 @@ constructor(
                     }
 
                 fun build(): TieredPackageWithMinimumConfig =
-                    TieredPackageWithMinimumConfig(additionalProperties.toUnmodifiable())
+                    TieredPackageWithMinimumConfig(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -15216,7 +15212,7 @@ constructor(
                     BillingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -15371,7 +15367,7 @@ constructor(
                     InvoicingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -15500,7 +15496,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -15801,7 +15797,7 @@ constructor(
                         "`unitWithPercentConfig` is required but was not set"
                     },
                     checkNotNull(currency) { "`currency` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -15980,7 +15976,7 @@ constructor(
                     }
 
                 fun build(): UnitWithPercentConfig =
-                    UnitWithPercentConfig(additionalProperties.toUnmodifiable())
+                    UnitWithPercentConfig(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -16073,7 +16069,7 @@ constructor(
                     BillingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -16228,7 +16224,7 @@ constructor(
                     InvoicingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -16357,7 +16353,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -16660,7 +16656,7 @@ constructor(
                         "`tieredWithProrationConfig` is required but was not set"
                     },
                     checkNotNull(currency) { "`currency` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -16840,7 +16836,7 @@ constructor(
                     }
 
                 fun build(): TieredWithProrationConfig =
-                    TieredWithProrationConfig(additionalProperties.toUnmodifiable())
+                    TieredWithProrationConfig(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -16933,7 +16929,7 @@ constructor(
                     BillingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -17088,7 +17084,7 @@ constructor(
                     InvoicingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -17217,7 +17213,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -17519,7 +17515,7 @@ constructor(
                         "`unitWithProrationConfig` is required but was not set"
                     },
                     checkNotNull(currency) { "`currency` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -17698,7 +17694,7 @@ constructor(
                     }
 
                 fun build(): UnitWithProrationConfig =
-                    UnitWithProrationConfig(additionalProperties.toUnmodifiable())
+                    UnitWithProrationConfig(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -17791,7 +17787,7 @@ constructor(
                     BillingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -17946,7 +17942,7 @@ constructor(
                     InvoicingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -18075,7 +18071,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -18377,7 +18373,7 @@ constructor(
                         "`groupedAllocationConfig` is required but was not set"
                     },
                     checkNotNull(currency) { "`currency` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -18505,7 +18501,7 @@ constructor(
                     }
 
                 fun build(): GroupedAllocationConfig =
-                    GroupedAllocationConfig(additionalProperties.toUnmodifiable())
+                    GroupedAllocationConfig(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -18649,7 +18645,7 @@ constructor(
                     BillingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -18804,7 +18800,7 @@ constructor(
                     InvoicingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -18933,7 +18929,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -19241,7 +19237,7 @@ constructor(
                         "`groupedWithProratedMinimumConfig` is required but was not set"
                     },
                     checkNotNull(currency) { "`currency` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -19371,7 +19367,7 @@ constructor(
                     }
 
                 fun build(): GroupedWithProratedMinimumConfig =
-                    GroupedWithProratedMinimumConfig(additionalProperties.toUnmodifiable())
+                    GroupedWithProratedMinimumConfig(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -19517,7 +19513,7 @@ constructor(
                     BillingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -19672,7 +19668,7 @@ constructor(
                     InvoicingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -19801,7 +19797,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -20106,7 +20102,7 @@ constructor(
                         "`groupedWithMeteredMinimumConfig` is required but was not set"
                     },
                     checkNotNull(currency) { "`currency` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -20236,7 +20232,7 @@ constructor(
                     }
 
                 fun build(): GroupedWithMeteredMinimumConfig =
-                    GroupedWithMeteredMinimumConfig(additionalProperties.toUnmodifiable())
+                    GroupedWithMeteredMinimumConfig(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -20382,7 +20378,7 @@ constructor(
                     BillingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -20537,7 +20533,7 @@ constructor(
                     InvoicingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -20666,7 +20662,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -20969,7 +20965,7 @@ constructor(
                         "`matrixWithDisplayNameConfig` is required but was not set"
                     },
                     checkNotNull(currency) { "`currency` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -21098,7 +21094,7 @@ constructor(
                     }
 
                 fun build(): MatrixWithDisplayNameConfig =
-                    MatrixWithDisplayNameConfig(additionalProperties.toUnmodifiable())
+                    MatrixWithDisplayNameConfig(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -21243,7 +21239,7 @@ constructor(
                     BillingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -21398,7 +21394,7 @@ constructor(
                     InvoicingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -21527,7 +21523,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -21829,7 +21825,7 @@ constructor(
                         "`bulkWithProrationConfig` is required but was not set"
                     },
                     checkNotNull(currency) { "`currency` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -21876,7 +21872,7 @@ constructor(
                     }
 
                 fun build(): BulkWithProrationConfig =
-                    BulkWithProrationConfig(additionalProperties.toUnmodifiable())
+                    BulkWithProrationConfig(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
@@ -22101,7 +22097,7 @@ constructor(
                     BillingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -22256,7 +22252,7 @@ constructor(
                     InvoicingCycleConfiguration(
                         checkNotNull(duration) { "`duration` is required but was not set" },
                         checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -22385,7 +22381,7 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {

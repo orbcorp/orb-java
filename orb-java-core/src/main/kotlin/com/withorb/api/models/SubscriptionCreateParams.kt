@@ -22,7 +22,7 @@ import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
 import com.withorb.api.core.getOrThrow
-import com.withorb.api.core.toUnmodifiable
+import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import com.withorb.api.models.*
 import java.time.OffsetDateTime
@@ -643,8 +643,8 @@ constructor(
 
             fun build(): SubscriptionCreateBody =
                 SubscriptionCreateBody(
-                    addAdjustments?.toUnmodifiable(),
-                    addPrices?.toUnmodifiable(),
+                    addAdjustments?.toImmutable(),
+                    addPrices?.toImmutable(),
                     alignBillingWithSubscriptionStartDate,
                     autoCollection,
                     awsRegion,
@@ -665,14 +665,14 @@ constructor(
                     perCreditOverageAmount,
                     planId,
                     planVersionNumber,
-                    priceOverrides?.toUnmodifiable(),
-                    removeAdjustments?.toUnmodifiable(),
-                    removePrices?.toUnmodifiable(),
-                    replaceAdjustments?.toUnmodifiable(),
-                    replacePrices?.toUnmodifiable(),
+                    priceOverrides?.toImmutable(),
+                    removeAdjustments?.toImmutable(),
+                    removePrices?.toImmutable(),
+                    replaceAdjustments?.toImmutable(),
+                    replacePrices?.toImmutable(),
                     startDate,
                     trialDurationDays,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -1082,8 +1082,8 @@ constructor(
 
         fun build(): SubscriptionCreateParams =
             SubscriptionCreateParams(
-                if (addAdjustments.size == 0) null else addAdjustments.toUnmodifiable(),
-                if (addPrices.size == 0) null else addPrices.toUnmodifiable(),
+                if (addAdjustments.size == 0) null else addAdjustments.toImmutable(),
+                if (addPrices.size == 0) null else addPrices.toImmutable(),
                 alignBillingWithSubscriptionStartDate,
                 autoCollection,
                 awsRegion,
@@ -1104,16 +1104,16 @@ constructor(
                 perCreditOverageAmount,
                 planId,
                 planVersionNumber,
-                if (priceOverrides.size == 0) null else priceOverrides.toUnmodifiable(),
-                if (removeAdjustments.size == 0) null else removeAdjustments.toUnmodifiable(),
-                if (removePrices.size == 0) null else removePrices.toUnmodifiable(),
-                if (replaceAdjustments.size == 0) null else replaceAdjustments.toUnmodifiable(),
-                if (replacePrices.size == 0) null else replacePrices.toUnmodifiable(),
+                if (priceOverrides.size == 0) null else priceOverrides.toImmutable(),
+                if (removeAdjustments.size == 0) null else removeAdjustments.toImmutable(),
+                if (removePrices.size == 0) null else removePrices.toImmutable(),
+                if (replaceAdjustments.size == 0) null else replaceAdjustments.toImmutable(),
+                if (replacePrices.size == 0) null else replacePrices.toImmutable(),
                 startDate,
                 trialDurationDays,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -1222,7 +1222,7 @@ constructor(
                     startDate,
                     endDate,
                     planPhaseOrder,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -1531,10 +1531,10 @@ constructor(
 
                     fun build(): NewPercentageDiscount =
                         NewPercentageDiscount(
-                            appliesToPriceIds.map { it.toUnmodifiable() },
+                            appliesToPriceIds.map { it.toImmutable() },
                             adjustmentType,
                             percentageDiscount,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -1727,10 +1727,10 @@ constructor(
 
                     fun build(): NewAmountDiscount =
                         NewAmountDiscount(
-                            appliesToPriceIds.map { it.toUnmodifiable() },
+                            appliesToPriceIds.map { it.toImmutable() },
                             adjustmentType,
                             amountDiscount,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -1938,11 +1938,11 @@ constructor(
 
                     fun build(): NewMinimum =
                         NewMinimum(
-                            appliesToPriceIds.map { it.toUnmodifiable() },
+                            appliesToPriceIds.map { it.toImmutable() },
                             adjustmentType,
                             minimumAmount,
                             itemId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -2131,10 +2131,10 @@ constructor(
 
                     fun build(): NewMaximum =
                         NewMaximum(
-                            appliesToPriceIds.map { it.toUnmodifiable() },
+                            appliesToPriceIds.map { it.toImmutable() },
                             adjustmentType,
                             maximumAmount,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -2390,8 +2390,8 @@ constructor(
                     planPhaseOrder,
                     minimumAmount,
                     maximumAmount,
-                    discounts?.toUnmodifiable(),
-                    additionalProperties.toUnmodifiable(),
+                    discounts?.toImmutable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -2501,7 +2501,7 @@ constructor(
                         percentageDiscount,
                         usageDiscount,
                         amountDiscount,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -3980,7 +3980,7 @@ constructor(
                             unitConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -4190,7 +4190,7 @@ constructor(
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
                         fun build(): UnitConfig =
-                            UnitConfig(unitAmount, additionalProperties.toUnmodifiable())
+                            UnitConfig(unitAmount, additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -4315,7 +4315,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -4501,7 +4501,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -4641,7 +4641,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -5207,7 +5207,7 @@ constructor(
                             packageConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -5455,7 +5455,7 @@ constructor(
                             PackageConfig(
                                 packageAmount,
                                 packageSize,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -5581,7 +5581,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -5767,7 +5767,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -5907,7 +5907,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -6473,7 +6473,7 @@ constructor(
                             matrixConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -6693,10 +6693,10 @@ constructor(
 
                         fun build(): MatrixConfig =
                             MatrixConfig(
-                                dimensions.map { it.toUnmodifiable() },
+                                dimensions.map { it.toImmutable() },
                                 defaultUnitAmount,
-                                matrixValues.map { it.toUnmodifiable() },
-                                additionalProperties.toUnmodifiable(),
+                                matrixValues.map { it.toImmutable() },
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -6815,8 +6815,8 @@ constructor(
                             fun build(): MatrixValue =
                                 MatrixValue(
                                     unitAmount,
-                                    dimensionValues.map { it.toUnmodifiable() },
-                                    additionalProperties.toUnmodifiable(),
+                                    dimensionValues.map { it.toImmutable() },
+                                    additionalProperties.toImmutable(),
                                 )
                         }
 
@@ -7015,7 +7015,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -7201,7 +7201,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -7341,7 +7341,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -7907,7 +7907,7 @@ constructor(
                             tieredConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -8120,8 +8120,8 @@ constructor(
 
                         fun build(): TieredConfig =
                             TieredConfig(
-                                tiers.map { it.toUnmodifiable() },
-                                additionalProperties.toUnmodifiable()
+                                tiers.map { it.toImmutable() },
+                                additionalProperties.toImmutable()
                             )
                     }
 
@@ -8253,7 +8253,7 @@ constructor(
                                     firstUnit,
                                     lastUnit,
                                     unitAmount,
-                                    additionalProperties.toUnmodifiable(),
+                                    additionalProperties.toImmutable(),
                                 )
                         }
 
@@ -8400,7 +8400,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -8586,7 +8586,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -8726,7 +8726,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -9296,7 +9296,7 @@ constructor(
                             tieredBpsConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -9517,8 +9517,8 @@ constructor(
 
                         fun build(): TieredBpsConfig =
                             TieredBpsConfig(
-                                tiers.map { it.toUnmodifiable() },
-                                additionalProperties.toUnmodifiable()
+                                tiers.map { it.toImmutable() },
+                                additionalProperties.toImmutable()
                             )
                     }
 
@@ -9668,7 +9668,7 @@ constructor(
                                     maximumAmount,
                                     bps,
                                     perUnitMaximum,
-                                    additionalProperties.toUnmodifiable(),
+                                    additionalProperties.toImmutable(),
                                 )
                         }
 
@@ -9815,7 +9815,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -10001,7 +10001,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -10141,7 +10141,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -10705,7 +10705,7 @@ constructor(
                             bpsConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -10806,7 +10806,7 @@ constructor(
                             BpsConfig(
                                 bps,
                                 perUnitMaximum,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -11066,7 +11066,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -11252,7 +11252,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -11392,7 +11392,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -11960,7 +11960,7 @@ constructor(
                             bulkBpsConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -12047,8 +12047,8 @@ constructor(
 
                         fun build(): BulkBpsConfig =
                             BulkBpsConfig(
-                                tiers.map { it.toUnmodifiable() },
-                                additionalProperties.toUnmodifiable()
+                                tiers.map { it.toImmutable() },
+                                additionalProperties.toImmutable()
                             )
                     }
 
@@ -12174,7 +12174,7 @@ constructor(
                                     maximumAmount,
                                     bps,
                                     perUnitMaximum,
-                                    additionalProperties.toUnmodifiable(),
+                                    additionalProperties.toImmutable(),
                                 )
                         }
 
@@ -12455,7 +12455,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -12641,7 +12641,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -12781,7 +12781,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -13345,7 +13345,7 @@ constructor(
                             bulkConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -13420,8 +13420,8 @@ constructor(
 
                         fun build(): BulkConfig =
                             BulkConfig(
-                                tiers.map { it.toUnmodifiable() },
-                                additionalProperties.toUnmodifiable()
+                                tiers.map { it.toImmutable() },
+                                additionalProperties.toImmutable()
                             )
                     }
 
@@ -13525,7 +13525,7 @@ constructor(
                                 Tier(
                                     maximumUnits,
                                     unitAmount,
-                                    additionalProperties.toUnmodifiable(),
+                                    additionalProperties.toImmutable(),
                                 )
                         }
 
@@ -13806,7 +13806,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -13992,7 +13992,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -14132,7 +14132,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -14714,7 +14714,7 @@ constructor(
                             thresholdTotalAmountConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -14909,7 +14909,7 @@ constructor(
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
                         fun build(): ThresholdTotalAmountConfig =
-                            ThresholdTotalAmountConfig(additionalProperties.toUnmodifiable())
+                            ThresholdTotalAmountConfig(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -15034,7 +15034,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -15220,7 +15220,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -15360,7 +15360,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -15935,7 +15935,7 @@ constructor(
                             tieredPackageConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -16125,7 +16125,7 @@ constructor(
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
                         fun build(): TieredPackageConfig =
-                            TieredPackageConfig(additionalProperties.toUnmodifiable())
+                            TieredPackageConfig(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -16250,7 +16250,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -16436,7 +16436,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -16576,7 +16576,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -17153,7 +17153,7 @@ constructor(
                             tieredWithMinimumConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -17345,7 +17345,7 @@ constructor(
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
                         fun build(): TieredWithMinimumConfig =
-                            TieredWithMinimumConfig(additionalProperties.toUnmodifiable())
+                            TieredWithMinimumConfig(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -17470,7 +17470,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -17656,7 +17656,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -17796,7 +17796,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -18372,7 +18372,7 @@ constructor(
                             unitWithPercentConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -18563,7 +18563,7 @@ constructor(
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
                         fun build(): UnitWithPercentConfig =
-                            UnitWithPercentConfig(additionalProperties.toUnmodifiable())
+                            UnitWithPercentConfig(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -18688,7 +18688,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -18874,7 +18874,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -19014,7 +19014,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -19597,7 +19597,7 @@ constructor(
                             packageWithAllocationConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -19791,7 +19791,7 @@ constructor(
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
                         fun build(): PackageWithAllocationConfig =
-                            PackageWithAllocationConfig(additionalProperties.toUnmodifiable())
+                            PackageWithAllocationConfig(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -19916,7 +19916,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -20102,7 +20102,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -20242,7 +20242,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -20820,7 +20820,7 @@ constructor(
                             tieredWithProrationConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -21012,7 +21012,7 @@ constructor(
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
                         fun build(): TieredWithProrationConfig =
-                            TieredWithProrationConfig(additionalProperties.toUnmodifiable())
+                            TieredWithProrationConfig(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -21137,7 +21137,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -21323,7 +21323,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -21463,7 +21463,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -22040,7 +22040,7 @@ constructor(
                             unitWithProrationConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -22232,7 +22232,7 @@ constructor(
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
                         fun build(): UnitWithProrationConfig =
-                            UnitWithProrationConfig(additionalProperties.toUnmodifiable())
+                            UnitWithProrationConfig(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -22357,7 +22357,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -22543,7 +22543,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -22683,7 +22683,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -23260,7 +23260,7 @@ constructor(
                             groupedAllocationConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -23399,7 +23399,7 @@ constructor(
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
                         fun build(): GroupedAllocationConfig =
-                            GroupedAllocationConfig(additionalProperties.toUnmodifiable())
+                            GroupedAllocationConfig(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -23577,7 +23577,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -23763,7 +23763,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -23903,7 +23903,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -24500,7 +24500,7 @@ constructor(
                             groupedWithProratedMinimumConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -24642,7 +24642,7 @@ constructor(
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
                         fun build(): GroupedWithProratedMinimumConfig =
-                            GroupedWithProratedMinimumConfig(additionalProperties.toUnmodifiable())
+                            GroupedWithProratedMinimumConfig(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -24821,7 +24821,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -25007,7 +25007,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -25147,7 +25147,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -25724,7 +25724,7 @@ constructor(
                             bulkWithProrationConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -25781,7 +25781,7 @@ constructor(
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
                         fun build(): BulkWithProrationConfig =
-                            BulkWithProrationConfig(additionalProperties.toUnmodifiable())
+                            BulkWithProrationConfig(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -26041,7 +26041,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -26227,7 +26227,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -26367,7 +26367,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -26529,7 +26529,7 @@ constructor(
                     checkNotNull(day) { "`day` is required but was not set" },
                     month,
                     year,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -26663,7 +26663,7 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+            fun build(): Metadata = Metadata(additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -26740,7 +26740,7 @@ constructor(
             fun build(): RemoveAdjustment =
                 RemoveAdjustment(
                     checkNotNull(adjustmentId) { "`adjustmentId` is required but was not set" },
-                    additionalProperties.toUnmodifiable()
+                    additionalProperties.toImmutable()
                 )
         }
 
@@ -26832,7 +26832,7 @@ constructor(
                 RemovePrice(
                     priceId,
                     externalPriceId,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -26927,7 +26927,7 @@ constructor(
                     checkNotNull(replacesAdjustmentId) {
                         "`replacesAdjustmentId` is required but was not set"
                     },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -27236,10 +27236,10 @@ constructor(
 
                     fun build(): NewPercentageDiscount =
                         NewPercentageDiscount(
-                            appliesToPriceIds.map { it.toUnmodifiable() },
+                            appliesToPriceIds.map { it.toImmutable() },
                             adjustmentType,
                             percentageDiscount,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -27432,10 +27432,10 @@ constructor(
 
                     fun build(): NewAmountDiscount =
                         NewAmountDiscount(
-                            appliesToPriceIds.map { it.toUnmodifiable() },
+                            appliesToPriceIds.map { it.toImmutable() },
                             adjustmentType,
                             amountDiscount,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -27643,11 +27643,11 @@ constructor(
 
                     fun build(): NewMinimum =
                         NewMinimum(
-                            appliesToPriceIds.map { it.toUnmodifiable() },
+                            appliesToPriceIds.map { it.toImmutable() },
                             adjustmentType,
                             minimumAmount,
                             itemId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -27836,10 +27836,10 @@ constructor(
 
                     fun build(): NewMaximum =
                         NewMaximum(
-                            appliesToPriceIds.map { it.toUnmodifiable() },
+                            appliesToPriceIds.map { it.toImmutable() },
                             adjustmentType,
                             maximumAmount,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -28075,8 +28075,8 @@ constructor(
                     },
                     minimumAmount,
                     maximumAmount,
-                    discounts?.toUnmodifiable(),
-                    additionalProperties.toUnmodifiable(),
+                    discounts?.toImmutable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -28186,7 +28186,7 @@ constructor(
                         percentageDiscount,
                         usageDiscount,
                         amountDiscount,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -29665,7 +29665,7 @@ constructor(
                             unitConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -29875,7 +29875,7 @@ constructor(
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
                         fun build(): UnitConfig =
-                            UnitConfig(unitAmount, additionalProperties.toUnmodifiable())
+                            UnitConfig(unitAmount, additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -30000,7 +30000,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -30186,7 +30186,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -30326,7 +30326,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -30892,7 +30892,7 @@ constructor(
                             packageConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -31140,7 +31140,7 @@ constructor(
                             PackageConfig(
                                 packageAmount,
                                 packageSize,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -31266,7 +31266,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -31452,7 +31452,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -31592,7 +31592,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -32158,7 +32158,7 @@ constructor(
                             matrixConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -32378,10 +32378,10 @@ constructor(
 
                         fun build(): MatrixConfig =
                             MatrixConfig(
-                                dimensions.map { it.toUnmodifiable() },
+                                dimensions.map { it.toImmutable() },
                                 defaultUnitAmount,
-                                matrixValues.map { it.toUnmodifiable() },
-                                additionalProperties.toUnmodifiable(),
+                                matrixValues.map { it.toImmutable() },
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -32500,8 +32500,8 @@ constructor(
                             fun build(): MatrixValue =
                                 MatrixValue(
                                     unitAmount,
-                                    dimensionValues.map { it.toUnmodifiable() },
-                                    additionalProperties.toUnmodifiable(),
+                                    dimensionValues.map { it.toImmutable() },
+                                    additionalProperties.toImmutable(),
                                 )
                         }
 
@@ -32700,7 +32700,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -32886,7 +32886,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -33026,7 +33026,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -33592,7 +33592,7 @@ constructor(
                             tieredConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -33805,8 +33805,8 @@ constructor(
 
                         fun build(): TieredConfig =
                             TieredConfig(
-                                tiers.map { it.toUnmodifiable() },
-                                additionalProperties.toUnmodifiable()
+                                tiers.map { it.toImmutable() },
+                                additionalProperties.toImmutable()
                             )
                     }
 
@@ -33938,7 +33938,7 @@ constructor(
                                     firstUnit,
                                     lastUnit,
                                     unitAmount,
-                                    additionalProperties.toUnmodifiable(),
+                                    additionalProperties.toImmutable(),
                                 )
                         }
 
@@ -34085,7 +34085,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -34271,7 +34271,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -34411,7 +34411,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -34981,7 +34981,7 @@ constructor(
                             tieredBpsConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -35202,8 +35202,8 @@ constructor(
 
                         fun build(): TieredBpsConfig =
                             TieredBpsConfig(
-                                tiers.map { it.toUnmodifiable() },
-                                additionalProperties.toUnmodifiable()
+                                tiers.map { it.toImmutable() },
+                                additionalProperties.toImmutable()
                             )
                     }
 
@@ -35353,7 +35353,7 @@ constructor(
                                     maximumAmount,
                                     bps,
                                     perUnitMaximum,
-                                    additionalProperties.toUnmodifiable(),
+                                    additionalProperties.toImmutable(),
                                 )
                         }
 
@@ -35500,7 +35500,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -35686,7 +35686,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -35826,7 +35826,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -36390,7 +36390,7 @@ constructor(
                             bpsConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -36491,7 +36491,7 @@ constructor(
                             BpsConfig(
                                 bps,
                                 perUnitMaximum,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -36751,7 +36751,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -36937,7 +36937,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -37077,7 +37077,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -37645,7 +37645,7 @@ constructor(
                             bulkBpsConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -37732,8 +37732,8 @@ constructor(
 
                         fun build(): BulkBpsConfig =
                             BulkBpsConfig(
-                                tiers.map { it.toUnmodifiable() },
-                                additionalProperties.toUnmodifiable()
+                                tiers.map { it.toImmutable() },
+                                additionalProperties.toImmutable()
                             )
                     }
 
@@ -37859,7 +37859,7 @@ constructor(
                                     maximumAmount,
                                     bps,
                                     perUnitMaximum,
-                                    additionalProperties.toUnmodifiable(),
+                                    additionalProperties.toImmutable(),
                                 )
                         }
 
@@ -38140,7 +38140,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -38326,7 +38326,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -38466,7 +38466,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -39030,7 +39030,7 @@ constructor(
                             bulkConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -39105,8 +39105,8 @@ constructor(
 
                         fun build(): BulkConfig =
                             BulkConfig(
-                                tiers.map { it.toUnmodifiable() },
-                                additionalProperties.toUnmodifiable()
+                                tiers.map { it.toImmutable() },
+                                additionalProperties.toImmutable()
                             )
                     }
 
@@ -39210,7 +39210,7 @@ constructor(
                                 Tier(
                                     maximumUnits,
                                     unitAmount,
-                                    additionalProperties.toUnmodifiable(),
+                                    additionalProperties.toImmutable(),
                                 )
                         }
 
@@ -39491,7 +39491,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -39677,7 +39677,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -39817,7 +39817,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -40399,7 +40399,7 @@ constructor(
                             thresholdTotalAmountConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -40594,7 +40594,7 @@ constructor(
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
                         fun build(): ThresholdTotalAmountConfig =
-                            ThresholdTotalAmountConfig(additionalProperties.toUnmodifiable())
+                            ThresholdTotalAmountConfig(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -40719,7 +40719,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -40905,7 +40905,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -41045,7 +41045,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -41620,7 +41620,7 @@ constructor(
                             tieredPackageConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -41810,7 +41810,7 @@ constructor(
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
                         fun build(): TieredPackageConfig =
-                            TieredPackageConfig(additionalProperties.toUnmodifiable())
+                            TieredPackageConfig(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -41935,7 +41935,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -42121,7 +42121,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -42261,7 +42261,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -42838,7 +42838,7 @@ constructor(
                             tieredWithMinimumConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -43030,7 +43030,7 @@ constructor(
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
                         fun build(): TieredWithMinimumConfig =
-                            TieredWithMinimumConfig(additionalProperties.toUnmodifiable())
+                            TieredWithMinimumConfig(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -43155,7 +43155,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -43341,7 +43341,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -43481,7 +43481,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -44057,7 +44057,7 @@ constructor(
                             unitWithPercentConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -44248,7 +44248,7 @@ constructor(
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
                         fun build(): UnitWithPercentConfig =
-                            UnitWithPercentConfig(additionalProperties.toUnmodifiable())
+                            UnitWithPercentConfig(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -44373,7 +44373,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -44559,7 +44559,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -44699,7 +44699,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -45282,7 +45282,7 @@ constructor(
                             packageWithAllocationConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -45476,7 +45476,7 @@ constructor(
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
                         fun build(): PackageWithAllocationConfig =
-                            PackageWithAllocationConfig(additionalProperties.toUnmodifiable())
+                            PackageWithAllocationConfig(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -45601,7 +45601,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -45787,7 +45787,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -45927,7 +45927,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -46505,7 +46505,7 @@ constructor(
                             tieredWithProrationConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -46697,7 +46697,7 @@ constructor(
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
                         fun build(): TieredWithProrationConfig =
-                            TieredWithProrationConfig(additionalProperties.toUnmodifiable())
+                            TieredWithProrationConfig(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -46822,7 +46822,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -47008,7 +47008,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -47148,7 +47148,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -47725,7 +47725,7 @@ constructor(
                             unitWithProrationConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -47917,7 +47917,7 @@ constructor(
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
                         fun build(): UnitWithProrationConfig =
-                            UnitWithProrationConfig(additionalProperties.toUnmodifiable())
+                            UnitWithProrationConfig(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -48042,7 +48042,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -48228,7 +48228,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -48368,7 +48368,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -48945,7 +48945,7 @@ constructor(
                             groupedAllocationConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -49084,7 +49084,7 @@ constructor(
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
                         fun build(): GroupedAllocationConfig =
-                            GroupedAllocationConfig(additionalProperties.toUnmodifiable())
+                            GroupedAllocationConfig(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -49262,7 +49262,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -49448,7 +49448,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -49588,7 +49588,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -50185,7 +50185,7 @@ constructor(
                             groupedWithProratedMinimumConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -50327,7 +50327,7 @@ constructor(
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
                         fun build(): GroupedWithProratedMinimumConfig =
-                            GroupedWithProratedMinimumConfig(additionalProperties.toUnmodifiable())
+                            GroupedWithProratedMinimumConfig(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -50506,7 +50506,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -50692,7 +50692,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -50832,7 +50832,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -51409,7 +51409,7 @@ constructor(
                             bulkWithProrationConfig,
                             currency,
                             referenceId,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -51466,7 +51466,7 @@ constructor(
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
                         fun build(): BulkWithProrationConfig =
-                            BulkWithProrationConfig(additionalProperties.toUnmodifiable())
+                            BulkWithProrationConfig(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -51726,7 +51726,7 @@ constructor(
                             BillingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -51912,7 +51912,7 @@ constructor(
                             InvoicingCycleConfiguration(
                                 duration,
                                 durationUnit,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -52052,7 +52052,7 @@ constructor(
                             additionalProperties: Map<String, JsonValue>
                         ) = apply { this.additionalProperties.putAll(additionalProperties) }
 
-                        fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+                        fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                     }
 
                     override fun equals(other: Any?): Boolean {

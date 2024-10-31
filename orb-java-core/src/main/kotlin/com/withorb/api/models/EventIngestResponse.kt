@@ -11,7 +11,7 @@ import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
-import com.withorb.api.core.toUnmodifiable
+import com.withorb.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
@@ -131,8 +131,8 @@ private constructor(
         fun build(): EventIngestResponse =
             EventIngestResponse(
                 debug,
-                validationFailed.map { it.toUnmodifiable() },
-                additionalProperties.toUnmodifiable(),
+                validationFailed.map { it.toImmutable() },
+                additionalProperties.toImmutable(),
             )
     }
 
@@ -236,8 +236,8 @@ private constructor(
             fun build(): ValidationFailed =
                 ValidationFailed(
                     idempotencyKey,
-                    validationErrors.map { it.toUnmodifiable() },
-                    additionalProperties.toUnmodifiable(),
+                    validationErrors.map { it.toImmutable() },
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -345,9 +345,9 @@ private constructor(
 
             fun build(): Debug =
                 Debug(
-                    duplicate.map { it.toUnmodifiable() },
-                    ingested.map { it.toUnmodifiable() },
-                    additionalProperties.toUnmodifiable(),
+                    duplicate.map { it.toImmutable() },
+                    ingested.map { it.toImmutable() },
+                    additionalProperties.toImmutable(),
                 )
         }
 

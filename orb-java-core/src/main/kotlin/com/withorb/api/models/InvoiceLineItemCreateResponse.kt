@@ -22,7 +22,7 @@ import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
 import com.withorb.api.core.getOrThrow
-import com.withorb.api.core.toUnmodifiable
+import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -1310,11 +1310,11 @@ private constructor(
                 quantity,
                 startDate,
                 subtotal,
-                subLineItems.map { it.toUnmodifiable() },
-                taxAmounts.map { it.toUnmodifiable() },
+                subLineItems.map { it.toImmutable() },
+                taxAmounts.map { it.toImmutable() },
                 id,
                 price,
-                additionalProperties.toUnmodifiable(),
+                additionalProperties.toImmutable(),
             )
     }
 
@@ -1426,8 +1426,8 @@ private constructor(
             fun build(): Maximum =
                 Maximum(
                     maximumAmount,
-                    appliesToPriceIds.map { it.toUnmodifiable() },
-                    additionalProperties.toUnmodifiable(),
+                    appliesToPriceIds.map { it.toImmutable() },
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -1560,8 +1560,8 @@ private constructor(
             fun build(): Minimum =
                 Minimum(
                     minimumAmount,
-                    appliesToPriceIds.map { it.toUnmodifiable() },
-                    additionalProperties.toUnmodifiable(),
+                    appliesToPriceIds.map { it.toImmutable() },
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -1892,7 +1892,7 @@ private constructor(
                         grouping,
                         type,
                         matrixConfig,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -1982,7 +1982,7 @@ private constructor(
                         Grouping(
                             key,
                             value,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -2083,8 +2083,8 @@ private constructor(
 
                     fun build(): MatrixConfig =
                         MatrixConfig(
-                            dimensionValues.map { it.toUnmodifiable() },
-                            additionalProperties.toUnmodifiable()
+                            dimensionValues.map { it.toImmutable() },
+                            additionalProperties.toImmutable()
                         )
                 }
 
@@ -2330,7 +2330,7 @@ private constructor(
                         grouping,
                         type,
                         tierConfig,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -2420,7 +2420,7 @@ private constructor(
                         Grouping(
                             key,
                             value,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -2547,7 +2547,7 @@ private constructor(
                             firstUnit,
                             lastUnit,
                             unitAmount,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -2776,7 +2776,7 @@ private constructor(
                         quantity,
                         grouping,
                         type,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -2866,7 +2866,7 @@ private constructor(
                         Grouping(
                             key,
                             value,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -3083,7 +3083,7 @@ private constructor(
                     taxRateDescription,
                     taxRatePercentage,
                     amount,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 

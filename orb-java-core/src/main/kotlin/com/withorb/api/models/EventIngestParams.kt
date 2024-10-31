@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
-import com.withorb.api.core.toUnmodifiable
+import com.withorb.api.core.toImmutable
 import com.withorb.api.models.*
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -42,7 +42,7 @@ constructor(
         this.backfillId?.let { params.put("backfill_id", listOf(it.toString())) }
         this.debug?.let { params.put("debug", listOf(it.toString())) }
         params.putAll(additionalQueryParams)
-        return params.toUnmodifiable()
+        return params.toImmutable()
     }
 
     @JvmSynthetic internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
@@ -97,9 +97,8 @@ constructor(
 
             fun build(): EventIngestBody =
                 EventIngestBody(
-                    checkNotNull(events) { "`events` is required but was not set" }
-                        .toUnmodifiable(),
-                    additionalProperties.toUnmodifiable()
+                    checkNotNull(events) { "`events` is required but was not set" }.toImmutable(),
+                    additionalProperties.toImmutable()
                 )
         }
 
@@ -244,12 +243,12 @@ constructor(
 
         fun build(): EventIngestParams =
             EventIngestParams(
-                checkNotNull(events) { "`events` is required but was not set" }.toUnmodifiable(),
+                checkNotNull(events) { "`events` is required but was not set" }.toImmutable(),
                 backfillId,
                 debug,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -390,7 +389,7 @@ constructor(
                     checkNotNull(timestamp) { "`timestamp` is required but was not set" },
                     checkNotNull(properties) { "`properties` is required but was not set" },
                     checkNotNull(idempotencyKey) { "`idempotencyKey` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
