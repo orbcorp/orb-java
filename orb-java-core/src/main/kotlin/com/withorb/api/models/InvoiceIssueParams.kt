@@ -53,7 +53,9 @@ constructor(
 
         /**
          * If true, the invoice will be issued synchronously. If false, the invoice will be issued
-         * asynchronously.
+         * asynchronously. The synchronous option is only available for invoices containin no usage
+         * fees. If the invoice is configured to sync to an external provider, a successful response
+         * from this endpoint guarantees the invoice is present in the provider.
          */
         @JsonProperty("synchronous") fun synchronous(): Boolean? = synchronous
 
@@ -81,7 +83,10 @@ constructor(
 
             /**
              * If true, the invoice will be issued synchronously. If false, the invoice will be
-             * issued asynchronously.
+             * issued asynchronously. The synchronous option is only available for invoices
+             * containin no usage fees. If the invoice is configured to sync to an external
+             * provider, a successful response from this endpoint guarantees the invoice is present
+             * in the provider.
              */
             @JsonProperty("synchronous")
             fun synchronous(synchronous: Boolean) = apply { this.synchronous = synchronous }
@@ -175,7 +180,9 @@ constructor(
 
         /**
          * If true, the invoice will be issued synchronously. If false, the invoice will be issued
-         * asynchronously.
+         * asynchronously. The synchronous option is only available for invoices containin no usage
+         * fees. If the invoice is configured to sync to an external provider, a successful response
+         * from this endpoint guarantees the invoice is present in the provider.
          */
         fun synchronous(synchronous: Boolean) = apply { this.synchronous = synchronous }
 

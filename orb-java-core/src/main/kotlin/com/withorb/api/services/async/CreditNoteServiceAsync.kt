@@ -6,12 +6,22 @@ package com.withorb.api.services.async
 
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.models.CreditNote
+import com.withorb.api.models.CreditNoteCreateParams
 import com.withorb.api.models.CreditNoteFetchParams
 import com.withorb.api.models.CreditNoteListPageAsync
 import com.withorb.api.models.CreditNoteListParams
 import java.util.concurrent.CompletableFuture
 
 interface CreditNoteServiceAsync {
+
+    /**
+     * This endpoint is used to create a single [`Credit Note`](../guides/invoicing/credit-notes).
+     */
+    @JvmOverloads
+    fun create(
+        params: CreditNoteCreateParams,
+        requestOptions: RequestOptions = RequestOptions.none()
+    ): CompletableFuture<CreditNote>
 
     /**
      * Get a paginated list of CreditNotes. Users can also filter by customer_id, subscription_id,
