@@ -101,19 +101,17 @@ private constructor(
             putAllQueryParams(queryParams)
         }
 
-        fun putQueryParam(name: String, value: String) = apply {
-            this.queryParams.getOrPut(name) { mutableListOf() }.add(value)
-        }
+        fun putQueryParam(key: String, value: String) = apply { queryParams.put(key, value) }
 
-        fun putQueryParams(name: String, values: Iterable<String>) = apply {
-            this.queryParams.getOrPut(name) { mutableListOf() }.addAll(values)
+        fun putQueryParams(key: String, values: Iterable<String>) = apply {
+            queryParams.putAll(key, values)
         }
 
         fun putAllQueryParams(queryParams: Map<String, Iterable<String>>) = apply {
             queryParams.forEach(this::putQueryParams)
         }
 
-        fun removeQueryParam(name: String) = apply { this.queryParams.put(name, mutableListOf()) }
+        fun removeQueryParam(key: String) = apply { queryParams.removeAll(key) }
 
         fun responseValidation(responseValidation: Boolean) = apply {
             this.responseValidation = responseValidation

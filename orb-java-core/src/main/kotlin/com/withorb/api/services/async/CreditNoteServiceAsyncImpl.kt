@@ -10,8 +10,10 @@ import com.withorb.api.core.handlers.withErrorHandler
 import com.withorb.api.core.http.HttpMethod
 import com.withorb.api.core.http.HttpRequest
 import com.withorb.api.core.http.HttpResponse.Handler
+import com.withorb.api.core.json
 import com.withorb.api.errors.OrbError
 import com.withorb.api.models.CreditNote
+import com.withorb.api.models.CreditNoteCreateParams
 import com.withorb.api.models.CreditNoteFetchParams
 import com.withorb.api.models.CreditNoteListPageAsync
 import com.withorb.api.models.CreditNoteListParams
@@ -23,6 +25,38 @@ constructor(
 ) : CreditNoteServiceAsync {
 
     private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
+
+    private val createHandler: Handler<CreditNote> =
+        jsonHandler<CreditNote>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
+    /**
+     * This endpoint is used to create a single [`Credit Note`](../guides/invoicing/credit-notes).
+     */
+    override fun create(
+        params: CreditNoteCreateParams,
+        requestOptions: RequestOptions
+    ): CompletableFuture<CreditNote> {
+        val request =
+            HttpRequest.builder()
+                .method(HttpMethod.POST)
+                .addPathSegments("credit_notes")
+                .putAllQueryParams(clientOptions.queryParams)
+                .putAllQueryParams(params.getQueryParams())
+                .putAllHeaders(clientOptions.headers)
+                .putAllHeaders(params.getHeaders())
+                .body(json(clientOptions.jsonMapper, params.getBody()))
+                .build()
+        return clientOptions.httpClient.executeAsync(request, requestOptions).thenApply { response
+            ->
+            response
+                .use { createHandler.handle(it) }
+                .apply {
+                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
+                        validate()
+                    }
+                }
+        }
+    }
 
     private val listHandler: Handler<CreditNoteListPageAsync.Response> =
         jsonHandler<CreditNoteListPageAsync.Response>(clientOptions.jsonMapper)
