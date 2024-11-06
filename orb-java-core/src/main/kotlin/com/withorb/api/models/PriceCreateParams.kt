@@ -13,6 +13,8 @@ import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.google.common.collect.ArrayListMultimap
+import com.google.common.collect.ListMultimap
 import com.withorb.api.core.BaseDeserializer
 import com.withorb.api.core.BaseSerializer
 import com.withorb.api.core.Enum
@@ -55,8 +57,8 @@ constructor(
         NewFloatingGroupedWithMeteredMinimumPrice?,
     private val newFloatingMatrixWithDisplayNamePrice: NewFloatingMatrixWithDisplayNamePrice?,
     private val newFloatingBulkWithProrationPrice: NewFloatingBulkWithProrationPrice?,
-    private val additionalQueryParams: Map<String, List<String>>,
     private val additionalHeaders: Map<String, List<String>>,
+    private val additionalQueryParams: Map<String, List<String>>,
 ) {
 
     fun newFloatingUnitPrice(): Optional<NewFloatingUnitPrice> =
@@ -160,9 +162,9 @@ constructor(
         )
     }
 
-    @JvmSynthetic internal fun getQueryParams(): Map<String, List<String>> = additionalQueryParams
-
     @JvmSynthetic internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
+
+    @JvmSynthetic internal fun getQueryParams(): Map<String, List<String>> = additionalQueryParams
 
     @JsonDeserialize(using = PriceCreateBody.Deserializer::class)
     @JsonSerialize(using = PriceCreateBody.Serializer::class)
@@ -1053,24 +1055,24 @@ constructor(
         }
     }
 
-    fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
-
     fun _additionalHeaders(): Map<String, List<String>> = additionalHeaders
+
+    fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is PriceCreateParams && this.newFloatingUnitPrice == other.newFloatingUnitPrice && this.newFloatingPackagePrice == other.newFloatingPackagePrice && this.newFloatingMatrixPrice == other.newFloatingMatrixPrice && this.newFloatingMatrixWithAllocationPrice == other.newFloatingMatrixWithAllocationPrice && this.newFloatingTieredPrice == other.newFloatingTieredPrice && this.newFloatingTieredBpsPrice == other.newFloatingTieredBpsPrice && this.newFloatingBpsPrice == other.newFloatingBpsPrice && this.newFloatingBulkBpsPrice == other.newFloatingBulkBpsPrice && this.newFloatingBulkPrice == other.newFloatingBulkPrice && this.newFloatingThresholdTotalAmountPrice == other.newFloatingThresholdTotalAmountPrice && this.newFloatingTieredPackagePrice == other.newFloatingTieredPackagePrice && this.newFloatingGroupedTieredPrice == other.newFloatingGroupedTieredPrice && this.newFloatingTieredWithMinimumPrice == other.newFloatingTieredWithMinimumPrice && this.newFloatingPackageWithAllocationPrice == other.newFloatingPackageWithAllocationPrice && this.newFloatingTieredPackageWithMinimumPrice == other.newFloatingTieredPackageWithMinimumPrice && this.newFloatingUnitWithPercentPrice == other.newFloatingUnitWithPercentPrice && this.newFloatingTieredWithProrationPrice == other.newFloatingTieredWithProrationPrice && this.newFloatingUnitWithProrationPrice == other.newFloatingUnitWithProrationPrice && this.newFloatingGroupedAllocationPrice == other.newFloatingGroupedAllocationPrice && this.newFloatingGroupedWithProratedMinimumPrice == other.newFloatingGroupedWithProratedMinimumPrice && this.newFloatingGroupedWithMeteredMinimumPrice == other.newFloatingGroupedWithMeteredMinimumPrice && this.newFloatingMatrixWithDisplayNamePrice == other.newFloatingMatrixWithDisplayNamePrice && this.newFloatingBulkWithProrationPrice == other.newFloatingBulkWithProrationPrice && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders /* spotless:on */
+        return /* spotless:off */ other is PriceCreateParams && this.newFloatingUnitPrice == other.newFloatingUnitPrice && this.newFloatingPackagePrice == other.newFloatingPackagePrice && this.newFloatingMatrixPrice == other.newFloatingMatrixPrice && this.newFloatingMatrixWithAllocationPrice == other.newFloatingMatrixWithAllocationPrice && this.newFloatingTieredPrice == other.newFloatingTieredPrice && this.newFloatingTieredBpsPrice == other.newFloatingTieredBpsPrice && this.newFloatingBpsPrice == other.newFloatingBpsPrice && this.newFloatingBulkBpsPrice == other.newFloatingBulkBpsPrice && this.newFloatingBulkPrice == other.newFloatingBulkPrice && this.newFloatingThresholdTotalAmountPrice == other.newFloatingThresholdTotalAmountPrice && this.newFloatingTieredPackagePrice == other.newFloatingTieredPackagePrice && this.newFloatingGroupedTieredPrice == other.newFloatingGroupedTieredPrice && this.newFloatingTieredWithMinimumPrice == other.newFloatingTieredWithMinimumPrice && this.newFloatingPackageWithAllocationPrice == other.newFloatingPackageWithAllocationPrice && this.newFloatingTieredPackageWithMinimumPrice == other.newFloatingTieredPackageWithMinimumPrice && this.newFloatingUnitWithPercentPrice == other.newFloatingUnitWithPercentPrice && this.newFloatingTieredWithProrationPrice == other.newFloatingTieredWithProrationPrice && this.newFloatingUnitWithProrationPrice == other.newFloatingUnitWithProrationPrice && this.newFloatingGroupedAllocationPrice == other.newFloatingGroupedAllocationPrice && this.newFloatingGroupedWithProratedMinimumPrice == other.newFloatingGroupedWithProratedMinimumPrice && this.newFloatingGroupedWithMeteredMinimumPrice == other.newFloatingGroupedWithMeteredMinimumPrice && this.newFloatingMatrixWithDisplayNamePrice == other.newFloatingMatrixWithDisplayNamePrice && this.newFloatingBulkWithProrationPrice == other.newFloatingBulkWithProrationPrice && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(newFloatingUnitPrice, newFloatingPackagePrice, newFloatingMatrixPrice, newFloatingMatrixWithAllocationPrice, newFloatingTieredPrice, newFloatingTieredBpsPrice, newFloatingBpsPrice, newFloatingBulkBpsPrice, newFloatingBulkPrice, newFloatingThresholdTotalAmountPrice, newFloatingTieredPackagePrice, newFloatingGroupedTieredPrice, newFloatingTieredWithMinimumPrice, newFloatingPackageWithAllocationPrice, newFloatingTieredPackageWithMinimumPrice, newFloatingUnitWithPercentPrice, newFloatingTieredWithProrationPrice, newFloatingUnitWithProrationPrice, newFloatingGroupedAllocationPrice, newFloatingGroupedWithProratedMinimumPrice, newFloatingGroupedWithMeteredMinimumPrice, newFloatingMatrixWithDisplayNamePrice, newFloatingBulkWithProrationPrice, additionalQueryParams, additionalHeaders) /* spotless:on */
+        return /* spotless:off */ Objects.hash(newFloatingUnitPrice, newFloatingPackagePrice, newFloatingMatrixPrice, newFloatingMatrixWithAllocationPrice, newFloatingTieredPrice, newFloatingTieredBpsPrice, newFloatingBpsPrice, newFloatingBulkBpsPrice, newFloatingBulkPrice, newFloatingThresholdTotalAmountPrice, newFloatingTieredPackagePrice, newFloatingGroupedTieredPrice, newFloatingTieredWithMinimumPrice, newFloatingPackageWithAllocationPrice, newFloatingTieredPackageWithMinimumPrice, newFloatingUnitWithPercentPrice, newFloatingTieredWithProrationPrice, newFloatingUnitWithProrationPrice, newFloatingGroupedAllocationPrice, newFloatingGroupedWithProratedMinimumPrice, newFloatingGroupedWithMeteredMinimumPrice, newFloatingMatrixWithDisplayNamePrice, newFloatingBulkWithProrationPrice, additionalHeaders, additionalQueryParams) /* spotless:on */
     }
 
     override fun toString() =
-        "PriceCreateParams{newFloatingUnitPrice=$newFloatingUnitPrice, newFloatingPackagePrice=$newFloatingPackagePrice, newFloatingMatrixPrice=$newFloatingMatrixPrice, newFloatingMatrixWithAllocationPrice=$newFloatingMatrixWithAllocationPrice, newFloatingTieredPrice=$newFloatingTieredPrice, newFloatingTieredBpsPrice=$newFloatingTieredBpsPrice, newFloatingBpsPrice=$newFloatingBpsPrice, newFloatingBulkBpsPrice=$newFloatingBulkBpsPrice, newFloatingBulkPrice=$newFloatingBulkPrice, newFloatingThresholdTotalAmountPrice=$newFloatingThresholdTotalAmountPrice, newFloatingTieredPackagePrice=$newFloatingTieredPackagePrice, newFloatingGroupedTieredPrice=$newFloatingGroupedTieredPrice, newFloatingTieredWithMinimumPrice=$newFloatingTieredWithMinimumPrice, newFloatingPackageWithAllocationPrice=$newFloatingPackageWithAllocationPrice, newFloatingTieredPackageWithMinimumPrice=$newFloatingTieredPackageWithMinimumPrice, newFloatingUnitWithPercentPrice=$newFloatingUnitWithPercentPrice, newFloatingTieredWithProrationPrice=$newFloatingTieredWithProrationPrice, newFloatingUnitWithProrationPrice=$newFloatingUnitWithProrationPrice, newFloatingGroupedAllocationPrice=$newFloatingGroupedAllocationPrice, newFloatingGroupedWithProratedMinimumPrice=$newFloatingGroupedWithProratedMinimumPrice, newFloatingGroupedWithMeteredMinimumPrice=$newFloatingGroupedWithMeteredMinimumPrice, newFloatingMatrixWithDisplayNamePrice=$newFloatingMatrixWithDisplayNamePrice, newFloatingBulkWithProrationPrice=$newFloatingBulkWithProrationPrice, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders}"
+        "PriceCreateParams{newFloatingUnitPrice=$newFloatingUnitPrice, newFloatingPackagePrice=$newFloatingPackagePrice, newFloatingMatrixPrice=$newFloatingMatrixPrice, newFloatingMatrixWithAllocationPrice=$newFloatingMatrixWithAllocationPrice, newFloatingTieredPrice=$newFloatingTieredPrice, newFloatingTieredBpsPrice=$newFloatingTieredBpsPrice, newFloatingBpsPrice=$newFloatingBpsPrice, newFloatingBulkBpsPrice=$newFloatingBulkBpsPrice, newFloatingBulkPrice=$newFloatingBulkPrice, newFloatingThresholdTotalAmountPrice=$newFloatingThresholdTotalAmountPrice, newFloatingTieredPackagePrice=$newFloatingTieredPackagePrice, newFloatingGroupedTieredPrice=$newFloatingGroupedTieredPrice, newFloatingTieredWithMinimumPrice=$newFloatingTieredWithMinimumPrice, newFloatingPackageWithAllocationPrice=$newFloatingPackageWithAllocationPrice, newFloatingTieredPackageWithMinimumPrice=$newFloatingTieredPackageWithMinimumPrice, newFloatingUnitWithPercentPrice=$newFloatingUnitWithPercentPrice, newFloatingTieredWithProrationPrice=$newFloatingTieredWithProrationPrice, newFloatingUnitWithProrationPrice=$newFloatingUnitWithProrationPrice, newFloatingGroupedAllocationPrice=$newFloatingGroupedAllocationPrice, newFloatingGroupedWithProratedMinimumPrice=$newFloatingGroupedWithProratedMinimumPrice, newFloatingGroupedWithMeteredMinimumPrice=$newFloatingGroupedWithMeteredMinimumPrice, newFloatingMatrixWithDisplayNamePrice=$newFloatingMatrixWithDisplayNamePrice, newFloatingBulkWithProrationPrice=$newFloatingBulkWithProrationPrice, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -1115,8 +1117,8 @@ constructor(
         private var newFloatingMatrixWithDisplayNamePrice: NewFloatingMatrixWithDisplayNamePrice? =
             null
         private var newFloatingBulkWithProrationPrice: NewFloatingBulkWithProrationPrice? = null
-        private var additionalQueryParams: MutableMap<String, MutableList<String>> = mutableMapOf()
-        private var additionalHeaders: MutableMap<String, MutableList<String>> = mutableMapOf()
+        private var additionalHeaders: ListMultimap<String, String> = ArrayListMultimap.create()
+        private var additionalQueryParams: ListMultimap<String, String> = ArrayListMultimap.create()
 
         @JvmSynthetic
         internal fun from(priceCreateParams: PriceCreateParams) = apply {
@@ -1155,8 +1157,8 @@ constructor(
                 priceCreateParams.newFloatingMatrixWithDisplayNamePrice
             this.newFloatingBulkWithProrationPrice =
                 priceCreateParams.newFloatingBulkWithProrationPrice
-            additionalQueryParams(priceCreateParams.additionalQueryParams)
             additionalHeaders(priceCreateParams.additionalHeaders)
+            additionalQueryParams(priceCreateParams.additionalQueryParams)
         }
 
         fun forNewFloatingUnitPrice(newFloatingUnitPrice: NewFloatingUnitPrice) = apply {
@@ -1790,45 +1792,79 @@ constructor(
             this.newFloatingBulkWithProrationPrice = newFloatingBulkWithProrationPrice
         }
 
-        fun additionalQueryParams(additionalQueryParams: Map<String, List<String>>) = apply {
-            this.additionalQueryParams.clear()
-            putAllQueryParams(additionalQueryParams)
-        }
-
-        fun putQueryParam(name: String, value: String) = apply {
-            this.additionalQueryParams.getOrPut(name) { mutableListOf() }.add(value)
-        }
-
-        fun putQueryParams(name: String, values: Iterable<String>) = apply {
-            this.additionalQueryParams.getOrPut(name) { mutableListOf() }.addAll(values)
-        }
-
-        fun putAllQueryParams(additionalQueryParams: Map<String, Iterable<String>>) = apply {
-            additionalQueryParams.forEach(this::putQueryParams)
-        }
-
-        fun removeQueryParam(name: String) = apply {
-            this.additionalQueryParams.put(name, mutableListOf())
-        }
-
         fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
             this.additionalHeaders.clear()
-            putAllHeaders(additionalHeaders)
+            putAllAdditionalHeaders(additionalHeaders)
         }
 
-        fun putHeader(name: String, value: String) = apply {
-            this.additionalHeaders.getOrPut(name) { mutableListOf() }.add(value)
+        fun putAdditionalHeader(name: String, value: String) = apply {
+            additionalHeaders.put(name, value)
         }
 
-        fun putHeaders(name: String, values: Iterable<String>) = apply {
-            this.additionalHeaders.getOrPut(name) { mutableListOf() }.addAll(values)
+        fun putAdditionalHeaders(name: String, values: Iterable<String>) = apply {
+            additionalHeaders.putAll(name, values)
         }
 
-        fun putAllHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            additionalHeaders.forEach(this::putHeaders)
+        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            additionalHeaders.forEach(::putAdditionalHeaders)
         }
 
-        fun removeHeader(name: String) = apply { this.additionalHeaders.put(name, mutableListOf()) }
+        fun replaceAdditionalHeaders(name: String, value: String) = apply {
+            additionalHeaders.replaceValues(name, listOf(value))
+        }
+
+        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) = apply {
+            additionalHeaders.replaceValues(name, values)
+        }
+
+        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            additionalHeaders.forEach(::replaceAdditionalHeaders)
+        }
+
+        fun removeAdditionalHeaders(name: String) = apply { additionalHeaders.removeAll(name) }
+
+        fun removeAllAdditionalHeaders(names: Set<String>) = apply {
+            names.forEach(::removeAdditionalHeaders)
+        }
+
+        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) = apply {
+            this.additionalQueryParams.clear()
+            putAllAdditionalQueryParams(additionalQueryParams)
+        }
+
+        fun putAdditionalQueryParam(key: String, value: String) = apply {
+            additionalQueryParams.put(key, value)
+        }
+
+        fun putAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
+            additionalQueryParams.putAll(key, values)
+        }
+
+        fun putAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
+            apply {
+                additionalQueryParams.forEach(::putAdditionalQueryParams)
+            }
+
+        fun replaceAdditionalQueryParams(key: String, value: String) = apply {
+            additionalQueryParams.replaceValues(key, listOf(value))
+        }
+
+        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
+            additionalQueryParams.replaceValues(key, values)
+        }
+
+        fun replaceAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
+            apply {
+                additionalQueryParams.forEach(::replaceAdditionalQueryParams)
+            }
+
+        fun removeAdditionalQueryParams(key: String) = apply {
+            additionalQueryParams.removeAll(key)
+        }
+
+        fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalQueryParams)
+        }
 
         fun build(): PriceCreateParams =
             PriceCreateParams(
@@ -1855,8 +1891,14 @@ constructor(
                 newFloatingGroupedWithMeteredMinimumPrice,
                 newFloatingMatrixWithDisplayNamePrice,
                 newFloatingBulkWithProrationPrice,
-                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
-                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders
+                    .asMap()
+                    .mapValues { it.value.toList().toImmutable() }
+                    .toImmutable(),
+                additionalQueryParams
+                    .asMap()
+                    .mapValues { it.value.toList().toImmutable() }
+                    .toImmutable(),
             )
     }
 
