@@ -94,7 +94,21 @@ private constructor(
             headers.forEach(this::putHeaders)
         }
 
-        fun removeHeader(name: String) = apply { this.headers.put(name, mutableListOf()) }
+        fun replaceHeaders(name: String, value: String) = apply {
+            headers.replaceValues(name, listOf(value))
+        }
+
+        fun replaceHeaders(name: String, values: Iterable<String>) = apply {
+            headers.replaceValues(name, values)
+        }
+
+        fun replaceAllHeaders(headers: Map<String, Iterable<String>>) = apply {
+            headers.forEach(::replaceHeaders)
+        }
+
+        fun removeHeaders(name: String) = apply { headers.removeAll(name) }
+
+        fun removeAllHeaders(names: Set<String>) = apply { names.forEach(::removeHeaders) }
 
         fun queryParams(queryParams: Map<String, Iterable<String>>) = apply {
             this.queryParams.clear()
@@ -111,7 +125,21 @@ private constructor(
             queryParams.forEach(this::putQueryParams)
         }
 
-        fun removeQueryParam(key: String) = apply { queryParams.removeAll(key) }
+        fun replaceQueryParams(key: String, value: String) = apply {
+            queryParams.replaceValues(key, listOf(value))
+        }
+
+        fun replaceQueryParams(key: String, values: Iterable<String>) = apply {
+            queryParams.replaceValues(key, values)
+        }
+
+        fun replaceAllQueryParams(queryParams: Map<String, Iterable<String>>) = apply {
+            queryParams.forEach(::replaceQueryParams)
+        }
+
+        fun removeQueryParams(key: String) = apply { queryParams.removeAll(key) }
+
+        fun removeAllQueryParams(keys: Set<String>) = apply { keys.forEach(::removeQueryParams) }
 
         fun responseValidation(responseValidation: Boolean) = apply {
             this.responseValidation = responseValidation
