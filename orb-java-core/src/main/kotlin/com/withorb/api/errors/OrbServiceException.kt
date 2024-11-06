@@ -1,12 +1,12 @@
 package com.withorb.api.errors
 
-import com.google.common.collect.ListMultimap
+import com.withorb.api.core.http.Headers
 
 abstract class OrbServiceException
 @JvmOverloads
 constructor(
     private val statusCode: Int,
-    private val headers: ListMultimap<String, String>,
+    private val headers: Headers,
     private val body: String,
     private val error: OrbError,
     message: String = "$statusCode: $error",
@@ -15,7 +15,7 @@ constructor(
 
     fun statusCode(): Int = statusCode
 
-    fun headers(): ListMultimap<String, String> = headers
+    fun headers(): Headers = headers
 
     fun body(): String = body
 
