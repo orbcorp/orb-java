@@ -3,10 +3,10 @@
 package com.withorb.api.core
 
 import com.fasterxml.jackson.databind.json.JsonMapper
-import com.google.common.collect.ArrayListMultimap
-import com.google.common.collect.ListMultimap
+import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.HttpClient
 import com.withorb.api.core.http.PhantomReachableClosingHttpClient
+import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.http.RetryingHttpClient
 import java.time.Clock
 
@@ -19,8 +19,8 @@ private constructor(
     @get:JvmName("baseUrl") val baseUrl: String,
     @get:JvmName("apiKey") val apiKey: String,
     @get:JvmName("webhookSecret") val webhookSecret: String?,
-    @get:JvmName("headers") val headers: ListMultimap<String, String>,
-    @get:JvmName("queryParams") val queryParams: ListMultimap<String, String>,
+    @get:JvmName("headers") val headers: Headers,
+    @get:JvmName("queryParams") val queryParams: QueryParams,
     @get:JvmName("responseValidation") val responseValidation: Boolean,
     @get:JvmName("maxRetries") val maxRetries: Int,
 ) {
@@ -42,8 +42,8 @@ private constructor(
         private var jsonMapper: JsonMapper? = null
         private var clock: Clock = Clock.systemUTC()
         private var baseUrl: String = PRODUCTION_URL
-        private var headers: MutableMap<String, MutableList<String>> = mutableMapOf()
-        private var queryParams: MutableMap<String, MutableList<String>> = mutableMapOf()
+        private var headers: Headers.Builder = Headers.builder()
+        private var queryParams: QueryParams.Builder = QueryParams.builder()
         private var responseValidation: Boolean = false
         private var maxRetries: Int = 2
         private var apiKey: String? = null
@@ -55,14 +55,8 @@ private constructor(
             jsonMapper = clientOptions.jsonMapper
             clock = clientOptions.clock
             baseUrl = clientOptions.baseUrl
-            headers =
-                clientOptions.headers.asMap().mapValuesTo(mutableMapOf()) { (_, value) ->
-                    value.toMutableList()
-                }
-            queryParams =
-                clientOptions.queryParams.asMap().mapValuesTo(mutableMapOf()) { (_, value) ->
-                    value.toMutableList()
-                }
+            headers = clientOptions.headers.toBuilder()
+            queryParams = clientOptions.queryParams.toBuilder()
             responseValidation = clientOptions.responseValidation
             maxRetries = clientOptions.maxRetries
             apiKey = clientOptions.apiKey
@@ -77,6 +71,11 @@ private constructor(
 
         fun clock(clock: Clock) = apply { this.clock = clock }
 
+        fun headers(headers: Headers) = apply {
+            this.headers.clear()
+            putAllHeaders(headers)
+        }
+
         fun headers(headers: Map<String, Iterable<String>>) = apply {
             this.headers.clear()
             putAllHeaders(headers)
@@ -85,30 +84,34 @@ private constructor(
         fun putHeader(name: String, value: String) = apply {
             this.headers.getOrPut(name) { mutableListOf() }.add(value)
         }
+        fun putHeaders(name: String, values: Iterable<String>) = apply { headers.put(name, values) }
 
-        fun putHeaders(name: String, values: Iterable<String>) = apply {
-            this.headers.getOrPut(name) { mutableListOf() }.addAll(values)
-        }
+        fun putAllHeaders(headers: Headers) = apply { this.headers.putAll(headers) }
 
         fun putAllHeaders(headers: Map<String, Iterable<String>>) = apply {
-            headers.forEach(this::putHeaders)
+            this.headers.putAll(headers)
         }
 
-        fun replaceHeaders(name: String, value: String) = apply {
-            headers.replaceValues(name, listOf(value))
-        }
+        fun replaceHeaders(name: String, value: String) = apply { headers.replace(name, value) }
 
         fun replaceHeaders(name: String, values: Iterable<String>) = apply {
-            headers.replaceValues(name, values)
+            headers.replace(name, values)
         }
+
+        fun replaceAllHeaders(headers: Headers) = apply { this.headers.replaceAll(headers) }
 
         fun replaceAllHeaders(headers: Map<String, Iterable<String>>) = apply {
-            headers.forEach(::replaceHeaders)
+            this.headers.replaceAll(headers)
         }
 
-        fun removeHeaders(name: String) = apply { headers.removeAll(name) }
+        fun removeHeaders(name: String) = apply { headers.remove(name) }
 
-        fun removeAllHeaders(names: Set<String>) = apply { names.forEach(::removeHeaders) }
+        fun removeAllHeaders(names: Set<String>) = apply { headers.removeAll(names) }
+
+        fun queryParams(queryParams: QueryParams) = apply {
+            this.queryParams.clear()
+            putAllQueryParams(queryParams)
+        }
 
         fun queryParams(queryParams: Map<String, Iterable<String>>) = apply {
             this.queryParams.clear()
@@ -118,28 +121,36 @@ private constructor(
         fun putQueryParam(key: String, value: String) = apply { queryParams.put(key, value) }
 
         fun putQueryParams(key: String, values: Iterable<String>) = apply {
-            queryParams.putAll(key, values)
+            queryParams.put(key, values)
+        }
+
+        fun putAllQueryParams(queryParams: QueryParams) = apply {
+            this.queryParams.putAll(queryParams)
         }
 
         fun putAllQueryParams(queryParams: Map<String, Iterable<String>>) = apply {
-            queryParams.forEach(this::putQueryParams)
+            this.queryParams.putAll(queryParams)
         }
 
         fun replaceQueryParams(key: String, value: String) = apply {
-            queryParams.replaceValues(key, listOf(value))
+            queryParams.replace(key, value)
         }
 
         fun replaceQueryParams(key: String, values: Iterable<String>) = apply {
-            queryParams.replaceValues(key, values)
+            queryParams.replace(key, values)
+        }
+
+        fun replaceAllQueryParams(queryParams: QueryParams) = apply {
+            this.queryParams.replaceAll(queryParams)
         }
 
         fun replaceAllQueryParams(queryParams: Map<String, Iterable<String>>) = apply {
-            queryParams.forEach(::replaceQueryParams)
+            this.queryParams.replaceAll(queryParams)
         }
 
-        fun removeQueryParams(key: String) = apply { queryParams.removeAll(key) }
+        fun removeQueryParams(key: String) = apply { queryParams.remove(key) }
 
-        fun removeAllQueryParams(keys: Set<String>) = apply { keys.forEach(::removeQueryParams) }
+        fun removeAllQueryParams(keys: Set<String>) = apply { queryParams.removeAll(keys) }
 
         fun responseValidation(responseValidation: Boolean) = apply {
             this.responseValidation = responseValidation
@@ -160,8 +171,8 @@ private constructor(
             checkNotNull(httpClient) { "`httpClient` is required but was not set" }
             checkNotNull(apiKey) { "`apiKey` is required but was not set" }
 
-            val headers = ArrayListMultimap.create<String, String>()
-            val queryParams = ArrayListMultimap.create<String, String>()
+            val headers = Headers.builder()
+            val queryParams = QueryParams.builder()
             headers.put("X-Stainless-Lang", "java")
             headers.put("X-Stainless-Arch", getOsArch())
             headers.put("X-Stainless-OS", getOsName())
@@ -169,11 +180,13 @@ private constructor(
             headers.put("X-Stainless-Package-Version", getPackageVersion())
             headers.put("X-Stainless-Runtime", "JRE")
             headers.put("X-Stainless-Runtime-Version", getJavaVersion())
-            if (!apiKey.isNullOrEmpty()) {
-                headers.put("Authorization", "Bearer ${apiKey}")
+            apiKey?.let {
+                if (!it.isEmpty()) {
+                    headers.put("Authorization", "Bearer $it")
+                }
             }
-            this.headers.forEach(headers::replaceValues)
-            this.queryParams.forEach(queryParams::replaceValues)
+            headers.replaceAll(this.headers.build())
+            queryParams.replaceAll(this.queryParams.build())
 
             return ClientOptions(
                 httpClient!!,
@@ -190,8 +203,8 @@ private constructor(
                 baseUrl,
                 apiKey!!,
                 webhookSecret,
-                headers.toImmutable(),
-                queryParams.toImmutable(),
+                headers.build(),
+                queryParams.build(),
                 responseValidation,
                 maxRetries,
             )
