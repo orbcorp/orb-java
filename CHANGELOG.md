@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.4.1 (2024-11-12)
+
+Full Changelog: [v0.4.0...v0.4.1](https://github.com/orbcorp/orb-java/compare/v0.4.0...v0.4.1)
+
+### Bug Fixes
+
+* **internal:** add missing options ([1ed6c28](https://github.com/orbcorp/orb-java/commit/1ed6c28c1dacee3121ae2fad5645ea84b5486737))
+
+
+### Chores
+
+* rebuild project due to codegen change ([#105](https://github.com/orbcorp/orb-java/issues/105)) ([6c52ea7](https://github.com/orbcorp/orb-java/commit/6c52ea7a17936f5f675d51b1bcc1a3b6d4816c56))
+* rebuild project due to codegen change ([#107](https://github.com/orbcorp/orb-java/issues/107)) ([0365098](https://github.com/orbcorp/orb-java/commit/0365098b47e408203b0bc2bc4d723ef2c577fe60))
+
 ## 0.4.0 (2024-11-06)
 
 Full Changelog: [v0.3.0...v0.4.0](https://github.com/orbcorp/orb-java/compare/v0.3.0...v0.4.0)
