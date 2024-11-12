@@ -6,6 +6,7 @@ import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.getPackageVersion
 import com.withorb.api.models.*
 import com.withorb.api.services.async.*
+import com.withorb.api.services.blocking.WebhookServiceAsyncImpl
 
 class OrbClientAsyncImpl
 constructor(
@@ -71,6 +72,8 @@ constructor(
         AlertServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
+    private val webhooks: WebhookServiceAsync by lazy { WebhookServiceAsyncImpl(clientOptions) }
+
     override fun sync(): OrbClient = sync
 
     override fun topLevel(): TopLevelServiceAsync = topLevel
@@ -98,4 +101,6 @@ constructor(
     override fun subscriptions(): SubscriptionServiceAsync = subscriptions
 
     override fun alerts(): AlertServiceAsync = alerts
+
+    override fun webhooks(): WebhookServiceAsync = webhooks
 }
