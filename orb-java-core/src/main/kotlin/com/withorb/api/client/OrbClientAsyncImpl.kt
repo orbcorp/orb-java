@@ -6,6 +6,7 @@ import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.getPackageVersion
 import com.withorb.api.models.*
 import com.withorb.api.services.async.*
+import com.withorb.api.services.blocking.WebhookServiceAsyncImpl
 
 class OrbClientAsyncImpl
 constructor(

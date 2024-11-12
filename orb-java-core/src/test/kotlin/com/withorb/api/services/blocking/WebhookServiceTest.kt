@@ -37,7 +37,10 @@ class WebhookServiceTest {
                 .put("X-Orb-Signature", "v1=$signature")
                 .build()
 
-        val event = client.webhooks().unwrap(payload, headers, "c-UGKYdnhHh436B_sMouYAPUvXyWpzOdunZBV5dFSD8")
+        val event =
+            client
+                .webhooks()
+                .unwrap(payload, headers, "c-UGKYdnhHh436B_sMouYAPUvXyWpzOdunZBV5dFSD8")
 
         assertThat(event).isNotNull()
     }
@@ -70,44 +73,44 @@ class WebhookServiceTest {
         val webhookTimestampInsant = LocalDateTime.parse(webhookTimestamp).toInstant(ZoneOffset.UTC)
 
         assertThatThrownBy {
-            client
-                .webhooks()
-                .verifySignature(
-                    payload,
-                    Headers.builder()
-                        .put(
-                            "X-Orb-Timestamp",
-                            webhookTimestampInsant
-                                .minusSeconds(1000)
-                                .atOffset(ZoneOffset.UTC)
-                                .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
-                        )
-                        .put("X-Orb-Signature", "v1=$webhookSignature")
-                        .build(),
-                    secret
-                )
-        }
+                client
+                    .webhooks()
+                    .verifySignature(
+                        payload,
+                        Headers.builder()
+                            .put(
+                                "X-Orb-Timestamp",
+                                webhookTimestampInsant
+                                    .minusSeconds(1000)
+                                    .atOffset(ZoneOffset.UTC)
+                                    .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+                            )
+                            .put("X-Orb-Signature", "v1=$webhookSignature")
+                            .build(),
+                        secret
+                    )
+            }
             .isInstanceOf(OrbException::class.java)
             .hasMessage("Webhook timestamp too old")
 
         assertThatThrownBy {
-            client
-                .webhooks()
-                .verifySignature(
-                    payload,
-                    Headers.builder()
-                        .put(
-                            "X-Orb-Timestamp",
-                            webhookTimestampInsant
-                                .plusSeconds(1000)
-                                .atOffset(ZoneOffset.UTC)
-                                .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
-                        )
-                        .put("X-Orb-Signature", "v1=$webhookSignature")
-                        .build(),
-                    secret
-                )
-        }
+                client
+                    .webhooks()
+                    .verifySignature(
+                        payload,
+                        Headers.builder()
+                            .put(
+                                "X-Orb-Timestamp",
+                                webhookTimestampInsant
+                                    .plusSeconds(1000)
+                                    .atOffset(ZoneOffset.UTC)
+                                    .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+                            )
+                            .put("X-Orb-Signature", "v1=$webhookSignature")
+                            .build(),
+                        secret
+                    )
+            }
             .isInstanceOf(OrbException::class.java)
             .hasMessage("Webhook timestamp too new")
 
@@ -120,63 +123,63 @@ class WebhookServiceTest {
             .hasMessage("None of the given webhook signatures match the expected signature")
 
         assertThatCode {
-            client
-                .webhooks()
-                .verifySignature(
-                    payload,
-                    Headers.builder()
-                        .put("X-Orb-Timestamp", webhookTimestamp)
-                        .put("X-Orb-Signature", "v1=$webhookSignature v1=Zm9v")
-                        .build(),
-                    secret
-                )
-        }
+                client
+                    .webhooks()
+                    .verifySignature(
+                        payload,
+                        Headers.builder()
+                            .put("X-Orb-Timestamp", webhookTimestamp)
+                            .put("X-Orb-Signature", "v1=$webhookSignature v1=Zm9v")
+                            .build(),
+                        secret
+                    )
+            }
             .doesNotThrowAnyException()
 
         assertThatThrownBy {
-            client
-                .webhooks()
-                .verifySignature(
-                    payload,
-                    Headers.builder()
-                        .put("X-Orb-Timestamp", webhookTimestamp)
-                        .put("X-Orb-Signature", "v2=$webhookSignature")
-                        .build(),
-                    secret
-                )
-        }
+                client
+                    .webhooks()
+                    .verifySignature(
+                        payload,
+                        Headers.builder()
+                            .put("X-Orb-Timestamp", webhookTimestamp)
+                            .put("X-Orb-Signature", "v2=$webhookSignature")
+                            .build(),
+                        secret
+                    )
+            }
             .isInstanceOf(OrbException::class.java)
             .hasMessage("None of the given webhook signatures match the expected signature")
 
         assertThatCode {
-            client
-                .webhooks()
-                .verifySignature(
-                    payload,
-                    Headers.builder()
-                        .put("X-Orb-Timestamp", webhookTimestamp)
-                        .put("X-Orb-Signature", "v1=$webhookSignature v2=$webhookSignature")
-                        .build(),
-                    secret
-                )
-        }
+                client
+                    .webhooks()
+                    .verifySignature(
+                        payload,
+                        Headers.builder()
+                            .put("X-Orb-Timestamp", webhookTimestamp)
+                            .put("X-Orb-Signature", "v1=$webhookSignature v2=$webhookSignature")
+                            .build(),
+                        secret
+                    )
+            }
             .doesNotThrowAnyException()
 
         assertThatThrownBy {
-            client
-                .webhooks()
-                .verifySignature(
-                    payload,
-                    Headers.builder()
-                        .put("X-Orb-Timestamp", webhookTimestamp)
-                        .put(
-                            "X-Orb-Signature",
-                            webhookSignature,
-                        )
-                        .build(),
-                    secret
-                )
-        }
+                client
+                    .webhooks()
+                    .verifySignature(
+                        payload,
+                        Headers.builder()
+                            .put("X-Orb-Timestamp", webhookTimestamp)
+                            .put(
+                                "X-Orb-Signature",
+                                webhookSignature,
+                            )
+                            .build(),
+                        secret
+                    )
+            }
             .isInstanceOf(OrbException::class.java)
             .hasMessage("None of the given webhook signatures match the expected signature")
     }

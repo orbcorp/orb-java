@@ -5,7 +5,7 @@ package com.withorb.api.client
 import com.withorb.api.models.*
 import com.withorb.api.services.async.*
 
-interface `OrbClientAsync {
+interface OrbClientAsync {
 
     fun sync(): OrbClient
 
@@ -35,5 +35,5 @@ interface `OrbClientAsync {
 
     fun alerts(): AlertServiceAsync
 
-    fun webhooks(): WebhookService
+    fun webhooks(): WebhookServiceAsync
 }

@@ -9,7 +9,7 @@ import com.withorb.api.core.http.Headers
 
 interface WebhookServiceAsync {
 
-    fun unwrap(payload: String, headers: Headers, secret: String?): JsonValue
+    suspend fun unwrap(payload: String, headers: Headers, secret: String?): JsonValue
 
-    fun verifySignature(payload: String, headers: Headers, secret: String?)
+    suspend fun verifySignature(payload: String, headers: Headers, secret: String?)
 }
