@@ -17,12 +17,12 @@ private constructor(
     @get:JvmName("jsonMapper") val jsonMapper: JsonMapper,
     @get:JvmName("clock") val clock: Clock,
     @get:JvmName("baseUrl") val baseUrl: String,
-    @get:JvmName("apiKey") val apiKey: String,
-    @get:JvmName("webhookSecret") val webhookSecret: String?,
     @get:JvmName("headers") val headers: Headers,
     @get:JvmName("queryParams") val queryParams: QueryParams,
     @get:JvmName("responseValidation") val responseValidation: Boolean,
     @get:JvmName("maxRetries") val maxRetries: Int,
+    @get:JvmName("apiKey") val apiKey: String,
+    @get:JvmName("webhookSecret") val webhookSecret: String?,
 ) {
 
     fun toBuilder() = Builder().from(this)
@@ -39,7 +39,7 @@ private constructor(
     class Builder {
 
         private var httpClient: HttpClient? = null
-        private var jsonMapper: JsonMapper? = null
+        private var jsonMapper: JsonMapper = jsonMapper()
         private var clock: Clock = Clock.systemUTC()
         private var baseUrl: String = PRODUCTION_URL
         private var headers: Headers.Builder = Headers.builder()
@@ -67,9 +67,9 @@ private constructor(
 
         fun jsonMapper(jsonMapper: JsonMapper) = apply { this.jsonMapper = jsonMapper }
 
-        fun baseUrl(baseUrl: String) = apply { this.baseUrl = baseUrl }
-
         fun clock(clock: Clock) = apply { this.clock = clock }
+
+        fun baseUrl(baseUrl: String) = apply { this.baseUrl = baseUrl }
 
         fun headers(headers: Headers) = apply {
             this.headers.clear()
@@ -81,9 +81,8 @@ private constructor(
             putAllHeaders(headers)
         }
 
-        fun putHeader(name: String, value: String) = apply {
-            this.headers.getOrPut(name) { mutableListOf() }.add(value)
-        }
+        fun putHeader(name: String, value: String) = apply { headers.put(name, value) }
+
         fun putHeaders(name: String, values: Iterable<String>) = apply { headers.put(name, values) }
 
         fun putAllHeaders(headers: Headers) = apply { this.headers.putAll(headers) }
@@ -198,15 +197,15 @@ private constructor(
                         .idempotencyHeader("Idempotency-Key")
                         .build()
                 ),
-                jsonMapper ?: jsonMapper(),
+                jsonMapper,
                 clock,
                 baseUrl,
-                apiKey!!,
-                webhookSecret,
                 headers.build(),
                 queryParams.build(),
                 responseValidation,
                 maxRetries,
+                apiKey!!,
+                webhookSecret,
             )
         }
     }
