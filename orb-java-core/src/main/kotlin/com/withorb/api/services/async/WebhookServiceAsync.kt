@@ -1,15 +1,14 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.async
 
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.http.Headers
+import java.util.concurrent.CompletableFuture
 
 interface WebhookServiceAsync {
 
-    suspend fun unwrap(payload: String, headers: Headers, secret: String?): JsonValue
+    fun unwrap(payload: String, headers: Headers, secret: String?): CompletableFuture<JsonValue>
 
-    suspend fun verifySignature(payload: String, headers: Headers, secret: String?)
+    fun verifySignature(payload: String, headers: Headers, secret: String?): CompletableFuture<Void>
 }

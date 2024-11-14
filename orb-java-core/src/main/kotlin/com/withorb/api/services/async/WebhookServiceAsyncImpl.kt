@@ -6,10 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException
 import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.getRequiredHeader
-import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.http.Headers
-import com.withorb.api.core.http.HttpResponse.Handler
-import com.withorb.api.errors.OrbError
 import com.withorb.api.errors.OrbException
 import com.withorb.api.services.async.WebhookServiceAsync
 import java.security.MessageDigest
@@ -18,6 +15,7 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.util.*
+import java.util.concurrent.CompletableFuture
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
@@ -34,19 +32,27 @@ constructor(
     private val clientOptions: ClientOptions,
 ) : WebhookServiceAsync {
 
-    private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
-
-    override suspend fun unwrap(payload: String, headers: Headers, secret: String?): JsonValue {
+    override fun unwrap(
+        payload: String,
+        headers: Headers,
+        secret: String?
+    ): CompletableFuture<JsonValue> {
         verifySignature(payload, headers, secret)
-        return try {
-            clientOptions.jsonMapper.readValue(payload, JsonValue::class.java)
+        try {
+            val future = CompletableFuture<JsonValue>()
+            future.complete(clientOptions.jsonMapper.readValue(payload, JsonValue::class.java))
+            return future
         } catch (e: JsonProcessingException) {
             throw OrbException("Invalid event payload", e)
         }
     }
 
     @OptIn(ExperimentalStdlibApi::class)
-    override suspend fun verifySignature(payload: String, headers: Headers, secret: String?) {
+    override fun verifySignature(
+        payload: String,
+        headers: Headers,
+        secret: String?
+    ): CompletableFuture<Void> {
         val webhookSecret =
             secret
                 ?: clientOptions.webhookSecret
@@ -95,7 +101,8 @@ constructor(
                     expectedSignature.toByteArray(Charsets.UTF_8)
                 )
             ) {
-                return
+                val future = CompletableFuture<Void>()
+                return future
             }
         }
 
