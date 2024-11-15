@@ -14,6 +14,7 @@ import com.withorb.api.models.InvoiceIssueParams
 import com.withorb.api.models.InvoiceListPageAsync
 import com.withorb.api.models.InvoiceListParams
 import com.withorb.api.models.InvoiceMarkPaidParams
+import com.withorb.api.models.InvoicePayParams
 import com.withorb.api.models.InvoiceUpdateParams
 import com.withorb.api.models.InvoiceVoidInvoiceParams
 import java.util.concurrent.CompletableFuture
@@ -99,6 +100,16 @@ interface InvoiceServiceAsync {
     @JvmOverloads
     fun markPaid(
         params: InvoiceMarkPaidParams,
+        requestOptions: RequestOptions = RequestOptions.none()
+    ): CompletableFuture<Invoice>
+
+    /**
+     * This endpoint collects payment for an invoice using the customer's default payment method.
+     * This action can only be taken on invoices with status "issued".
+     */
+    @JvmOverloads
+    fun pay(
+        params: InvoicePayParams,
         requestOptions: RequestOptions = RequestOptions.none()
     ): CompletableFuture<Invoice>
 
