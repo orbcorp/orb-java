@@ -29,6 +29,7 @@ class WebhookServiceImpl
 constructor(
     private val clientOptions: ClientOptions,
 ) : WebhookService {
+    @kotlin.ExperimentalStdlibApi
     override fun unwrap(payload: String, headers: Headers, secret: String?): JsonValue {
         verifySignature(payload, headers, secret)
         return try {
@@ -38,6 +39,7 @@ constructor(
         }
     }
 
+    @kotlin.ExperimentalStdlibApi
     override fun verifySignature(payload: String, headers: Headers, secret: String?) {
         val webhookSecret =
             secret
