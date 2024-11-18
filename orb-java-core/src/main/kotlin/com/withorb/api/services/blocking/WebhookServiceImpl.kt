@@ -38,7 +38,6 @@ constructor(
         }
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
     override fun verifySignature(payload: String, headers: Headers, secret: String?) {
         val webhookSecret =
             secret

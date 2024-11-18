@@ -17,8 +17,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
-@ExtendWith(TestServerExtension::class)
-class WebhookServiceTest {
+internal class WebhookServiceTest {
 
     @Test
     fun unwrap() {
