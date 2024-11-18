@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.6.0 (2024-11-18)
+
+Full Changelog: [v0.5.0...v0.6.0](https://github.com/orbcorp/orb-java/compare/v0.5.0...v0.6.0)
+
+### Features
+
+* **api:** add webhook validation and parsing ([#111](https://github.com/orbcorp/orb-java/issues/111)) ([993bd2b](https://github.com/orbcorp/orb-java/commit/993bd2b43a362a5b7a4ecc5dbfd6b71125f1f8eb))
+
 ## 0.5.0 (2024-11-15)
 
 Full Changelog: [v0.4.1...v0.5.0](https://github.com/orbcorp/orb-java/compare/v0.4.1...v0.5.0)
