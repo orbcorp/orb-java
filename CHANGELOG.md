@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.6.1 (2024-11-19)
+
+Full Changelog: [v0.6.0...v0.6.1](https://github.com/orbcorp/orb-java/compare/v0.6.0...v0.6.1)
+
+### Chores
+
+* rebuild project due to codegen change ([#116](https://github.com/orbcorp/orb-java/issues/116)) ([94d7006](https://github.com/orbcorp/orb-java/commit/94d700697d44adede203c1f7d3dda1e67f37eae2))
+
 ## 0.6.0 (2024-11-18)
 
 Full Changelog: [v0.5.0...v0.6.0](https://github.com/orbcorp/orb-java/compare/v0.5.0...v0.6.0)
