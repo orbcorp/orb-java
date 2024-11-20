@@ -195,22 +195,19 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is GroupingValue && this.string == other.string && this.number == other.number && this.bool == other.bool /* spotless:on */
+            return /* spotless:off */ other is GroupingValue && string == other.string && number == other.number && bool == other.bool /* spotless:on */
         }
 
-        override fun hashCode(): Int {
-            return /* spotless:off */ Objects.hash(string, number, bool) /* spotless:on */
-        }
+        override fun hashCode(): Int = /* spotless:off */ Objects.hash(string, number, bool) /* spotless:on */
 
-        override fun toString(): String {
-            return when {
+        override fun toString(): String =
+            when {
                 string != null -> "GroupingValue{string=$string}"
                 number != null -> "GroupingValue{number=$number}"
                 bool != null -> "GroupingValue{bool=$bool}"
                 _json != null -> "GroupingValue{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid GroupingValue")
             }
-        }
 
         companion object {
 
@@ -276,17 +273,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is EvaluatePriceGroup && this.groupingValues == other.groupingValues && this.quantity == other.quantity && this.amount == other.amount && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is EvaluatePriceGroup && groupingValues == other.groupingValues && quantity == other.quantity && amount == other.amount && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(groupingValues, quantity, amount, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(groupingValues, quantity, amount, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "EvaluatePriceGroup{groupingValues=$groupingValues, quantity=$quantity, amount=$amount, additionalProperties=$additionalProperties}"

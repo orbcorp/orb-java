@@ -177,17 +177,14 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CouponCreateBody && this.discount == other.discount && this.redemptionCode == other.redemptionCode && this.durationInMonths == other.durationInMonths && this.maxRedemptions == other.maxRedemptions && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CouponCreateBody && discount == other.discount && redemptionCode == other.redemptionCode && durationInMonths == other.durationInMonths && maxRedemptions == other.maxRedemptions && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(discount, redemptionCode, durationInMonths, maxRedemptions, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(discount, redemptionCode, durationInMonths, maxRedemptions, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "CouponCreateBody{discount=$discount, redemptionCode=$redemptionCode, durationInMonths=$durationInMonths, maxRedemptions=$maxRedemptions, additionalProperties=$additionalProperties}"
@@ -204,12 +201,10 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CouponCreateParams && this.discount == other.discount && this.redemptionCode == other.redemptionCode && this.durationInMonths == other.durationInMonths && this.maxRedemptions == other.maxRedemptions && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CouponCreateParams && discount == other.discount && redemptionCode == other.redemptionCode && durationInMonths == other.durationInMonths && maxRedemptions == other.maxRedemptions && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(discount, redemptionCode, durationInMonths, maxRedemptions, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-    }
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(discount, redemptionCode, durationInMonths, maxRedemptions, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
         "CouponCreateParams{discount=$discount, redemptionCode=$redemptionCode, durationInMonths=$durationInMonths, maxRedemptions=$maxRedemptions, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
@@ -457,15 +452,13 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Discount && this.newCouponPercentageDiscount == other.newCouponPercentageDiscount && this.newCouponAmountDiscount == other.newCouponAmountDiscount /* spotless:on */
+            return /* spotless:off */ other is Discount && newCouponPercentageDiscount == other.newCouponPercentageDiscount && newCouponAmountDiscount == other.newCouponAmountDiscount /* spotless:on */
         }
 
-        override fun hashCode(): Int {
-            return /* spotless:off */ Objects.hash(newCouponPercentageDiscount, newCouponAmountDiscount) /* spotless:on */
-        }
+        override fun hashCode(): Int = /* spotless:off */ Objects.hash(newCouponPercentageDiscount, newCouponAmountDiscount) /* spotless:on */
 
-        override fun toString(): String {
-            return when {
+        override fun toString(): String =
+            when {
                 newCouponPercentageDiscount != null ->
                     "Discount{newCouponPercentageDiscount=$newCouponPercentageDiscount}"
                 newCouponAmountDiscount != null ->
@@ -473,7 +466,6 @@ constructor(
                 _json != null -> "Discount{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid Discount")
             }
-        }
 
         companion object {
 
@@ -656,7 +648,7 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
+                    return /* spotless:off */ other is DiscountType && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -699,17 +691,14 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is NewCouponPercentageDiscount && this.discountType == other.discountType && this.percentageDiscount == other.percentageDiscount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is NewCouponPercentageDiscount && discountType == other.discountType && percentageDiscount == other.percentageDiscount && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(discountType, percentageDiscount, additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(discountType, percentageDiscount, additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "NewCouponPercentageDiscount{discountType=$discountType, percentageDiscount=$percentageDiscount, additionalProperties=$additionalProperties}"
@@ -820,7 +809,7 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
+                    return /* spotless:off */ other is DiscountType && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -863,17 +852,14 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is NewCouponAmountDiscount && this.discountType == other.discountType && this.amountDiscount == other.amountDiscount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is NewCouponAmountDiscount && discountType == other.discountType && amountDiscount == other.amountDiscount && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(discountType, amountDiscount, additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(discountType, amountDiscount, additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "NewCouponAmountDiscount{discountType=$discountType, amountDiscount=$amountDiscount, additionalProperties=$additionalProperties}"
