@@ -1066,15 +1066,13 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Adjustment && this.amountDiscountAdjustment == other.amountDiscountAdjustment && this.percentageDiscountAdjustment == other.percentageDiscountAdjustment && this.usageDiscountAdjustment == other.usageDiscountAdjustment && this.minimumAdjustment == other.minimumAdjustment && this.maximumAdjustment == other.maximumAdjustment /* spotless:on */
+                return /* spotless:off */ other is Adjustment && amountDiscountAdjustment == other.amountDiscountAdjustment && percentageDiscountAdjustment == other.percentageDiscountAdjustment && usageDiscountAdjustment == other.usageDiscountAdjustment && minimumAdjustment == other.minimumAdjustment && maximumAdjustment == other.maximumAdjustment /* spotless:on */
             }
 
-            override fun hashCode(): Int {
-                return /* spotless:off */ Objects.hash(amountDiscountAdjustment, percentageDiscountAdjustment, usageDiscountAdjustment, minimumAdjustment, maximumAdjustment) /* spotless:on */
-            }
+            override fun hashCode(): Int = /* spotless:off */ Objects.hash(amountDiscountAdjustment, percentageDiscountAdjustment, usageDiscountAdjustment, minimumAdjustment, maximumAdjustment) /* spotless:on */
 
-            override fun toString(): String {
-                return when {
+            override fun toString(): String =
+                when {
                     amountDiscountAdjustment != null ->
                         "Adjustment{amountDiscountAdjustment=$amountDiscountAdjustment}"
                     percentageDiscountAdjustment != null ->
@@ -1086,7 +1084,6 @@ private constructor(
                     _json != null -> "Adjustment{_unknown=$_json}"
                     else -> throw IllegalStateException("Invalid Adjustment")
                 }
-            }
 
             companion object {
 
@@ -1386,7 +1383,7 @@ private constructor(
                             return true
                         }
 
-                        return /* spotless:off */ other is AdjustmentType && this.value == other.value /* spotless:on */
+                        return /* spotless:off */ other is AdjustmentType && value == other.value /* spotless:on */
                     }
 
                     override fun hashCode() = value.hashCode()
@@ -1430,17 +1427,14 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is AmountDiscountAdjustment && this.appliesToPriceIds == other.appliesToPriceIds && this.reason == other.reason && this.adjustmentType == other.adjustmentType && this.amountDiscount == other.amountDiscount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is AmountDiscountAdjustment && appliesToPriceIds == other.appliesToPriceIds && reason == other.reason && adjustmentType == other.adjustmentType && amountDiscount == other.amountDiscount && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
-                private var hashCode: Int = 0
+                /* spotless:off */
+                private val hashCode: Int by lazy { Objects.hash(appliesToPriceIds, reason, adjustmentType, amountDiscount, additionalProperties) }
+                /* spotless:on */
 
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode = /* spotless:off */ Objects.hash(appliesToPriceIds, reason, adjustmentType, amountDiscount, additionalProperties) /* spotless:on */
-                    }
-                    return hashCode
-                }
+                override fun hashCode(): Int = hashCode
 
                 override fun toString() =
                     "AmountDiscountAdjustment{appliesToPriceIds=$appliesToPriceIds, reason=$reason, adjustmentType=$adjustmentType, amountDiscount=$amountDiscount, additionalProperties=$additionalProperties}"
@@ -1619,7 +1613,7 @@ private constructor(
                             return true
                         }
 
-                        return /* spotless:off */ other is AdjustmentType && this.value == other.value /* spotless:on */
+                        return /* spotless:off */ other is AdjustmentType && value == other.value /* spotless:on */
                     }
 
                     override fun hashCode() = value.hashCode()
@@ -1664,17 +1658,14 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is PercentageDiscountAdjustment && this.appliesToPriceIds == other.appliesToPriceIds && this.reason == other.reason && this.adjustmentType == other.adjustmentType && this.percentageDiscount == other.percentageDiscount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is PercentageDiscountAdjustment && appliesToPriceIds == other.appliesToPriceIds && reason == other.reason && adjustmentType == other.adjustmentType && percentageDiscount == other.percentageDiscount && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
-                private var hashCode: Int = 0
+                /* spotless:off */
+                private val hashCode: Int by lazy { Objects.hash(appliesToPriceIds, reason, adjustmentType, percentageDiscount, additionalProperties) }
+                /* spotless:on */
 
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode = /* spotless:off */ Objects.hash(appliesToPriceIds, reason, adjustmentType, percentageDiscount, additionalProperties) /* spotless:on */
-                    }
-                    return hashCode
-                }
+                override fun hashCode(): Int = hashCode
 
                 override fun toString() =
                     "PercentageDiscountAdjustment{appliesToPriceIds=$appliesToPriceIds, reason=$reason, adjustmentType=$adjustmentType, percentageDiscount=$percentageDiscount, additionalProperties=$additionalProperties}"
@@ -1848,7 +1839,7 @@ private constructor(
                             return true
                         }
 
-                        return /* spotless:off */ other is AdjustmentType && this.value == other.value /* spotless:on */
+                        return /* spotless:off */ other is AdjustmentType && value == other.value /* spotless:on */
                     }
 
                     override fun hashCode() = value.hashCode()
@@ -1892,17 +1883,14 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is UsageDiscountAdjustment && this.appliesToPriceIds == other.appliesToPriceIds && this.reason == other.reason && this.adjustmentType == other.adjustmentType && this.usageDiscount == other.usageDiscount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is UsageDiscountAdjustment && appliesToPriceIds == other.appliesToPriceIds && reason == other.reason && adjustmentType == other.adjustmentType && usageDiscount == other.usageDiscount && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
-                private var hashCode: Int = 0
+                /* spotless:off */
+                private val hashCode: Int by lazy { Objects.hash(appliesToPriceIds, reason, adjustmentType, usageDiscount, additionalProperties) }
+                /* spotless:on */
 
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode = /* spotless:off */ Objects.hash(appliesToPriceIds, reason, adjustmentType, usageDiscount, additionalProperties) /* spotless:on */
-                    }
-                    return hashCode
-                }
+                override fun hashCode(): Int = hashCode
 
                 override fun toString() =
                     "UsageDiscountAdjustment{appliesToPriceIds=$appliesToPriceIds, reason=$reason, adjustmentType=$adjustmentType, usageDiscount=$usageDiscount, additionalProperties=$additionalProperties}"
@@ -2095,7 +2083,7 @@ private constructor(
                             return true
                         }
 
-                        return /* spotless:off */ other is AdjustmentType && this.value == other.value /* spotless:on */
+                        return /* spotless:off */ other is AdjustmentType && value == other.value /* spotless:on */
                     }
 
                     override fun hashCode() = value.hashCode()
@@ -2138,17 +2126,14 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is MinimumAdjustment && this.appliesToPriceIds == other.appliesToPriceIds && this.reason == other.reason && this.adjustmentType == other.adjustmentType && this.minimumAmount == other.minimumAmount && this.itemId == other.itemId && this.additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is MinimumAdjustment && appliesToPriceIds == other.appliesToPriceIds && reason == other.reason && adjustmentType == other.adjustmentType && minimumAmount == other.minimumAmount && itemId == other.itemId && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
-                private var hashCode: Int = 0
+                /* spotless:off */
+                private val hashCode: Int by lazy { Objects.hash(appliesToPriceIds, reason, adjustmentType, minimumAmount, itemId, additionalProperties) }
+                /* spotless:on */
 
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode = /* spotless:off */ Objects.hash(appliesToPriceIds, reason, adjustmentType, minimumAmount, itemId, additionalProperties) /* spotless:on */
-                    }
-                    return hashCode
-                }
+                override fun hashCode(): Int = hashCode
 
                 override fun toString() =
                     "MinimumAdjustment{appliesToPriceIds=$appliesToPriceIds, reason=$reason, adjustmentType=$adjustmentType, minimumAmount=$minimumAmount, itemId=$itemId, additionalProperties=$additionalProperties}"
@@ -2322,7 +2307,7 @@ private constructor(
                             return true
                         }
 
-                        return /* spotless:off */ other is AdjustmentType && this.value == other.value /* spotless:on */
+                        return /* spotless:off */ other is AdjustmentType && value == other.value /* spotless:on */
                     }
 
                     override fun hashCode() = value.hashCode()
@@ -2365,17 +2350,14 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is MaximumAdjustment && this.appliesToPriceIds == other.appliesToPriceIds && this.reason == other.reason && this.adjustmentType == other.adjustmentType && this.maximumAmount == other.maximumAmount && this.additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is MaximumAdjustment && appliesToPriceIds == other.appliesToPriceIds && reason == other.reason && adjustmentType == other.adjustmentType && maximumAmount == other.maximumAmount && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
-                private var hashCode: Int = 0
+                /* spotless:off */
+                private val hashCode: Int by lazy { Objects.hash(appliesToPriceIds, reason, adjustmentType, maximumAmount, additionalProperties) }
+                /* spotless:on */
 
-                override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode = /* spotless:off */ Objects.hash(appliesToPriceIds, reason, adjustmentType, maximumAmount, additionalProperties) /* spotless:on */
-                    }
-                    return hashCode
-                }
+                override fun hashCode(): Int = hashCode
 
                 override fun toString() =
                     "MaximumAdjustment{appliesToPriceIds=$appliesToPriceIds, reason=$reason, adjustmentType=$adjustmentType, maximumAmount=$maximumAmount, additionalProperties=$additionalProperties}"
@@ -2387,17 +2369,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is AdjustmentInterval && this.id == other.id && this.adjustment == other.adjustment && this.startDate == other.startDate && this.endDate == other.endDate && this.appliesToPriceIntervalIds == other.appliesToPriceIntervalIds && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is AdjustmentInterval && id == other.id && adjustment == other.adjustment && startDate == other.startDate && endDate == other.endDate && appliesToPriceIntervalIds == other.appliesToPriceIntervalIds && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(id, adjustment, startDate, endDate, appliesToPriceIntervalIds, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(id, adjustment, startDate, endDate, appliesToPriceIntervalIds, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "AdjustmentInterval{id=$id, adjustment=$adjustment, startDate=$startDate, endDate=$endDate, appliesToPriceIntervalIds=$appliesToPriceIntervalIds, additionalProperties=$additionalProperties}"
@@ -2565,17 +2544,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is BillingCycleAnchorConfiguration && this.day == other.day && this.month == other.month && this.year == other.year && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is BillingCycleAnchorConfiguration && day == other.day && month == other.month && year == other.year && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(day, month, year, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(day, month, year, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "BillingCycleAnchorConfiguration{day=$day, month=$month, year=$year, additionalProperties=$additionalProperties}"
@@ -2652,15 +2628,13 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is DiscountInterval && this.amountDiscountInterval == other.amountDiscountInterval && this.percentageDiscountInterval == other.percentageDiscountInterval && this.usageDiscountInterval == other.usageDiscountInterval /* spotless:on */
+            return /* spotless:off */ other is DiscountInterval && amountDiscountInterval == other.amountDiscountInterval && percentageDiscountInterval == other.percentageDiscountInterval && usageDiscountInterval == other.usageDiscountInterval /* spotless:on */
         }
 
-        override fun hashCode(): Int {
-            return /* spotless:off */ Objects.hash(amountDiscountInterval, percentageDiscountInterval, usageDiscountInterval) /* spotless:on */
-        }
+        override fun hashCode(): Int = /* spotless:off */ Objects.hash(amountDiscountInterval, percentageDiscountInterval, usageDiscountInterval) /* spotless:on */
 
-        override fun toString(): String {
-            return when {
+        override fun toString(): String =
+            when {
                 amountDiscountInterval != null ->
                     "DiscountInterval{amountDiscountInterval=$amountDiscountInterval}"
                 percentageDiscountInterval != null ->
@@ -2670,7 +2644,6 @@ private constructor(
                 _json != null -> "DiscountInterval{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid DiscountInterval")
             }
-        }
 
         companion object {
 
@@ -2966,7 +2939,7 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
+                    return /* spotless:off */ other is DiscountType && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -3009,17 +2982,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is AmountDiscountInterval && this.discountType == other.discountType && this.amountDiscount == other.amountDiscount && this.startDate == other.startDate && this.endDate == other.endDate && this.appliesToPriceIds == other.appliesToPriceIds && this.appliesToPriceIntervalIds == other.appliesToPriceIntervalIds && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is AmountDiscountInterval && discountType == other.discountType && amountDiscount == other.amountDiscount && startDate == other.startDate && endDate == other.endDate && appliesToPriceIds == other.appliesToPriceIds && appliesToPriceIntervalIds == other.appliesToPriceIntervalIds && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(discountType, amountDiscount, startDate, endDate, appliesToPriceIds, appliesToPriceIntervalIds, additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(discountType, amountDiscount, startDate, endDate, appliesToPriceIds, appliesToPriceIntervalIds, additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "AmountDiscountInterval{discountType=$discountType, amountDiscount=$amountDiscount, startDate=$startDate, endDate=$endDate, appliesToPriceIds=$appliesToPriceIds, appliesToPriceIntervalIds=$appliesToPriceIntervalIds, additionalProperties=$additionalProperties}"
@@ -3233,7 +3203,7 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
+                    return /* spotless:off */ other is DiscountType && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -3276,17 +3246,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PercentageDiscountInterval && this.discountType == other.discountType && this.percentageDiscount == other.percentageDiscount && this.startDate == other.startDate && this.endDate == other.endDate && this.appliesToPriceIds == other.appliesToPriceIds && this.appliesToPriceIntervalIds == other.appliesToPriceIntervalIds && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is PercentageDiscountInterval && discountType == other.discountType && percentageDiscount == other.percentageDiscount && startDate == other.startDate && endDate == other.endDate && appliesToPriceIds == other.appliesToPriceIds && appliesToPriceIntervalIds == other.appliesToPriceIntervalIds && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(discountType, percentageDiscount, startDate, endDate, appliesToPriceIds, appliesToPriceIntervalIds, additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(discountType, percentageDiscount, startDate, endDate, appliesToPriceIds, appliesToPriceIntervalIds, additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "PercentageDiscountInterval{discountType=$discountType, percentageDiscount=$percentageDiscount, startDate=$startDate, endDate=$endDate, appliesToPriceIds=$appliesToPriceIds, appliesToPriceIntervalIds=$appliesToPriceIntervalIds, additionalProperties=$additionalProperties}"
@@ -3505,7 +3472,7 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is DiscountType && this.value == other.value /* spotless:on */
+                    return /* spotless:off */ other is DiscountType && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -3548,17 +3515,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is UsageDiscountInterval && this.discountType == other.discountType && this.usageDiscount == other.usageDiscount && this.startDate == other.startDate && this.endDate == other.endDate && this.appliesToPriceIds == other.appliesToPriceIds && this.appliesToPriceIntervalIds == other.appliesToPriceIntervalIds && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is UsageDiscountInterval && discountType == other.discountType && usageDiscount == other.usageDiscount && startDate == other.startDate && endDate == other.endDate && appliesToPriceIds == other.appliesToPriceIds && appliesToPriceIntervalIds == other.appliesToPriceIntervalIds && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(discountType, usageDiscount, startDate, endDate, appliesToPriceIds, appliesToPriceIntervalIds, additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(discountType, usageDiscount, startDate, endDate, appliesToPriceIds, appliesToPriceIntervalIds, additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "UsageDiscountInterval{discountType=$discountType, usageDiscount=$usageDiscount, startDate=$startDate, endDate=$endDate, appliesToPriceIds=$appliesToPriceIds, appliesToPriceIntervalIds=$appliesToPriceIntervalIds, additionalProperties=$additionalProperties}"
@@ -3688,17 +3652,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is FixedFeeQuantitySchedule && this.priceId == other.priceId && this.startDate == other.startDate && this.endDate == other.endDate && this.quantity == other.quantity && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is FixedFeeQuantitySchedule && priceId == other.priceId && startDate == other.startDate && endDate == other.endDate && quantity == other.quantity && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(priceId, startDate, endDate, quantity, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(priceId, startDate, endDate, quantity, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "FixedFeeQuantitySchedule{priceId=$priceId, startDate=$startDate, endDate=$endDate, quantity=$quantity, additionalProperties=$additionalProperties}"
@@ -3889,17 +3850,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is MaximumInterval && this.startDate == other.startDate && this.endDate == other.endDate && this.appliesToPriceIds == other.appliesToPriceIds && this.appliesToPriceIntervalIds == other.appliesToPriceIntervalIds && this.maximumAmount == other.maximumAmount && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is MaximumInterval && startDate == other.startDate && endDate == other.endDate && appliesToPriceIds == other.appliesToPriceIds && appliesToPriceIntervalIds == other.appliesToPriceIntervalIds && maximumAmount == other.maximumAmount && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(startDate, endDate, appliesToPriceIds, appliesToPriceIntervalIds, maximumAmount, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(startDate, endDate, appliesToPriceIds, appliesToPriceIntervalIds, maximumAmount, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "MaximumInterval{startDate=$startDate, endDate=$endDate, appliesToPriceIds=$appliesToPriceIds, appliesToPriceIntervalIds=$appliesToPriceIntervalIds, maximumAmount=$maximumAmount, additionalProperties=$additionalProperties}"
@@ -3967,17 +3925,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Metadata && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
     }
@@ -4167,17 +4122,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is MinimumInterval && this.startDate == other.startDate && this.endDate == other.endDate && this.appliesToPriceIds == other.appliesToPriceIds && this.appliesToPriceIntervalIds == other.appliesToPriceIntervalIds && this.minimumAmount == other.minimumAmount && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is MinimumInterval && startDate == other.startDate && endDate == other.endDate && appliesToPriceIds == other.appliesToPriceIds && appliesToPriceIntervalIds == other.appliesToPriceIntervalIds && minimumAmount == other.minimumAmount && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(startDate, endDate, appliesToPriceIds, appliesToPriceIntervalIds, minimumAmount, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(startDate, endDate, appliesToPriceIds, appliesToPriceIntervalIds, minimumAmount, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "MinimumInterval{startDate=$startDate, endDate=$endDate, appliesToPriceIds=$appliesToPriceIds, appliesToPriceIntervalIds=$appliesToPriceIntervalIds, minimumAmount=$minimumAmount, additionalProperties=$additionalProperties}"
@@ -5507,17 +5459,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is FixedFeeQuantityTransition && this.priceId == other.priceId && this.effectiveDate == other.effectiveDate && this.quantity == other.quantity && this.additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is FixedFeeQuantityTransition && priceId == other.priceId && effectiveDate == other.effectiveDate && quantity == other.quantity && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
-            private var hashCode: Int = 0
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(priceId, effectiveDate, quantity, additionalProperties) }
+            /* spotless:on */
 
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = /* spotless:off */ Objects.hash(priceId, effectiveDate, quantity, additionalProperties) /* spotless:on */
-                }
-                return hashCode
-            }
+            override fun hashCode(): Int = hashCode
 
             override fun toString() =
                 "FixedFeeQuantityTransition{priceId=$priceId, effectiveDate=$effectiveDate, quantity=$quantity, additionalProperties=$additionalProperties}"
@@ -5528,17 +5477,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is PriceInterval && this.id == other.id && this.startDate == other.startDate && this.endDate == other.endDate && this.price == other.price && this.billingCycleDay == other.billingCycleDay && this.fixedFeeQuantityTransitions == other.fixedFeeQuantityTransitions && this.currentBillingPeriodStartDate == other.currentBillingPeriodStartDate && this.currentBillingPeriodEndDate == other.currentBillingPeriodEndDate && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is PriceInterval && id == other.id && startDate == other.startDate && endDate == other.endDate && price == other.price && billingCycleDay == other.billingCycleDay && fixedFeeQuantityTransitions == other.fixedFeeQuantityTransitions && currentBillingPeriodStartDate == other.currentBillingPeriodStartDate && currentBillingPeriodEndDate == other.currentBillingPeriodEndDate && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(id, startDate, endDate, price, billingCycleDay, fixedFeeQuantityTransitions, currentBillingPeriodStartDate, currentBillingPeriodEndDate, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(id, startDate, endDate, price, billingCycleDay, fixedFeeQuantityTransitions, currentBillingPeriodStartDate, currentBillingPeriodEndDate, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "PriceInterval{id=$id, startDate=$startDate, endDate=$endDate, price=$price, billingCycleDay=$billingCycleDay, fixedFeeQuantityTransitions=$fixedFeeQuantityTransitions, currentBillingPeriodStartDate=$currentBillingPeriodStartDate, currentBillingPeriodEndDate=$currentBillingPeriodEndDate, additionalProperties=$additionalProperties}"
@@ -5652,17 +5598,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is RedeemedCoupon && this.couponId == other.couponId && this.startDate == other.startDate && this.endDate == other.endDate && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is RedeemedCoupon && couponId == other.couponId && startDate == other.startDate && endDate == other.endDate && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(couponId, startDate, endDate, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(couponId, startDate, endDate, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "RedeemedCoupon{couponId=$couponId, startDate=$startDate, endDate=$endDate, additionalProperties=$additionalProperties}"
@@ -5681,7 +5624,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Status && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is Status && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -5803,17 +5746,14 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is TrialInfo && this.endDate == other.endDate && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is TrialInfo && endDate == other.endDate && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
-        private var hashCode: Int = 0
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(endDate, additionalProperties) }
+        /* spotless:on */
 
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(endDate, additionalProperties) /* spotless:on */
-            }
-            return hashCode
-        }
+        override fun hashCode(): Int = hashCode
 
         override fun toString() =
             "TrialInfo{endDate=$endDate, additionalProperties=$additionalProperties}"
@@ -5824,17 +5764,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is SubscriptionUnschedulePendingPlanChangesResponse && this.metadata == other.metadata && this.id == other.id && this.customer == other.customer && this.plan == other.plan && this.startDate == other.startDate && this.endDate == other.endDate && this.createdAt == other.createdAt && this.currentBillingPeriodStartDate == other.currentBillingPeriodStartDate && this.currentBillingPeriodEndDate == other.currentBillingPeriodEndDate && this.status == other.status && this.trialInfo == other.trialInfo && this.activePlanPhaseOrder == other.activePlanPhaseOrder && this.fixedFeeQuantitySchedule == other.fixedFeeQuantitySchedule && this.defaultInvoiceMemo == other.defaultInvoiceMemo && this.autoCollection == other.autoCollection && this.netTerms == other.netTerms && this.redeemedCoupon == other.redeemedCoupon && this.billingCycleDay == other.billingCycleDay && this.billingCycleAnchorConfiguration == other.billingCycleAnchorConfiguration && this.invoicingThreshold == other.invoicingThreshold && this.priceIntervals == other.priceIntervals && this.adjustmentIntervals == other.adjustmentIntervals && this.discountIntervals == other.discountIntervals && this.minimumIntervals == other.minimumIntervals && this.maximumIntervals == other.maximumIntervals && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is SubscriptionUnschedulePendingPlanChangesResponse && metadata == other.metadata && id == other.id && customer == other.customer && plan == other.plan && startDate == other.startDate && endDate == other.endDate && createdAt == other.createdAt && currentBillingPeriodStartDate == other.currentBillingPeriodStartDate && currentBillingPeriodEndDate == other.currentBillingPeriodEndDate && status == other.status && trialInfo == other.trialInfo && activePlanPhaseOrder == other.activePlanPhaseOrder && fixedFeeQuantitySchedule == other.fixedFeeQuantitySchedule && defaultInvoiceMemo == other.defaultInvoiceMemo && autoCollection == other.autoCollection && netTerms == other.netTerms && redeemedCoupon == other.redeemedCoupon && billingCycleDay == other.billingCycleDay && billingCycleAnchorConfiguration == other.billingCycleAnchorConfiguration && invoicingThreshold == other.invoicingThreshold && priceIntervals == other.priceIntervals && adjustmentIntervals == other.adjustmentIntervals && discountIntervals == other.discountIntervals && minimumIntervals == other.minimumIntervals && maximumIntervals == other.maximumIntervals && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
-    private var hashCode: Int = 0
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(metadata, id, customer, plan, startDate, endDate, createdAt, currentBillingPeriodStartDate, currentBillingPeriodEndDate, status, trialInfo, activePlanPhaseOrder, fixedFeeQuantitySchedule, defaultInvoiceMemo, autoCollection, netTerms, redeemedCoupon, billingCycleDay, billingCycleAnchorConfiguration, invoicingThreshold, priceIntervals, adjustmentIntervals, discountIntervals, minimumIntervals, maximumIntervals, additionalProperties) }
+    /* spotless:on */
 
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(metadata, id, customer, plan, startDate, endDate, createdAt, currentBillingPeriodStartDate, currentBillingPeriodEndDate, status, trialInfo, activePlanPhaseOrder, fixedFeeQuantitySchedule, defaultInvoiceMemo, autoCollection, netTerms, redeemedCoupon, billingCycleDay, billingCycleAnchorConfiguration, invoicingThreshold, priceIntervals, adjustmentIntervals, discountIntervals, minimumIntervals, maximumIntervals, additionalProperties) /* spotless:on */
-        }
-        return hashCode
-    }
+    override fun hashCode(): Int = hashCode
 
     override fun toString() =
         "SubscriptionUnschedulePendingPlanChangesResponse{metadata=$metadata, id=$id, customer=$customer, plan=$plan, startDate=$startDate, endDate=$endDate, createdAt=$createdAt, currentBillingPeriodStartDate=$currentBillingPeriodStartDate, currentBillingPeriodEndDate=$currentBillingPeriodEndDate, status=$status, trialInfo=$trialInfo, activePlanPhaseOrder=$activePlanPhaseOrder, fixedFeeQuantitySchedule=$fixedFeeQuantitySchedule, defaultInvoiceMemo=$defaultInvoiceMemo, autoCollection=$autoCollection, netTerms=$netTerms, redeemedCoupon=$redeemedCoupon, billingCycleDay=$billingCycleDay, billingCycleAnchorConfiguration=$billingCycleAnchorConfiguration, invoicingThreshold=$invoicingThreshold, priceIntervals=$priceIntervals, adjustmentIntervals=$adjustmentIntervals, discountIntervals=$discountIntervals, minimumIntervals=$minimumIntervals, maximumIntervals=$maximumIntervals, additionalProperties=$additionalProperties}"
