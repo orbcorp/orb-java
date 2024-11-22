@@ -45,6 +45,12 @@ constructor(
 
     fun replaceExistingEvents(): Optional<Boolean> = Optional.ofNullable(replaceExistingEvents)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): EventBackfillCreateBody {
         return EventBackfillCreateBody(
@@ -250,25 +256,6 @@ constructor(
             "EventBackfillCreateBody{timeframeEnd=$timeframeEnd, timeframeStart=$timeframeStart, closeTime=$closeTime, customerId=$customerId, deprecationFilter=$deprecationFilter, externalCustomerId=$externalCustomerId, replaceExistingEvents=$replaceExistingEvents, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is EventBackfillCreateParams && timeframeEnd == other.timeframeEnd && timeframeStart == other.timeframeStart && closeTime == other.closeTime && customerId == other.customerId && deprecationFilter == other.deprecationFilter && externalCustomerId == other.externalCustomerId && replaceExistingEvents == other.replaceExistingEvents && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(timeframeEnd, timeframeStart, closeTime, customerId, deprecationFilter, externalCustomerId, replaceExistingEvents, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "EventBackfillCreateParams{timeframeEnd=$timeframeEnd, timeframeStart=$timeframeStart, closeTime=$closeTime, customerId=$customerId, deprecationFilter=$deprecationFilter, externalCustomerId=$externalCustomerId, replaceExistingEvents=$replaceExistingEvents, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -292,16 +279,17 @@ constructor(
 
         @JvmSynthetic
         internal fun from(eventBackfillCreateParams: EventBackfillCreateParams) = apply {
-            this.timeframeEnd = eventBackfillCreateParams.timeframeEnd
-            this.timeframeStart = eventBackfillCreateParams.timeframeStart
-            this.closeTime = eventBackfillCreateParams.closeTime
-            this.customerId = eventBackfillCreateParams.customerId
-            this.deprecationFilter = eventBackfillCreateParams.deprecationFilter
-            this.externalCustomerId = eventBackfillCreateParams.externalCustomerId
-            this.replaceExistingEvents = eventBackfillCreateParams.replaceExistingEvents
-            additionalHeaders(eventBackfillCreateParams.additionalHeaders)
-            additionalQueryParams(eventBackfillCreateParams.additionalQueryParams)
-            additionalBodyProperties(eventBackfillCreateParams.additionalBodyProperties)
+            timeframeEnd = eventBackfillCreateParams.timeframeEnd
+            timeframeStart = eventBackfillCreateParams.timeframeStart
+            closeTime = eventBackfillCreateParams.closeTime
+            customerId = eventBackfillCreateParams.customerId
+            deprecationFilter = eventBackfillCreateParams.deprecationFilter
+            externalCustomerId = eventBackfillCreateParams.externalCustomerId
+            replaceExistingEvents = eventBackfillCreateParams.replaceExistingEvents
+            additionalHeaders = eventBackfillCreateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = eventBackfillCreateParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                eventBackfillCreateParams.additionalBodyProperties.toMutableMap()
         }
 
         /** The (exclusive) end of the usage timeframe affected by this backfill. */
@@ -484,4 +472,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is EventBackfillCreateParams && timeframeEnd == other.timeframeEnd && timeframeStart == other.timeframeStart && closeTime == other.closeTime && customerId == other.customerId && deprecationFilter == other.deprecationFilter && externalCustomerId == other.externalCustomerId && replaceExistingEvents == other.replaceExistingEvents && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(timeframeEnd, timeframeStart, closeTime, customerId, deprecationFilter, externalCustomerId, replaceExistingEvents, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "EventBackfillCreateParams{timeframeEnd=$timeframeEnd, timeframeStart=$timeframeStart, closeTime=$closeTime, customerId=$customerId, deprecationFilter=$deprecationFilter, externalCustomerId=$externalCustomerId, replaceExistingEvents=$replaceExistingEvents, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

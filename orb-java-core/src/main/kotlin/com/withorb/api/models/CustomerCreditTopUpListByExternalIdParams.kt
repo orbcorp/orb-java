@@ -24,6 +24,10 @@ constructor(
 
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
     @JvmSynthetic
@@ -41,23 +45,6 @@ constructor(
             else -> ""
         }
     }
-
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerCreditTopUpListByExternalIdParams && externalCustomerId == other.externalCustomerId && cursor == other.cursor && limit == other.limit && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(externalCustomerId, cursor, limit, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "CustomerCreditTopUpListByExternalIdParams{externalCustomerId=$externalCustomerId, cursor=$cursor, limit=$limit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -79,11 +66,13 @@ constructor(
         internal fun from(
             customerCreditTopUpListByExternalIdParams: CustomerCreditTopUpListByExternalIdParams
         ) = apply {
-            this.externalCustomerId = customerCreditTopUpListByExternalIdParams.externalCustomerId
-            this.cursor = customerCreditTopUpListByExternalIdParams.cursor
-            this.limit = customerCreditTopUpListByExternalIdParams.limit
-            additionalHeaders(customerCreditTopUpListByExternalIdParams.additionalHeaders)
-            additionalQueryParams(customerCreditTopUpListByExternalIdParams.additionalQueryParams)
+            externalCustomerId = customerCreditTopUpListByExternalIdParams.externalCustomerId
+            cursor = customerCreditTopUpListByExternalIdParams.cursor
+            limit = customerCreditTopUpListByExternalIdParams.limit
+            additionalHeaders =
+                customerCreditTopUpListByExternalIdParams.additionalHeaders.toBuilder()
+            additionalQueryParams =
+                customerCreditTopUpListByExternalIdParams.additionalQueryParams.toBuilder()
         }
 
         fun externalCustomerId(externalCustomerId: String) = apply {
@@ -208,4 +197,17 @@ constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerCreditTopUpListByExternalIdParams && externalCustomerId == other.externalCustomerId && cursor == other.cursor && limit == other.limit && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(externalCustomerId, cursor, limit, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "CustomerCreditTopUpListByExternalIdParams{externalCustomerId=$externalCustomerId, cursor=$cursor, limit=$limit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

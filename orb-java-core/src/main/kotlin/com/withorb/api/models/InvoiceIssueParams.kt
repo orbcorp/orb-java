@@ -29,6 +29,12 @@ constructor(
 
     fun synchronous(): Optional<Boolean> = Optional.ofNullable(synchronous)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): InvoiceIssueBody {
         return InvoiceIssueBody(synchronous, additionalBodyProperties)
@@ -129,25 +135,6 @@ constructor(
             "InvoiceIssueBody{synchronous=$synchronous, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is InvoiceIssueParams && invoiceId == other.invoiceId && synchronous == other.synchronous && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(invoiceId, synchronous, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "InvoiceIssueParams{invoiceId=$invoiceId, synchronous=$synchronous, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -166,11 +153,11 @@ constructor(
 
         @JvmSynthetic
         internal fun from(invoiceIssueParams: InvoiceIssueParams) = apply {
-            this.invoiceId = invoiceIssueParams.invoiceId
-            this.synchronous = invoiceIssueParams.synchronous
-            additionalHeaders(invoiceIssueParams.additionalHeaders)
-            additionalQueryParams(invoiceIssueParams.additionalQueryParams)
-            additionalBodyProperties(invoiceIssueParams.additionalBodyProperties)
+            invoiceId = invoiceIssueParams.invoiceId
+            synchronous = invoiceIssueParams.synchronous
+            additionalHeaders = invoiceIssueParams.additionalHeaders.toBuilder()
+            additionalQueryParams = invoiceIssueParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = invoiceIssueParams.additionalBodyProperties.toMutableMap()
         }
 
         fun invoiceId(invoiceId: String) = apply { this.invoiceId = invoiceId }
@@ -312,4 +299,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is InvoiceIssueParams && invoiceId == other.invoiceId && synchronous == other.synchronous && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(invoiceId, synchronous, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "InvoiceIssueParams{invoiceId=$invoiceId, synchronous=$synchronous, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

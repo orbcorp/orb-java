@@ -41,6 +41,12 @@ constructor(
 
     fun startDate(): LocalDate = startDate
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): InvoiceLineItemCreateBody {
         return InvoiceLineItemCreateBody(
@@ -193,25 +199,6 @@ constructor(
             "InvoiceLineItemCreateBody{amount=$amount, endDate=$endDate, invoiceId=$invoiceId, name=$name, quantity=$quantity, startDate=$startDate, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is InvoiceLineItemCreateParams && amount == other.amount && endDate == other.endDate && invoiceId == other.invoiceId && name == other.name && quantity == other.quantity && startDate == other.startDate && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(amount, endDate, invoiceId, name, quantity, startDate, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "InvoiceLineItemCreateParams{amount=$amount, endDate=$endDate, invoiceId=$invoiceId, name=$name, quantity=$quantity, startDate=$startDate, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -234,15 +221,16 @@ constructor(
 
         @JvmSynthetic
         internal fun from(invoiceLineItemCreateParams: InvoiceLineItemCreateParams) = apply {
-            this.amount = invoiceLineItemCreateParams.amount
-            this.endDate = invoiceLineItemCreateParams.endDate
-            this.invoiceId = invoiceLineItemCreateParams.invoiceId
-            this.name = invoiceLineItemCreateParams.name
-            this.quantity = invoiceLineItemCreateParams.quantity
-            this.startDate = invoiceLineItemCreateParams.startDate
-            additionalHeaders(invoiceLineItemCreateParams.additionalHeaders)
-            additionalQueryParams(invoiceLineItemCreateParams.additionalQueryParams)
-            additionalBodyProperties(invoiceLineItemCreateParams.additionalBodyProperties)
+            amount = invoiceLineItemCreateParams.amount
+            endDate = invoiceLineItemCreateParams.endDate
+            invoiceId = invoiceLineItemCreateParams.invoiceId
+            name = invoiceLineItemCreateParams.name
+            quantity = invoiceLineItemCreateParams.quantity
+            startDate = invoiceLineItemCreateParams.startDate
+            additionalHeaders = invoiceLineItemCreateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = invoiceLineItemCreateParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                invoiceLineItemCreateParams.additionalBodyProperties.toMutableMap()
         }
 
         /** The total amount in the invoice's currency to add to the line item. */
@@ -399,4 +387,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is InvoiceLineItemCreateParams && amount == other.amount && endDate == other.endDate && invoiceId == other.invoiceId && name == other.name && quantity == other.quantity && startDate == other.startDate && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(amount, endDate, invoiceId, name, quantity, startDate, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "InvoiceLineItemCreateParams{amount=$amount, endDate=$endDate, invoiceId=$invoiceId, name=$name, quantity=$quantity, startDate=$startDate, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

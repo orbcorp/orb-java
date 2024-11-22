@@ -33,6 +33,12 @@ constructor(
 
     fun timeframeStart(): Optional<OffsetDateTime> = Optional.ofNullable(timeframeStart)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): EventSearchBody {
         return EventSearchBody(
@@ -170,25 +176,6 @@ constructor(
             "EventSearchBody{eventIds=$eventIds, timeframeEnd=$timeframeEnd, timeframeStart=$timeframeStart, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is EventSearchParams && eventIds == other.eventIds && timeframeEnd == other.timeframeEnd && timeframeStart == other.timeframeStart && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(eventIds, timeframeEnd, timeframeStart, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "EventSearchParams{eventIds=$eventIds, timeframeEnd=$timeframeEnd, timeframeStart=$timeframeStart, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -208,12 +195,12 @@ constructor(
 
         @JvmSynthetic
         internal fun from(eventSearchParams: EventSearchParams) = apply {
-            this.eventIds(eventSearchParams.eventIds)
-            this.timeframeEnd = eventSearchParams.timeframeEnd
-            this.timeframeStart = eventSearchParams.timeframeStart
-            additionalHeaders(eventSearchParams.additionalHeaders)
-            additionalQueryParams(eventSearchParams.additionalQueryParams)
-            additionalBodyProperties(eventSearchParams.additionalBodyProperties)
+            eventIds = eventSearchParams.eventIds.toMutableList()
+            timeframeEnd = eventSearchParams.timeframeEnd
+            timeframeStart = eventSearchParams.timeframeStart
+            additionalHeaders = eventSearchParams.additionalHeaders.toBuilder()
+            additionalQueryParams = eventSearchParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = eventSearchParams.additionalBodyProperties.toMutableMap()
         }
 
         /**
@@ -369,7 +356,7 @@ constructor(
 
         fun build(): EventSearchParams =
             EventSearchParams(
-                checkNotNull(eventIds) { "`eventIds` is required but was not set" }.toImmutable(),
+                eventIds.toImmutable(),
                 timeframeEnd,
                 timeframeStart,
                 additionalHeaders.build(),
@@ -377,4 +364,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is EventSearchParams && eventIds == other.eventIds && timeframeEnd == other.timeframeEnd && timeframeStart == other.timeframeStart && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(eventIds, timeframeEnd, timeframeStart, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "EventSearchParams{eventIds=$eventIds, timeframeEnd=$timeframeEnd, timeframeStart=$timeframeStart, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }
