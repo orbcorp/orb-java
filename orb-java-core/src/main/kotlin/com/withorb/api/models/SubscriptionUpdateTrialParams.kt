@@ -46,6 +46,12 @@ constructor(
 
     fun shift(): Optional<Boolean> = Optional.ofNullable(shift)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): SubscriptionUpdateTrialBody {
         return SubscriptionUpdateTrialBody(
@@ -166,25 +172,6 @@ constructor(
             "SubscriptionUpdateTrialBody{trialEndDate=$trialEndDate, shift=$shift, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is SubscriptionUpdateTrialParams && subscriptionId == other.subscriptionId && trialEndDate == other.trialEndDate && shift == other.shift && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionId, trialEndDate, shift, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "SubscriptionUpdateTrialParams{subscriptionId=$subscriptionId, trialEndDate=$trialEndDate, shift=$shift, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -204,12 +191,13 @@ constructor(
 
         @JvmSynthetic
         internal fun from(subscriptionUpdateTrialParams: SubscriptionUpdateTrialParams) = apply {
-            this.subscriptionId = subscriptionUpdateTrialParams.subscriptionId
-            this.trialEndDate = subscriptionUpdateTrialParams.trialEndDate
-            this.shift = subscriptionUpdateTrialParams.shift
-            additionalHeaders(subscriptionUpdateTrialParams.additionalHeaders)
-            additionalQueryParams(subscriptionUpdateTrialParams.additionalQueryParams)
-            additionalBodyProperties(subscriptionUpdateTrialParams.additionalBodyProperties)
+            subscriptionId = subscriptionUpdateTrialParams.subscriptionId
+            trialEndDate = subscriptionUpdateTrialParams.trialEndDate
+            shift = subscriptionUpdateTrialParams.shift
+            additionalHeaders = subscriptionUpdateTrialParams.additionalHeaders.toBuilder()
+            additionalQueryParams = subscriptionUpdateTrialParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                subscriptionUpdateTrialParams.additionalBodyProperties.toMutableMap()
         }
 
         fun subscriptionId(subscriptionId: String) = apply { this.subscriptionId = subscriptionId }
@@ -538,4 +526,17 @@ constructor(
             fun asString(): String = _value().asStringOrThrow()
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is SubscriptionUpdateTrialParams && subscriptionId == other.subscriptionId && trialEndDate == other.trialEndDate && shift == other.shift && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionId, trialEndDate, shift, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "SubscriptionUpdateTrialParams{subscriptionId=$subscriptionId, trialEndDate=$trialEndDate, shift=$shift, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

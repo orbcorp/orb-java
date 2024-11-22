@@ -24,6 +24,10 @@ constructor(
 
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
     @JvmSynthetic
@@ -41,23 +45,6 @@ constructor(
             else -> ""
         }
     }
-
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CouponSubscriptionListParams && couponId == other.couponId && cursor == other.cursor && limit == other.limit && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(couponId, cursor, limit, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "CouponSubscriptionListParams{couponId=$couponId, cursor=$cursor, limit=$limit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -77,11 +64,11 @@ constructor(
 
         @JvmSynthetic
         internal fun from(couponSubscriptionListParams: CouponSubscriptionListParams) = apply {
-            this.couponId = couponSubscriptionListParams.couponId
-            this.cursor = couponSubscriptionListParams.cursor
-            this.limit = couponSubscriptionListParams.limit
-            additionalHeaders(couponSubscriptionListParams.additionalHeaders)
-            additionalQueryParams(couponSubscriptionListParams.additionalQueryParams)
+            couponId = couponSubscriptionListParams.couponId
+            cursor = couponSubscriptionListParams.cursor
+            limit = couponSubscriptionListParams.limit
+            additionalHeaders = couponSubscriptionListParams.additionalHeaders.toBuilder()
+            additionalQueryParams = couponSubscriptionListParams.additionalQueryParams.toBuilder()
         }
 
         fun couponId(couponId: String) = apply { this.couponId = couponId }
@@ -202,4 +189,17 @@ constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CouponSubscriptionListParams && couponId == other.couponId && cursor == other.cursor && limit == other.limit && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(couponId, cursor, limit, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "CouponSubscriptionListParams{couponId=$couponId, cursor=$cursor, limit=$limit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

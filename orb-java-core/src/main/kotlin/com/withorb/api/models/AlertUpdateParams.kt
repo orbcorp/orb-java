@@ -28,6 +28,12 @@ constructor(
 
     fun thresholds(): List<Threshold> = thresholds
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): AlertUpdateBody {
         return AlertUpdateBody(thresholds, additionalBodyProperties)
@@ -121,25 +127,6 @@ constructor(
             "AlertUpdateBody{thresholds=$thresholds, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is AlertUpdateParams && alertConfigurationId == other.alertConfigurationId && thresholds == other.thresholds && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(alertConfigurationId, thresholds, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "AlertUpdateParams{alertConfigurationId=$alertConfigurationId, thresholds=$thresholds, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -158,11 +145,11 @@ constructor(
 
         @JvmSynthetic
         internal fun from(alertUpdateParams: AlertUpdateParams) = apply {
-            this.alertConfigurationId = alertUpdateParams.alertConfigurationId
-            this.thresholds(alertUpdateParams.thresholds)
-            additionalHeaders(alertUpdateParams.additionalHeaders)
-            additionalQueryParams(alertUpdateParams.additionalQueryParams)
-            additionalBodyProperties(alertUpdateParams.additionalBodyProperties)
+            alertConfigurationId = alertUpdateParams.alertConfigurationId
+            thresholds = alertUpdateParams.thresholds.toMutableList()
+            additionalHeaders = alertUpdateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = alertUpdateParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = alertUpdateParams.additionalBodyProperties.toMutableMap()
         }
 
         fun alertConfigurationId(alertConfigurationId: String) = apply {
@@ -303,8 +290,7 @@ constructor(
                 checkNotNull(alertConfigurationId) {
                     "`alertConfigurationId` is required but was not set"
                 },
-                checkNotNull(thresholds) { "`thresholds` is required but was not set" }
-                    .toImmutable(),
+                thresholds.toImmutable(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -394,4 +380,17 @@ constructor(
         override fun toString() =
             "Threshold{value=$value, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is AlertUpdateParams && alertConfigurationId == other.alertConfigurationId && thresholds == other.thresholds && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(alertConfigurationId, thresholds, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "AlertUpdateParams{alertConfigurationId=$alertConfigurationId, thresholds=$thresholds, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

@@ -55,6 +55,10 @@ constructor(
 
     fun viewMode(): Optional<ViewMode> = Optional.ofNullable(viewMode)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
     @JvmSynthetic
@@ -99,23 +103,6 @@ constructor(
         }
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is SubscriptionFetchUsageParams && subscriptionId == other.subscriptionId && billableMetricId == other.billableMetricId && firstDimensionKey == other.firstDimensionKey && firstDimensionValue == other.firstDimensionValue && granularity == other.granularity && groupBy == other.groupBy && secondDimensionKey == other.secondDimensionKey && secondDimensionValue == other.secondDimensionValue && timeframeEnd == other.timeframeEnd && timeframeStart == other.timeframeStart && viewMode == other.viewMode && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionId, billableMetricId, firstDimensionKey, firstDimensionValue, granularity, groupBy, secondDimensionKey, secondDimensionValue, timeframeEnd, timeframeStart, viewMode, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "SubscriptionFetchUsageParams{subscriptionId=$subscriptionId, billableMetricId=$billableMetricId, firstDimensionKey=$firstDimensionKey, firstDimensionValue=$firstDimensionValue, granularity=$granularity, groupBy=$groupBy, secondDimensionKey=$secondDimensionKey, secondDimensionValue=$secondDimensionValue, timeframeEnd=$timeframeEnd, timeframeStart=$timeframeStart, viewMode=$viewMode, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -142,19 +129,19 @@ constructor(
 
         @JvmSynthetic
         internal fun from(subscriptionFetchUsageParams: SubscriptionFetchUsageParams) = apply {
-            this.subscriptionId = subscriptionFetchUsageParams.subscriptionId
-            this.billableMetricId = subscriptionFetchUsageParams.billableMetricId
-            this.firstDimensionKey = subscriptionFetchUsageParams.firstDimensionKey
-            this.firstDimensionValue = subscriptionFetchUsageParams.firstDimensionValue
-            this.granularity = subscriptionFetchUsageParams.granularity
-            this.groupBy = subscriptionFetchUsageParams.groupBy
-            this.secondDimensionKey = subscriptionFetchUsageParams.secondDimensionKey
-            this.secondDimensionValue = subscriptionFetchUsageParams.secondDimensionValue
-            this.timeframeEnd = subscriptionFetchUsageParams.timeframeEnd
-            this.timeframeStart = subscriptionFetchUsageParams.timeframeStart
-            this.viewMode = subscriptionFetchUsageParams.viewMode
-            additionalHeaders(subscriptionFetchUsageParams.additionalHeaders)
-            additionalQueryParams(subscriptionFetchUsageParams.additionalQueryParams)
+            subscriptionId = subscriptionFetchUsageParams.subscriptionId
+            billableMetricId = subscriptionFetchUsageParams.billableMetricId
+            firstDimensionKey = subscriptionFetchUsageParams.firstDimensionKey
+            firstDimensionValue = subscriptionFetchUsageParams.firstDimensionValue
+            granularity = subscriptionFetchUsageParams.granularity
+            groupBy = subscriptionFetchUsageParams.groupBy
+            secondDimensionKey = subscriptionFetchUsageParams.secondDimensionKey
+            secondDimensionValue = subscriptionFetchUsageParams.secondDimensionValue
+            timeframeEnd = subscriptionFetchUsageParams.timeframeEnd
+            timeframeStart = subscriptionFetchUsageParams.timeframeStart
+            viewMode = subscriptionFetchUsageParams.viewMode
+            additionalHeaders = subscriptionFetchUsageParams.additionalHeaders.toBuilder()
+            additionalQueryParams = subscriptionFetchUsageParams.additionalQueryParams.toBuilder()
         }
 
         fun subscriptionId(subscriptionId: String) = apply { this.subscriptionId = subscriptionId }
@@ -428,4 +415,17 @@ constructor(
 
         fun asString(): String = _value().asStringOrThrow()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is SubscriptionFetchUsageParams && subscriptionId == other.subscriptionId && billableMetricId == other.billableMetricId && firstDimensionKey == other.firstDimensionKey && firstDimensionValue == other.firstDimensionValue && granularity == other.granularity && groupBy == other.groupBy && secondDimensionKey == other.secondDimensionKey && secondDimensionValue == other.secondDimensionValue && timeframeEnd == other.timeframeEnd && timeframeStart == other.timeframeStart && viewMode == other.viewMode && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionId, billableMetricId, firstDimensionKey, firstDimensionValue, granularity, groupBy, secondDimensionKey, secondDimensionValue, timeframeEnd, timeframeStart, viewMode, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "SubscriptionFetchUsageParams{subscriptionId=$subscriptionId, billableMetricId=$billableMetricId, firstDimensionKey=$firstDimensionKey, firstDimensionValue=$firstDimensionValue, granularity=$granularity, groupBy=$groupBy, secondDimensionKey=$secondDimensionKey, secondDimensionValue=$secondDimensionValue, timeframeEnd=$timeframeEnd, timeframeStart=$timeframeStart, viewMode=$viewMode, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

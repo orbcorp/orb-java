@@ -39,6 +39,12 @@ constructor(
 
     fun thresholds(): Optional<List<Threshold>> = Optional.ofNullable(thresholds)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): AlertCreateForCustomerBody {
         return AlertCreateForCustomerBody(
@@ -157,25 +163,6 @@ constructor(
             "AlertCreateForCustomerBody{currency=$currency, type=$type, thresholds=$thresholds, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is AlertCreateForCustomerParams && customerId == other.customerId && currency == other.currency && type == other.type && thresholds == other.thresholds && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, currency, type, thresholds, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "AlertCreateForCustomerParams{customerId=$customerId, currency=$currency, type=$type, thresholds=$thresholds, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -196,13 +183,14 @@ constructor(
 
         @JvmSynthetic
         internal fun from(alertCreateForCustomerParams: AlertCreateForCustomerParams) = apply {
-            this.customerId = alertCreateForCustomerParams.customerId
-            this.currency = alertCreateForCustomerParams.currency
-            this.type = alertCreateForCustomerParams.type
-            this.thresholds(alertCreateForCustomerParams.thresholds ?: listOf())
-            additionalHeaders(alertCreateForCustomerParams.additionalHeaders)
-            additionalQueryParams(alertCreateForCustomerParams.additionalQueryParams)
-            additionalBodyProperties(alertCreateForCustomerParams.additionalBodyProperties)
+            customerId = alertCreateForCustomerParams.customerId
+            currency = alertCreateForCustomerParams.currency
+            type = alertCreateForCustomerParams.type
+            thresholds = alertCreateForCustomerParams.thresholds?.toMutableList() ?: mutableListOf()
+            additionalHeaders = alertCreateForCustomerParams.additionalHeaders.toBuilder()
+            additionalQueryParams = alertCreateForCustomerParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                alertCreateForCustomerParams.additionalBodyProperties.toMutableMap()
         }
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
@@ -347,7 +335,7 @@ constructor(
                 checkNotNull(customerId) { "`customerId` is required but was not set" },
                 checkNotNull(currency) { "`currency` is required but was not set" },
                 checkNotNull(type) { "`type` is required but was not set" },
-                if (thresholds.size == 0) null else thresholds.toImmutable(),
+                thresholds.toImmutable().ifEmpty { null },
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -512,4 +500,17 @@ constructor(
         override fun toString() =
             "Threshold{value=$value, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is AlertCreateForCustomerParams && customerId == other.customerId && currency == other.currency && type == other.type && thresholds == other.thresholds && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, currency, type, thresholds, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "AlertCreateForCustomerParams{customerId=$customerId, currency=$currency, type=$type, thresholds=$thresholds, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }
