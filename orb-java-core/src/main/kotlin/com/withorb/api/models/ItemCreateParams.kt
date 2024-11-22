@@ -25,6 +25,12 @@ constructor(
 
     fun name(): String = name
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): ItemCreateBody {
         return ItemCreateBody(name, additionalBodyProperties)
@@ -109,25 +115,6 @@ constructor(
             "ItemCreateBody{name=$name, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ItemCreateParams && name == other.name && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(name, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "ItemCreateParams{name=$name, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -145,10 +132,10 @@ constructor(
 
         @JvmSynthetic
         internal fun from(itemCreateParams: ItemCreateParams) = apply {
-            this.name = itemCreateParams.name
-            additionalHeaders(itemCreateParams.additionalHeaders)
-            additionalQueryParams(itemCreateParams.additionalQueryParams)
-            additionalBodyProperties(itemCreateParams.additionalBodyProperties)
+            name = itemCreateParams.name
+            additionalHeaders = itemCreateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = itemCreateParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = itemCreateParams.additionalBodyProperties.toMutableMap()
         }
 
         /** The name of the item. */
@@ -282,4 +269,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ItemCreateParams && name == other.name && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(name, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "ItemCreateParams{name=$name, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

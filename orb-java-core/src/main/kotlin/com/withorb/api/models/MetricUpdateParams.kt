@@ -29,6 +29,12 @@ constructor(
 
     fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): MetricUpdateBody {
         return MetricUpdateBody(metadata, additionalBodyProperties)
@@ -126,25 +132,6 @@ constructor(
             "MetricUpdateBody{metadata=$metadata, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is MetricUpdateParams && metricId == other.metricId && metadata == other.metadata && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(metricId, metadata, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "MetricUpdateParams{metricId=$metricId, metadata=$metadata, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -163,11 +150,11 @@ constructor(
 
         @JvmSynthetic
         internal fun from(metricUpdateParams: MetricUpdateParams) = apply {
-            this.metricId = metricUpdateParams.metricId
-            this.metadata = metricUpdateParams.metadata
-            additionalHeaders(metricUpdateParams.additionalHeaders)
-            additionalQueryParams(metricUpdateParams.additionalQueryParams)
-            additionalBodyProperties(metricUpdateParams.additionalBodyProperties)
+            metricId = metricUpdateParams.metricId
+            metadata = metricUpdateParams.metadata
+            additionalHeaders = metricUpdateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = metricUpdateParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = metricUpdateParams.additionalBodyProperties.toMutableMap()
         }
 
         fun metricId(metricId: String) = apply { this.metricId = metricId }
@@ -374,4 +361,17 @@ constructor(
 
         override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is MetricUpdateParams && metricId == other.metricId && metadata == other.metadata && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(metricId, metadata, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "MetricUpdateParams{metricId=$metricId, metadata=$metadata, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

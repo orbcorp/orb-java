@@ -36,6 +36,12 @@ constructor(
 
     fun reason(): Optional<Reason> = Optional.ofNullable(reason)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): CreditNoteCreateBody {
         return CreditNoteCreateBody(
@@ -145,25 +151,6 @@ constructor(
             "CreditNoteCreateBody{lineItems=$lineItems, memo=$memo, reason=$reason, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CreditNoteCreateParams && lineItems == other.lineItems && memo == other.memo && reason == other.reason && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(lineItems, memo, reason, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CreditNoteCreateParams{lineItems=$lineItems, memo=$memo, reason=$reason, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -183,12 +170,13 @@ constructor(
 
         @JvmSynthetic
         internal fun from(creditNoteCreateParams: CreditNoteCreateParams) = apply {
-            this.lineItems(creditNoteCreateParams.lineItems)
-            this.memo = creditNoteCreateParams.memo
-            this.reason = creditNoteCreateParams.reason
-            additionalHeaders(creditNoteCreateParams.additionalHeaders)
-            additionalQueryParams(creditNoteCreateParams.additionalQueryParams)
-            additionalBodyProperties(creditNoteCreateParams.additionalBodyProperties)
+            lineItems = creditNoteCreateParams.lineItems.toMutableList()
+            memo = creditNoteCreateParams.memo
+            reason = creditNoteCreateParams.reason
+            additionalHeaders = creditNoteCreateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = creditNoteCreateParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                creditNoteCreateParams.additionalBodyProperties.toMutableMap()
         }
 
         fun lineItems(lineItems: List<LineItem>) = apply {
@@ -326,7 +314,7 @@ constructor(
 
         fun build(): CreditNoteCreateParams =
             CreditNoteCreateParams(
-                checkNotNull(lineItems) { "`lineItems` is required but was not set" }.toImmutable(),
+                lineItems.toImmutable(),
                 memo,
                 reason,
                 additionalHeaders.build(),
@@ -493,4 +481,17 @@ constructor(
 
         fun asString(): String = _value().asStringOrThrow()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CreditNoteCreateParams && lineItems == other.lineItems && memo == other.memo && reason == other.reason && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(lineItems, memo, reason, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CreditNoteCreateParams{lineItems=$lineItems, memo=$memo, reason=$reason, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

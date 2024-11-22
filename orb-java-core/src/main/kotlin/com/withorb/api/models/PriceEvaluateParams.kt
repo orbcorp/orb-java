@@ -45,6 +45,12 @@ constructor(
 
     fun groupingKeys(): Optional<List<String>> = Optional.ofNullable(groupingKeys)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): PriceEvaluateBody {
         return PriceEvaluateBody(
@@ -223,25 +229,6 @@ constructor(
             "PriceEvaluateBody{timeframeEnd=$timeframeEnd, timeframeStart=$timeframeStart, customerId=$customerId, externalCustomerId=$externalCustomerId, filter=$filter, groupingKeys=$groupingKeys, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is PriceEvaluateParams && priceId == other.priceId && timeframeEnd == other.timeframeEnd && timeframeStart == other.timeframeStart && customerId == other.customerId && externalCustomerId == other.externalCustomerId && filter == other.filter && groupingKeys == other.groupingKeys && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(priceId, timeframeEnd, timeframeStart, customerId, externalCustomerId, filter, groupingKeys, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "PriceEvaluateParams{priceId=$priceId, timeframeEnd=$timeframeEnd, timeframeStart=$timeframeStart, customerId=$customerId, externalCustomerId=$externalCustomerId, filter=$filter, groupingKeys=$groupingKeys, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -265,16 +252,16 @@ constructor(
 
         @JvmSynthetic
         internal fun from(priceEvaluateParams: PriceEvaluateParams) = apply {
-            this.priceId = priceEvaluateParams.priceId
-            this.timeframeEnd = priceEvaluateParams.timeframeEnd
-            this.timeframeStart = priceEvaluateParams.timeframeStart
-            this.customerId = priceEvaluateParams.customerId
-            this.externalCustomerId = priceEvaluateParams.externalCustomerId
-            this.filter = priceEvaluateParams.filter
-            this.groupingKeys(priceEvaluateParams.groupingKeys ?: listOf())
-            additionalHeaders(priceEvaluateParams.additionalHeaders)
-            additionalQueryParams(priceEvaluateParams.additionalQueryParams)
-            additionalBodyProperties(priceEvaluateParams.additionalBodyProperties)
+            priceId = priceEvaluateParams.priceId
+            timeframeEnd = priceEvaluateParams.timeframeEnd
+            timeframeStart = priceEvaluateParams.timeframeStart
+            customerId = priceEvaluateParams.customerId
+            externalCustomerId = priceEvaluateParams.externalCustomerId
+            filter = priceEvaluateParams.filter
+            groupingKeys = priceEvaluateParams.groupingKeys?.toMutableList() ?: mutableListOf()
+            additionalHeaders = priceEvaluateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = priceEvaluateParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = priceEvaluateParams.additionalBodyProperties.toMutableMap()
         }
 
         fun priceId(priceId: String) = apply { this.priceId = priceId }
@@ -447,10 +434,23 @@ constructor(
                 customerId,
                 externalCustomerId,
                 filter,
-                if (groupingKeys.size == 0) null else groupingKeys.toImmutable(),
+                groupingKeys.toImmutable().ifEmpty { null },
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is PriceEvaluateParams && priceId == other.priceId && timeframeEnd == other.timeframeEnd && timeframeStart == other.timeframeStart && customerId == other.customerId && externalCustomerId == other.externalCustomerId && filter == other.filter && groupingKeys == other.groupingKeys && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(priceId, timeframeEnd, timeframeStart, customerId, externalCustomerId, filter, groupingKeys, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "PriceEvaluateParams{priceId=$priceId, timeframeEnd=$timeframeEnd, timeframeStart=$timeframeStart, customerId=$customerId, externalCustomerId=$externalCustomerId, filter=$filter, groupingKeys=$groupingKeys, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

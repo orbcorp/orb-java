@@ -39,6 +39,12 @@ constructor(
 
     fun thresholds(): Optional<List<Threshold>> = Optional.ofNullable(thresholds)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): AlertCreateForExternalCustomerBody {
         return AlertCreateForExternalCustomerBody(
@@ -159,25 +165,6 @@ constructor(
             "AlertCreateForExternalCustomerBody{currency=$currency, type=$type, thresholds=$thresholds, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is AlertCreateForExternalCustomerParams && externalCustomerId == other.externalCustomerId && currency == other.currency && type == other.type && thresholds == other.thresholds && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(externalCustomerId, currency, type, thresholds, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "AlertCreateForExternalCustomerParams{externalCustomerId=$externalCustomerId, currency=$currency, type=$type, thresholds=$thresholds, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -200,13 +187,16 @@ constructor(
         internal fun from(
             alertCreateForExternalCustomerParams: AlertCreateForExternalCustomerParams
         ) = apply {
-            this.externalCustomerId = alertCreateForExternalCustomerParams.externalCustomerId
-            this.currency = alertCreateForExternalCustomerParams.currency
-            this.type = alertCreateForExternalCustomerParams.type
-            this.thresholds(alertCreateForExternalCustomerParams.thresholds ?: listOf())
-            additionalHeaders(alertCreateForExternalCustomerParams.additionalHeaders)
-            additionalQueryParams(alertCreateForExternalCustomerParams.additionalQueryParams)
-            additionalBodyProperties(alertCreateForExternalCustomerParams.additionalBodyProperties)
+            externalCustomerId = alertCreateForExternalCustomerParams.externalCustomerId
+            currency = alertCreateForExternalCustomerParams.currency
+            type = alertCreateForExternalCustomerParams.type
+            thresholds =
+                alertCreateForExternalCustomerParams.thresholds?.toMutableList() ?: mutableListOf()
+            additionalHeaders = alertCreateForExternalCustomerParams.additionalHeaders.toBuilder()
+            additionalQueryParams =
+                alertCreateForExternalCustomerParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                alertCreateForExternalCustomerParams.additionalBodyProperties.toMutableMap()
         }
 
         fun externalCustomerId(externalCustomerId: String) = apply {
@@ -355,7 +345,7 @@ constructor(
                 },
                 checkNotNull(currency) { "`currency` is required but was not set" },
                 checkNotNull(type) { "`type` is required but was not set" },
-                if (thresholds.size == 0) null else thresholds.toImmutable(),
+                thresholds.toImmutable().ifEmpty { null },
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -520,4 +510,17 @@ constructor(
         override fun toString() =
             "Threshold{value=$value, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is AlertCreateForExternalCustomerParams && externalCustomerId == other.externalCustomerId && currency == other.currency && type == other.type && thresholds == other.thresholds && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(externalCustomerId, currency, type, thresholds, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "AlertCreateForExternalCustomerParams{externalCustomerId=$externalCustomerId, currency=$currency, type=$type, thresholds=$thresholds, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

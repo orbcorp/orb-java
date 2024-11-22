@@ -17,6 +17,10 @@ constructor(
 
     fun couponId(): String = couponId
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
@@ -27,23 +31,6 @@ constructor(
             else -> ""
         }
     }
-
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CouponFetchParams && couponId == other.couponId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(couponId, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "CouponFetchParams{couponId=$couponId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -61,9 +48,9 @@ constructor(
 
         @JvmSynthetic
         internal fun from(couponFetchParams: CouponFetchParams) = apply {
-            this.couponId = couponFetchParams.couponId
-            additionalHeaders(couponFetchParams.additionalHeaders)
-            additionalQueryParams(couponFetchParams.additionalQueryParams)
+            couponId = couponFetchParams.couponId
+            additionalHeaders = couponFetchParams.additionalHeaders.toBuilder()
+            additionalQueryParams = couponFetchParams.additionalQueryParams.toBuilder()
         }
 
         fun couponId(couponId: String) = apply { this.couponId = couponId }
@@ -173,4 +160,17 @@ constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CouponFetchParams && couponId == other.couponId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(couponId, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "CouponFetchParams{couponId=$couponId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

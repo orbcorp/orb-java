@@ -42,6 +42,12 @@ constructor(
 
     fun externalCustomerId(): Optional<String> = Optional.ofNullable(externalCustomerId)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): EventUpdateBody {
         return EventUpdateBody(
@@ -203,25 +209,6 @@ constructor(
             "EventUpdateBody{eventName=$eventName, properties=$properties, timestamp=$timestamp, customerId=$customerId, externalCustomerId=$externalCustomerId, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is EventUpdateParams && eventId == other.eventId && eventName == other.eventName && properties == other.properties && timestamp == other.timestamp && customerId == other.customerId && externalCustomerId == other.externalCustomerId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(eventId, eventName, properties, timestamp, customerId, externalCustomerId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "EventUpdateParams{eventId=$eventId, eventName=$eventName, properties=$properties, timestamp=$timestamp, customerId=$customerId, externalCustomerId=$externalCustomerId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -244,15 +231,15 @@ constructor(
 
         @JvmSynthetic
         internal fun from(eventUpdateParams: EventUpdateParams) = apply {
-            this.eventId = eventUpdateParams.eventId
-            this.eventName = eventUpdateParams.eventName
-            this.properties = eventUpdateParams.properties
-            this.timestamp = eventUpdateParams.timestamp
-            this.customerId = eventUpdateParams.customerId
-            this.externalCustomerId = eventUpdateParams.externalCustomerId
-            additionalHeaders(eventUpdateParams.additionalHeaders)
-            additionalQueryParams(eventUpdateParams.additionalQueryParams)
-            additionalBodyProperties(eventUpdateParams.additionalBodyProperties)
+            eventId = eventUpdateParams.eventId
+            eventName = eventUpdateParams.eventName
+            properties = eventUpdateParams.properties
+            timestamp = eventUpdateParams.timestamp
+            customerId = eventUpdateParams.customerId
+            externalCustomerId = eventUpdateParams.externalCustomerId
+            additionalHeaders = eventUpdateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = eventUpdateParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = eventUpdateParams.additionalBodyProperties.toMutableMap()
         }
 
         fun eventId(eventId: String) = apply { this.eventId = eventId }
@@ -414,4 +401,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is EventUpdateParams && eventId == other.eventId && eventName == other.eventName && properties == other.properties && timestamp == other.timestamp && customerId == other.customerId && externalCustomerId == other.externalCustomerId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(eventId, eventName, properties, timestamp, customerId, externalCustomerId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "EventUpdateParams{eventId=$eventId, eventName=$eventName, properties=$properties, timestamp=$timestamp, customerId=$customerId, externalCustomerId=$externalCustomerId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

@@ -29,6 +29,12 @@ constructor(
 
     fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): InvoiceUpdateBody {
         return InvoiceUpdateBody(metadata, additionalBodyProperties)
@@ -126,25 +132,6 @@ constructor(
             "InvoiceUpdateBody{metadata=$metadata, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is InvoiceUpdateParams && invoiceId == other.invoiceId && metadata == other.metadata && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(invoiceId, metadata, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "InvoiceUpdateParams{invoiceId=$invoiceId, metadata=$metadata, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -163,11 +150,11 @@ constructor(
 
         @JvmSynthetic
         internal fun from(invoiceUpdateParams: InvoiceUpdateParams) = apply {
-            this.invoiceId = invoiceUpdateParams.invoiceId
-            this.metadata = invoiceUpdateParams.metadata
-            additionalHeaders(invoiceUpdateParams.additionalHeaders)
-            additionalQueryParams(invoiceUpdateParams.additionalQueryParams)
-            additionalBodyProperties(invoiceUpdateParams.additionalBodyProperties)
+            invoiceId = invoiceUpdateParams.invoiceId
+            metadata = invoiceUpdateParams.metadata
+            additionalHeaders = invoiceUpdateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = invoiceUpdateParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = invoiceUpdateParams.additionalBodyProperties.toMutableMap()
         }
 
         fun invoiceId(invoiceId: String) = apply { this.invoiceId = invoiceId }
@@ -374,4 +361,17 @@ constructor(
 
         override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is InvoiceUpdateParams && invoiceId == other.invoiceId && metadata == other.metadata && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(invoiceId, metadata, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "InvoiceUpdateParams{invoiceId=$invoiceId, metadata=$metadata, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

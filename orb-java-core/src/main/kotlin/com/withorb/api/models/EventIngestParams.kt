@@ -33,6 +33,12 @@ constructor(
 
     fun debug(): Optional<Boolean> = Optional.ofNullable(debug)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): EventIngestBody {
         return EventIngestBody(events, additionalBodyProperties)
@@ -122,25 +128,6 @@ constructor(
             "EventIngestBody{events=$events, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is EventIngestParams && events == other.events && backfillId == other.backfillId && debug == other.debug && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(events, backfillId, debug, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "EventIngestParams{events=$events, backfillId=$backfillId, debug=$debug, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -160,12 +147,12 @@ constructor(
 
         @JvmSynthetic
         internal fun from(eventIngestParams: EventIngestParams) = apply {
-            this.events(eventIngestParams.events)
-            this.backfillId = eventIngestParams.backfillId
-            this.debug = eventIngestParams.debug
-            additionalHeaders(eventIngestParams.additionalHeaders)
-            additionalQueryParams(eventIngestParams.additionalQueryParams)
-            additionalBodyProperties(eventIngestParams.additionalBodyProperties)
+            events = eventIngestParams.events.toMutableList()
+            backfillId = eventIngestParams.backfillId
+            debug = eventIngestParams.debug
+            additionalHeaders = eventIngestParams.additionalHeaders.toBuilder()
+            additionalQueryParams = eventIngestParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = eventIngestParams.additionalBodyProperties.toMutableMap()
         }
 
         fun events(events: List<Event>) = apply {
@@ -306,7 +293,7 @@ constructor(
 
         fun build(): EventIngestParams =
             EventIngestParams(
-                checkNotNull(events) { "`events` is required but was not set" }.toImmutable(),
+                events.toImmutable(),
                 backfillId,
                 debug,
                 additionalHeaders.build(),
@@ -473,4 +460,17 @@ constructor(
         override fun toString() =
             "Event{customerId=$customerId, externalCustomerId=$externalCustomerId, eventName=$eventName, timestamp=$timestamp, properties=$properties, idempotencyKey=$idempotencyKey, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is EventIngestParams && events == other.events && backfillId == other.backfillId && debug == other.debug && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(events, backfillId, debug, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "EventIngestParams{events=$events, backfillId=$backfillId, debug=$debug, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

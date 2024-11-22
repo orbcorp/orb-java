@@ -17,6 +17,10 @@ constructor(
 
     fun creditNoteId(): String = creditNoteId
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
@@ -27,23 +31,6 @@ constructor(
             else -> ""
         }
     }
-
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CreditNoteFetchParams && creditNoteId == other.creditNoteId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(creditNoteId, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "CreditNoteFetchParams{creditNoteId=$creditNoteId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -61,9 +48,9 @@ constructor(
 
         @JvmSynthetic
         internal fun from(creditNoteFetchParams: CreditNoteFetchParams) = apply {
-            this.creditNoteId = creditNoteFetchParams.creditNoteId
-            additionalHeaders(creditNoteFetchParams.additionalHeaders)
-            additionalQueryParams(creditNoteFetchParams.additionalQueryParams)
+            creditNoteId = creditNoteFetchParams.creditNoteId
+            additionalHeaders = creditNoteFetchParams.additionalHeaders.toBuilder()
+            additionalQueryParams = creditNoteFetchParams.additionalQueryParams.toBuilder()
         }
 
         fun creditNoteId(creditNoteId: String) = apply { this.creditNoteId = creditNoteId }
@@ -173,4 +160,17 @@ constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CreditNoteFetchParams && creditNoteId == other.creditNoteId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(creditNoteId, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "CreditNoteFetchParams{creditNoteId=$creditNoteId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

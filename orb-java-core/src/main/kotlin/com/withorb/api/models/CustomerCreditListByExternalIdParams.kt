@@ -30,6 +30,10 @@ constructor(
 
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
     @JvmSynthetic
@@ -49,23 +53,6 @@ constructor(
             else -> ""
         }
     }
-
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerCreditListByExternalIdParams && externalCustomerId == other.externalCustomerId && currency == other.currency && cursor == other.cursor && includeAllBlocks == other.includeAllBlocks && limit == other.limit && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(externalCustomerId, currency, cursor, includeAllBlocks, limit, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "CustomerCreditListByExternalIdParams{externalCustomerId=$externalCustomerId, currency=$currency, cursor=$cursor, includeAllBlocks=$includeAllBlocks, limit=$limit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -89,13 +76,14 @@ constructor(
         internal fun from(
             customerCreditListByExternalIdParams: CustomerCreditListByExternalIdParams
         ) = apply {
-            this.externalCustomerId = customerCreditListByExternalIdParams.externalCustomerId
-            this.currency = customerCreditListByExternalIdParams.currency
-            this.cursor = customerCreditListByExternalIdParams.cursor
-            this.includeAllBlocks = customerCreditListByExternalIdParams.includeAllBlocks
-            this.limit = customerCreditListByExternalIdParams.limit
-            additionalHeaders(customerCreditListByExternalIdParams.additionalHeaders)
-            additionalQueryParams(customerCreditListByExternalIdParams.additionalQueryParams)
+            externalCustomerId = customerCreditListByExternalIdParams.externalCustomerId
+            currency = customerCreditListByExternalIdParams.currency
+            cursor = customerCreditListByExternalIdParams.cursor
+            includeAllBlocks = customerCreditListByExternalIdParams.includeAllBlocks
+            limit = customerCreditListByExternalIdParams.limit
+            additionalHeaders = customerCreditListByExternalIdParams.additionalHeaders.toBuilder()
+            additionalQueryParams =
+                customerCreditListByExternalIdParams.additionalQueryParams.toBuilder()
         }
 
         fun externalCustomerId(externalCustomerId: String) = apply {
@@ -230,4 +218,17 @@ constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerCreditListByExternalIdParams && externalCustomerId == other.externalCustomerId && currency == other.currency && cursor == other.cursor && includeAllBlocks == other.includeAllBlocks && limit == other.limit && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(externalCustomerId, currency, cursor, includeAllBlocks, limit, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "CustomerCreditListByExternalIdParams{externalCustomerId=$externalCustomerId, currency=$currency, cursor=$cursor, includeAllBlocks=$includeAllBlocks, limit=$limit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
