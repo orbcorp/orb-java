@@ -37,6 +37,12 @@ constructor(
 
     fun name(): Optional<String> = Optional.ofNullable(name)
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): ItemUpdateBody {
         return ItemUpdateBody(
@@ -147,25 +153,6 @@ constructor(
             "ItemUpdateBody{externalConnections=$externalConnections, name=$name, additionalProperties=$additionalProperties}"
     }
 
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ItemUpdateParams && itemId == other.itemId && externalConnections == other.externalConnections && name == other.name && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(itemId, externalConnections, name, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "ItemUpdateParams{itemId=$itemId, externalConnections=$externalConnections, name=$name, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -185,12 +172,13 @@ constructor(
 
         @JvmSynthetic
         internal fun from(itemUpdateParams: ItemUpdateParams) = apply {
-            this.itemId = itemUpdateParams.itemId
-            this.externalConnections(itemUpdateParams.externalConnections ?: listOf())
-            this.name = itemUpdateParams.name
-            additionalHeaders(itemUpdateParams.additionalHeaders)
-            additionalQueryParams(itemUpdateParams.additionalQueryParams)
-            additionalBodyProperties(itemUpdateParams.additionalBodyProperties)
+            itemId = itemUpdateParams.itemId
+            externalConnections =
+                itemUpdateParams.externalConnections?.toMutableList() ?: mutableListOf()
+            name = itemUpdateParams.name
+            additionalHeaders = itemUpdateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = itemUpdateParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = itemUpdateParams.additionalBodyProperties.toMutableMap()
         }
 
         fun itemId(itemId: String) = apply { this.itemId = itemId }
@@ -329,7 +317,7 @@ constructor(
         fun build(): ItemUpdateParams =
             ItemUpdateParams(
                 checkNotNull(itemId) { "`itemId` is required but was not set" },
-                if (externalConnections.size == 0) null else externalConnections.toImmutable(),
+                externalConnections.toImmutable().ifEmpty { null },
                 name,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -515,4 +503,17 @@ constructor(
         override fun toString() =
             "ExternalConnection{externalConnectionName=$externalConnectionName, externalEntityId=$externalEntityId, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ItemUpdateParams && itemId == other.itemId && externalConnections == other.externalConnections && name == other.name && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(itemId, externalConnections, name, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "ItemUpdateParams{itemId=$itemId, externalConnections=$externalConnections, name=$name, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

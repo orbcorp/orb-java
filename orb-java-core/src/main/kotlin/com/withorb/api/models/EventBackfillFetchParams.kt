@@ -17,6 +17,10 @@ constructor(
 
     fun backfillId(): String = backfillId
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
@@ -27,23 +31,6 @@ constructor(
             else -> ""
         }
     }
-
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is EventBackfillFetchParams && backfillId == other.backfillId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(backfillId, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "EventBackfillFetchParams{backfillId=$backfillId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -61,9 +48,9 @@ constructor(
 
         @JvmSynthetic
         internal fun from(eventBackfillFetchParams: EventBackfillFetchParams) = apply {
-            this.backfillId = eventBackfillFetchParams.backfillId
-            additionalHeaders(eventBackfillFetchParams.additionalHeaders)
-            additionalQueryParams(eventBackfillFetchParams.additionalQueryParams)
+            backfillId = eventBackfillFetchParams.backfillId
+            additionalHeaders = eventBackfillFetchParams.additionalHeaders.toBuilder()
+            additionalQueryParams = eventBackfillFetchParams.additionalQueryParams.toBuilder()
         }
 
         fun backfillId(backfillId: String) = apply { this.backfillId = backfillId }
@@ -173,4 +160,17 @@ constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is EventBackfillFetchParams && backfillId == other.backfillId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(backfillId, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "EventBackfillFetchParams{backfillId=$backfillId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

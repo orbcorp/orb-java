@@ -21,6 +21,12 @@ constructor(
 
     fun subscriptionId(): String = subscriptionId
 
+    fun _additionalHeaders(): Headers = additionalHeaders
+
+    fun _additionalQueryParams(): QueryParams = additionalQueryParams
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     @JvmSynthetic
     internal fun getBody(): Optional<Map<String, JsonValue>> {
         return Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
@@ -36,25 +42,6 @@ constructor(
             else -> ""
         }
     }
-
-    fun _additionalHeaders(): Headers = additionalHeaders
-
-    fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is SubscriptionUnschedulePendingPlanChangesParams && subscriptionId == other.subscriptionId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "SubscriptionUnschedulePendingPlanChangesParams{subscriptionId=$subscriptionId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -76,14 +63,14 @@ constructor(
             subscriptionUnschedulePendingPlanChangesParams:
                 SubscriptionUnschedulePendingPlanChangesParams
         ) = apply {
-            this.subscriptionId = subscriptionUnschedulePendingPlanChangesParams.subscriptionId
-            additionalHeaders(subscriptionUnschedulePendingPlanChangesParams.additionalHeaders)
-            additionalQueryParams(
-                subscriptionUnschedulePendingPlanChangesParams.additionalQueryParams
-            )
-            additionalBodyProperties(
+            subscriptionId = subscriptionUnschedulePendingPlanChangesParams.subscriptionId
+            additionalHeaders =
+                subscriptionUnschedulePendingPlanChangesParams.additionalHeaders.toBuilder()
+            additionalQueryParams =
+                subscriptionUnschedulePendingPlanChangesParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
                 subscriptionUnschedulePendingPlanChangesParams.additionalBodyProperties
-            )
+                    .toMutableMap()
         }
 
         fun subscriptionId(subscriptionId: String) = apply { this.subscriptionId = subscriptionId }
@@ -216,4 +203,17 @@ constructor(
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is SubscriptionUnschedulePendingPlanChangesParams && subscriptionId == other.subscriptionId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "SubscriptionUnschedulePendingPlanChangesParams{subscriptionId=$subscriptionId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }
