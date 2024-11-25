@@ -15,13 +15,13 @@ class TrialDiscountTest {
                 .discountType(TrialDiscount.DiscountType.TRIAL)
                 .reason("reason")
                 .trialAmountDiscount("trial_amount_discount")
-                .trialPercentageDiscount(42.23)
+                .trialPercentageDiscount(0.0)
                 .build()
         assertThat(trialDiscount).isNotNull
         assertThat(trialDiscount.appliesToPriceIds()).containsExactly("string")
         assertThat(trialDiscount.discountType()).isEqualTo(TrialDiscount.DiscountType.TRIAL)
         assertThat(trialDiscount.reason()).contains("reason")
         assertThat(trialDiscount.trialAmountDiscount()).contains("trial_amount_discount")
-        assertThat(trialDiscount.trialPercentageDiscount()).contains(42.23)
+        assertThat(trialDiscount.trialPercentageDiscount()).contains(0.0)
     }
 }
