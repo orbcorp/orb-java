@@ -20,7 +20,7 @@ class AlertTest {
                 .metric(Alert.Metric.builder().build())
                 .plan(Alert.Plan.builder().build())
                 .subscription(Alert.Subscription.builder().build())
-                .thresholds(listOf(Alert.Threshold.builder().value(42.23).build()))
+                .thresholds(listOf(Alert.Threshold.builder().value(0.0).build()))
                 .type(Alert.Type.USAGE_EXCEEDED)
                 .build()
         assertThat(alert).isNotNull
@@ -33,7 +33,7 @@ class AlertTest {
         assertThat(alert.plan()).contains(Alert.Plan.builder().build())
         assertThat(alert.subscription()).contains(Alert.Subscription.builder().build())
         assertThat(alert.thresholds().get())
-            .containsExactly(Alert.Threshold.builder().value(42.23).build())
+            .containsExactly(Alert.Threshold.builder().value(0.0).build())
         assertThat(alert.type()).isEqualTo(Alert.Type.USAGE_EXCEEDED)
     }
 }
