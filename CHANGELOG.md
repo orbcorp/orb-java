@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.7.0 (2024-11-25)
+
+Full Changelog: [v0.6.1...v0.7.0](https://github.com/orbcorp/orb-java/compare/v0.6.1...v0.7.0)
+
+### Features
+
+* **api:** api update ([#125](https://github.com/orbcorp/orb-java/issues/125)) ([4b935c7](https://github.com/orbcorp/orb-java/commit/4b935c7382677f2fe81ebd260e234751769444a9))
+* **client:** add logging when debug env is set ([#124](https://github.com/orbcorp/orb-java/issues/124)) ([3000c2e](https://github.com/orbcorp/orb-java/commit/3000c2ecb971be9285631e42ae4c5871605df0a1))
+
+
+### Chores
+
+* **internal:** codegen related update ([#123](https://github.com/orbcorp/orb-java/issues/123)) ([c08609a](https://github.com/orbcorp/orb-java/commit/c08609aa223cd9cdc77f3179da506d1f35252fe5))
+* **internal:** version bump ([#119](https://github.com/orbcorp/orb-java/issues/119)) ([bfcad34](https://github.com/orbcorp/orb-java/commit/bfcad34e9c6a1d3c21812c89f83c528487ab1e1b))
+* **internal:** version bump ([#121](https://github.com/orbcorp/orb-java/issues/121)) ([6388030](https://github.com/orbcorp/orb-java/commit/638803028321775a8581fa525354e55503a12edd))
+* **internal:** version bump ([#122](https://github.com/orbcorp/orb-java/issues/122)) ([3163e60](https://github.com/orbcorp/orb-java/commit/3163e60efb09dd43e751a32ad299688c0fa2bfe3))
+
 ## 0.6.1 (2024-11-19)
 
 Full Changelog: [v0.6.0...v0.6.1](https://github.com/orbcorp/orb-java/compare/v0.6.0...v0.6.1)
