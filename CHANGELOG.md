@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.9.1 (2024-11-26)
+
+Full Changelog: [v0.9.0...v0.9.1](https://github.com/orbcorp/orb-java/compare/v0.9.0...v0.9.1)
+
+### Chores
+
+* **internal:** codegen related update ([#134](https://github.com/orbcorp/orb-java/issues/134)) ([61e2a3f](https://github.com/orbcorp/orb-java/commit/61e2a3f250034b37c31697cda1f9366445d88358))
+
 ## 0.9.0 (2024-11-26)
 
 Full Changelog: [v0.8.0...v0.9.0](https://github.com/orbcorp/orb-java/compare/v0.8.0...v0.9.0)
