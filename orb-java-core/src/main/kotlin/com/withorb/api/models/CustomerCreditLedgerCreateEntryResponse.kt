@@ -907,9 +907,9 @@ private constructor(
 
             companion object {
 
-                @JvmField val COMMITTED = EntryStatus(JsonField.of("committed"))
+                @JvmField val COMMITTED = of("committed")
 
-                @JvmField val PENDING = EntryStatus(JsonField.of("pending"))
+                @JvmField val PENDING = of("pending")
 
                 @JvmStatic fun of(value: String) = EntryStatus(JsonField.of(value))
             }
@@ -964,7 +964,7 @@ private constructor(
 
             companion object {
 
-                @JvmField val INCREMENT = EntryType(JsonField.of("increment"))
+                @JvmField val INCREMENT = of("increment")
 
                 @JvmStatic fun of(value: String) = EntryType(JsonField.of(value))
             }
@@ -1681,9 +1681,9 @@ private constructor(
 
             companion object {
 
-                @JvmField val COMMITTED = EntryStatus(JsonField.of("committed"))
+                @JvmField val COMMITTED = of("committed")
 
-                @JvmField val PENDING = EntryStatus(JsonField.of("pending"))
+                @JvmField val PENDING = of("pending")
 
                 @JvmStatic fun of(value: String) = EntryStatus(JsonField.of(value))
             }
@@ -1738,7 +1738,7 @@ private constructor(
 
             companion object {
 
-                @JvmField val DECREMENT = EntryType(JsonField.of("decrement"))
+                @JvmField val DECREMENT = of("decrement")
 
                 @JvmStatic fun of(value: String) = EntryType(JsonField.of(value))
             }
@@ -2431,9 +2431,9 @@ private constructor(
 
             companion object {
 
-                @JvmField val COMMITTED = EntryStatus(JsonField.of("committed"))
+                @JvmField val COMMITTED = of("committed")
 
-                @JvmField val PENDING = EntryStatus(JsonField.of("pending"))
+                @JvmField val PENDING = of("pending")
 
                 @JvmStatic fun of(value: String) = EntryStatus(JsonField.of(value))
             }
@@ -2488,7 +2488,7 @@ private constructor(
 
             companion object {
 
-                @JvmField val EXPIRATION_CHANGE = EntryType(JsonField.of("expiration_change"))
+                @JvmField val EXPIRATION_CHANGE = of("expiration_change")
 
                 @JvmStatic fun of(value: String) = EntryType(JsonField.of(value))
             }
@@ -3160,9 +3160,9 @@ private constructor(
 
             companion object {
 
-                @JvmField val COMMITTED = EntryStatus(JsonField.of("committed"))
+                @JvmField val COMMITTED = of("committed")
 
-                @JvmField val PENDING = EntryStatus(JsonField.of("pending"))
+                @JvmField val PENDING = of("pending")
 
                 @JvmStatic fun of(value: String) = EntryStatus(JsonField.of(value))
             }
@@ -3217,7 +3217,7 @@ private constructor(
 
             companion object {
 
-                @JvmField val CREDIT_BLOCK_EXPIRY = EntryType(JsonField.of("credit_block_expiry"))
+                @JvmField val CREDIT_BLOCK_EXPIRY = of("credit_block_expiry")
 
                 @JvmStatic fun of(value: String) = EntryType(JsonField.of(value))
             }
@@ -3920,9 +3920,9 @@ private constructor(
 
             companion object {
 
-                @JvmField val COMMITTED = EntryStatus(JsonField.of("committed"))
+                @JvmField val COMMITTED = of("committed")
 
-                @JvmField val PENDING = EntryStatus(JsonField.of("pending"))
+                @JvmField val PENDING = of("pending")
 
                 @JvmStatic fun of(value: String) = EntryStatus(JsonField.of(value))
             }
@@ -3977,7 +3977,7 @@ private constructor(
 
             companion object {
 
-                @JvmField val VOID = EntryType(JsonField.of("void"))
+                @JvmField val VOID = of("void")
 
                 @JvmStatic fun of(value: String) = EntryType(JsonField.of(value))
             }
@@ -4701,9 +4701,9 @@ private constructor(
 
             companion object {
 
-                @JvmField val COMMITTED = EntryStatus(JsonField.of("committed"))
+                @JvmField val COMMITTED = of("committed")
 
-                @JvmField val PENDING = EntryStatus(JsonField.of("pending"))
+                @JvmField val PENDING = of("pending")
 
                 @JvmStatic fun of(value: String) = EntryStatus(JsonField.of(value))
             }
@@ -4758,7 +4758,7 @@ private constructor(
 
             companion object {
 
-                @JvmField val VOID_INITIATED = EntryType(JsonField.of("void_initiated"))
+                @JvmField val VOID_INITIATED = of("void_initiated")
 
                 @JvmStatic fun of(value: String) = EntryType(JsonField.of(value))
             }
@@ -5430,9 +5430,9 @@ private constructor(
 
             companion object {
 
-                @JvmField val COMMITTED = EntryStatus(JsonField.of("committed"))
+                @JvmField val COMMITTED = of("committed")
 
-                @JvmField val PENDING = EntryStatus(JsonField.of("pending"))
+                @JvmField val PENDING = of("pending")
 
                 @JvmStatic fun of(value: String) = EntryStatus(JsonField.of(value))
             }
@@ -5487,7 +5487,7 @@ private constructor(
 
             companion object {
 
-                @JvmField val AMENDMENT = EntryType(JsonField.of("amendment"))
+                @JvmField val AMENDMENT = of("amendment")
 
                 @JvmStatic fun of(value: String) = EntryType(JsonField.of(value))
             }

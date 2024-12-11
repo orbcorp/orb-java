@@ -585,9 +585,9 @@ private constructor(
 
                 companion object {
 
-                    @JvmField val PERIODIC = ViewMode(JsonField.of("periodic"))
+                    @JvmField val PERIODIC = of("periodic")
 
-                    @JvmField val CUMULATIVE = ViewMode(JsonField.of("cumulative"))
+                    @JvmField val CUMULATIVE = of("cumulative")
 
                     @JvmStatic fun of(value: String) = ViewMode(JsonField.of(value))
                 }
@@ -1230,9 +1230,9 @@ private constructor(
 
                 companion object {
 
-                    @JvmField val PERIODIC = ViewMode(JsonField.of("periodic"))
+                    @JvmField val PERIODIC = of("periodic")
 
-                    @JvmField val CUMULATIVE = ViewMode(JsonField.of("cumulative"))
+                    @JvmField val CUMULATIVE = of("cumulative")
 
                     @JvmStatic fun of(value: String) = ViewMode(JsonField.of(value))
                 }

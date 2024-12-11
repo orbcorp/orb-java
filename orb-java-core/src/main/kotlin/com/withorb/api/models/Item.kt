@@ -261,19 +261,19 @@ private constructor(
 
             companion object {
 
-                @JvmField val STRIPE = ExternalConnectionName(JsonField.of("stripe"))
+                @JvmField val STRIPE = of("stripe")
 
-                @JvmField val QUICKBOOKS = ExternalConnectionName(JsonField.of("quickbooks"))
+                @JvmField val QUICKBOOKS = of("quickbooks")
 
-                @JvmField val BILL_COM = ExternalConnectionName(JsonField.of("bill.com"))
+                @JvmField val BILL_COM = of("bill.com")
 
-                @JvmField val NETSUITE = ExternalConnectionName(JsonField.of("netsuite"))
+                @JvmField val NETSUITE = of("netsuite")
 
-                @JvmField val TAXJAR = ExternalConnectionName(JsonField.of("taxjar"))
+                @JvmField val TAXJAR = of("taxjar")
 
-                @JvmField val AVALARA = ExternalConnectionName(JsonField.of("avalara"))
+                @JvmField val AVALARA = of("avalara")
 
-                @JvmField val ANROK = ExternalConnectionName(JsonField.of("anrok"))
+                @JvmField val ANROK = of("anrok")
 
                 @JvmStatic fun of(value: String) = ExternalConnectionName(JsonField.of(value))
             }

@@ -325,13 +325,13 @@ private constructor(
 
         companion object {
 
-            @JvmField val PENDING = Status(JsonField.of("pending"))
+            @JvmField val PENDING = of("pending")
 
-            @JvmField val REFLECTED = Status(JsonField.of("reflected"))
+            @JvmField val REFLECTED = of("reflected")
 
-            @JvmField val PENDING_REVERT = Status(JsonField.of("pending_revert"))
+            @JvmField val PENDING_REVERT = of("pending_revert")
 
-            @JvmField val REVERTED = Status(JsonField.of("reverted"))
+            @JvmField val REVERTED = of("reverted")
 
             @JvmStatic fun of(value: String) = Status(JsonField.of(value))
         }

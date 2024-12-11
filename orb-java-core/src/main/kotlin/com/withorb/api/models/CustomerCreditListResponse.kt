@@ -216,9 +216,9 @@ private constructor(
 
         companion object {
 
-            @JvmField val ACTIVE = Status(JsonField.of("active"))
+            @JvmField val ACTIVE = of("active")
 
-            @JvmField val PENDING_PAYMENT = Status(JsonField.of("pending_payment"))
+            @JvmField val PENDING_PAYMENT = of("pending_payment")
 
             @JvmStatic fun of(value: String) = Status(JsonField.of(value))
         }

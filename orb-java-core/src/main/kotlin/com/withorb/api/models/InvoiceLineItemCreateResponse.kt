@@ -2116,7 +2116,7 @@ private constructor(
 
                 companion object {
 
-                    @JvmField val MATRIX = Type(JsonField.of("matrix"))
+                    @JvmField val MATRIX = of("matrix")
 
                     @JvmStatic fun of(value: String) = Type(JsonField.of(value))
                 }
@@ -2570,7 +2570,7 @@ private constructor(
 
                 companion object {
 
-                    @JvmField val TIER = Type(JsonField.of("tier"))
+                    @JvmField val TIER = of("tier")
 
                     @JvmStatic fun of(value: String) = Type(JsonField.of(value))
                 }
@@ -2883,7 +2883,7 @@ private constructor(
 
                 companion object {
 
-                    @JvmField val NULL = Type(JsonField.of("'null'"))
+                    @JvmField val NULL = of("'null'")
 
                     @JvmStatic fun of(value: String) = Type(JsonField.of(value))
                 }

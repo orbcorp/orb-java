@@ -356,9 +356,9 @@ constructor(
 
         companion object {
 
-            @JvmField val INCREMENT = Type(JsonField.of("increment"))
+            @JvmField val INCREMENT = of("increment")
 
-            @JvmField val DECREMENT = Type(JsonField.of("decrement"))
+            @JvmField val DECREMENT = of("decrement")
 
             @JvmStatic fun of(value: String) = Type(JsonField.of(value))
         }

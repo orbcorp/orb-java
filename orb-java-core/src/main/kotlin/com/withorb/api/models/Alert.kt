@@ -686,15 +686,15 @@ private constructor(
 
         companion object {
 
-            @JvmField val USAGE_EXCEEDED = Type(JsonField.of("usage_exceeded"))
+            @JvmField val USAGE_EXCEEDED = of("usage_exceeded")
 
-            @JvmField val COST_EXCEEDED = Type(JsonField.of("cost_exceeded"))
+            @JvmField val COST_EXCEEDED = of("cost_exceeded")
 
-            @JvmField val CREDIT_BALANCE_DEPLETED = Type(JsonField.of("credit_balance_depleted"))
+            @JvmField val CREDIT_BALANCE_DEPLETED = of("credit_balance_depleted")
 
-            @JvmField val CREDIT_BALANCE_DROPPED = Type(JsonField.of("credit_balance_dropped"))
+            @JvmField val CREDIT_BALANCE_DROPPED = of("credit_balance_dropped")
 
-            @JvmField val CREDIT_BALANCE_RECOVERED = Type(JsonField.of("credit_balance_recovered"))
+            @JvmField val CREDIT_BALANCE_RECOVERED = of("credit_balance_recovered")
 
             @JvmStatic fun of(value: String) = Type(JsonField.of(value))
         }
