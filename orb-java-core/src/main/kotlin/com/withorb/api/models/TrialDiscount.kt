@@ -213,7 +213,7 @@ private constructor(
 
         companion object {
 
-            @JvmField val TRIAL = DiscountType(JsonField.of("trial"))
+            @JvmField val TRIAL = of("trial")
 
             @JvmStatic fun of(value: String) = DiscountType(JsonField.of(value))
         }

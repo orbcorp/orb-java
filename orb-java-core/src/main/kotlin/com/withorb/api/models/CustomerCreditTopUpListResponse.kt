@@ -484,9 +484,9 @@ private constructor(
 
         companion object {
 
-            @JvmField val DAY = ExpiresAfterUnit(JsonField.of("day"))
+            @JvmField val DAY = of("day")
 
-            @JvmField val MONTH = ExpiresAfterUnit(JsonField.of("month"))
+            @JvmField val MONTH = of("month")
 
             @JvmStatic fun of(value: String) = ExpiresAfterUnit(JsonField.of(value))
         }

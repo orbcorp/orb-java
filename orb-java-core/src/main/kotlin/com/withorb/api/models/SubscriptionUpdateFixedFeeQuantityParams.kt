@@ -412,11 +412,11 @@ constructor(
 
         companion object {
 
-            @JvmField val IMMEDIATE = ChangeOption(JsonField.of("immediate"))
+            @JvmField val IMMEDIATE = of("immediate")
 
-            @JvmField val UPCOMING_INVOICE = ChangeOption(JsonField.of("upcoming_invoice"))
+            @JvmField val UPCOMING_INVOICE = of("upcoming_invoice")
 
-            @JvmField val EFFECTIVE_DATE = ChangeOption(JsonField.of("effective_date"))
+            @JvmField val EFFECTIVE_DATE = of("effective_date")
 
             @JvmStatic fun of(value: String) = ChangeOption(JsonField.of(value))
         }

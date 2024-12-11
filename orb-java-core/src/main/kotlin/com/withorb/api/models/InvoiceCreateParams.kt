@@ -702,7 +702,7 @@ constructor(
 
             companion object {
 
-                @JvmField val UNIT = ModelType(JsonField.of("unit"))
+                @JvmField val UNIT = of("unit")
 
                 @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
             }
