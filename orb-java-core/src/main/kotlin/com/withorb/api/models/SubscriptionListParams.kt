@@ -297,11 +297,11 @@ constructor(
 
         companion object {
 
-            @JvmField val ACTIVE = Status(JsonField.of("active"))
+            @JvmField val ACTIVE = of("active")
 
-            @JvmField val ENDED = Status(JsonField.of("ended"))
+            @JvmField val ENDED = of("ended")
 
-            @JvmField val UPCOMING = Status(JsonField.of("upcoming"))
+            @JvmField val UPCOMING = of("upcoming")
 
             @JvmStatic fun of(value: String) = Status(JsonField.of(value))
         }

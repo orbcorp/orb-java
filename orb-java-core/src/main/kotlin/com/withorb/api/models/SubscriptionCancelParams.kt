@@ -355,12 +355,11 @@ constructor(
 
         companion object {
 
-            @JvmField
-            val END_OF_SUBSCRIPTION_TERM = CancelOption(JsonField.of("end_of_subscription_term"))
+            @JvmField val END_OF_SUBSCRIPTION_TERM = of("end_of_subscription_term")
 
-            @JvmField val IMMEDIATE = CancelOption(JsonField.of("immediate"))
+            @JvmField val IMMEDIATE = of("immediate")
 
-            @JvmField val REQUESTED_DATE = CancelOption(JsonField.of("requested_date"))
+            @JvmField val REQUESTED_DATE = of("requested_date")
 
             @JvmStatic fun of(value: String) = CancelOption(JsonField.of(value))
         }

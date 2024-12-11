@@ -330,7 +330,7 @@ constructor(
 
         companion object {
 
-            @JvmField val DAY = Granularity(JsonField.of("day"))
+            @JvmField val DAY = of("day")
 
             @JvmStatic fun of(value: String) = Granularity(JsonField.of(value))
         }
@@ -381,9 +381,9 @@ constructor(
 
         companion object {
 
-            @JvmField val PERIODIC = ViewMode(JsonField.of("periodic"))
+            @JvmField val PERIODIC = of("periodic")
 
-            @JvmField val CUMULATIVE = ViewMode(JsonField.of("cumulative"))
+            @JvmField val CUMULATIVE = of("cumulative")
 
             @JvmStatic fun of(value: String) = ViewMode(JsonField.of(value))
         }

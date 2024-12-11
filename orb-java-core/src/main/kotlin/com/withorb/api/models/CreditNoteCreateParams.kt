@@ -435,13 +435,13 @@ constructor(
 
         companion object {
 
-            @JvmField val DUPLICATE = Reason(JsonField.of("duplicate"))
+            @JvmField val DUPLICATE = of("duplicate")
 
-            @JvmField val FRAUDULENT = Reason(JsonField.of("fraudulent"))
+            @JvmField val FRAUDULENT = of("fraudulent")
 
-            @JvmField val ORDER_CHANGE = Reason(JsonField.of("order_change"))
+            @JvmField val ORDER_CHANGE = of("order_change")
 
-            @JvmField val PRODUCT_UNSATISFACTORY = Reason(JsonField.of("product_unsatisfactory"))
+            @JvmField val PRODUCT_UNSATISFACTORY = of("product_unsatisfactory")
 
             @JvmStatic fun of(value: String) = Reason(JsonField.of(value))
         }

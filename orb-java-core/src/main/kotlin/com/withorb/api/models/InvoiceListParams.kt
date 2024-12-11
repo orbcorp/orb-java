@@ -401,9 +401,9 @@ constructor(
 
         companion object {
 
-            @JvmField val DUE_DATE = DateType(JsonField.of("due_date"))
+            @JvmField val DUE_DATE = of("due_date")
 
-            @JvmField val INVOICE_DATE = DateType(JsonField.of("invoice_date"))
+            @JvmField val INVOICE_DATE = of("invoice_date")
 
             @JvmStatic fun of(value: String) = DateType(JsonField.of(value))
         }
@@ -458,15 +458,15 @@ constructor(
 
         companion object {
 
-            @JvmField val DRAFT = Status(JsonField.of("draft"))
+            @JvmField val DRAFT = of("draft")
 
-            @JvmField val ISSUED = Status(JsonField.of("issued"))
+            @JvmField val ISSUED = of("issued")
 
-            @JvmField val PAID = Status(JsonField.of("paid"))
+            @JvmField val PAID = of("paid")
 
-            @JvmField val SYNCED = Status(JsonField.of("synced"))
+            @JvmField val SYNCED = of("synced")
 
-            @JvmField val VOID = Status(JsonField.of("void"))
+            @JvmField val VOID = of("void")
 
             @JvmStatic fun of(value: String) = Status(JsonField.of(value))
         }

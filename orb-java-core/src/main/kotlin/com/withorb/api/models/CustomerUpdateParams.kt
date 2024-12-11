@@ -1438,15 +1438,15 @@ constructor(
 
         companion object {
 
-            @JvmField val QUICKBOOKS = PaymentProvider(JsonField.of("quickbooks"))
+            @JvmField val QUICKBOOKS = of("quickbooks")
 
-            @JvmField val BILL_COM = PaymentProvider(JsonField.of("bill.com"))
+            @JvmField val BILL_COM = of("bill.com")
 
-            @JvmField val STRIPE_CHARGE = PaymentProvider(JsonField.of("stripe_charge"))
+            @JvmField val STRIPE_CHARGE = of("stripe_charge")
 
-            @JvmField val STRIPE_INVOICE = PaymentProvider(JsonField.of("stripe_invoice"))
+            @JvmField val STRIPE_INVOICE = of("stripe_invoice")
 
-            @JvmField val NETSUITE = PaymentProvider(JsonField.of("netsuite"))
+            @JvmField val NETSUITE = of("netsuite")
 
             @JvmStatic fun of(value: String) = PaymentProvider(JsonField.of(value))
         }
@@ -1955,7 +1955,7 @@ constructor(
 
                 companion object {
 
-                    @JvmField val AVALARA = TaxProvider(JsonField.of("avalara"))
+                    @JvmField val AVALARA = of("avalara")
 
                     @JvmStatic fun of(value: String) = TaxProvider(JsonField.of(value))
                 }
@@ -2112,7 +2112,7 @@ constructor(
 
                 companion object {
 
-                    @JvmField val TAXJAR = TaxProvider(JsonField.of("taxjar"))
+                    @JvmField val TAXJAR = of("taxjar")
 
                     @JvmStatic fun of(value: String) = TaxProvider(JsonField.of(value))
                 }
@@ -2360,161 +2360,161 @@ constructor(
 
             companion object {
 
-                @JvmField val AD = Country(JsonField.of("AD"))
+                @JvmField val AD = of("AD")
 
-                @JvmField val AE = Country(JsonField.of("AE"))
+                @JvmField val AE = of("AE")
 
-                @JvmField val AR = Country(JsonField.of("AR"))
+                @JvmField val AR = of("AR")
 
-                @JvmField val AT = Country(JsonField.of("AT"))
+                @JvmField val AT = of("AT")
 
-                @JvmField val AU = Country(JsonField.of("AU"))
+                @JvmField val AU = of("AU")
 
-                @JvmField val BE = Country(JsonField.of("BE"))
+                @JvmField val BE = of("BE")
 
-                @JvmField val BG = Country(JsonField.of("BG"))
+                @JvmField val BG = of("BG")
 
-                @JvmField val BH = Country(JsonField.of("BH"))
+                @JvmField val BH = of("BH")
 
-                @JvmField val BO = Country(JsonField.of("BO"))
+                @JvmField val BO = of("BO")
 
-                @JvmField val BR = Country(JsonField.of("BR"))
+                @JvmField val BR = of("BR")
 
-                @JvmField val CA = Country(JsonField.of("CA"))
+                @JvmField val CA = of("CA")
 
-                @JvmField val CH = Country(JsonField.of("CH"))
+                @JvmField val CH = of("CH")
 
-                @JvmField val CL = Country(JsonField.of("CL"))
+                @JvmField val CL = of("CL")
 
-                @JvmField val CN = Country(JsonField.of("CN"))
+                @JvmField val CN = of("CN")
 
-                @JvmField val CO = Country(JsonField.of("CO"))
+                @JvmField val CO = of("CO")
 
-                @JvmField val CR = Country(JsonField.of("CR"))
+                @JvmField val CR = of("CR")
 
-                @JvmField val CY = Country(JsonField.of("CY"))
+                @JvmField val CY = of("CY")
 
-                @JvmField val CZ = Country(JsonField.of("CZ"))
+                @JvmField val CZ = of("CZ")
 
-                @JvmField val DE = Country(JsonField.of("DE"))
+                @JvmField val DE = of("DE")
 
-                @JvmField val DK = Country(JsonField.of("DK"))
+                @JvmField val DK = of("DK")
 
-                @JvmField val EE = Country(JsonField.of("EE"))
+                @JvmField val EE = of("EE")
 
-                @JvmField val DO = Country(JsonField.of("DO"))
+                @JvmField val DO = of("DO")
 
-                @JvmField val EC = Country(JsonField.of("EC"))
+                @JvmField val EC = of("EC")
 
-                @JvmField val EG = Country(JsonField.of("EG"))
+                @JvmField val EG = of("EG")
 
-                @JvmField val ES = Country(JsonField.of("ES"))
+                @JvmField val ES = of("ES")
 
-                @JvmField val EU = Country(JsonField.of("EU"))
+                @JvmField val EU = of("EU")
 
-                @JvmField val FI = Country(JsonField.of("FI"))
+                @JvmField val FI = of("FI")
 
-                @JvmField val FR = Country(JsonField.of("FR"))
+                @JvmField val FR = of("FR")
 
-                @JvmField val GB = Country(JsonField.of("GB"))
+                @JvmField val GB = of("GB")
 
-                @JvmField val GE = Country(JsonField.of("GE"))
+                @JvmField val GE = of("GE")
 
-                @JvmField val GR = Country(JsonField.of("GR"))
+                @JvmField val GR = of("GR")
 
-                @JvmField val HK = Country(JsonField.of("HK"))
+                @JvmField val HK = of("HK")
 
-                @JvmField val HR = Country(JsonField.of("HR"))
+                @JvmField val HR = of("HR")
 
-                @JvmField val HU = Country(JsonField.of("HU"))
+                @JvmField val HU = of("HU")
 
-                @JvmField val ID = Country(JsonField.of("ID"))
+                @JvmField val ID = of("ID")
 
-                @JvmField val IE = Country(JsonField.of("IE"))
+                @JvmField val IE = of("IE")
 
-                @JvmField val IL = Country(JsonField.of("IL"))
+                @JvmField val IL = of("IL")
 
-                @JvmField val IN = Country(JsonField.of("IN"))
+                @JvmField val IN = of("IN")
 
-                @JvmField val IS = Country(JsonField.of("IS"))
+                @JvmField val IS = of("IS")
 
-                @JvmField val IT = Country(JsonField.of("IT"))
+                @JvmField val IT = of("IT")
 
-                @JvmField val JP = Country(JsonField.of("JP"))
+                @JvmField val JP = of("JP")
 
-                @JvmField val KE = Country(JsonField.of("KE"))
+                @JvmField val KE = of("KE")
 
-                @JvmField val KR = Country(JsonField.of("KR"))
+                @JvmField val KR = of("KR")
 
-                @JvmField val KZ = Country(JsonField.of("KZ"))
+                @JvmField val KZ = of("KZ")
 
-                @JvmField val LI = Country(JsonField.of("LI"))
+                @JvmField val LI = of("LI")
 
-                @JvmField val LT = Country(JsonField.of("LT"))
+                @JvmField val LT = of("LT")
 
-                @JvmField val LU = Country(JsonField.of("LU"))
+                @JvmField val LU = of("LU")
 
-                @JvmField val LV = Country(JsonField.of("LV"))
+                @JvmField val LV = of("LV")
 
-                @JvmField val MT = Country(JsonField.of("MT"))
+                @JvmField val MT = of("MT")
 
-                @JvmField val MX = Country(JsonField.of("MX"))
+                @JvmField val MX = of("MX")
 
-                @JvmField val MY = Country(JsonField.of("MY"))
+                @JvmField val MY = of("MY")
 
-                @JvmField val NG = Country(JsonField.of("NG"))
+                @JvmField val NG = of("NG")
 
-                @JvmField val NL = Country(JsonField.of("NL"))
+                @JvmField val NL = of("NL")
 
-                @JvmField val NO = Country(JsonField.of("NO"))
+                @JvmField val NO = of("NO")
 
-                @JvmField val NZ = Country(JsonField.of("NZ"))
+                @JvmField val NZ = of("NZ")
 
-                @JvmField val OM = Country(JsonField.of("OM"))
+                @JvmField val OM = of("OM")
 
-                @JvmField val PE = Country(JsonField.of("PE"))
+                @JvmField val PE = of("PE")
 
-                @JvmField val PH = Country(JsonField.of("PH"))
+                @JvmField val PH = of("PH")
 
-                @JvmField val PL = Country(JsonField.of("PL"))
+                @JvmField val PL = of("PL")
 
-                @JvmField val PT = Country(JsonField.of("PT"))
+                @JvmField val PT = of("PT")
 
-                @JvmField val RO = Country(JsonField.of("RO"))
+                @JvmField val RO = of("RO")
 
-                @JvmField val RS = Country(JsonField.of("RS"))
+                @JvmField val RS = of("RS")
 
-                @JvmField val RU = Country(JsonField.of("RU"))
+                @JvmField val RU = of("RU")
 
-                @JvmField val SA = Country(JsonField.of("SA"))
+                @JvmField val SA = of("SA")
 
-                @JvmField val SE = Country(JsonField.of("SE"))
+                @JvmField val SE = of("SE")
 
-                @JvmField val SG = Country(JsonField.of("SG"))
+                @JvmField val SG = of("SG")
 
-                @JvmField val SI = Country(JsonField.of("SI"))
+                @JvmField val SI = of("SI")
 
-                @JvmField val SK = Country(JsonField.of("SK"))
+                @JvmField val SK = of("SK")
 
-                @JvmField val SV = Country(JsonField.of("SV"))
+                @JvmField val SV = of("SV")
 
-                @JvmField val TH = Country(JsonField.of("TH"))
+                @JvmField val TH = of("TH")
 
-                @JvmField val TR = Country(JsonField.of("TR"))
+                @JvmField val TR = of("TR")
 
-                @JvmField val TW = Country(JsonField.of("TW"))
+                @JvmField val TW = of("TW")
 
-                @JvmField val UA = Country(JsonField.of("UA"))
+                @JvmField val UA = of("UA")
 
-                @JvmField val US = Country(JsonField.of("US"))
+                @JvmField val US = of("US")
 
-                @JvmField val UY = Country(JsonField.of("UY"))
+                @JvmField val UY = of("UY")
 
-                @JvmField val VE = Country(JsonField.of("VE"))
+                @JvmField val VE = of("VE")
 
-                @JvmField val VN = Country(JsonField.of("VN"))
+                @JvmField val VN = of("VN")
 
-                @JvmField val ZA = Country(JsonField.of("ZA"))
+                @JvmField val ZA = of("ZA")
 
                 @JvmStatic fun of(value: String) = Country(JsonField.of(value))
             }
@@ -2873,147 +2873,147 @@ constructor(
 
             companion object {
 
-                @JvmField val AD_NRT = Type(JsonField.of("ad_nrt"))
+                @JvmField val AD_NRT = of("ad_nrt")
 
-                @JvmField val AE_TRN = Type(JsonField.of("ae_trn"))
+                @JvmField val AE_TRN = of("ae_trn")
 
-                @JvmField val AR_CUIT = Type(JsonField.of("ar_cuit"))
+                @JvmField val AR_CUIT = of("ar_cuit")
 
-                @JvmField val EU_VAT = Type(JsonField.of("eu_vat"))
+                @JvmField val EU_VAT = of("eu_vat")
 
-                @JvmField val AU_ABN = Type(JsonField.of("au_abn"))
+                @JvmField val AU_ABN = of("au_abn")
 
-                @JvmField val AU_ARN = Type(JsonField.of("au_arn"))
+                @JvmField val AU_ARN = of("au_arn")
 
-                @JvmField val BG_UIC = Type(JsonField.of("bg_uic"))
+                @JvmField val BG_UIC = of("bg_uic")
 
-                @JvmField val BH_VAT = Type(JsonField.of("bh_vat"))
+                @JvmField val BH_VAT = of("bh_vat")
 
-                @JvmField val BO_TIN = Type(JsonField.of("bo_tin"))
+                @JvmField val BO_TIN = of("bo_tin")
 
-                @JvmField val BR_CNPJ = Type(JsonField.of("br_cnpj"))
+                @JvmField val BR_CNPJ = of("br_cnpj")
 
-                @JvmField val BR_CPF = Type(JsonField.of("br_cpf"))
+                @JvmField val BR_CPF = of("br_cpf")
 
-                @JvmField val CA_BN = Type(JsonField.of("ca_bn"))
+                @JvmField val CA_BN = of("ca_bn")
 
-                @JvmField val CA_GST_HST = Type(JsonField.of("ca_gst_hst"))
+                @JvmField val CA_GST_HST = of("ca_gst_hst")
 
-                @JvmField val CA_PST_BC = Type(JsonField.of("ca_pst_bc"))
+                @JvmField val CA_PST_BC = of("ca_pst_bc")
 
-                @JvmField val CA_PST_MB = Type(JsonField.of("ca_pst_mb"))
+                @JvmField val CA_PST_MB = of("ca_pst_mb")
 
-                @JvmField val CA_PST_SK = Type(JsonField.of("ca_pst_sk"))
+                @JvmField val CA_PST_SK = of("ca_pst_sk")
 
-                @JvmField val CA_QST = Type(JsonField.of("ca_qst"))
+                @JvmField val CA_QST = of("ca_qst")
 
-                @JvmField val CH_VAT = Type(JsonField.of("ch_vat"))
+                @JvmField val CH_VAT = of("ch_vat")
 
-                @JvmField val CL_TIN = Type(JsonField.of("cl_tin"))
+                @JvmField val CL_TIN = of("cl_tin")
 
-                @JvmField val CN_TIN = Type(JsonField.of("cn_tin"))
+                @JvmField val CN_TIN = of("cn_tin")
 
-                @JvmField val CO_NIT = Type(JsonField.of("co_nit"))
+                @JvmField val CO_NIT = of("co_nit")
 
-                @JvmField val CR_TIN = Type(JsonField.of("cr_tin"))
+                @JvmField val CR_TIN = of("cr_tin")
 
-                @JvmField val DO_RCN = Type(JsonField.of("do_rcn"))
+                @JvmField val DO_RCN = of("do_rcn")
 
-                @JvmField val EC_RUC = Type(JsonField.of("ec_ruc"))
+                @JvmField val EC_RUC = of("ec_ruc")
 
-                @JvmField val EG_TIN = Type(JsonField.of("eg_tin"))
+                @JvmField val EG_TIN = of("eg_tin")
 
-                @JvmField val ES_CIF = Type(JsonField.of("es_cif"))
+                @JvmField val ES_CIF = of("es_cif")
 
-                @JvmField val EU_OSS_VAT = Type(JsonField.of("eu_oss_vat"))
+                @JvmField val EU_OSS_VAT = of("eu_oss_vat")
 
-                @JvmField val GB_VAT = Type(JsonField.of("gb_vat"))
+                @JvmField val GB_VAT = of("gb_vat")
 
-                @JvmField val GE_VAT = Type(JsonField.of("ge_vat"))
+                @JvmField val GE_VAT = of("ge_vat")
 
-                @JvmField val HK_BR = Type(JsonField.of("hk_br"))
+                @JvmField val HK_BR = of("hk_br")
 
-                @JvmField val HU_TIN = Type(JsonField.of("hu_tin"))
+                @JvmField val HU_TIN = of("hu_tin")
 
-                @JvmField val ID_NPWP = Type(JsonField.of("id_npwp"))
+                @JvmField val ID_NPWP = of("id_npwp")
 
-                @JvmField val IL_VAT = Type(JsonField.of("il_vat"))
+                @JvmField val IL_VAT = of("il_vat")
 
-                @JvmField val IN_GST = Type(JsonField.of("in_gst"))
+                @JvmField val IN_GST = of("in_gst")
 
-                @JvmField val IS_VAT = Type(JsonField.of("is_vat"))
+                @JvmField val IS_VAT = of("is_vat")
 
-                @JvmField val JP_CN = Type(JsonField.of("jp_cn"))
+                @JvmField val JP_CN = of("jp_cn")
 
-                @JvmField val JP_RN = Type(JsonField.of("jp_rn"))
+                @JvmField val JP_RN = of("jp_rn")
 
-                @JvmField val JP_TRN = Type(JsonField.of("jp_trn"))
+                @JvmField val JP_TRN = of("jp_trn")
 
-                @JvmField val KE_PIN = Type(JsonField.of("ke_pin"))
+                @JvmField val KE_PIN = of("ke_pin")
 
-                @JvmField val KR_BRN = Type(JsonField.of("kr_brn"))
+                @JvmField val KR_BRN = of("kr_brn")
 
-                @JvmField val KZ_BIN = Type(JsonField.of("kz_bin"))
+                @JvmField val KZ_BIN = of("kz_bin")
 
-                @JvmField val LI_UID = Type(JsonField.of("li_uid"))
+                @JvmField val LI_UID = of("li_uid")
 
-                @JvmField val MX_RFC = Type(JsonField.of("mx_rfc"))
+                @JvmField val MX_RFC = of("mx_rfc")
 
-                @JvmField val MY_FRP = Type(JsonField.of("my_frp"))
+                @JvmField val MY_FRP = of("my_frp")
 
-                @JvmField val MY_ITN = Type(JsonField.of("my_itn"))
+                @JvmField val MY_ITN = of("my_itn")
 
-                @JvmField val MY_SST = Type(JsonField.of("my_sst"))
+                @JvmField val MY_SST = of("my_sst")
 
-                @JvmField val NG_TIN = Type(JsonField.of("ng_tin"))
+                @JvmField val NG_TIN = of("ng_tin")
 
-                @JvmField val NO_VAT = Type(JsonField.of("no_vat"))
+                @JvmField val NO_VAT = of("no_vat")
 
-                @JvmField val NO_VOEC = Type(JsonField.of("no_voec"))
+                @JvmField val NO_VOEC = of("no_voec")
 
-                @JvmField val NZ_GST = Type(JsonField.of("nz_gst"))
+                @JvmField val NZ_GST = of("nz_gst")
 
-                @JvmField val OM_VAT = Type(JsonField.of("om_vat"))
+                @JvmField val OM_VAT = of("om_vat")
 
-                @JvmField val PE_RUC = Type(JsonField.of("pe_ruc"))
+                @JvmField val PE_RUC = of("pe_ruc")
 
-                @JvmField val PH_TIN = Type(JsonField.of("ph_tin"))
+                @JvmField val PH_TIN = of("ph_tin")
 
-                @JvmField val RO_TIN = Type(JsonField.of("ro_tin"))
+                @JvmField val RO_TIN = of("ro_tin")
 
-                @JvmField val RS_PIB = Type(JsonField.of("rs_pib"))
+                @JvmField val RS_PIB = of("rs_pib")
 
-                @JvmField val RU_INN = Type(JsonField.of("ru_inn"))
+                @JvmField val RU_INN = of("ru_inn")
 
-                @JvmField val RU_KPP = Type(JsonField.of("ru_kpp"))
+                @JvmField val RU_KPP = of("ru_kpp")
 
-                @JvmField val SA_VAT = Type(JsonField.of("sa_vat"))
+                @JvmField val SA_VAT = of("sa_vat")
 
-                @JvmField val SG_GST = Type(JsonField.of("sg_gst"))
+                @JvmField val SG_GST = of("sg_gst")
 
-                @JvmField val SG_UEN = Type(JsonField.of("sg_uen"))
+                @JvmField val SG_UEN = of("sg_uen")
 
-                @JvmField val SI_TIN = Type(JsonField.of("si_tin"))
+                @JvmField val SI_TIN = of("si_tin")
 
-                @JvmField val SV_NIT = Type(JsonField.of("sv_nit"))
+                @JvmField val SV_NIT = of("sv_nit")
 
-                @JvmField val TH_VAT = Type(JsonField.of("th_vat"))
+                @JvmField val TH_VAT = of("th_vat")
 
-                @JvmField val TR_TIN = Type(JsonField.of("tr_tin"))
+                @JvmField val TR_TIN = of("tr_tin")
 
-                @JvmField val TW_VAT = Type(JsonField.of("tw_vat"))
+                @JvmField val TW_VAT = of("tw_vat")
 
-                @JvmField val UA_VAT = Type(JsonField.of("ua_vat"))
+                @JvmField val UA_VAT = of("ua_vat")
 
-                @JvmField val US_EIN = Type(JsonField.of("us_ein"))
+                @JvmField val US_EIN = of("us_ein")
 
-                @JvmField val UY_RUC = Type(JsonField.of("uy_ruc"))
+                @JvmField val UY_RUC = of("uy_ruc")
 
-                @JvmField val VE_RIF = Type(JsonField.of("ve_rif"))
+                @JvmField val VE_RIF = of("ve_rif")
 
-                @JvmField val VN_TIN = Type(JsonField.of("vn_tin"))
+                @JvmField val VN_TIN = of("vn_tin")
 
-                @JvmField val ZA_VAT = Type(JsonField.of("za_vat"))
+                @JvmField val ZA_VAT = of("za_vat")
 
                 @JvmStatic fun of(value: String) = Type(JsonField.of(value))
             }

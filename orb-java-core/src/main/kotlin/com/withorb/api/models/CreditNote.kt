@@ -1038,9 +1038,9 @@ private constructor(
 
                 companion object {
 
-                    @JvmField val PERCENTAGE = DiscountType(JsonField.of("percentage"))
+                    @JvmField val PERCENTAGE = of("percentage")
 
-                    @JvmField val AMOUNT = DiscountType(JsonField.of("amount"))
+                    @JvmField val AMOUNT = of("amount")
 
                     @JvmStatic fun of(value: String) = DiscountType(JsonField.of(value))
                 }
@@ -1275,7 +1275,7 @@ private constructor(
 
             companion object {
 
-                @JvmField val PERCENTAGE = DiscountType(JsonField.of("percentage"))
+                @JvmField val PERCENTAGE = of("percentage")
 
                 @JvmStatic fun of(value: String) = DiscountType(JsonField.of(value))
             }
@@ -1448,13 +1448,13 @@ private constructor(
 
         companion object {
 
-            @JvmField val DUPLICATE = Reason(JsonField.of("Duplicate"))
+            @JvmField val DUPLICATE = of("Duplicate")
 
-            @JvmField val FRAUDULENT = Reason(JsonField.of("Fraudulent"))
+            @JvmField val FRAUDULENT = of("Fraudulent")
 
-            @JvmField val ORDER_CHANGE = Reason(JsonField.of("Order change"))
+            @JvmField val ORDER_CHANGE = of("Order change")
 
-            @JvmField val PRODUCT_UNSATISFACTORY = Reason(JsonField.of("Product unsatisfactory"))
+            @JvmField val PRODUCT_UNSATISFACTORY = of("Product unsatisfactory")
 
             @JvmStatic fun of(value: String) = Reason(JsonField.of(value))
         }
@@ -1517,9 +1517,9 @@ private constructor(
 
         companion object {
 
-            @JvmField val REFUND = Type(JsonField.of("refund"))
+            @JvmField val REFUND = of("refund")
 
-            @JvmField val ADJUSTMENT = Type(JsonField.of("adjustment"))
+            @JvmField val ADJUSTMENT = of("adjustment")
 
             @JvmStatic fun of(value: String) = Type(JsonField.of(value))
         }
@@ -1717,7 +1717,7 @@ private constructor(
 
             companion object {
 
-                @JvmField val PERCENTAGE = DiscountType(JsonField.of("percentage"))
+                @JvmField val PERCENTAGE = of("percentage")
 
                 @JvmStatic fun of(value: String) = DiscountType(JsonField.of(value))
             }
