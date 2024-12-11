@@ -867,7 +867,7 @@ constructor(
 
             companion object {
 
-                @JvmField val INCREMENT = EntryType(JsonField.of("increment"))
+                @JvmField val INCREMENT = of("increment")
 
                 @JvmStatic fun of(value: String) = EntryType(JsonField.of(value))
             }
@@ -1275,7 +1275,7 @@ constructor(
 
             companion object {
 
-                @JvmField val DECREMENT = EntryType(JsonField.of("decrement"))
+                @JvmField val DECREMENT = of("decrement")
 
                 @JvmStatic fun of(value: String) = EntryType(JsonField.of(value))
             }
@@ -1593,7 +1593,7 @@ constructor(
 
             companion object {
 
-                @JvmField val EXPIRATION_CHANGE = EntryType(JsonField.of("expiration_change"))
+                @JvmField val EXPIRATION_CHANGE = of("expiration_change")
 
                 @JvmStatic fun of(value: String) = EntryType(JsonField.of(value))
             }
@@ -1880,7 +1880,7 @@ constructor(
 
             companion object {
 
-                @JvmField val VOID = EntryType(JsonField.of("void"))
+                @JvmField val VOID = of("void")
 
                 @JvmStatic fun of(value: String) = EntryType(JsonField.of(value))
             }
@@ -1998,7 +1998,7 @@ constructor(
 
             companion object {
 
-                @JvmField val REFUND = VoidReason(JsonField.of("refund"))
+                @JvmField val REFUND = of("refund")
 
                 @JvmStatic fun of(value: String) = VoidReason(JsonField.of(value))
             }
@@ -2210,7 +2210,7 @@ constructor(
 
             companion object {
 
-                @JvmField val AMENDMENT = EntryType(JsonField.of("amendment"))
+                @JvmField val AMENDMENT = of("amendment")
 
                 @JvmStatic fun of(value: String) = EntryType(JsonField.of(value))
             }

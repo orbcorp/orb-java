@@ -849,17 +849,17 @@ constructor(
 
                 companion object {
 
-                    @JvmField val ONE_TIME = Cadence(JsonField.of("one_time"))
+                    @JvmField val ONE_TIME = of("one_time")
 
-                    @JvmField val MONTHLY = Cadence(JsonField.of("monthly"))
+                    @JvmField val MONTHLY = of("monthly")
 
-                    @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
+                    @JvmField val QUARTERLY = of("quarterly")
 
-                    @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+                    @JvmField val SEMI_ANNUAL = of("semi_annual")
 
-                    @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
+                    @JvmField val ANNUAL = of("annual")
 
-                    @JvmField val CUSTOM = Cadence(JsonField.of("custom"))
+                    @JvmField val CUSTOM = of("custom")
 
                     @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
                 }
@@ -1240,7 +1240,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField val AMOUNT = DiscountType(JsonField.of("amount"))
+                        @JvmField val AMOUNT = of("amount")
 
                         @JvmStatic fun of(value: String) = DiscountType(JsonField.of(value))
                     }
@@ -1424,7 +1424,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField val PERCENTAGE = DiscountType(JsonField.of("percentage"))
+                        @JvmField val PERCENTAGE = of("percentage")
 
                         @JvmStatic fun of(value: String) = DiscountType(JsonField.of(value))
                     }
@@ -1603,7 +1603,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField val USAGE = DiscountType(JsonField.of("usage"))
+                        @JvmField val USAGE = of("usage")
 
                         @JvmStatic fun of(value: String) = DiscountType(JsonField.of(value))
                     }
@@ -3451,17 +3451,17 @@ constructor(
 
                     companion object {
 
-                        @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
+                        @JvmField val ANNUAL = of("annual")
 
-                        @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+                        @JvmField val SEMI_ANNUAL = of("semi_annual")
 
-                        @JvmField val MONTHLY = Cadence(JsonField.of("monthly"))
+                        @JvmField val MONTHLY = of("monthly")
 
-                        @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
+                        @JvmField val QUARTERLY = of("quarterly")
 
-                        @JvmField val ONE_TIME = Cadence(JsonField.of("one_time"))
+                        @JvmField val ONE_TIME = of("one_time")
 
-                        @JvmField val CUSTOM = Cadence(JsonField.of("custom"))
+                        @JvmField val CUSTOM = of("custom")
 
                         @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
                     }
@@ -3533,7 +3533,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField val UNIT = ModelType(JsonField.of("unit"))
+                        @JvmField val UNIT = of("unit")
 
                         @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                     }
@@ -3783,9 +3783,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -3966,9 +3966,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -4615,17 +4615,17 @@ constructor(
 
                     companion object {
 
-                        @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
+                        @JvmField val ANNUAL = of("annual")
 
-                        @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+                        @JvmField val SEMI_ANNUAL = of("semi_annual")
 
-                        @JvmField val MONTHLY = Cadence(JsonField.of("monthly"))
+                        @JvmField val MONTHLY = of("monthly")
 
-                        @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
+                        @JvmField val QUARTERLY = of("quarterly")
 
-                        @JvmField val ONE_TIME = Cadence(JsonField.of("one_time"))
+                        @JvmField val ONE_TIME = of("one_time")
 
-                        @JvmField val CUSTOM = Cadence(JsonField.of("custom"))
+                        @JvmField val CUSTOM = of("custom")
 
                         @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
                     }
@@ -4697,7 +4697,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField val PACKAGE = ModelType(JsonField.of("package"))
+                        @JvmField val PACKAGE = of("package")
 
                         @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                     }
@@ -4986,9 +4986,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -5169,9 +5169,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -5818,17 +5818,17 @@ constructor(
 
                     companion object {
 
-                        @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
+                        @JvmField val ANNUAL = of("annual")
 
-                        @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+                        @JvmField val SEMI_ANNUAL = of("semi_annual")
 
-                        @JvmField val MONTHLY = Cadence(JsonField.of("monthly"))
+                        @JvmField val MONTHLY = of("monthly")
 
-                        @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
+                        @JvmField val QUARTERLY = of("quarterly")
 
-                        @JvmField val ONE_TIME = Cadence(JsonField.of("one_time"))
+                        @JvmField val ONE_TIME = of("one_time")
 
-                        @JvmField val CUSTOM = Cadence(JsonField.of("custom"))
+                        @JvmField val CUSTOM = of("custom")
 
                         @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
                     }
@@ -6197,7 +6197,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField val MATRIX = ModelType(JsonField.of("matrix"))
+                        @JvmField val MATRIX = of("matrix")
 
                         @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                     }
@@ -6354,9 +6354,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -6537,9 +6537,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -7199,17 +7199,17 @@ constructor(
 
                     companion object {
 
-                        @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
+                        @JvmField val ANNUAL = of("annual")
 
-                        @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+                        @JvmField val SEMI_ANNUAL = of("semi_annual")
 
-                        @JvmField val MONTHLY = Cadence(JsonField.of("monthly"))
+                        @JvmField val MONTHLY = of("monthly")
 
-                        @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
+                        @JvmField val QUARTERLY = of("quarterly")
 
-                        @JvmField val ONE_TIME = Cadence(JsonField.of("one_time"))
+                        @JvmField val ONE_TIME = of("one_time")
 
-                        @JvmField val CUSTOM = Cadence(JsonField.of("custom"))
+                        @JvmField val CUSTOM = of("custom")
 
                         @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
                     }
@@ -7603,9 +7603,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField
-                        val MATRIX_WITH_ALLOCATION =
-                            ModelType(JsonField.of("matrix_with_allocation"))
+                        @JvmField val MATRIX_WITH_ALLOCATION = of("matrix_with_allocation")
 
                         @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                     }
@@ -7762,9 +7760,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -7945,9 +7943,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -8594,17 +8592,17 @@ constructor(
 
                     companion object {
 
-                        @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
+                        @JvmField val ANNUAL = of("annual")
 
-                        @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+                        @JvmField val SEMI_ANNUAL = of("semi_annual")
 
-                        @JvmField val MONTHLY = Cadence(JsonField.of("monthly"))
+                        @JvmField val MONTHLY = of("monthly")
 
-                        @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
+                        @JvmField val QUARTERLY = of("quarterly")
 
-                        @JvmField val ONE_TIME = Cadence(JsonField.of("one_time"))
+                        @JvmField val ONE_TIME = of("one_time")
 
-                        @JvmField val CUSTOM = Cadence(JsonField.of("custom"))
+                        @JvmField val CUSTOM = of("custom")
 
                         @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
                     }
@@ -8676,7 +8674,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField val TIERED = ModelType(JsonField.of("tiered"))
+                        @JvmField val TIERED = of("tiered")
 
                         @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                     }
@@ -9081,9 +9079,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -9264,9 +9262,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -9917,17 +9915,17 @@ constructor(
 
                     companion object {
 
-                        @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
+                        @JvmField val ANNUAL = of("annual")
 
-                        @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+                        @JvmField val SEMI_ANNUAL = of("semi_annual")
 
-                        @JvmField val MONTHLY = Cadence(JsonField.of("monthly"))
+                        @JvmField val MONTHLY = of("monthly")
 
-                        @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
+                        @JvmField val QUARTERLY = of("quarterly")
 
-                        @JvmField val ONE_TIME = Cadence(JsonField.of("one_time"))
+                        @JvmField val ONE_TIME = of("one_time")
 
-                        @JvmField val CUSTOM = Cadence(JsonField.of("custom"))
+                        @JvmField val CUSTOM = of("custom")
 
                         @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
                     }
@@ -9999,7 +9997,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField val TIERED_BPS = ModelType(JsonField.of("tiered_bps"))
+                        @JvmField val TIERED_BPS = of("tiered_bps")
 
                         @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                     }
@@ -10430,9 +10428,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -10613,9 +10611,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -11380,17 +11378,17 @@ constructor(
 
                     companion object {
 
-                        @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
+                        @JvmField val ANNUAL = of("annual")
 
-                        @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+                        @JvmField val SEMI_ANNUAL = of("semi_annual")
 
-                        @JvmField val MONTHLY = Cadence(JsonField.of("monthly"))
+                        @JvmField val MONTHLY = of("monthly")
 
-                        @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
+                        @JvmField val QUARTERLY = of("quarterly")
 
-                        @JvmField val ONE_TIME = Cadence(JsonField.of("one_time"))
+                        @JvmField val ONE_TIME = of("one_time")
 
-                        @JvmField val CUSTOM = Cadence(JsonField.of("custom"))
+                        @JvmField val CUSTOM = of("custom")
 
                         @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
                     }
@@ -11462,7 +11460,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField val BPS = ModelType(JsonField.of("bps"))
+                        @JvmField val BPS = of("bps")
 
                         @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                     }
@@ -11619,9 +11617,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -11802,9 +11800,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -12703,17 +12701,17 @@ constructor(
 
                     companion object {
 
-                        @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
+                        @JvmField val ANNUAL = of("annual")
 
-                        @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+                        @JvmField val SEMI_ANNUAL = of("semi_annual")
 
-                        @JvmField val MONTHLY = Cadence(JsonField.of("monthly"))
+                        @JvmField val MONTHLY = of("monthly")
 
-                        @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
+                        @JvmField val QUARTERLY = of("quarterly")
 
-                        @JvmField val ONE_TIME = Cadence(JsonField.of("one_time"))
+                        @JvmField val ONE_TIME = of("one_time")
 
-                        @JvmField val CUSTOM = Cadence(JsonField.of("custom"))
+                        @JvmField val CUSTOM = of("custom")
 
                         @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
                     }
@@ -12785,7 +12783,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField val BULK_BPS = ModelType(JsonField.of("bulk_bps"))
+                        @JvmField val BULK_BPS = of("bulk_bps")
 
                         @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                     }
@@ -12942,9 +12940,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -13125,9 +13123,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -13989,17 +13987,17 @@ constructor(
 
                     companion object {
 
-                        @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
+                        @JvmField val ANNUAL = of("annual")
 
-                        @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+                        @JvmField val SEMI_ANNUAL = of("semi_annual")
 
-                        @JvmField val MONTHLY = Cadence(JsonField.of("monthly"))
+                        @JvmField val MONTHLY = of("monthly")
 
-                        @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
+                        @JvmField val QUARTERLY = of("quarterly")
 
-                        @JvmField val ONE_TIME = Cadence(JsonField.of("one_time"))
+                        @JvmField val ONE_TIME = of("one_time")
 
-                        @JvmField val CUSTOM = Cadence(JsonField.of("custom"))
+                        @JvmField val CUSTOM = of("custom")
 
                         @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
                     }
@@ -14071,7 +14069,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField val BULK = ModelType(JsonField.of("bulk"))
+                        @JvmField val BULK = of("bulk")
 
                         @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                     }
@@ -14228,9 +14226,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -14411,9 +14409,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -15073,17 +15071,17 @@ constructor(
 
                     companion object {
 
-                        @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
+                        @JvmField val ANNUAL = of("annual")
 
-                        @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+                        @JvmField val SEMI_ANNUAL = of("semi_annual")
 
-                        @JvmField val MONTHLY = Cadence(JsonField.of("monthly"))
+                        @JvmField val MONTHLY = of("monthly")
 
-                        @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
+                        @JvmField val QUARTERLY = of("quarterly")
 
-                        @JvmField val ONE_TIME = Cadence(JsonField.of("one_time"))
+                        @JvmField val ONE_TIME = of("one_time")
 
-                        @JvmField val CUSTOM = Cadence(JsonField.of("custom"))
+                        @JvmField val CUSTOM = of("custom")
 
                         @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
                     }
@@ -15155,9 +15153,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField
-                        val THRESHOLD_TOTAL_AMOUNT =
-                            ModelType(JsonField.of("threshold_total_amount"))
+                        @JvmField val THRESHOLD_TOTAL_AMOUNT = of("threshold_total_amount")
 
                         @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                     }
@@ -15390,9 +15386,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -15573,9 +15569,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -16229,17 +16225,17 @@ constructor(
 
                     companion object {
 
-                        @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
+                        @JvmField val ANNUAL = of("annual")
 
-                        @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+                        @JvmField val SEMI_ANNUAL = of("semi_annual")
 
-                        @JvmField val MONTHLY = Cadence(JsonField.of("monthly"))
+                        @JvmField val MONTHLY = of("monthly")
 
-                        @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
+                        @JvmField val QUARTERLY = of("quarterly")
 
-                        @JvmField val ONE_TIME = Cadence(JsonField.of("one_time"))
+                        @JvmField val ONE_TIME = of("one_time")
 
-                        @JvmField val CUSTOM = Cadence(JsonField.of("custom"))
+                        @JvmField val CUSTOM = of("custom")
 
                         @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
                     }
@@ -16311,7 +16307,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField val TIERED_PACKAGE = ModelType(JsonField.of("tiered_package"))
+                        @JvmField val TIERED_PACKAGE = of("tiered_package")
 
                         @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                     }
@@ -16541,9 +16537,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -16724,9 +16720,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -17380,17 +17376,17 @@ constructor(
 
                     companion object {
 
-                        @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
+                        @JvmField val ANNUAL = of("annual")
 
-                        @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+                        @JvmField val SEMI_ANNUAL = of("semi_annual")
 
-                        @JvmField val MONTHLY = Cadence(JsonField.of("monthly"))
+                        @JvmField val MONTHLY = of("monthly")
 
-                        @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
+                        @JvmField val QUARTERLY = of("quarterly")
 
-                        @JvmField val ONE_TIME = Cadence(JsonField.of("one_time"))
+                        @JvmField val ONE_TIME = of("one_time")
 
-                        @JvmField val CUSTOM = Cadence(JsonField.of("custom"))
+                        @JvmField val CUSTOM = of("custom")
 
                         @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
                     }
@@ -17535,7 +17531,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField val GROUPED_TIERED = ModelType(JsonField.of("grouped_tiered"))
+                        @JvmField val GROUPED_TIERED = of("grouped_tiered")
 
                         @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                     }
@@ -17692,9 +17688,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -17875,9 +17871,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -18533,17 +18529,17 @@ constructor(
 
                     companion object {
 
-                        @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
+                        @JvmField val ANNUAL = of("annual")
 
-                        @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+                        @JvmField val SEMI_ANNUAL = of("semi_annual")
 
-                        @JvmField val MONTHLY = Cadence(JsonField.of("monthly"))
+                        @JvmField val MONTHLY = of("monthly")
 
-                        @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
+                        @JvmField val QUARTERLY = of("quarterly")
 
-                        @JvmField val ONE_TIME = Cadence(JsonField.of("one_time"))
+                        @JvmField val ONE_TIME = of("one_time")
 
-                        @JvmField val CUSTOM = Cadence(JsonField.of("custom"))
+                        @JvmField val CUSTOM = of("custom")
 
                         @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
                     }
@@ -18615,8 +18611,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField
-                        val TIERED_WITH_MINIMUM = ModelType(JsonField.of("tiered_with_minimum"))
+                        @JvmField val TIERED_WITH_MINIMUM = of("tiered_with_minimum")
 
                         @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                     }
@@ -18847,9 +18842,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -19030,9 +19025,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -19693,17 +19688,17 @@ constructor(
 
                     companion object {
 
-                        @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
+                        @JvmField val ANNUAL = of("annual")
 
-                        @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+                        @JvmField val SEMI_ANNUAL = of("semi_annual")
 
-                        @JvmField val MONTHLY = Cadence(JsonField.of("monthly"))
+                        @JvmField val MONTHLY = of("monthly")
 
-                        @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
+                        @JvmField val QUARTERLY = of("quarterly")
 
-                        @JvmField val ONE_TIME = Cadence(JsonField.of("one_time"))
+                        @JvmField val ONE_TIME = of("one_time")
 
-                        @JvmField val CUSTOM = Cadence(JsonField.of("custom"))
+                        @JvmField val CUSTOM = of("custom")
 
                         @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
                     }
@@ -19775,9 +19770,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField
-                        val PACKAGE_WITH_ALLOCATION =
-                            ModelType(JsonField.of("package_with_allocation"))
+                        @JvmField val PACKAGE_WITH_ALLOCATION = of("package_with_allocation")
 
                         @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                     }
@@ -20009,9 +20002,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -20192,9 +20185,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -20862,17 +20855,17 @@ constructor(
 
                     companion object {
 
-                        @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
+                        @JvmField val ANNUAL = of("annual")
 
-                        @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+                        @JvmField val SEMI_ANNUAL = of("semi_annual")
 
-                        @JvmField val MONTHLY = Cadence(JsonField.of("monthly"))
+                        @JvmField val MONTHLY = of("monthly")
 
-                        @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
+                        @JvmField val QUARTERLY = of("quarterly")
 
-                        @JvmField val ONE_TIME = Cadence(JsonField.of("one_time"))
+                        @JvmField val ONE_TIME = of("one_time")
 
-                        @JvmField val CUSTOM = Cadence(JsonField.of("custom"))
+                        @JvmField val CUSTOM = of("custom")
 
                         @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
                     }
@@ -20945,8 +20938,7 @@ constructor(
                     companion object {
 
                         @JvmField
-                        val TIERED_PACKAGE_WITH_MINIMUM =
-                            ModelType(JsonField.of("tiered_package_with_minimum"))
+                        val TIERED_PACKAGE_WITH_MINIMUM = of("tiered_package_with_minimum")
 
                         @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                     }
@@ -21180,9 +21172,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -21363,9 +21355,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -22019,17 +22011,17 @@ constructor(
 
                     companion object {
 
-                        @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
+                        @JvmField val ANNUAL = of("annual")
 
-                        @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+                        @JvmField val SEMI_ANNUAL = of("semi_annual")
 
-                        @JvmField val MONTHLY = Cadence(JsonField.of("monthly"))
+                        @JvmField val MONTHLY = of("monthly")
 
-                        @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
+                        @JvmField val QUARTERLY = of("quarterly")
 
-                        @JvmField val ONE_TIME = Cadence(JsonField.of("one_time"))
+                        @JvmField val ONE_TIME = of("one_time")
 
-                        @JvmField val CUSTOM = Cadence(JsonField.of("custom"))
+                        @JvmField val CUSTOM = of("custom")
 
                         @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
                     }
@@ -22101,8 +22093,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField
-                        val UNIT_WITH_PERCENT = ModelType(JsonField.of("unit_with_percent"))
+                        @JvmField val UNIT_WITH_PERCENT = of("unit_with_percent")
 
                         @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                     }
@@ -22332,9 +22323,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -22515,9 +22506,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -23176,17 +23167,17 @@ constructor(
 
                     companion object {
 
-                        @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
+                        @JvmField val ANNUAL = of("annual")
 
-                        @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+                        @JvmField val SEMI_ANNUAL = of("semi_annual")
 
-                        @JvmField val MONTHLY = Cadence(JsonField.of("monthly"))
+                        @JvmField val MONTHLY = of("monthly")
 
-                        @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
+                        @JvmField val QUARTERLY = of("quarterly")
 
-                        @JvmField val ONE_TIME = Cadence(JsonField.of("one_time"))
+                        @JvmField val ONE_TIME = of("one_time")
 
-                        @JvmField val CUSTOM = Cadence(JsonField.of("custom"))
+                        @JvmField val CUSTOM = of("custom")
 
                         @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
                     }
@@ -23258,8 +23249,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField
-                        val TIERED_WITH_PRORATION = ModelType(JsonField.of("tiered_with_proration"))
+                        @JvmField val TIERED_WITH_PRORATION = of("tiered_with_proration")
 
                         @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                     }
@@ -23490,9 +23480,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -23673,9 +23663,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -24331,17 +24321,17 @@ constructor(
 
                     companion object {
 
-                        @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
+                        @JvmField val ANNUAL = of("annual")
 
-                        @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+                        @JvmField val SEMI_ANNUAL = of("semi_annual")
 
-                        @JvmField val MONTHLY = Cadence(JsonField.of("monthly"))
+                        @JvmField val MONTHLY = of("monthly")
 
-                        @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
+                        @JvmField val QUARTERLY = of("quarterly")
 
-                        @JvmField val ONE_TIME = Cadence(JsonField.of("one_time"))
+                        @JvmField val ONE_TIME = of("one_time")
 
-                        @JvmField val CUSTOM = Cadence(JsonField.of("custom"))
+                        @JvmField val CUSTOM = of("custom")
 
                         @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
                     }
@@ -24413,8 +24403,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField
-                        val UNIT_WITH_PRORATION = ModelType(JsonField.of("unit_with_proration"))
+                        @JvmField val UNIT_WITH_PRORATION = of("unit_with_proration")
 
                         @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                     }
@@ -24645,9 +24634,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -24828,9 +24817,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -25486,17 +25475,17 @@ constructor(
 
                     companion object {
 
-                        @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
+                        @JvmField val ANNUAL = of("annual")
 
-                        @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+                        @JvmField val SEMI_ANNUAL = of("semi_annual")
 
-                        @JvmField val MONTHLY = Cadence(JsonField.of("monthly"))
+                        @JvmField val MONTHLY = of("monthly")
 
-                        @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
+                        @JvmField val QUARTERLY = of("quarterly")
 
-                        @JvmField val ONE_TIME = Cadence(JsonField.of("one_time"))
+                        @JvmField val ONE_TIME = of("one_time")
 
-                        @JvmField val CUSTOM = Cadence(JsonField.of("custom"))
+                        @JvmField val CUSTOM = of("custom")
 
                         @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
                     }
@@ -25642,8 +25631,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField
-                        val GROUPED_ALLOCATION = ModelType(JsonField.of("grouped_allocation"))
+                        @JvmField val GROUPED_ALLOCATION = of("grouped_allocation")
 
                         @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                     }
@@ -25800,9 +25788,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -25983,9 +25971,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -26660,17 +26648,17 @@ constructor(
 
                     companion object {
 
-                        @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
+                        @JvmField val ANNUAL = of("annual")
 
-                        @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+                        @JvmField val SEMI_ANNUAL = of("semi_annual")
 
-                        @JvmField val MONTHLY = Cadence(JsonField.of("monthly"))
+                        @JvmField val MONTHLY = of("monthly")
 
-                        @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
+                        @JvmField val QUARTERLY = of("quarterly")
 
-                        @JvmField val ONE_TIME = Cadence(JsonField.of("one_time"))
+                        @JvmField val ONE_TIME = of("one_time")
 
-                        @JvmField val CUSTOM = Cadence(JsonField.of("custom"))
+                        @JvmField val CUSTOM = of("custom")
 
                         @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
                     }
@@ -26820,8 +26808,7 @@ constructor(
                     companion object {
 
                         @JvmField
-                        val GROUPED_WITH_PRORATED_MINIMUM =
-                            ModelType(JsonField.of("grouped_with_prorated_minimum"))
+                        val GROUPED_WITH_PRORATED_MINIMUM = of("grouped_with_prorated_minimum")
 
                         @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                     }
@@ -26978,9 +26965,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -27161,9 +27148,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -27837,17 +27824,17 @@ constructor(
 
                     companion object {
 
-                        @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
+                        @JvmField val ANNUAL = of("annual")
 
-                        @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+                        @JvmField val SEMI_ANNUAL = of("semi_annual")
 
-                        @JvmField val MONTHLY = Cadence(JsonField.of("monthly"))
+                        @JvmField val MONTHLY = of("monthly")
 
-                        @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
+                        @JvmField val QUARTERLY = of("quarterly")
 
-                        @JvmField val ONE_TIME = Cadence(JsonField.of("one_time"))
+                        @JvmField val ONE_TIME = of("one_time")
 
-                        @JvmField val CUSTOM = Cadence(JsonField.of("custom"))
+                        @JvmField val CUSTOM = of("custom")
 
                         @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
                     }
@@ -27997,8 +27984,7 @@ constructor(
                     companion object {
 
                         @JvmField
-                        val GROUPED_WITH_METERED_MINIMUM =
-                            ModelType(JsonField.of("grouped_with_metered_minimum"))
+                        val GROUPED_WITH_METERED_MINIMUM = of("grouped_with_metered_minimum")
 
                         @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                     }
@@ -28155,9 +28141,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -28338,9 +28324,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -29001,17 +28987,17 @@ constructor(
 
                     companion object {
 
-                        @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
+                        @JvmField val ANNUAL = of("annual")
 
-                        @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+                        @JvmField val SEMI_ANNUAL = of("semi_annual")
 
-                        @JvmField val MONTHLY = Cadence(JsonField.of("monthly"))
+                        @JvmField val MONTHLY = of("monthly")
 
-                        @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
+                        @JvmField val QUARTERLY = of("quarterly")
 
-                        @JvmField val ONE_TIME = Cadence(JsonField.of("one_time"))
+                        @JvmField val ONE_TIME = of("one_time")
 
-                        @JvmField val CUSTOM = Cadence(JsonField.of("custom"))
+                        @JvmField val CUSTOM = of("custom")
 
                         @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
                     }
@@ -29158,9 +29144,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField
-                        val MATRIX_WITH_DISPLAY_NAME =
-                            ModelType(JsonField.of("matrix_with_display_name"))
+                        @JvmField val MATRIX_WITH_DISPLAY_NAME = of("matrix_with_display_name")
 
                         @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                     }
@@ -29317,9 +29301,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -29500,9 +29484,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -30232,17 +30216,17 @@ constructor(
 
                     companion object {
 
-                        @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
+                        @JvmField val ANNUAL = of("annual")
 
-                        @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+                        @JvmField val SEMI_ANNUAL = of("semi_annual")
 
-                        @JvmField val MONTHLY = Cadence(JsonField.of("monthly"))
+                        @JvmField val MONTHLY = of("monthly")
 
-                        @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
+                        @JvmField val QUARTERLY = of("quarterly")
 
-                        @JvmField val ONE_TIME = Cadence(JsonField.of("one_time"))
+                        @JvmField val ONE_TIME = of("one_time")
 
-                        @JvmField val CUSTOM = Cadence(JsonField.of("custom"))
+                        @JvmField val CUSTOM = of("custom")
 
                         @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
                     }
@@ -30314,8 +30298,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField
-                        val BULK_WITH_PRORATION = ModelType(JsonField.of("bulk_with_proration"))
+                        @JvmField val BULK_WITH_PRORATION = of("bulk_with_proration")
 
                         @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                     }
@@ -30472,9 +30455,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -30655,9 +30638,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -31317,17 +31300,17 @@ constructor(
 
                     companion object {
 
-                        @JvmField val ANNUAL = Cadence(JsonField.of("annual"))
+                        @JvmField val ANNUAL = of("annual")
 
-                        @JvmField val SEMI_ANNUAL = Cadence(JsonField.of("semi_annual"))
+                        @JvmField val SEMI_ANNUAL = of("semi_annual")
 
-                        @JvmField val MONTHLY = Cadence(JsonField.of("monthly"))
+                        @JvmField val MONTHLY = of("monthly")
 
-                        @JvmField val QUARTERLY = Cadence(JsonField.of("quarterly"))
+                        @JvmField val QUARTERLY = of("quarterly")
 
-                        @JvmField val ONE_TIME = Cadence(JsonField.of("one_time"))
+                        @JvmField val ONE_TIME = of("one_time")
 
-                        @JvmField val CUSTOM = Cadence(JsonField.of("custom"))
+                        @JvmField val CUSTOM = of("custom")
 
                         @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
                     }
@@ -31475,9 +31458,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField
-                        val GROUPED_TIERED_PACKAGE =
-                            ModelType(JsonField.of("grouped_tiered_package"))
+                        @JvmField val GROUPED_TIERED_PACKAGE = of("grouped_tiered_package")
 
                         @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
                     }
@@ -31634,9 +31615,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -31817,9 +31798,9 @@ constructor(
 
                         companion object {
 
-                            @JvmField val DAY = DurationUnit(JsonField.of("day"))
+                            @JvmField val DAY = of("day")
 
-                            @JvmField val MONTH = DurationUnit(JsonField.of("month"))
+                            @JvmField val MONTH = of("month")
 
                             @JvmStatic fun of(value: String) = DurationUnit(JsonField.of(value))
                         }
@@ -32474,9 +32455,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField
-                        val PERCENTAGE_DISCOUNT =
-                            AdjustmentType(JsonField.of("percentage_discount"))
+                        @JvmField val PERCENTAGE_DISCOUNT = of("percentage_discount")
 
                         @JvmStatic fun of(value: String) = AdjustmentType(JsonField.of(value))
                     }
@@ -32702,8 +32681,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField
-                        val USAGE_DISCOUNT = AdjustmentType(JsonField.of("usage_discount"))
+                        @JvmField val USAGE_DISCOUNT = of("usage_discount")
 
                         @JvmStatic fun of(value: String) = AdjustmentType(JsonField.of(value))
                     }
@@ -32931,8 +32909,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField
-                        val AMOUNT_DISCOUNT = AdjustmentType(JsonField.of("amount_discount"))
+                        @JvmField val AMOUNT_DISCOUNT = of("amount_discount")
 
                         @JvmStatic fun of(value: String) = AdjustmentType(JsonField.of(value))
                     }
@@ -33177,7 +33154,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField val MINIMUM = AdjustmentType(JsonField.of("minimum"))
+                        @JvmField val MINIMUM = of("minimum")
 
                         @JvmStatic fun of(value: String) = AdjustmentType(JsonField.of(value))
                     }
@@ -33403,7 +33380,7 @@ constructor(
 
                     companion object {
 
-                        @JvmField val MAXIMUM = AdjustmentType(JsonField.of("maximum"))
+                        @JvmField val MAXIMUM = of("maximum")
 
                         @JvmStatic fun of(value: String) = AdjustmentType(JsonField.of(value))
                     }

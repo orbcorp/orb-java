@@ -1468,8 +1468,7 @@ private constructor(
 
                     companion object {
 
-                        @JvmField
-                        val AMOUNT_DISCOUNT = AdjustmentType(JsonField.of("amount_discount"))
+                        @JvmField val AMOUNT_DISCOUNT = of("amount_discount")
 
                         @JvmStatic fun of(value: String) = AdjustmentType(JsonField.of(value))
                     }
@@ -1774,9 +1773,7 @@ private constructor(
 
                     companion object {
 
-                        @JvmField
-                        val PERCENTAGE_DISCOUNT =
-                            AdjustmentType(JsonField.of("percentage_discount"))
+                        @JvmField val PERCENTAGE_DISCOUNT = of("percentage_discount")
 
                         @JvmStatic fun of(value: String) = AdjustmentType(JsonField.of(value))
                     }
@@ -2076,8 +2073,7 @@ private constructor(
 
                     companion object {
 
-                        @JvmField
-                        val USAGE_DISCOUNT = AdjustmentType(JsonField.of("usage_discount"))
+                        @JvmField val USAGE_DISCOUNT = of("usage_discount")
 
                         @JvmStatic fun of(value: String) = AdjustmentType(JsonField.of(value))
                     }
@@ -2396,7 +2392,7 @@ private constructor(
 
                     companion object {
 
-                        @JvmField val MINIMUM = AdjustmentType(JsonField.of("minimum"))
+                        @JvmField val MINIMUM = of("minimum")
 
                         @JvmStatic fun of(value: String) = AdjustmentType(JsonField.of(value))
                     }
@@ -2696,7 +2692,7 @@ private constructor(
 
                     companion object {
 
-                        @JvmField val MAXIMUM = AdjustmentType(JsonField.of("maximum"))
+                        @JvmField val MAXIMUM = of("maximum")
 
                         @JvmStatic fun of(value: String) = AdjustmentType(JsonField.of(value))
                     }
@@ -3328,7 +3324,7 @@ private constructor(
 
                 companion object {
 
-                    @JvmField val AMOUNT = DiscountType(JsonField.of("amount"))
+                    @JvmField val AMOUNT = of("amount")
 
                     @JvmStatic fun of(value: String) = DiscountType(JsonField.of(value))
                 }
@@ -3592,7 +3588,7 @@ private constructor(
 
                 companion object {
 
-                    @JvmField val PERCENTAGE = DiscountType(JsonField.of("percentage"))
+                    @JvmField val PERCENTAGE = of("percentage")
 
                     @JvmStatic fun of(value: String) = DiscountType(JsonField.of(value))
                 }
@@ -3861,7 +3857,7 @@ private constructor(
 
                 companion object {
 
-                    @JvmField val USAGE = DiscountType(JsonField.of("usage"))
+                    @JvmField val USAGE = of("usage")
 
                     @JvmStatic fun of(value: String) = DiscountType(JsonField.of(value))
                 }
@@ -6013,11 +6009,11 @@ private constructor(
 
         companion object {
 
-            @JvmField val ACTIVE = Status(JsonField.of("active"))
+            @JvmField val ACTIVE = of("active")
 
-            @JvmField val ENDED = Status(JsonField.of("ended"))
+            @JvmField val ENDED = of("ended")
 
-            @JvmField val UPCOMING = Status(JsonField.of("upcoming"))
+            @JvmField val UPCOMING = of("upcoming")
 
             @JvmStatic fun of(value: String) = Status(JsonField.of(value))
         }

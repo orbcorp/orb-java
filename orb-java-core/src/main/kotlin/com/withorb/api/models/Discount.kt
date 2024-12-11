@@ -383,7 +383,7 @@ private constructor(
 
             companion object {
 
-                @JvmField val USAGE = DiscountType(JsonField.of("usage"))
+                @JvmField val USAGE = of("usage")
 
                 @JvmStatic fun of(value: String) = DiscountType(JsonField.of(value))
             }

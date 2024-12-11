@@ -30,9 +30,9 @@ private constructor(
 
     companion object {
 
-        @JvmField val START_OF_TERM = BillingCycleRelativeDate(JsonField.of("start_of_term"))
+        @JvmField val START_OF_TERM = of("start_of_term")
 
-        @JvmField val END_OF_TERM = BillingCycleRelativeDate(JsonField.of("end_of_term"))
+        @JvmField val END_OF_TERM = of("end_of_term")
 
         @JvmStatic fun of(value: String) = BillingCycleRelativeDate(JsonField.of(value))
     }

@@ -184,7 +184,7 @@ private constructor(
 
         companion object {
 
-            @JvmField val AMOUNT = DiscountType(JsonField.of("amount"))
+            @JvmField val AMOUNT = of("amount")
 
             @JvmStatic fun of(value: String) = DiscountType(JsonField.of(value))
         }
