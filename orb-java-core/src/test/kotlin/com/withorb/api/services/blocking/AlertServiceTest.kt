@@ -150,7 +150,10 @@ class AlertServiceTest {
         val alertService = client.alerts()
         val alert =
             alertService.disable(
-                AlertDisableParams.builder().alertConfigurationId("alert_configuration_id").build()
+                AlertDisableParams.builder()
+                    .alertConfigurationId("alert_configuration_id")
+                    .subscriptionId("subscription_id")
+                    .build()
             )
         println(alert)
         alert.validate()
@@ -166,7 +169,10 @@ class AlertServiceTest {
         val alertService = client.alerts()
         val alert =
             alertService.enable(
-                AlertEnableParams.builder().alertConfigurationId("alert_configuration_id").build()
+                AlertEnableParams.builder()
+                    .alertConfigurationId("alert_configuration_id")
+                    .subscriptionId("subscription_id")
+                    .build()
             )
         println(alert)
         alert.validate()
