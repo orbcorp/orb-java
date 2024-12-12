@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.12.0 (2024-12-12)
+
+Full Changelog: [v0.11.0...v0.12.0](https://github.com/orbcorp/orb-java/compare/v0.11.0...v0.12.0)
+
+### Features
+
+* **api:** api update ([#152](https://github.com/orbcorp/orb-java/issues/152)) ([80e4392](https://github.com/orbcorp/orb-java/commit/80e4392479ef269e8c2c4fe785fdd4e365ce63fb))
+
+
+### Chores
+
+* **internal:** remove unused and expand used wildcard imports ([#150](https://github.com/orbcorp/orb-java/issues/150)) ([125239d](https://github.com/orbcorp/orb-java/commit/125239d512c263421213eeb779a114dcaae25032))
+* **internal:** remove unused and expand used wildcard imports ([#151](https://github.com/orbcorp/orb-java/issues/151)) ([e31d1ed](https://github.com/orbcorp/orb-java/commit/e31d1ed415f6f2f3eecd33bb198d1b93cd59c4fb))
+* **internal:** remove unused imports ([#147](https://github.com/orbcorp/orb-java/issues/147)) ([fbafbb5](https://github.com/orbcorp/orb-java/commit/fbafbb58161b70959c6ac9a3e484478571633619))
+* **test:** remove unused imports ([#148](https://github.com/orbcorp/orb-java/issues/148)) ([b170c90](https://github.com/orbcorp/orb-java/commit/b170c90db37d08d16ea65b4e9650c6281dc65124))
+* **test:** use `JsonValue` instead of `JsonString` ([#149](https://github.com/orbcorp/orb-java/issues/149)) ([b177193](https://github.com/orbcorp/orb-java/commit/b177193c824bb6c6a3e80e1c6248b5f87b51be90))
+* update example values in tests and docs ([#143](https://github.com/orbcorp/orb-java/issues/143)) ([3ae9d16](https://github.com/orbcorp/orb-java/commit/3ae9d16e54069c512ca6afcc912ebd4522428d92))
+
+
+### Styles
+
+* **internal:** make enum value definitions less verbose ([#145](https://github.com/orbcorp/orb-java/issues/145)) ([618c1a3](https://github.com/orbcorp/orb-java/commit/618c1a3ccf88c313d9fff21ee49520f638cd49d2))
+* **internal:** move enum identity methods to bottom of class ([#146](https://github.com/orbcorp/orb-java/issues/146)) ([8a9c393](https://github.com/orbcorp/orb-java/commit/8a9c3931e848d900c5d915329919e5a7f1164d08))
+
 ## 0.11.0 (2024-12-03)
 
 Full Changelog: [v0.10.0...v0.11.0](https://github.com/orbcorp/orb-java/compare/v0.10.0...v0.11.0)
