@@ -98,14 +98,22 @@ interface AlertServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none()
     ): CompletableFuture<Alert>
 
-    /** This endpoint can be used to disable an alert. */
+    /**
+     * This endpoint allows you to disable an alert. To disable a plan-level alert for a specific
+     * subscription, you must include the `subscription_id`. The `subscription_id` is not required
+     * for customer or subscription level alerts.
+     */
     @JvmOverloads
     fun disable(
         params: AlertDisableParams,
         requestOptions: RequestOptions = RequestOptions.none()
     ): CompletableFuture<Alert>
 
-    /** This endpoint can be used to enable an alert. */
+    /**
+     * This endpoint allows you to enable an alert. To enable a plan-level alert for a specific
+     * subscription, you must include the `subscription_id`. The `subscription_id` is not required
+     * for customer or subscription level alerts.
+     */
     @JvmOverloads
     fun enable(
         params: AlertEnableParams,
