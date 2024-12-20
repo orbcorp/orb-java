@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.13.1 (2024-12-20)
+
+Full Changelog: [v0.13.0...v0.13.1](https://github.com/orbcorp/orb-java/compare/v0.13.0...v0.13.1)
+
+### Chores
+
+* **docs:** update readme ([#157](https://github.com/orbcorp/orb-java/issues/157)) ([4c11716](https://github.com/orbcorp/orb-java/commit/4c1171658c630869fcf256ed76244d8a626a9d16))
+
 ## 0.13.0 (2024-12-17)
 
 Full Changelog: [v0.12.0...v0.13.0](https://github.com/orbcorp/orb-java/compare/v0.12.0...v0.13.0)
