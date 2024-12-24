@@ -1,0 +1,124 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package com.withorb.api.models
+
+import com.fasterxml.jackson.annotation.JsonAnyGetter
+import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.withorb.api.core.ExcludeMissing
+import com.withorb.api.core.JsonField
+import com.withorb.api.core.JsonMissing
+import com.withorb.api.core.JsonValue
+import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.toImmutable
+import java.util.Objects
+
+@JsonDeserialize(builder = DimensionalPriceGroups.Builder::class)
+@NoAutoDetect
+class DimensionalPriceGroups
+private constructor(
+    private val data: JsonField<List<DimensionalPriceGroup>>,
+    private val paginationMetadata: JsonField<PaginationMetadata>,
+    private val additionalProperties: Map<String, JsonValue>,
+) {
+
+    private var validated: Boolean = false
+
+    fun data(): List<DimensionalPriceGroup> = data.getRequired("data")
+
+    fun paginationMetadata(): PaginationMetadata =
+        paginationMetadata.getRequired("pagination_metadata")
+
+    @JsonProperty("data") @ExcludeMissing fun _data() = data
+
+    @JsonProperty("pagination_metadata")
+    @ExcludeMissing
+    fun _paginationMetadata() = paginationMetadata
+
+    @JsonAnyGetter
+    @ExcludeMissing
+    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+    fun validate(): DimensionalPriceGroups = apply {
+        if (!validated) {
+            data().forEach { it.validate() }
+            paginationMetadata().validate()
+            validated = true
+        }
+    }
+
+    fun toBuilder() = Builder().from(this)
+
+    companion object {
+
+        @JvmStatic fun builder() = Builder()
+    }
+
+    class Builder {
+
+        private var data: JsonField<List<DimensionalPriceGroup>> = JsonMissing.of()
+        private var paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of()
+        private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+        @JvmSynthetic
+        internal fun from(dimensionalPriceGroups: DimensionalPriceGroups) = apply {
+            this.data = dimensionalPriceGroups.data
+            this.paginationMetadata = dimensionalPriceGroups.paginationMetadata
+            additionalProperties(dimensionalPriceGroups.additionalProperties)
+        }
+
+        fun data(data: List<DimensionalPriceGroup>) = data(JsonField.of(data))
+
+        @JsonProperty("data")
+        @ExcludeMissing
+        fun data(data: JsonField<List<DimensionalPriceGroup>>) = apply { this.data = data }
+
+        fun paginationMetadata(paginationMetadata: PaginationMetadata) =
+            paginationMetadata(JsonField.of(paginationMetadata))
+
+        @JsonProperty("pagination_metadata")
+        @ExcludeMissing
+        fun paginationMetadata(paginationMetadata: JsonField<PaginationMetadata>) = apply {
+            this.paginationMetadata = paginationMetadata
+        }
+
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            this.additionalProperties.putAll(additionalProperties)
+        }
+
+        @JsonAnySetter
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            this.additionalProperties.put(key, value)
+        }
+
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun build(): DimensionalPriceGroups =
+            DimensionalPriceGroups(
+                data.map { it.toImmutable() },
+                paginationMetadata,
+                additionalProperties.toImmutable(),
+            )
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is DimensionalPriceGroups && data == other.data && paginationMetadata == other.paginationMetadata && additionalProperties == other.additionalProperties /* spotless:on */
+    }
+
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(data, paginationMetadata, additionalProperties) }
+    /* spotless:on */
+
+    override fun hashCode(): Int = hashCode
+
+    override fun toString() =
+        "DimensionalPriceGroups{data=$data, paginationMetadata=$paginationMetadata, additionalProperties=$additionalProperties}"
+}
