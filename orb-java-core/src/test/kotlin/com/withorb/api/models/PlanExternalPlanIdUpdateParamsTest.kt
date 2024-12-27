@@ -35,9 +35,9 @@ class PlanExternalPlanIdUpdateParamsTest {
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.externalPlanId()).isEqualTo("external_plan_id")
+        assertThat(body.externalPlanId()).contains("external_plan_id")
         assertThat(body.metadata())
-            .isEqualTo(
+            .contains(
                 PlanExternalPlanIdUpdateParams.Metadata.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()

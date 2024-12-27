@@ -37,7 +37,7 @@ class AlertCreateForExternalCustomerParamsTest {
         assertThat(body.currency()).isEqualTo("currency")
         assertThat(body.type()).isEqualTo(AlertCreateForExternalCustomerParams.Type.USAGE_EXCEEDED)
         assertThat(body.thresholds())
-            .isEqualTo(
+            .contains(
                 listOf(AlertCreateForExternalCustomerParams.Threshold.builder().value(0.0).build())
             )
     }

@@ -30,7 +30,7 @@ class CustomerBalanceTransactionCreateParamsTest {
         assertThat(body).isNotNull
         assertThat(body.amount()).isEqualTo("amount")
         assertThat(body.type()).isEqualTo(CustomerBalanceTransactionCreateParams.Type.INCREMENT)
-        assertThat(body.description()).isEqualTo("description")
+        assertThat(body.description()).contains("description")
     }
 
     @Test

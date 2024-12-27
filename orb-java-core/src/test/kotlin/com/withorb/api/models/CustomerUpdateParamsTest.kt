@@ -166,7 +166,7 @@ class CustomerUpdateParamsTest {
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.accountingSyncConfiguration())
-            .isEqualTo(
+            .contains(
                 CustomerUpdateParams.AccountingSyncConfiguration.builder()
                     .accountingProviders(
                         listOf(
@@ -180,10 +180,10 @@ class CustomerUpdateParamsTest {
                     .excluded(true)
                     .build()
             )
-        assertThat(body.additionalEmails()).isEqualTo(listOf("string"))
-        assertThat(body.autoCollection()).isEqualTo(true)
+        assertThat(body.additionalEmails()).contains(listOf("string"))
+        assertThat(body.autoCollection()).contains(true)
         assertThat(body.billingAddress())
-            .isEqualTo(
+            .contains(
                 CustomerUpdateParams.BillingAddress.builder()
                     .city("city")
                     .country("country")
@@ -193,24 +193,23 @@ class CustomerUpdateParamsTest {
                     .state("state")
                     .build()
             )
-        assertThat(body.currency()).isEqualTo("currency")
-        assertThat(body.email()).isEqualTo("dev@stainlessapi.com")
-        assertThat(body.emailDelivery()).isEqualTo(true)
-        assertThat(body.externalCustomerId()).isEqualTo("external_customer_id")
+        assertThat(body.currency()).contains("currency")
+        assertThat(body.email()).contains("dev@stainlessapi.com")
+        assertThat(body.emailDelivery()).contains(true)
+        assertThat(body.externalCustomerId()).contains("external_customer_id")
         assertThat(body.metadata())
-            .isEqualTo(
+            .contains(
                 CustomerUpdateParams.Metadata.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
-        assertThat(body.name()).isEqualTo("name")
-        assertThat(body.paymentProvider())
-            .isEqualTo(CustomerUpdateParams.PaymentProvider.QUICKBOOKS)
-        assertThat(body.paymentProviderId()).isEqualTo("payment_provider_id")
+        assertThat(body.name()).contains("name")
+        assertThat(body.paymentProvider()).contains(CustomerUpdateParams.PaymentProvider.QUICKBOOKS)
+        assertThat(body.paymentProviderId()).contains("payment_provider_id")
         assertThat(body.reportingConfiguration())
-            .isEqualTo(CustomerUpdateParams.ReportingConfiguration.builder().exempt(true).build())
+            .contains(CustomerUpdateParams.ReportingConfiguration.builder().exempt(true).build())
         assertThat(body.shippingAddress())
-            .isEqualTo(
+            .contains(
                 CustomerUpdateParams.ShippingAddress.builder()
                     .city("city")
                     .country("country")
@@ -221,7 +220,7 @@ class CustomerUpdateParamsTest {
                     .build()
             )
         assertThat(body.taxConfiguration())
-            .isEqualTo(
+            .contains(
                 CustomerUpdateParams.TaxConfiguration.ofNewAvalaraTaxConfiguration(
                     CustomerUpdateParams.TaxConfiguration.NewAvalaraTaxConfiguration.builder()
                         .taxExempt(true)
@@ -235,7 +234,7 @@ class CustomerUpdateParamsTest {
                 )
             )
         assertThat(body.taxId())
-            .isEqualTo(
+            .contains(
                 CustomerUpdateParams.TaxId.builder()
                     .country(CustomerUpdateParams.TaxId.Country.AD)
                     .type(CustomerUpdateParams.TaxId.Type.AD_NRT)

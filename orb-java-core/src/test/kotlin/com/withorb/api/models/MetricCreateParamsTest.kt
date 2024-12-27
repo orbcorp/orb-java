@@ -39,13 +39,13 @@ class MetricCreateParamsTest {
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.description()).isEqualTo("Sum of bytes downloaded in fast mode")
+        assertThat(body.description()).contains("Sum of bytes downloaded in fast mode")
         assertThat(body.itemId()).isEqualTo("item_id")
         assertThat(body.name()).isEqualTo("Bytes downloaded")
         assertThat(body.sql())
             .isEqualTo("SELECT sum(bytes_downloaded) FROM events WHERE download_speed = 'fast'")
         assertThat(body.metadata())
-            .isEqualTo(
+            .contains(
                 MetricCreateParams.Metadata.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()

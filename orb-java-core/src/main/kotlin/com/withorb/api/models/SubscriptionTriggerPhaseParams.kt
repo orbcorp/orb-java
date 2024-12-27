@@ -4,13 +4,14 @@ package com.withorb.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
+import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
 import java.time.LocalDate
 import java.util.Objects
@@ -51,19 +52,21 @@ constructor(
         }
     }
 
-    @JsonDeserialize(builder = SubscriptionTriggerPhaseBody.Builder::class)
     @NoAutoDetect
     class SubscriptionTriggerPhaseBody
+    @JsonCreator
     internal constructor(
-        private val effectiveDate: LocalDate?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("effective_date") private val effectiveDate: LocalDate?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /**
          * The date on which the phase change should take effect. If not provided, defaults to today
          * in the customer's timezone.
          */
-        @JsonProperty("effective_date") fun effectiveDate(): LocalDate? = effectiveDate
+        @JsonProperty("effective_date")
+        fun effectiveDate(): Optional<LocalDate> = Optional.ofNullable(effectiveDate)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -83,31 +86,36 @@ constructor(
 
             @JvmSynthetic
             internal fun from(subscriptionTriggerPhaseBody: SubscriptionTriggerPhaseBody) = apply {
-                this.effectiveDate = subscriptionTriggerPhaseBody.effectiveDate
-                additionalProperties(subscriptionTriggerPhaseBody.additionalProperties)
+                effectiveDate = subscriptionTriggerPhaseBody.effectiveDate
+                additionalProperties =
+                    subscriptionTriggerPhaseBody.additionalProperties.toMutableMap()
             }
 
             /**
              * The date on which the phase change should take effect. If not provided, defaults to
              * today in the customer's timezone.
              */
-            @JsonProperty("effective_date")
             fun effectiveDate(effectiveDate: LocalDate) = apply {
                 this.effectiveDate = effectiveDate
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): SubscriptionTriggerPhaseBody =

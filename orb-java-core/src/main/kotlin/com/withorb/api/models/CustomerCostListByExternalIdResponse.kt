@@ -4,27 +4,28 @@ package com.withorb.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
-@JsonDeserialize(builder = CustomerCostListByExternalIdResponse.Builder::class)
 @NoAutoDetect
 class CustomerCostListByExternalIdResponse
+@JsonCreator
 private constructor(
-    private val data: JsonField<List<Data>>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("data")
+    @ExcludeMissing
+    private val data: JsonField<List<Data>> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
-
-    private var validated: Boolean = false
 
     fun data(): List<Data> = data.getRequired("data")
 
@@ -33,6 +34,8 @@ private constructor(
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+    private var validated: Boolean = false
 
     fun validate(): CustomerCostListByExternalIdResponse = apply {
         if (!validated) {
@@ -57,28 +60,32 @@ private constructor(
         internal fun from(
             customerCostListByExternalIdResponse: CustomerCostListByExternalIdResponse
         ) = apply {
-            this.data = customerCostListByExternalIdResponse.data
-            additionalProperties(customerCostListByExternalIdResponse.additionalProperties)
+            data = customerCostListByExternalIdResponse.data
+            additionalProperties =
+                customerCostListByExternalIdResponse.additionalProperties.toMutableMap()
         }
 
         fun data(data: List<Data>) = data(JsonField.of(data))
 
-        @JsonProperty("data")
-        @ExcludeMissing
         fun data(data: JsonField<List<Data>>) = apply { this.data = data }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
         }
 
         fun build(): CustomerCostListByExternalIdResponse =
@@ -88,19 +95,28 @@ private constructor(
             )
     }
 
-    @JsonDeserialize(builder = Data.Builder::class)
     @NoAutoDetect
     class Data
+    @JsonCreator
     private constructor(
-        private val subtotal: JsonField<String>,
-        private val total: JsonField<String>,
-        private val timeframeStart: JsonField<OffsetDateTime>,
-        private val timeframeEnd: JsonField<OffsetDateTime>,
-        private val perPriceCosts: JsonField<List<PerPriceCost>>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("subtotal")
+        @ExcludeMissing
+        private val subtotal: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("total")
+        @ExcludeMissing
+        private val total: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("timeframe_start")
+        @ExcludeMissing
+        private val timeframeStart: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("timeframe_end")
+        @ExcludeMissing
+        private val timeframeEnd: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("per_price_costs")
+        @ExcludeMissing
+        private val perPriceCosts: JsonField<List<PerPriceCost>> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
-
-        private var validated: Boolean = false
 
         /** Total costs for the timeframe, excluding any minimums and discounts. */
         fun subtotal(): String = subtotal.getRequired("subtotal")
@@ -129,6 +145,8 @@ private constructor(
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
 
         fun validate(): Data = apply {
             if (!validated) {
@@ -159,35 +177,29 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(data: Data) = apply {
-                this.subtotal = data.subtotal
-                this.total = data.total
-                this.timeframeStart = data.timeframeStart
-                this.timeframeEnd = data.timeframeEnd
-                this.perPriceCosts = data.perPriceCosts
-                additionalProperties(data.additionalProperties)
+                subtotal = data.subtotal
+                total = data.total
+                timeframeStart = data.timeframeStart
+                timeframeEnd = data.timeframeEnd
+                perPriceCosts = data.perPriceCosts
+                additionalProperties = data.additionalProperties.toMutableMap()
             }
 
             /** Total costs for the timeframe, excluding any minimums and discounts. */
             fun subtotal(subtotal: String) = subtotal(JsonField.of(subtotal))
 
             /** Total costs for the timeframe, excluding any minimums and discounts. */
-            @JsonProperty("subtotal")
-            @ExcludeMissing
             fun subtotal(subtotal: JsonField<String>) = apply { this.subtotal = subtotal }
 
             /** Total costs for the timeframe, including any minimums and discounts. */
             fun total(total: String) = total(JsonField.of(total))
 
             /** Total costs for the timeframe, including any minimums and discounts. */
-            @JsonProperty("total")
-            @ExcludeMissing
             fun total(total: JsonField<String>) = apply { this.total = total }
 
             fun timeframeStart(timeframeStart: OffsetDateTime) =
                 timeframeStart(JsonField.of(timeframeStart))
 
-            @JsonProperty("timeframe_start")
-            @ExcludeMissing
             fun timeframeStart(timeframeStart: JsonField<OffsetDateTime>) = apply {
                 this.timeframeStart = timeframeStart
             }
@@ -195,8 +207,6 @@ private constructor(
             fun timeframeEnd(timeframeEnd: OffsetDateTime) =
                 timeframeEnd(JsonField.of(timeframeEnd))
 
-            @JsonProperty("timeframe_end")
-            @ExcludeMissing
             fun timeframeEnd(timeframeEnd: JsonField<OffsetDateTime>) = apply {
                 this.timeframeEnd = timeframeEnd
             }
@@ -204,24 +214,27 @@ private constructor(
             fun perPriceCosts(perPriceCosts: List<PerPriceCost>) =
                 perPriceCosts(JsonField.of(perPriceCosts))
 
-            @JsonProperty("per_price_costs")
-            @ExcludeMissing
             fun perPriceCosts(perPriceCosts: JsonField<List<PerPriceCost>>) = apply {
                 this.perPriceCosts = perPriceCosts
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Data =
@@ -235,18 +248,25 @@ private constructor(
                 )
         }
 
-        @JsonDeserialize(builder = PerPriceCost.Builder::class)
         @NoAutoDetect
         class PerPriceCost
+        @JsonCreator
         private constructor(
-            private val quantity: JsonField<Double>,
-            private val subtotal: JsonField<String>,
-            private val total: JsonField<String>,
-            private val price: JsonField<Price>,
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonProperty("quantity")
+            @ExcludeMissing
+            private val quantity: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("subtotal")
+            @ExcludeMissing
+            private val subtotal: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("total")
+            @ExcludeMissing
+            private val total: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("price")
+            @ExcludeMissing
+            private val price: JsonField<Price> = JsonMissing.of(),
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
-
-            private var validated: Boolean = false
 
             /** The price's quantity for the timeframe */
             fun quantity(): Optional<Double> = Optional.ofNullable(quantity.getNullable("quantity"))
@@ -730,6 +750,8 @@ private constructor(
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+            private var validated: Boolean = false
+
             fun validate(): PerPriceCost = apply {
                 if (!validated) {
                     quantity()
@@ -757,19 +779,17 @@ private constructor(
 
                 @JvmSynthetic
                 internal fun from(perPriceCost: PerPriceCost) = apply {
-                    this.quantity = perPriceCost.quantity
-                    this.subtotal = perPriceCost.subtotal
-                    this.total = perPriceCost.total
-                    this.price = perPriceCost.price
-                    additionalProperties(perPriceCost.additionalProperties)
+                    quantity = perPriceCost.quantity
+                    subtotal = perPriceCost.subtotal
+                    total = perPriceCost.total
+                    price = perPriceCost.price
+                    additionalProperties = perPriceCost.additionalProperties.toMutableMap()
                 }
 
                 /** The price's quantity for the timeframe */
                 fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
                 /** The price's quantity for the timeframe */
-                @JsonProperty("quantity")
-                @ExcludeMissing
                 fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
                 /**
@@ -780,16 +800,12 @@ private constructor(
                 /**
                  * Price's contributions for the timeframe, excluding any minimums and discounts.
                  */
-                @JsonProperty("subtotal")
-                @ExcludeMissing
                 fun subtotal(subtotal: JsonField<String>) = apply { this.subtotal = subtotal }
 
                 /** Price's contributions for the timeframe, including minimums and discounts. */
                 fun total(total: String) = total(JsonField.of(total))
 
                 /** Price's contributions for the timeframe, including minimums and discounts. */
-                @JsonProperty("total")
-                @ExcludeMissing
                 fun total(total: JsonField<String>) = apply { this.total = total }
 
                 /**
@@ -1258,24 +1274,29 @@ private constructor(
                  * }
                  * ```
                  */
-                @JsonProperty("price")
-                @ExcludeMissing
                 fun price(price: JsonField<Price>) = apply { this.price = price }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): PerPriceCost =
                     PerPriceCost(
