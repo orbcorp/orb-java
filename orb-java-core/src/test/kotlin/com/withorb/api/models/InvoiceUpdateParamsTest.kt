@@ -34,7 +34,7 @@ class InvoiceUpdateParamsTest {
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.metadata())
-            .isEqualTo(
+            .contains(
                 InvoiceUpdateParams.Metadata.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()

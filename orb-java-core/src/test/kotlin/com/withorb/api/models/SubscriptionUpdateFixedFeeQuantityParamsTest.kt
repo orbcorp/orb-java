@@ -34,8 +34,8 @@ class SubscriptionUpdateFixedFeeQuantityParamsTest {
         assertThat(body.priceId()).isEqualTo("price_id")
         assertThat(body.quantity()).isEqualTo(0.0)
         assertThat(body.changeOption())
-            .isEqualTo(SubscriptionUpdateFixedFeeQuantityParams.ChangeOption.IMMEDIATE)
-        assertThat(body.effectiveDate()).isEqualTo(LocalDate.parse("2022-12-21"))
+            .contains(SubscriptionUpdateFixedFeeQuantityParams.ChangeOption.IMMEDIATE)
+        assertThat(body.effectiveDate()).contains(LocalDate.parse("2022-12-21"))
     }
 
     @Test

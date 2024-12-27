@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.withorb.api.core.Enum
 import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonField
@@ -14,6 +13,7 @@ import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
+import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import java.time.OffsetDateTime
@@ -62,24 +62,25 @@ constructor(
         }
     }
 
-    @JsonDeserialize(builder = SubscriptionCancelBody.Builder::class)
     @NoAutoDetect
     class SubscriptionCancelBody
+    @JsonCreator
     internal constructor(
-        private val cancelOption: CancelOption?,
-        private val cancellationDate: OffsetDateTime?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("cancel_option") private val cancelOption: CancelOption,
+        @JsonProperty("cancellation_date") private val cancellationDate: OffsetDateTime?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** Determines the timing of subscription cancellation */
-        @JsonProperty("cancel_option") fun cancelOption(): CancelOption? = cancelOption
+        @JsonProperty("cancel_option") fun cancelOption(): CancelOption = cancelOption
 
         /**
          * The date that the cancellation should take effect. This parameter can only be passed if
          * the `cancel_option` is `requested_date`.
          */
         @JsonProperty("cancellation_date")
-        fun cancellationDate(): OffsetDateTime? = cancellationDate
+        fun cancellationDate(): Optional<OffsetDateTime> = Optional.ofNullable(cancellationDate)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -100,13 +101,12 @@ constructor(
 
             @JvmSynthetic
             internal fun from(subscriptionCancelBody: SubscriptionCancelBody) = apply {
-                this.cancelOption = subscriptionCancelBody.cancelOption
-                this.cancellationDate = subscriptionCancelBody.cancellationDate
-                additionalProperties(subscriptionCancelBody.additionalProperties)
+                cancelOption = subscriptionCancelBody.cancelOption
+                cancellationDate = subscriptionCancelBody.cancellationDate
+                additionalProperties = subscriptionCancelBody.additionalProperties.toMutableMap()
             }
 
             /** Determines the timing of subscription cancellation */
-            @JsonProperty("cancel_option")
             fun cancelOption(cancelOption: CancelOption) = apply {
                 this.cancelOption = cancelOption
             }
@@ -115,23 +115,27 @@ constructor(
              * The date that the cancellation should take effect. This parameter can only be passed
              * if the `cancel_option` is `requested_date`.
              */
-            @JsonProperty("cancellation_date")
             fun cancellationDate(cancellationDate: OffsetDateTime) = apply {
                 this.cancellationDate = cancellationDate
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): SubscriptionCancelBody =

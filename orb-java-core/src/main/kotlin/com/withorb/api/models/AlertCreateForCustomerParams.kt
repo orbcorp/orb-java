@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.withorb.api.core.Enum
 import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonField
@@ -14,6 +13,7 @@ import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
+import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import java.util.Objects
@@ -65,24 +65,26 @@ constructor(
         }
     }
 
-    @JsonDeserialize(builder = AlertCreateForCustomerBody.Builder::class)
     @NoAutoDetect
     class AlertCreateForCustomerBody
+    @JsonCreator
     internal constructor(
-        private val currency: String?,
-        private val type: Type?,
-        private val thresholds: List<Threshold>?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("currency") private val currency: String,
+        @JsonProperty("type") private val type: Type,
+        @JsonProperty("thresholds") private val thresholds: List<Threshold>?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** The case sensitive currency or custom pricing unit to use for this alert. */
-        @JsonProperty("currency") fun currency(): String? = currency
+        @JsonProperty("currency") fun currency(): String = currency
 
         /** The type of alert to create. This must be a valid alert type. */
-        @JsonProperty("type") fun type(): Type? = type
+        @JsonProperty("type") fun type(): Type = type
 
         /** The thresholds that define the values at which the alert will be triggered. */
-        @JsonProperty("thresholds") fun thresholds(): List<Threshold>? = thresholds
+        @JsonProperty("thresholds")
+        fun thresholds(): Optional<List<Threshold>> = Optional.ofNullable(thresholds)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -104,35 +106,39 @@ constructor(
 
             @JvmSynthetic
             internal fun from(alertCreateForCustomerBody: AlertCreateForCustomerBody) = apply {
-                this.currency = alertCreateForCustomerBody.currency
-                this.type = alertCreateForCustomerBody.type
-                this.thresholds = alertCreateForCustomerBody.thresholds
-                additionalProperties(alertCreateForCustomerBody.additionalProperties)
+                currency = alertCreateForCustomerBody.currency
+                type = alertCreateForCustomerBody.type
+                thresholds = alertCreateForCustomerBody.thresholds?.toMutableList()
+                additionalProperties =
+                    alertCreateForCustomerBody.additionalProperties.toMutableMap()
             }
 
             /** The case sensitive currency or custom pricing unit to use for this alert. */
-            @JsonProperty("currency")
             fun currency(currency: String) = apply { this.currency = currency }
 
             /** The type of alert to create. This must be a valid alert type. */
-            @JsonProperty("type") fun type(type: Type) = apply { this.type = type }
+            fun type(type: Type) = apply { this.type = type }
 
             /** The thresholds that define the values at which the alert will be triggered. */
-            @JsonProperty("thresholds")
             fun thresholds(thresholds: List<Threshold>) = apply { this.thresholds = thresholds }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): AlertCreateForCustomerBody =
@@ -417,12 +423,13 @@ constructor(
     }
 
     /** Thresholds are used to define the conditions under which an alert will be triggered. */
-    @JsonDeserialize(builder = Threshold.Builder::class)
     @NoAutoDetect
     class Threshold
+    @JsonCreator
     private constructor(
-        private val value: Double?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("value") private val value: Double,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /**
@@ -430,7 +437,7 @@ constructor(
          * or below this value. For usage and cost alerts, the alert will fire at or above this
          * value.
          */
-        @JsonProperty("value") fun value(): Double? = value
+        @JsonProperty("value") fun value(): Double = value
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -450,8 +457,8 @@ constructor(
 
             @JvmSynthetic
             internal fun from(threshold: Threshold) = apply {
-                this.value = threshold.value
-                additionalProperties(threshold.additionalProperties)
+                value = threshold.value
+                additionalProperties = threshold.additionalProperties.toMutableMap()
             }
 
             /**
@@ -459,20 +466,25 @@ constructor(
              * at or below this value. For usage and cost alerts, the alert will fire at or above
              * this value.
              */
-            @JsonProperty("value") fun value(value: Double) = apply { this.value = value }
+            fun value(value: Double) = apply { this.value = value }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Threshold =

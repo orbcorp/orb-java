@@ -34,7 +34,7 @@ class MetricUpdateParamsTest {
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.metadata())
-            .isEqualTo(
+            .contains(
                 MetricUpdateParams.Metadata.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()

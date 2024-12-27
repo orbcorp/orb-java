@@ -22,6 +22,7 @@ import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
 import com.withorb.api.core.getOrThrow
+import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import java.util.Objects
@@ -204,18 +205,25 @@ private constructor(
         }
     }
 
-    @JsonDeserialize(builder = UsageDiscount.Builder::class)
     @NoAutoDetect
     class UsageDiscount
+    @JsonCreator
     private constructor(
-        private val discountType: JsonField<DiscountType>,
-        private val appliesToPriceIds: JsonField<List<String>>,
-        private val reason: JsonField<String>,
-        private val usageDiscount: JsonField<Double>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("discount_type")
+        @ExcludeMissing
+        private val discountType: JsonField<DiscountType> = JsonMissing.of(),
+        @JsonProperty("applies_to_price_ids")
+        @ExcludeMissing
+        private val appliesToPriceIds: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("reason")
+        @ExcludeMissing
+        private val reason: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("usage_discount")
+        @ExcludeMissing
+        private val usageDiscount: JsonField<Double> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
-
-        private var validated: Boolean = false
 
         fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
@@ -256,6 +264,8 @@ private constructor(
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+        private var validated: Boolean = false
+
         fun validate(): UsageDiscount = apply {
             if (!validated) {
                 discountType()
@@ -283,17 +293,15 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(usageDiscount: UsageDiscount) = apply {
-                this.discountType = usageDiscount.discountType
-                this.appliesToPriceIds = usageDiscount.appliesToPriceIds
-                this.reason = usageDiscount.reason
+                discountType = usageDiscount.discountType
+                appliesToPriceIds = usageDiscount.appliesToPriceIds
+                reason = usageDiscount.reason
                 this.usageDiscount = usageDiscount.usageDiscount
-                additionalProperties(usageDiscount.additionalProperties)
+                additionalProperties = usageDiscount.additionalProperties.toMutableMap()
             }
 
             fun discountType(discountType: DiscountType) = discountType(JsonField.of(discountType))
 
-            @JsonProperty("discount_type")
-            @ExcludeMissing
             fun discountType(discountType: JsonField<DiscountType>) = apply {
                 this.discountType = discountType
             }
@@ -309,16 +317,12 @@ private constructor(
              * List of price_ids that this discount applies to. For plan/plan phase discounts, this
              * can be a subset of prices.
              */
-            @JsonProperty("applies_to_price_ids")
-            @ExcludeMissing
             fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
                 this.appliesToPriceIds = appliesToPriceIds
             }
 
             fun reason(reason: String) = reason(JsonField.of(reason))
 
-            @JsonProperty("reason")
-            @ExcludeMissing
             fun reason(reason: JsonField<String>) = apply { this.reason = reason }
 
             /**
@@ -331,24 +335,27 @@ private constructor(
              * Only available if discount_type is `usage`. Number of usage units that this discount
              * is for
              */
-            @JsonProperty("usage_discount")
-            @ExcludeMissing
             fun usageDiscount(usageDiscount: JsonField<Double>) = apply {
                 this.usageDiscount = usageDiscount
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): UsageDiscount =

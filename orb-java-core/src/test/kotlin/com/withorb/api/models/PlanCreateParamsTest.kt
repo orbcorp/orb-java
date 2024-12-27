@@ -207,16 +207,16 @@ class PlanCreateParamsTest {
                     )
                 )
             )
-        assertThat(body.defaultInvoiceMemo()).isEqualTo("default_invoice_memo")
-        assertThat(body.externalPlanId()).isEqualTo("external_plan_id")
+        assertThat(body.defaultInvoiceMemo()).contains("default_invoice_memo")
+        assertThat(body.externalPlanId()).contains("external_plan_id")
         assertThat(body.metadata())
-            .isEqualTo(
+            .contains(
                 PlanCreateParams.Metadata.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
-        assertThat(body.netTerms()).isEqualTo(0L)
-        assertThat(body.status()).isEqualTo(PlanCreateParams.Status.ACTIVE)
+        assertThat(body.netTerms()).contains(0L)
+        assertThat(body.status()).contains(PlanCreateParams.Status.ACTIVE)
     }
 
     @Test

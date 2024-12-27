@@ -37,7 +37,7 @@ class AlertCreateForSubscriptionParamsTest {
                 listOf(AlertCreateForSubscriptionParams.Threshold.builder().value(0.0).build())
             )
         assertThat(body.type()).isEqualTo(AlertCreateForSubscriptionParams.Type.USAGE_EXCEEDED)
-        assertThat(body.metricId()).isEqualTo("metric_id")
+        assertThat(body.metricId()).contains("metric_id")
     }
 
     @Test

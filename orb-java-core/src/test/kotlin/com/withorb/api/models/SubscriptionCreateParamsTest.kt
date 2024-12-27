@@ -637,7 +637,7 @@ class SubscriptionCreateParamsTest {
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.addAdjustments())
-            .isEqualTo(
+            .contains(
                 listOf(
                     SubscriptionCreateParams.AddAdjustment.builder()
                         .adjustment(
@@ -665,7 +665,7 @@ class SubscriptionCreateParamsTest {
                 )
             )
         assertThat(body.addPrices())
-            .isEqualTo(
+            .contains(
                 listOf(
                     SubscriptionCreateParams.AddPrice.builder()
                         .discounts(
@@ -766,44 +766,44 @@ class SubscriptionCreateParamsTest {
                         .build()
                 )
             )
-        assertThat(body.alignBillingWithSubscriptionStartDate()).isEqualTo(true)
-        assertThat(body.autoCollection()).isEqualTo(true)
-        assertThat(body.awsRegion()).isEqualTo("aws_region")
+        assertThat(body.alignBillingWithSubscriptionStartDate()).contains(true)
+        assertThat(body.autoCollection()).contains(true)
+        assertThat(body.awsRegion()).contains("aws_region")
         assertThat(body.billingCycleAnchorConfiguration())
-            .isEqualTo(
+            .contains(
                 SubscriptionCreateParams.BillingCycleAnchorConfiguration.builder()
                     .day(1L)
                     .month(1L)
                     .year(0L)
                     .build()
             )
-        assertThat(body.couponRedemptionCode()).isEqualTo("coupon_redemption_code")
-        assertThat(body.creditsOverageRate()).isEqualTo(0.0)
-        assertThat(body.customerId()).isEqualTo("customer_id")
-        assertThat(body.defaultInvoiceMemo()).isEqualTo("default_invoice_memo")
-        assertThat(body.endDate()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(body.externalCustomerId()).isEqualTo("external_customer_id")
+        assertThat(body.couponRedemptionCode()).contains("coupon_redemption_code")
+        assertThat(body.creditsOverageRate()).contains(0.0)
+        assertThat(body.customerId()).contains("customer_id")
+        assertThat(body.defaultInvoiceMemo()).contains("default_invoice_memo")
+        assertThat(body.endDate()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.externalCustomerId()).contains("external_customer_id")
         assertThat(body.externalMarketplace())
-            .isEqualTo(SubscriptionCreateParams.ExternalMarketplace.GOOGLE)
+            .contains(SubscriptionCreateParams.ExternalMarketplace.GOOGLE)
         assertThat(body.externalMarketplaceReportingId())
-            .isEqualTo("external_marketplace_reporting_id")
-        assertThat(body.externalPlanId()).isEqualTo("ZMwNQefe7J3ecf7W")
-        assertThat(body.filter()).isEqualTo("my_property > 100 AND my_other_property = 'bar'")
-        assertThat(body.initialPhaseOrder()).isEqualTo(2L)
-        assertThat(body.invoicingThreshold()).isEqualTo("10.00")
+            .contains("external_marketplace_reporting_id")
+        assertThat(body.externalPlanId()).contains("ZMwNQefe7J3ecf7W")
+        assertThat(body.filter()).contains("my_property > 100 AND my_other_property = 'bar'")
+        assertThat(body.initialPhaseOrder()).contains(2L)
+        assertThat(body.invoicingThreshold()).contains("10.00")
         assertThat(body.metadata())
-            .isEqualTo(
+            .contains(
                 SubscriptionCreateParams.Metadata.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
-        assertThat(body.netTerms()).isEqualTo(0L)
-        assertThat(body.perCreditOverageAmount()).isEqualTo(0.0)
-        assertThat(body.planId()).isEqualTo("ZMwNQefe7J3ecf7W")
-        assertThat(body.planVersionNumber()).isEqualTo(0L)
-        assertThat(body.priceOverrides()).isEqualTo(listOf(JsonValue.from(mapOf<String, Any>())))
+        assertThat(body.netTerms()).contains(0L)
+        assertThat(body.perCreditOverageAmount()).contains(0.0)
+        assertThat(body.planId()).contains("ZMwNQefe7J3ecf7W")
+        assertThat(body.planVersionNumber()).contains(0L)
+        assertThat(body.priceOverrides()).contains(listOf(JsonValue.from(mapOf<String, Any>())))
         assertThat(body.removeAdjustments())
-            .isEqualTo(
+            .contains(
                 listOf(
                     SubscriptionCreateParams.RemoveAdjustment.builder()
                         .adjustmentId("h74gfhdjvn7ujokd")
@@ -811,7 +811,7 @@ class SubscriptionCreateParamsTest {
                 )
             )
         assertThat(body.removePrices())
-            .isEqualTo(
+            .contains(
                 listOf(
                     SubscriptionCreateParams.RemovePrice.builder()
                         .externalPriceId("external_price_id")
@@ -820,7 +820,7 @@ class SubscriptionCreateParamsTest {
                 )
             )
         assertThat(body.replaceAdjustments())
-            .isEqualTo(
+            .contains(
                 listOf(
                     SubscriptionCreateParams.ReplaceAdjustment.builder()
                         .adjustment(
@@ -846,7 +846,7 @@ class SubscriptionCreateParamsTest {
                 )
             )
         assertThat(body.replacePrices())
-            .isEqualTo(
+            .contains(
                 listOf(
                     SubscriptionCreateParams.ReplacePrice.builder()
                         .replacesPriceId("replaces_price_id")
@@ -946,8 +946,8 @@ class SubscriptionCreateParamsTest {
                         .build()
                 )
             )
-        assertThat(body.startDate()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(body.trialDurationDays()).isEqualTo(0L)
+        assertThat(body.startDate()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.trialDurationDays()).contains(0L)
     }
 
     @Test

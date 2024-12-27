@@ -63,9 +63,9 @@ class CustomerCreditTopUpCreateByExternalIdParamsTest {
             )
         assertThat(body.perUnitCostBasis()).isEqualTo("per_unit_cost_basis")
         assertThat(body.threshold()).isEqualTo("threshold")
-        assertThat(body.expiresAfter()).isEqualTo(0L)
+        assertThat(body.expiresAfter()).contains(0L)
         assertThat(body.expiresAfterUnit())
-            .isEqualTo(CustomerCreditTopUpCreateByExternalIdParams.ExpiresAfterUnit.DAY)
+            .contains(CustomerCreditTopUpCreateByExternalIdParams.ExpiresAfterUnit.DAY)
     }
 
     @Test

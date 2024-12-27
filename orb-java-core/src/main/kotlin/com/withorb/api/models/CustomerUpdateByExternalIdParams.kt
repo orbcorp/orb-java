@@ -18,12 +18,12 @@ import com.withorb.api.core.BaseSerializer
 import com.withorb.api.core.Enum
 import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonField
-import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
 import com.withorb.api.core.getOrThrow
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
+import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import java.util.Objects
@@ -130,74 +130,82 @@ constructor(
         }
     }
 
-    @JsonDeserialize(builder = CustomerUpdateByExternalIdBody.Builder::class)
     @NoAutoDetect
     class CustomerUpdateByExternalIdBody
+    @JsonCreator
     internal constructor(
+        @JsonProperty("accounting_sync_configuration")
         private val accountingSyncConfiguration: AccountingSyncConfiguration?,
-        private val additionalEmails: List<String>?,
-        private val autoCollection: Boolean?,
-        private val billingAddress: BillingAddress?,
-        private val currency: String?,
-        private val email: String?,
-        private val emailDelivery: Boolean?,
-        private val externalCustomerId: String?,
-        private val metadata: Metadata?,
-        private val name: String?,
-        private val paymentProvider: PaymentProvider?,
-        private val paymentProviderId: String?,
+        @JsonProperty("additional_emails") private val additionalEmails: List<String>?,
+        @JsonProperty("auto_collection") private val autoCollection: Boolean?,
+        @JsonProperty("billing_address") private val billingAddress: BillingAddress?,
+        @JsonProperty("currency") private val currency: String?,
+        @JsonProperty("email") private val email: String?,
+        @JsonProperty("email_delivery") private val emailDelivery: Boolean?,
+        @JsonProperty("external_customer_id") private val externalCustomerId: String?,
+        @JsonProperty("metadata") private val metadata: Metadata?,
+        @JsonProperty("name") private val name: String?,
+        @JsonProperty("payment_provider") private val paymentProvider: PaymentProvider?,
+        @JsonProperty("payment_provider_id") private val paymentProviderId: String?,
+        @JsonProperty("reporting_configuration")
         private val reportingConfiguration: ReportingConfiguration?,
-        private val shippingAddress: ShippingAddress?,
-        private val taxConfiguration: TaxConfiguration?,
-        private val taxId: TaxId?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("shipping_address") private val shippingAddress: ShippingAddress?,
+        @JsonProperty("tax_configuration") private val taxConfiguration: TaxConfiguration?,
+        @JsonProperty("tax_id") private val taxId: TaxId?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("accounting_sync_configuration")
-        fun accountingSyncConfiguration(): AccountingSyncConfiguration? =
-            accountingSyncConfiguration
+        fun accountingSyncConfiguration(): Optional<AccountingSyncConfiguration> =
+            Optional.ofNullable(accountingSyncConfiguration)
 
         /**
          * Additional email addresses for this customer. If populated, these email addresses will be
          * CC'd for customer communications.
          */
-        @JsonProperty("additional_emails") fun additionalEmails(): List<String>? = additionalEmails
+        @JsonProperty("additional_emails")
+        fun additionalEmails(): Optional<List<String>> = Optional.ofNullable(additionalEmails)
 
         /**
          * Used to determine if invoices for this customer will automatically attempt to charge a
          * saved payment method, if available. This parameter defaults to `True` when a payment
          * provider is provided on customer creation.
          */
-        @JsonProperty("auto_collection") fun autoCollection(): Boolean? = autoCollection
+        @JsonProperty("auto_collection")
+        fun autoCollection(): Optional<Boolean> = Optional.ofNullable(autoCollection)
 
-        @JsonProperty("billing_address") fun billingAddress(): BillingAddress? = billingAddress
+        @JsonProperty("billing_address")
+        fun billingAddress(): Optional<BillingAddress> = Optional.ofNullable(billingAddress)
 
         /**
          * An ISO 4217 currency string used for the customer's invoices and balance. If not set at
          * creation time, will be set at subscription creation time.
          */
-        @JsonProperty("currency") fun currency(): String? = currency
+        @JsonProperty("currency") fun currency(): Optional<String> = Optional.ofNullable(currency)
 
         /** A valid customer email, to be used for invoicing and notifications. */
-        @JsonProperty("email") fun email(): String? = email
+        @JsonProperty("email") fun email(): Optional<String> = Optional.ofNullable(email)
 
-        @JsonProperty("email_delivery") fun emailDelivery(): Boolean? = emailDelivery
+        @JsonProperty("email_delivery")
+        fun emailDelivery(): Optional<Boolean> = Optional.ofNullable(emailDelivery)
 
         /**
          * The external customer ID. This can only be set if empty and the customer has no past or
          * current subscriptions.
          */
-        @JsonProperty("external_customer_id") fun externalCustomerId(): String? = externalCustomerId
+        @JsonProperty("external_customer_id")
+        fun externalCustomerId(): Optional<String> = Optional.ofNullable(externalCustomerId)
 
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        @JsonProperty("metadata") fun metadata(): Metadata? = metadata
+        @JsonProperty("metadata") fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
         /** The full name of the customer */
-        @JsonProperty("name") fun name(): String? = name
+        @JsonProperty("name") fun name(): Optional<String> = Optional.ofNullable(name)
 
         /**
          * This is used for creating charges or invoices in an external system via Orb. When not in
@@ -206,21 +214,25 @@ constructor(
          * - if the provider is an invoicing provider (`stripe_invoice`, `quickbooks`, `bill.com`,
          *   `netsuite`), any product mappings must first be configured with the Orb team.
          */
-        @JsonProperty("payment_provider") fun paymentProvider(): PaymentProvider? = paymentProvider
+        @JsonProperty("payment_provider")
+        fun paymentProvider(): Optional<PaymentProvider> = Optional.ofNullable(paymentProvider)
 
         /**
          * The ID of this customer in an external payments solution, such as Stripe. This is used
          * for creating charges or invoices in the external system via Orb.
          */
-        @JsonProperty("payment_provider_id") fun paymentProviderId(): String? = paymentProviderId
+        @JsonProperty("payment_provider_id")
+        fun paymentProviderId(): Optional<String> = Optional.ofNullable(paymentProviderId)
 
         @JsonProperty("reporting_configuration")
-        fun reportingConfiguration(): ReportingConfiguration? = reportingConfiguration
+        fun reportingConfiguration(): Optional<ReportingConfiguration> =
+            Optional.ofNullable(reportingConfiguration)
 
-        @JsonProperty("shipping_address") fun shippingAddress(): ShippingAddress? = shippingAddress
+        @JsonProperty("shipping_address")
+        fun shippingAddress(): Optional<ShippingAddress> = Optional.ofNullable(shippingAddress)
 
         @JsonProperty("tax_configuration")
-        fun taxConfiguration(): TaxConfiguration? = taxConfiguration
+        fun taxConfiguration(): Optional<TaxConfiguration> = Optional.ofNullable(taxConfiguration)
 
         /**
          * Tax IDs are commonly required to be displayed on customer invoices, which are added to
@@ -328,7 +340,7 @@ constructor(
          * |Venezuela           |`ve_rif`    |Venezuelan RIF Number                                                                                  |
          * |Vietnam             |`vn_tin`    |Vietnamese Tax ID Number                                                                               |
          */
-        @JsonProperty("tax_id") fun taxId(): TaxId? = taxId
+        @JsonProperty("tax_id") fun taxId(): Optional<TaxId> = Optional.ofNullable(taxId)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -364,28 +376,28 @@ constructor(
             @JvmSynthetic
             internal fun from(customerUpdateByExternalIdBody: CustomerUpdateByExternalIdBody) =
                 apply {
-                    this.accountingSyncConfiguration =
+                    accountingSyncConfiguration =
                         customerUpdateByExternalIdBody.accountingSyncConfiguration
-                    this.additionalEmails = customerUpdateByExternalIdBody.additionalEmails
-                    this.autoCollection = customerUpdateByExternalIdBody.autoCollection
-                    this.billingAddress = customerUpdateByExternalIdBody.billingAddress
-                    this.currency = customerUpdateByExternalIdBody.currency
-                    this.email = customerUpdateByExternalIdBody.email
-                    this.emailDelivery = customerUpdateByExternalIdBody.emailDelivery
-                    this.externalCustomerId = customerUpdateByExternalIdBody.externalCustomerId
-                    this.metadata = customerUpdateByExternalIdBody.metadata
-                    this.name = customerUpdateByExternalIdBody.name
-                    this.paymentProvider = customerUpdateByExternalIdBody.paymentProvider
-                    this.paymentProviderId = customerUpdateByExternalIdBody.paymentProviderId
-                    this.reportingConfiguration =
-                        customerUpdateByExternalIdBody.reportingConfiguration
-                    this.shippingAddress = customerUpdateByExternalIdBody.shippingAddress
-                    this.taxConfiguration = customerUpdateByExternalIdBody.taxConfiguration
-                    this.taxId = customerUpdateByExternalIdBody.taxId
-                    additionalProperties(customerUpdateByExternalIdBody.additionalProperties)
+                    additionalEmails =
+                        customerUpdateByExternalIdBody.additionalEmails?.toMutableList()
+                    autoCollection = customerUpdateByExternalIdBody.autoCollection
+                    billingAddress = customerUpdateByExternalIdBody.billingAddress
+                    currency = customerUpdateByExternalIdBody.currency
+                    email = customerUpdateByExternalIdBody.email
+                    emailDelivery = customerUpdateByExternalIdBody.emailDelivery
+                    externalCustomerId = customerUpdateByExternalIdBody.externalCustomerId
+                    metadata = customerUpdateByExternalIdBody.metadata
+                    name = customerUpdateByExternalIdBody.name
+                    paymentProvider = customerUpdateByExternalIdBody.paymentProvider
+                    paymentProviderId = customerUpdateByExternalIdBody.paymentProviderId
+                    reportingConfiguration = customerUpdateByExternalIdBody.reportingConfiguration
+                    shippingAddress = customerUpdateByExternalIdBody.shippingAddress
+                    taxConfiguration = customerUpdateByExternalIdBody.taxConfiguration
+                    taxId = customerUpdateByExternalIdBody.taxId
+                    additionalProperties =
+                        customerUpdateByExternalIdBody.additionalProperties.toMutableMap()
                 }
 
-            @JsonProperty("accounting_sync_configuration")
             fun accountingSyncConfiguration(
                 accountingSyncConfiguration: AccountingSyncConfiguration
             ) = apply { this.accountingSyncConfiguration = accountingSyncConfiguration }
@@ -394,7 +406,6 @@ constructor(
              * Additional email addresses for this customer. If populated, these email addresses
              * will be CC'd for customer communications.
              */
-            @JsonProperty("additional_emails")
             fun additionalEmails(additionalEmails: List<String>) = apply {
                 this.additionalEmails = additionalEmails
             }
@@ -404,12 +415,10 @@ constructor(
              * a saved payment method, if available. This parameter defaults to `True` when a
              * payment provider is provided on customer creation.
              */
-            @JsonProperty("auto_collection")
             fun autoCollection(autoCollection: Boolean) = apply {
                 this.autoCollection = autoCollection
             }
 
-            @JsonProperty("billing_address")
             fun billingAddress(billingAddress: BillingAddress) = apply {
                 this.billingAddress = billingAddress
             }
@@ -418,20 +427,17 @@ constructor(
              * An ISO 4217 currency string used for the customer's invoices and balance. If not set
              * at creation time, will be set at subscription creation time.
              */
-            @JsonProperty("currency")
             fun currency(currency: String) = apply { this.currency = currency }
 
             /** A valid customer email, to be used for invoicing and notifications. */
-            @JsonProperty("email") fun email(email: String) = apply { this.email = email }
+            fun email(email: String) = apply { this.email = email }
 
-            @JsonProperty("email_delivery")
             fun emailDelivery(emailDelivery: Boolean) = apply { this.emailDelivery = emailDelivery }
 
             /**
              * The external customer ID. This can only be set if empty and the customer has no past
              * or current subscriptions.
              */
-            @JsonProperty("external_customer_id")
             fun externalCustomerId(externalCustomerId: String) = apply {
                 this.externalCustomerId = externalCustomerId
             }
@@ -441,11 +447,10 @@ constructor(
              * setting the value to `null`, and the entire metadata mapping can be cleared by
              * setting `metadata` to `null`.
              */
-            @JsonProperty("metadata")
             fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
             /** The full name of the customer */
-            @JsonProperty("name") fun name(name: String) = apply { this.name = name }
+            fun name(name: String) = apply { this.name = name }
 
             /**
              * This is used for creating charges or invoices in an external system via Orb. When not
@@ -455,7 +460,6 @@ constructor(
              *   `bill.com`, `netsuite`), any product mappings must first be configured with the Orb
              *   team.
              */
-            @JsonProperty("payment_provider")
             fun paymentProvider(paymentProvider: PaymentProvider) = apply {
                 this.paymentProvider = paymentProvider
             }
@@ -464,22 +468,18 @@ constructor(
              * The ID of this customer in an external payments solution, such as Stripe. This is
              * used for creating charges or invoices in the external system via Orb.
              */
-            @JsonProperty("payment_provider_id")
             fun paymentProviderId(paymentProviderId: String) = apply {
                 this.paymentProviderId = paymentProviderId
             }
 
-            @JsonProperty("reporting_configuration")
             fun reportingConfiguration(reportingConfiguration: ReportingConfiguration) = apply {
                 this.reportingConfiguration = reportingConfiguration
             }
 
-            @JsonProperty("shipping_address")
             fun shippingAddress(shippingAddress: ShippingAddress) = apply {
                 this.shippingAddress = shippingAddress
             }
 
-            @JsonProperty("tax_configuration")
             fun taxConfiguration(taxConfiguration: TaxConfiguration) = apply {
                 this.taxConfiguration = taxConfiguration
             }
@@ -590,20 +590,25 @@ constructor(
              * |Venezuela           |`ve_rif`    |Venezuelan RIF Number                                                                                  |
              * |Vietnam             |`vn_tin`    |Vietnamese Tax ID Number                                                                               |
              */
-            @JsonProperty("tax_id") fun taxId(taxId: TaxId) = apply { this.taxId = taxId }
+            fun taxId(taxId: TaxId) = apply { this.taxId = taxId }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CustomerUpdateByExternalIdBody =
@@ -1068,19 +1073,22 @@ constructor(
             )
     }
 
-    @JsonDeserialize(builder = AccountingSyncConfiguration.Builder::class)
     @NoAutoDetect
     class AccountingSyncConfiguration
+    @JsonCreator
     private constructor(
-        private val excluded: Boolean?,
+        @JsonProperty("excluded") private val excluded: Boolean?,
+        @JsonProperty("accounting_providers")
         private val accountingProviders: List<AccountingProvider>?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("excluded") fun excluded(): Boolean? = excluded
+        @JsonProperty("excluded") fun excluded(): Optional<Boolean> = Optional.ofNullable(excluded)
 
         @JsonProperty("accounting_providers")
-        fun accountingProviders(): List<AccountingProvider>? = accountingProviders
+        fun accountingProviders(): Optional<List<AccountingProvider>> =
+            Optional.ofNullable(accountingProviders)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -1101,31 +1109,36 @@ constructor(
 
             @JvmSynthetic
             internal fun from(accountingSyncConfiguration: AccountingSyncConfiguration) = apply {
-                this.excluded = accountingSyncConfiguration.excluded
-                this.accountingProviders = accountingSyncConfiguration.accountingProviders
-                additionalProperties(accountingSyncConfiguration.additionalProperties)
+                excluded = accountingSyncConfiguration.excluded
+                accountingProviders =
+                    accountingSyncConfiguration.accountingProviders?.toMutableList()
+                additionalProperties =
+                    accountingSyncConfiguration.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("excluded")
             fun excluded(excluded: Boolean) = apply { this.excluded = excluded }
 
-            @JsonProperty("accounting_providers")
             fun accountingProviders(accountingProviders: List<AccountingProvider>) = apply {
                 this.accountingProviders = accountingProviders
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): AccountingSyncConfiguration =
@@ -1136,19 +1149,20 @@ constructor(
                 )
         }
 
-        @JsonDeserialize(builder = AccountingProvider.Builder::class)
         @NoAutoDetect
         class AccountingProvider
+        @JsonCreator
         private constructor(
-            private val providerType: String?,
-            private val externalProviderId: String?,
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonProperty("provider_type") private val providerType: String,
+            @JsonProperty("external_provider_id") private val externalProviderId: String,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            @JsonProperty("provider_type") fun providerType(): String? = providerType
+            @JsonProperty("provider_type") fun providerType(): String = providerType
 
             @JsonProperty("external_provider_id")
-            fun externalProviderId(): String? = externalProviderId
+            fun externalProviderId(): String = externalProviderId
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -1169,33 +1183,38 @@ constructor(
 
                 @JvmSynthetic
                 internal fun from(accountingProvider: AccountingProvider) = apply {
-                    this.providerType = accountingProvider.providerType
-                    this.externalProviderId = accountingProvider.externalProviderId
-                    additionalProperties(accountingProvider.additionalProperties)
+                    providerType = accountingProvider.providerType
+                    externalProviderId = accountingProvider.externalProviderId
+                    additionalProperties = accountingProvider.additionalProperties.toMutableMap()
                 }
 
-                @JsonProperty("provider_type")
                 fun providerType(providerType: String) = apply { this.providerType = providerType }
 
-                @JsonProperty("external_provider_id")
                 fun externalProviderId(externalProviderId: String) = apply {
                     this.externalProviderId = externalProviderId
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): AccountingProvider =
                     AccountingProvider(
@@ -1243,30 +1262,32 @@ constructor(
             "AccountingSyncConfiguration{excluded=$excluded, accountingProviders=$accountingProviders, additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = BillingAddress.Builder::class)
     @NoAutoDetect
     class BillingAddress
+    @JsonCreator
     private constructor(
-        private val line1: String?,
-        private val line2: String?,
-        private val city: String?,
-        private val state: String?,
-        private val postalCode: String?,
-        private val country: String?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("line1") private val line1: String?,
+        @JsonProperty("line2") private val line2: String?,
+        @JsonProperty("city") private val city: String?,
+        @JsonProperty("state") private val state: String?,
+        @JsonProperty("postal_code") private val postalCode: String?,
+        @JsonProperty("country") private val country: String?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("line1") fun line1(): String? = line1
+        @JsonProperty("line1") fun line1(): Optional<String> = Optional.ofNullable(line1)
 
-        @JsonProperty("line2") fun line2(): String? = line2
+        @JsonProperty("line2") fun line2(): Optional<String> = Optional.ofNullable(line2)
 
-        @JsonProperty("city") fun city(): String? = city
+        @JsonProperty("city") fun city(): Optional<String> = Optional.ofNullable(city)
 
-        @JsonProperty("state") fun state(): String? = state
+        @JsonProperty("state") fun state(): Optional<String> = Optional.ofNullable(state)
 
-        @JsonProperty("postal_code") fun postalCode(): String? = postalCode
+        @JsonProperty("postal_code")
+        fun postalCode(): Optional<String> = Optional.ofNullable(postalCode)
 
-        @JsonProperty("country") fun country(): String? = country
+        @JsonProperty("country") fun country(): Optional<String> = Optional.ofNullable(country)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -1291,40 +1312,44 @@ constructor(
 
             @JvmSynthetic
             internal fun from(billingAddress: BillingAddress) = apply {
-                this.line1 = billingAddress.line1
-                this.line2 = billingAddress.line2
-                this.city = billingAddress.city
-                this.state = billingAddress.state
-                this.postalCode = billingAddress.postalCode
-                this.country = billingAddress.country
-                additionalProperties(billingAddress.additionalProperties)
+                line1 = billingAddress.line1
+                line2 = billingAddress.line2
+                city = billingAddress.city
+                state = billingAddress.state
+                postalCode = billingAddress.postalCode
+                country = billingAddress.country
+                additionalProperties = billingAddress.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("line1") fun line1(line1: String) = apply { this.line1 = line1 }
+            fun line1(line1: String) = apply { this.line1 = line1 }
 
-            @JsonProperty("line2") fun line2(line2: String) = apply { this.line2 = line2 }
+            fun line2(line2: String) = apply { this.line2 = line2 }
 
-            @JsonProperty("city") fun city(city: String) = apply { this.city = city }
+            fun city(city: String) = apply { this.city = city }
 
-            @JsonProperty("state") fun state(state: String) = apply { this.state = state }
+            fun state(state: String) = apply { this.state = state }
 
-            @JsonProperty("postal_code")
             fun postalCode(postalCode: String) = apply { this.postalCode = postalCode }
 
-            @JsonProperty("country") fun country(country: String) = apply { this.country = country }
+            fun country(country: String) = apply { this.country = country }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): BillingAddress =
@@ -1362,11 +1387,12 @@ constructor(
      * the value to `null`, and the entire metadata mapping can be cleared by setting `metadata` to
      * `null`.
      */
-    @JsonDeserialize(builder = Metadata.Builder::class)
     @NoAutoDetect
     class Metadata
+    @JsonCreator
     private constructor(
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonAnyGetter
@@ -1386,21 +1412,26 @@ constructor(
 
             @JvmSynthetic
             internal fun from(metadata: Metadata) = apply {
-                additionalProperties(metadata.additionalProperties)
+                additionalProperties = metadata.additionalProperties.toMutableMap()
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Metadata = Metadata(additionalProperties.toImmutable())
@@ -1498,15 +1529,16 @@ constructor(
         override fun toString() = value.toString()
     }
 
-    @JsonDeserialize(builder = ReportingConfiguration.Builder::class)
     @NoAutoDetect
     class ReportingConfiguration
+    @JsonCreator
     private constructor(
-        private val exempt: Boolean?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("exempt") private val exempt: Boolean,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("exempt") fun exempt(): Boolean? = exempt
+        @JsonProperty("exempt") fun exempt(): Boolean = exempt
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -1526,24 +1558,29 @@ constructor(
 
             @JvmSynthetic
             internal fun from(reportingConfiguration: ReportingConfiguration) = apply {
-                this.exempt = reportingConfiguration.exempt
-                additionalProperties(reportingConfiguration.additionalProperties)
+                exempt = reportingConfiguration.exempt
+                additionalProperties = reportingConfiguration.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("exempt") fun exempt(exempt: Boolean) = apply { this.exempt = exempt }
+            fun exempt(exempt: Boolean) = apply { this.exempt = exempt }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): ReportingConfiguration =
@@ -1571,30 +1608,32 @@ constructor(
             "ReportingConfiguration{exempt=$exempt, additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = ShippingAddress.Builder::class)
     @NoAutoDetect
     class ShippingAddress
+    @JsonCreator
     private constructor(
-        private val line1: String?,
-        private val line2: String?,
-        private val city: String?,
-        private val state: String?,
-        private val postalCode: String?,
-        private val country: String?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("line1") private val line1: String?,
+        @JsonProperty("line2") private val line2: String?,
+        @JsonProperty("city") private val city: String?,
+        @JsonProperty("state") private val state: String?,
+        @JsonProperty("postal_code") private val postalCode: String?,
+        @JsonProperty("country") private val country: String?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("line1") fun line1(): String? = line1
+        @JsonProperty("line1") fun line1(): Optional<String> = Optional.ofNullable(line1)
 
-        @JsonProperty("line2") fun line2(): String? = line2
+        @JsonProperty("line2") fun line2(): Optional<String> = Optional.ofNullable(line2)
 
-        @JsonProperty("city") fun city(): String? = city
+        @JsonProperty("city") fun city(): Optional<String> = Optional.ofNullable(city)
 
-        @JsonProperty("state") fun state(): String? = state
+        @JsonProperty("state") fun state(): Optional<String> = Optional.ofNullable(state)
 
-        @JsonProperty("postal_code") fun postalCode(): String? = postalCode
+        @JsonProperty("postal_code")
+        fun postalCode(): Optional<String> = Optional.ofNullable(postalCode)
 
-        @JsonProperty("country") fun country(): String? = country
+        @JsonProperty("country") fun country(): Optional<String> = Optional.ofNullable(country)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -1619,40 +1658,44 @@ constructor(
 
             @JvmSynthetic
             internal fun from(shippingAddress: ShippingAddress) = apply {
-                this.line1 = shippingAddress.line1
-                this.line2 = shippingAddress.line2
-                this.city = shippingAddress.city
-                this.state = shippingAddress.state
-                this.postalCode = shippingAddress.postalCode
-                this.country = shippingAddress.country
-                additionalProperties(shippingAddress.additionalProperties)
+                line1 = shippingAddress.line1
+                line2 = shippingAddress.line2
+                city = shippingAddress.city
+                state = shippingAddress.state
+                postalCode = shippingAddress.postalCode
+                country = shippingAddress.country
+                additionalProperties = shippingAddress.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("line1") fun line1(line1: String) = apply { this.line1 = line1 }
+            fun line1(line1: String) = apply { this.line1 = line1 }
 
-            @JsonProperty("line2") fun line2(line2: String) = apply { this.line2 = line2 }
+            fun line2(line2: String) = apply { this.line2 = line2 }
 
-            @JsonProperty("city") fun city(city: String) = apply { this.city = city }
+            fun city(city: String) = apply { this.city = city }
 
-            @JsonProperty("state") fun state(state: String) = apply { this.state = state }
+            fun state(state: String) = apply { this.state = state }
 
-            @JsonProperty("postal_code")
             fun postalCode(postalCode: String) = apply { this.postalCode = postalCode }
 
-            @JsonProperty("country") fun country(country: String) = apply { this.country = country }
+            fun country(country: String) = apply { this.country = country }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): ShippingAddress =
@@ -1694,8 +1737,6 @@ constructor(
         private val _json: JsonValue? = null,
     ) {
 
-        private var validated: Boolean = false
-
         fun newAvalaraTaxConfiguration(): Optional<NewAvalaraTaxConfiguration> =
             Optional.ofNullable(newAvalaraTaxConfiguration)
 
@@ -1721,17 +1762,6 @@ constructor(
                 newTaxJarConfiguration != null ->
                     visitor.visitNewTaxJarConfiguration(newTaxJarConfiguration)
                 else -> visitor.unknown(_json)
-            }
-        }
-
-        fun validate(): TaxConfiguration = apply {
-            if (!validated) {
-                if (newAvalaraTaxConfiguration == null && newTaxJarConfiguration == null) {
-                    throw OrbInvalidDataException("Unknown TaxConfiguration: $_json")
-                }
-                newAvalaraTaxConfiguration?.validate()
-                newTaxJarConfiguration?.validate()
-                validated = true
             }
         }
 
@@ -1789,23 +1819,14 @@ constructor(
 
                 when (taxProvider) {
                     "avalara" -> {
-                        tryDeserialize(node, jacksonTypeRef<NewAvalaraTaxConfiguration>()) {
-                                it.validate()
-                            }
-                            ?.let {
-                                return TaxConfiguration(
-                                    newAvalaraTaxConfiguration = it,
-                                    _json = json
-                                )
-                            }
+                        tryDeserialize(node, jacksonTypeRef<NewAvalaraTaxConfiguration>())?.let {
+                            return TaxConfiguration(newAvalaraTaxConfiguration = it, _json = json)
+                        }
                     }
                     "taxjar" -> {
-                        tryDeserialize(node, jacksonTypeRef<NewTaxJarConfiguration>()) {
-                                it.validate()
-                            }
-                            ?.let {
-                                return TaxConfiguration(newTaxJarConfiguration = it, _json = json)
-                            }
+                        tryDeserialize(node, jacksonTypeRef<NewTaxJarConfiguration>())?.let {
+                            return TaxConfiguration(newTaxJarConfiguration = it, _json = json)
+                        }
                     }
                 }
 
@@ -1831,45 +1852,27 @@ constructor(
             }
         }
 
-        @JsonDeserialize(builder = NewAvalaraTaxConfiguration.Builder::class)
         @NoAutoDetect
         class NewAvalaraTaxConfiguration
+        @JsonCreator
         private constructor(
-            private val taxExempt: JsonField<Boolean>,
-            private val taxProvider: JsonField<TaxProvider>,
-            private val taxExemptionCode: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonProperty("tax_exempt") private val taxExempt: Boolean,
+            @JsonProperty("tax_provider") private val taxProvider: TaxProvider,
+            @JsonProperty("tax_exemption_code") private val taxExemptionCode: String?,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            private var validated: Boolean = false
+            @JsonProperty("tax_exempt") fun taxExempt(): Boolean = taxExempt
 
-            fun taxExempt(): Boolean = taxExempt.getRequired("tax_exempt")
-
-            fun taxProvider(): TaxProvider = taxProvider.getRequired("tax_provider")
-
-            fun taxExemptionCode(): Optional<String> =
-                Optional.ofNullable(taxExemptionCode.getNullable("tax_exemption_code"))
-
-            @JsonProperty("tax_exempt") @ExcludeMissing fun _taxExempt() = taxExempt
-
-            @JsonProperty("tax_provider") @ExcludeMissing fun _taxProvider() = taxProvider
+            @JsonProperty("tax_provider") fun taxProvider(): TaxProvider = taxProvider
 
             @JsonProperty("tax_exemption_code")
-            @ExcludeMissing
-            fun _taxExemptionCode() = taxExemptionCode
+            fun taxExemptionCode(): Optional<String> = Optional.ofNullable(taxExemptionCode)
 
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): NewAvalaraTaxConfiguration = apply {
-                if (!validated) {
-                    taxExempt()
-                    taxProvider()
-                    taxExemptionCode()
-                    validated = true
-                }
-            }
 
             fun toBuilder() = Builder().from(this)
 
@@ -1880,50 +1883,35 @@ constructor(
 
             class Builder {
 
-                private var taxExempt: JsonField<Boolean> = JsonMissing.of()
-                private var taxProvider: JsonField<TaxProvider> = JsonMissing.of()
-                private var taxExemptionCode: JsonField<String> = JsonMissing.of()
+                private var taxExempt: Boolean? = null
+                private var taxProvider: TaxProvider? = null
+                private var taxExemptionCode: String? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(newAvalaraTaxConfiguration: NewAvalaraTaxConfiguration) = apply {
-                    this.taxExempt = newAvalaraTaxConfiguration.taxExempt
-                    this.taxProvider = newAvalaraTaxConfiguration.taxProvider
-                    this.taxExemptionCode = newAvalaraTaxConfiguration.taxExemptionCode
-                    additionalProperties(newAvalaraTaxConfiguration.additionalProperties)
+                    taxExempt = newAvalaraTaxConfiguration.taxExempt
+                    taxProvider = newAvalaraTaxConfiguration.taxProvider
+                    taxExemptionCode = newAvalaraTaxConfiguration.taxExemptionCode
+                    additionalProperties =
+                        newAvalaraTaxConfiguration.additionalProperties.toMutableMap()
                 }
 
-                fun taxExempt(taxExempt: Boolean) = taxExempt(JsonField.of(taxExempt))
+                fun taxExempt(taxExempt: Boolean) = apply { this.taxExempt = taxExempt }
 
-                @JsonProperty("tax_exempt")
-                @ExcludeMissing
-                fun taxExempt(taxExempt: JsonField<Boolean>) = apply { this.taxExempt = taxExempt }
+                fun taxProvider(taxProvider: TaxProvider) = apply { this.taxProvider = taxProvider }
 
-                fun taxProvider(taxProvider: TaxProvider) = taxProvider(JsonField.of(taxProvider))
-
-                @JsonProperty("tax_provider")
-                @ExcludeMissing
-                fun taxProvider(taxProvider: JsonField<TaxProvider>) = apply {
-                    this.taxProvider = taxProvider
-                }
-
-                fun taxExemptionCode(taxExemptionCode: String) =
-                    taxExemptionCode(JsonField.of(taxExemptionCode))
-
-                @JsonProperty("tax_exemption_code")
-                @ExcludeMissing
-                fun taxExemptionCode(taxExemptionCode: JsonField<String>) = apply {
+                fun taxExemptionCode(taxExemptionCode: String) = apply {
                     this.taxExemptionCode = taxExemptionCode
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -1931,10 +1919,18 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
                 fun build(): NewAvalaraTaxConfiguration =
                     NewAvalaraTaxConfiguration(
-                        taxExempt,
-                        taxProvider,
+                        checkNotNull(taxExempt) { "`taxExempt` is required but was not set" },
+                        checkNotNull(taxProvider) { "`taxProvider` is required but was not set" },
                         taxExemptionCode,
                         additionalProperties.toImmutable(),
                     )
@@ -2009,36 +2005,23 @@ constructor(
                 "NewAvalaraTaxConfiguration{taxExempt=$taxExempt, taxProvider=$taxProvider, taxExemptionCode=$taxExemptionCode, additionalProperties=$additionalProperties}"
         }
 
-        @JsonDeserialize(builder = NewTaxJarConfiguration.Builder::class)
         @NoAutoDetect
         class NewTaxJarConfiguration
+        @JsonCreator
         private constructor(
-            private val taxExempt: JsonField<Boolean>,
-            private val taxProvider: JsonField<TaxProvider>,
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonProperty("tax_exempt") private val taxExempt: Boolean,
+            @JsonProperty("tax_provider") private val taxProvider: TaxProvider,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            private var validated: Boolean = false
+            @JsonProperty("tax_exempt") fun taxExempt(): Boolean = taxExempt
 
-            fun taxExempt(): Boolean = taxExempt.getRequired("tax_exempt")
-
-            fun taxProvider(): TaxProvider = taxProvider.getRequired("tax_provider")
-
-            @JsonProperty("tax_exempt") @ExcludeMissing fun _taxExempt() = taxExempt
-
-            @JsonProperty("tax_provider") @ExcludeMissing fun _taxProvider() = taxProvider
+            @JsonProperty("tax_provider") fun taxProvider(): TaxProvider = taxProvider
 
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): NewTaxJarConfiguration = apply {
-                if (!validated) {
-                    taxExempt()
-                    taxProvider()
-                    validated = true
-                }
-            }
 
             fun toBuilder() = Builder().from(this)
 
@@ -2049,39 +2032,29 @@ constructor(
 
             class Builder {
 
-                private var taxExempt: JsonField<Boolean> = JsonMissing.of()
-                private var taxProvider: JsonField<TaxProvider> = JsonMissing.of()
+                private var taxExempt: Boolean? = null
+                private var taxProvider: TaxProvider? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(newTaxJarConfiguration: NewTaxJarConfiguration) = apply {
-                    this.taxExempt = newTaxJarConfiguration.taxExempt
-                    this.taxProvider = newTaxJarConfiguration.taxProvider
-                    additionalProperties(newTaxJarConfiguration.additionalProperties)
+                    taxExempt = newTaxJarConfiguration.taxExempt
+                    taxProvider = newTaxJarConfiguration.taxProvider
+                    additionalProperties =
+                        newTaxJarConfiguration.additionalProperties.toMutableMap()
                 }
 
-                fun taxExempt(taxExempt: Boolean) = taxExempt(JsonField.of(taxExempt))
+                fun taxExempt(taxExempt: Boolean) = apply { this.taxExempt = taxExempt }
 
-                @JsonProperty("tax_exempt")
-                @ExcludeMissing
-                fun taxExempt(taxExempt: JsonField<Boolean>) = apply { this.taxExempt = taxExempt }
-
-                fun taxProvider(taxProvider: TaxProvider) = taxProvider(JsonField.of(taxProvider))
-
-                @JsonProperty("tax_provider")
-                @ExcludeMissing
-                fun taxProvider(taxProvider: JsonField<TaxProvider>) = apply {
-                    this.taxProvider = taxProvider
-                }
+                fun taxProvider(taxProvider: TaxProvider) = apply { this.taxProvider = taxProvider }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -2089,10 +2062,18 @@ constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
                 fun build(): NewTaxJarConfiguration =
                     NewTaxJarConfiguration(
-                        taxExempt,
-                        taxProvider,
+                        checkNotNull(taxExempt) { "`taxExempt` is required but was not set" },
+                        checkNotNull(taxProvider) { "`taxProvider` is required but was not set" },
                         additionalProperties.toImmutable(),
                     )
             }
@@ -2273,21 +2254,22 @@ constructor(
      * |Venezuela           |`ve_rif`    |Venezuelan RIF Number                                                                                  |
      * |Vietnam             |`vn_tin`    |Vietnamese Tax ID Number                                                                               |
      */
-    @JsonDeserialize(builder = TaxId.Builder::class)
     @NoAutoDetect
     class TaxId
+    @JsonCreator
     private constructor(
-        private val country: Country?,
-        private val type: Type?,
-        private val value: String?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("country") private val country: Country,
+        @JsonProperty("type") private val type: Type,
+        @JsonProperty("value") private val value: String,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("country") fun country(): Country? = country
+        @JsonProperty("country") fun country(): Country = country
 
-        @JsonProperty("type") fun type(): Type? = type
+        @JsonProperty("type") fun type(): Type = type
 
-        @JsonProperty("value") fun value(): String? = value
+        @JsonProperty("value") fun value(): String = value
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -2309,31 +2291,35 @@ constructor(
 
             @JvmSynthetic
             internal fun from(taxId: TaxId) = apply {
-                this.country = taxId.country
-                this.type = taxId.type
-                this.value = taxId.value
-                additionalProperties(taxId.additionalProperties)
+                country = taxId.country
+                type = taxId.type
+                value = taxId.value
+                additionalProperties = taxId.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("country")
             fun country(country: Country) = apply { this.country = country }
 
-            @JsonProperty("type") fun type(type: Type) = apply { this.type = type }
+            fun type(type: Type) = apply { this.type = type }
 
-            @JsonProperty("value") fun value(value: String) = apply { this.value = value }
+            fun value(value: String) = apply { this.value = value }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): TaxId =

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.withorb.api.core.Enum
 import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonField
@@ -14,6 +13,7 @@ import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
+import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import java.util.Objects
@@ -55,23 +55,24 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = CreditNoteCreateBody.Builder::class)
     @NoAutoDetect
     class CreditNoteCreateBody
+    @JsonCreator
     internal constructor(
-        private val lineItems: List<LineItem>?,
-        private val memo: String?,
-        private val reason: Reason?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("line_items") private val lineItems: List<LineItem>,
+        @JsonProperty("memo") private val memo: String?,
+        @JsonProperty("reason") private val reason: Reason?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("line_items") fun lineItems(): List<LineItem>? = lineItems
+        @JsonProperty("line_items") fun lineItems(): List<LineItem> = lineItems
 
         /** An optional memo to attach to the credit note. */
-        @JsonProperty("memo") fun memo(): String? = memo
+        @JsonProperty("memo") fun memo(): Optional<String> = Optional.ofNullable(memo)
 
         /** An optional reason for the credit note. */
-        @JsonProperty("reason") fun reason(): Reason? = reason
+        @JsonProperty("reason") fun reason(): Optional<Reason> = Optional.ofNullable(reason)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -93,33 +94,37 @@ constructor(
 
             @JvmSynthetic
             internal fun from(creditNoteCreateBody: CreditNoteCreateBody) = apply {
-                this.lineItems = creditNoteCreateBody.lineItems
-                this.memo = creditNoteCreateBody.memo
-                this.reason = creditNoteCreateBody.reason
-                additionalProperties(creditNoteCreateBody.additionalProperties)
+                lineItems = creditNoteCreateBody.lineItems.toMutableList()
+                memo = creditNoteCreateBody.memo
+                reason = creditNoteCreateBody.reason
+                additionalProperties = creditNoteCreateBody.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("line_items")
             fun lineItems(lineItems: List<LineItem>) = apply { this.lineItems = lineItems }
 
             /** An optional memo to attach to the credit note. */
-            @JsonProperty("memo") fun memo(memo: String) = apply { this.memo = memo }
+            fun memo(memo: String) = apply { this.memo = memo }
 
             /** An optional reason for the credit note. */
-            @JsonProperty("reason") fun reason(reason: Reason) = apply { this.reason = reason }
+            fun reason(reason: Reason) = apply { this.reason = reason }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CreditNoteCreateBody =
@@ -322,20 +327,21 @@ constructor(
             )
     }
 
-    @JsonDeserialize(builder = LineItem.Builder::class)
     @NoAutoDetect
     class LineItem
+    @JsonCreator
     private constructor(
-        private val invoiceLineItemId: String?,
-        private val amount: String?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("invoice_line_item_id") private val invoiceLineItemId: String,
+        @JsonProperty("amount") private val amount: String,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** The ID of the line item to credit. */
-        @JsonProperty("invoice_line_item_id") fun invoiceLineItemId(): String? = invoiceLineItemId
+        @JsonProperty("invoice_line_item_id") fun invoiceLineItemId(): String = invoiceLineItemId
 
         /** The total amount in the invoice's currency to credit this line item. */
-        @JsonProperty("amount") fun amount(): String? = amount
+        @JsonProperty("amount") fun amount(): String = amount
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -356,32 +362,36 @@ constructor(
 
             @JvmSynthetic
             internal fun from(lineItem: LineItem) = apply {
-                this.invoiceLineItemId = lineItem.invoiceLineItemId
-                this.amount = lineItem.amount
-                additionalProperties(lineItem.additionalProperties)
+                invoiceLineItemId = lineItem.invoiceLineItemId
+                amount = lineItem.amount
+                additionalProperties = lineItem.additionalProperties.toMutableMap()
             }
 
             /** The ID of the line item to credit. */
-            @JsonProperty("invoice_line_item_id")
             fun invoiceLineItemId(invoiceLineItemId: String) = apply {
                 this.invoiceLineItemId = invoiceLineItemId
             }
 
             /** The total amount in the invoice's currency to credit this line item. */
-            @JsonProperty("amount") fun amount(amount: String) = apply { this.amount = amount }
+            fun amount(amount: String) = apply { this.amount = amount }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): LineItem =

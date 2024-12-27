@@ -28,9 +28,8 @@ class EventSearchParamsTest {
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.eventIds()).isEqualTo(listOf("string"))
-        assertThat(body.timeframeEnd()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(body.timeframeStart())
-            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.timeframeEnd()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.timeframeStart()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
     }
 
     @Test
