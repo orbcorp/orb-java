@@ -45,7 +45,7 @@ class ItemUpdateParamsTest {
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.externalConnections())
-            .isEqualTo(
+            .contains(
                 listOf(
                     ItemUpdateParams.ExternalConnection.builder()
                         .externalConnectionName(
@@ -55,7 +55,7 @@ class ItemUpdateParamsTest {
                         .build()
                 )
             )
-        assertThat(body.name()).isEqualTo("name")
+        assertThat(body.name()).contains("name")
     }
 
     @Test

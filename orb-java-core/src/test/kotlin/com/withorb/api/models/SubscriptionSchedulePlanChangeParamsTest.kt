@@ -671,7 +671,7 @@ class SubscriptionSchedulePlanChangeParamsTest {
         assertThat(body.changeOption())
             .isEqualTo(SubscriptionSchedulePlanChangeParams.ChangeOption.REQUESTED_DATE)
         assertThat(body.addAdjustments())
-            .isEqualTo(
+            .contains(
                 listOf(
                     SubscriptionSchedulePlanChangeParams.AddAdjustment.builder()
                         .adjustment(
@@ -700,7 +700,7 @@ class SubscriptionSchedulePlanChangeParamsTest {
                 )
             )
         assertThat(body.addPrices())
-            .isEqualTo(
+            .contains(
                 listOf(
                     SubscriptionSchedulePlanChangeParams.AddPrice.builder()
                         .discounts(
@@ -809,33 +809,33 @@ class SubscriptionSchedulePlanChangeParamsTest {
                         .build()
                 )
             )
-        assertThat(body.alignBillingWithPlanChangeDate()).isEqualTo(true)
-        assertThat(body.autoCollection()).isEqualTo(true)
+        assertThat(body.alignBillingWithPlanChangeDate()).contains(true)
+        assertThat(body.autoCollection()).contains(true)
         assertThat(body.billingCycleAlignment())
-            .isEqualTo(SubscriptionSchedulePlanChangeParams.BillingCycleAlignment.UNCHANGED)
+            .contains(SubscriptionSchedulePlanChangeParams.BillingCycleAlignment.UNCHANGED)
         assertThat(body.billingCycleAnchorConfiguration())
-            .isEqualTo(
+            .contains(
                 SubscriptionSchedulePlanChangeParams.BillingCycleAnchorConfiguration.builder()
                     .day(1L)
                     .month(1L)
                     .year(0L)
                     .build()
             )
-        assertThat(body.changeDate()).isEqualTo(OffsetDateTime.parse("2017-07-21T17:32:28Z"))
-        assertThat(body.couponRedemptionCode()).isEqualTo("coupon_redemption_code")
-        assertThat(body.creditsOverageRate()).isEqualTo(0.0)
-        assertThat(body.defaultInvoiceMemo()).isEqualTo("default_invoice_memo")
-        assertThat(body.externalPlanId()).isEqualTo("ZMwNQefe7J3ecf7W")
-        assertThat(body.filter()).isEqualTo("my_property > 100 AND my_other_property = 'bar'")
-        assertThat(body.initialPhaseOrder()).isEqualTo(2L)
-        assertThat(body.invoicingThreshold()).isEqualTo("10.00")
-        assertThat(body.netTerms()).isEqualTo(0L)
-        assertThat(body.perCreditOverageAmount()).isEqualTo(0.0)
-        assertThat(body.planId()).isEqualTo("ZMwNQefe7J3ecf7W")
-        assertThat(body.planVersionNumber()).isEqualTo(0L)
-        assertThat(body.priceOverrides()).isEqualTo(listOf(JsonValue.from(mapOf<String, Any>())))
+        assertThat(body.changeDate()).contains(OffsetDateTime.parse("2017-07-21T17:32:28Z"))
+        assertThat(body.couponRedemptionCode()).contains("coupon_redemption_code")
+        assertThat(body.creditsOverageRate()).contains(0.0)
+        assertThat(body.defaultInvoiceMemo()).contains("default_invoice_memo")
+        assertThat(body.externalPlanId()).contains("ZMwNQefe7J3ecf7W")
+        assertThat(body.filter()).contains("my_property > 100 AND my_other_property = 'bar'")
+        assertThat(body.initialPhaseOrder()).contains(2L)
+        assertThat(body.invoicingThreshold()).contains("10.00")
+        assertThat(body.netTerms()).contains(0L)
+        assertThat(body.perCreditOverageAmount()).contains(0.0)
+        assertThat(body.planId()).contains("ZMwNQefe7J3ecf7W")
+        assertThat(body.planVersionNumber()).contains(0L)
+        assertThat(body.priceOverrides()).contains(listOf(JsonValue.from(mapOf<String, Any>())))
         assertThat(body.removeAdjustments())
-            .isEqualTo(
+            .contains(
                 listOf(
                     SubscriptionSchedulePlanChangeParams.RemoveAdjustment.builder()
                         .adjustmentId("h74gfhdjvn7ujokd")
@@ -843,7 +843,7 @@ class SubscriptionSchedulePlanChangeParamsTest {
                 )
             )
         assertThat(body.removePrices())
-            .isEqualTo(
+            .contains(
                 listOf(
                     SubscriptionSchedulePlanChangeParams.RemovePrice.builder()
                         .externalPriceId("external_price_id")
@@ -852,7 +852,7 @@ class SubscriptionSchedulePlanChangeParamsTest {
                 )
             )
         assertThat(body.replaceAdjustments())
-            .isEqualTo(
+            .contains(
                 listOf(
                     SubscriptionSchedulePlanChangeParams.ReplaceAdjustment.builder()
                         .adjustment(
@@ -880,7 +880,7 @@ class SubscriptionSchedulePlanChangeParamsTest {
                 )
             )
         assertThat(body.replacePrices())
-            .isEqualTo(
+            .contains(
                 listOf(
                     SubscriptionSchedulePlanChangeParams.ReplacePrice.builder()
                         .replacesPriceId("replaces_price_id")
@@ -990,7 +990,7 @@ class SubscriptionSchedulePlanChangeParamsTest {
                         .build()
                 )
             )
-        assertThat(body.trialDurationDays()).isEqualTo(0L)
+        assertThat(body.trialDurationDays()).contains(0L)
     }
 
     @Test

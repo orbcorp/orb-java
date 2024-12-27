@@ -30,7 +30,7 @@ class SubscriptionCancelParamsTest {
         assertThat(body.cancelOption())
             .isEqualTo(SubscriptionCancelParams.CancelOption.END_OF_SUBSCRIPTION_TERM)
         assertThat(body.cancellationDate())
-            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+            .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
     }
 
     @Test

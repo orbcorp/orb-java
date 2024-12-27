@@ -23,6 +23,7 @@ import com.withorb.api.core.NoAutoDetect
 import com.withorb.api.core.getOrThrow
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
+import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import java.time.LocalDate
@@ -642,20 +643,21 @@ constructor(
             )
     }
 
-    @JsonDeserialize(builder = AddIncrementCreditLedgerEntryRequestParams.Builder::class)
     @NoAutoDetect
     class AddIncrementCreditLedgerEntryRequestParams
+    @JsonCreator
     private constructor(
-        private val metadata: Metadata?,
-        private val currency: String?,
-        private val description: String?,
-        private val entryType: EntryType?,
-        private val amount: Double?,
-        private val expiryDate: OffsetDateTime?,
-        private val effectiveDate: OffsetDateTime?,
-        private val perUnitCostBasis: String?,
-        private val invoiceSettings: InvoiceSettings?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("metadata") private val metadata: Metadata?,
+        @JsonProperty("currency") private val currency: String?,
+        @JsonProperty("description") private val description: String?,
+        @JsonProperty("entry_type") private val entryType: EntryType,
+        @JsonProperty("amount") private val amount: Double,
+        @JsonProperty("expiry_date") private val expiryDate: OffsetDateTime?,
+        @JsonProperty("effective_date") private val effectiveDate: OffsetDateTime?,
+        @JsonProperty("per_unit_cost_basis") private val perUnitCostBasis: String?,
+        @JsonProperty("invoice_settings") private val invoiceSettings: InvoiceSettings?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /**
@@ -663,50 +665,55 @@ constructor(
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        @JsonProperty("metadata") fun metadata(): Metadata? = metadata
+        @JsonProperty("metadata") fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
         /**
          * The currency or custom pricing unit to use for this ledger entry. If this is a real-world
          * currency, it must match the customer's invoicing currency.
          */
-        @JsonProperty("currency") fun currency(): String? = currency
+        @JsonProperty("currency") fun currency(): Optional<String> = Optional.ofNullable(currency)
 
         /**
          * Optional metadata that can be specified when adding ledger results via the API. For
          * example, this can be used to note an increment refers to trial credits, or for noting
          * corrections as a result of an incident, etc.
          */
-        @JsonProperty("description") fun description(): String? = description
+        @JsonProperty("description")
+        fun description(): Optional<String> = Optional.ofNullable(description)
 
-        @JsonProperty("entry_type") fun entryType(): EntryType? = entryType
+        @JsonProperty("entry_type") fun entryType(): EntryType = entryType
 
         /**
          * The number of credits to effect. Note that this is required for increment, decrement,
          * void, or undo operations.
          */
-        @JsonProperty("amount") fun amount(): Double? = amount
+        @JsonProperty("amount") fun amount(): Double = amount
 
         /** An ISO 8601 format date that denotes when this credit balance should expire. */
-        @JsonProperty("expiry_date") fun expiryDate(): OffsetDateTime? = expiryDate
+        @JsonProperty("expiry_date")
+        fun expiryDate(): Optional<OffsetDateTime> = Optional.ofNullable(expiryDate)
 
         /**
          * An ISO 8601 format date that denotes when this credit balance should become available for
          * use.
          */
-        @JsonProperty("effective_date") fun effectiveDate(): OffsetDateTime? = effectiveDate
+        @JsonProperty("effective_date")
+        fun effectiveDate(): Optional<OffsetDateTime> = Optional.ofNullable(effectiveDate)
 
         /**
          * Can only be specified when entry_type=increment. How much, in the customer's currency, a
          * customer paid for a single credit in this block
          */
-        @JsonProperty("per_unit_cost_basis") fun perUnitCostBasis(): String? = perUnitCostBasis
+        @JsonProperty("per_unit_cost_basis")
+        fun perUnitCostBasis(): Optional<String> = Optional.ofNullable(perUnitCostBasis)
 
         /**
          * Passing `invoice_settings` automatically generates an invoice for the newly added
          * credits. If `invoice_settings` is passed, you must specify per_unit_cost_basis, as the
          * calculation of the invoice total is done on that basis.
          */
-        @JsonProperty("invoice_settings") fun invoiceSettings(): InvoiceSettings? = invoiceSettings
+        @JsonProperty("invoice_settings")
+        fun invoiceSettings(): Optional<InvoiceSettings> = Optional.ofNullable(invoiceSettings)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -737,18 +744,17 @@ constructor(
                 addIncrementCreditLedgerEntryRequestParams:
                     AddIncrementCreditLedgerEntryRequestParams
             ) = apply {
-                this.metadata = addIncrementCreditLedgerEntryRequestParams.metadata
-                this.currency = addIncrementCreditLedgerEntryRequestParams.currency
-                this.description = addIncrementCreditLedgerEntryRequestParams.description
-                this.entryType = addIncrementCreditLedgerEntryRequestParams.entryType
-                this.amount = addIncrementCreditLedgerEntryRequestParams.amount
-                this.expiryDate = addIncrementCreditLedgerEntryRequestParams.expiryDate
-                this.effectiveDate = addIncrementCreditLedgerEntryRequestParams.effectiveDate
-                this.perUnitCostBasis = addIncrementCreditLedgerEntryRequestParams.perUnitCostBasis
-                this.invoiceSettings = addIncrementCreditLedgerEntryRequestParams.invoiceSettings
-                additionalProperties(
-                    addIncrementCreditLedgerEntryRequestParams.additionalProperties
-                )
+                metadata = addIncrementCreditLedgerEntryRequestParams.metadata
+                currency = addIncrementCreditLedgerEntryRequestParams.currency
+                description = addIncrementCreditLedgerEntryRequestParams.description
+                entryType = addIncrementCreditLedgerEntryRequestParams.entryType
+                amount = addIncrementCreditLedgerEntryRequestParams.amount
+                expiryDate = addIncrementCreditLedgerEntryRequestParams.expiryDate
+                effectiveDate = addIncrementCreditLedgerEntryRequestParams.effectiveDate
+                perUnitCostBasis = addIncrementCreditLedgerEntryRequestParams.perUnitCostBasis
+                invoiceSettings = addIncrementCreditLedgerEntryRequestParams.invoiceSettings
+                additionalProperties =
+                    addIncrementCreditLedgerEntryRequestParams.additionalProperties.toMutableMap()
             }
 
             /**
@@ -756,14 +762,12 @@ constructor(
              * setting the value to `null`, and the entire metadata mapping can be cleared by
              * setting `metadata` to `null`.
              */
-            @JsonProperty("metadata")
             fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
             /**
              * The currency or custom pricing unit to use for this ledger entry. If this is a
              * real-world currency, it must match the customer's invoicing currency.
              */
-            @JsonProperty("currency")
             fun currency(currency: String) = apply { this.currency = currency }
 
             /**
@@ -771,27 +775,23 @@ constructor(
              * example, this can be used to note an increment refers to trial credits, or for noting
              * corrections as a result of an incident, etc.
              */
-            @JsonProperty("description")
             fun description(description: String) = apply { this.description = description }
 
-            @JsonProperty("entry_type")
             fun entryType(entryType: EntryType) = apply { this.entryType = entryType }
 
             /**
              * The number of credits to effect. Note that this is required for increment, decrement,
              * void, or undo operations.
              */
-            @JsonProperty("amount") fun amount(amount: Double) = apply { this.amount = amount }
+            fun amount(amount: Double) = apply { this.amount = amount }
 
             /** An ISO 8601 format date that denotes when this credit balance should expire. */
-            @JsonProperty("expiry_date")
             fun expiryDate(expiryDate: OffsetDateTime) = apply { this.expiryDate = expiryDate }
 
             /**
              * An ISO 8601 format date that denotes when this credit balance should become available
              * for use.
              */
-            @JsonProperty("effective_date")
             fun effectiveDate(effectiveDate: OffsetDateTime) = apply {
                 this.effectiveDate = effectiveDate
             }
@@ -800,7 +800,6 @@ constructor(
              * Can only be specified when entry_type=increment. How much, in the customer's
              * currency, a customer paid for a single credit in this block
              */
-            @JsonProperty("per_unit_cost_basis")
             fun perUnitCostBasis(perUnitCostBasis: String) = apply {
                 this.perUnitCostBasis = perUnitCostBasis
             }
@@ -810,23 +809,27 @@ constructor(
              * credits. If `invoice_settings` is passed, you must specify per_unit_cost_basis, as
              * the calculation of the invoice total is done on that basis.
              */
-            @JsonProperty("invoice_settings")
             fun invoiceSettings(invoiceSettings: InvoiceSettings) = apply {
                 this.invoiceSettings = invoiceSettings
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): AddIncrementCreditLedgerEntryRequestParams =
@@ -900,38 +903,41 @@ constructor(
          * credits. If `invoice_settings` is passed, you must specify per_unit_cost_basis, as the
          * calculation of the invoice total is done on that basis.
          */
-        @JsonDeserialize(builder = InvoiceSettings.Builder::class)
         @NoAutoDetect
         class InvoiceSettings
+        @JsonCreator
         private constructor(
-            private val autoCollection: Boolean?,
-            private val netTerms: Long?,
-            private val memo: String?,
+            @JsonProperty("auto_collection") private val autoCollection: Boolean,
+            @JsonProperty("net_terms") private val netTerms: Long,
+            @JsonProperty("memo") private val memo: String?,
+            @JsonProperty("require_successful_payment")
             private val requireSuccessfulPayment: Boolean?,
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             /**
              * Whether the credits purchase invoice should auto collect with the customer's saved
              * payment method.
              */
-            @JsonProperty("auto_collection") fun autoCollection(): Boolean? = autoCollection
+            @JsonProperty("auto_collection") fun autoCollection(): Boolean = autoCollection
 
             /**
              * The net terms determines the difference between the invoice date and the issue date
              * for the invoice. If you intend the invoice to be due on issue, set this to 0.
              */
-            @JsonProperty("net_terms") fun netTerms(): Long? = netTerms
+            @JsonProperty("net_terms") fun netTerms(): Long = netTerms
 
             /** An optional memo to display on the invoice. */
-            @JsonProperty("memo") fun memo(): String? = memo
+            @JsonProperty("memo") fun memo(): Optional<String> = Optional.ofNullable(memo)
 
             /**
              * If true, the new credit block will require that the corresponding invoice is paid
              * before it can be drawn down from.
              */
             @JsonProperty("require_successful_payment")
-            fun requireSuccessfulPayment(): Boolean? = requireSuccessfulPayment
+            fun requireSuccessfulPayment(): Optional<Boolean> =
+                Optional.ofNullable(requireSuccessfulPayment)
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -954,18 +960,17 @@ constructor(
 
                 @JvmSynthetic
                 internal fun from(invoiceSettings: InvoiceSettings) = apply {
-                    this.autoCollection = invoiceSettings.autoCollection
-                    this.netTerms = invoiceSettings.netTerms
-                    this.memo = invoiceSettings.memo
-                    this.requireSuccessfulPayment = invoiceSettings.requireSuccessfulPayment
-                    additionalProperties(invoiceSettings.additionalProperties)
+                    autoCollection = invoiceSettings.autoCollection
+                    netTerms = invoiceSettings.netTerms
+                    memo = invoiceSettings.memo
+                    requireSuccessfulPayment = invoiceSettings.requireSuccessfulPayment
+                    additionalProperties = invoiceSettings.additionalProperties.toMutableMap()
                 }
 
                 /**
                  * Whether the credits purchase invoice should auto collect with the customer's
                  * saved payment method.
                  */
-                @JsonProperty("auto_collection")
                 fun autoCollection(autoCollection: Boolean) = apply {
                     this.autoCollection = autoCollection
                 }
@@ -975,35 +980,40 @@ constructor(
                  * date for the invoice. If you intend the invoice to be due on issue, set this
                  * to 0.
                  */
-                @JsonProperty("net_terms")
                 fun netTerms(netTerms: Long) = apply { this.netTerms = netTerms }
 
                 /** An optional memo to display on the invoice. */
-                @JsonProperty("memo") fun memo(memo: String) = apply { this.memo = memo }
+                fun memo(memo: String) = apply { this.memo = memo }
 
                 /**
                  * If true, the new credit block will require that the corresponding invoice is paid
                  * before it can be drawn down from.
                  */
-                @JsonProperty("require_successful_payment")
                 fun requireSuccessfulPayment(requireSuccessfulPayment: Boolean) = apply {
                     this.requireSuccessfulPayment = requireSuccessfulPayment
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): InvoiceSettings =
                     InvoiceSettings(
@@ -1040,11 +1050,12 @@ constructor(
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        @JsonDeserialize(builder = Metadata.Builder::class)
         @NoAutoDetect
         class Metadata
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonAnyGetter
@@ -1064,23 +1075,30 @@ constructor(
 
                 @JvmSynthetic
                 internal fun from(metadata: Metadata) = apply {
-                    additionalProperties(metadata.additionalProperties)
+                    additionalProperties = metadata.additionalProperties.toMutableMap()
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
@@ -1120,16 +1138,17 @@ constructor(
             "AddIncrementCreditLedgerEntryRequestParams{metadata=$metadata, currency=$currency, description=$description, entryType=$entryType, amount=$amount, expiryDate=$expiryDate, effectiveDate=$effectiveDate, perUnitCostBasis=$perUnitCostBasis, invoiceSettings=$invoiceSettings, additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = AddDecrementCreditLedgerEntryRequestParams.Builder::class)
     @NoAutoDetect
     class AddDecrementCreditLedgerEntryRequestParams
+    @JsonCreator
     private constructor(
-        private val metadata: Metadata?,
-        private val currency: String?,
-        private val description: String?,
-        private val entryType: EntryType?,
-        private val amount: Double?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("metadata") private val metadata: Metadata?,
+        @JsonProperty("currency") private val currency: String?,
+        @JsonProperty("description") private val description: String?,
+        @JsonProperty("entry_type") private val entryType: EntryType,
+        @JsonProperty("amount") private val amount: Double,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /**
@@ -1137,28 +1156,29 @@ constructor(
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        @JsonProperty("metadata") fun metadata(): Metadata? = metadata
+        @JsonProperty("metadata") fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
         /**
          * The currency or custom pricing unit to use for this ledger entry. If this is a real-world
          * currency, it must match the customer's invoicing currency.
          */
-        @JsonProperty("currency") fun currency(): String? = currency
+        @JsonProperty("currency") fun currency(): Optional<String> = Optional.ofNullable(currency)
 
         /**
          * Optional metadata that can be specified when adding ledger results via the API. For
          * example, this can be used to note an increment refers to trial credits, or for noting
          * corrections as a result of an incident, etc.
          */
-        @JsonProperty("description") fun description(): String? = description
+        @JsonProperty("description")
+        fun description(): Optional<String> = Optional.ofNullable(description)
 
-        @JsonProperty("entry_type") fun entryType(): EntryType? = entryType
+        @JsonProperty("entry_type") fun entryType(): EntryType = entryType
 
         /**
          * The number of credits to effect. Note that this is required for increment, decrement,
          * void, or undo operations.
          */
-        @JsonProperty("amount") fun amount(): Double? = amount
+        @JsonProperty("amount") fun amount(): Double = amount
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -1185,14 +1205,13 @@ constructor(
                 addDecrementCreditLedgerEntryRequestParams:
                     AddDecrementCreditLedgerEntryRequestParams
             ) = apply {
-                this.metadata = addDecrementCreditLedgerEntryRequestParams.metadata
-                this.currency = addDecrementCreditLedgerEntryRequestParams.currency
-                this.description = addDecrementCreditLedgerEntryRequestParams.description
-                this.entryType = addDecrementCreditLedgerEntryRequestParams.entryType
-                this.amount = addDecrementCreditLedgerEntryRequestParams.amount
-                additionalProperties(
-                    addDecrementCreditLedgerEntryRequestParams.additionalProperties
-                )
+                metadata = addDecrementCreditLedgerEntryRequestParams.metadata
+                currency = addDecrementCreditLedgerEntryRequestParams.currency
+                description = addDecrementCreditLedgerEntryRequestParams.description
+                entryType = addDecrementCreditLedgerEntryRequestParams.entryType
+                amount = addDecrementCreditLedgerEntryRequestParams.amount
+                additionalProperties =
+                    addDecrementCreditLedgerEntryRequestParams.additionalProperties.toMutableMap()
             }
 
             /**
@@ -1200,14 +1219,12 @@ constructor(
              * setting the value to `null`, and the entire metadata mapping can be cleared by
              * setting `metadata` to `null`.
              */
-            @JsonProperty("metadata")
             fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
             /**
              * The currency or custom pricing unit to use for this ledger entry. If this is a
              * real-world currency, it must match the customer's invoicing currency.
              */
-            @JsonProperty("currency")
             fun currency(currency: String) = apply { this.currency = currency }
 
             /**
@@ -1215,30 +1232,33 @@ constructor(
              * example, this can be used to note an increment refers to trial credits, or for noting
              * corrections as a result of an incident, etc.
              */
-            @JsonProperty("description")
             fun description(description: String) = apply { this.description = description }
 
-            @JsonProperty("entry_type")
             fun entryType(entryType: EntryType) = apply { this.entryType = entryType }
 
             /**
              * The number of credits to effect. Note that this is required for increment, decrement,
              * void, or undo operations.
              */
-            @JsonProperty("amount") fun amount(amount: Double) = apply { this.amount = amount }
+            fun amount(amount: Double) = apply { this.amount = amount }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): AddDecrementCreditLedgerEntryRequestParams =
@@ -1308,11 +1328,12 @@ constructor(
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        @JsonDeserialize(builder = Metadata.Builder::class)
         @NoAutoDetect
         class Metadata
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonAnyGetter
@@ -1332,23 +1353,30 @@ constructor(
 
                 @JvmSynthetic
                 internal fun from(metadata: Metadata) = apply {
-                    additionalProperties(metadata.additionalProperties)
+                    additionalProperties = metadata.additionalProperties.toMutableMap()
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
@@ -1388,19 +1416,20 @@ constructor(
             "AddDecrementCreditLedgerEntryRequestParams{metadata=$metadata, currency=$currency, description=$description, entryType=$entryType, amount=$amount, additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = AddExpirationChangeCreditLedgerEntryRequestParams.Builder::class)
     @NoAutoDetect
     class AddExpirationChangeCreditLedgerEntryRequestParams
+    @JsonCreator
     private constructor(
-        private val metadata: Metadata?,
-        private val currency: String?,
-        private val description: String?,
-        private val entryType: EntryType?,
-        private val amount: Double?,
-        private val expiryDate: OffsetDateTime?,
-        private val blockId: String?,
-        private val targetExpiryDate: LocalDate?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("metadata") private val metadata: Metadata?,
+        @JsonProperty("currency") private val currency: String?,
+        @JsonProperty("description") private val description: String?,
+        @JsonProperty("entry_type") private val entryType: EntryType,
+        @JsonProperty("amount") private val amount: Double?,
+        @JsonProperty("expiry_date") private val expiryDate: OffsetDateTime?,
+        @JsonProperty("block_id") private val blockId: String?,
+        @JsonProperty("target_expiry_date") private val targetExpiryDate: LocalDate,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /**
@@ -1408,43 +1437,45 @@ constructor(
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        @JsonProperty("metadata") fun metadata(): Metadata? = metadata
+        @JsonProperty("metadata") fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
         /**
          * The currency or custom pricing unit to use for this ledger entry. If this is a real-world
          * currency, it must match the customer's invoicing currency.
          */
-        @JsonProperty("currency") fun currency(): String? = currency
+        @JsonProperty("currency") fun currency(): Optional<String> = Optional.ofNullable(currency)
 
         /**
          * Optional metadata that can be specified when adding ledger results via the API. For
          * example, this can be used to note an increment refers to trial credits, or for noting
          * corrections as a result of an incident, etc.
          */
-        @JsonProperty("description") fun description(): String? = description
+        @JsonProperty("description")
+        fun description(): Optional<String> = Optional.ofNullable(description)
 
-        @JsonProperty("entry_type") fun entryType(): EntryType? = entryType
+        @JsonProperty("entry_type") fun entryType(): EntryType = entryType
 
         /**
          * The number of credits to effect. Note that this is required for increment, decrement,
          * void, or undo operations.
          */
-        @JsonProperty("amount") fun amount(): Double? = amount
+        @JsonProperty("amount") fun amount(): Optional<Double> = Optional.ofNullable(amount)
 
         /** An ISO 8601 format date that identifies the origination credit block to expire */
-        @JsonProperty("expiry_date") fun expiryDate(): OffsetDateTime? = expiryDate
+        @JsonProperty("expiry_date")
+        fun expiryDate(): Optional<OffsetDateTime> = Optional.ofNullable(expiryDate)
 
         /**
          * The ID of the block affected by an expiration_change, used to differentiate between
          * multiple blocks with the same `expiry_date`.
          */
-        @JsonProperty("block_id") fun blockId(): String? = blockId
+        @JsonProperty("block_id") fun blockId(): Optional<String> = Optional.ofNullable(blockId)
 
         /**
          * A future date (specified in YYYY-MM-DD format) used for expiration change, denoting when
          * credits transferred (as part of a partial block expiration) should expire.
          */
-        @JsonProperty("target_expiry_date") fun targetExpiryDate(): LocalDate? = targetExpiryDate
+        @JsonProperty("target_expiry_date") fun targetExpiryDate(): LocalDate = targetExpiryDate
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -1474,18 +1505,18 @@ constructor(
                 addExpirationChangeCreditLedgerEntryRequestParams:
                     AddExpirationChangeCreditLedgerEntryRequestParams
             ) = apply {
-                this.metadata = addExpirationChangeCreditLedgerEntryRequestParams.metadata
-                this.currency = addExpirationChangeCreditLedgerEntryRequestParams.currency
-                this.description = addExpirationChangeCreditLedgerEntryRequestParams.description
-                this.entryType = addExpirationChangeCreditLedgerEntryRequestParams.entryType
-                this.amount = addExpirationChangeCreditLedgerEntryRequestParams.amount
-                this.expiryDate = addExpirationChangeCreditLedgerEntryRequestParams.expiryDate
-                this.blockId = addExpirationChangeCreditLedgerEntryRequestParams.blockId
-                this.targetExpiryDate =
+                metadata = addExpirationChangeCreditLedgerEntryRequestParams.metadata
+                currency = addExpirationChangeCreditLedgerEntryRequestParams.currency
+                description = addExpirationChangeCreditLedgerEntryRequestParams.description
+                entryType = addExpirationChangeCreditLedgerEntryRequestParams.entryType
+                amount = addExpirationChangeCreditLedgerEntryRequestParams.amount
+                expiryDate = addExpirationChangeCreditLedgerEntryRequestParams.expiryDate
+                blockId = addExpirationChangeCreditLedgerEntryRequestParams.blockId
+                targetExpiryDate =
                     addExpirationChangeCreditLedgerEntryRequestParams.targetExpiryDate
-                additionalProperties(
+                additionalProperties =
                     addExpirationChangeCreditLedgerEntryRequestParams.additionalProperties
-                )
+                        .toMutableMap()
             }
 
             /**
@@ -1493,14 +1524,12 @@ constructor(
              * setting the value to `null`, and the entire metadata mapping can be cleared by
              * setting `metadata` to `null`.
              */
-            @JsonProperty("metadata")
             fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
             /**
              * The currency or custom pricing unit to use for this ledger entry. If this is a
              * real-world currency, it must match the customer's invoicing currency.
              */
-            @JsonProperty("currency")
             fun currency(currency: String) = apply { this.currency = currency }
 
             /**
@@ -1508,50 +1537,50 @@ constructor(
              * example, this can be used to note an increment refers to trial credits, or for noting
              * corrections as a result of an incident, etc.
              */
-            @JsonProperty("description")
             fun description(description: String) = apply { this.description = description }
 
-            @JsonProperty("entry_type")
             fun entryType(entryType: EntryType) = apply { this.entryType = entryType }
 
             /**
              * The number of credits to effect. Note that this is required for increment, decrement,
              * void, or undo operations.
              */
-            @JsonProperty("amount") fun amount(amount: Double) = apply { this.amount = amount }
+            fun amount(amount: Double) = apply { this.amount = amount }
 
             /** An ISO 8601 format date that identifies the origination credit block to expire */
-            @JsonProperty("expiry_date")
             fun expiryDate(expiryDate: OffsetDateTime) = apply { this.expiryDate = expiryDate }
 
             /**
              * The ID of the block affected by an expiration_change, used to differentiate between
              * multiple blocks with the same `expiry_date`.
              */
-            @JsonProperty("block_id")
             fun blockId(blockId: String) = apply { this.blockId = blockId }
 
             /**
              * A future date (specified in YYYY-MM-DD format) used for expiration change, denoting
              * when credits transferred (as part of a partial block expiration) should expire.
              */
-            @JsonProperty("target_expiry_date")
             fun targetExpiryDate(targetExpiryDate: LocalDate) = apply {
                 this.targetExpiryDate = targetExpiryDate
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): AddExpirationChangeCreditLedgerEntryRequestParams =
@@ -1626,11 +1655,12 @@ constructor(
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        @JsonDeserialize(builder = Metadata.Builder::class)
         @NoAutoDetect
         class Metadata
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonAnyGetter
@@ -1650,23 +1680,30 @@ constructor(
 
                 @JvmSynthetic
                 internal fun from(metadata: Metadata) = apply {
-                    additionalProperties(metadata.additionalProperties)
+                    additionalProperties = metadata.additionalProperties.toMutableMap()
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
@@ -1706,18 +1743,19 @@ constructor(
             "AddExpirationChangeCreditLedgerEntryRequestParams{metadata=$metadata, currency=$currency, description=$description, entryType=$entryType, amount=$amount, expiryDate=$expiryDate, blockId=$blockId, targetExpiryDate=$targetExpiryDate, additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = AddVoidCreditLedgerEntryRequestParams.Builder::class)
     @NoAutoDetect
     class AddVoidCreditLedgerEntryRequestParams
+    @JsonCreator
     private constructor(
-        private val metadata: Metadata?,
-        private val currency: String?,
-        private val description: String?,
-        private val entryType: EntryType?,
-        private val blockId: String?,
-        private val voidReason: VoidReason?,
-        private val amount: Double?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("metadata") private val metadata: Metadata?,
+        @JsonProperty("currency") private val currency: String?,
+        @JsonProperty("description") private val description: String?,
+        @JsonProperty("entry_type") private val entryType: EntryType,
+        @JsonProperty("block_id") private val blockId: String,
+        @JsonProperty("void_reason") private val voidReason: VoidReason?,
+        @JsonProperty("amount") private val amount: Double,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /**
@@ -1725,34 +1763,36 @@ constructor(
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        @JsonProperty("metadata") fun metadata(): Metadata? = metadata
+        @JsonProperty("metadata") fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
         /**
          * The currency or custom pricing unit to use for this ledger entry. If this is a real-world
          * currency, it must match the customer's invoicing currency.
          */
-        @JsonProperty("currency") fun currency(): String? = currency
+        @JsonProperty("currency") fun currency(): Optional<String> = Optional.ofNullable(currency)
 
         /**
          * Optional metadata that can be specified when adding ledger results via the API. For
          * example, this can be used to note an increment refers to trial credits, or for noting
          * corrections as a result of an incident, etc.
          */
-        @JsonProperty("description") fun description(): String? = description
+        @JsonProperty("description")
+        fun description(): Optional<String> = Optional.ofNullable(description)
 
-        @JsonProperty("entry_type") fun entryType(): EntryType? = entryType
+        @JsonProperty("entry_type") fun entryType(): EntryType = entryType
 
         /** The ID of the block to void. */
-        @JsonProperty("block_id") fun blockId(): String? = blockId
+        @JsonProperty("block_id") fun blockId(): String = blockId
 
         /** Can only be specified when `entry_type=void`. The reason for the void. */
-        @JsonProperty("void_reason") fun voidReason(): VoidReason? = voidReason
+        @JsonProperty("void_reason")
+        fun voidReason(): Optional<VoidReason> = Optional.ofNullable(voidReason)
 
         /**
          * The number of credits to effect. Note that this is required for increment, decrement,
          * void, or undo operations.
          */
-        @JsonProperty("amount") fun amount(): Double? = amount
+        @JsonProperty("amount") fun amount(): Double = amount
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -1780,14 +1820,15 @@ constructor(
             internal fun from(
                 addVoidCreditLedgerEntryRequestParams: AddVoidCreditLedgerEntryRequestParams
             ) = apply {
-                this.metadata = addVoidCreditLedgerEntryRequestParams.metadata
-                this.currency = addVoidCreditLedgerEntryRequestParams.currency
-                this.description = addVoidCreditLedgerEntryRequestParams.description
-                this.entryType = addVoidCreditLedgerEntryRequestParams.entryType
-                this.blockId = addVoidCreditLedgerEntryRequestParams.blockId
-                this.voidReason = addVoidCreditLedgerEntryRequestParams.voidReason
-                this.amount = addVoidCreditLedgerEntryRequestParams.amount
-                additionalProperties(addVoidCreditLedgerEntryRequestParams.additionalProperties)
+                metadata = addVoidCreditLedgerEntryRequestParams.metadata
+                currency = addVoidCreditLedgerEntryRequestParams.currency
+                description = addVoidCreditLedgerEntryRequestParams.description
+                entryType = addVoidCreditLedgerEntryRequestParams.entryType
+                blockId = addVoidCreditLedgerEntryRequestParams.blockId
+                voidReason = addVoidCreditLedgerEntryRequestParams.voidReason
+                amount = addVoidCreditLedgerEntryRequestParams.amount
+                additionalProperties =
+                    addVoidCreditLedgerEntryRequestParams.additionalProperties.toMutableMap()
             }
 
             /**
@@ -1795,14 +1836,12 @@ constructor(
              * setting the value to `null`, and the entire metadata mapping can be cleared by
              * setting `metadata` to `null`.
              */
-            @JsonProperty("metadata")
             fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
             /**
              * The currency or custom pricing unit to use for this ledger entry. If this is a
              * real-world currency, it must match the customer's invoicing currency.
              */
-            @JsonProperty("currency")
             fun currency(currency: String) = apply { this.currency = currency }
 
             /**
@@ -1810,38 +1849,39 @@ constructor(
              * example, this can be used to note an increment refers to trial credits, or for noting
              * corrections as a result of an incident, etc.
              */
-            @JsonProperty("description")
             fun description(description: String) = apply { this.description = description }
 
-            @JsonProperty("entry_type")
             fun entryType(entryType: EntryType) = apply { this.entryType = entryType }
 
             /** The ID of the block to void. */
-            @JsonProperty("block_id")
             fun blockId(blockId: String) = apply { this.blockId = blockId }
 
             /** Can only be specified when `entry_type=void`. The reason for the void. */
-            @JsonProperty("void_reason")
             fun voidReason(voidReason: VoidReason) = apply { this.voidReason = voidReason }
 
             /**
              * The number of credits to effect. Note that this is required for increment, decrement,
              * void, or undo operations.
              */
-            @JsonProperty("amount") fun amount(amount: Double) = apply { this.amount = amount }
+            fun amount(amount: Double) = apply { this.amount = amount }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): AddVoidCreditLedgerEntryRequestParams =
@@ -1913,11 +1953,12 @@ constructor(
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        @JsonDeserialize(builder = Metadata.Builder::class)
         @NoAutoDetect
         class Metadata
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonAnyGetter
@@ -1937,23 +1978,30 @@ constructor(
 
                 @JvmSynthetic
                 internal fun from(metadata: Metadata) = apply {
-                    additionalProperties(metadata.additionalProperties)
+                    additionalProperties = metadata.additionalProperties.toMutableMap()
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
@@ -2044,17 +2092,18 @@ constructor(
             "AddVoidCreditLedgerEntryRequestParams{metadata=$metadata, currency=$currency, description=$description, entryType=$entryType, blockId=$blockId, voidReason=$voidReason, amount=$amount, additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = AddAmendmentCreditLedgerEntryRequestParams.Builder::class)
     @NoAutoDetect
     class AddAmendmentCreditLedgerEntryRequestParams
+    @JsonCreator
     private constructor(
-        private val metadata: Metadata?,
-        private val currency: String?,
-        private val description: String?,
-        private val entryType: EntryType?,
-        private val amount: Double?,
-        private val blockId: String?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("metadata") private val metadata: Metadata?,
+        @JsonProperty("currency") private val currency: String?,
+        @JsonProperty("description") private val description: String?,
+        @JsonProperty("entry_type") private val entryType: EntryType,
+        @JsonProperty("amount") private val amount: Double,
+        @JsonProperty("block_id") private val blockId: String,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /**
@@ -2062,31 +2111,32 @@ constructor(
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        @JsonProperty("metadata") fun metadata(): Metadata? = metadata
+        @JsonProperty("metadata") fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
         /**
          * The currency or custom pricing unit to use for this ledger entry. If this is a real-world
          * currency, it must match the customer's invoicing currency.
          */
-        @JsonProperty("currency") fun currency(): String? = currency
+        @JsonProperty("currency") fun currency(): Optional<String> = Optional.ofNullable(currency)
 
         /**
          * Optional metadata that can be specified when adding ledger results via the API. For
          * example, this can be used to note an increment refers to trial credits, or for noting
          * corrections as a result of an incident, etc.
          */
-        @JsonProperty("description") fun description(): String? = description
+        @JsonProperty("description")
+        fun description(): Optional<String> = Optional.ofNullable(description)
 
-        @JsonProperty("entry_type") fun entryType(): EntryType? = entryType
+        @JsonProperty("entry_type") fun entryType(): EntryType = entryType
 
         /**
          * The number of credits to effect. Note that this is required for increment, decrement or
          * void operations.
          */
-        @JsonProperty("amount") fun amount(): Double? = amount
+        @JsonProperty("amount") fun amount(): Double = amount
 
         /** The ID of the block to reverse a decrement from. */
-        @JsonProperty("block_id") fun blockId(): String? = blockId
+        @JsonProperty("block_id") fun blockId(): String = blockId
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -2114,15 +2164,14 @@ constructor(
                 addAmendmentCreditLedgerEntryRequestParams:
                     AddAmendmentCreditLedgerEntryRequestParams
             ) = apply {
-                this.metadata = addAmendmentCreditLedgerEntryRequestParams.metadata
-                this.currency = addAmendmentCreditLedgerEntryRequestParams.currency
-                this.description = addAmendmentCreditLedgerEntryRequestParams.description
-                this.entryType = addAmendmentCreditLedgerEntryRequestParams.entryType
-                this.amount = addAmendmentCreditLedgerEntryRequestParams.amount
-                this.blockId = addAmendmentCreditLedgerEntryRequestParams.blockId
-                additionalProperties(
-                    addAmendmentCreditLedgerEntryRequestParams.additionalProperties
-                )
+                metadata = addAmendmentCreditLedgerEntryRequestParams.metadata
+                currency = addAmendmentCreditLedgerEntryRequestParams.currency
+                description = addAmendmentCreditLedgerEntryRequestParams.description
+                entryType = addAmendmentCreditLedgerEntryRequestParams.entryType
+                amount = addAmendmentCreditLedgerEntryRequestParams.amount
+                blockId = addAmendmentCreditLedgerEntryRequestParams.blockId
+                additionalProperties =
+                    addAmendmentCreditLedgerEntryRequestParams.additionalProperties.toMutableMap()
             }
 
             /**
@@ -2130,14 +2179,12 @@ constructor(
              * setting the value to `null`, and the entire metadata mapping can be cleared by
              * setting `metadata` to `null`.
              */
-            @JsonProperty("metadata")
             fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
             /**
              * The currency or custom pricing unit to use for this ledger entry. If this is a
              * real-world currency, it must match the customer's invoicing currency.
              */
-            @JsonProperty("currency")
             fun currency(currency: String) = apply { this.currency = currency }
 
             /**
@@ -2145,34 +2192,36 @@ constructor(
              * example, this can be used to note an increment refers to trial credits, or for noting
              * corrections as a result of an incident, etc.
              */
-            @JsonProperty("description")
             fun description(description: String) = apply { this.description = description }
 
-            @JsonProperty("entry_type")
             fun entryType(entryType: EntryType) = apply { this.entryType = entryType }
 
             /**
              * The number of credits to effect. Note that this is required for increment, decrement
              * or void operations.
              */
-            @JsonProperty("amount") fun amount(amount: Double) = apply { this.amount = amount }
+            fun amount(amount: Double) = apply { this.amount = amount }
 
             /** The ID of the block to reverse a decrement from. */
-            @JsonProperty("block_id")
             fun blockId(blockId: String) = apply { this.blockId = blockId }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): AddAmendmentCreditLedgerEntryRequestParams =
@@ -2243,11 +2292,12 @@ constructor(
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        @JsonDeserialize(builder = Metadata.Builder::class)
         @NoAutoDetect
         class Metadata
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             @JsonAnyGetter
@@ -2267,23 +2317,30 @@ constructor(
 
                 @JvmSynthetic
                 internal fun from(metadata: Metadata) = apply {
-                    additionalProperties(metadata.additionalProperties)
+                    additionalProperties = metadata.additionalProperties.toMutableMap()
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }

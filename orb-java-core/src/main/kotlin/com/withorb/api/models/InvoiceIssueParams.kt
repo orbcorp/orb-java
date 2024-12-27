@@ -4,13 +4,14 @@ package com.withorb.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
+import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
@@ -50,12 +51,13 @@ constructor(
         }
     }
 
-    @JsonDeserialize(builder = InvoiceIssueBody.Builder::class)
     @NoAutoDetect
     class InvoiceIssueBody
+    @JsonCreator
     internal constructor(
-        private val synchronous: Boolean?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("synchronous") private val synchronous: Boolean?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /**
@@ -64,7 +66,8 @@ constructor(
          * fees. If the invoice is configured to sync to an external provider, a successful response
          * from this endpoint guarantees the invoice is present in the provider.
          */
-        @JsonProperty("synchronous") fun synchronous(): Boolean? = synchronous
+        @JsonProperty("synchronous")
+        fun synchronous(): Optional<Boolean> = Optional.ofNullable(synchronous)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -84,8 +87,8 @@ constructor(
 
             @JvmSynthetic
             internal fun from(invoiceIssueBody: InvoiceIssueBody) = apply {
-                this.synchronous = invoiceIssueBody.synchronous
-                additionalProperties(invoiceIssueBody.additionalProperties)
+                synchronous = invoiceIssueBody.synchronous
+                additionalProperties = invoiceIssueBody.additionalProperties.toMutableMap()
             }
 
             /**
@@ -95,21 +98,25 @@ constructor(
              * provider, a successful response from this endpoint guarantees the invoice is present
              * in the provider.
              */
-            @JsonProperty("synchronous")
             fun synchronous(synchronous: Boolean) = apply { this.synchronous = synchronous }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): InvoiceIssueBody =

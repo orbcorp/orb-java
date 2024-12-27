@@ -43,9 +43,9 @@ class DimensionalPriceGroupCreateParamsTest {
         assertThat(body.dimensions()).isEqualTo(listOf("region", "instance_type"))
         assertThat(body.name()).isEqualTo("name")
         assertThat(body.externalDimensionalPriceGroupId())
-            .isEqualTo("external_dimensional_price_group_id")
+            .contains("external_dimensional_price_group_id")
         assertThat(body.metadata())
-            .isEqualTo(
+            .contains(
                 DimensionalPriceGroupCreateParams.Metadata.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()

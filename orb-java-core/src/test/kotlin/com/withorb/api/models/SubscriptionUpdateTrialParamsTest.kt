@@ -41,7 +41,7 @@ class SubscriptionUpdateTrialParamsTest {
                     OffsetDateTime.parse("2017-07-21T17:32:28Z")
                 )
             )
-        assertThat(body.shift()).isEqualTo(true)
+        assertThat(body.shift()).contains(true)
     }
 
     @Test

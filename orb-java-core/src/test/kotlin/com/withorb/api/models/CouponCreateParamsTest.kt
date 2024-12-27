@@ -61,8 +61,8 @@ class CouponCreateParamsTest {
                 )
             )
         assertThat(body.redemptionCode()).isEqualTo("HALFOFF")
-        assertThat(body.durationInMonths()).isEqualTo(12L)
-        assertThat(body.maxRedemptions()).isEqualTo(1L)
+        assertThat(body.durationInMonths()).contains(12L)
+        assertThat(body.maxRedemptions()).contains(1L)
     }
 
     @Test
