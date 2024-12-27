@@ -4,13 +4,14 @@ package com.withorb.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
+import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
@@ -74,44 +75,48 @@ constructor(
         }
     }
 
-    @JsonDeserialize(builder = PriceEvaluateBody.Builder::class)
     @NoAutoDetect
     class PriceEvaluateBody
+    @JsonCreator
     internal constructor(
-        private val timeframeEnd: OffsetDateTime?,
-        private val timeframeStart: OffsetDateTime?,
-        private val customerId: String?,
-        private val externalCustomerId: String?,
-        private val filter: String?,
-        private val groupingKeys: List<String>?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("timeframe_end") private val timeframeEnd: OffsetDateTime,
+        @JsonProperty("timeframe_start") private val timeframeStart: OffsetDateTime,
+        @JsonProperty("customer_id") private val customerId: String?,
+        @JsonProperty("external_customer_id") private val externalCustomerId: String?,
+        @JsonProperty("filter") private val filter: String?,
+        @JsonProperty("grouping_keys") private val groupingKeys: List<String>?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** The exclusive upper bound for event timestamps */
-        @JsonProperty("timeframe_end") fun timeframeEnd(): OffsetDateTime? = timeframeEnd
+        @JsonProperty("timeframe_end") fun timeframeEnd(): OffsetDateTime = timeframeEnd
 
         /** The inclusive lower bound for event timestamps */
-        @JsonProperty("timeframe_start") fun timeframeStart(): OffsetDateTime? = timeframeStart
+        @JsonProperty("timeframe_start") fun timeframeStart(): OffsetDateTime = timeframeStart
 
         /** The ID of the customer to which this evaluation is scoped. */
-        @JsonProperty("customer_id") fun customerId(): String? = customerId
+        @JsonProperty("customer_id")
+        fun customerId(): Optional<String> = Optional.ofNullable(customerId)
 
         /** The external customer ID of the customer to which this evaluation is scoped. */
-        @JsonProperty("external_customer_id") fun externalCustomerId(): String? = externalCustomerId
+        @JsonProperty("external_customer_id")
+        fun externalCustomerId(): Optional<String> = Optional.ofNullable(externalCustomerId)
 
         /**
          * A boolean
          * [computed property](../guides/extensibility/advanced-metrics#computed-properties) used to
          * filter the underlying billable metric
          */
-        @JsonProperty("filter") fun filter(): String? = filter
+        @JsonProperty("filter") fun filter(): Optional<String> = Optional.ofNullable(filter)
 
         /**
          * Properties (or
          * [computed properties](../guides/extensibility/advanced-metrics#computed-properties)) used
          * to group the underlying billable metric
          */
-        @JsonProperty("grouping_keys") fun groupingKeys(): List<String>? = groupingKeys
+        @JsonProperty("grouping_keys")
+        fun groupingKeys(): Optional<List<String>> = Optional.ofNullable(groupingKeys)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -136,33 +141,29 @@ constructor(
 
             @JvmSynthetic
             internal fun from(priceEvaluateBody: PriceEvaluateBody) = apply {
-                this.timeframeEnd = priceEvaluateBody.timeframeEnd
-                this.timeframeStart = priceEvaluateBody.timeframeStart
-                this.customerId = priceEvaluateBody.customerId
-                this.externalCustomerId = priceEvaluateBody.externalCustomerId
-                this.filter = priceEvaluateBody.filter
-                this.groupingKeys = priceEvaluateBody.groupingKeys
-                additionalProperties(priceEvaluateBody.additionalProperties)
+                timeframeEnd = priceEvaluateBody.timeframeEnd
+                timeframeStart = priceEvaluateBody.timeframeStart
+                customerId = priceEvaluateBody.customerId
+                externalCustomerId = priceEvaluateBody.externalCustomerId
+                filter = priceEvaluateBody.filter
+                groupingKeys = priceEvaluateBody.groupingKeys?.toMutableList()
+                additionalProperties = priceEvaluateBody.additionalProperties.toMutableMap()
             }
 
             /** The exclusive upper bound for event timestamps */
-            @JsonProperty("timeframe_end")
             fun timeframeEnd(timeframeEnd: OffsetDateTime) = apply {
                 this.timeframeEnd = timeframeEnd
             }
 
             /** The inclusive lower bound for event timestamps */
-            @JsonProperty("timeframe_start")
             fun timeframeStart(timeframeStart: OffsetDateTime) = apply {
                 this.timeframeStart = timeframeStart
             }
 
             /** The ID of the customer to which this evaluation is scoped. */
-            @JsonProperty("customer_id")
             fun customerId(customerId: String) = apply { this.customerId = customerId }
 
             /** The external customer ID of the customer to which this evaluation is scoped. */
-            @JsonProperty("external_customer_id")
             fun externalCustomerId(externalCustomerId: String) = apply {
                 this.externalCustomerId = externalCustomerId
             }
@@ -172,30 +173,34 @@ constructor(
              * [computed property](../guides/extensibility/advanced-metrics#computed-properties)
              * used to filter the underlying billable metric
              */
-            @JsonProperty("filter") fun filter(filter: String) = apply { this.filter = filter }
+            fun filter(filter: String) = apply { this.filter = filter }
 
             /**
              * Properties (or
              * [computed properties](../guides/extensibility/advanced-metrics#computed-properties))
              * used to group the underlying billable metric
              */
-            @JsonProperty("grouping_keys")
             fun groupingKeys(groupingKeys: List<String>) = apply {
                 this.groupingKeys = groupingKeys
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): PriceEvaluateBody =

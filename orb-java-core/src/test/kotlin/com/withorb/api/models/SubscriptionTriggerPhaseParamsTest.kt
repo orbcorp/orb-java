@@ -25,7 +25,7 @@ class SubscriptionTriggerPhaseParamsTest {
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.effectiveDate()).isEqualTo(LocalDate.parse("2019-12-27"))
+        assertThat(body.effectiveDate()).contains(LocalDate.parse("2019-12-27"))
     }
 
     @Test

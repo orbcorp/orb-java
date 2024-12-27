@@ -30,8 +30,8 @@ class InvoiceMarkPaidParamsTest {
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.paymentReceivedDate()).isEqualTo(LocalDate.parse("2023-09-22"))
-        assertThat(body.externalId()).isEqualTo("external_payment_id_123")
-        assertThat(body.notes()).isEqualTo("notes")
+        assertThat(body.externalId()).contains("external_payment_id_123")
+        assertThat(body.notes()).contains("notes")
     }
 
     @Test

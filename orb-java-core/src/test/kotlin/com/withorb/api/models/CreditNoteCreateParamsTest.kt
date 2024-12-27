@@ -49,8 +49,8 @@ class CreditNoteCreateParamsTest {
                         .build()
                 )
             )
-        assertThat(body.memo()).isEqualTo("An optional memo for my credit note.")
-        assertThat(body.reason()).isEqualTo(CreditNoteCreateParams.Reason.DUPLICATE)
+        assertThat(body.memo()).contains("An optional memo for my credit note.")
+        assertThat(body.reason()).contains(CreditNoteCreateParams.Reason.DUPLICATE)
     }
 
     @Test

@@ -34,7 +34,7 @@ class PriceExternalPriceIdUpdateParamsTest {
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.metadata())
-            .isEqualTo(
+            .contains(
                 PriceExternalPriceIdUpdateParams.Metadata.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()

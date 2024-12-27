@@ -41,16 +41,16 @@ class SubscriptionUpdateParamsTest {
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.autoCollection()).isEqualTo(true)
-        assertThat(body.defaultInvoiceMemo()).isEqualTo("default_invoice_memo")
-        assertThat(body.invoicingThreshold()).isEqualTo("10.00")
+        assertThat(body.autoCollection()).contains(true)
+        assertThat(body.defaultInvoiceMemo()).contains("default_invoice_memo")
+        assertThat(body.invoicingThreshold()).contains("10.00")
         assertThat(body.metadata())
-            .isEqualTo(
+            .contains(
                 SubscriptionUpdateParams.Metadata.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
-        assertThat(body.netTerms()).isEqualTo(0L)
+        assertThat(body.netTerms()).contains(0L)
     }
 
     @Test

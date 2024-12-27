@@ -122,9 +122,9 @@ class InvoiceCreateParamsTest {
                 )
             )
         assertThat(body.netTerms()).isEqualTo(0L)
-        assertThat(body.customerId()).isEqualTo("4khy3nwzktxv7")
+        assertThat(body.customerId()).contains("4khy3nwzktxv7")
         assertThat(body.discount())
-            .isEqualTo(
+            .contains(
                 Discount.ofPercentageDiscount(
                     PercentageDiscount.builder()
                         .appliesToPriceIds(listOf("h74gfhdjvn7ujokd", "7hfgtgjnbvc3ujkl"))
@@ -134,15 +134,15 @@ class InvoiceCreateParamsTest {
                         .build()
                 )
             )
-        assertThat(body.externalCustomerId()).isEqualTo("external-customer-id")
-        assertThat(body.memo()).isEqualTo("An optional memo for my invoice.")
+        assertThat(body.externalCustomerId()).contains("external-customer-id")
+        assertThat(body.memo()).contains("An optional memo for my invoice.")
         assertThat(body.metadata())
-            .isEqualTo(
+            .contains(
                 InvoiceCreateParams.Metadata.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
-        assertThat(body.willAutoIssue()).isEqualTo(false)
+        assertThat(body.willAutoIssue()).contains(false)
     }
 
     @Test

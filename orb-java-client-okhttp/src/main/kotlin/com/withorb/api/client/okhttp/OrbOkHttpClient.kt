@@ -130,7 +130,7 @@ class OrbOkHttpClient private constructor() {
 
         fun apiKey(apiKey: String) = apply { clientOptions.apiKey(apiKey) }
 
-        fun webhookSecret(webhookSecret: String?) = apply {
+        fun webhookSecret(webhookSecret: String) = apply {
             clientOptions.webhookSecret(webhookSecret)
         }
 

@@ -4,13 +4,14 @@ package com.withorb.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
+import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
@@ -60,34 +61,37 @@ constructor(
 
     @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = DimensionalPriceGroupCreateBody.Builder::class)
     @NoAutoDetect
     class DimensionalPriceGroupCreateBody
+    @JsonCreator
     internal constructor(
-        private val billableMetricId: String?,
-        private val dimensions: List<String>?,
-        private val name: String?,
+        @JsonProperty("billable_metric_id") private val billableMetricId: String,
+        @JsonProperty("dimensions") private val dimensions: List<String>,
+        @JsonProperty("name") private val name: String,
+        @JsonProperty("external_dimensional_price_group_id")
         private val externalDimensionalPriceGroupId: String?,
-        private val metadata: Metadata?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("metadata") private val metadata: Metadata?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("billable_metric_id") fun billableMetricId(): String? = billableMetricId
+        @JsonProperty("billable_metric_id") fun billableMetricId(): String = billableMetricId
 
         /** The set of keys (in order) used to disambiguate prices in the group. */
-        @JsonProperty("dimensions") fun dimensions(): List<String>? = dimensions
+        @JsonProperty("dimensions") fun dimensions(): List<String> = dimensions
 
-        @JsonProperty("name") fun name(): String? = name
+        @JsonProperty("name") fun name(): String = name
 
         @JsonProperty("external_dimensional_price_group_id")
-        fun externalDimensionalPriceGroupId(): String? = externalDimensionalPriceGroupId
+        fun externalDimensionalPriceGroupId(): Optional<String> =
+            Optional.ofNullable(externalDimensionalPriceGroupId)
 
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        @JsonProperty("metadata") fun metadata(): Metadata? = metadata
+        @JsonProperty("metadata") fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -112,27 +116,25 @@ constructor(
             @JvmSynthetic
             internal fun from(dimensionalPriceGroupCreateBody: DimensionalPriceGroupCreateBody) =
                 apply {
-                    this.billableMetricId = dimensionalPriceGroupCreateBody.billableMetricId
-                    this.dimensions = dimensionalPriceGroupCreateBody.dimensions
-                    this.name = dimensionalPriceGroupCreateBody.name
-                    this.externalDimensionalPriceGroupId =
+                    billableMetricId = dimensionalPriceGroupCreateBody.billableMetricId
+                    dimensions = dimensionalPriceGroupCreateBody.dimensions.toMutableList()
+                    name = dimensionalPriceGroupCreateBody.name
+                    externalDimensionalPriceGroupId =
                         dimensionalPriceGroupCreateBody.externalDimensionalPriceGroupId
-                    this.metadata = dimensionalPriceGroupCreateBody.metadata
-                    additionalProperties(dimensionalPriceGroupCreateBody.additionalProperties)
+                    metadata = dimensionalPriceGroupCreateBody.metadata
+                    additionalProperties =
+                        dimensionalPriceGroupCreateBody.additionalProperties.toMutableMap()
                 }
 
-            @JsonProperty("billable_metric_id")
             fun billableMetricId(billableMetricId: String) = apply {
                 this.billableMetricId = billableMetricId
             }
 
             /** The set of keys (in order) used to disambiguate prices in the group. */
-            @JsonProperty("dimensions")
             fun dimensions(dimensions: List<String>) = apply { this.dimensions = dimensions }
 
-            @JsonProperty("name") fun name(name: String) = apply { this.name = name }
+            fun name(name: String) = apply { this.name = name }
 
-            @JsonProperty("external_dimensional_price_group_id")
             fun externalDimensionalPriceGroupId(externalDimensionalPriceGroupId: String) = apply {
                 this.externalDimensionalPriceGroupId = externalDimensionalPriceGroupId
             }
@@ -142,21 +144,25 @@ constructor(
              * setting the value to `null`, and the entire metadata mapping can be cleared by
              * setting `metadata` to `null`.
              */
-            @JsonProperty("metadata")
             fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): DimensionalPriceGroupCreateBody =
@@ -390,11 +396,12 @@ constructor(
      * the value to `null`, and the entire metadata mapping can be cleared by setting `metadata` to
      * `null`.
      */
-    @JsonDeserialize(builder = Metadata.Builder::class)
     @NoAutoDetect
     class Metadata
+    @JsonCreator
     private constructor(
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonAnyGetter
@@ -414,21 +421,26 @@ constructor(
 
             @JvmSynthetic
             internal fun from(metadata: Metadata) = apply {
-                additionalProperties(metadata.additionalProperties)
+                additionalProperties = metadata.additionalProperties.toMutableMap()
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Metadata = Metadata(additionalProperties.toImmutable())

@@ -168,7 +168,7 @@ class CustomerCreateParamsTest {
         assertThat(body.email()).isEqualTo("dev@stainlessapi.com")
         assertThat(body.name()).isEqualTo("x")
         assertThat(body.accountingSyncConfiguration())
-            .isEqualTo(
+            .contains(
                 CustomerCreateParams.AccountingSyncConfiguration.builder()
                     .accountingProviders(
                         listOf(
@@ -182,10 +182,10 @@ class CustomerCreateParamsTest {
                     .excluded(true)
                     .build()
             )
-        assertThat(body.additionalEmails()).isEqualTo(listOf("string"))
-        assertThat(body.autoCollection()).isEqualTo(true)
+        assertThat(body.additionalEmails()).contains(listOf("string"))
+        assertThat(body.autoCollection()).contains(true)
         assertThat(body.billingAddress())
-            .isEqualTo(
+            .contains(
                 CustomerCreateParams.BillingAddress.builder()
                     .city("city")
                     .country("country")
@@ -195,22 +195,21 @@ class CustomerCreateParamsTest {
                     .state("state")
                     .build()
             )
-        assertThat(body.currency()).isEqualTo("currency")
-        assertThat(body.emailDelivery()).isEqualTo(true)
-        assertThat(body.externalCustomerId()).isEqualTo("external_customer_id")
+        assertThat(body.currency()).contains("currency")
+        assertThat(body.emailDelivery()).contains(true)
+        assertThat(body.externalCustomerId()).contains("external_customer_id")
         assertThat(body.metadata())
-            .isEqualTo(
+            .contains(
                 CustomerCreateParams.Metadata.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
-        assertThat(body.paymentProvider())
-            .isEqualTo(CustomerCreateParams.PaymentProvider.QUICKBOOKS)
-        assertThat(body.paymentProviderId()).isEqualTo("payment_provider_id")
+        assertThat(body.paymentProvider()).contains(CustomerCreateParams.PaymentProvider.QUICKBOOKS)
+        assertThat(body.paymentProviderId()).contains("payment_provider_id")
         assertThat(body.reportingConfiguration())
-            .isEqualTo(CustomerCreateParams.ReportingConfiguration.builder().exempt(true).build())
+            .contains(CustomerCreateParams.ReportingConfiguration.builder().exempt(true).build())
         assertThat(body.shippingAddress())
-            .isEqualTo(
+            .contains(
                 CustomerCreateParams.ShippingAddress.builder()
                     .city("city")
                     .country("country")
@@ -221,7 +220,7 @@ class CustomerCreateParamsTest {
                     .build()
             )
         assertThat(body.taxConfiguration())
-            .isEqualTo(
+            .contains(
                 CustomerCreateParams.TaxConfiguration.ofNewAvalaraTaxConfiguration(
                     CustomerCreateParams.TaxConfiguration.NewAvalaraTaxConfiguration.builder()
                         .taxExempt(true)
@@ -235,14 +234,14 @@ class CustomerCreateParamsTest {
                 )
             )
         assertThat(body.taxId())
-            .isEqualTo(
+            .contains(
                 CustomerCreateParams.TaxId.builder()
                     .country(CustomerCreateParams.TaxId.Country.AD)
                     .type(CustomerCreateParams.TaxId.Type.AD_NRT)
                     .value("value")
                     .build()
             )
-        assertThat(body.timezone()).isEqualTo("timezone")
+        assertThat(body.timezone()).contains("timezone")
     }
 
     @Test

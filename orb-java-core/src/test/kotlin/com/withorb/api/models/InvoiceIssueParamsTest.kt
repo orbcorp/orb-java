@@ -17,7 +17,7 @@ class InvoiceIssueParamsTest {
         val params = InvoiceIssueParams.builder().invoiceId("invoice_id").synchronous(true).build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.synchronous()).isEqualTo(true)
+        assertThat(body.synchronous()).contains(true)
     }
 
     @Test

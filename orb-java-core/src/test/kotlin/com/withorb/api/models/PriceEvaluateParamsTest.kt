@@ -38,12 +38,12 @@ class PriceEvaluateParamsTest {
         assertThat(body.timeframeEnd()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(body.timeframeStart())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(body.customerId()).isEqualTo("customer_id")
-        assertThat(body.externalCustomerId()).isEqualTo("external_customer_id")
+        assertThat(body.customerId()).contains("customer_id")
+        assertThat(body.externalCustomerId()).contains("external_customer_id")
         assertThat(body.filter())
-            .isEqualTo("my_numeric_property > 100 AND my_other_property = 'bar'")
+            .contains("my_numeric_property > 100 AND my_other_property = 'bar'")
         assertThat(body.groupingKeys())
-            .isEqualTo(listOf("case when my_event_type = 'foo' then true else false end"))
+            .contains(listOf("case when my_event_type = 'foo' then true else false end"))
     }
 
     @Test

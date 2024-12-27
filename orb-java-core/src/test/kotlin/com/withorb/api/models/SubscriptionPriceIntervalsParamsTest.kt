@@ -453,7 +453,7 @@ class SubscriptionPriceIntervalsParamsTest {
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.add())
-            .isEqualTo(
+            .contains(
                 listOf(
                     SubscriptionPriceIntervalsParams.Add.builder()
                         .startDate(
@@ -586,7 +586,7 @@ class SubscriptionPriceIntervalsParamsTest {
                 )
             )
         assertThat(body.addAdjustments())
-            .isEqualTo(
+            .contains(
                 listOf(
                     SubscriptionPriceIntervalsParams.AddAdjustment.builder()
                         .adjustment(
@@ -622,7 +622,7 @@ class SubscriptionPriceIntervalsParamsTest {
                 )
             )
         assertThat(body.edit())
-            .isEqualTo(
+            .contains(
                 listOf(
                     SubscriptionPriceIntervalsParams.Edit.builder()
                         .priceIntervalId("sdfs6wdjvn7ujokd")
@@ -650,7 +650,7 @@ class SubscriptionPriceIntervalsParamsTest {
                 )
             )
         assertThat(body.editAdjustments())
-            .isEqualTo(
+            .contains(
                 listOf(
                     SubscriptionPriceIntervalsParams.EditAdjustment.builder()
                         .adjustmentIntervalId("sdfs6wdjvn7ujokd")
