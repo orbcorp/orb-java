@@ -21,12 +21,21 @@ constructor(
 
     fun customerId(): String = customerId
 
+    /** The ledger currency or custom pricing unit to use. */
     fun currency(): Optional<String> = Optional.ofNullable(currency)
 
+    /**
+     * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
+     * initial request.
+     */
     fun cursor(): Optional<String> = Optional.ofNullable(cursor)
 
+    /**
+     * If set to True, all expired and depleted blocks, as well as active block will be returned.
+     */
     fun includeAllBlocks(): Optional<Boolean> = Optional.ofNullable(includeAllBlocks)
 
+    /** The number of items to fetch. Defaults to 20. */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
     fun _additionalHeaders(): Headers = additionalHeaders

@@ -47,6 +47,10 @@ constructor(
 
     fun amountLt(): Optional<String> = Optional.ofNullable(amountLt)
 
+    /**
+     * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
+     * initial request.
+     */
     fun cursor(): Optional<String> = Optional.ofNullable(cursor)
 
     fun customerId(): Optional<String> = Optional.ofNullable(customerId)
@@ -55,6 +59,11 @@ constructor(
 
     fun dueDate(): Optional<LocalDate> = Optional.ofNullable(dueDate)
 
+    /**
+     * Filters invoices by their due dates within a specific time range in the past. Specify the
+     * range as a number followed by 'd' (days) or 'm' (months). For example, '7d' filters invoices
+     * due in the last 7 days, and '2m' filters those due in the last 2 months.
+     */
     fun dueDateWindow(): Optional<String> = Optional.ofNullable(dueDateWindow)
 
     fun dueDateGt(): Optional<LocalDate> = Optional.ofNullable(dueDateGt)
@@ -73,6 +82,7 @@ constructor(
 
     fun isRecurring(): Optional<Boolean> = Optional.ofNullable(isRecurring)
 
+    /** The number of items to fetch. Defaults to 20. */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
     fun status(): Optional<List<Status>> = Optional.ofNullable(status)
@@ -160,7 +170,7 @@ constructor(
         private var invoiceDateLte: OffsetDateTime? = null
         private var isRecurring: Boolean? = null
         private var limit: Long? = null
-        private var status: MutableList<Status> = mutableListOf()
+        private var status: MutableList<Status>? = null
         private var subscriptionId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -184,7 +194,7 @@ constructor(
             invoiceDateLte = invoiceListParams.invoiceDateLte
             isRecurring = invoiceListParams.isRecurring
             limit = invoiceListParams.limit
-            status = invoiceListParams.status?.toMutableList() ?: mutableListOf()
+            status = invoiceListParams.status?.toMutableList()
             subscriptionId = invoiceListParams.subscriptionId
             additionalHeaders = invoiceListParams.additionalHeaders.toBuilder()
             additionalQueryParams = invoiceListParams.additionalQueryParams.toBuilder()
@@ -244,12 +254,11 @@ constructor(
         /** The number of items to fetch. Defaults to 20. */
         fun limit(limit: Long) = apply { this.limit = limit }
 
-        fun status(status: List<Status>) = apply {
-            this.status.clear()
-            this.status.addAll(status)
-        }
+        fun status(status: List<Status>) = apply { this.status = status.toMutableList() }
 
-        fun addStatus(status: Status) = apply { this.status.add(status) }
+        fun addStatus(status: Status) = apply {
+            this.status = (this.status ?: mutableListOf()).apply { add(status) }
+        }
 
         fun subscriptionId(subscriptionId: String) = apply { this.subscriptionId = subscriptionId }
 
@@ -370,7 +379,7 @@ constructor(
                 invoiceDateLte,
                 isRecurring,
                 limit,
-                status.toImmutable().ifEmpty { null },
+                status?.toImmutable(),
                 subscriptionId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),

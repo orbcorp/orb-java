@@ -25,8 +25,13 @@ constructor(
 
     fun subscriptionId(): String = subscriptionId
 
+    /**
+     * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
+     * initial request.
+     */
     fun cursor(): Optional<String> = Optional.ofNullable(cursor)
 
+    /** The number of items to fetch. Defaults to 20. */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
     fun startDateGt(): Optional<OffsetDateTime> = Optional.ofNullable(startDateGt)

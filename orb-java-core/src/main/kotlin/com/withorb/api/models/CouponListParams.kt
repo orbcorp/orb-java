@@ -18,12 +18,19 @@ constructor(
     private val additionalQueryParams: QueryParams,
 ) {
 
+    /**
+     * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
+     * initial request.
+     */
     fun cursor(): Optional<String> = Optional.ofNullable(cursor)
 
+    /** The number of items to fetch. Defaults to 20. */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
+    /** Filter to coupons matching this redemption code. */
     fun redemptionCode(): Optional<String> = Optional.ofNullable(redemptionCode)
 
+    /** Show archived coupons as well (by default, this endpoint only returns active coupons). */
     fun showArchived(): Optional<Boolean> = Optional.ofNullable(showArchived)
 
     fun _additionalHeaders(): Headers = additionalHeaders
