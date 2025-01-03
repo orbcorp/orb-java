@@ -24,11 +24,6 @@ import java.util.Optional
  * spending, usage, or credit balance and trigger webhooks when a threshold is exceeded.
  *
  * Alerts created through the API can be scoped to either customers or subscriptions.
- *
- * |Scope       |Monitors                      |Vaild Alert Types                                                                  |
- * |------------|------------------------------|-----------------------------------------------------------------------------------|
- * |Customer    |A customer's credit balance   |`credit_balance_depleted`, `credit_balance_recovered`, and `credit_balance_dropped`|
- * |Subscription|A subscription's usage or cost|`usage_exceeded` and `cost_exceeded`                                               |
  */
 @NoAutoDetect
 class Alert
@@ -285,9 +280,24 @@ private constructor(
     class Customer
     @JsonCreator
     private constructor(
+        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("external_customer_id")
+        @ExcludeMissing
+        private val externalCustomerId: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
+
+        fun id(): String = id.getRequired("id")
+
+        fun externalCustomerId(): Optional<String> =
+            Optional.ofNullable(externalCustomerId.getNullable("external_customer_id"))
+
+        @JsonProperty("id") @ExcludeMissing fun _id() = id
+
+        @JsonProperty("external_customer_id")
+        @ExcludeMissing
+        fun _externalCustomerId() = externalCustomerId
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -297,6 +307,8 @@ private constructor(
 
         fun validate(): Customer = apply {
             if (!validated) {
+                id()
+                externalCustomerId()
                 validated = true
             }
         }
@@ -310,11 +322,26 @@ private constructor(
 
         class Builder {
 
+            private var id: JsonField<String> = JsonMissing.of()
+            private var externalCustomerId: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(customer: Customer) = apply {
+                id = customer.id
+                externalCustomerId = customer.externalCustomerId
                 additionalProperties = customer.additionalProperties.toMutableMap()
+            }
+
+            fun id(id: String) = id(JsonField.of(id))
+
+            fun id(id: JsonField<String>) = apply { this.id = id }
+
+            fun externalCustomerId(externalCustomerId: String) =
+                externalCustomerId(JsonField.of(externalCustomerId))
+
+            fun externalCustomerId(externalCustomerId: JsonField<String>) = apply {
+                this.externalCustomerId = externalCustomerId
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -336,7 +363,12 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): Customer = Customer(additionalProperties.toImmutable())
+            fun build(): Customer =
+                Customer(
+                    id,
+                    externalCustomerId,
+                    additionalProperties.toImmutable(),
+                )
         }
 
         override fun equals(other: Any?): Boolean {
@@ -344,16 +376,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Customer && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Customer && id == other.id && externalCustomerId == other.externalCustomerId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, externalCustomerId, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() = "Customer{additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "Customer{id=$id, externalCustomerId=$externalCustomerId, additionalProperties=$additionalProperties}"
     }
 
     /** The metric the alert applies to. */
@@ -361,9 +394,14 @@ private constructor(
     class Metric
     @JsonCreator
     private constructor(
+        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
+
+        fun id(): String = id.getRequired("id")
+
+        @JsonProperty("id") @ExcludeMissing fun _id() = id
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -373,6 +411,7 @@ private constructor(
 
         fun validate(): Metric = apply {
             if (!validated) {
+                id()
                 validated = true
             }
         }
@@ -386,12 +425,18 @@ private constructor(
 
         class Builder {
 
+            private var id: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(metric: Metric) = apply {
+                id = metric.id
                 additionalProperties = metric.additionalProperties.toMutableMap()
             }
+
+            fun id(id: String) = id(JsonField.of(id))
+
+            fun id(id: JsonField<String>) = apply { this.id = id }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -412,7 +457,7 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): Metric = Metric(additionalProperties.toImmutable())
+            fun build(): Metric = Metric(id, additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -420,16 +465,16 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Metric && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Metric && id == other.id && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() = "Metric{additionalProperties=$additionalProperties}"
+        override fun toString() = "Metric{id=$id, additionalProperties=$additionalProperties}"
     }
 
     /** The plan the alert applies to. */
@@ -437,9 +482,46 @@ private constructor(
     class Plan
     @JsonCreator
     private constructor(
+        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("external_plan_id")
+        @ExcludeMissing
+        private val externalPlanId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("plan_version")
+        @ExcludeMissing
+        private val planVersion: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
+
+        fun id(): Optional<String> = Optional.ofNullable(id.getNullable("id"))
+
+        /**
+         * An optional user-defined ID for this plan resource, used throughout the system as an
+         * alias for this Plan. Use this field to identify a plan by an existing identifier in your
+         * system.
+         */
+        fun externalPlanId(): Optional<String> =
+            Optional.ofNullable(externalPlanId.getNullable("external_plan_id"))
+
+        fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
+
+        fun planVersion(): String = planVersion.getRequired("plan_version")
+
+        @JsonProperty("id") @ExcludeMissing fun _id() = id
+
+        /**
+         * An optional user-defined ID for this plan resource, used throughout the system as an
+         * alias for this Plan. Use this field to identify a plan by an existing identifier in your
+         * system.
+         */
+        @JsonProperty("external_plan_id") @ExcludeMissing fun _externalPlanId() = externalPlanId
+
+        @JsonProperty("name") @ExcludeMissing fun _name() = name
+
+        @JsonProperty("plan_version") @ExcludeMissing fun _planVersion() = planVersion
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -449,6 +531,10 @@ private constructor(
 
         fun validate(): Plan = apply {
             if (!validated) {
+                id()
+                externalPlanId()
+                name()
+                planVersion()
                 validated = true
             }
         }
@@ -462,11 +548,50 @@ private constructor(
 
         class Builder {
 
+            private var id: JsonField<String> = JsonMissing.of()
+            private var externalPlanId: JsonField<String> = JsonMissing.of()
+            private var name: JsonField<String> = JsonMissing.of()
+            private var planVersion: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(plan: Plan) = apply {
+                id = plan.id
+                externalPlanId = plan.externalPlanId
+                name = plan.name
+                planVersion = plan.planVersion
                 additionalProperties = plan.additionalProperties.toMutableMap()
+            }
+
+            fun id(id: String) = id(JsonField.of(id))
+
+            fun id(id: JsonField<String>) = apply { this.id = id }
+
+            /**
+             * An optional user-defined ID for this plan resource, used throughout the system as an
+             * alias for this Plan. Use this field to identify a plan by an existing identifier in
+             * your system.
+             */
+            fun externalPlanId(externalPlanId: String) =
+                externalPlanId(JsonField.of(externalPlanId))
+
+            /**
+             * An optional user-defined ID for this plan resource, used throughout the system as an
+             * alias for this Plan. Use this field to identify a plan by an existing identifier in
+             * your system.
+             */
+            fun externalPlanId(externalPlanId: JsonField<String>) = apply {
+                this.externalPlanId = externalPlanId
+            }
+
+            fun name(name: String) = name(JsonField.of(name))
+
+            fun name(name: JsonField<String>) = apply { this.name = name }
+
+            fun planVersion(planVersion: String) = planVersion(JsonField.of(planVersion))
+
+            fun planVersion(planVersion: JsonField<String>) = apply {
+                this.planVersion = planVersion
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -488,7 +613,14 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): Plan = Plan(additionalProperties.toImmutable())
+            fun build(): Plan =
+                Plan(
+                    id,
+                    externalPlanId,
+                    name,
+                    planVersion,
+                    additionalProperties.toImmutable(),
+                )
         }
 
         override fun equals(other: Any?): Boolean {
@@ -496,16 +628,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Plan && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Plan && id == other.id && externalPlanId == other.externalPlanId && name == other.name && planVersion == other.planVersion && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, externalPlanId, name, planVersion, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() = "Plan{additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "Plan{id=$id, externalPlanId=$externalPlanId, name=$name, planVersion=$planVersion, additionalProperties=$additionalProperties}"
     }
 
     /** The subscription the alert applies to. */
@@ -513,9 +646,14 @@ private constructor(
     class Subscription
     @JsonCreator
     private constructor(
+        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
+
+        fun id(): String = id.getRequired("id")
+
+        @JsonProperty("id") @ExcludeMissing fun _id() = id
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -525,6 +663,7 @@ private constructor(
 
         fun validate(): Subscription = apply {
             if (!validated) {
+                id()
                 validated = true
             }
         }
@@ -538,12 +677,18 @@ private constructor(
 
         class Builder {
 
+            private var id: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(subscription: Subscription) = apply {
+                id = subscription.id
                 additionalProperties = subscription.additionalProperties.toMutableMap()
             }
+
+            fun id(id: String) = id(JsonField.of(id))
+
+            fun id(id: JsonField<String>) = apply { this.id = id }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -564,7 +709,7 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): Subscription = Subscription(additionalProperties.toImmutable())
+            fun build(): Subscription = Subscription(id, additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -572,16 +717,16 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Subscription && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Subscription && id == other.id && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() = "Subscription{additionalProperties=$additionalProperties}"
+        override fun toString() = "Subscription{id=$id, additionalProperties=$additionalProperties}"
     }
 
     /** Thresholds are used to define the conditions under which an alert will be triggered. */
