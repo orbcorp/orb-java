@@ -18,44 +18,34 @@ import java.util.Optional
 
 class DimensionalPriceGroupCreateParams
 constructor(
-    private val billableMetricId: String,
-    private val dimensions: List<String>,
-    private val name: String,
-    private val externalDimensionalPriceGroupId: String?,
-    private val metadata: Metadata?,
+    private val body: DimensionalPriceGroupCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun billableMetricId(): String = billableMetricId
+    fun billableMetricId(): String = body.billableMetricId()
 
-    fun dimensions(): List<String> = dimensions
+    /** The set of keys (in order) used to disambiguate prices in the group. */
+    fun dimensions(): List<String> = body.dimensions()
 
-    fun name(): String = name
+    fun name(): String = body.name()
 
-    fun externalDimensionalPriceGroupId(): Optional<String> =
-        Optional.ofNullable(externalDimensionalPriceGroupId)
+    fun externalDimensionalPriceGroupId(): Optional<String> = body.externalDimensionalPriceGroupId()
 
-    fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+    /**
+     * User-specified key/value pairs for the resource. Individual keys can be removed by setting
+     * the value to `null`, and the entire metadata mapping can be cleared by setting `metadata` to
+     * `null`.
+     */
+    fun metadata(): Optional<Metadata> = body.metadata()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): DimensionalPriceGroupCreateBody {
-        return DimensionalPriceGroupCreateBody(
-            billableMetricId,
-            dimensions,
-            name,
-            externalDimensionalPriceGroupId,
-            metadata,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): DimensionalPriceGroupCreateBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -107,7 +97,7 @@ constructor(
         class Builder {
 
             private var billableMetricId: String? = null
-            private var dimensions: List<String>? = null
+            private var dimensions: MutableList<String>? = null
             private var name: String? = null
             private var externalDimensionalPriceGroupId: String? = null
             private var metadata: Metadata? = null
@@ -131,7 +121,14 @@ constructor(
             }
 
             /** The set of keys (in order) used to disambiguate prices in the group. */
-            fun dimensions(dimensions: List<String>) = apply { this.dimensions = dimensions }
+            fun dimensions(dimensions: List<String>) = apply {
+                this.dimensions = dimensions.toMutableList()
+            }
+
+            /** The set of keys (in order) used to disambiguate prices in the group. */
+            fun addDimension(dimension: String) = apply {
+                dimensions = (dimensions ?: mutableListOf()).apply { add(dimension) }
+            }
 
             fun name(name: String) = apply { this.name = name }
 
@@ -207,48 +204,34 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var billableMetricId: String? = null
-        private var dimensions: MutableList<String> = mutableListOf()
-        private var name: String? = null
-        private var externalDimensionalPriceGroupId: String? = null
-        private var metadata: Metadata? = null
+        private var body: DimensionalPriceGroupCreateBody.Builder =
+            DimensionalPriceGroupCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(dimensionalPriceGroupCreateParams: DimensionalPriceGroupCreateParams) =
             apply {
-                billableMetricId = dimensionalPriceGroupCreateParams.billableMetricId
-                dimensions = dimensionalPriceGroupCreateParams.dimensions.toMutableList()
-                name = dimensionalPriceGroupCreateParams.name
-                externalDimensionalPriceGroupId =
-                    dimensionalPriceGroupCreateParams.externalDimensionalPriceGroupId
-                metadata = dimensionalPriceGroupCreateParams.metadata
+                body = dimensionalPriceGroupCreateParams.body.toBuilder()
                 additionalHeaders = dimensionalPriceGroupCreateParams.additionalHeaders.toBuilder()
                 additionalQueryParams =
                     dimensionalPriceGroupCreateParams.additionalQueryParams.toBuilder()
-                additionalBodyProperties =
-                    dimensionalPriceGroupCreateParams.additionalBodyProperties.toMutableMap()
             }
 
         fun billableMetricId(billableMetricId: String) = apply {
-            this.billableMetricId = billableMetricId
+            body.billableMetricId(billableMetricId)
         }
 
         /** The set of keys (in order) used to disambiguate prices in the group. */
-        fun dimensions(dimensions: List<String>) = apply {
-            this.dimensions.clear()
-            this.dimensions.addAll(dimensions)
-        }
+        fun dimensions(dimensions: List<String>) = apply { body.dimensions(dimensions) }
 
         /** The set of keys (in order) used to disambiguate prices in the group. */
-        fun addDimension(dimension: String) = apply { this.dimensions.add(dimension) }
+        fun addDimension(dimension: String) = apply { body.addDimension(dimension) }
 
-        fun name(name: String) = apply { this.name = name }
+        fun name(name: String) = apply { body.name(name) }
 
         fun externalDimensionalPriceGroupId(externalDimensionalPriceGroupId: String) = apply {
-            this.externalDimensionalPriceGroupId = externalDimensionalPriceGroupId
+            body.externalDimensionalPriceGroupId(externalDimensionalPriceGroupId)
         }
 
         /**
@@ -256,7 +239,7 @@ constructor(
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+        fun metadata(metadata: Metadata) = apply { body.metadata(metadata) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -357,37 +340,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): DimensionalPriceGroupCreateParams =
             DimensionalPriceGroupCreateParams(
-                checkNotNull(billableMetricId) { "`billableMetricId` is required but was not set" },
-                dimensions.toImmutable(),
-                checkNotNull(name) { "`name` is required but was not set" },
-                externalDimensionalPriceGroupId,
-                metadata,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -468,11 +443,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is DimensionalPriceGroupCreateParams && billableMetricId == other.billableMetricId && dimensions == other.dimensions && name == other.name && externalDimensionalPriceGroupId == other.externalDimensionalPriceGroupId && metadata == other.metadata && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is DimensionalPriceGroupCreateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(billableMetricId, dimensions, name, externalDimensionalPriceGroupId, metadata, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "DimensionalPriceGroupCreateParams{billableMetricId=$billableMetricId, dimensions=$dimensions, name=$name, externalDimensionalPriceGroupId=$externalDimensionalPriceGroupId, metadata=$metadata, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "DimensionalPriceGroupCreateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

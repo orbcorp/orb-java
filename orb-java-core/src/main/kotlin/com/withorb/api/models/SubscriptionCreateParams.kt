@@ -33,149 +33,156 @@ import kotlin.jvm.optionals.getOrNull
 
 class SubscriptionCreateParams
 constructor(
-    private val addAdjustments: List<AddAdjustment>?,
-    private val addPrices: List<AddPrice>?,
-    private val alignBillingWithSubscriptionStartDate: Boolean?,
-    private val autoCollection: Boolean?,
-    private val awsRegion: String?,
-    private val billingCycleAnchorConfiguration: BillingCycleAnchorConfiguration?,
-    private val couponRedemptionCode: String?,
-    private val creditsOverageRate: Double?,
-    private val customerId: String?,
-    private val defaultInvoiceMemo: String?,
-    private val endDate: OffsetDateTime?,
-    private val externalCustomerId: String?,
-    private val externalMarketplace: ExternalMarketplace?,
-    private val externalMarketplaceReportingId: String?,
-    private val externalPlanId: String?,
-    private val filter: String?,
-    private val initialPhaseOrder: Long?,
-    private val invoicingThreshold: String?,
-    private val metadata: Metadata?,
-    private val netTerms: Long?,
-    private val perCreditOverageAmount: Double?,
-    private val planId: String?,
-    private val planVersionNumber: Long?,
-    private val priceOverrides: List<JsonValue>?,
-    private val removeAdjustments: List<RemoveAdjustment>?,
-    private val removePrices: List<RemovePrice>?,
-    private val replaceAdjustments: List<ReplaceAdjustment>?,
-    private val replacePrices: List<ReplacePrice>?,
-    private val startDate: OffsetDateTime?,
-    private val trialDurationDays: Long?,
+    private val body: SubscriptionCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun addAdjustments(): Optional<List<AddAdjustment>> = Optional.ofNullable(addAdjustments)
+    /**
+     * Additional adjustments to be added to the subscription. (Only available for accounts that
+     * have migrated off of legacy subscription overrides)
+     */
+    fun addAdjustments(): Optional<List<AddAdjustment>> = body.addAdjustments()
 
-    fun addPrices(): Optional<List<AddPrice>> = Optional.ofNullable(addPrices)
+    /**
+     * Additional prices to be added to the subscription. (Only available for accounts that have
+     * migrated off of legacy subscription overrides)
+     */
+    fun addPrices(): Optional<List<AddPrice>> = body.addPrices()
 
     fun alignBillingWithSubscriptionStartDate(): Optional<Boolean> =
-        Optional.ofNullable(alignBillingWithSubscriptionStartDate)
+        body.alignBillingWithSubscriptionStartDate()
 
-    fun autoCollection(): Optional<Boolean> = Optional.ofNullable(autoCollection)
+    /**
+     * Determines whether issued invoices for this subscription will automatically be charged with
+     * the saved payment method on the due date. If not specified, this defaults to the behavior
+     * configured for this customer.
+     */
+    fun autoCollection(): Optional<Boolean> = body.autoCollection()
 
-    fun awsRegion(): Optional<String> = Optional.ofNullable(awsRegion)
+    fun awsRegion(): Optional<String> = body.awsRegion()
 
     fun billingCycleAnchorConfiguration(): Optional<BillingCycleAnchorConfiguration> =
-        Optional.ofNullable(billingCycleAnchorConfiguration)
+        body.billingCycleAnchorConfiguration()
 
-    fun couponRedemptionCode(): Optional<String> = Optional.ofNullable(couponRedemptionCode)
+    /**
+     * Redemption code to be used for this subscription. If the coupon cannot be found by its
+     * redemption code, or cannot be redeemed, an error response will be returned and the
+     * subscription creation or plan change will not be scheduled.
+     */
+    fun couponRedemptionCode(): Optional<String> = body.couponRedemptionCode()
 
-    fun creditsOverageRate(): Optional<Double> = Optional.ofNullable(creditsOverageRate)
+    fun creditsOverageRate(): Optional<Double> = body.creditsOverageRate()
 
-    fun customerId(): Optional<String> = Optional.ofNullable(customerId)
+    fun customerId(): Optional<String> = body.customerId()
 
-    fun defaultInvoiceMemo(): Optional<String> = Optional.ofNullable(defaultInvoiceMemo)
+    /**
+     * Determines the default memo on this subscription's invoices. Note that if this is not
+     * provided, it is determined by the plan configuration.
+     */
+    fun defaultInvoiceMemo(): Optional<String> = body.defaultInvoiceMemo()
 
-    fun endDate(): Optional<OffsetDateTime> = Optional.ofNullable(endDate)
+    fun endDate(): Optional<OffsetDateTime> = body.endDate()
 
-    fun externalCustomerId(): Optional<String> = Optional.ofNullable(externalCustomerId)
+    fun externalCustomerId(): Optional<String> = body.externalCustomerId()
 
-    fun externalMarketplace(): Optional<ExternalMarketplace> =
-        Optional.ofNullable(externalMarketplace)
+    fun externalMarketplace(): Optional<ExternalMarketplace> = body.externalMarketplace()
 
-    fun externalMarketplaceReportingId(): Optional<String> =
-        Optional.ofNullable(externalMarketplaceReportingId)
+    fun externalMarketplaceReportingId(): Optional<String> = body.externalMarketplaceReportingId()
 
-    fun externalPlanId(): Optional<String> = Optional.ofNullable(externalPlanId)
+    /**
+     * The external_plan_id of the plan that the given subscription should be switched to. Note that
+     * either this property or `plan_id` must be specified.
+     */
+    fun externalPlanId(): Optional<String> = body.externalPlanId()
 
-    fun filter(): Optional<String> = Optional.ofNullable(filter)
+    /**
+     * An additional filter to apply to usage queries. This filter must be expressed as a boolean
+     * [computed property](../guides/extensibility/advanced-metrics#computed-properties). If null,
+     * usage queries will not include any additional filter.
+     */
+    fun filter(): Optional<String> = body.filter()
 
-    fun initialPhaseOrder(): Optional<Long> = Optional.ofNullable(initialPhaseOrder)
+    /** The phase of the plan to start with */
+    fun initialPhaseOrder(): Optional<Long> = body.initialPhaseOrder()
 
-    fun invoicingThreshold(): Optional<String> = Optional.ofNullable(invoicingThreshold)
+    /**
+     * When this subscription's accrued usage reaches this threshold, an invoice will be issued for
+     * the subscription. If not specified, invoices will only be issued at the end of the billing
+     * period.
+     */
+    fun invoicingThreshold(): Optional<String> = body.invoicingThreshold()
 
-    fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+    /**
+     * User-specified key/value pairs for the resource. Individual keys can be removed by setting
+     * the value to `null`, and the entire metadata mapping can be cleared by setting `metadata` to
+     * `null`.
+     */
+    fun metadata(): Optional<Metadata> = body.metadata()
 
-    fun netTerms(): Optional<Long> = Optional.ofNullable(netTerms)
+    /**
+     * The net terms determines the difference between the invoice date and the issue date for the
+     * invoice. If you intend the invoice to be due on issue, set this to 0. If not provided, this
+     * defaults to the value specified in the plan.
+     */
+    fun netTerms(): Optional<Long> = body.netTerms()
 
-    fun perCreditOverageAmount(): Optional<Double> = Optional.ofNullable(perCreditOverageAmount)
+    fun perCreditOverageAmount(): Optional<Double> = body.perCreditOverageAmount()
 
-    fun planId(): Optional<String> = Optional.ofNullable(planId)
+    /**
+     * The plan that the given subscription should be switched to. Note that either this property or
+     * `external_plan_id` must be specified.
+     */
+    fun planId(): Optional<String> = body.planId()
 
-    fun planVersionNumber(): Optional<Long> = Optional.ofNullable(planVersionNumber)
+    /**
+     * Specifies which version of the plan to subscribe to. If null, the default version will be
+     * used.
+     */
+    fun planVersionNumber(): Optional<Long> = body.planVersionNumber()
 
-    fun priceOverrides(): Optional<List<JsonValue>> = Optional.ofNullable(priceOverrides)
+    /** Optionally provide a list of overrides for prices on the plan */
+    fun priceOverrides(): Optional<List<JsonValue>> = body.priceOverrides()
 
-    fun removeAdjustments(): Optional<List<RemoveAdjustment>> =
-        Optional.ofNullable(removeAdjustments)
+    /**
+     * Plan adjustments to be removed from the subscription. (Only available for accounts that have
+     * migrated off of legacy subscription overrides)
+     */
+    fun removeAdjustments(): Optional<List<RemoveAdjustment>> = body.removeAdjustments()
 
-    fun removePrices(): Optional<List<RemovePrice>> = Optional.ofNullable(removePrices)
+    /**
+     * Plan prices to be removed from the subscription. (Only available for accounts that have
+     * migrated off of legacy subscription overrides)
+     */
+    fun removePrices(): Optional<List<RemovePrice>> = body.removePrices()
 
-    fun replaceAdjustments(): Optional<List<ReplaceAdjustment>> =
-        Optional.ofNullable(replaceAdjustments)
+    /**
+     * Plan adjustments to be replaced with additional adjustments on the subscription. (Only
+     * available for accounts that have migrated off of legacy subscription overrides)
+     */
+    fun replaceAdjustments(): Optional<List<ReplaceAdjustment>> = body.replaceAdjustments()
 
-    fun replacePrices(): Optional<List<ReplacePrice>> = Optional.ofNullable(replacePrices)
+    /**
+     * Plan prices to be replaced with additional prices on the subscription. (Only available for
+     * accounts that have migrated off of legacy subscription overrides)
+     */
+    fun replacePrices(): Optional<List<ReplacePrice>> = body.replacePrices()
 
-    fun startDate(): Optional<OffsetDateTime> = Optional.ofNullable(startDate)
+    fun startDate(): Optional<OffsetDateTime> = body.startDate()
 
-    fun trialDurationDays(): Optional<Long> = Optional.ofNullable(trialDurationDays)
+    /**
+     * The duration of the trial period in days. If not provided, this defaults to the value
+     * specified in the plan. If `0` is provided, the trial on the plan will be skipped.
+     */
+    fun trialDurationDays(): Optional<Long> = body.trialDurationDays()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): SubscriptionCreateBody {
-        return SubscriptionCreateBody(
-            addAdjustments,
-            addPrices,
-            alignBillingWithSubscriptionStartDate,
-            autoCollection,
-            awsRegion,
-            billingCycleAnchorConfiguration,
-            couponRedemptionCode,
-            creditsOverageRate,
-            customerId,
-            defaultInvoiceMemo,
-            endDate,
-            externalCustomerId,
-            externalMarketplace,
-            externalMarketplaceReportingId,
-            externalPlanId,
-            filter,
-            initialPhaseOrder,
-            invoicingThreshold,
-            metadata,
-            netTerms,
-            perCreditOverageAmount,
-            planId,
-            planVersionNumber,
-            priceOverrides,
-            removeAdjustments,
-            removePrices,
-            replaceAdjustments,
-            replacePrices,
-            startDate,
-            trialDurationDays,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): SubscriptionCreateBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -405,8 +412,8 @@ constructor(
 
         class Builder {
 
-            private var addAdjustments: List<AddAdjustment>? = null
-            private var addPrices: List<AddPrice>? = null
+            private var addAdjustments: MutableList<AddAdjustment>? = null
+            private var addPrices: MutableList<AddPrice>? = null
             private var alignBillingWithSubscriptionStartDate: Boolean? = null
             private var autoCollection: Boolean? = null
             private var awsRegion: String? = null
@@ -428,11 +435,11 @@ constructor(
             private var perCreditOverageAmount: Double? = null
             private var planId: String? = null
             private var planVersionNumber: Long? = null
-            private var priceOverrides: List<JsonValue>? = null
-            private var removeAdjustments: List<RemoveAdjustment>? = null
-            private var removePrices: List<RemovePrice>? = null
-            private var replaceAdjustments: List<ReplaceAdjustment>? = null
-            private var replacePrices: List<ReplacePrice>? = null
+            private var priceOverrides: MutableList<JsonValue>? = null
+            private var removeAdjustments: MutableList<RemoveAdjustment>? = null
+            private var removePrices: MutableList<RemovePrice>? = null
+            private var replaceAdjustments: MutableList<ReplaceAdjustment>? = null
+            private var replacePrices: MutableList<ReplacePrice>? = null
             private var startDate: OffsetDateTime? = null
             private var trialDurationDays: Long? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -480,14 +487,32 @@ constructor(
              * that have migrated off of legacy subscription overrides)
              */
             fun addAdjustments(addAdjustments: List<AddAdjustment>) = apply {
-                this.addAdjustments = addAdjustments
+                this.addAdjustments = addAdjustments.toMutableList()
+            }
+
+            /**
+             * Additional adjustments to be added to the subscription. (Only available for accounts
+             * that have migrated off of legacy subscription overrides)
+             */
+            fun addAddAdjustment(addAdjustment: AddAdjustment) = apply {
+                addAdjustments = (addAdjustments ?: mutableListOf()).apply { add(addAdjustment) }
             }
 
             /**
              * Additional prices to be added to the subscription. (Only available for accounts that
              * have migrated off of legacy subscription overrides)
              */
-            fun addPrices(addPrices: List<AddPrice>) = apply { this.addPrices = addPrices }
+            fun addPrices(addPrices: List<AddPrice>) = apply {
+                this.addPrices = addPrices.toMutableList()
+            }
+
+            /**
+             * Additional prices to be added to the subscription. (Only available for accounts that
+             * have migrated off of legacy subscription overrides)
+             */
+            fun addAddPrice(addPrice: AddPrice) = apply {
+                addPrices = (addPrices ?: mutableListOf()).apply { add(addPrice) }
+            }
 
             fun alignBillingWithSubscriptionStartDate(
                 alignBillingWithSubscriptionStartDate: Boolean
@@ -611,7 +636,12 @@ constructor(
 
             /** Optionally provide a list of overrides for prices on the plan */
             fun priceOverrides(priceOverrides: List<JsonValue>) = apply {
-                this.priceOverrides = priceOverrides
+                this.priceOverrides = priceOverrides.toMutableList()
+            }
+
+            /** Optionally provide a list of overrides for prices on the plan */
+            fun addPriceOverride(priceOverride: JsonValue) = apply {
+                priceOverrides = (priceOverrides ?: mutableListOf()).apply { add(priceOverride) }
             }
 
             /**
@@ -619,7 +649,16 @@ constructor(
              * that have migrated off of legacy subscription overrides)
              */
             fun removeAdjustments(removeAdjustments: List<RemoveAdjustment>) = apply {
-                this.removeAdjustments = removeAdjustments
+                this.removeAdjustments = removeAdjustments.toMutableList()
+            }
+
+            /**
+             * Plan adjustments to be removed from the subscription. (Only available for accounts
+             * that have migrated off of legacy subscription overrides)
+             */
+            fun addRemoveAdjustment(removeAdjustment: RemoveAdjustment) = apply {
+                removeAdjustments =
+                    (removeAdjustments ?: mutableListOf()).apply { add(removeAdjustment) }
             }
 
             /**
@@ -627,7 +666,15 @@ constructor(
              * have migrated off of legacy subscription overrides)
              */
             fun removePrices(removePrices: List<RemovePrice>) = apply {
-                this.removePrices = removePrices
+                this.removePrices = removePrices.toMutableList()
+            }
+
+            /**
+             * Plan prices to be removed from the subscription. (Only available for accounts that
+             * have migrated off of legacy subscription overrides)
+             */
+            fun addRemovePrice(removePrice: RemovePrice) = apply {
+                removePrices = (removePrices ?: mutableListOf()).apply { add(removePrice) }
             }
 
             /**
@@ -635,7 +682,16 @@ constructor(
              * (Only available for accounts that have migrated off of legacy subscription overrides)
              */
             fun replaceAdjustments(replaceAdjustments: List<ReplaceAdjustment>) = apply {
-                this.replaceAdjustments = replaceAdjustments
+                this.replaceAdjustments = replaceAdjustments.toMutableList()
+            }
+
+            /**
+             * Plan adjustments to be replaced with additional adjustments on the subscription.
+             * (Only available for accounts that have migrated off of legacy subscription overrides)
+             */
+            fun addReplaceAdjustment(replaceAdjustment: ReplaceAdjustment) = apply {
+                replaceAdjustments =
+                    (replaceAdjustments ?: mutableListOf()).apply { add(replaceAdjustment) }
             }
 
             /**
@@ -643,7 +699,15 @@ constructor(
              * available for accounts that have migrated off of legacy subscription overrides)
              */
             fun replacePrices(replacePrices: List<ReplacePrice>) = apply {
-                this.replacePrices = replacePrices
+                this.replacePrices = replacePrices.toMutableList()
+            }
+
+            /**
+             * Plan prices to be replaced with additional prices on the subscription. (Only
+             * available for accounts that have migrated off of legacy subscription overrides)
+             */
+            fun addReplacePrice(replacePrice: ReplacePrice) = apply {
+                replacePrices = (replacePrices ?: mutableListOf()).apply { add(replacePrice) }
             }
 
             fun startDate(startDate: OffsetDateTime) = apply { this.startDate = startDate }
@@ -739,83 +803,15 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var addAdjustments: MutableList<AddAdjustment> = mutableListOf()
-        private var addPrices: MutableList<AddPrice> = mutableListOf()
-        private var alignBillingWithSubscriptionStartDate: Boolean? = null
-        private var autoCollection: Boolean? = null
-        private var awsRegion: String? = null
-        private var billingCycleAnchorConfiguration: BillingCycleAnchorConfiguration? = null
-        private var couponRedemptionCode: String? = null
-        private var creditsOverageRate: Double? = null
-        private var customerId: String? = null
-        private var defaultInvoiceMemo: String? = null
-        private var endDate: OffsetDateTime? = null
-        private var externalCustomerId: String? = null
-        private var externalMarketplace: ExternalMarketplace? = null
-        private var externalMarketplaceReportingId: String? = null
-        private var externalPlanId: String? = null
-        private var filter: String? = null
-        private var initialPhaseOrder: Long? = null
-        private var invoicingThreshold: String? = null
-        private var metadata: Metadata? = null
-        private var netTerms: Long? = null
-        private var perCreditOverageAmount: Double? = null
-        private var planId: String? = null
-        private var planVersionNumber: Long? = null
-        private var priceOverrides: MutableList<JsonValue> = mutableListOf()
-        private var removeAdjustments: MutableList<RemoveAdjustment> = mutableListOf()
-        private var removePrices: MutableList<RemovePrice> = mutableListOf()
-        private var replaceAdjustments: MutableList<ReplaceAdjustment> = mutableListOf()
-        private var replacePrices: MutableList<ReplacePrice> = mutableListOf()
-        private var startDate: OffsetDateTime? = null
-        private var trialDurationDays: Long? = null
+        private var body: SubscriptionCreateBody.Builder = SubscriptionCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(subscriptionCreateParams: SubscriptionCreateParams) = apply {
-            addAdjustments =
-                subscriptionCreateParams.addAdjustments?.toMutableList() ?: mutableListOf()
-            addPrices = subscriptionCreateParams.addPrices?.toMutableList() ?: mutableListOf()
-            alignBillingWithSubscriptionStartDate =
-                subscriptionCreateParams.alignBillingWithSubscriptionStartDate
-            autoCollection = subscriptionCreateParams.autoCollection
-            awsRegion = subscriptionCreateParams.awsRegion
-            billingCycleAnchorConfiguration =
-                subscriptionCreateParams.billingCycleAnchorConfiguration
-            couponRedemptionCode = subscriptionCreateParams.couponRedemptionCode
-            creditsOverageRate = subscriptionCreateParams.creditsOverageRate
-            customerId = subscriptionCreateParams.customerId
-            defaultInvoiceMemo = subscriptionCreateParams.defaultInvoiceMemo
-            endDate = subscriptionCreateParams.endDate
-            externalCustomerId = subscriptionCreateParams.externalCustomerId
-            externalMarketplace = subscriptionCreateParams.externalMarketplace
-            externalMarketplaceReportingId = subscriptionCreateParams.externalMarketplaceReportingId
-            externalPlanId = subscriptionCreateParams.externalPlanId
-            filter = subscriptionCreateParams.filter
-            initialPhaseOrder = subscriptionCreateParams.initialPhaseOrder
-            invoicingThreshold = subscriptionCreateParams.invoicingThreshold
-            metadata = subscriptionCreateParams.metadata
-            netTerms = subscriptionCreateParams.netTerms
-            perCreditOverageAmount = subscriptionCreateParams.perCreditOverageAmount
-            planId = subscriptionCreateParams.planId
-            planVersionNumber = subscriptionCreateParams.planVersionNumber
-            priceOverrides =
-                subscriptionCreateParams.priceOverrides?.toMutableList() ?: mutableListOf()
-            removeAdjustments =
-                subscriptionCreateParams.removeAdjustments?.toMutableList() ?: mutableListOf()
-            removePrices = subscriptionCreateParams.removePrices?.toMutableList() ?: mutableListOf()
-            replaceAdjustments =
-                subscriptionCreateParams.replaceAdjustments?.toMutableList() ?: mutableListOf()
-            replacePrices =
-                subscriptionCreateParams.replacePrices?.toMutableList() ?: mutableListOf()
-            startDate = subscriptionCreateParams.startDate
-            trialDurationDays = subscriptionCreateParams.trialDurationDays
+            body = subscriptionCreateParams.body.toBuilder()
             additionalHeaders = subscriptionCreateParams.additionalHeaders.toBuilder()
             additionalQueryParams = subscriptionCreateParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                subscriptionCreateParams.additionalBodyProperties.toMutableMap()
         }
 
         /**
@@ -823,8 +819,7 @@ constructor(
          * have migrated off of legacy subscription overrides)
          */
         fun addAdjustments(addAdjustments: List<AddAdjustment>) = apply {
-            this.addAdjustments.clear()
-            this.addAdjustments.addAll(addAdjustments)
+            body.addAdjustments(addAdjustments)
         }
 
         /**
@@ -832,27 +827,24 @@ constructor(
          * have migrated off of legacy subscription overrides)
          */
         fun addAddAdjustment(addAdjustment: AddAdjustment) = apply {
-            this.addAdjustments.add(addAdjustment)
+            body.addAddAdjustment(addAdjustment)
         }
 
         /**
          * Additional prices to be added to the subscription. (Only available for accounts that have
          * migrated off of legacy subscription overrides)
          */
-        fun addPrices(addPrices: List<AddPrice>) = apply {
-            this.addPrices.clear()
-            this.addPrices.addAll(addPrices)
-        }
+        fun addPrices(addPrices: List<AddPrice>) = apply { body.addPrices(addPrices) }
 
         /**
          * Additional prices to be added to the subscription. (Only available for accounts that have
          * migrated off of legacy subscription overrides)
          */
-        fun addAddPrice(addPrice: AddPrice) = apply { this.addPrices.add(addPrice) }
+        fun addAddPrice(addPrice: AddPrice) = apply { body.addAddPrice(addPrice) }
 
         fun alignBillingWithSubscriptionStartDate(alignBillingWithSubscriptionStartDate: Boolean) =
             apply {
-                this.alignBillingWithSubscriptionStartDate = alignBillingWithSubscriptionStartDate
+                body.alignBillingWithSubscriptionStartDate(alignBillingWithSubscriptionStartDate)
             }
 
         /**
@@ -860,13 +852,13 @@ constructor(
          * with the saved payment method on the due date. If not specified, this defaults to the
          * behavior configured for this customer.
          */
-        fun autoCollection(autoCollection: Boolean) = apply { this.autoCollection = autoCollection }
+        fun autoCollection(autoCollection: Boolean) = apply { body.autoCollection(autoCollection) }
 
-        fun awsRegion(awsRegion: String) = apply { this.awsRegion = awsRegion }
+        fun awsRegion(awsRegion: String) = apply { body.awsRegion(awsRegion) }
 
         fun billingCycleAnchorConfiguration(
             billingCycleAnchorConfiguration: BillingCycleAnchorConfiguration
-        ) = apply { this.billingCycleAnchorConfiguration = billingCycleAnchorConfiguration }
+        ) = apply { body.billingCycleAnchorConfiguration(billingCycleAnchorConfiguration) }
 
         /**
          * Redemption code to be used for this subscription. If the coupon cannot be found by its
@@ -874,42 +866,42 @@ constructor(
          * subscription creation or plan change will not be scheduled.
          */
         fun couponRedemptionCode(couponRedemptionCode: String) = apply {
-            this.couponRedemptionCode = couponRedemptionCode
+            body.couponRedemptionCode(couponRedemptionCode)
         }
 
         fun creditsOverageRate(creditsOverageRate: Double) = apply {
-            this.creditsOverageRate = creditsOverageRate
+            body.creditsOverageRate(creditsOverageRate)
         }
 
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
         /**
          * Determines the default memo on this subscription's invoices. Note that if this is not
          * provided, it is determined by the plan configuration.
          */
         fun defaultInvoiceMemo(defaultInvoiceMemo: String) = apply {
-            this.defaultInvoiceMemo = defaultInvoiceMemo
+            body.defaultInvoiceMemo(defaultInvoiceMemo)
         }
 
-        fun endDate(endDate: OffsetDateTime) = apply { this.endDate = endDate }
+        fun endDate(endDate: OffsetDateTime) = apply { body.endDate(endDate) }
 
         fun externalCustomerId(externalCustomerId: String) = apply {
-            this.externalCustomerId = externalCustomerId
+            body.externalCustomerId(externalCustomerId)
         }
 
         fun externalMarketplace(externalMarketplace: ExternalMarketplace) = apply {
-            this.externalMarketplace = externalMarketplace
+            body.externalMarketplace(externalMarketplace)
         }
 
         fun externalMarketplaceReportingId(externalMarketplaceReportingId: String) = apply {
-            this.externalMarketplaceReportingId = externalMarketplaceReportingId
+            body.externalMarketplaceReportingId(externalMarketplaceReportingId)
         }
 
         /**
          * The external_plan_id of the plan that the given subscription should be switched to. Note
          * that either this property or `plan_id` must be specified.
          */
-        fun externalPlanId(externalPlanId: String) = apply { this.externalPlanId = externalPlanId }
+        fun externalPlanId(externalPlanId: String) = apply { body.externalPlanId(externalPlanId) }
 
         /**
          * An additional filter to apply to usage queries. This filter must be expressed as a
@@ -917,11 +909,11 @@ constructor(
          * [computed property](../guides/extensibility/advanced-metrics#computed-properties). If
          * null, usage queries will not include any additional filter.
          */
-        fun filter(filter: String) = apply { this.filter = filter }
+        fun filter(filter: String) = apply { body.filter(filter) }
 
         /** The phase of the plan to start with */
         fun initialPhaseOrder(initialPhaseOrder: Long) = apply {
-            this.initialPhaseOrder = initialPhaseOrder
+            body.initialPhaseOrder(initialPhaseOrder)
         }
 
         /**
@@ -930,7 +922,7 @@ constructor(
          * billing period.
          */
         fun invoicingThreshold(invoicingThreshold: String) = apply {
-            this.invoicingThreshold = invoicingThreshold
+            body.invoicingThreshold(invoicingThreshold)
         }
 
         /**
@@ -938,42 +930,41 @@ constructor(
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+        fun metadata(metadata: Metadata) = apply { body.metadata(metadata) }
 
         /**
          * The net terms determines the difference between the invoice date and the issue date for
          * the invoice. If you intend the invoice to be due on issue, set this to 0. If not
          * provided, this defaults to the value specified in the plan.
          */
-        fun netTerms(netTerms: Long) = apply { this.netTerms = netTerms }
+        fun netTerms(netTerms: Long) = apply { body.netTerms(netTerms) }
 
         fun perCreditOverageAmount(perCreditOverageAmount: Double) = apply {
-            this.perCreditOverageAmount = perCreditOverageAmount
+            body.perCreditOverageAmount(perCreditOverageAmount)
         }
 
         /**
          * The plan that the given subscription should be switched to. Note that either this
          * property or `external_plan_id` must be specified.
          */
-        fun planId(planId: String) = apply { this.planId = planId }
+        fun planId(planId: String) = apply { body.planId(planId) }
 
         /**
          * Specifies which version of the plan to subscribe to. If null, the default version will be
          * used.
          */
         fun planVersionNumber(planVersionNumber: Long) = apply {
-            this.planVersionNumber = planVersionNumber
+            body.planVersionNumber(planVersionNumber)
         }
 
         /** Optionally provide a list of overrides for prices on the plan */
         fun priceOverrides(priceOverrides: List<JsonValue>) = apply {
-            this.priceOverrides.clear()
-            this.priceOverrides.addAll(priceOverrides)
+            body.priceOverrides(priceOverrides)
         }
 
         /** Optionally provide a list of overrides for prices on the plan */
         fun addPriceOverride(priceOverride: JsonValue) = apply {
-            this.priceOverrides.add(priceOverride)
+            body.addPriceOverride(priceOverride)
         }
 
         /**
@@ -981,8 +972,7 @@ constructor(
          * have migrated off of legacy subscription overrides)
          */
         fun removeAdjustments(removeAdjustments: List<RemoveAdjustment>) = apply {
-            this.removeAdjustments.clear()
-            this.removeAdjustments.addAll(removeAdjustments)
+            body.removeAdjustments(removeAdjustments)
         }
 
         /**
@@ -990,7 +980,7 @@ constructor(
          * have migrated off of legacy subscription overrides)
          */
         fun addRemoveAdjustment(removeAdjustment: RemoveAdjustment) = apply {
-            this.removeAdjustments.add(removeAdjustment)
+            body.addRemoveAdjustment(removeAdjustment)
         }
 
         /**
@@ -998,23 +988,21 @@ constructor(
          * migrated off of legacy subscription overrides)
          */
         fun removePrices(removePrices: List<RemovePrice>) = apply {
-            this.removePrices.clear()
-            this.removePrices.addAll(removePrices)
+            body.removePrices(removePrices)
         }
 
         /**
          * Plan prices to be removed from the subscription. (Only available for accounts that have
          * migrated off of legacy subscription overrides)
          */
-        fun addRemovePrice(removePrice: RemovePrice) = apply { this.removePrices.add(removePrice) }
+        fun addRemovePrice(removePrice: RemovePrice) = apply { body.addRemovePrice(removePrice) }
 
         /**
          * Plan adjustments to be replaced with additional adjustments on the subscription. (Only
          * available for accounts that have migrated off of legacy subscription overrides)
          */
         fun replaceAdjustments(replaceAdjustments: List<ReplaceAdjustment>) = apply {
-            this.replaceAdjustments.clear()
-            this.replaceAdjustments.addAll(replaceAdjustments)
+            body.replaceAdjustments(replaceAdjustments)
         }
 
         /**
@@ -1022,7 +1010,7 @@ constructor(
          * available for accounts that have migrated off of legacy subscription overrides)
          */
         fun addReplaceAdjustment(replaceAdjustment: ReplaceAdjustment) = apply {
-            this.replaceAdjustments.add(replaceAdjustment)
+            body.addReplaceAdjustment(replaceAdjustment)
         }
 
         /**
@@ -1030,8 +1018,7 @@ constructor(
          * for accounts that have migrated off of legacy subscription overrides)
          */
         fun replacePrices(replacePrices: List<ReplacePrice>) = apply {
-            this.replacePrices.clear()
-            this.replacePrices.addAll(replacePrices)
+            body.replacePrices(replacePrices)
         }
 
         /**
@@ -1039,17 +1026,17 @@ constructor(
          * for accounts that have migrated off of legacy subscription overrides)
          */
         fun addReplacePrice(replacePrice: ReplacePrice) = apply {
-            this.replacePrices.add(replacePrice)
+            body.addReplacePrice(replacePrice)
         }
 
-        fun startDate(startDate: OffsetDateTime) = apply { this.startDate = startDate }
+        fun startDate(startDate: OffsetDateTime) = apply { body.startDate(startDate) }
 
         /**
          * The duration of the trial period in days. If not provided, this defaults to the value
          * specified in the plan. If `0` is provided, the trial on the plan will be skipped.
          */
         fun trialDurationDays(trialDurationDays: Long) = apply {
-            this.trialDurationDays = trialDurationDays
+            body.trialDurationDays(trialDurationDays)
         }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -1151,62 +1138,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): SubscriptionCreateParams =
             SubscriptionCreateParams(
-                addAdjustments.toImmutable().ifEmpty { null },
-                addPrices.toImmutable().ifEmpty { null },
-                alignBillingWithSubscriptionStartDate,
-                autoCollection,
-                awsRegion,
-                billingCycleAnchorConfiguration,
-                couponRedemptionCode,
-                creditsOverageRate,
-                customerId,
-                defaultInvoiceMemo,
-                endDate,
-                externalCustomerId,
-                externalMarketplace,
-                externalMarketplaceReportingId,
-                externalPlanId,
-                filter,
-                initialPhaseOrder,
-                invoicingThreshold,
-                metadata,
-                netTerms,
-                perCreditOverageAmount,
-                planId,
-                planVersionNumber,
-                priceOverrides.toImmutable().ifEmpty { null },
-                removeAdjustments.toImmutable().ifEmpty { null },
-                removePrices.toImmutable().ifEmpty { null },
-                replaceAdjustments.toImmutable().ifEmpty { null },
-                replacePrices.toImmutable().ifEmpty { null },
-                startDate,
-                trialDurationDays,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -1275,6 +1229,26 @@ constructor(
 
             /** The definition of a new adjustment to create and add to the subscription. */
             fun adjustment(adjustment: Adjustment) = apply { this.adjustment = adjustment }
+
+            fun adjustment(newPercentageDiscount: Adjustment.NewPercentageDiscount) = apply {
+                this.adjustment = Adjustment.ofNewPercentageDiscount(newPercentageDiscount)
+            }
+
+            fun adjustment(newUsageDiscount: Adjustment.NewUsageDiscount) = apply {
+                this.adjustment = Adjustment.ofNewUsageDiscount(newUsageDiscount)
+            }
+
+            fun adjustment(newAmountDiscount: Adjustment.NewAmountDiscount) = apply {
+                this.adjustment = Adjustment.ofNewAmountDiscount(newAmountDiscount)
+            }
+
+            fun adjustment(newMinimum: Adjustment.NewMinimum) = apply {
+                this.adjustment = Adjustment.ofNewMinimum(newMinimum)
+            }
+
+            fun adjustment(newMaximum: Adjustment.NewMaximum) = apply {
+                this.adjustment = Adjustment.ofNewMaximum(newMaximum)
+            }
 
             /**
              * The start date of the adjustment interval. This is the date that the adjustment will
@@ -1549,7 +1523,7 @@ constructor(
 
                 class Builder {
 
-                    private var appliesToPriceIds: List<String>? = null
+                    private var appliesToPriceIds: MutableList<String>? = null
                     private var isInvoiceLevel: Boolean? = null
                     private var adjustmentType: AdjustmentType? = null
                     private var percentageDiscount: Double? = null
@@ -1567,7 +1541,13 @@ constructor(
 
                     /** The set of price IDs to which this adjustment applies. */
                     fun appliesToPriceIds(appliesToPriceIds: List<String>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
+                        this.appliesToPriceIds = appliesToPriceIds.toMutableList()
+                    }
+
+                    /** The set of price IDs to which this adjustment applies. */
+                    fun addAppliesToPriceId(appliesToPriceId: String) = apply {
+                        appliesToPriceIds =
+                            (appliesToPriceIds ?: mutableListOf()).apply { add(appliesToPriceId) }
                     }
 
                     /**
@@ -1736,7 +1716,7 @@ constructor(
 
                 class Builder {
 
-                    private var appliesToPriceIds: List<String>? = null
+                    private var appliesToPriceIds: MutableList<String>? = null
                     private var isInvoiceLevel: Boolean? = null
                     private var adjustmentType: AdjustmentType? = null
                     private var usageDiscount: Double? = null
@@ -1753,7 +1733,13 @@ constructor(
 
                     /** The set of price IDs to which this adjustment applies. */
                     fun appliesToPriceIds(appliesToPriceIds: List<String>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
+                        this.appliesToPriceIds = appliesToPriceIds.toMutableList()
+                    }
+
+                    /** The set of price IDs to which this adjustment applies. */
+                    fun addAppliesToPriceId(appliesToPriceId: String) = apply {
+                        appliesToPriceIds =
+                            (appliesToPriceIds ?: mutableListOf()).apply { add(appliesToPriceId) }
                     }
 
                     /**
@@ -1922,7 +1908,7 @@ constructor(
 
                 class Builder {
 
-                    private var appliesToPriceIds: List<String>? = null
+                    private var appliesToPriceIds: MutableList<String>? = null
                     private var isInvoiceLevel: Boolean? = null
                     private var adjustmentType: AdjustmentType? = null
                     private var amountDiscount: String? = null
@@ -1939,7 +1925,13 @@ constructor(
 
                     /** The set of price IDs to which this adjustment applies. */
                     fun appliesToPriceIds(appliesToPriceIds: List<String>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
+                        this.appliesToPriceIds = appliesToPriceIds.toMutableList()
+                    }
+
+                    /** The set of price IDs to which this adjustment applies. */
+                    fun addAppliesToPriceId(appliesToPriceId: String) = apply {
+                        appliesToPriceIds =
+                            (appliesToPriceIds ?: mutableListOf()).apply { add(appliesToPriceId) }
                     }
 
                     /**
@@ -2112,7 +2104,7 @@ constructor(
 
                 class Builder {
 
-                    private var appliesToPriceIds: List<String>? = null
+                    private var appliesToPriceIds: MutableList<String>? = null
                     private var isInvoiceLevel: Boolean? = null
                     private var adjustmentType: AdjustmentType? = null
                     private var minimumAmount: String? = null
@@ -2131,7 +2123,13 @@ constructor(
 
                     /** The set of price IDs to which this adjustment applies. */
                     fun appliesToPriceIds(appliesToPriceIds: List<String>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
+                        this.appliesToPriceIds = appliesToPriceIds.toMutableList()
+                    }
+
+                    /** The set of price IDs to which this adjustment applies. */
+                    fun addAppliesToPriceId(appliesToPriceId: String) = apply {
+                        appliesToPriceIds =
+                            (appliesToPriceIds ?: mutableListOf()).apply { add(appliesToPriceId) }
                     }
 
                     /**
@@ -2304,7 +2302,7 @@ constructor(
 
                 class Builder {
 
-                    private var appliesToPriceIds: List<String>? = null
+                    private var appliesToPriceIds: MutableList<String>? = null
                     private var isInvoiceLevel: Boolean? = null
                     private var adjustmentType: AdjustmentType? = null
                     private var maximumAmount: String? = null
@@ -2321,7 +2319,13 @@ constructor(
 
                     /** The set of price IDs to which this adjustment applies. */
                     fun appliesToPriceIds(appliesToPriceIds: List<String>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
+                        this.appliesToPriceIds = appliesToPriceIds.toMutableList()
+                    }
+
+                    /** The set of price IDs to which this adjustment applies. */
+                    fun addAppliesToPriceId(appliesToPriceId: String) = apply {
+                        appliesToPriceIds =
+                            (appliesToPriceIds ?: mutableListOf()).apply { add(appliesToPriceId) }
                     }
 
                     /**
@@ -2554,7 +2558,7 @@ constructor(
             private var planPhaseOrder: Long? = null
             private var minimumAmount: String? = null
             private var maximumAmount: String? = null
-            private var discounts: List<Discount>? = null
+            private var discounts: MutableList<Discount>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -2581,6 +2585,126 @@ constructor(
 
             /** The definition of a new price to create and add to the subscription. */
             fun price(price: Price) = apply { this.price = price }
+
+            fun price(newSubscriptionUnitPrice: Price.NewSubscriptionUnitPrice) = apply {
+                this.price = Price.ofNewSubscriptionUnitPrice(newSubscriptionUnitPrice)
+            }
+
+            fun price(newSubscriptionPackagePrice: Price.NewSubscriptionPackagePrice) = apply {
+                this.price = Price.ofNewSubscriptionPackagePrice(newSubscriptionPackagePrice)
+            }
+
+            fun price(newSubscriptionMatrixPrice: Price.NewSubscriptionMatrixPrice) = apply {
+                this.price = Price.ofNewSubscriptionMatrixPrice(newSubscriptionMatrixPrice)
+            }
+
+            fun price(newSubscriptionTieredPrice: Price.NewSubscriptionTieredPrice) = apply {
+                this.price = Price.ofNewSubscriptionTieredPrice(newSubscriptionTieredPrice)
+            }
+
+            fun price(newSubscriptionTieredBpsPrice: Price.NewSubscriptionTieredBpsPrice) = apply {
+                this.price = Price.ofNewSubscriptionTieredBpsPrice(newSubscriptionTieredBpsPrice)
+            }
+
+            fun price(newSubscriptionBpsPrice: Price.NewSubscriptionBpsPrice) = apply {
+                this.price = Price.ofNewSubscriptionBpsPrice(newSubscriptionBpsPrice)
+            }
+
+            fun price(newSubscriptionBulkBpsPrice: Price.NewSubscriptionBulkBpsPrice) = apply {
+                this.price = Price.ofNewSubscriptionBulkBpsPrice(newSubscriptionBulkBpsPrice)
+            }
+
+            fun price(newSubscriptionBulkPrice: Price.NewSubscriptionBulkPrice) = apply {
+                this.price = Price.ofNewSubscriptionBulkPrice(newSubscriptionBulkPrice)
+            }
+
+            fun price(
+                newSubscriptionThresholdTotalAmountPrice:
+                    Price.NewSubscriptionThresholdTotalAmountPrice
+            ) = apply {
+                this.price =
+                    Price.ofNewSubscriptionThresholdTotalAmountPrice(
+                        newSubscriptionThresholdTotalAmountPrice
+                    )
+            }
+
+            fun price(newSubscriptionTieredPackagePrice: Price.NewSubscriptionTieredPackagePrice) =
+                apply {
+                    this.price =
+                        Price.ofNewSubscriptionTieredPackagePrice(newSubscriptionTieredPackagePrice)
+                }
+
+            fun price(
+                newSubscriptionTieredWithMinimumPrice: Price.NewSubscriptionTieredWithMinimumPrice
+            ) = apply {
+                this.price =
+                    Price.ofNewSubscriptionTieredWithMinimumPrice(
+                        newSubscriptionTieredWithMinimumPrice
+                    )
+            }
+
+            fun price(
+                newSubscriptionUnitWithPercentPrice: Price.NewSubscriptionUnitWithPercentPrice
+            ) = apply {
+                this.price =
+                    Price.ofNewSubscriptionUnitWithPercentPrice(newSubscriptionUnitWithPercentPrice)
+            }
+
+            fun price(
+                newSubscriptionPackageWithAllocationPrice:
+                    Price.NewSubscriptionPackageWithAllocationPrice
+            ) = apply {
+                this.price =
+                    Price.ofNewSubscriptionPackageWithAllocationPrice(
+                        newSubscriptionPackageWithAllocationPrice
+                    )
+            }
+
+            fun price(
+                newSubscriptionTierWithProrationPrice: Price.NewSubscriptionTierWithProrationPrice
+            ) = apply {
+                this.price =
+                    Price.ofNewSubscriptionTierWithProrationPrice(
+                        newSubscriptionTierWithProrationPrice
+                    )
+            }
+
+            fun price(
+                newSubscriptionUnitWithProrationPrice: Price.NewSubscriptionUnitWithProrationPrice
+            ) = apply {
+                this.price =
+                    Price.ofNewSubscriptionUnitWithProrationPrice(
+                        newSubscriptionUnitWithProrationPrice
+                    )
+            }
+
+            fun price(
+                newSubscriptionGroupedAllocationPrice: Price.NewSubscriptionGroupedAllocationPrice
+            ) = apply {
+                this.price =
+                    Price.ofNewSubscriptionGroupedAllocationPrice(
+                        newSubscriptionGroupedAllocationPrice
+                    )
+            }
+
+            fun price(
+                newSubscriptionGroupedWithProratedMinimumPrice:
+                    Price.NewSubscriptionGroupedWithProratedMinimumPrice
+            ) = apply {
+                this.price =
+                    Price.ofNewSubscriptionGroupedWithProratedMinimumPrice(
+                        newSubscriptionGroupedWithProratedMinimumPrice
+                    )
+            }
+
+            fun price(
+                newSubscriptionBulkWithProrationPrice: Price.NewSubscriptionBulkWithProrationPrice
+            ) = apply {
+                this.price =
+                    Price.ofNewSubscriptionBulkWithProrationPrice(
+                        newSubscriptionBulkWithProrationPrice
+                    )
+            }
 
             /**
              * The start date of the price interval. This is the date that the price will start
@@ -2616,7 +2740,17 @@ constructor(
              * [DEPRECATED] Use add_adjustments instead. The subscription's discounts for this
              * price.
              */
-            fun discounts(discounts: List<Discount>) = apply { this.discounts = discounts }
+            fun discounts(discounts: List<Discount>) = apply {
+                this.discounts = discounts.toMutableList()
+            }
+
+            /**
+             * [DEPRECATED] Use add_adjustments instead. The subscription's discounts for this
+             * price.
+             */
+            fun addDiscount(discount: Discount) = apply {
+                discounts = (discounts ?: mutableListOf()).apply { add(discount) }
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -5964,9 +6098,9 @@ constructor(
 
                     class Builder {
 
-                        private var dimensions: List<String?>? = null
+                        private var dimensions: MutableList<String?>? = null
                         private var defaultUnitAmount: String? = null
-                        private var matrixValues: List<MatrixValue>? = null
+                        private var matrixValues: MutableList<MatrixValue>? = null
                         private var additionalProperties: MutableMap<String, JsonValue> =
                             mutableMapOf()
 
@@ -5980,7 +6114,12 @@ constructor(
 
                         /** One or two event property values to evaluate matrix groups by */
                         fun dimensions(dimensions: List<String?>) = apply {
-                            this.dimensions = dimensions
+                            this.dimensions = dimensions.toMutableList()
+                        }
+
+                        /** One or two event property values to evaluate matrix groups by */
+                        fun addDimension(dimension: String) = apply {
+                            dimensions = (dimensions ?: mutableListOf()).apply { add(dimension) }
                         }
 
                         /**
@@ -5993,7 +6132,13 @@ constructor(
 
                         /** Matrix values for specified matrix grouping keys */
                         fun matrixValues(matrixValues: List<MatrixValue>) = apply {
-                            this.matrixValues = matrixValues
+                            this.matrixValues = matrixValues.toMutableList()
+                        }
+
+                        /** Matrix values for specified matrix grouping keys */
+                        fun addMatrixValue(matrixValue: MatrixValue) = apply {
+                            matrixValues =
+                                (matrixValues ?: mutableListOf()).apply { add(matrixValue) }
                         }
 
                         fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -6072,7 +6217,7 @@ constructor(
                         class Builder {
 
                             private var unitAmount: String? = null
-                            private var dimensionValues: List<String?>? = null
+                            private var dimensionValues: MutableList<String?>? = null
                             private var additionalProperties: MutableMap<String, JsonValue> =
                                 mutableMapOf()
 
@@ -6095,7 +6240,19 @@ constructor(
                              * cloud region and an instance tier.
                              */
                             fun dimensionValues(dimensionValues: List<String?>) = apply {
-                                this.dimensionValues = dimensionValues
+                                this.dimensionValues = dimensionValues.toMutableList()
+                            }
+
+                            /**
+                             * One or two matrix keys to filter usage to this Matrix value by. For
+                             * example, ["region", "tier"] could be used to filter cloud usage by a
+                             * cloud region and an instance tier.
+                             */
+                            fun addDimensionValue(dimensionValue: String) = apply {
+                                dimensionValues =
+                                    (dimensionValues ?: mutableListOf()).apply {
+                                        add(dimensionValue)
+                                    }
                             }
 
                             fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -7106,7 +7263,7 @@ constructor(
 
                     class Builder {
 
-                        private var tiers: List<Tier>? = null
+                        private var tiers: MutableList<Tier>? = null
                         private var additionalProperties: MutableMap<String, JsonValue> =
                             mutableMapOf()
 
@@ -7119,7 +7276,14 @@ constructor(
                         /**
                          * Tiers for rating based on total usage quantities into the specified tier
                          */
-                        fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
+                        fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
+
+                        /**
+                         * Tiers for rating based on total usage quantities into the specified tier
+                         */
+                        fun addTier(tier: Tier) = apply {
+                            tiers = (tiers ?: mutableListOf()).apply { add(tier) }
+                        }
 
                         fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
                             apply {
@@ -8177,7 +8341,7 @@ constructor(
 
                     class Builder {
 
-                        private var tiers: List<Tier>? = null
+                        private var tiers: MutableList<Tier>? = null
                         private var additionalProperties: MutableMap<String, JsonValue> =
                             mutableMapOf()
 
@@ -8192,7 +8356,15 @@ constructor(
                          * Tiers for a Graduated BPS pricing model, where usage is bucketed into
                          * specified tiers
                          */
-                        fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
+                        fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
+
+                        /**
+                         * Tiers for a Graduated BPS pricing model, where usage is bucketed into
+                         * specified tiers
+                         */
+                        fun addTier(tier: Tier) = apply {
+                            tiers = (tiers ?: mutableListOf()).apply { add(tier) }
+                        }
 
                         fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
                             apply {
@@ -10075,7 +10247,7 @@ constructor(
 
                     class Builder {
 
-                        private var tiers: List<Tier>? = null
+                        private var tiers: MutableList<Tier>? = null
                         private var additionalProperties: MutableMap<String, JsonValue> =
                             mutableMapOf()
 
@@ -10089,7 +10261,15 @@ constructor(
                          * Tiers for a bulk BPS pricing model where all usage is aggregated to a
                          * single tier based on total volume
                          */
-                        fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
+                        fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
+
+                        /**
+                         * Tiers for a bulk BPS pricing model where all usage is aggregated to a
+                         * single tier based on total volume
+                         */
+                        fun addTier(tier: Tier) = apply {
+                            tiers = (tiers ?: mutableListOf()).apply { add(tier) }
+                        }
 
                         fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
                             apply {
@@ -11131,7 +11311,7 @@ constructor(
 
                     class Builder {
 
-                        private var tiers: List<Tier>? = null
+                        private var tiers: MutableList<Tier>? = null
                         private var additionalProperties: MutableMap<String, JsonValue> =
                             mutableMapOf()
 
@@ -11142,7 +11322,12 @@ constructor(
                         }
 
                         /** Bulk tiers for rating based on total usage volume */
-                        fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
+                        fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
+
+                        /** Bulk tiers for rating based on total usage volume */
+                        fun addTier(tier: Tier) = apply {
+                            tiers = (tiers ?: mutableListOf()).apply { add(tier) }
+                        }
 
                         fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
                             apply {
@@ -21787,6 +21972,26 @@ constructor(
             /** The definition of a new adjustment to create and add to the subscription. */
             fun adjustment(adjustment: Adjustment) = apply { this.adjustment = adjustment }
 
+            fun adjustment(newPercentageDiscount: Adjustment.NewPercentageDiscount) = apply {
+                this.adjustment = Adjustment.ofNewPercentageDiscount(newPercentageDiscount)
+            }
+
+            fun adjustment(newUsageDiscount: Adjustment.NewUsageDiscount) = apply {
+                this.adjustment = Adjustment.ofNewUsageDiscount(newUsageDiscount)
+            }
+
+            fun adjustment(newAmountDiscount: Adjustment.NewAmountDiscount) = apply {
+                this.adjustment = Adjustment.ofNewAmountDiscount(newAmountDiscount)
+            }
+
+            fun adjustment(newMinimum: Adjustment.NewMinimum) = apply {
+                this.adjustment = Adjustment.ofNewMinimum(newMinimum)
+            }
+
+            fun adjustment(newMaximum: Adjustment.NewMaximum) = apply {
+                this.adjustment = Adjustment.ofNewMaximum(newMaximum)
+            }
+
             /** The id of the adjustment on the plan to replace in the subscription. */
             fun replacesAdjustmentId(replacesAdjustmentId: String) = apply {
                 this.replacesAdjustmentId = replacesAdjustmentId
@@ -22046,7 +22251,7 @@ constructor(
 
                 class Builder {
 
-                    private var appliesToPriceIds: List<String>? = null
+                    private var appliesToPriceIds: MutableList<String>? = null
                     private var isInvoiceLevel: Boolean? = null
                     private var adjustmentType: AdjustmentType? = null
                     private var percentageDiscount: Double? = null
@@ -22064,7 +22269,13 @@ constructor(
 
                     /** The set of price IDs to which this adjustment applies. */
                     fun appliesToPriceIds(appliesToPriceIds: List<String>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
+                        this.appliesToPriceIds = appliesToPriceIds.toMutableList()
+                    }
+
+                    /** The set of price IDs to which this adjustment applies. */
+                    fun addAppliesToPriceId(appliesToPriceId: String) = apply {
+                        appliesToPriceIds =
+                            (appliesToPriceIds ?: mutableListOf()).apply { add(appliesToPriceId) }
                     }
 
                     /**
@@ -22233,7 +22444,7 @@ constructor(
 
                 class Builder {
 
-                    private var appliesToPriceIds: List<String>? = null
+                    private var appliesToPriceIds: MutableList<String>? = null
                     private var isInvoiceLevel: Boolean? = null
                     private var adjustmentType: AdjustmentType? = null
                     private var usageDiscount: Double? = null
@@ -22250,7 +22461,13 @@ constructor(
 
                     /** The set of price IDs to which this adjustment applies. */
                     fun appliesToPriceIds(appliesToPriceIds: List<String>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
+                        this.appliesToPriceIds = appliesToPriceIds.toMutableList()
+                    }
+
+                    /** The set of price IDs to which this adjustment applies. */
+                    fun addAppliesToPriceId(appliesToPriceId: String) = apply {
+                        appliesToPriceIds =
+                            (appliesToPriceIds ?: mutableListOf()).apply { add(appliesToPriceId) }
                     }
 
                     /**
@@ -22419,7 +22636,7 @@ constructor(
 
                 class Builder {
 
-                    private var appliesToPriceIds: List<String>? = null
+                    private var appliesToPriceIds: MutableList<String>? = null
                     private var isInvoiceLevel: Boolean? = null
                     private var adjustmentType: AdjustmentType? = null
                     private var amountDiscount: String? = null
@@ -22436,7 +22653,13 @@ constructor(
 
                     /** The set of price IDs to which this adjustment applies. */
                     fun appliesToPriceIds(appliesToPriceIds: List<String>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
+                        this.appliesToPriceIds = appliesToPriceIds.toMutableList()
+                    }
+
+                    /** The set of price IDs to which this adjustment applies. */
+                    fun addAppliesToPriceId(appliesToPriceId: String) = apply {
+                        appliesToPriceIds =
+                            (appliesToPriceIds ?: mutableListOf()).apply { add(appliesToPriceId) }
                     }
 
                     /**
@@ -22609,7 +22832,7 @@ constructor(
 
                 class Builder {
 
-                    private var appliesToPriceIds: List<String>? = null
+                    private var appliesToPriceIds: MutableList<String>? = null
                     private var isInvoiceLevel: Boolean? = null
                     private var adjustmentType: AdjustmentType? = null
                     private var minimumAmount: String? = null
@@ -22628,7 +22851,13 @@ constructor(
 
                     /** The set of price IDs to which this adjustment applies. */
                     fun appliesToPriceIds(appliesToPriceIds: List<String>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
+                        this.appliesToPriceIds = appliesToPriceIds.toMutableList()
+                    }
+
+                    /** The set of price IDs to which this adjustment applies. */
+                    fun addAppliesToPriceId(appliesToPriceId: String) = apply {
+                        appliesToPriceIds =
+                            (appliesToPriceIds ?: mutableListOf()).apply { add(appliesToPriceId) }
                     }
 
                     /**
@@ -22801,7 +23030,7 @@ constructor(
 
                 class Builder {
 
-                    private var appliesToPriceIds: List<String>? = null
+                    private var appliesToPriceIds: MutableList<String>? = null
                     private var isInvoiceLevel: Boolean? = null
                     private var adjustmentType: AdjustmentType? = null
                     private var maximumAmount: String? = null
@@ -22818,7 +23047,13 @@ constructor(
 
                     /** The set of price IDs to which this adjustment applies. */
                     fun appliesToPriceIds(appliesToPriceIds: List<String>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
+                        this.appliesToPriceIds = appliesToPriceIds.toMutableList()
+                    }
+
+                    /** The set of price IDs to which this adjustment applies. */
+                    fun addAppliesToPriceId(appliesToPriceId: String) = apply {
+                        appliesToPriceIds =
+                            (appliesToPriceIds ?: mutableListOf()).apply { add(appliesToPriceId) }
                     }
 
                     /**
@@ -23039,7 +23274,7 @@ constructor(
             private var replacesPriceId: String? = null
             private var minimumAmount: String? = null
             private var maximumAmount: String? = null
-            private var discounts: List<Discount>? = null
+            private var discounts: MutableList<Discount>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -23065,6 +23300,126 @@ constructor(
 
             /** The definition of a new price to create and add to the subscription. */
             fun price(price: Price) = apply { this.price = price }
+
+            fun price(newSubscriptionUnitPrice: Price.NewSubscriptionUnitPrice) = apply {
+                this.price = Price.ofNewSubscriptionUnitPrice(newSubscriptionUnitPrice)
+            }
+
+            fun price(newSubscriptionPackagePrice: Price.NewSubscriptionPackagePrice) = apply {
+                this.price = Price.ofNewSubscriptionPackagePrice(newSubscriptionPackagePrice)
+            }
+
+            fun price(newSubscriptionMatrixPrice: Price.NewSubscriptionMatrixPrice) = apply {
+                this.price = Price.ofNewSubscriptionMatrixPrice(newSubscriptionMatrixPrice)
+            }
+
+            fun price(newSubscriptionTieredPrice: Price.NewSubscriptionTieredPrice) = apply {
+                this.price = Price.ofNewSubscriptionTieredPrice(newSubscriptionTieredPrice)
+            }
+
+            fun price(newSubscriptionTieredBpsPrice: Price.NewSubscriptionTieredBpsPrice) = apply {
+                this.price = Price.ofNewSubscriptionTieredBpsPrice(newSubscriptionTieredBpsPrice)
+            }
+
+            fun price(newSubscriptionBpsPrice: Price.NewSubscriptionBpsPrice) = apply {
+                this.price = Price.ofNewSubscriptionBpsPrice(newSubscriptionBpsPrice)
+            }
+
+            fun price(newSubscriptionBulkBpsPrice: Price.NewSubscriptionBulkBpsPrice) = apply {
+                this.price = Price.ofNewSubscriptionBulkBpsPrice(newSubscriptionBulkBpsPrice)
+            }
+
+            fun price(newSubscriptionBulkPrice: Price.NewSubscriptionBulkPrice) = apply {
+                this.price = Price.ofNewSubscriptionBulkPrice(newSubscriptionBulkPrice)
+            }
+
+            fun price(
+                newSubscriptionThresholdTotalAmountPrice:
+                    Price.NewSubscriptionThresholdTotalAmountPrice
+            ) = apply {
+                this.price =
+                    Price.ofNewSubscriptionThresholdTotalAmountPrice(
+                        newSubscriptionThresholdTotalAmountPrice
+                    )
+            }
+
+            fun price(newSubscriptionTieredPackagePrice: Price.NewSubscriptionTieredPackagePrice) =
+                apply {
+                    this.price =
+                        Price.ofNewSubscriptionTieredPackagePrice(newSubscriptionTieredPackagePrice)
+                }
+
+            fun price(
+                newSubscriptionTieredWithMinimumPrice: Price.NewSubscriptionTieredWithMinimumPrice
+            ) = apply {
+                this.price =
+                    Price.ofNewSubscriptionTieredWithMinimumPrice(
+                        newSubscriptionTieredWithMinimumPrice
+                    )
+            }
+
+            fun price(
+                newSubscriptionUnitWithPercentPrice: Price.NewSubscriptionUnitWithPercentPrice
+            ) = apply {
+                this.price =
+                    Price.ofNewSubscriptionUnitWithPercentPrice(newSubscriptionUnitWithPercentPrice)
+            }
+
+            fun price(
+                newSubscriptionPackageWithAllocationPrice:
+                    Price.NewSubscriptionPackageWithAllocationPrice
+            ) = apply {
+                this.price =
+                    Price.ofNewSubscriptionPackageWithAllocationPrice(
+                        newSubscriptionPackageWithAllocationPrice
+                    )
+            }
+
+            fun price(
+                newSubscriptionTierWithProrationPrice: Price.NewSubscriptionTierWithProrationPrice
+            ) = apply {
+                this.price =
+                    Price.ofNewSubscriptionTierWithProrationPrice(
+                        newSubscriptionTierWithProrationPrice
+                    )
+            }
+
+            fun price(
+                newSubscriptionUnitWithProrationPrice: Price.NewSubscriptionUnitWithProrationPrice
+            ) = apply {
+                this.price =
+                    Price.ofNewSubscriptionUnitWithProrationPrice(
+                        newSubscriptionUnitWithProrationPrice
+                    )
+            }
+
+            fun price(
+                newSubscriptionGroupedAllocationPrice: Price.NewSubscriptionGroupedAllocationPrice
+            ) = apply {
+                this.price =
+                    Price.ofNewSubscriptionGroupedAllocationPrice(
+                        newSubscriptionGroupedAllocationPrice
+                    )
+            }
+
+            fun price(
+                newSubscriptionGroupedWithProratedMinimumPrice:
+                    Price.NewSubscriptionGroupedWithProratedMinimumPrice
+            ) = apply {
+                this.price =
+                    Price.ofNewSubscriptionGroupedWithProratedMinimumPrice(
+                        newSubscriptionGroupedWithProratedMinimumPrice
+                    )
+            }
+
+            fun price(
+                newSubscriptionBulkWithProrationPrice: Price.NewSubscriptionBulkWithProrationPrice
+            ) = apply {
+                this.price =
+                    Price.ofNewSubscriptionBulkWithProrationPrice(
+                        newSubscriptionBulkWithProrationPrice
+                    )
+            }
 
             /** The new quantity of the price, if the price is a fixed price. */
             fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
@@ -23092,7 +23447,17 @@ constructor(
              * [DEPRECATED] Use add_adjustments instead. The subscription's discounts for the
              * replacement price.
              */
-            fun discounts(discounts: List<Discount>) = apply { this.discounts = discounts }
+            fun discounts(discounts: List<Discount>) = apply {
+                this.discounts = discounts.toMutableList()
+            }
+
+            /**
+             * [DEPRECATED] Use add_adjustments instead. The subscription's discounts for the
+             * replacement price.
+             */
+            fun addDiscount(discount: Discount) = apply {
+                discounts = (discounts ?: mutableListOf()).apply { add(discount) }
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -26441,9 +26806,9 @@ constructor(
 
                     class Builder {
 
-                        private var dimensions: List<String?>? = null
+                        private var dimensions: MutableList<String?>? = null
                         private var defaultUnitAmount: String? = null
-                        private var matrixValues: List<MatrixValue>? = null
+                        private var matrixValues: MutableList<MatrixValue>? = null
                         private var additionalProperties: MutableMap<String, JsonValue> =
                             mutableMapOf()
 
@@ -26457,7 +26822,12 @@ constructor(
 
                         /** One or two event property values to evaluate matrix groups by */
                         fun dimensions(dimensions: List<String?>) = apply {
-                            this.dimensions = dimensions
+                            this.dimensions = dimensions.toMutableList()
+                        }
+
+                        /** One or two event property values to evaluate matrix groups by */
+                        fun addDimension(dimension: String) = apply {
+                            dimensions = (dimensions ?: mutableListOf()).apply { add(dimension) }
                         }
 
                         /**
@@ -26470,7 +26840,13 @@ constructor(
 
                         /** Matrix values for specified matrix grouping keys */
                         fun matrixValues(matrixValues: List<MatrixValue>) = apply {
-                            this.matrixValues = matrixValues
+                            this.matrixValues = matrixValues.toMutableList()
+                        }
+
+                        /** Matrix values for specified matrix grouping keys */
+                        fun addMatrixValue(matrixValue: MatrixValue) = apply {
+                            matrixValues =
+                                (matrixValues ?: mutableListOf()).apply { add(matrixValue) }
                         }
 
                         fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -26549,7 +26925,7 @@ constructor(
                         class Builder {
 
                             private var unitAmount: String? = null
-                            private var dimensionValues: List<String?>? = null
+                            private var dimensionValues: MutableList<String?>? = null
                             private var additionalProperties: MutableMap<String, JsonValue> =
                                 mutableMapOf()
 
@@ -26572,7 +26948,19 @@ constructor(
                              * cloud region and an instance tier.
                              */
                             fun dimensionValues(dimensionValues: List<String?>) = apply {
-                                this.dimensionValues = dimensionValues
+                                this.dimensionValues = dimensionValues.toMutableList()
+                            }
+
+                            /**
+                             * One or two matrix keys to filter usage to this Matrix value by. For
+                             * example, ["region", "tier"] could be used to filter cloud usage by a
+                             * cloud region and an instance tier.
+                             */
+                            fun addDimensionValue(dimensionValue: String) = apply {
+                                dimensionValues =
+                                    (dimensionValues ?: mutableListOf()).apply {
+                                        add(dimensionValue)
+                                    }
                             }
 
                             fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -27583,7 +27971,7 @@ constructor(
 
                     class Builder {
 
-                        private var tiers: List<Tier>? = null
+                        private var tiers: MutableList<Tier>? = null
                         private var additionalProperties: MutableMap<String, JsonValue> =
                             mutableMapOf()
 
@@ -27596,7 +27984,14 @@ constructor(
                         /**
                          * Tiers for rating based on total usage quantities into the specified tier
                          */
-                        fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
+                        fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
+
+                        /**
+                         * Tiers for rating based on total usage quantities into the specified tier
+                         */
+                        fun addTier(tier: Tier) = apply {
+                            tiers = (tiers ?: mutableListOf()).apply { add(tier) }
+                        }
 
                         fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
                             apply {
@@ -28654,7 +29049,7 @@ constructor(
 
                     class Builder {
 
-                        private var tiers: List<Tier>? = null
+                        private var tiers: MutableList<Tier>? = null
                         private var additionalProperties: MutableMap<String, JsonValue> =
                             mutableMapOf()
 
@@ -28669,7 +29064,15 @@ constructor(
                          * Tiers for a Graduated BPS pricing model, where usage is bucketed into
                          * specified tiers
                          */
-                        fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
+                        fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
+
+                        /**
+                         * Tiers for a Graduated BPS pricing model, where usage is bucketed into
+                         * specified tiers
+                         */
+                        fun addTier(tier: Tier) = apply {
+                            tiers = (tiers ?: mutableListOf()).apply { add(tier) }
+                        }
 
                         fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
                             apply {
@@ -30552,7 +30955,7 @@ constructor(
 
                     class Builder {
 
-                        private var tiers: List<Tier>? = null
+                        private var tiers: MutableList<Tier>? = null
                         private var additionalProperties: MutableMap<String, JsonValue> =
                             mutableMapOf()
 
@@ -30566,7 +30969,15 @@ constructor(
                          * Tiers for a bulk BPS pricing model where all usage is aggregated to a
                          * single tier based on total volume
                          */
-                        fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
+                        fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
+
+                        /**
+                         * Tiers for a bulk BPS pricing model where all usage is aggregated to a
+                         * single tier based on total volume
+                         */
+                        fun addTier(tier: Tier) = apply {
+                            tiers = (tiers ?: mutableListOf()).apply { add(tier) }
+                        }
 
                         fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
                             apply {
@@ -31608,7 +32019,7 @@ constructor(
 
                     class Builder {
 
-                        private var tiers: List<Tier>? = null
+                        private var tiers: MutableList<Tier>? = null
                         private var additionalProperties: MutableMap<String, JsonValue> =
                             mutableMapOf()
 
@@ -31619,7 +32030,12 @@ constructor(
                         }
 
                         /** Bulk tiers for rating based on total usage volume */
-                        fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
+                        fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
+
+                        /** Bulk tiers for rating based on total usage volume */
+                        fun addTier(tier: Tier) = apply {
+                            tiers = (tiers ?: mutableListOf()).apply { add(tier) }
+                        }
 
                         fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
                             apply {
@@ -41790,11 +42206,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is SubscriptionCreateParams && addAdjustments == other.addAdjustments && addPrices == other.addPrices && alignBillingWithSubscriptionStartDate == other.alignBillingWithSubscriptionStartDate && autoCollection == other.autoCollection && awsRegion == other.awsRegion && billingCycleAnchorConfiguration == other.billingCycleAnchorConfiguration && couponRedemptionCode == other.couponRedemptionCode && creditsOverageRate == other.creditsOverageRate && customerId == other.customerId && defaultInvoiceMemo == other.defaultInvoiceMemo && endDate == other.endDate && externalCustomerId == other.externalCustomerId && externalMarketplace == other.externalMarketplace && externalMarketplaceReportingId == other.externalMarketplaceReportingId && externalPlanId == other.externalPlanId && filter == other.filter && initialPhaseOrder == other.initialPhaseOrder && invoicingThreshold == other.invoicingThreshold && metadata == other.metadata && netTerms == other.netTerms && perCreditOverageAmount == other.perCreditOverageAmount && planId == other.planId && planVersionNumber == other.planVersionNumber && priceOverrides == other.priceOverrides && removeAdjustments == other.removeAdjustments && removePrices == other.removePrices && replaceAdjustments == other.replaceAdjustments && replacePrices == other.replacePrices && startDate == other.startDate && trialDurationDays == other.trialDurationDays && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is SubscriptionCreateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(addAdjustments, addPrices, alignBillingWithSubscriptionStartDate, autoCollection, awsRegion, billingCycleAnchorConfiguration, couponRedemptionCode, creditsOverageRate, customerId, defaultInvoiceMemo, endDate, externalCustomerId, externalMarketplace, externalMarketplaceReportingId, externalPlanId, filter, initialPhaseOrder, invoicingThreshold, metadata, netTerms, perCreditOverageAmount, planId, planVersionNumber, priceOverrides, removeAdjustments, removePrices, replaceAdjustments, replacePrices, startDate, trialDurationDays, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "SubscriptionCreateParams{addAdjustments=$addAdjustments, addPrices=$addPrices, alignBillingWithSubscriptionStartDate=$alignBillingWithSubscriptionStartDate, autoCollection=$autoCollection, awsRegion=$awsRegion, billingCycleAnchorConfiguration=$billingCycleAnchorConfiguration, couponRedemptionCode=$couponRedemptionCode, creditsOverageRate=$creditsOverageRate, customerId=$customerId, defaultInvoiceMemo=$defaultInvoiceMemo, endDate=$endDate, externalCustomerId=$externalCustomerId, externalMarketplace=$externalMarketplace, externalMarketplaceReportingId=$externalMarketplaceReportingId, externalPlanId=$externalPlanId, filter=$filter, initialPhaseOrder=$initialPhaseOrder, invoicingThreshold=$invoicingThreshold, metadata=$metadata, netTerms=$netTerms, perCreditOverageAmount=$perCreditOverageAmount, planId=$planId, planVersionNumber=$planVersionNumber, priceOverrides=$priceOverrides, removeAdjustments=$removeAdjustments, removePrices=$removePrices, replaceAdjustments=$replaceAdjustments, replacePrices=$replacePrices, startDate=$startDate, trialDurationDays=$trialDurationDays, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "SubscriptionCreateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

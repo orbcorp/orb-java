@@ -32,144 +32,86 @@ import kotlin.jvm.optionals.getOrNull
 
 class PriceCreateParams
 constructor(
-    private val newFloatingUnitPrice: NewFloatingUnitPrice?,
-    private val newFloatingPackagePrice: NewFloatingPackagePrice?,
-    private val newFloatingMatrixPrice: NewFloatingMatrixPrice?,
-    private val newFloatingMatrixWithAllocationPrice: NewFloatingMatrixWithAllocationPrice?,
-    private val newFloatingTieredPrice: NewFloatingTieredPrice?,
-    private val newFloatingTieredBpsPrice: NewFloatingTieredBpsPrice?,
-    private val newFloatingBpsPrice: NewFloatingBpsPrice?,
-    private val newFloatingBulkBpsPrice: NewFloatingBulkBpsPrice?,
-    private val newFloatingBulkPrice: NewFloatingBulkPrice?,
-    private val newFloatingThresholdTotalAmountPrice: NewFloatingThresholdTotalAmountPrice?,
-    private val newFloatingTieredPackagePrice: NewFloatingTieredPackagePrice?,
-    private val newFloatingGroupedTieredPrice: NewFloatingGroupedTieredPrice?,
-    private val newFloatingTieredWithMinimumPrice: NewFloatingTieredWithMinimumPrice?,
-    private val newFloatingPackageWithAllocationPrice: NewFloatingPackageWithAllocationPrice?,
-    private val newFloatingTieredPackageWithMinimumPrice: NewFloatingTieredPackageWithMinimumPrice?,
-    private val newFloatingUnitWithPercentPrice: NewFloatingUnitWithPercentPrice?,
-    private val newFloatingTieredWithProrationPrice: NewFloatingTieredWithProrationPrice?,
-    private val newFloatingUnitWithProrationPrice: NewFloatingUnitWithProrationPrice?,
-    private val newFloatingGroupedAllocationPrice: NewFloatingGroupedAllocationPrice?,
-    private val newFloatingGroupedWithProratedMinimumPrice:
-        NewFloatingGroupedWithProratedMinimumPrice?,
-    private val newFloatingGroupedWithMeteredMinimumPrice:
-        NewFloatingGroupedWithMeteredMinimumPrice?,
-    private val newFloatingMatrixWithDisplayNamePrice: NewFloatingMatrixWithDisplayNamePrice?,
-    private val newFloatingBulkWithProrationPrice: NewFloatingBulkWithProrationPrice?,
-    private val newFloatingGroupedTieredPackagePrice: NewFloatingGroupedTieredPackagePrice?,
+    private val body: PriceCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) {
 
-    fun newFloatingUnitPrice(): Optional<NewFloatingUnitPrice> =
-        Optional.ofNullable(newFloatingUnitPrice)
+    fun newFloatingUnitPrice(): Optional<NewFloatingUnitPrice> = body.newFloatingUnitPrice()
 
     fun newFloatingPackagePrice(): Optional<NewFloatingPackagePrice> =
-        Optional.ofNullable(newFloatingPackagePrice)
+        body.newFloatingPackagePrice()
 
-    fun newFloatingMatrixPrice(): Optional<NewFloatingMatrixPrice> =
-        Optional.ofNullable(newFloatingMatrixPrice)
+    fun newFloatingMatrixPrice(): Optional<NewFloatingMatrixPrice> = body.newFloatingMatrixPrice()
 
     fun newFloatingMatrixWithAllocationPrice(): Optional<NewFloatingMatrixWithAllocationPrice> =
-        Optional.ofNullable(newFloatingMatrixWithAllocationPrice)
+        body.newFloatingMatrixWithAllocationPrice()
 
-    fun newFloatingTieredPrice(): Optional<NewFloatingTieredPrice> =
-        Optional.ofNullable(newFloatingTieredPrice)
+    fun newFloatingTieredPrice(): Optional<NewFloatingTieredPrice> = body.newFloatingTieredPrice()
 
     fun newFloatingTieredBpsPrice(): Optional<NewFloatingTieredBpsPrice> =
-        Optional.ofNullable(newFloatingTieredBpsPrice)
+        body.newFloatingTieredBpsPrice()
 
-    fun newFloatingBpsPrice(): Optional<NewFloatingBpsPrice> =
-        Optional.ofNullable(newFloatingBpsPrice)
+    fun newFloatingBpsPrice(): Optional<NewFloatingBpsPrice> = body.newFloatingBpsPrice()
 
     fun newFloatingBulkBpsPrice(): Optional<NewFloatingBulkBpsPrice> =
-        Optional.ofNullable(newFloatingBulkBpsPrice)
+        body.newFloatingBulkBpsPrice()
 
-    fun newFloatingBulkPrice(): Optional<NewFloatingBulkPrice> =
-        Optional.ofNullable(newFloatingBulkPrice)
+    fun newFloatingBulkPrice(): Optional<NewFloatingBulkPrice> = body.newFloatingBulkPrice()
 
     fun newFloatingThresholdTotalAmountPrice(): Optional<NewFloatingThresholdTotalAmountPrice> =
-        Optional.ofNullable(newFloatingThresholdTotalAmountPrice)
+        body.newFloatingThresholdTotalAmountPrice()
 
     fun newFloatingTieredPackagePrice(): Optional<NewFloatingTieredPackagePrice> =
-        Optional.ofNullable(newFloatingTieredPackagePrice)
+        body.newFloatingTieredPackagePrice()
 
     fun newFloatingGroupedTieredPrice(): Optional<NewFloatingGroupedTieredPrice> =
-        Optional.ofNullable(newFloatingGroupedTieredPrice)
+        body.newFloatingGroupedTieredPrice()
 
     fun newFloatingTieredWithMinimumPrice(): Optional<NewFloatingTieredWithMinimumPrice> =
-        Optional.ofNullable(newFloatingTieredWithMinimumPrice)
+        body.newFloatingTieredWithMinimumPrice()
 
     fun newFloatingPackageWithAllocationPrice(): Optional<NewFloatingPackageWithAllocationPrice> =
-        Optional.ofNullable(newFloatingPackageWithAllocationPrice)
+        body.newFloatingPackageWithAllocationPrice()
 
     fun newFloatingTieredPackageWithMinimumPrice():
         Optional<NewFloatingTieredPackageWithMinimumPrice> =
-        Optional.ofNullable(newFloatingTieredPackageWithMinimumPrice)
+        body.newFloatingTieredPackageWithMinimumPrice()
 
     fun newFloatingUnitWithPercentPrice(): Optional<NewFloatingUnitWithPercentPrice> =
-        Optional.ofNullable(newFloatingUnitWithPercentPrice)
+        body.newFloatingUnitWithPercentPrice()
 
     fun newFloatingTieredWithProrationPrice(): Optional<NewFloatingTieredWithProrationPrice> =
-        Optional.ofNullable(newFloatingTieredWithProrationPrice)
+        body.newFloatingTieredWithProrationPrice()
 
     fun newFloatingUnitWithProrationPrice(): Optional<NewFloatingUnitWithProrationPrice> =
-        Optional.ofNullable(newFloatingUnitWithProrationPrice)
+        body.newFloatingUnitWithProrationPrice()
 
     fun newFloatingGroupedAllocationPrice(): Optional<NewFloatingGroupedAllocationPrice> =
-        Optional.ofNullable(newFloatingGroupedAllocationPrice)
+        body.newFloatingGroupedAllocationPrice()
 
     fun newFloatingGroupedWithProratedMinimumPrice():
         Optional<NewFloatingGroupedWithProratedMinimumPrice> =
-        Optional.ofNullable(newFloatingGroupedWithProratedMinimumPrice)
+        body.newFloatingGroupedWithProratedMinimumPrice()
 
     fun newFloatingGroupedWithMeteredMinimumPrice():
         Optional<NewFloatingGroupedWithMeteredMinimumPrice> =
-        Optional.ofNullable(newFloatingGroupedWithMeteredMinimumPrice)
+        body.newFloatingGroupedWithMeteredMinimumPrice()
 
     fun newFloatingMatrixWithDisplayNamePrice(): Optional<NewFloatingMatrixWithDisplayNamePrice> =
-        Optional.ofNullable(newFloatingMatrixWithDisplayNamePrice)
+        body.newFloatingMatrixWithDisplayNamePrice()
 
     fun newFloatingBulkWithProrationPrice(): Optional<NewFloatingBulkWithProrationPrice> =
-        Optional.ofNullable(newFloatingBulkWithProrationPrice)
+        body.newFloatingBulkWithProrationPrice()
 
     fun newFloatingGroupedTieredPackagePrice(): Optional<NewFloatingGroupedTieredPackagePrice> =
-        Optional.ofNullable(newFloatingGroupedTieredPackagePrice)
+        body.newFloatingGroupedTieredPackagePrice()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic
-    internal fun getBody(): PriceCreateBody {
-        return PriceCreateBody(
-            newFloatingUnitPrice,
-            newFloatingPackagePrice,
-            newFloatingMatrixPrice,
-            newFloatingMatrixWithAllocationPrice,
-            newFloatingTieredPrice,
-            newFloatingTieredBpsPrice,
-            newFloatingBpsPrice,
-            newFloatingBulkBpsPrice,
-            newFloatingBulkPrice,
-            newFloatingThresholdTotalAmountPrice,
-            newFloatingTieredPackagePrice,
-            newFloatingGroupedTieredPrice,
-            newFloatingTieredWithMinimumPrice,
-            newFloatingPackageWithAllocationPrice,
-            newFloatingTieredPackageWithMinimumPrice,
-            newFloatingUnitWithPercentPrice,
-            newFloatingTieredWithProrationPrice,
-            newFloatingUnitWithProrationPrice,
-            newFloatingGroupedAllocationPrice,
-            newFloatingGroupedWithProratedMinimumPrice,
-            newFloatingGroupedWithMeteredMinimumPrice,
-            newFloatingMatrixWithDisplayNamePrice,
-            newFloatingBulkWithProrationPrice,
-            newFloatingGroupedTieredPackagePrice,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): PriceCreateBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -1111,764 +1053,184 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var newFloatingUnitPrice: NewFloatingUnitPrice? = null
-        private var newFloatingPackagePrice: NewFloatingPackagePrice? = null
-        private var newFloatingMatrixPrice: NewFloatingMatrixPrice? = null
-        private var newFloatingMatrixWithAllocationPrice: NewFloatingMatrixWithAllocationPrice? =
-            null
-        private var newFloatingTieredPrice: NewFloatingTieredPrice? = null
-        private var newFloatingTieredBpsPrice: NewFloatingTieredBpsPrice? = null
-        private var newFloatingBpsPrice: NewFloatingBpsPrice? = null
-        private var newFloatingBulkBpsPrice: NewFloatingBulkBpsPrice? = null
-        private var newFloatingBulkPrice: NewFloatingBulkPrice? = null
-        private var newFloatingThresholdTotalAmountPrice: NewFloatingThresholdTotalAmountPrice? =
-            null
-        private var newFloatingTieredPackagePrice: NewFloatingTieredPackagePrice? = null
-        private var newFloatingGroupedTieredPrice: NewFloatingGroupedTieredPrice? = null
-        private var newFloatingTieredWithMinimumPrice: NewFloatingTieredWithMinimumPrice? = null
-        private var newFloatingPackageWithAllocationPrice: NewFloatingPackageWithAllocationPrice? =
-            null
-        private var newFloatingTieredPackageWithMinimumPrice:
-            NewFloatingTieredPackageWithMinimumPrice? =
-            null
-        private var newFloatingUnitWithPercentPrice: NewFloatingUnitWithPercentPrice? = null
-        private var newFloatingTieredWithProrationPrice: NewFloatingTieredWithProrationPrice? = null
-        private var newFloatingUnitWithProrationPrice: NewFloatingUnitWithProrationPrice? = null
-        private var newFloatingGroupedAllocationPrice: NewFloatingGroupedAllocationPrice? = null
-        private var newFloatingGroupedWithProratedMinimumPrice:
-            NewFloatingGroupedWithProratedMinimumPrice? =
-            null
-        private var newFloatingGroupedWithMeteredMinimumPrice:
-            NewFloatingGroupedWithMeteredMinimumPrice? =
-            null
-        private var newFloatingMatrixWithDisplayNamePrice: NewFloatingMatrixWithDisplayNamePrice? =
-            null
-        private var newFloatingBulkWithProrationPrice: NewFloatingBulkWithProrationPrice? = null
-        private var newFloatingGroupedTieredPackagePrice: NewFloatingGroupedTieredPackagePrice? =
-            null
+        private var body: PriceCreateBody? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
         internal fun from(priceCreateParams: PriceCreateParams) = apply {
-            newFloatingUnitPrice = priceCreateParams.newFloatingUnitPrice
-            newFloatingPackagePrice = priceCreateParams.newFloatingPackagePrice
-            newFloatingMatrixPrice = priceCreateParams.newFloatingMatrixPrice
-            newFloatingMatrixWithAllocationPrice =
-                priceCreateParams.newFloatingMatrixWithAllocationPrice
-            newFloatingTieredPrice = priceCreateParams.newFloatingTieredPrice
-            newFloatingTieredBpsPrice = priceCreateParams.newFloatingTieredBpsPrice
-            newFloatingBpsPrice = priceCreateParams.newFloatingBpsPrice
-            newFloatingBulkBpsPrice = priceCreateParams.newFloatingBulkBpsPrice
-            newFloatingBulkPrice = priceCreateParams.newFloatingBulkPrice
-            newFloatingThresholdTotalAmountPrice =
-                priceCreateParams.newFloatingThresholdTotalAmountPrice
-            newFloatingTieredPackagePrice = priceCreateParams.newFloatingTieredPackagePrice
-            newFloatingGroupedTieredPrice = priceCreateParams.newFloatingGroupedTieredPrice
-            newFloatingTieredWithMinimumPrice = priceCreateParams.newFloatingTieredWithMinimumPrice
-            newFloatingPackageWithAllocationPrice =
-                priceCreateParams.newFloatingPackageWithAllocationPrice
-            newFloatingTieredPackageWithMinimumPrice =
-                priceCreateParams.newFloatingTieredPackageWithMinimumPrice
-            newFloatingUnitWithPercentPrice = priceCreateParams.newFloatingUnitWithPercentPrice
-            newFloatingTieredWithProrationPrice =
-                priceCreateParams.newFloatingTieredWithProrationPrice
-            newFloatingUnitWithProrationPrice = priceCreateParams.newFloatingUnitWithProrationPrice
-            newFloatingGroupedAllocationPrice = priceCreateParams.newFloatingGroupedAllocationPrice
-            newFloatingGroupedWithProratedMinimumPrice =
-                priceCreateParams.newFloatingGroupedWithProratedMinimumPrice
-            newFloatingGroupedWithMeteredMinimumPrice =
-                priceCreateParams.newFloatingGroupedWithMeteredMinimumPrice
-            newFloatingMatrixWithDisplayNamePrice =
-                priceCreateParams.newFloatingMatrixWithDisplayNamePrice
-            newFloatingBulkWithProrationPrice = priceCreateParams.newFloatingBulkWithProrationPrice
-            newFloatingGroupedTieredPackagePrice =
-                priceCreateParams.newFloatingGroupedTieredPackagePrice
+            body = priceCreateParams.body
             additionalHeaders = priceCreateParams.additionalHeaders.toBuilder()
             additionalQueryParams = priceCreateParams.additionalQueryParams.toBuilder()
         }
 
         fun forNewFloatingUnitPrice(newFloatingUnitPrice: NewFloatingUnitPrice) = apply {
-            this.newFloatingUnitPrice = newFloatingUnitPrice
-            this.newFloatingPackagePrice = null
-            this.newFloatingMatrixPrice = null
-            this.newFloatingMatrixWithAllocationPrice = null
-            this.newFloatingTieredPrice = null
-            this.newFloatingTieredBpsPrice = null
-            this.newFloatingBpsPrice = null
-            this.newFloatingBulkBpsPrice = null
-            this.newFloatingBulkPrice = null
-            this.newFloatingThresholdTotalAmountPrice = null
-            this.newFloatingTieredPackagePrice = null
-            this.newFloatingGroupedTieredPrice = null
-            this.newFloatingTieredWithMinimumPrice = null
-            this.newFloatingPackageWithAllocationPrice = null
-            this.newFloatingTieredPackageWithMinimumPrice = null
-            this.newFloatingUnitWithPercentPrice = null
-            this.newFloatingTieredWithProrationPrice = null
-            this.newFloatingUnitWithProrationPrice = null
-            this.newFloatingGroupedAllocationPrice = null
-            this.newFloatingGroupedWithProratedMinimumPrice = null
-            this.newFloatingGroupedWithMeteredMinimumPrice = null
-            this.newFloatingMatrixWithDisplayNamePrice = null
-            this.newFloatingBulkWithProrationPrice = null
-            this.newFloatingGroupedTieredPackagePrice = null
+            body = PriceCreateBody.ofNewFloatingUnitPrice(newFloatingUnitPrice)
         }
 
         fun forNewFloatingPackagePrice(newFloatingPackagePrice: NewFloatingPackagePrice) = apply {
-            this.newFloatingUnitPrice = null
-            this.newFloatingPackagePrice = newFloatingPackagePrice
-            this.newFloatingMatrixPrice = null
-            this.newFloatingMatrixWithAllocationPrice = null
-            this.newFloatingTieredPrice = null
-            this.newFloatingTieredBpsPrice = null
-            this.newFloatingBpsPrice = null
-            this.newFloatingBulkBpsPrice = null
-            this.newFloatingBulkPrice = null
-            this.newFloatingThresholdTotalAmountPrice = null
-            this.newFloatingTieredPackagePrice = null
-            this.newFloatingGroupedTieredPrice = null
-            this.newFloatingTieredWithMinimumPrice = null
-            this.newFloatingPackageWithAllocationPrice = null
-            this.newFloatingTieredPackageWithMinimumPrice = null
-            this.newFloatingUnitWithPercentPrice = null
-            this.newFloatingTieredWithProrationPrice = null
-            this.newFloatingUnitWithProrationPrice = null
-            this.newFloatingGroupedAllocationPrice = null
-            this.newFloatingGroupedWithProratedMinimumPrice = null
-            this.newFloatingGroupedWithMeteredMinimumPrice = null
-            this.newFloatingMatrixWithDisplayNamePrice = null
-            this.newFloatingBulkWithProrationPrice = null
-            this.newFloatingGroupedTieredPackagePrice = null
+            body = PriceCreateBody.ofNewFloatingPackagePrice(newFloatingPackagePrice)
         }
 
         fun forNewFloatingMatrixPrice(newFloatingMatrixPrice: NewFloatingMatrixPrice) = apply {
-            this.newFloatingUnitPrice = null
-            this.newFloatingPackagePrice = null
-            this.newFloatingMatrixPrice = newFloatingMatrixPrice
-            this.newFloatingMatrixWithAllocationPrice = null
-            this.newFloatingTieredPrice = null
-            this.newFloatingTieredBpsPrice = null
-            this.newFloatingBpsPrice = null
-            this.newFloatingBulkBpsPrice = null
-            this.newFloatingBulkPrice = null
-            this.newFloatingThresholdTotalAmountPrice = null
-            this.newFloatingTieredPackagePrice = null
-            this.newFloatingGroupedTieredPrice = null
-            this.newFloatingTieredWithMinimumPrice = null
-            this.newFloatingPackageWithAllocationPrice = null
-            this.newFloatingTieredPackageWithMinimumPrice = null
-            this.newFloatingUnitWithPercentPrice = null
-            this.newFloatingTieredWithProrationPrice = null
-            this.newFloatingUnitWithProrationPrice = null
-            this.newFloatingGroupedAllocationPrice = null
-            this.newFloatingGroupedWithProratedMinimumPrice = null
-            this.newFloatingGroupedWithMeteredMinimumPrice = null
-            this.newFloatingMatrixWithDisplayNamePrice = null
-            this.newFloatingBulkWithProrationPrice = null
-            this.newFloatingGroupedTieredPackagePrice = null
+            body = PriceCreateBody.ofNewFloatingMatrixPrice(newFloatingMatrixPrice)
         }
 
         fun forNewFloatingMatrixWithAllocationPrice(
             newFloatingMatrixWithAllocationPrice: NewFloatingMatrixWithAllocationPrice
         ) = apply {
-            this.newFloatingUnitPrice = null
-            this.newFloatingPackagePrice = null
-            this.newFloatingMatrixPrice = null
-            this.newFloatingMatrixWithAllocationPrice = newFloatingMatrixWithAllocationPrice
-            this.newFloatingTieredPrice = null
-            this.newFloatingTieredBpsPrice = null
-            this.newFloatingBpsPrice = null
-            this.newFloatingBulkBpsPrice = null
-            this.newFloatingBulkPrice = null
-            this.newFloatingThresholdTotalAmountPrice = null
-            this.newFloatingTieredPackagePrice = null
-            this.newFloatingGroupedTieredPrice = null
-            this.newFloatingTieredWithMinimumPrice = null
-            this.newFloatingPackageWithAllocationPrice = null
-            this.newFloatingTieredPackageWithMinimumPrice = null
-            this.newFloatingUnitWithPercentPrice = null
-            this.newFloatingTieredWithProrationPrice = null
-            this.newFloatingUnitWithProrationPrice = null
-            this.newFloatingGroupedAllocationPrice = null
-            this.newFloatingGroupedWithProratedMinimumPrice = null
-            this.newFloatingGroupedWithMeteredMinimumPrice = null
-            this.newFloatingMatrixWithDisplayNamePrice = null
-            this.newFloatingBulkWithProrationPrice = null
-            this.newFloatingGroupedTieredPackagePrice = null
+            body =
+                PriceCreateBody.ofNewFloatingMatrixWithAllocationPrice(
+                    newFloatingMatrixWithAllocationPrice
+                )
         }
 
         fun forNewFloatingTieredPrice(newFloatingTieredPrice: NewFloatingTieredPrice) = apply {
-            this.newFloatingUnitPrice = null
-            this.newFloatingPackagePrice = null
-            this.newFloatingMatrixPrice = null
-            this.newFloatingMatrixWithAllocationPrice = null
-            this.newFloatingTieredPrice = newFloatingTieredPrice
-            this.newFloatingTieredBpsPrice = null
-            this.newFloatingBpsPrice = null
-            this.newFloatingBulkBpsPrice = null
-            this.newFloatingBulkPrice = null
-            this.newFloatingThresholdTotalAmountPrice = null
-            this.newFloatingTieredPackagePrice = null
-            this.newFloatingGroupedTieredPrice = null
-            this.newFloatingTieredWithMinimumPrice = null
-            this.newFloatingPackageWithAllocationPrice = null
-            this.newFloatingTieredPackageWithMinimumPrice = null
-            this.newFloatingUnitWithPercentPrice = null
-            this.newFloatingTieredWithProrationPrice = null
-            this.newFloatingUnitWithProrationPrice = null
-            this.newFloatingGroupedAllocationPrice = null
-            this.newFloatingGroupedWithProratedMinimumPrice = null
-            this.newFloatingGroupedWithMeteredMinimumPrice = null
-            this.newFloatingMatrixWithDisplayNamePrice = null
-            this.newFloatingBulkWithProrationPrice = null
-            this.newFloatingGroupedTieredPackagePrice = null
+            body = PriceCreateBody.ofNewFloatingTieredPrice(newFloatingTieredPrice)
         }
 
         fun forNewFloatingTieredBpsPrice(newFloatingTieredBpsPrice: NewFloatingTieredBpsPrice) =
             apply {
-                this.newFloatingUnitPrice = null
-                this.newFloatingPackagePrice = null
-                this.newFloatingMatrixPrice = null
-                this.newFloatingMatrixWithAllocationPrice = null
-                this.newFloatingTieredPrice = null
-                this.newFloatingTieredBpsPrice = newFloatingTieredBpsPrice
-                this.newFloatingBpsPrice = null
-                this.newFloatingBulkBpsPrice = null
-                this.newFloatingBulkPrice = null
-                this.newFloatingThresholdTotalAmountPrice = null
-                this.newFloatingTieredPackagePrice = null
-                this.newFloatingGroupedTieredPrice = null
-                this.newFloatingTieredWithMinimumPrice = null
-                this.newFloatingPackageWithAllocationPrice = null
-                this.newFloatingTieredPackageWithMinimumPrice = null
-                this.newFloatingUnitWithPercentPrice = null
-                this.newFloatingTieredWithProrationPrice = null
-                this.newFloatingUnitWithProrationPrice = null
-                this.newFloatingGroupedAllocationPrice = null
-                this.newFloatingGroupedWithProratedMinimumPrice = null
-                this.newFloatingGroupedWithMeteredMinimumPrice = null
-                this.newFloatingMatrixWithDisplayNamePrice = null
-                this.newFloatingBulkWithProrationPrice = null
-                this.newFloatingGroupedTieredPackagePrice = null
+                body = PriceCreateBody.ofNewFloatingTieredBpsPrice(newFloatingTieredBpsPrice)
             }
 
         fun forNewFloatingBpsPrice(newFloatingBpsPrice: NewFloatingBpsPrice) = apply {
-            this.newFloatingUnitPrice = null
-            this.newFloatingPackagePrice = null
-            this.newFloatingMatrixPrice = null
-            this.newFloatingMatrixWithAllocationPrice = null
-            this.newFloatingTieredPrice = null
-            this.newFloatingTieredBpsPrice = null
-            this.newFloatingBpsPrice = newFloatingBpsPrice
-            this.newFloatingBulkBpsPrice = null
-            this.newFloatingBulkPrice = null
-            this.newFloatingThresholdTotalAmountPrice = null
-            this.newFloatingTieredPackagePrice = null
-            this.newFloatingGroupedTieredPrice = null
-            this.newFloatingTieredWithMinimumPrice = null
-            this.newFloatingPackageWithAllocationPrice = null
-            this.newFloatingTieredPackageWithMinimumPrice = null
-            this.newFloatingUnitWithPercentPrice = null
-            this.newFloatingTieredWithProrationPrice = null
-            this.newFloatingUnitWithProrationPrice = null
-            this.newFloatingGroupedAllocationPrice = null
-            this.newFloatingGroupedWithProratedMinimumPrice = null
-            this.newFloatingGroupedWithMeteredMinimumPrice = null
-            this.newFloatingMatrixWithDisplayNamePrice = null
-            this.newFloatingBulkWithProrationPrice = null
-            this.newFloatingGroupedTieredPackagePrice = null
+            body = PriceCreateBody.ofNewFloatingBpsPrice(newFloatingBpsPrice)
         }
 
         fun forNewFloatingBulkBpsPrice(newFloatingBulkBpsPrice: NewFloatingBulkBpsPrice) = apply {
-            this.newFloatingUnitPrice = null
-            this.newFloatingPackagePrice = null
-            this.newFloatingMatrixPrice = null
-            this.newFloatingMatrixWithAllocationPrice = null
-            this.newFloatingTieredPrice = null
-            this.newFloatingTieredBpsPrice = null
-            this.newFloatingBpsPrice = null
-            this.newFloatingBulkBpsPrice = newFloatingBulkBpsPrice
-            this.newFloatingBulkPrice = null
-            this.newFloatingThresholdTotalAmountPrice = null
-            this.newFloatingTieredPackagePrice = null
-            this.newFloatingGroupedTieredPrice = null
-            this.newFloatingTieredWithMinimumPrice = null
-            this.newFloatingPackageWithAllocationPrice = null
-            this.newFloatingTieredPackageWithMinimumPrice = null
-            this.newFloatingUnitWithPercentPrice = null
-            this.newFloatingTieredWithProrationPrice = null
-            this.newFloatingUnitWithProrationPrice = null
-            this.newFloatingGroupedAllocationPrice = null
-            this.newFloatingGroupedWithProratedMinimumPrice = null
-            this.newFloatingGroupedWithMeteredMinimumPrice = null
-            this.newFloatingMatrixWithDisplayNamePrice = null
-            this.newFloatingBulkWithProrationPrice = null
-            this.newFloatingGroupedTieredPackagePrice = null
+            body = PriceCreateBody.ofNewFloatingBulkBpsPrice(newFloatingBulkBpsPrice)
         }
 
         fun forNewFloatingBulkPrice(newFloatingBulkPrice: NewFloatingBulkPrice) = apply {
-            this.newFloatingUnitPrice = null
-            this.newFloatingPackagePrice = null
-            this.newFloatingMatrixPrice = null
-            this.newFloatingMatrixWithAllocationPrice = null
-            this.newFloatingTieredPrice = null
-            this.newFloatingTieredBpsPrice = null
-            this.newFloatingBpsPrice = null
-            this.newFloatingBulkBpsPrice = null
-            this.newFloatingBulkPrice = newFloatingBulkPrice
-            this.newFloatingThresholdTotalAmountPrice = null
-            this.newFloatingTieredPackagePrice = null
-            this.newFloatingGroupedTieredPrice = null
-            this.newFloatingTieredWithMinimumPrice = null
-            this.newFloatingPackageWithAllocationPrice = null
-            this.newFloatingTieredPackageWithMinimumPrice = null
-            this.newFloatingUnitWithPercentPrice = null
-            this.newFloatingTieredWithProrationPrice = null
-            this.newFloatingUnitWithProrationPrice = null
-            this.newFloatingGroupedAllocationPrice = null
-            this.newFloatingGroupedWithProratedMinimumPrice = null
-            this.newFloatingGroupedWithMeteredMinimumPrice = null
-            this.newFloatingMatrixWithDisplayNamePrice = null
-            this.newFloatingBulkWithProrationPrice = null
-            this.newFloatingGroupedTieredPackagePrice = null
+            body = PriceCreateBody.ofNewFloatingBulkPrice(newFloatingBulkPrice)
         }
 
         fun forNewFloatingThresholdTotalAmountPrice(
             newFloatingThresholdTotalAmountPrice: NewFloatingThresholdTotalAmountPrice
         ) = apply {
-            this.newFloatingUnitPrice = null
-            this.newFloatingPackagePrice = null
-            this.newFloatingMatrixPrice = null
-            this.newFloatingMatrixWithAllocationPrice = null
-            this.newFloatingTieredPrice = null
-            this.newFloatingTieredBpsPrice = null
-            this.newFloatingBpsPrice = null
-            this.newFloatingBulkBpsPrice = null
-            this.newFloatingBulkPrice = null
-            this.newFloatingThresholdTotalAmountPrice = newFloatingThresholdTotalAmountPrice
-            this.newFloatingTieredPackagePrice = null
-            this.newFloatingGroupedTieredPrice = null
-            this.newFloatingTieredWithMinimumPrice = null
-            this.newFloatingPackageWithAllocationPrice = null
-            this.newFloatingTieredPackageWithMinimumPrice = null
-            this.newFloatingUnitWithPercentPrice = null
-            this.newFloatingTieredWithProrationPrice = null
-            this.newFloatingUnitWithProrationPrice = null
-            this.newFloatingGroupedAllocationPrice = null
-            this.newFloatingGroupedWithProratedMinimumPrice = null
-            this.newFloatingGroupedWithMeteredMinimumPrice = null
-            this.newFloatingMatrixWithDisplayNamePrice = null
-            this.newFloatingBulkWithProrationPrice = null
-            this.newFloatingGroupedTieredPackagePrice = null
+            body =
+                PriceCreateBody.ofNewFloatingThresholdTotalAmountPrice(
+                    newFloatingThresholdTotalAmountPrice
+                )
         }
 
         fun forNewFloatingTieredPackagePrice(
             newFloatingTieredPackagePrice: NewFloatingTieredPackagePrice
         ) = apply {
-            this.newFloatingUnitPrice = null
-            this.newFloatingPackagePrice = null
-            this.newFloatingMatrixPrice = null
-            this.newFloatingMatrixWithAllocationPrice = null
-            this.newFloatingTieredPrice = null
-            this.newFloatingTieredBpsPrice = null
-            this.newFloatingBpsPrice = null
-            this.newFloatingBulkBpsPrice = null
-            this.newFloatingBulkPrice = null
-            this.newFloatingThresholdTotalAmountPrice = null
-            this.newFloatingTieredPackagePrice = newFloatingTieredPackagePrice
-            this.newFloatingGroupedTieredPrice = null
-            this.newFloatingTieredWithMinimumPrice = null
-            this.newFloatingPackageWithAllocationPrice = null
-            this.newFloatingTieredPackageWithMinimumPrice = null
-            this.newFloatingUnitWithPercentPrice = null
-            this.newFloatingTieredWithProrationPrice = null
-            this.newFloatingUnitWithProrationPrice = null
-            this.newFloatingGroupedAllocationPrice = null
-            this.newFloatingGroupedWithProratedMinimumPrice = null
-            this.newFloatingGroupedWithMeteredMinimumPrice = null
-            this.newFloatingMatrixWithDisplayNamePrice = null
-            this.newFloatingBulkWithProrationPrice = null
-            this.newFloatingGroupedTieredPackagePrice = null
+            body = PriceCreateBody.ofNewFloatingTieredPackagePrice(newFloatingTieredPackagePrice)
         }
 
         fun forNewFloatingGroupedTieredPrice(
             newFloatingGroupedTieredPrice: NewFloatingGroupedTieredPrice
         ) = apply {
-            this.newFloatingUnitPrice = null
-            this.newFloatingPackagePrice = null
-            this.newFloatingMatrixPrice = null
-            this.newFloatingMatrixWithAllocationPrice = null
-            this.newFloatingTieredPrice = null
-            this.newFloatingTieredBpsPrice = null
-            this.newFloatingBpsPrice = null
-            this.newFloatingBulkBpsPrice = null
-            this.newFloatingBulkPrice = null
-            this.newFloatingThresholdTotalAmountPrice = null
-            this.newFloatingTieredPackagePrice = null
-            this.newFloatingGroupedTieredPrice = newFloatingGroupedTieredPrice
-            this.newFloatingTieredWithMinimumPrice = null
-            this.newFloatingPackageWithAllocationPrice = null
-            this.newFloatingTieredPackageWithMinimumPrice = null
-            this.newFloatingUnitWithPercentPrice = null
-            this.newFloatingTieredWithProrationPrice = null
-            this.newFloatingUnitWithProrationPrice = null
-            this.newFloatingGroupedAllocationPrice = null
-            this.newFloatingGroupedWithProratedMinimumPrice = null
-            this.newFloatingGroupedWithMeteredMinimumPrice = null
-            this.newFloatingMatrixWithDisplayNamePrice = null
-            this.newFloatingBulkWithProrationPrice = null
-            this.newFloatingGroupedTieredPackagePrice = null
+            body = PriceCreateBody.ofNewFloatingGroupedTieredPrice(newFloatingGroupedTieredPrice)
         }
 
         fun forNewFloatingTieredWithMinimumPrice(
             newFloatingTieredWithMinimumPrice: NewFloatingTieredWithMinimumPrice
         ) = apply {
-            this.newFloatingUnitPrice = null
-            this.newFloatingPackagePrice = null
-            this.newFloatingMatrixPrice = null
-            this.newFloatingMatrixWithAllocationPrice = null
-            this.newFloatingTieredPrice = null
-            this.newFloatingTieredBpsPrice = null
-            this.newFloatingBpsPrice = null
-            this.newFloatingBulkBpsPrice = null
-            this.newFloatingBulkPrice = null
-            this.newFloatingThresholdTotalAmountPrice = null
-            this.newFloatingTieredPackagePrice = null
-            this.newFloatingGroupedTieredPrice = null
-            this.newFloatingTieredWithMinimumPrice = newFloatingTieredWithMinimumPrice
-            this.newFloatingPackageWithAllocationPrice = null
-            this.newFloatingTieredPackageWithMinimumPrice = null
-            this.newFloatingUnitWithPercentPrice = null
-            this.newFloatingTieredWithProrationPrice = null
-            this.newFloatingUnitWithProrationPrice = null
-            this.newFloatingGroupedAllocationPrice = null
-            this.newFloatingGroupedWithProratedMinimumPrice = null
-            this.newFloatingGroupedWithMeteredMinimumPrice = null
-            this.newFloatingMatrixWithDisplayNamePrice = null
-            this.newFloatingBulkWithProrationPrice = null
-            this.newFloatingGroupedTieredPackagePrice = null
+            body =
+                PriceCreateBody.ofNewFloatingTieredWithMinimumPrice(
+                    newFloatingTieredWithMinimumPrice
+                )
         }
 
         fun forNewFloatingPackageWithAllocationPrice(
             newFloatingPackageWithAllocationPrice: NewFloatingPackageWithAllocationPrice
         ) = apply {
-            this.newFloatingUnitPrice = null
-            this.newFloatingPackagePrice = null
-            this.newFloatingMatrixPrice = null
-            this.newFloatingMatrixWithAllocationPrice = null
-            this.newFloatingTieredPrice = null
-            this.newFloatingTieredBpsPrice = null
-            this.newFloatingBpsPrice = null
-            this.newFloatingBulkBpsPrice = null
-            this.newFloatingBulkPrice = null
-            this.newFloatingThresholdTotalAmountPrice = null
-            this.newFloatingTieredPackagePrice = null
-            this.newFloatingGroupedTieredPrice = null
-            this.newFloatingTieredWithMinimumPrice = null
-            this.newFloatingPackageWithAllocationPrice = newFloatingPackageWithAllocationPrice
-            this.newFloatingTieredPackageWithMinimumPrice = null
-            this.newFloatingUnitWithPercentPrice = null
-            this.newFloatingTieredWithProrationPrice = null
-            this.newFloatingUnitWithProrationPrice = null
-            this.newFloatingGroupedAllocationPrice = null
-            this.newFloatingGroupedWithProratedMinimumPrice = null
-            this.newFloatingGroupedWithMeteredMinimumPrice = null
-            this.newFloatingMatrixWithDisplayNamePrice = null
-            this.newFloatingBulkWithProrationPrice = null
-            this.newFloatingGroupedTieredPackagePrice = null
+            body =
+                PriceCreateBody.ofNewFloatingPackageWithAllocationPrice(
+                    newFloatingPackageWithAllocationPrice
+                )
         }
 
         fun forNewFloatingTieredPackageWithMinimumPrice(
             newFloatingTieredPackageWithMinimumPrice: NewFloatingTieredPackageWithMinimumPrice
         ) = apply {
-            this.newFloatingUnitPrice = null
-            this.newFloatingPackagePrice = null
-            this.newFloatingMatrixPrice = null
-            this.newFloatingMatrixWithAllocationPrice = null
-            this.newFloatingTieredPrice = null
-            this.newFloatingTieredBpsPrice = null
-            this.newFloatingBpsPrice = null
-            this.newFloatingBulkBpsPrice = null
-            this.newFloatingBulkPrice = null
-            this.newFloatingThresholdTotalAmountPrice = null
-            this.newFloatingTieredPackagePrice = null
-            this.newFloatingGroupedTieredPrice = null
-            this.newFloatingTieredWithMinimumPrice = null
-            this.newFloatingPackageWithAllocationPrice = null
-            this.newFloatingTieredPackageWithMinimumPrice = newFloatingTieredPackageWithMinimumPrice
-            this.newFloatingUnitWithPercentPrice = null
-            this.newFloatingTieredWithProrationPrice = null
-            this.newFloatingUnitWithProrationPrice = null
-            this.newFloatingGroupedAllocationPrice = null
-            this.newFloatingGroupedWithProratedMinimumPrice = null
-            this.newFloatingGroupedWithMeteredMinimumPrice = null
-            this.newFloatingMatrixWithDisplayNamePrice = null
-            this.newFloatingBulkWithProrationPrice = null
-            this.newFloatingGroupedTieredPackagePrice = null
+            body =
+                PriceCreateBody.ofNewFloatingTieredPackageWithMinimumPrice(
+                    newFloatingTieredPackageWithMinimumPrice
+                )
         }
 
         fun forNewFloatingUnitWithPercentPrice(
             newFloatingUnitWithPercentPrice: NewFloatingUnitWithPercentPrice
         ) = apply {
-            this.newFloatingUnitPrice = null
-            this.newFloatingPackagePrice = null
-            this.newFloatingMatrixPrice = null
-            this.newFloatingMatrixWithAllocationPrice = null
-            this.newFloatingTieredPrice = null
-            this.newFloatingTieredBpsPrice = null
-            this.newFloatingBpsPrice = null
-            this.newFloatingBulkBpsPrice = null
-            this.newFloatingBulkPrice = null
-            this.newFloatingThresholdTotalAmountPrice = null
-            this.newFloatingTieredPackagePrice = null
-            this.newFloatingGroupedTieredPrice = null
-            this.newFloatingTieredWithMinimumPrice = null
-            this.newFloatingPackageWithAllocationPrice = null
-            this.newFloatingTieredPackageWithMinimumPrice = null
-            this.newFloatingUnitWithPercentPrice = newFloatingUnitWithPercentPrice
-            this.newFloatingTieredWithProrationPrice = null
-            this.newFloatingUnitWithProrationPrice = null
-            this.newFloatingGroupedAllocationPrice = null
-            this.newFloatingGroupedWithProratedMinimumPrice = null
-            this.newFloatingGroupedWithMeteredMinimumPrice = null
-            this.newFloatingMatrixWithDisplayNamePrice = null
-            this.newFloatingBulkWithProrationPrice = null
-            this.newFloatingGroupedTieredPackagePrice = null
+            body =
+                PriceCreateBody.ofNewFloatingUnitWithPercentPrice(newFloatingUnitWithPercentPrice)
         }
 
         fun forNewFloatingTieredWithProrationPrice(
             newFloatingTieredWithProrationPrice: NewFloatingTieredWithProrationPrice
         ) = apply {
-            this.newFloatingUnitPrice = null
-            this.newFloatingPackagePrice = null
-            this.newFloatingMatrixPrice = null
-            this.newFloatingMatrixWithAllocationPrice = null
-            this.newFloatingTieredPrice = null
-            this.newFloatingTieredBpsPrice = null
-            this.newFloatingBpsPrice = null
-            this.newFloatingBulkBpsPrice = null
-            this.newFloatingBulkPrice = null
-            this.newFloatingThresholdTotalAmountPrice = null
-            this.newFloatingTieredPackagePrice = null
-            this.newFloatingGroupedTieredPrice = null
-            this.newFloatingTieredWithMinimumPrice = null
-            this.newFloatingPackageWithAllocationPrice = null
-            this.newFloatingTieredPackageWithMinimumPrice = null
-            this.newFloatingUnitWithPercentPrice = null
-            this.newFloatingTieredWithProrationPrice = newFloatingTieredWithProrationPrice
-            this.newFloatingUnitWithProrationPrice = null
-            this.newFloatingGroupedAllocationPrice = null
-            this.newFloatingGroupedWithProratedMinimumPrice = null
-            this.newFloatingGroupedWithMeteredMinimumPrice = null
-            this.newFloatingMatrixWithDisplayNamePrice = null
-            this.newFloatingBulkWithProrationPrice = null
-            this.newFloatingGroupedTieredPackagePrice = null
+            body =
+                PriceCreateBody.ofNewFloatingTieredWithProrationPrice(
+                    newFloatingTieredWithProrationPrice
+                )
         }
 
         fun forNewFloatingUnitWithProrationPrice(
             newFloatingUnitWithProrationPrice: NewFloatingUnitWithProrationPrice
         ) = apply {
-            this.newFloatingUnitPrice = null
-            this.newFloatingPackagePrice = null
-            this.newFloatingMatrixPrice = null
-            this.newFloatingMatrixWithAllocationPrice = null
-            this.newFloatingTieredPrice = null
-            this.newFloatingTieredBpsPrice = null
-            this.newFloatingBpsPrice = null
-            this.newFloatingBulkBpsPrice = null
-            this.newFloatingBulkPrice = null
-            this.newFloatingThresholdTotalAmountPrice = null
-            this.newFloatingTieredPackagePrice = null
-            this.newFloatingGroupedTieredPrice = null
-            this.newFloatingTieredWithMinimumPrice = null
-            this.newFloatingPackageWithAllocationPrice = null
-            this.newFloatingTieredPackageWithMinimumPrice = null
-            this.newFloatingUnitWithPercentPrice = null
-            this.newFloatingTieredWithProrationPrice = null
-            this.newFloatingUnitWithProrationPrice = newFloatingUnitWithProrationPrice
-            this.newFloatingGroupedAllocationPrice = null
-            this.newFloatingGroupedWithProratedMinimumPrice = null
-            this.newFloatingGroupedWithMeteredMinimumPrice = null
-            this.newFloatingMatrixWithDisplayNamePrice = null
-            this.newFloatingBulkWithProrationPrice = null
-            this.newFloatingGroupedTieredPackagePrice = null
+            body =
+                PriceCreateBody.ofNewFloatingUnitWithProrationPrice(
+                    newFloatingUnitWithProrationPrice
+                )
         }
 
         fun forNewFloatingGroupedAllocationPrice(
             newFloatingGroupedAllocationPrice: NewFloatingGroupedAllocationPrice
         ) = apply {
-            this.newFloatingUnitPrice = null
-            this.newFloatingPackagePrice = null
-            this.newFloatingMatrixPrice = null
-            this.newFloatingMatrixWithAllocationPrice = null
-            this.newFloatingTieredPrice = null
-            this.newFloatingTieredBpsPrice = null
-            this.newFloatingBpsPrice = null
-            this.newFloatingBulkBpsPrice = null
-            this.newFloatingBulkPrice = null
-            this.newFloatingThresholdTotalAmountPrice = null
-            this.newFloatingTieredPackagePrice = null
-            this.newFloatingGroupedTieredPrice = null
-            this.newFloatingTieredWithMinimumPrice = null
-            this.newFloatingPackageWithAllocationPrice = null
-            this.newFloatingTieredPackageWithMinimumPrice = null
-            this.newFloatingUnitWithPercentPrice = null
-            this.newFloatingTieredWithProrationPrice = null
-            this.newFloatingUnitWithProrationPrice = null
-            this.newFloatingGroupedAllocationPrice = newFloatingGroupedAllocationPrice
-            this.newFloatingGroupedWithProratedMinimumPrice = null
-            this.newFloatingGroupedWithMeteredMinimumPrice = null
-            this.newFloatingMatrixWithDisplayNamePrice = null
-            this.newFloatingBulkWithProrationPrice = null
-            this.newFloatingGroupedTieredPackagePrice = null
+            body =
+                PriceCreateBody.ofNewFloatingGroupedAllocationPrice(
+                    newFloatingGroupedAllocationPrice
+                )
         }
 
         fun forNewFloatingGroupedWithProratedMinimumPrice(
             newFloatingGroupedWithProratedMinimumPrice: NewFloatingGroupedWithProratedMinimumPrice
         ) = apply {
-            this.newFloatingUnitPrice = null
-            this.newFloatingPackagePrice = null
-            this.newFloatingMatrixPrice = null
-            this.newFloatingMatrixWithAllocationPrice = null
-            this.newFloatingTieredPrice = null
-            this.newFloatingTieredBpsPrice = null
-            this.newFloatingBpsPrice = null
-            this.newFloatingBulkBpsPrice = null
-            this.newFloatingBulkPrice = null
-            this.newFloatingThresholdTotalAmountPrice = null
-            this.newFloatingTieredPackagePrice = null
-            this.newFloatingGroupedTieredPrice = null
-            this.newFloatingTieredWithMinimumPrice = null
-            this.newFloatingPackageWithAllocationPrice = null
-            this.newFloatingTieredPackageWithMinimumPrice = null
-            this.newFloatingUnitWithPercentPrice = null
-            this.newFloatingTieredWithProrationPrice = null
-            this.newFloatingUnitWithProrationPrice = null
-            this.newFloatingGroupedAllocationPrice = null
-            this.newFloatingGroupedWithProratedMinimumPrice =
-                newFloatingGroupedWithProratedMinimumPrice
-            this.newFloatingGroupedWithMeteredMinimumPrice = null
-            this.newFloatingMatrixWithDisplayNamePrice = null
-            this.newFloatingBulkWithProrationPrice = null
-            this.newFloatingGroupedTieredPackagePrice = null
+            body =
+                PriceCreateBody.ofNewFloatingGroupedWithProratedMinimumPrice(
+                    newFloatingGroupedWithProratedMinimumPrice
+                )
         }
 
         fun forNewFloatingGroupedWithMeteredMinimumPrice(
             newFloatingGroupedWithMeteredMinimumPrice: NewFloatingGroupedWithMeteredMinimumPrice
         ) = apply {
-            this.newFloatingUnitPrice = null
-            this.newFloatingPackagePrice = null
-            this.newFloatingMatrixPrice = null
-            this.newFloatingMatrixWithAllocationPrice = null
-            this.newFloatingTieredPrice = null
-            this.newFloatingTieredBpsPrice = null
-            this.newFloatingBpsPrice = null
-            this.newFloatingBulkBpsPrice = null
-            this.newFloatingBulkPrice = null
-            this.newFloatingThresholdTotalAmountPrice = null
-            this.newFloatingTieredPackagePrice = null
-            this.newFloatingGroupedTieredPrice = null
-            this.newFloatingTieredWithMinimumPrice = null
-            this.newFloatingPackageWithAllocationPrice = null
-            this.newFloatingTieredPackageWithMinimumPrice = null
-            this.newFloatingUnitWithPercentPrice = null
-            this.newFloatingTieredWithProrationPrice = null
-            this.newFloatingUnitWithProrationPrice = null
-            this.newFloatingGroupedAllocationPrice = null
-            this.newFloatingGroupedWithProratedMinimumPrice = null
-            this.newFloatingGroupedWithMeteredMinimumPrice =
-                newFloatingGroupedWithMeteredMinimumPrice
-            this.newFloatingMatrixWithDisplayNamePrice = null
-            this.newFloatingBulkWithProrationPrice = null
-            this.newFloatingGroupedTieredPackagePrice = null
+            body =
+                PriceCreateBody.ofNewFloatingGroupedWithMeteredMinimumPrice(
+                    newFloatingGroupedWithMeteredMinimumPrice
+                )
         }
 
         fun forNewFloatingMatrixWithDisplayNamePrice(
             newFloatingMatrixWithDisplayNamePrice: NewFloatingMatrixWithDisplayNamePrice
         ) = apply {
-            this.newFloatingUnitPrice = null
-            this.newFloatingPackagePrice = null
-            this.newFloatingMatrixPrice = null
-            this.newFloatingMatrixWithAllocationPrice = null
-            this.newFloatingTieredPrice = null
-            this.newFloatingTieredBpsPrice = null
-            this.newFloatingBpsPrice = null
-            this.newFloatingBulkBpsPrice = null
-            this.newFloatingBulkPrice = null
-            this.newFloatingThresholdTotalAmountPrice = null
-            this.newFloatingTieredPackagePrice = null
-            this.newFloatingGroupedTieredPrice = null
-            this.newFloatingTieredWithMinimumPrice = null
-            this.newFloatingPackageWithAllocationPrice = null
-            this.newFloatingTieredPackageWithMinimumPrice = null
-            this.newFloatingUnitWithPercentPrice = null
-            this.newFloatingTieredWithProrationPrice = null
-            this.newFloatingUnitWithProrationPrice = null
-            this.newFloatingGroupedAllocationPrice = null
-            this.newFloatingGroupedWithProratedMinimumPrice = null
-            this.newFloatingGroupedWithMeteredMinimumPrice = null
-            this.newFloatingMatrixWithDisplayNamePrice = newFloatingMatrixWithDisplayNamePrice
-            this.newFloatingBulkWithProrationPrice = null
-            this.newFloatingGroupedTieredPackagePrice = null
+            body =
+                PriceCreateBody.ofNewFloatingMatrixWithDisplayNamePrice(
+                    newFloatingMatrixWithDisplayNamePrice
+                )
         }
 
         fun forNewFloatingBulkWithProrationPrice(
             newFloatingBulkWithProrationPrice: NewFloatingBulkWithProrationPrice
         ) = apply {
-            this.newFloatingUnitPrice = null
-            this.newFloatingPackagePrice = null
-            this.newFloatingMatrixPrice = null
-            this.newFloatingMatrixWithAllocationPrice = null
-            this.newFloatingTieredPrice = null
-            this.newFloatingTieredBpsPrice = null
-            this.newFloatingBpsPrice = null
-            this.newFloatingBulkBpsPrice = null
-            this.newFloatingBulkPrice = null
-            this.newFloatingThresholdTotalAmountPrice = null
-            this.newFloatingTieredPackagePrice = null
-            this.newFloatingGroupedTieredPrice = null
-            this.newFloatingTieredWithMinimumPrice = null
-            this.newFloatingPackageWithAllocationPrice = null
-            this.newFloatingTieredPackageWithMinimumPrice = null
-            this.newFloatingUnitWithPercentPrice = null
-            this.newFloatingTieredWithProrationPrice = null
-            this.newFloatingUnitWithProrationPrice = null
-            this.newFloatingGroupedAllocationPrice = null
-            this.newFloatingGroupedWithProratedMinimumPrice = null
-            this.newFloatingGroupedWithMeteredMinimumPrice = null
-            this.newFloatingMatrixWithDisplayNamePrice = null
-            this.newFloatingBulkWithProrationPrice = newFloatingBulkWithProrationPrice
-            this.newFloatingGroupedTieredPackagePrice = null
+            body =
+                PriceCreateBody.ofNewFloatingBulkWithProrationPrice(
+                    newFloatingBulkWithProrationPrice
+                )
         }
 
         fun forNewFloatingGroupedTieredPackagePrice(
             newFloatingGroupedTieredPackagePrice: NewFloatingGroupedTieredPackagePrice
         ) = apply {
-            this.newFloatingUnitPrice = null
-            this.newFloatingPackagePrice = null
-            this.newFloatingMatrixPrice = null
-            this.newFloatingMatrixWithAllocationPrice = null
-            this.newFloatingTieredPrice = null
-            this.newFloatingTieredBpsPrice = null
-            this.newFloatingBpsPrice = null
-            this.newFloatingBulkBpsPrice = null
-            this.newFloatingBulkPrice = null
-            this.newFloatingThresholdTotalAmountPrice = null
-            this.newFloatingTieredPackagePrice = null
-            this.newFloatingGroupedTieredPrice = null
-            this.newFloatingTieredWithMinimumPrice = null
-            this.newFloatingPackageWithAllocationPrice = null
-            this.newFloatingTieredPackageWithMinimumPrice = null
-            this.newFloatingUnitWithPercentPrice = null
-            this.newFloatingTieredWithProrationPrice = null
-            this.newFloatingUnitWithProrationPrice = null
-            this.newFloatingGroupedAllocationPrice = null
-            this.newFloatingGroupedWithProratedMinimumPrice = null
-            this.newFloatingGroupedWithMeteredMinimumPrice = null
-            this.newFloatingMatrixWithDisplayNamePrice = null
-            this.newFloatingBulkWithProrationPrice = null
-            this.newFloatingGroupedTieredPackagePrice = newFloatingGroupedTieredPackagePrice
+            body =
+                PriceCreateBody.ofNewFloatingGroupedTieredPackagePrice(
+                    newFloatingGroupedTieredPackagePrice
+                )
         }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -1971,30 +1333,7 @@ constructor(
 
         fun build(): PriceCreateParams =
             PriceCreateParams(
-                newFloatingUnitPrice,
-                newFloatingPackagePrice,
-                newFloatingMatrixPrice,
-                newFloatingMatrixWithAllocationPrice,
-                newFloatingTieredPrice,
-                newFloatingTieredBpsPrice,
-                newFloatingBpsPrice,
-                newFloatingBulkBpsPrice,
-                newFloatingBulkPrice,
-                newFloatingThresholdTotalAmountPrice,
-                newFloatingTieredPackagePrice,
-                newFloatingGroupedTieredPrice,
-                newFloatingTieredWithMinimumPrice,
-                newFloatingPackageWithAllocationPrice,
-                newFloatingTieredPackageWithMinimumPrice,
-                newFloatingUnitWithPercentPrice,
-                newFloatingTieredWithProrationPrice,
-                newFloatingUnitWithProrationPrice,
-                newFloatingGroupedAllocationPrice,
-                newFloatingGroupedWithProratedMinimumPrice,
-                newFloatingGroupedWithMeteredMinimumPrice,
-                newFloatingMatrixWithDisplayNamePrice,
-                newFloatingBulkWithProrationPrice,
-                newFloatingGroupedTieredPackagePrice,
+                body ?: PriceCreateBody(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -4146,9 +3485,9 @@ constructor(
 
             class Builder {
 
-                private var dimensions: List<String?>? = null
+                private var dimensions: MutableList<String?>? = null
                 private var defaultUnitAmount: String? = null
-                private var matrixValues: List<MatrixValue>? = null
+                private var matrixValues: MutableList<MatrixValue>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -4160,7 +3499,14 @@ constructor(
                 }
 
                 /** One or two event property values to evaluate matrix groups by */
-                fun dimensions(dimensions: List<String?>) = apply { this.dimensions = dimensions }
+                fun dimensions(dimensions: List<String?>) = apply {
+                    this.dimensions = dimensions.toMutableList()
+                }
+
+                /** One or two event property values to evaluate matrix groups by */
+                fun addDimension(dimension: String) = apply {
+                    dimensions = (dimensions ?: mutableListOf()).apply { add(dimension) }
+                }
 
                 /**
                  * Default per unit rate for any usage not bucketed into a specified matrix_value
@@ -4171,7 +3517,12 @@ constructor(
 
                 /** Matrix values for specified matrix grouping keys */
                 fun matrixValues(matrixValues: List<MatrixValue>) = apply {
-                    this.matrixValues = matrixValues
+                    this.matrixValues = matrixValues.toMutableList()
+                }
+
+                /** Matrix values for specified matrix grouping keys */
+                fun addMatrixValue(matrixValue: MatrixValue) = apply {
+                    matrixValues = (matrixValues ?: mutableListOf()).apply { add(matrixValue) }
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -4244,7 +3595,7 @@ constructor(
                 class Builder {
 
                     private var unitAmount: String? = null
-                    private var dimensionValues: List<String?>? = null
+                    private var dimensionValues: MutableList<String?>? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
@@ -4263,7 +3614,17 @@ constructor(
                      * an instance tier.
                      */
                     fun dimensionValues(dimensionValues: List<String?>) = apply {
-                        this.dimensionValues = dimensionValues
+                        this.dimensionValues = dimensionValues.toMutableList()
+                    }
+
+                    /**
+                     * One or two matrix keys to filter usage to this Matrix value by. For example,
+                     * ["region", "tier"] could be used to filter cloud usage by a cloud region and
+                     * an instance tier.
+                     */
+                    fun addDimensionValue(dimensionValue: String) = apply {
+                        dimensionValues =
+                            (dimensionValues ?: mutableListOf()).apply { add(dimensionValue) }
                     }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -5178,9 +4539,9 @@ constructor(
 
             class Builder {
 
-                private var dimensions: List<String?>? = null
+                private var dimensions: MutableList<String?>? = null
                 private var defaultUnitAmount: String? = null
-                private var matrixValues: List<MatrixValue>? = null
+                private var matrixValues: MutableList<MatrixValue>? = null
                 private var allocation: Double? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -5195,7 +4556,14 @@ constructor(
                 }
 
                 /** One or two event property values to evaluate matrix groups by */
-                fun dimensions(dimensions: List<String?>) = apply { this.dimensions = dimensions }
+                fun dimensions(dimensions: List<String?>) = apply {
+                    this.dimensions = dimensions.toMutableList()
+                }
+
+                /** One or two event property values to evaluate matrix groups by */
+                fun addDimension(dimension: String) = apply {
+                    dimensions = (dimensions ?: mutableListOf()).apply { add(dimension) }
+                }
 
                 /**
                  * Default per unit rate for any usage not bucketed into a specified matrix_value
@@ -5206,7 +4574,12 @@ constructor(
 
                 /** Matrix values for specified matrix grouping keys */
                 fun matrixValues(matrixValues: List<MatrixValue>) = apply {
-                    this.matrixValues = matrixValues
+                    this.matrixValues = matrixValues.toMutableList()
+                }
+
+                /** Matrix values for specified matrix grouping keys */
+                fun addMatrixValue(matrixValue: MatrixValue) = apply {
+                    matrixValues = (matrixValues ?: mutableListOf()).apply { add(matrixValue) }
                 }
 
                 /** Allocation to be used to calculate the price */
@@ -5283,7 +4656,7 @@ constructor(
                 class Builder {
 
                     private var unitAmount: String? = null
-                    private var dimensionValues: List<String?>? = null
+                    private var dimensionValues: MutableList<String?>? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
@@ -5302,7 +4675,17 @@ constructor(
                      * an instance tier.
                      */
                     fun dimensionValues(dimensionValues: List<String?>) = apply {
-                        this.dimensionValues = dimensionValues
+                        this.dimensionValues = dimensionValues.toMutableList()
+                    }
+
+                    /**
+                     * One or two matrix keys to filter usage to this Matrix value by. For example,
+                     * ["region", "tier"] could be used to filter cloud usage by a cloud region and
+                     * an instance tier.
+                     */
+                    fun addDimensionValue(dimensionValue: String) = apply {
+                        dimensionValues =
+                            (dimensionValues ?: mutableListOf()).apply { add(dimensionValue) }
                     }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -6245,7 +5628,7 @@ constructor(
 
             class Builder {
 
-                private var tiers: List<Tier>? = null
+                private var tiers: MutableList<Tier>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -6255,7 +5638,12 @@ constructor(
                 }
 
                 /** Tiers for rating based on total usage quantities into the specified tier */
-                fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
+                fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
+
+                /** Tiers for rating based on total usage quantities into the specified tier */
+                fun addTier(tier: Tier) = apply {
+                    tiers = (tiers ?: mutableListOf()).apply { add(tier) }
+                }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -7233,7 +6621,7 @@ constructor(
 
             class Builder {
 
-                private var tiers: List<Tier>? = null
+                private var tiers: MutableList<Tier>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -7246,7 +6634,15 @@ constructor(
                  * Tiers for a Graduated BPS pricing model, where usage is bucketed into specified
                  * tiers
                  */
-                fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
+                fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
+
+                /**
+                 * Tiers for a Graduated BPS pricing model, where usage is bucketed into specified
+                 * tiers
+                 */
+                fun addTier(tier: Tier) = apply {
+                    tiers = (tiers ?: mutableListOf()).apply { add(tier) }
+                }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -9000,7 +8396,7 @@ constructor(
 
             class Builder {
 
-                private var tiers: List<Tier>? = null
+                private var tiers: MutableList<Tier>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -9013,7 +8409,15 @@ constructor(
                  * Tiers for a bulk BPS pricing model where all usage is aggregated to a single tier
                  * based on total volume
                  */
-                fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
+                fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
+
+                /**
+                 * Tiers for a bulk BPS pricing model where all usage is aggregated to a single tier
+                 * based on total volume
+                 */
+                fun addTier(tier: Tier) = apply {
+                    tiers = (tiers ?: mutableListOf()).apply { add(tier) }
+                }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -9990,7 +9394,7 @@ constructor(
 
             class Builder {
 
-                private var tiers: List<Tier>? = null
+                private var tiers: MutableList<Tier>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -10000,7 +9404,12 @@ constructor(
                 }
 
                 /** Bulk tiers for rating based on total usage volume */
-                fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
+                fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
+
+                /** Bulk tiers for rating based on total usage volume */
+                fun addTier(tier: Tier) = apply {
+                    tiers = (tiers ?: mutableListOf()).apply { add(tier) }
+                }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -23859,11 +23268,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is PriceCreateParams && newFloatingUnitPrice == other.newFloatingUnitPrice && newFloatingPackagePrice == other.newFloatingPackagePrice && newFloatingMatrixPrice == other.newFloatingMatrixPrice && newFloatingMatrixWithAllocationPrice == other.newFloatingMatrixWithAllocationPrice && newFloatingTieredPrice == other.newFloatingTieredPrice && newFloatingTieredBpsPrice == other.newFloatingTieredBpsPrice && newFloatingBpsPrice == other.newFloatingBpsPrice && newFloatingBulkBpsPrice == other.newFloatingBulkBpsPrice && newFloatingBulkPrice == other.newFloatingBulkPrice && newFloatingThresholdTotalAmountPrice == other.newFloatingThresholdTotalAmountPrice && newFloatingTieredPackagePrice == other.newFloatingTieredPackagePrice && newFloatingGroupedTieredPrice == other.newFloatingGroupedTieredPrice && newFloatingTieredWithMinimumPrice == other.newFloatingTieredWithMinimumPrice && newFloatingPackageWithAllocationPrice == other.newFloatingPackageWithAllocationPrice && newFloatingTieredPackageWithMinimumPrice == other.newFloatingTieredPackageWithMinimumPrice && newFloatingUnitWithPercentPrice == other.newFloatingUnitWithPercentPrice && newFloatingTieredWithProrationPrice == other.newFloatingTieredWithProrationPrice && newFloatingUnitWithProrationPrice == other.newFloatingUnitWithProrationPrice && newFloatingGroupedAllocationPrice == other.newFloatingGroupedAllocationPrice && newFloatingGroupedWithProratedMinimumPrice == other.newFloatingGroupedWithProratedMinimumPrice && newFloatingGroupedWithMeteredMinimumPrice == other.newFloatingGroupedWithMeteredMinimumPrice && newFloatingMatrixWithDisplayNamePrice == other.newFloatingMatrixWithDisplayNamePrice && newFloatingBulkWithProrationPrice == other.newFloatingBulkWithProrationPrice && newFloatingGroupedTieredPackagePrice == other.newFloatingGroupedTieredPackagePrice && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is PriceCreateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(newFloatingUnitPrice, newFloatingPackagePrice, newFloatingMatrixPrice, newFloatingMatrixWithAllocationPrice, newFloatingTieredPrice, newFloatingTieredBpsPrice, newFloatingBpsPrice, newFloatingBulkBpsPrice, newFloatingBulkPrice, newFloatingThresholdTotalAmountPrice, newFloatingTieredPackagePrice, newFloatingGroupedTieredPrice, newFloatingTieredWithMinimumPrice, newFloatingPackageWithAllocationPrice, newFloatingTieredPackageWithMinimumPrice, newFloatingUnitWithPercentPrice, newFloatingTieredWithProrationPrice, newFloatingUnitWithProrationPrice, newFloatingGroupedAllocationPrice, newFloatingGroupedWithProratedMinimumPrice, newFloatingGroupedWithMeteredMinimumPrice, newFloatingMatrixWithDisplayNamePrice, newFloatingBulkWithProrationPrice, newFloatingGroupedTieredPackagePrice, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "PriceCreateParams{newFloatingUnitPrice=$newFloatingUnitPrice, newFloatingPackagePrice=$newFloatingPackagePrice, newFloatingMatrixPrice=$newFloatingMatrixPrice, newFloatingMatrixWithAllocationPrice=$newFloatingMatrixWithAllocationPrice, newFloatingTieredPrice=$newFloatingTieredPrice, newFloatingTieredBpsPrice=$newFloatingTieredBpsPrice, newFloatingBpsPrice=$newFloatingBpsPrice, newFloatingBulkBpsPrice=$newFloatingBulkBpsPrice, newFloatingBulkPrice=$newFloatingBulkPrice, newFloatingThresholdTotalAmountPrice=$newFloatingThresholdTotalAmountPrice, newFloatingTieredPackagePrice=$newFloatingTieredPackagePrice, newFloatingGroupedTieredPrice=$newFloatingGroupedTieredPrice, newFloatingTieredWithMinimumPrice=$newFloatingTieredWithMinimumPrice, newFloatingPackageWithAllocationPrice=$newFloatingPackageWithAllocationPrice, newFloatingTieredPackageWithMinimumPrice=$newFloatingTieredPackageWithMinimumPrice, newFloatingUnitWithPercentPrice=$newFloatingUnitWithPercentPrice, newFloatingTieredWithProrationPrice=$newFloatingTieredWithProrationPrice, newFloatingUnitWithProrationPrice=$newFloatingUnitWithProrationPrice, newFloatingGroupedAllocationPrice=$newFloatingGroupedAllocationPrice, newFloatingGroupedWithProratedMinimumPrice=$newFloatingGroupedWithProratedMinimumPrice, newFloatingGroupedWithMeteredMinimumPrice=$newFloatingGroupedWithMeteredMinimumPrice, newFloatingMatrixWithDisplayNamePrice=$newFloatingMatrixWithDisplayNamePrice, newFloatingBulkWithProrationPrice=$newFloatingBulkWithProrationPrice, newFloatingGroupedTieredPackagePrice=$newFloatingGroupedTieredPackagePrice, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "PriceCreateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

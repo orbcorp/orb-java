@@ -33,14 +33,22 @@ constructor(
 
     fun createdAtLte(): Optional<OffsetDateTime> = Optional.ofNullable(createdAtLte)
 
+    /**
+     * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
+     * initial request.
+     */
     fun cursor(): Optional<String> = Optional.ofNullable(cursor)
 
+    /** Fetch alerts scoped to this customer_id */
     fun customerId(): Optional<String> = Optional.ofNullable(customerId)
 
+    /** Fetch alerts scoped to this external_customer_id */
     fun externalCustomerId(): Optional<String> = Optional.ofNullable(externalCustomerId)
 
+    /** The number of items to fetch. Defaults to 20. */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
+    /** Fetch alerts scoped to this subscription_id */
     fun subscriptionId(): Optional<String> = Optional.ofNullable(subscriptionId)
 
     fun _additionalHeaders(): Headers = additionalHeaders

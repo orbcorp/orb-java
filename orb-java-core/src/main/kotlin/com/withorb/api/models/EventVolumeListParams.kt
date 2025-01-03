@@ -20,12 +20,28 @@ constructor(
     private val additionalQueryParams: QueryParams,
 ) {
 
+    /**
+     * The start of the timeframe, inclusive, in which to return event volume. All datetime values
+     * are converted to UTC time. If the specified time isn't hour-aligned, the response includes
+     * the event volume count for the hour the time falls in.
+     */
     fun timeframeStart(): OffsetDateTime = timeframeStart
 
+    /**
+     * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
+     * initial request.
+     */
     fun cursor(): Optional<String> = Optional.ofNullable(cursor)
 
+    /** The number of items to fetch. Defaults to 20. */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
+    /**
+     * The end of the timeframe, exclusive, in which to return event volume. If not specified, the
+     * current time is used. All datetime values are converted to UTC time.If the specified time
+     * isn't hour-aligned, the response includes the event volumecount for the hour the time falls
+     * in.
+     */
     fun timeframeEnd(): Optional<OffsetDateTime> = Optional.ofNullable(timeframeEnd)
 
     fun _additionalHeaders(): Headers = additionalHeaders
