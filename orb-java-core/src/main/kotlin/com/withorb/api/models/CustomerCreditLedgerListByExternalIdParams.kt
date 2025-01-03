@@ -41,14 +41,20 @@ constructor(
 
     fun createdAtLte(): Optional<OffsetDateTime> = Optional.ofNullable(createdAtLte)
 
+    /** The ledger currency or custom pricing unit to use. */
     fun currency(): Optional<String> = Optional.ofNullable(currency)
 
+    /**
+     * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
+     * initial request.
+     */
     fun cursor(): Optional<String> = Optional.ofNullable(cursor)
 
     fun entryStatus(): Optional<EntryStatus> = Optional.ofNullable(entryStatus)
 
     fun entryType(): Optional<EntryType> = Optional.ofNullable(entryType)
 
+    /** The number of items to fetch. Defaults to 20. */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
     fun minimumAmount(): Optional<String> = Optional.ofNullable(minimumAmount)

@@ -35,15 +35,7 @@ import kotlin.jvm.optionals.getOrNull
 class CustomerCreditLedgerCreateEntryByExternalIdParams
 constructor(
     private val externalCustomerId: String,
-    private val addIncrementCreditLedgerEntryRequestParams:
-        AddIncrementCreditLedgerEntryRequestParams?,
-    private val addDecrementCreditLedgerEntryRequestParams:
-        AddDecrementCreditLedgerEntryRequestParams?,
-    private val addExpirationChangeCreditLedgerEntryRequestParams:
-        AddExpirationChangeCreditLedgerEntryRequestParams?,
-    private val addVoidCreditLedgerEntryRequestParams: AddVoidCreditLedgerEntryRequestParams?,
-    private val addAmendmentCreditLedgerEntryRequestParams:
-        AddAmendmentCreditLedgerEntryRequestParams?,
+    private val body: CustomerCreditLedgerCreateEntryByExternalIdBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) {
@@ -52,37 +44,28 @@ constructor(
 
     fun addIncrementCreditLedgerEntryRequestParams():
         Optional<AddIncrementCreditLedgerEntryRequestParams> =
-        Optional.ofNullable(addIncrementCreditLedgerEntryRequestParams)
+        body.addIncrementCreditLedgerEntryRequestParams()
 
     fun addDecrementCreditLedgerEntryRequestParams():
         Optional<AddDecrementCreditLedgerEntryRequestParams> =
-        Optional.ofNullable(addDecrementCreditLedgerEntryRequestParams)
+        body.addDecrementCreditLedgerEntryRequestParams()
 
     fun addExpirationChangeCreditLedgerEntryRequestParams():
         Optional<AddExpirationChangeCreditLedgerEntryRequestParams> =
-        Optional.ofNullable(addExpirationChangeCreditLedgerEntryRequestParams)
+        body.addExpirationChangeCreditLedgerEntryRequestParams()
 
     fun addVoidCreditLedgerEntryRequestParams(): Optional<AddVoidCreditLedgerEntryRequestParams> =
-        Optional.ofNullable(addVoidCreditLedgerEntryRequestParams)
+        body.addVoidCreditLedgerEntryRequestParams()
 
     fun addAmendmentCreditLedgerEntryRequestParams():
         Optional<AddAmendmentCreditLedgerEntryRequestParams> =
-        Optional.ofNullable(addAmendmentCreditLedgerEntryRequestParams)
+        body.addAmendmentCreditLedgerEntryRequestParams()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic
-    internal fun getBody(): CustomerCreditLedgerCreateEntryByExternalIdBody {
-        return CustomerCreditLedgerCreateEntryByExternalIdBody(
-            addIncrementCreditLedgerEntryRequestParams,
-            addDecrementCreditLedgerEntryRequestParams,
-            addExpirationChangeCreditLedgerEntryRequestParams,
-            addVoidCreditLedgerEntryRequestParams,
-            addAmendmentCreditLedgerEntryRequestParams,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): CustomerCreditLedgerCreateEntryByExternalIdBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -444,20 +427,7 @@ constructor(
     class Builder {
 
         private var externalCustomerId: String? = null
-        private var addIncrementCreditLedgerEntryRequestParams:
-            AddIncrementCreditLedgerEntryRequestParams? =
-            null
-        private var addDecrementCreditLedgerEntryRequestParams:
-            AddDecrementCreditLedgerEntryRequestParams? =
-            null
-        private var addExpirationChangeCreditLedgerEntryRequestParams:
-            AddExpirationChangeCreditLedgerEntryRequestParams? =
-            null
-        private var addVoidCreditLedgerEntryRequestParams: AddVoidCreditLedgerEntryRequestParams? =
-            null
-        private var addAmendmentCreditLedgerEntryRequestParams:
-            AddAmendmentCreditLedgerEntryRequestParams? =
-            null
+        private var body: CustomerCreditLedgerCreateEntryByExternalIdBody? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -468,21 +438,7 @@ constructor(
         ) = apply {
             externalCustomerId =
                 customerCreditLedgerCreateEntryByExternalIdParams.externalCustomerId
-            addIncrementCreditLedgerEntryRequestParams =
-                customerCreditLedgerCreateEntryByExternalIdParams
-                    .addIncrementCreditLedgerEntryRequestParams
-            addDecrementCreditLedgerEntryRequestParams =
-                customerCreditLedgerCreateEntryByExternalIdParams
-                    .addDecrementCreditLedgerEntryRequestParams
-            addExpirationChangeCreditLedgerEntryRequestParams =
-                customerCreditLedgerCreateEntryByExternalIdParams
-                    .addExpirationChangeCreditLedgerEntryRequestParams
-            addVoidCreditLedgerEntryRequestParams =
-                customerCreditLedgerCreateEntryByExternalIdParams
-                    .addVoidCreditLedgerEntryRequestParams
-            addAmendmentCreditLedgerEntryRequestParams =
-                customerCreditLedgerCreateEntryByExternalIdParams
-                    .addAmendmentCreditLedgerEntryRequestParams
+            body = customerCreditLedgerCreateEntryByExternalIdParams.body
             additionalHeaders =
                 customerCreditLedgerCreateEntryByExternalIdParams.additionalHeaders.toBuilder()
             additionalQueryParams =
@@ -496,56 +452,50 @@ constructor(
         fun forAddIncrementCreditLedgerEntryRequestParams(
             addIncrementCreditLedgerEntryRequestParams: AddIncrementCreditLedgerEntryRequestParams
         ) = apply {
-            this.addIncrementCreditLedgerEntryRequestParams =
-                addIncrementCreditLedgerEntryRequestParams
-            this.addDecrementCreditLedgerEntryRequestParams = null
-            this.addExpirationChangeCreditLedgerEntryRequestParams = null
-            this.addVoidCreditLedgerEntryRequestParams = null
-            this.addAmendmentCreditLedgerEntryRequestParams = null
+            body =
+                CustomerCreditLedgerCreateEntryByExternalIdBody
+                    .ofAddIncrementCreditLedgerEntryRequestParams(
+                        addIncrementCreditLedgerEntryRequestParams
+                    )
         }
 
         fun forAddDecrementCreditLedgerEntryRequestParams(
             addDecrementCreditLedgerEntryRequestParams: AddDecrementCreditLedgerEntryRequestParams
         ) = apply {
-            this.addIncrementCreditLedgerEntryRequestParams = null
-            this.addDecrementCreditLedgerEntryRequestParams =
-                addDecrementCreditLedgerEntryRequestParams
-            this.addExpirationChangeCreditLedgerEntryRequestParams = null
-            this.addVoidCreditLedgerEntryRequestParams = null
-            this.addAmendmentCreditLedgerEntryRequestParams = null
+            body =
+                CustomerCreditLedgerCreateEntryByExternalIdBody
+                    .ofAddDecrementCreditLedgerEntryRequestParams(
+                        addDecrementCreditLedgerEntryRequestParams
+                    )
         }
 
         fun forAddExpirationChangeCreditLedgerEntryRequestParams(
             addExpirationChangeCreditLedgerEntryRequestParams:
                 AddExpirationChangeCreditLedgerEntryRequestParams
         ) = apply {
-            this.addIncrementCreditLedgerEntryRequestParams = null
-            this.addDecrementCreditLedgerEntryRequestParams = null
-            this.addExpirationChangeCreditLedgerEntryRequestParams =
-                addExpirationChangeCreditLedgerEntryRequestParams
-            this.addVoidCreditLedgerEntryRequestParams = null
-            this.addAmendmentCreditLedgerEntryRequestParams = null
+            body =
+                CustomerCreditLedgerCreateEntryByExternalIdBody
+                    .ofAddExpirationChangeCreditLedgerEntryRequestParams(
+                        addExpirationChangeCreditLedgerEntryRequestParams
+                    )
         }
 
         fun forAddVoidCreditLedgerEntryRequestParams(
             addVoidCreditLedgerEntryRequestParams: AddVoidCreditLedgerEntryRequestParams
         ) = apply {
-            this.addIncrementCreditLedgerEntryRequestParams = null
-            this.addDecrementCreditLedgerEntryRequestParams = null
-            this.addExpirationChangeCreditLedgerEntryRequestParams = null
-            this.addVoidCreditLedgerEntryRequestParams = addVoidCreditLedgerEntryRequestParams
-            this.addAmendmentCreditLedgerEntryRequestParams = null
+            body =
+                CustomerCreditLedgerCreateEntryByExternalIdBody
+                    .ofAddVoidCreditLedgerEntryRequestParams(addVoidCreditLedgerEntryRequestParams)
         }
 
         fun forAddAmendmentCreditLedgerEntryRequestParams(
             addAmendmentCreditLedgerEntryRequestParams: AddAmendmentCreditLedgerEntryRequestParams
         ) = apply {
-            this.addIncrementCreditLedgerEntryRequestParams = null
-            this.addDecrementCreditLedgerEntryRequestParams = null
-            this.addExpirationChangeCreditLedgerEntryRequestParams = null
-            this.addVoidCreditLedgerEntryRequestParams = null
-            this.addAmendmentCreditLedgerEntryRequestParams =
-                addAmendmentCreditLedgerEntryRequestParams
+            body =
+                CustomerCreditLedgerCreateEntryByExternalIdBody
+                    .ofAddAmendmentCreditLedgerEntryRequestParams(
+                        addAmendmentCreditLedgerEntryRequestParams
+                    )
         }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -651,11 +601,7 @@ constructor(
                 checkNotNull(externalCustomerId) {
                     "`externalCustomerId` is required but was not set"
                 },
-                addIncrementCreditLedgerEntryRequestParams,
-                addDecrementCreditLedgerEntryRequestParams,
-                addExpirationChangeCreditLedgerEntryRequestParams,
-                addVoidCreditLedgerEntryRequestParams,
-                addAmendmentCreditLedgerEntryRequestParams,
+                body ?: CustomerCreditLedgerCreateEntryByExternalIdBody(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -2403,11 +2349,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerCreditLedgerCreateEntryByExternalIdParams && externalCustomerId == other.externalCustomerId && addIncrementCreditLedgerEntryRequestParams == other.addIncrementCreditLedgerEntryRequestParams && addDecrementCreditLedgerEntryRequestParams == other.addDecrementCreditLedgerEntryRequestParams && addExpirationChangeCreditLedgerEntryRequestParams == other.addExpirationChangeCreditLedgerEntryRequestParams && addVoidCreditLedgerEntryRequestParams == other.addVoidCreditLedgerEntryRequestParams && addAmendmentCreditLedgerEntryRequestParams == other.addAmendmentCreditLedgerEntryRequestParams && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is CustomerCreditLedgerCreateEntryByExternalIdParams && externalCustomerId == other.externalCustomerId && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(externalCustomerId, addIncrementCreditLedgerEntryRequestParams, addDecrementCreditLedgerEntryRequestParams, addExpirationChangeCreditLedgerEntryRequestParams, addVoidCreditLedgerEntryRequestParams, addAmendmentCreditLedgerEntryRequestParams, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(externalCustomerId, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CustomerCreditLedgerCreateEntryByExternalIdParams{externalCustomerId=$externalCustomerId, addIncrementCreditLedgerEntryRequestParams=$addIncrementCreditLedgerEntryRequestParams, addDecrementCreditLedgerEntryRequestParams=$addDecrementCreditLedgerEntryRequestParams, addExpirationChangeCreditLedgerEntryRequestParams=$addExpirationChangeCreditLedgerEntryRequestParams, addVoidCreditLedgerEntryRequestParams=$addVoidCreditLedgerEntryRequestParams, addAmendmentCreditLedgerEntryRequestParams=$addAmendmentCreditLedgerEntryRequestParams, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "CustomerCreditLedgerCreateEntryByExternalIdParams{externalCustomerId=$externalCustomerId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

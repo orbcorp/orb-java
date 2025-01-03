@@ -34,41 +34,32 @@ import kotlin.jvm.optionals.getOrNull
 class SubscriptionPriceIntervalsParams
 constructor(
     private val subscriptionId: String,
-    private val add: List<Add>?,
-    private val addAdjustments: List<AddAdjustment>?,
-    private val edit: List<Edit>?,
-    private val editAdjustments: List<EditAdjustment>?,
+    private val body: SubscriptionPriceIntervalsBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
     fun subscriptionId(): String = subscriptionId
 
-    fun add(): Optional<List<Add>> = Optional.ofNullable(add)
+    /** A list of price intervals to add to the subscription. */
+    fun add(): Optional<List<Add>> = body.add()
 
-    fun addAdjustments(): Optional<List<AddAdjustment>> = Optional.ofNullable(addAdjustments)
+    /** A list of adjustments to add to the subscription. */
+    fun addAdjustments(): Optional<List<AddAdjustment>> = body.addAdjustments()
 
-    fun edit(): Optional<List<Edit>> = Optional.ofNullable(edit)
+    /** A list of price intervals to edit on the subscription. */
+    fun edit(): Optional<List<Edit>> = body.edit()
 
-    fun editAdjustments(): Optional<List<EditAdjustment>> = Optional.ofNullable(editAdjustments)
+    /** A list of adjustments to edit on the subscription. */
+    fun editAdjustments(): Optional<List<EditAdjustment>> = body.editAdjustments()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): SubscriptionPriceIntervalsBody {
-        return SubscriptionPriceIntervalsBody(
-            add,
-            addAdjustments,
-            edit,
-            editAdjustments,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): SubscriptionPriceIntervalsBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -120,10 +111,10 @@ constructor(
 
         class Builder {
 
-            private var add: List<Add>? = null
-            private var addAdjustments: List<AddAdjustment>? = null
-            private var edit: List<Edit>? = null
-            private var editAdjustments: List<EditAdjustment>? = null
+            private var add: MutableList<Add>? = null
+            private var addAdjustments: MutableList<AddAdjustment>? = null
+            private var edit: MutableList<Edit>? = null
+            private var editAdjustments: MutableList<EditAdjustment>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -139,19 +130,39 @@ constructor(
                 }
 
             /** A list of price intervals to add to the subscription. */
-            fun add(add: List<Add>) = apply { this.add = add }
+            fun add(add: List<Add>) = apply { this.add = add.toMutableList() }
+
+            /** A list of price intervals to add to the subscription. */
+            fun addAdd(add: Add) = apply {
+                this.add = (this.add ?: mutableListOf()).apply { add(add) }
+            }
 
             /** A list of adjustments to add to the subscription. */
             fun addAdjustments(addAdjustments: List<AddAdjustment>) = apply {
-                this.addAdjustments = addAdjustments
+                this.addAdjustments = addAdjustments.toMutableList()
+            }
+
+            /** A list of adjustments to add to the subscription. */
+            fun addAddAdjustment(addAdjustment: AddAdjustment) = apply {
+                addAdjustments = (addAdjustments ?: mutableListOf()).apply { add(addAdjustment) }
             }
 
             /** A list of price intervals to edit on the subscription. */
-            fun edit(edit: List<Edit>) = apply { this.edit = edit }
+            fun edit(edit: List<Edit>) = apply { this.edit = edit.toMutableList() }
+
+            /** A list of price intervals to edit on the subscription. */
+            fun addEdit(edit: Edit) = apply {
+                this.edit = (this.edit ?: mutableListOf()).apply { add(edit) }
+            }
 
             /** A list of adjustments to edit on the subscription. */
             fun editAdjustments(editAdjustments: List<EditAdjustment>) = apply {
-                this.editAdjustments = editAdjustments
+                this.editAdjustments = editAdjustments.toMutableList()
+            }
+
+            /** A list of adjustments to edit on the subscription. */
+            fun addEditAdjustment(editAdjustment: EditAdjustment) = apply {
+                editAdjustments = (editAdjustments ?: mutableListOf()).apply { add(editAdjustment) }
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -212,73 +223,53 @@ constructor(
     class Builder {
 
         private var subscriptionId: String? = null
-        private var add: MutableList<Add> = mutableListOf()
-        private var addAdjustments: MutableList<AddAdjustment> = mutableListOf()
-        private var edit: MutableList<Edit> = mutableListOf()
-        private var editAdjustments: MutableList<EditAdjustment> = mutableListOf()
+        private var body: SubscriptionPriceIntervalsBody.Builder =
+            SubscriptionPriceIntervalsBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(subscriptionPriceIntervalsParams: SubscriptionPriceIntervalsParams) =
             apply {
                 subscriptionId = subscriptionPriceIntervalsParams.subscriptionId
-                add = subscriptionPriceIntervalsParams.add?.toMutableList() ?: mutableListOf()
-                addAdjustments =
-                    subscriptionPriceIntervalsParams.addAdjustments?.toMutableList()
-                        ?: mutableListOf()
-                edit = subscriptionPriceIntervalsParams.edit?.toMutableList() ?: mutableListOf()
-                editAdjustments =
-                    subscriptionPriceIntervalsParams.editAdjustments?.toMutableList()
-                        ?: mutableListOf()
+                body = subscriptionPriceIntervalsParams.body.toBuilder()
                 additionalHeaders = subscriptionPriceIntervalsParams.additionalHeaders.toBuilder()
                 additionalQueryParams =
                     subscriptionPriceIntervalsParams.additionalQueryParams.toBuilder()
-                additionalBodyProperties =
-                    subscriptionPriceIntervalsParams.additionalBodyProperties.toMutableMap()
             }
 
         fun subscriptionId(subscriptionId: String) = apply { this.subscriptionId = subscriptionId }
 
         /** A list of price intervals to add to the subscription. */
-        fun add(add: List<Add>) = apply {
-            this.add.clear()
-            this.add.addAll(add)
-        }
+        fun add(add: List<Add>) = apply { body.add(add) }
 
         /** A list of price intervals to add to the subscription. */
-        fun addAdd(add: Add) = apply { this.add.add(add) }
+        fun addAdd(add: Add) = apply { body.addAdd(add) }
 
         /** A list of adjustments to add to the subscription. */
         fun addAdjustments(addAdjustments: List<AddAdjustment>) = apply {
-            this.addAdjustments.clear()
-            this.addAdjustments.addAll(addAdjustments)
+            body.addAdjustments(addAdjustments)
         }
 
         /** A list of adjustments to add to the subscription. */
         fun addAddAdjustment(addAdjustment: AddAdjustment) = apply {
-            this.addAdjustments.add(addAdjustment)
+            body.addAddAdjustment(addAdjustment)
         }
 
         /** A list of price intervals to edit on the subscription. */
-        fun edit(edit: List<Edit>) = apply {
-            this.edit.clear()
-            this.edit.addAll(edit)
-        }
+        fun edit(edit: List<Edit>) = apply { body.edit(edit) }
 
         /** A list of price intervals to edit on the subscription. */
-        fun addEdit(edit: Edit) = apply { this.edit.add(edit) }
+        fun addEdit(edit: Edit) = apply { body.addEdit(edit) }
 
         /** A list of adjustments to edit on the subscription. */
         fun editAdjustments(editAdjustments: List<EditAdjustment>) = apply {
-            this.editAdjustments.clear()
-            this.editAdjustments.addAll(editAdjustments)
+            body.editAdjustments(editAdjustments)
         }
 
         /** A list of adjustments to edit on the subscription. */
         fun addEditAdjustment(editAdjustment: EditAdjustment) = apply {
-            this.editAdjustments.add(editAdjustment)
+            body.addEditAdjustment(editAdjustment)
         }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -380,37 +371,30 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): SubscriptionPriceIntervalsParams =
             SubscriptionPriceIntervalsParams(
                 checkNotNull(subscriptionId) { "`subscriptionId` is required but was not set" },
-                add.toImmutable().ifEmpty { null },
-                addAdjustments.toImmutable().ifEmpty { null },
-                edit.toImmutable().ifEmpty { null },
-                editAdjustments.toImmutable().ifEmpty { null },
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -501,8 +485,8 @@ constructor(
             private var allocationPrice: AllocationPrice? = null
             private var startDate: StartDate? = null
             private var endDate: EndDate? = null
-            private var fixedFeeQuantityTransitions: List<FixedFeeQuantityTransition>? = null
-            private var discounts: List<Discount>? = null
+            private var fixedFeeQuantityTransitions: MutableList<FixedFeeQuantityTransition>? = null
+            private var discounts: MutableList<Discount>? = null
             private var minimumAmount: Double? = null
             private var maximumAmount: Double? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -533,6 +517,158 @@ constructor(
             /** The definition of a new price to create and add to the subscription. */
             fun price(price: Price) = apply { this.price = price }
 
+            fun price(newFloatingUnitPrice: Price.NewFloatingUnitPrice) = apply {
+                this.price = Price.ofNewFloatingUnitPrice(newFloatingUnitPrice)
+            }
+
+            fun price(newFloatingPackagePrice: Price.NewFloatingPackagePrice) = apply {
+                this.price = Price.ofNewFloatingPackagePrice(newFloatingPackagePrice)
+            }
+
+            fun price(newFloatingMatrixPrice: Price.NewFloatingMatrixPrice) = apply {
+                this.price = Price.ofNewFloatingMatrixPrice(newFloatingMatrixPrice)
+            }
+
+            fun price(
+                newFloatingMatrixWithAllocationPrice: Price.NewFloatingMatrixWithAllocationPrice
+            ) = apply {
+                this.price =
+                    Price.ofNewFloatingMatrixWithAllocationPrice(
+                        newFloatingMatrixWithAllocationPrice
+                    )
+            }
+
+            fun price(newFloatingTieredPrice: Price.NewFloatingTieredPrice) = apply {
+                this.price = Price.ofNewFloatingTieredPrice(newFloatingTieredPrice)
+            }
+
+            fun price(newFloatingTieredBpsPrice: Price.NewFloatingTieredBpsPrice) = apply {
+                this.price = Price.ofNewFloatingTieredBpsPrice(newFloatingTieredBpsPrice)
+            }
+
+            fun price(newFloatingBpsPrice: Price.NewFloatingBpsPrice) = apply {
+                this.price = Price.ofNewFloatingBpsPrice(newFloatingBpsPrice)
+            }
+
+            fun price(newFloatingBulkBpsPrice: Price.NewFloatingBulkBpsPrice) = apply {
+                this.price = Price.ofNewFloatingBulkBpsPrice(newFloatingBulkBpsPrice)
+            }
+
+            fun price(newFloatingBulkPrice: Price.NewFloatingBulkPrice) = apply {
+                this.price = Price.ofNewFloatingBulkPrice(newFloatingBulkPrice)
+            }
+
+            fun price(
+                newFloatingThresholdTotalAmountPrice: Price.NewFloatingThresholdTotalAmountPrice
+            ) = apply {
+                this.price =
+                    Price.ofNewFloatingThresholdTotalAmountPrice(
+                        newFloatingThresholdTotalAmountPrice
+                    )
+            }
+
+            fun price(newFloatingTieredPackagePrice: Price.NewFloatingTieredPackagePrice) = apply {
+                this.price = Price.ofNewFloatingTieredPackagePrice(newFloatingTieredPackagePrice)
+            }
+
+            fun price(newFloatingGroupedTieredPrice: Price.NewFloatingGroupedTieredPrice) = apply {
+                this.price = Price.ofNewFloatingGroupedTieredPrice(newFloatingGroupedTieredPrice)
+            }
+
+            fun price(newFloatingTieredWithMinimumPrice: Price.NewFloatingTieredWithMinimumPrice) =
+                apply {
+                    this.price =
+                        Price.ofNewFloatingTieredWithMinimumPrice(newFloatingTieredWithMinimumPrice)
+                }
+
+            fun price(
+                newFloatingPackageWithAllocationPrice: Price.NewFloatingPackageWithAllocationPrice
+            ) = apply {
+                this.price =
+                    Price.ofNewFloatingPackageWithAllocationPrice(
+                        newFloatingPackageWithAllocationPrice
+                    )
+            }
+
+            fun price(
+                newFloatingTieredPackageWithMinimumPrice:
+                    Price.NewFloatingTieredPackageWithMinimumPrice
+            ) = apply {
+                this.price =
+                    Price.ofNewFloatingTieredPackageWithMinimumPrice(
+                        newFloatingTieredPackageWithMinimumPrice
+                    )
+            }
+
+            fun price(newFloatingUnitWithPercentPrice: Price.NewFloatingUnitWithPercentPrice) =
+                apply {
+                    this.price =
+                        Price.ofNewFloatingUnitWithPercentPrice(newFloatingUnitWithPercentPrice)
+                }
+
+            fun price(
+                newFloatingTieredWithProrationPrice: Price.NewFloatingTieredWithProrationPrice
+            ) = apply {
+                this.price =
+                    Price.ofNewFloatingTieredWithProrationPrice(newFloatingTieredWithProrationPrice)
+            }
+
+            fun price(newFloatingUnitWithProrationPrice: Price.NewFloatingUnitWithProrationPrice) =
+                apply {
+                    this.price =
+                        Price.ofNewFloatingUnitWithProrationPrice(newFloatingUnitWithProrationPrice)
+                }
+
+            fun price(newFloatingGroupedAllocationPrice: Price.NewFloatingGroupedAllocationPrice) =
+                apply {
+                    this.price =
+                        Price.ofNewFloatingGroupedAllocationPrice(newFloatingGroupedAllocationPrice)
+                }
+
+            fun price(
+                newFloatingGroupedWithProratedMinimumPrice:
+                    Price.NewFloatingGroupedWithProratedMinimumPrice
+            ) = apply {
+                this.price =
+                    Price.ofNewFloatingGroupedWithProratedMinimumPrice(
+                        newFloatingGroupedWithProratedMinimumPrice
+                    )
+            }
+
+            fun price(
+                newFloatingGroupedWithMeteredMinimumPrice:
+                    Price.NewFloatingGroupedWithMeteredMinimumPrice
+            ) = apply {
+                this.price =
+                    Price.ofNewFloatingGroupedWithMeteredMinimumPrice(
+                        newFloatingGroupedWithMeteredMinimumPrice
+                    )
+            }
+
+            fun price(
+                newFloatingMatrixWithDisplayNamePrice: Price.NewFloatingMatrixWithDisplayNamePrice
+            ) = apply {
+                this.price =
+                    Price.ofNewFloatingMatrixWithDisplayNamePrice(
+                        newFloatingMatrixWithDisplayNamePrice
+                    )
+            }
+
+            fun price(newFloatingBulkWithProrationPrice: Price.NewFloatingBulkWithProrationPrice) =
+                apply {
+                    this.price =
+                        Price.ofNewFloatingBulkWithProrationPrice(newFloatingBulkWithProrationPrice)
+                }
+
+            fun price(
+                newFloatingGroupedTieredPackagePrice: Price.NewFloatingGroupedTieredPackagePrice
+            ) = apply {
+                this.price =
+                    Price.ofNewFloatingGroupedTieredPackagePrice(
+                        newFloatingGroupedTieredPackagePrice
+                    )
+            }
+
             /** The definition of a new allocation price to create and add to the subscription. */
             fun allocationPrice(allocationPrice: AllocationPrice) = apply {
                 this.allocationPrice = allocationPrice
@@ -544,19 +680,54 @@ constructor(
              */
             fun startDate(startDate: StartDate) = apply { this.startDate = startDate }
 
+            fun startDate(dateTime: OffsetDateTime) = apply {
+                this.startDate = StartDate.ofDateTime(dateTime)
+            }
+
+            fun startDate(billingCycleRelativeDate: BillingCycleRelativeDate) = apply {
+                this.startDate = StartDate.ofBillingCycleRelativeDate(billingCycleRelativeDate)
+            }
+
             /**
              * The end date of the price interval. This is the date that the price will stop billing
              * on the subscription.
              */
             fun endDate(endDate: EndDate) = apply { this.endDate = endDate }
 
+            fun endDate(dateTime: OffsetDateTime) = apply {
+                this.endDate = EndDate.ofDateTime(dateTime)
+            }
+
+            fun endDate(billingCycleRelativeDate: BillingCycleRelativeDate) = apply {
+                this.endDate = EndDate.ofBillingCycleRelativeDate(billingCycleRelativeDate)
+            }
+
             /** A list of fixed fee quantity transitions to initialize on the price interval. */
             fun fixedFeeQuantityTransitions(
                 fixedFeeQuantityTransitions: List<FixedFeeQuantityTransition>
-            ) = apply { this.fixedFeeQuantityTransitions = fixedFeeQuantityTransitions }
+            ) = apply {
+                this.fixedFeeQuantityTransitions = fixedFeeQuantityTransitions.toMutableList()
+            }
+
+            /** A list of fixed fee quantity transitions to initialize on the price interval. */
+            fun addFixedFeeQuantityTransition(
+                fixedFeeQuantityTransition: FixedFeeQuantityTransition
+            ) = apply {
+                fixedFeeQuantityTransitions =
+                    (fixedFeeQuantityTransitions ?: mutableListOf()).apply {
+                        add(fixedFeeQuantityTransition)
+                    }
+            }
 
             /** A list of discounts to initialize on the price interval. */
-            fun discounts(discounts: List<Discount>) = apply { this.discounts = discounts }
+            fun discounts(discounts: List<Discount>) = apply {
+                this.discounts = discounts.toMutableList()
+            }
+
+            /** A list of discounts to initialize on the price interval. */
+            fun addDiscount(discount: Discount) = apply {
+                discounts = (discounts ?: mutableListOf()).apply { add(discount) }
+            }
 
             /**
              * The minimum amount that will be billed for this price interval for a given billing
@@ -5006,9 +5177,9 @@ constructor(
 
                     class Builder {
 
-                        private var dimensions: List<String?>? = null
+                        private var dimensions: MutableList<String?>? = null
                         private var defaultUnitAmount: String? = null
-                        private var matrixValues: List<MatrixValue>? = null
+                        private var matrixValues: MutableList<MatrixValue>? = null
                         private var additionalProperties: MutableMap<String, JsonValue> =
                             mutableMapOf()
 
@@ -5022,7 +5193,12 @@ constructor(
 
                         /** One or two event property values to evaluate matrix groups by */
                         fun dimensions(dimensions: List<String?>) = apply {
-                            this.dimensions = dimensions
+                            this.dimensions = dimensions.toMutableList()
+                        }
+
+                        /** One or two event property values to evaluate matrix groups by */
+                        fun addDimension(dimension: String) = apply {
+                            dimensions = (dimensions ?: mutableListOf()).apply { add(dimension) }
                         }
 
                         /**
@@ -5035,7 +5211,13 @@ constructor(
 
                         /** Matrix values for specified matrix grouping keys */
                         fun matrixValues(matrixValues: List<MatrixValue>) = apply {
-                            this.matrixValues = matrixValues
+                            this.matrixValues = matrixValues.toMutableList()
+                        }
+
+                        /** Matrix values for specified matrix grouping keys */
+                        fun addMatrixValue(matrixValue: MatrixValue) = apply {
+                            matrixValues =
+                                (matrixValues ?: mutableListOf()).apply { add(matrixValue) }
                         }
 
                         fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -5114,7 +5296,7 @@ constructor(
                         class Builder {
 
                             private var unitAmount: String? = null
-                            private var dimensionValues: List<String?>? = null
+                            private var dimensionValues: MutableList<String?>? = null
                             private var additionalProperties: MutableMap<String, JsonValue> =
                                 mutableMapOf()
 
@@ -5137,7 +5319,19 @@ constructor(
                              * cloud region and an instance tier.
                              */
                             fun dimensionValues(dimensionValues: List<String?>) = apply {
-                                this.dimensionValues = dimensionValues
+                                this.dimensionValues = dimensionValues.toMutableList()
+                            }
+
+                            /**
+                             * One or two matrix keys to filter usage to this Matrix value by. For
+                             * example, ["region", "tier"] could be used to filter cloud usage by a
+                             * cloud region and an instance tier.
+                             */
+                            fun addDimensionValue(dimensionValue: String) = apply {
+                                dimensionValues =
+                                    (dimensionValues ?: mutableListOf()).apply {
+                                        add(dimensionValue)
+                                    }
                             }
 
                             fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -6094,9 +6288,9 @@ constructor(
 
                     class Builder {
 
-                        private var dimensions: List<String?>? = null
+                        private var dimensions: MutableList<String?>? = null
                         private var defaultUnitAmount: String? = null
-                        private var matrixValues: List<MatrixValue>? = null
+                        private var matrixValues: MutableList<MatrixValue>? = null
                         private var allocation: Double? = null
                         private var additionalProperties: MutableMap<String, JsonValue> =
                             mutableMapOf()
@@ -6115,7 +6309,12 @@ constructor(
 
                         /** One or two event property values to evaluate matrix groups by */
                         fun dimensions(dimensions: List<String?>) = apply {
-                            this.dimensions = dimensions
+                            this.dimensions = dimensions.toMutableList()
+                        }
+
+                        /** One or two event property values to evaluate matrix groups by */
+                        fun addDimension(dimension: String) = apply {
+                            dimensions = (dimensions ?: mutableListOf()).apply { add(dimension) }
                         }
 
                         /**
@@ -6128,7 +6327,13 @@ constructor(
 
                         /** Matrix values for specified matrix grouping keys */
                         fun matrixValues(matrixValues: List<MatrixValue>) = apply {
-                            this.matrixValues = matrixValues
+                            this.matrixValues = matrixValues.toMutableList()
+                        }
+
+                        /** Matrix values for specified matrix grouping keys */
+                        fun addMatrixValue(matrixValue: MatrixValue) = apply {
+                            matrixValues =
+                                (matrixValues ?: mutableListOf()).apply { add(matrixValue) }
                         }
 
                         /** Allocation to be used to calculate the price */
@@ -6213,7 +6418,7 @@ constructor(
                         class Builder {
 
                             private var unitAmount: String? = null
-                            private var dimensionValues: List<String?>? = null
+                            private var dimensionValues: MutableList<String?>? = null
                             private var additionalProperties: MutableMap<String, JsonValue> =
                                 mutableMapOf()
 
@@ -6236,7 +6441,19 @@ constructor(
                              * cloud region and an instance tier.
                              */
                             fun dimensionValues(dimensionValues: List<String?>) = apply {
-                                this.dimensionValues = dimensionValues
+                                this.dimensionValues = dimensionValues.toMutableList()
+                            }
+
+                            /**
+                             * One or two matrix keys to filter usage to this Matrix value by. For
+                             * example, ["region", "tier"] could be used to filter cloud usage by a
+                             * cloud region and an instance tier.
+                             */
+                            fun addDimensionValue(dimensionValue: String) = apply {
+                                dimensionValues =
+                                    (dimensionValues ?: mutableListOf()).apply {
+                                        add(dimensionValue)
+                                    }
                             }
 
                             fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -7221,7 +7438,7 @@ constructor(
 
                     class Builder {
 
-                        private var tiers: List<Tier>? = null
+                        private var tiers: MutableList<Tier>? = null
                         private var additionalProperties: MutableMap<String, JsonValue> =
                             mutableMapOf()
 
@@ -7234,7 +7451,14 @@ constructor(
                         /**
                          * Tiers for rating based on total usage quantities into the specified tier
                          */
-                        fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
+                        fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
+
+                        /**
+                         * Tiers for rating based on total usage quantities into the specified tier
+                         */
+                        fun addTier(tier: Tier) = apply {
+                            tiers = (tiers ?: mutableListOf()).apply { add(tier) }
+                        }
 
                         fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
                             apply {
@@ -8267,7 +8491,7 @@ constructor(
 
                     class Builder {
 
-                        private var tiers: List<Tier>? = null
+                        private var tiers: MutableList<Tier>? = null
                         private var additionalProperties: MutableMap<String, JsonValue> =
                             mutableMapOf()
 
@@ -8282,7 +8506,15 @@ constructor(
                          * Tiers for a Graduated BPS pricing model, where usage is bucketed into
                          * specified tiers
                          */
-                        fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
+                        fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
+
+                        /**
+                         * Tiers for a Graduated BPS pricing model, where usage is bucketed into
+                         * specified tiers
+                         */
+                        fun addTier(tier: Tier) = apply {
+                            tiers = (tiers ?: mutableListOf()).apply { add(tier) }
+                        }
 
                         fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
                             apply {
@@ -10115,7 +10347,7 @@ constructor(
 
                     class Builder {
 
-                        private var tiers: List<Tier>? = null
+                        private var tiers: MutableList<Tier>? = null
                         private var additionalProperties: MutableMap<String, JsonValue> =
                             mutableMapOf()
 
@@ -10129,7 +10361,15 @@ constructor(
                          * Tiers for a bulk BPS pricing model where all usage is aggregated to a
                          * single tier based on total volume
                          */
-                        fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
+                        fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
+
+                        /**
+                         * Tiers for a bulk BPS pricing model where all usage is aggregated to a
+                         * single tier based on total volume
+                         */
+                        fun addTier(tier: Tier) = apply {
+                            tiers = (tiers ?: mutableListOf()).apply { add(tier) }
+                        }
 
                         fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
                             apply {
@@ -11146,7 +11386,7 @@ constructor(
 
                     class Builder {
 
-                        private var tiers: List<Tier>? = null
+                        private var tiers: MutableList<Tier>? = null
                         private var additionalProperties: MutableMap<String, JsonValue> =
                             mutableMapOf()
 
@@ -11157,7 +11397,12 @@ constructor(
                         }
 
                         /** Bulk tiers for rating based on total usage volume */
-                        fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers }
+                        fun tiers(tiers: List<Tier>) = apply { this.tiers = tiers.toMutableList() }
+
+                        /** Bulk tiers for rating based on total usage volume */
+                        fun addTier(tier: Tier) = apply {
+                            tiers = (tiers ?: mutableListOf()).apply { add(tier) }
+                        }
 
                         fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
                             apply {
@@ -25714,17 +25959,53 @@ constructor(
             /** The definition of a new adjustment to create and add to the subscription. */
             fun adjustment(adjustment: Adjustment) = apply { this.adjustment = adjustment }
 
+            fun adjustment(newPercentageDiscount: Adjustment.NewPercentageDiscount) = apply {
+                this.adjustment = Adjustment.ofNewPercentageDiscount(newPercentageDiscount)
+            }
+
+            fun adjustment(newUsageDiscount: Adjustment.NewUsageDiscount) = apply {
+                this.adjustment = Adjustment.ofNewUsageDiscount(newUsageDiscount)
+            }
+
+            fun adjustment(newAmountDiscount: Adjustment.NewAmountDiscount) = apply {
+                this.adjustment = Adjustment.ofNewAmountDiscount(newAmountDiscount)
+            }
+
+            fun adjustment(newMinimum: Adjustment.NewMinimum) = apply {
+                this.adjustment = Adjustment.ofNewMinimum(newMinimum)
+            }
+
+            fun adjustment(newMaximum: Adjustment.NewMaximum) = apply {
+                this.adjustment = Adjustment.ofNewMaximum(newMaximum)
+            }
+
             /**
              * The start date of the adjustment interval. This is the date that the adjustment will
              * start affecting prices on the subscription.
              */
             fun startDate(startDate: StartDate) = apply { this.startDate = startDate }
 
+            fun startDate(dateTime: OffsetDateTime) = apply {
+                this.startDate = StartDate.ofDateTime(dateTime)
+            }
+
+            fun startDate(billingCycleRelativeDate: BillingCycleRelativeDate) = apply {
+                this.startDate = StartDate.ofBillingCycleRelativeDate(billingCycleRelativeDate)
+            }
+
             /**
              * The end date of the adjustment interval. This is the date that the adjustment will
              * stop affecting prices on the subscription.
              */
             fun endDate(endDate: EndDate) = apply { this.endDate = endDate }
+
+            fun endDate(dateTime: OffsetDateTime) = apply {
+                this.endDate = EndDate.ofDateTime(dateTime)
+            }
+
+            fun endDate(billingCycleRelativeDate: BillingCycleRelativeDate) = apply {
+                this.endDate = EndDate.ofBillingCycleRelativeDate(billingCycleRelativeDate)
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -25979,7 +26260,7 @@ constructor(
 
                 class Builder {
 
-                    private var appliesToPriceIds: List<String>? = null
+                    private var appliesToPriceIds: MutableList<String>? = null
                     private var isInvoiceLevel: Boolean? = null
                     private var adjustmentType: AdjustmentType? = null
                     private var percentageDiscount: Double? = null
@@ -25997,7 +26278,13 @@ constructor(
 
                     /** The set of price IDs to which this adjustment applies. */
                     fun appliesToPriceIds(appliesToPriceIds: List<String>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
+                        this.appliesToPriceIds = appliesToPriceIds.toMutableList()
+                    }
+
+                    /** The set of price IDs to which this adjustment applies. */
+                    fun addAppliesToPriceId(appliesToPriceId: String) = apply {
+                        appliesToPriceIds =
+                            (appliesToPriceIds ?: mutableListOf()).apply { add(appliesToPriceId) }
                     }
 
                     /**
@@ -26166,7 +26453,7 @@ constructor(
 
                 class Builder {
 
-                    private var appliesToPriceIds: List<String>? = null
+                    private var appliesToPriceIds: MutableList<String>? = null
                     private var isInvoiceLevel: Boolean? = null
                     private var adjustmentType: AdjustmentType? = null
                     private var usageDiscount: Double? = null
@@ -26183,7 +26470,13 @@ constructor(
 
                     /** The set of price IDs to which this adjustment applies. */
                     fun appliesToPriceIds(appliesToPriceIds: List<String>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
+                        this.appliesToPriceIds = appliesToPriceIds.toMutableList()
+                    }
+
+                    /** The set of price IDs to which this adjustment applies. */
+                    fun addAppliesToPriceId(appliesToPriceId: String) = apply {
+                        appliesToPriceIds =
+                            (appliesToPriceIds ?: mutableListOf()).apply { add(appliesToPriceId) }
                     }
 
                     /**
@@ -26352,7 +26645,7 @@ constructor(
 
                 class Builder {
 
-                    private var appliesToPriceIds: List<String>? = null
+                    private var appliesToPriceIds: MutableList<String>? = null
                     private var isInvoiceLevel: Boolean? = null
                     private var adjustmentType: AdjustmentType? = null
                     private var amountDiscount: String? = null
@@ -26369,7 +26662,13 @@ constructor(
 
                     /** The set of price IDs to which this adjustment applies. */
                     fun appliesToPriceIds(appliesToPriceIds: List<String>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
+                        this.appliesToPriceIds = appliesToPriceIds.toMutableList()
+                    }
+
+                    /** The set of price IDs to which this adjustment applies. */
+                    fun addAppliesToPriceId(appliesToPriceId: String) = apply {
+                        appliesToPriceIds =
+                            (appliesToPriceIds ?: mutableListOf()).apply { add(appliesToPriceId) }
                     }
 
                     /**
@@ -26542,7 +26841,7 @@ constructor(
 
                 class Builder {
 
-                    private var appliesToPriceIds: List<String>? = null
+                    private var appliesToPriceIds: MutableList<String>? = null
                     private var isInvoiceLevel: Boolean? = null
                     private var adjustmentType: AdjustmentType? = null
                     private var minimumAmount: String? = null
@@ -26561,7 +26860,13 @@ constructor(
 
                     /** The set of price IDs to which this adjustment applies. */
                     fun appliesToPriceIds(appliesToPriceIds: List<String>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
+                        this.appliesToPriceIds = appliesToPriceIds.toMutableList()
+                    }
+
+                    /** The set of price IDs to which this adjustment applies. */
+                    fun addAppliesToPriceId(appliesToPriceId: String) = apply {
+                        appliesToPriceIds =
+                            (appliesToPriceIds ?: mutableListOf()).apply { add(appliesToPriceId) }
                     }
 
                     /**
@@ -26734,7 +27039,7 @@ constructor(
 
                 class Builder {
 
-                    private var appliesToPriceIds: List<String>? = null
+                    private var appliesToPriceIds: MutableList<String>? = null
                     private var isInvoiceLevel: Boolean? = null
                     private var adjustmentType: AdjustmentType? = null
                     private var maximumAmount: String? = null
@@ -26751,7 +27056,13 @@ constructor(
 
                     /** The set of price IDs to which this adjustment applies. */
                     fun appliesToPriceIds(appliesToPriceIds: List<String>) = apply {
-                        this.appliesToPriceIds = appliesToPriceIds
+                        this.appliesToPriceIds = appliesToPriceIds.toMutableList()
+                    }
+
+                    /** The set of price IDs to which this adjustment applies. */
+                    fun addAppliesToPriceId(appliesToPriceId: String) = apply {
+                        appliesToPriceIds =
+                            (appliesToPriceIds ?: mutableListOf()).apply { add(appliesToPriceId) }
                     }
 
                     /**
@@ -27178,7 +27489,7 @@ constructor(
             private var priceIntervalId: String? = null
             private var startDate: StartDate? = null
             private var endDate: EndDate? = null
-            private var fixedFeeQuantityTransitions: List<FixedFeeQuantityTransition>? = null
+            private var fixedFeeQuantityTransitions: MutableList<FixedFeeQuantityTransition>? = null
             private var billingCycleDay: Long? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -27203,11 +27514,27 @@ constructor(
              */
             fun startDate(startDate: StartDate) = apply { this.startDate = startDate }
 
+            fun startDate(dateTime: OffsetDateTime) = apply {
+                this.startDate = StartDate.ofDateTime(dateTime)
+            }
+
+            fun startDate(billingCycleRelativeDate: BillingCycleRelativeDate) = apply {
+                this.startDate = StartDate.ofBillingCycleRelativeDate(billingCycleRelativeDate)
+            }
+
             /**
              * The updated end date of this price interval. If not specified, the start date will
              * not be updated.
              */
             fun endDate(endDate: EndDate) = apply { this.endDate = endDate }
+
+            fun endDate(dateTime: OffsetDateTime) = apply {
+                this.endDate = EndDate.ofDateTime(dateTime)
+            }
+
+            fun endDate(billingCycleRelativeDate: BillingCycleRelativeDate) = apply {
+                this.endDate = EndDate.ofBillingCycleRelativeDate(billingCycleRelativeDate)
+            }
 
             /**
              * A list of fixed fee quantity transitions to use for this price interval. Note that
@@ -27216,7 +27543,23 @@ constructor(
              */
             fun fixedFeeQuantityTransitions(
                 fixedFeeQuantityTransitions: List<FixedFeeQuantityTransition>
-            ) = apply { this.fixedFeeQuantityTransitions = fixedFeeQuantityTransitions }
+            ) = apply {
+                this.fixedFeeQuantityTransitions = fixedFeeQuantityTransitions.toMutableList()
+            }
+
+            /**
+             * A list of fixed fee quantity transitions to use for this price interval. Note that
+             * this list will overwrite all existing fixed fee quantity transitions on the price
+             * interval.
+             */
+            fun addFixedFeeQuantityTransition(
+                fixedFeeQuantityTransition: FixedFeeQuantityTransition
+            ) = apply {
+                fixedFeeQuantityTransitions =
+                    (fixedFeeQuantityTransitions ?: mutableListOf()).apply {
+                        add(fixedFeeQuantityTransition)
+                    }
+            }
 
             /**
              * The updated billing cycle day for this price interval. If not specified, the billing
@@ -27659,11 +28002,27 @@ constructor(
              */
             fun startDate(startDate: StartDate) = apply { this.startDate = startDate }
 
+            fun startDate(dateTime: OffsetDateTime) = apply {
+                this.startDate = StartDate.ofDateTime(dateTime)
+            }
+
+            fun startDate(billingCycleRelativeDate: BillingCycleRelativeDate) = apply {
+                this.startDate = StartDate.ofBillingCycleRelativeDate(billingCycleRelativeDate)
+            }
+
             /**
              * The updated end date of this adjustment interval. If not specified, the start date
              * will not be updated.
              */
             fun endDate(endDate: EndDate) = apply { this.endDate = endDate }
+
+            fun endDate(dateTime: OffsetDateTime) = apply {
+                this.endDate = EndDate.ofDateTime(dateTime)
+            }
+
+            fun endDate(billingCycleRelativeDate: BillingCycleRelativeDate) = apply {
+                this.endDate = EndDate.ofBillingCycleRelativeDate(billingCycleRelativeDate)
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -27936,11 +28295,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is SubscriptionPriceIntervalsParams && subscriptionId == other.subscriptionId && add == other.add && addAdjustments == other.addAdjustments && edit == other.edit && editAdjustments == other.editAdjustments && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is SubscriptionPriceIntervalsParams && subscriptionId == other.subscriptionId && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionId, add, addAdjustments, edit, editAdjustments, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionId, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "SubscriptionPriceIntervalsParams{subscriptionId=$subscriptionId, add=$add, addAdjustments=$addAdjustments, edit=$edit, editAdjustments=$editAdjustments, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "SubscriptionPriceIntervalsParams{subscriptionId=$subscriptionId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
