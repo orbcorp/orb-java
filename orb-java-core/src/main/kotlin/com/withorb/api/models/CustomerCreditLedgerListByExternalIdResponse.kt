@@ -30,6 +30,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * The [Credit Ledger Entry resource](/guides/product-catalog/prepurchase) models prepaid credits
+ * within Orb.
+ */
 @JsonDeserialize(using = CustomerCreditLedgerListByExternalIdResponse.Deserializer::class)
 @JsonSerialize(using = CustomerCreditLedgerListByExternalIdResponse.Serializer::class)
 class CustomerCreditLedgerListByExternalIdResponse
