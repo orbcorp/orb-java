@@ -1338,6 +1338,7 @@ constructor(
                 )
         }
 
+        /** The definition of a new adjustment to create and add to the subscription. */
         @JsonDeserialize(using = Adjustment.Deserializer::class)
         @JsonSerialize(using = Adjustment.Serializer::class)
         class Adjustment
@@ -3023,6 +3024,7 @@ constructor(
                 "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, additionalProperties=$additionalProperties}"
         }
 
+        /** The definition of a new price to create and add to the subscription. */
         @JsonDeserialize(using = Price.Deserializer::class)
         @JsonSerialize(using = Price.Serializer::class)
         class Price
@@ -21994,6 +21996,7 @@ constructor(
                 )
         }
 
+        /** The definition of a new adjustment to create and add to the subscription. */
         @JsonDeserialize(using = Adjustment.Deserializer::class)
         @JsonSerialize(using = Adjustment.Serializer::class)
         class Adjustment
@@ -23659,6 +23662,7 @@ constructor(
                 "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, usageDiscount=$usageDiscount, amountDiscount=$amountDiscount, additionalProperties=$additionalProperties}"
         }
 
+        /** The definition of a new price to create and add to the subscription. */
         @JsonDeserialize(using = Price.Deserializer::class)
         @JsonSerialize(using = Price.Serializer::class)
         class Price

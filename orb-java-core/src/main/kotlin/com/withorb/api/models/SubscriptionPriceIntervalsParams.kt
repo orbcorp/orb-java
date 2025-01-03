@@ -776,6 +776,10 @@ constructor(
                 )
         }
 
+        /**
+         * The start date of the price interval. This is the date that the price will start billing
+         * on the subscription.
+         */
         @JsonDeserialize(using = StartDate.Deserializer::class)
         @JsonSerialize(using = StartDate.Serializer::class)
         class StartDate
@@ -1742,6 +1746,10 @@ constructor(
             }
         }
 
+        /**
+         * The end date of the price interval. This is the date that the price will stop billing on
+         * the subscription.
+         */
         @JsonDeserialize(using = EndDate.Deserializer::class)
         @JsonSerialize(using = EndDate.Serializer::class)
         class EndDate
@@ -1950,6 +1958,7 @@ constructor(
                 "FixedFeeQuantityTransition{quantity=$quantity, effectiveDate=$effectiveDate, additionalProperties=$additionalProperties}"
         }
 
+        /** The definition of a new price to create and add to the subscription. */
         @JsonDeserialize(using = Price.Deserializer::class)
         @JsonSerialize(using = Price.Serializer::class)
         class Price
@@ -26035,6 +26044,7 @@ constructor(
                 )
         }
 
+        /** The definition of a new adjustment to create and add to the subscription. */
         @JsonDeserialize(using = Adjustment.Deserializer::class)
         @JsonSerialize(using = Adjustment.Serializer::class)
         class Adjustment
@@ -27191,6 +27201,10 @@ constructor(
             }
         }
 
+        /**
+         * The start date of the adjustment interval. This is the date that the adjustment will
+         * start affecting prices on the subscription.
+         */
         @JsonDeserialize(using = StartDate.Deserializer::class)
         @JsonSerialize(using = StartDate.Serializer::class)
         class StartDate
@@ -27300,6 +27314,10 @@ constructor(
             }
         }
 
+        /**
+         * The end date of the adjustment interval. This is the date that the adjustment will stop
+         * affecting prices on the subscription.
+         */
         @JsonDeserialize(using = EndDate.Deserializer::class)
         @JsonSerialize(using = EndDate.Serializer::class)
         class EndDate
@@ -27602,6 +27620,10 @@ constructor(
                 )
         }
 
+        /**
+         * The updated end date of this price interval. If not specified, the start date will not be
+         * updated.
+         */
         @JsonDeserialize(using = EndDate.Deserializer::class)
         @JsonSerialize(using = EndDate.Serializer::class)
         class EndDate
@@ -27810,6 +27832,10 @@ constructor(
                 "FixedFeeQuantityTransition{quantity=$quantity, effectiveDate=$effectiveDate, additionalProperties=$additionalProperties}"
         }
 
+        /**
+         * The updated start date of this price interval. If not specified, the start date will not
+         * be updated.
+         */
         @JsonDeserialize(using = StartDate.Deserializer::class)
         @JsonSerialize(using = StartDate.Serializer::class)
         class StartDate
@@ -28054,6 +28080,10 @@ constructor(
                 )
         }
 
+        /**
+         * The updated end date of this adjustment interval. If not specified, the start date will
+         * not be updated.
+         */
         @JsonDeserialize(using = EndDate.Deserializer::class)
         @JsonSerialize(using = EndDate.Serializer::class)
         class EndDate
@@ -28163,6 +28193,10 @@ constructor(
             }
         }
 
+        /**
+         * The updated start date of this adjustment interval. If not specified, the start date will
+         * not be updated.
+         */
         @JsonDeserialize(using = StartDate.Deserializer::class)
         @JsonSerialize(using = StartDate.Serializer::class)
         class StartDate
