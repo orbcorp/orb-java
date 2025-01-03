@@ -38,12 +38,17 @@ constructor(
 
     fun createdAtLte(): Optional<OffsetDateTime> = Optional.ofNullable(createdAtLte)
 
+    /**
+     * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
+     * initial request.
+     */
     fun cursor(): Optional<String> = Optional.ofNullable(cursor)
 
     fun customerId(): Optional<List<String>> = Optional.ofNullable(customerId)
 
     fun externalCustomerId(): Optional<String> = Optional.ofNullable(externalCustomerId)
 
+    /** The number of items to fetch. Defaults to 20. */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
     fun status(): Optional<Status> = Optional.ofNullable(status)
@@ -107,7 +112,7 @@ constructor(
         private var createdAtLt: OffsetDateTime? = null
         private var createdAtLte: OffsetDateTime? = null
         private var cursor: String? = null
-        private var customerId: MutableList<String> = mutableListOf()
+        private var customerId: MutableList<String>? = null
         private var externalCustomerId: String? = null
         private var limit: Long? = null
         private var status: Status? = null
@@ -121,7 +126,7 @@ constructor(
             createdAtLt = subscriptionListParams.createdAtLt
             createdAtLte = subscriptionListParams.createdAtLte
             cursor = subscriptionListParams.cursor
-            customerId = subscriptionListParams.customerId?.toMutableList() ?: mutableListOf()
+            customerId = subscriptionListParams.customerId?.toMutableList()
             externalCustomerId = subscriptionListParams.externalCustomerId
             limit = subscriptionListParams.limit
             status = subscriptionListParams.status
@@ -144,11 +149,12 @@ constructor(
         fun cursor(cursor: String) = apply { this.cursor = cursor }
 
         fun customerId(customerId: List<String>) = apply {
-            this.customerId.clear()
-            this.customerId.addAll(customerId)
+            this.customerId = customerId.toMutableList()
         }
 
-        fun addCustomerId(customerId: String) = apply { this.customerId.add(customerId) }
+        fun addCustomerId(customerId: String) = apply {
+            this.customerId = (this.customerId ?: mutableListOf()).apply { add(customerId) }
+        }
 
         fun externalCustomerId(externalCustomerId: String) = apply {
             this.externalCustomerId = externalCustomerId
@@ -264,7 +270,7 @@ constructor(
                 createdAtLt,
                 createdAtLte,
                 cursor,
-                customerId.toImmutable().ifEmpty { null },
+                customerId?.toImmutable(),
                 externalCustomerId,
                 limit,
                 status,

@@ -27,12 +27,20 @@ constructor(
 
     fun subscriptionId(): String = subscriptionId
 
+    /** The currency or custom pricing unit to use. */
     fun currency(): Optional<String> = Optional.ofNullable(currency)
 
+    /** Costs returned are exclusive of `timeframe_end`. */
     fun timeframeEnd(): Optional<OffsetDateTime> = Optional.ofNullable(timeframeEnd)
 
+    /** Costs returned are inclusive of `timeframe_start`. */
     fun timeframeStart(): Optional<OffsetDateTime> = Optional.ofNullable(timeframeStart)
 
+    /**
+     * Controls whether Orb returns cumulative costs since the start of the billing period, or
+     * incremental day-by-day costs. If your customer has minimums or discounts, it's strongly
+     * recommended that you use the default cumulative behavior.
+     */
     fun viewMode(): Optional<ViewMode> = Optional.ofNullable(viewMode)
 
     fun _additionalHeaders(): Headers = additionalHeaders

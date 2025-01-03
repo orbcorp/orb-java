@@ -33,24 +33,38 @@ constructor(
 
     fun subscriptionId(): String = subscriptionId
 
+    /**
+     * When specified in conjunction with `group_by`, this parameter filters usage to a single
+     * billable metric. Note that both `group_by` and `billable_metric_id` must be specified
+     * together.
+     */
     fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
     fun firstDimensionKey(): Optional<String> = Optional.ofNullable(firstDimensionKey)
 
     fun firstDimensionValue(): Optional<String> = Optional.ofNullable(firstDimensionValue)
 
+    /** This determines the windowing of usage reporting. */
     fun granularity(): Optional<Granularity> = Optional.ofNullable(granularity)
 
+    /** Groups per-price usage by the key provided. */
     fun groupBy(): Optional<String> = Optional.ofNullable(groupBy)
 
     fun secondDimensionKey(): Optional<String> = Optional.ofNullable(secondDimensionKey)
 
     fun secondDimensionValue(): Optional<String> = Optional.ofNullable(secondDimensionValue)
 
+    /** Usage returned is exclusive of `timeframe_end`. */
     fun timeframeEnd(): Optional<OffsetDateTime> = Optional.ofNullable(timeframeEnd)
 
+    /** Usage returned is inclusive of `timeframe_start`. */
     fun timeframeStart(): Optional<OffsetDateTime> = Optional.ofNullable(timeframeStart)
 
+    /**
+     * Controls whether Orb returns cumulative usage since the start of the billing period, or
+     * incremental day-by-day usage. If your customer has minimums or discounts, it's strongly
+     * recommended that you use the default cumulative behavior.
+     */
     fun viewMode(): Optional<ViewMode> = Optional.ofNullable(viewMode)
 
     fun _additionalHeaders(): Headers = additionalHeaders

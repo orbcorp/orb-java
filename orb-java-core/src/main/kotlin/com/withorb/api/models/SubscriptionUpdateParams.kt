@@ -19,45 +19,53 @@ import java.util.Optional
 class SubscriptionUpdateParams
 constructor(
     private val subscriptionId: String,
-    private val autoCollection: Boolean?,
-    private val defaultInvoiceMemo: String?,
-    private val invoicingThreshold: String?,
-    private val metadata: Metadata?,
-    private val netTerms: Long?,
+    private val body: SubscriptionUpdateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
     fun subscriptionId(): String = subscriptionId
 
-    fun autoCollection(): Optional<Boolean> = Optional.ofNullable(autoCollection)
+    /**
+     * Determines whether issued invoices for this subscription will automatically be charged with
+     * the saved payment method on the due date. This property defaults to the plan's behavior.
+     */
+    fun autoCollection(): Optional<Boolean> = body.autoCollection()
 
-    fun defaultInvoiceMemo(): Optional<String> = Optional.ofNullable(defaultInvoiceMemo)
+    /**
+     * Determines the default memo on this subscription's invoices. Note that if this is not
+     * provided, it is determined by the plan configuration.
+     */
+    fun defaultInvoiceMemo(): Optional<String> = body.defaultInvoiceMemo()
 
-    fun invoicingThreshold(): Optional<String> = Optional.ofNullable(invoicingThreshold)
+    /**
+     * When this subscription's accrued usage reaches this threshold, an invoice will be issued for
+     * the subscription. If not specified, invoices will only be issued at the end of the billing
+     * period.
+     */
+    fun invoicingThreshold(): Optional<String> = body.invoicingThreshold()
 
-    fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+    /**
+     * User-specified key/value pairs for the resource. Individual keys can be removed by setting
+     * the value to `null`, and the entire metadata mapping can be cleared by setting `metadata` to
+     * `null`.
+     */
+    fun metadata(): Optional<Metadata> = body.metadata()
 
-    fun netTerms(): Optional<Long> = Optional.ofNullable(netTerms)
+    /**
+     * Determines the difference between the invoice issue date for subscription invoices as the
+     * date that they are due. A value of `0` here represents that the invoice is due on issue,
+     * whereas a value of `30` represents that the customer has a month to pay the invoice.
+     */
+    fun netTerms(): Optional<Long> = body.netTerms()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    @JvmSynthetic
-    internal fun getBody(): SubscriptionUpdateBody {
-        return SubscriptionUpdateBody(
-            autoCollection,
-            defaultInvoiceMemo,
-            invoicingThreshold,
-            metadata,
-            netTerms,
-            additionalBodyProperties,
-        )
-    }
+    @JvmSynthetic internal fun getBody(): SubscriptionUpdateBody = body
 
     @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
 
@@ -250,27 +258,16 @@ constructor(
     class Builder {
 
         private var subscriptionId: String? = null
-        private var autoCollection: Boolean? = null
-        private var defaultInvoiceMemo: String? = null
-        private var invoicingThreshold: String? = null
-        private var metadata: Metadata? = null
-        private var netTerms: Long? = null
+        private var body: SubscriptionUpdateBody.Builder = SubscriptionUpdateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(subscriptionUpdateParams: SubscriptionUpdateParams) = apply {
             subscriptionId = subscriptionUpdateParams.subscriptionId
-            autoCollection = subscriptionUpdateParams.autoCollection
-            defaultInvoiceMemo = subscriptionUpdateParams.defaultInvoiceMemo
-            invoicingThreshold = subscriptionUpdateParams.invoicingThreshold
-            metadata = subscriptionUpdateParams.metadata
-            netTerms = subscriptionUpdateParams.netTerms
+            body = subscriptionUpdateParams.body.toBuilder()
             additionalHeaders = subscriptionUpdateParams.additionalHeaders.toBuilder()
             additionalQueryParams = subscriptionUpdateParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                subscriptionUpdateParams.additionalBodyProperties.toMutableMap()
         }
 
         fun subscriptionId(subscriptionId: String) = apply { this.subscriptionId = subscriptionId }
@@ -280,14 +277,14 @@ constructor(
          * with the saved payment method on the due date. This property defaults to the plan's
          * behavior.
          */
-        fun autoCollection(autoCollection: Boolean) = apply { this.autoCollection = autoCollection }
+        fun autoCollection(autoCollection: Boolean) = apply { body.autoCollection(autoCollection) }
 
         /**
          * Determines the default memo on this subscription's invoices. Note that if this is not
          * provided, it is determined by the plan configuration.
          */
         fun defaultInvoiceMemo(defaultInvoiceMemo: String) = apply {
-            this.defaultInvoiceMemo = defaultInvoiceMemo
+            body.defaultInvoiceMemo(defaultInvoiceMemo)
         }
 
         /**
@@ -296,7 +293,7 @@ constructor(
          * billing period.
          */
         fun invoicingThreshold(invoicingThreshold: String) = apply {
-            this.invoicingThreshold = invoicingThreshold
+            body.invoicingThreshold(invoicingThreshold)
         }
 
         /**
@@ -304,14 +301,14 @@ constructor(
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+        fun metadata(metadata: Metadata) = apply { body.metadata(metadata) }
 
         /**
          * Determines the difference between the invoice issue date for subscription invoices as the
          * date that they are due. A value of `0` here represents that the invoice is due on issue,
          * whereas a value of `30` represents that the customer has a month to pay the invoice.
          */
-        fun netTerms(netTerms: Long) = apply { this.netTerms = netTerms }
+        fun netTerms(netTerms: Long) = apply { body.netTerms(netTerms) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -412,38 +409,30 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): SubscriptionUpdateParams =
             SubscriptionUpdateParams(
                 checkNotNull(subscriptionId) { "`subscriptionId` is required but was not set" },
-                autoCollection,
-                defaultInvoiceMemo,
-                invoicingThreshold,
-                metadata,
-                netTerms,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -524,11 +513,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is SubscriptionUpdateParams && subscriptionId == other.subscriptionId && autoCollection == other.autoCollection && defaultInvoiceMemo == other.defaultInvoiceMemo && invoicingThreshold == other.invoicingThreshold && metadata == other.metadata && netTerms == other.netTerms && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is SubscriptionUpdateParams && subscriptionId == other.subscriptionId && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionId, autoCollection, defaultInvoiceMemo, invoicingThreshold, metadata, netTerms, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionId, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "SubscriptionUpdateParams{subscriptionId=$subscriptionId, autoCollection=$autoCollection, defaultInvoiceMemo=$defaultInvoiceMemo, invoicingThreshold=$invoicingThreshold, metadata=$metadata, netTerms=$netTerms, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "SubscriptionUpdateParams{subscriptionId=$subscriptionId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
