@@ -455,7 +455,7 @@ class InvoiceFetchUpcomingResponseTest {
                 )
             )
         assertThat(invoiceFetchUpcomingResponse.dueDate())
-            .contains(OffsetDateTime.parse("2022-05-30T07:00:00+00:00"))
+            .isEqualTo(OffsetDateTime.parse("2022-05-30T07:00:00+00:00"))
         assertThat(invoiceFetchUpcomingResponse.eligibleToIssueAt())
             .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(invoiceFetchUpcomingResponse.hostedInvoiceUrl()).contains("hosted_invoice_url")
