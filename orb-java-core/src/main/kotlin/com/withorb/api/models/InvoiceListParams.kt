@@ -200,67 +200,130 @@ constructor(
             additionalQueryParams = invoiceListParams.additionalQueryParams.toBuilder()
         }
 
-        fun amount(amount: String) = apply { this.amount = amount }
+        fun amount(amount: String?) = apply { this.amount = amount }
 
-        fun amountGt(amountGt: String) = apply { this.amountGt = amountGt }
+        fun amount(amount: Optional<String>) = amount(amount.orElse(null))
 
-        fun amountLt(amountLt: String) = apply { this.amountLt = amountLt }
+        fun amountGt(amountGt: String?) = apply { this.amountGt = amountGt }
+
+        fun amountGt(amountGt: Optional<String>) = amountGt(amountGt.orElse(null))
+
+        fun amountLt(amountLt: String?) = apply { this.amountLt = amountLt }
+
+        fun amountLt(amountLt: Optional<String>) = amountLt(amountLt.orElse(null))
 
         /**
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
          * initial request.
          */
-        fun cursor(cursor: String) = apply { this.cursor = cursor }
+        fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        /**
+         * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
+         * initial request.
+         */
+        fun cursor(cursor: Optional<String>) = cursor(cursor.orElse(null))
 
-        fun dateType(dateType: DateType) = apply { this.dateType = dateType }
+        fun customerId(customerId: String?) = apply { this.customerId = customerId }
 
-        fun dueDate(dueDate: LocalDate) = apply { this.dueDate = dueDate }
+        fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
+
+        fun dateType(dateType: DateType?) = apply { this.dateType = dateType }
+
+        fun dateType(dateType: Optional<DateType>) = dateType(dateType.orElse(null))
+
+        fun dueDate(dueDate: LocalDate?) = apply { this.dueDate = dueDate }
+
+        fun dueDate(dueDate: Optional<LocalDate>) = dueDate(dueDate.orElse(null))
 
         /**
          * Filters invoices by their due dates within a specific time range in the past. Specify the
          * range as a number followed by 'd' (days) or 'm' (months). For example, '7d' filters
          * invoices due in the last 7 days, and '2m' filters those due in the last 2 months.
          */
-        fun dueDateWindow(dueDateWindow: String) = apply { this.dueDateWindow = dueDateWindow }
+        fun dueDateWindow(dueDateWindow: String?) = apply { this.dueDateWindow = dueDateWindow }
 
-        fun dueDateGt(dueDateGt: LocalDate) = apply { this.dueDateGt = dueDateGt }
+        /**
+         * Filters invoices by their due dates within a specific time range in the past. Specify the
+         * range as a number followed by 'd' (days) or 'm' (months). For example, '7d' filters
+         * invoices due in the last 7 days, and '2m' filters those due in the last 2 months.
+         */
+        fun dueDateWindow(dueDateWindow: Optional<String>) =
+            dueDateWindow(dueDateWindow.orElse(null))
 
-        fun dueDateLt(dueDateLt: LocalDate) = apply { this.dueDateLt = dueDateLt }
+        fun dueDateGt(dueDateGt: LocalDate?) = apply { this.dueDateGt = dueDateGt }
 
-        fun externalCustomerId(externalCustomerId: String) = apply {
+        fun dueDateGt(dueDateGt: Optional<LocalDate>) = dueDateGt(dueDateGt.orElse(null))
+
+        fun dueDateLt(dueDateLt: LocalDate?) = apply { this.dueDateLt = dueDateLt }
+
+        fun dueDateLt(dueDateLt: Optional<LocalDate>) = dueDateLt(dueDateLt.orElse(null))
+
+        fun externalCustomerId(externalCustomerId: String?) = apply {
             this.externalCustomerId = externalCustomerId
         }
 
-        fun invoiceDateGt(invoiceDateGt: OffsetDateTime) = apply {
+        fun externalCustomerId(externalCustomerId: Optional<String>) =
+            externalCustomerId(externalCustomerId.orElse(null))
+
+        fun invoiceDateGt(invoiceDateGt: OffsetDateTime?) = apply {
             this.invoiceDateGt = invoiceDateGt
         }
 
-        fun invoiceDateGte(invoiceDateGte: OffsetDateTime) = apply {
+        fun invoiceDateGt(invoiceDateGt: Optional<OffsetDateTime>) =
+            invoiceDateGt(invoiceDateGt.orElse(null))
+
+        fun invoiceDateGte(invoiceDateGte: OffsetDateTime?) = apply {
             this.invoiceDateGte = invoiceDateGte
         }
 
-        fun invoiceDateLt(invoiceDateLt: OffsetDateTime) = apply {
+        fun invoiceDateGte(invoiceDateGte: Optional<OffsetDateTime>) =
+            invoiceDateGte(invoiceDateGte.orElse(null))
+
+        fun invoiceDateLt(invoiceDateLt: OffsetDateTime?) = apply {
             this.invoiceDateLt = invoiceDateLt
         }
 
-        fun invoiceDateLte(invoiceDateLte: OffsetDateTime) = apply {
+        fun invoiceDateLt(invoiceDateLt: Optional<OffsetDateTime>) =
+            invoiceDateLt(invoiceDateLt.orElse(null))
+
+        fun invoiceDateLte(invoiceDateLte: OffsetDateTime?) = apply {
             this.invoiceDateLte = invoiceDateLte
         }
 
-        fun isRecurring(isRecurring: Boolean) = apply { this.isRecurring = isRecurring }
+        fun invoiceDateLte(invoiceDateLte: Optional<OffsetDateTime>) =
+            invoiceDateLte(invoiceDateLte.orElse(null))
+
+        fun isRecurring(isRecurring: Boolean?) = apply { this.isRecurring = isRecurring }
+
+        fun isRecurring(isRecurring: Boolean) = isRecurring(isRecurring as Boolean?)
+
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun isRecurring(isRecurring: Optional<Boolean>) =
+            isRecurring(isRecurring.orElse(null) as Boolean?)
 
         /** The number of items to fetch. Defaults to 20. */
-        fun limit(limit: Long) = apply { this.limit = limit }
+        fun limit(limit: Long?) = apply { this.limit = limit }
 
-        fun status(status: List<Status>) = apply { this.status = status.toMutableList() }
+        /** The number of items to fetch. Defaults to 20. */
+        fun limit(limit: Long) = limit(limit as Long?)
+
+        /** The number of items to fetch. Defaults to 20. */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun limit(limit: Optional<Long>) = limit(limit.orElse(null) as Long?)
+
+        fun status(status: List<Status>?) = apply { this.status = status?.toMutableList() }
+
+        fun status(status: Optional<List<Status>>) = status(status.orElse(null))
 
         fun addStatus(status: Status) = apply {
             this.status = (this.status ?: mutableListOf()).apply { add(status) }
         }
 
-        fun subscriptionId(subscriptionId: String) = apply { this.subscriptionId = subscriptionId }
+        fun subscriptionId(subscriptionId: String?) = apply { this.subscriptionId = subscriptionId }
+
+        fun subscriptionId(subscriptionId: Optional<String>) =
+            subscriptionId(subscriptionId.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

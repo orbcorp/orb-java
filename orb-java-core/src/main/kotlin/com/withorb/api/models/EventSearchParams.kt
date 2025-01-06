@@ -135,17 +135,31 @@ constructor(
              * The end of the timeframe, exclusive, in which to search events. If not specified, the
              * current time is used.
              */
-            fun timeframeEnd(timeframeEnd: OffsetDateTime) = apply {
+            fun timeframeEnd(timeframeEnd: OffsetDateTime?) = apply {
                 this.timeframeEnd = timeframeEnd
+            }
+
+            /**
+             * The end of the timeframe, exclusive, in which to search events. If not specified, the
+             * current time is used.
+             */
+            fun timeframeEnd(timeframeEnd: Optional<OffsetDateTime>) =
+                timeframeEnd(timeframeEnd.orElse(null))
+
+            /**
+             * The start of the timeframe, inclusive, in which to search events. If not specified,
+             * the one week ago is used.
+             */
+            fun timeframeStart(timeframeStart: OffsetDateTime?) = apply {
+                this.timeframeStart = timeframeStart
             }
 
             /**
              * The start of the timeframe, inclusive, in which to search events. If not specified,
              * the one week ago is used.
              */
-            fun timeframeStart(timeframeStart: OffsetDateTime) = apply {
-                this.timeframeStart = timeframeStart
-            }
+            fun timeframeStart(timeframeStart: Optional<OffsetDateTime>) =
+                timeframeStart(timeframeStart.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -233,15 +247,29 @@ constructor(
          * The end of the timeframe, exclusive, in which to search events. If not specified, the
          * current time is used.
          */
-        fun timeframeEnd(timeframeEnd: OffsetDateTime) = apply { body.timeframeEnd(timeframeEnd) }
+        fun timeframeEnd(timeframeEnd: OffsetDateTime?) = apply { body.timeframeEnd(timeframeEnd) }
+
+        /**
+         * The end of the timeframe, exclusive, in which to search events. If not specified, the
+         * current time is used.
+         */
+        fun timeframeEnd(timeframeEnd: Optional<OffsetDateTime>) =
+            timeframeEnd(timeframeEnd.orElse(null))
 
         /**
          * The start of the timeframe, inclusive, in which to search events. If not specified, the
          * one week ago is used.
          */
-        fun timeframeStart(timeframeStart: OffsetDateTime) = apply {
+        fun timeframeStart(timeframeStart: OffsetDateTime?) = apply {
             body.timeframeStart(timeframeStart)
         }
+
+        /**
+         * The start of the timeframe, inclusive, in which to search events. If not specified, the
+         * one week ago is used.
+         */
+        fun timeframeStart(timeframeStart: Optional<OffsetDateTime>) =
+            timeframeStart(timeframeStart.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

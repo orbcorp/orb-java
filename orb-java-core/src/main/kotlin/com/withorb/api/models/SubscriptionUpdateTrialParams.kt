@@ -138,7 +138,20 @@ constructor(
              * If true, shifts subsequent price and adjustment intervals (preserving their
              * durations, but adjusting their absolute dates).
              */
-            fun shift(shift: Boolean) = apply { this.shift = shift }
+            fun shift(shift: Boolean?) = apply { this.shift = shift }
+
+            /**
+             * If true, shifts subsequent price and adjustment intervals (preserving their
+             * durations, but adjusting their absolute dates).
+             */
+            fun shift(shift: Boolean) = shift(shift as Boolean?)
+
+            /**
+             * If true, shifts subsequent price and adjustment intervals (preserving their
+             * durations, but adjusting their absolute dates).
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun shift(shift: Optional<Boolean>) = shift(shift.orElse(null) as Boolean?)
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -229,7 +242,20 @@ constructor(
          * If true, shifts subsequent price and adjustment intervals (preserving their durations,
          * but adjusting their absolute dates).
          */
-        fun shift(shift: Boolean) = apply { body.shift(shift) }
+        fun shift(shift: Boolean?) = apply { body.shift(shift) }
+
+        /**
+         * If true, shifts subsequent price and adjustment intervals (preserving their durations,
+         * but adjusting their absolute dates).
+         */
+        fun shift(shift: Boolean) = shift(shift as Boolean?)
+
+        /**
+         * If true, shifts subsequent price and adjustment intervals (preserving their durations,
+         * but adjusting their absolute dates).
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun shift(shift: Optional<Boolean>) = shift(shift.orElse(null) as Boolean?)
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

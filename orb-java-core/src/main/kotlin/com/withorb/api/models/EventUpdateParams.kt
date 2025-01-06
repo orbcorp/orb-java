@@ -152,14 +152,23 @@ constructor(
             fun timestamp(timestamp: OffsetDateTime) = apply { this.timestamp = timestamp }
 
             /** The Orb Customer identifier */
-            fun customerId(customerId: String) = apply { this.customerId = customerId }
+            fun customerId(customerId: String?) = apply { this.customerId = customerId }
+
+            /** The Orb Customer identifier */
+            fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
 
             /**
              * An alias for the Orb customer, whose mapping is specified when creating the customer
              */
-            fun externalCustomerId(externalCustomerId: String) = apply {
+            fun externalCustomerId(externalCustomerId: String?) = apply {
                 this.externalCustomerId = externalCustomerId
             }
+
+            /**
+             * An alias for the Orb customer, whose mapping is specified when creating the customer
+             */
+            fun externalCustomerId(externalCustomerId: Optional<String>) =
+                externalCustomerId(externalCustomerId.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -251,12 +260,19 @@ constructor(
         fun timestamp(timestamp: OffsetDateTime) = apply { body.timestamp(timestamp) }
 
         /** The Orb Customer identifier */
-        fun customerId(customerId: String) = apply { body.customerId(customerId) }
+        fun customerId(customerId: String?) = apply { body.customerId(customerId) }
+
+        /** The Orb Customer identifier */
+        fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
 
         /** An alias for the Orb customer, whose mapping is specified when creating the customer */
-        fun externalCustomerId(externalCustomerId: String) = apply {
+        fun externalCustomerId(externalCustomerId: String?) = apply {
             body.externalCustomerId(externalCustomerId)
         }
+
+        /** An alias for the Orb customer, whose mapping is specified when creating the customer */
+        fun externalCustomerId(externalCustomerId: Optional<String>) =
+            externalCustomerId(externalCustomerId.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

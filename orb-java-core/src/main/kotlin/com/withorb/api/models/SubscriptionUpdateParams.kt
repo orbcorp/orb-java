@@ -163,16 +163,48 @@ constructor(
              * charged with the saved payment method on the due date. This property defaults to the
              * plan's behavior.
              */
-            fun autoCollection(autoCollection: Boolean) = apply {
+            fun autoCollection(autoCollection: Boolean?) = apply {
                 this.autoCollection = autoCollection
+            }
+
+            /**
+             * Determines whether issued invoices for this subscription will automatically be
+             * charged with the saved payment method on the due date. This property defaults to the
+             * plan's behavior.
+             */
+            fun autoCollection(autoCollection: Boolean) = autoCollection(autoCollection as Boolean?)
+
+            /**
+             * Determines whether issued invoices for this subscription will automatically be
+             * charged with the saved payment method on the due date. This property defaults to the
+             * plan's behavior.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun autoCollection(autoCollection: Optional<Boolean>) =
+                autoCollection(autoCollection.orElse(null) as Boolean?)
+
+            /**
+             * Determines the default memo on this subscription's invoices. Note that if this is not
+             * provided, it is determined by the plan configuration.
+             */
+            fun defaultInvoiceMemo(defaultInvoiceMemo: String?) = apply {
+                this.defaultInvoiceMemo = defaultInvoiceMemo
             }
 
             /**
              * Determines the default memo on this subscription's invoices. Note that if this is not
              * provided, it is determined by the plan configuration.
              */
-            fun defaultInvoiceMemo(defaultInvoiceMemo: String) = apply {
-                this.defaultInvoiceMemo = defaultInvoiceMemo
+            fun defaultInvoiceMemo(defaultInvoiceMemo: Optional<String>) =
+                defaultInvoiceMemo(defaultInvoiceMemo.orElse(null))
+
+            /**
+             * When this subscription's accrued usage reaches this threshold, an invoice will be
+             * issued for the subscription. If not specified, invoices will only be issued at the
+             * end of the billing period.
+             */
+            fun invoicingThreshold(invoicingThreshold: String?) = apply {
+                this.invoicingThreshold = invoicingThreshold
             }
 
             /**
@@ -180,16 +212,22 @@ constructor(
              * issued for the subscription. If not specified, invoices will only be issued at the
              * end of the billing period.
              */
-            fun invoicingThreshold(invoicingThreshold: String) = apply {
-                this.invoicingThreshold = invoicingThreshold
-            }
+            fun invoicingThreshold(invoicingThreshold: Optional<String>) =
+                invoicingThreshold(invoicingThreshold.orElse(null))
 
             /**
              * User-specified key/value pairs for the resource. Individual keys can be removed by
              * setting the value to `null`, and the entire metadata mapping can be cleared by
              * setting `metadata` to `null`.
              */
-            fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+            fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+            /**
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
+             */
+            fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
             /**
              * Determines the difference between the invoice issue date for subscription invoices as
@@ -197,7 +235,24 @@ constructor(
              * issue, whereas a value of `30` represents that the customer has a month to pay the
              * invoice.
              */
-            fun netTerms(netTerms: Long) = apply { this.netTerms = netTerms }
+            fun netTerms(netTerms: Long?) = apply { this.netTerms = netTerms }
+
+            /**
+             * Determines the difference between the invoice issue date for subscription invoices as
+             * the date that they are due. A value of `0` here represents that the invoice is due on
+             * issue, whereas a value of `30` represents that the customer has a month to pay the
+             * invoice.
+             */
+            fun netTerms(netTerms: Long) = netTerms(netTerms as Long?)
+
+            /**
+             * Determines the difference between the invoice issue date for subscription invoices as
+             * the date that they are due. A value of `0` here represents that the invoice is due on
+             * issue, whereas a value of `30` represents that the customer has a month to pay the
+             * invoice.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun netTerms(netTerms: Optional<Long>) = netTerms(netTerms.orElse(null) as Long?)
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -277,14 +332,46 @@ constructor(
          * with the saved payment method on the due date. This property defaults to the plan's
          * behavior.
          */
-        fun autoCollection(autoCollection: Boolean) = apply { body.autoCollection(autoCollection) }
+        fun autoCollection(autoCollection: Boolean?) = apply { body.autoCollection(autoCollection) }
+
+        /**
+         * Determines whether issued invoices for this subscription will automatically be charged
+         * with the saved payment method on the due date. This property defaults to the plan's
+         * behavior.
+         */
+        fun autoCollection(autoCollection: Boolean) = autoCollection(autoCollection as Boolean?)
+
+        /**
+         * Determines whether issued invoices for this subscription will automatically be charged
+         * with the saved payment method on the due date. This property defaults to the plan's
+         * behavior.
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun autoCollection(autoCollection: Optional<Boolean>) =
+            autoCollection(autoCollection.orElse(null) as Boolean?)
 
         /**
          * Determines the default memo on this subscription's invoices. Note that if this is not
          * provided, it is determined by the plan configuration.
          */
-        fun defaultInvoiceMemo(defaultInvoiceMemo: String) = apply {
+        fun defaultInvoiceMemo(defaultInvoiceMemo: String?) = apply {
             body.defaultInvoiceMemo(defaultInvoiceMemo)
+        }
+
+        /**
+         * Determines the default memo on this subscription's invoices. Note that if this is not
+         * provided, it is determined by the plan configuration.
+         */
+        fun defaultInvoiceMemo(defaultInvoiceMemo: Optional<String>) =
+            defaultInvoiceMemo(defaultInvoiceMemo.orElse(null))
+
+        /**
+         * When this subscription's accrued usage reaches this threshold, an invoice will be issued
+         * for the subscription. If not specified, invoices will only be issued at the end of the
+         * billing period.
+         */
+        fun invoicingThreshold(invoicingThreshold: String?) = apply {
+            body.invoicingThreshold(invoicingThreshold)
         }
 
         /**
@@ -292,23 +379,44 @@ constructor(
          * for the subscription. If not specified, invoices will only be issued at the end of the
          * billing period.
          */
-        fun invoicingThreshold(invoicingThreshold: String) = apply {
-            body.invoicingThreshold(invoicingThreshold)
-        }
+        fun invoicingThreshold(invoicingThreshold: Optional<String>) =
+            invoicingThreshold(invoicingThreshold.orElse(null))
 
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        fun metadata(metadata: Metadata) = apply { body.metadata(metadata) }
+        fun metadata(metadata: Metadata?) = apply { body.metadata(metadata) }
+
+        /**
+         * User-specified key/value pairs for the resource. Individual keys can be removed by
+         * setting the value to `null`, and the entire metadata mapping can be cleared by setting
+         * `metadata` to `null`.
+         */
+        fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
         /**
          * Determines the difference between the invoice issue date for subscription invoices as the
          * date that they are due. A value of `0` here represents that the invoice is due on issue,
          * whereas a value of `30` represents that the customer has a month to pay the invoice.
          */
-        fun netTerms(netTerms: Long) = apply { body.netTerms(netTerms) }
+        fun netTerms(netTerms: Long?) = apply { body.netTerms(netTerms) }
+
+        /**
+         * Determines the difference between the invoice issue date for subscription invoices as the
+         * date that they are due. A value of `0` here represents that the invoice is due on issue,
+         * whereas a value of `30` represents that the customer has a month to pay the invoice.
+         */
+        fun netTerms(netTerms: Long) = netTerms(netTerms as Long?)
+
+        /**
+         * Determines the difference between the invoice issue date for subscription invoices as the
+         * date that they are due. A value of `0` here represents that the invoice is due on issue,
+         * whereas a value of `30` represents that the customer has a month to pay the invoice.
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun netTerms(netTerms: Optional<Long>) = netTerms(netTerms.orElse(null) as Long?)
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

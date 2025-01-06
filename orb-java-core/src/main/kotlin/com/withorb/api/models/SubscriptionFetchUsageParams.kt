@@ -163,46 +163,87 @@ constructor(
          * billable metric. Note that both `group_by` and `billable_metric_id` must be specified
          * together.
          */
-        fun billableMetricId(billableMetricId: String) = apply {
+        fun billableMetricId(billableMetricId: String?) = apply {
             this.billableMetricId = billableMetricId
         }
 
-        fun firstDimensionKey(firstDimensionKey: String) = apply {
+        /**
+         * When specified in conjunction with `group_by`, this parameter filters usage to a single
+         * billable metric. Note that both `group_by` and `billable_metric_id` must be specified
+         * together.
+         */
+        fun billableMetricId(billableMetricId: Optional<String>) =
+            billableMetricId(billableMetricId.orElse(null))
+
+        fun firstDimensionKey(firstDimensionKey: String?) = apply {
             this.firstDimensionKey = firstDimensionKey
         }
 
-        fun firstDimensionValue(firstDimensionValue: String) = apply {
+        fun firstDimensionKey(firstDimensionKey: Optional<String>) =
+            firstDimensionKey(firstDimensionKey.orElse(null))
+
+        fun firstDimensionValue(firstDimensionValue: String?) = apply {
             this.firstDimensionValue = firstDimensionValue
         }
 
+        fun firstDimensionValue(firstDimensionValue: Optional<String>) =
+            firstDimensionValue(firstDimensionValue.orElse(null))
+
         /** This determines the windowing of usage reporting. */
-        fun granularity(granularity: Granularity) = apply { this.granularity = granularity }
+        fun granularity(granularity: Granularity?) = apply { this.granularity = granularity }
+
+        /** This determines the windowing of usage reporting. */
+        fun granularity(granularity: Optional<Granularity>) = granularity(granularity.orElse(null))
 
         /** Groups per-price usage by the key provided. */
-        fun groupBy(groupBy: String) = apply { this.groupBy = groupBy }
+        fun groupBy(groupBy: String?) = apply { this.groupBy = groupBy }
 
-        fun secondDimensionKey(secondDimensionKey: String) = apply {
+        /** Groups per-price usage by the key provided. */
+        fun groupBy(groupBy: Optional<String>) = groupBy(groupBy.orElse(null))
+
+        fun secondDimensionKey(secondDimensionKey: String?) = apply {
             this.secondDimensionKey = secondDimensionKey
         }
 
-        fun secondDimensionValue(secondDimensionValue: String) = apply {
+        fun secondDimensionKey(secondDimensionKey: Optional<String>) =
+            secondDimensionKey(secondDimensionKey.orElse(null))
+
+        fun secondDimensionValue(secondDimensionValue: String?) = apply {
             this.secondDimensionValue = secondDimensionValue
         }
 
+        fun secondDimensionValue(secondDimensionValue: Optional<String>) =
+            secondDimensionValue(secondDimensionValue.orElse(null))
+
         /** Usage returned is exclusive of `timeframe_end`. */
-        fun timeframeEnd(timeframeEnd: OffsetDateTime) = apply { this.timeframeEnd = timeframeEnd }
+        fun timeframeEnd(timeframeEnd: OffsetDateTime?) = apply { this.timeframeEnd = timeframeEnd }
+
+        /** Usage returned is exclusive of `timeframe_end`. */
+        fun timeframeEnd(timeframeEnd: Optional<OffsetDateTime>) =
+            timeframeEnd(timeframeEnd.orElse(null))
 
         /** Usage returned is inclusive of `timeframe_start`. */
-        fun timeframeStart(timeframeStart: OffsetDateTime) = apply {
+        fun timeframeStart(timeframeStart: OffsetDateTime?) = apply {
             this.timeframeStart = timeframeStart
         }
+
+        /** Usage returned is inclusive of `timeframe_start`. */
+        fun timeframeStart(timeframeStart: Optional<OffsetDateTime>) =
+            timeframeStart(timeframeStart.orElse(null))
 
         /**
          * Controls whether Orb returns cumulative usage since the start of the billing period, or
          * incremental day-by-day usage. If your customer has minimums or discounts, it's strongly
          * recommended that you use the default cumulative behavior.
          */
-        fun viewMode(viewMode: ViewMode) = apply { this.viewMode = viewMode }
+        fun viewMode(viewMode: ViewMode?) = apply { this.viewMode = viewMode }
+
+        /**
+         * Controls whether Orb returns cumulative usage since the start of the billing period, or
+         * incremental day-by-day usage. If your customer has minimums or discounts, it's strongly
+         * recommended that you use the default cumulative behavior.
+         */
+        fun viewMode(viewMode: Optional<ViewMode>) = viewMode(viewMode.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
