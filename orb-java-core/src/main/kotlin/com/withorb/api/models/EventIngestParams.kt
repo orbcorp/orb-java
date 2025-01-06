@@ -168,10 +168,23 @@ constructor(
          * If this ingestion request is part of a backfill, this parameter ties the ingested events
          * to the backfill
          */
-        fun backfillId(backfillId: String) = apply { this.backfillId = backfillId }
+        fun backfillId(backfillId: String?) = apply { this.backfillId = backfillId }
+
+        /**
+         * If this ingestion request is part of a backfill, this parameter ties the ingested events
+         * to the backfill
+         */
+        fun backfillId(backfillId: Optional<String>) = backfillId(backfillId.orElse(null))
 
         /** Flag to enable additional debug information in the endpoint response */
-        fun debug(debug: Boolean) = apply { this.debug = debug }
+        fun debug(debug: Boolean?) = apply { this.debug = debug }
+
+        /** Flag to enable additional debug information in the endpoint response */
+        fun debug(debug: Boolean) = debug(debug as Boolean?)
+
+        /** Flag to enable additional debug information in the endpoint response */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun debug(debug: Optional<Boolean>) = debug(debug.orElse(null) as Boolean?)
 
         fun events(events: List<Event>) = apply { body.events(events) }
 
@@ -407,14 +420,23 @@ constructor(
             fun timestamp(timestamp: OffsetDateTime) = apply { this.timestamp = timestamp }
 
             /** The Orb Customer identifier */
-            fun customerId(customerId: String) = apply { this.customerId = customerId }
+            fun customerId(customerId: String?) = apply { this.customerId = customerId }
+
+            /** The Orb Customer identifier */
+            fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
 
             /**
              * An alias for the Orb customer, whose mapping is specified when creating the customer
              */
-            fun externalCustomerId(externalCustomerId: String) = apply {
+            fun externalCustomerId(externalCustomerId: String?) = apply {
                 this.externalCustomerId = externalCustomerId
             }
+
+            /**
+             * An alias for the Orb customer, whose mapping is specified when creating the customer
+             */
+            fun externalCustomerId(externalCustomerId: Optional<String>) =
+                externalCustomerId(externalCustomerId.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()

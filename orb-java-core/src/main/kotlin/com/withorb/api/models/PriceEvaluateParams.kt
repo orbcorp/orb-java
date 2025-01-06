@@ -157,28 +157,50 @@ constructor(
             }
 
             /** The ID of the customer to which this evaluation is scoped. */
-            fun customerId(customerId: String) = apply { this.customerId = customerId }
+            fun customerId(customerId: String?) = apply { this.customerId = customerId }
+
+            /** The ID of the customer to which this evaluation is scoped. */
+            fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
 
             /** The external customer ID of the customer to which this evaluation is scoped. */
-            fun externalCustomerId(externalCustomerId: String) = apply {
+            fun externalCustomerId(externalCustomerId: String?) = apply {
                 this.externalCustomerId = externalCustomerId
             }
+
+            /** The external customer ID of the customer to which this evaluation is scoped. */
+            fun externalCustomerId(externalCustomerId: Optional<String>) =
+                externalCustomerId(externalCustomerId.orElse(null))
 
             /**
              * A boolean
              * [computed property](../guides/extensibility/advanced-metrics#computed-properties)
              * used to filter the underlying billable metric
              */
-            fun filter(filter: String) = apply { this.filter = filter }
+            fun filter(filter: String?) = apply { this.filter = filter }
+
+            /**
+             * A boolean
+             * [computed property](../guides/extensibility/advanced-metrics#computed-properties)
+             * used to filter the underlying billable metric
+             */
+            fun filter(filter: Optional<String>) = filter(filter.orElse(null))
 
             /**
              * Properties (or
              * [computed properties](../guides/extensibility/advanced-metrics#computed-properties))
              * used to group the underlying billable metric
              */
-            fun groupingKeys(groupingKeys: List<String>) = apply {
-                this.groupingKeys = groupingKeys.toMutableList()
+            fun groupingKeys(groupingKeys: List<String>?) = apply {
+                this.groupingKeys = groupingKeys?.toMutableList()
             }
+
+            /**
+             * Properties (or
+             * [computed properties](../guides/extensibility/advanced-metrics#computed-properties))
+             * used to group the underlying billable metric
+             */
+            fun groupingKeys(groupingKeys: Optional<List<String>>) =
+                groupingKeys(groupingKeys.orElse(null))
 
             /**
              * Properties (or
@@ -272,26 +294,48 @@ constructor(
         }
 
         /** The ID of the customer to which this evaluation is scoped. */
-        fun customerId(customerId: String) = apply { body.customerId(customerId) }
+        fun customerId(customerId: String?) = apply { body.customerId(customerId) }
+
+        /** The ID of the customer to which this evaluation is scoped. */
+        fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
 
         /** The external customer ID of the customer to which this evaluation is scoped. */
-        fun externalCustomerId(externalCustomerId: String) = apply {
+        fun externalCustomerId(externalCustomerId: String?) = apply {
             body.externalCustomerId(externalCustomerId)
         }
+
+        /** The external customer ID of the customer to which this evaluation is scoped. */
+        fun externalCustomerId(externalCustomerId: Optional<String>) =
+            externalCustomerId(externalCustomerId.orElse(null))
 
         /**
          * A boolean
          * [computed property](../guides/extensibility/advanced-metrics#computed-properties) used to
          * filter the underlying billable metric
          */
-        fun filter(filter: String) = apply { body.filter(filter) }
+        fun filter(filter: String?) = apply { body.filter(filter) }
+
+        /**
+         * A boolean
+         * [computed property](../guides/extensibility/advanced-metrics#computed-properties) used to
+         * filter the underlying billable metric
+         */
+        fun filter(filter: Optional<String>) = filter(filter.orElse(null))
 
         /**
          * Properties (or
          * [computed properties](../guides/extensibility/advanced-metrics#computed-properties)) used
          * to group the underlying billable metric
          */
-        fun groupingKeys(groupingKeys: List<String>) = apply { body.groupingKeys(groupingKeys) }
+        fun groupingKeys(groupingKeys: List<String>?) = apply { body.groupingKeys(groupingKeys) }
+
+        /**
+         * Properties (or
+         * [computed properties](../guides/extensibility/advanced-metrics#computed-properties)) used
+         * to group the underlying billable metric
+         */
+        fun groupingKeys(groupingKeys: Optional<List<String>>) =
+            groupingKeys(groupingKeys.orElse(null))
 
         /**
          * Properties (or

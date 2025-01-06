@@ -11,6 +11,7 @@ import com.withorb.api.core.http.QueryParams
 import java.net.Proxy
 import java.time.Clock
 import java.time.Duration
+import java.util.Optional
 
 class OrbOkHttpClient private constructor() {
 
@@ -130,9 +131,12 @@ class OrbOkHttpClient private constructor() {
 
         fun apiKey(apiKey: String) = apply { clientOptions.apiKey(apiKey) }
 
-        fun webhookSecret(webhookSecret: String) = apply {
+        fun webhookSecret(webhookSecret: String?) = apply {
             clientOptions.webhookSecret(webhookSecret)
         }
+
+        fun webhookSecret(webhookSecret: Optional<String>) =
+            webhookSecret(webhookSecret.orElse(null))
 
         fun fromEnv() = apply { clientOptions.fromEnv() }
 

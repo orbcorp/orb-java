@@ -132,16 +132,26 @@ constructor(
 
             fun name(name: String) = apply { this.name = name }
 
-            fun externalDimensionalPriceGroupId(externalDimensionalPriceGroupId: String) = apply {
+            fun externalDimensionalPriceGroupId(externalDimensionalPriceGroupId: String?) = apply {
                 this.externalDimensionalPriceGroupId = externalDimensionalPriceGroupId
             }
+
+            fun externalDimensionalPriceGroupId(externalDimensionalPriceGroupId: Optional<String>) =
+                externalDimensionalPriceGroupId(externalDimensionalPriceGroupId.orElse(null))
 
             /**
              * User-specified key/value pairs for the resource. Individual keys can be removed by
              * setting the value to `null`, and the entire metadata mapping can be cleared by
              * setting `metadata` to `null`.
              */
-            fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+            fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+            /**
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
+             */
+            fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -230,16 +240,26 @@ constructor(
 
         fun name(name: String) = apply { body.name(name) }
 
-        fun externalDimensionalPriceGroupId(externalDimensionalPriceGroupId: String) = apply {
+        fun externalDimensionalPriceGroupId(externalDimensionalPriceGroupId: String?) = apply {
             body.externalDimensionalPriceGroupId(externalDimensionalPriceGroupId)
         }
+
+        fun externalDimensionalPriceGroupId(externalDimensionalPriceGroupId: Optional<String>) =
+            externalDimensionalPriceGroupId(externalDimensionalPriceGroupId.orElse(null))
 
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        fun metadata(metadata: Metadata) = apply { body.metadata(metadata) }
+        fun metadata(metadata: Metadata?) = apply { body.metadata(metadata) }
+
+        /**
+         * User-specified key/value pairs for the resource. Individual keys can be removed by
+         * setting the value to `null`, and the entire metadata mapping can be cleared by setting
+         * `metadata` to `null`.
+         */
+        fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

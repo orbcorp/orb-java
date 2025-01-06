@@ -114,9 +114,13 @@ constructor(
             fun type(type: Type) = apply { this.type = type }
 
             /** The thresholds that define the values at which the alert will be triggered. */
-            fun thresholds(thresholds: List<Threshold>) = apply {
-                this.thresholds = thresholds.toMutableList()
+            fun thresholds(thresholds: List<Threshold>?) = apply {
+                this.thresholds = thresholds?.toMutableList()
             }
+
+            /** The thresholds that define the values at which the alert will be triggered. */
+            fun thresholds(thresholds: Optional<List<Threshold>>) =
+                thresholds(thresholds.orElse(null))
 
             /** The thresholds that define the values at which the alert will be triggered. */
             fun addThreshold(threshold: Threshold) = apply {
@@ -207,7 +211,10 @@ constructor(
         fun type(type: Type) = apply { body.type(type) }
 
         /** The thresholds that define the values at which the alert will be triggered. */
-        fun thresholds(thresholds: List<Threshold>) = apply { body.thresholds(thresholds) }
+        fun thresholds(thresholds: List<Threshold>?) = apply { body.thresholds(thresholds) }
+
+        /** The thresholds that define the values at which the alert will be triggered. */
+        fun thresholds(thresholds: Optional<List<Threshold>>) = thresholds(thresholds.orElse(null))
 
         /** The thresholds that define the values at which the alert will be triggered. */
         fun addThreshold(threshold: Threshold) = apply { body.addThreshold(threshold) }

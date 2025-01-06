@@ -146,17 +146,46 @@ constructor(
              * This allows for a coupon's discount to apply for a limited time (determined in
              * months); a `null` value here means "unlimited time".
              */
-            fun durationInMonths(durationInMonths: Long) = apply {
+            fun durationInMonths(durationInMonths: Long?) = apply {
                 this.durationInMonths = durationInMonths
+            }
+
+            /**
+             * This allows for a coupon's discount to apply for a limited time (determined in
+             * months); a `null` value here means "unlimited time".
+             */
+            fun durationInMonths(durationInMonths: Long) =
+                durationInMonths(durationInMonths as Long?)
+
+            /**
+             * This allows for a coupon's discount to apply for a limited time (determined in
+             * months); a `null` value here means "unlimited time".
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun durationInMonths(durationInMonths: Optional<Long>) =
+                durationInMonths(durationInMonths.orElse(null) as Long?)
+
+            /**
+             * The maximum number of redemptions allowed for this coupon before it is
+             * exhausted;`null` here means "unlimited".
+             */
+            fun maxRedemptions(maxRedemptions: Long?) = apply {
+                this.maxRedemptions = maxRedemptions
             }
 
             /**
              * The maximum number of redemptions allowed for this coupon before it is
              * exhausted;`null` here means "unlimited".
              */
-            fun maxRedemptions(maxRedemptions: Long) = apply {
-                this.maxRedemptions = maxRedemptions
-            }
+            fun maxRedemptions(maxRedemptions: Long) = maxRedemptions(maxRedemptions as Long?)
+
+            /**
+             * The maximum number of redemptions allowed for this coupon before it is
+             * exhausted;`null` here means "unlimited".
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun maxRedemptions(maxRedemptions: Optional<Long>) =
+                maxRedemptions(maxRedemptions.orElse(null) as Long?)
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -243,15 +272,43 @@ constructor(
          * This allows for a coupon's discount to apply for a limited time (determined in months); a
          * `null` value here means "unlimited time".
          */
-        fun durationInMonths(durationInMonths: Long) = apply {
+        fun durationInMonths(durationInMonths: Long?) = apply {
             body.durationInMonths(durationInMonths)
         }
+
+        /**
+         * This allows for a coupon's discount to apply for a limited time (determined in months); a
+         * `null` value here means "unlimited time".
+         */
+        fun durationInMonths(durationInMonths: Long) = durationInMonths(durationInMonths as Long?)
+
+        /**
+         * This allows for a coupon's discount to apply for a limited time (determined in months); a
+         * `null` value here means "unlimited time".
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun durationInMonths(durationInMonths: Optional<Long>) =
+            durationInMonths(durationInMonths.orElse(null) as Long?)
 
         /**
          * The maximum number of redemptions allowed for this coupon before it is exhausted;`null`
          * here means "unlimited".
          */
-        fun maxRedemptions(maxRedemptions: Long) = apply { body.maxRedemptions(maxRedemptions) }
+        fun maxRedemptions(maxRedemptions: Long?) = apply { body.maxRedemptions(maxRedemptions) }
+
+        /**
+         * The maximum number of redemptions allowed for this coupon before it is exhausted;`null`
+         * here means "unlimited".
+         */
+        fun maxRedemptions(maxRedemptions: Long) = maxRedemptions(maxRedemptions as Long?)
+
+        /**
+         * The maximum number of redemptions allowed for this coupon before it is exhausted;`null`
+         * here means "unlimited".
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun maxRedemptions(maxRedemptions: Optional<Long>) =
+            maxRedemptions(maxRedemptions.orElse(null) as Long?)
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

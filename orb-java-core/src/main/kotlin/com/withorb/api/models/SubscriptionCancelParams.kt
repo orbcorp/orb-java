@@ -111,9 +111,16 @@ constructor(
              * The date that the cancellation should take effect. This parameter can only be passed
              * if the `cancel_option` is `requested_date`.
              */
-            fun cancellationDate(cancellationDate: OffsetDateTime) = apply {
+            fun cancellationDate(cancellationDate: OffsetDateTime?) = apply {
                 this.cancellationDate = cancellationDate
             }
+
+            /**
+             * The date that the cancellation should take effect. This parameter can only be passed
+             * if the `cancel_option` is `requested_date`.
+             */
+            fun cancellationDate(cancellationDate: Optional<OffsetDateTime>) =
+                cancellationDate(cancellationDate.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -192,9 +199,16 @@ constructor(
          * The date that the cancellation should take effect. This parameter can only be passed if
          * the `cancel_option` is `requested_date`.
          */
-        fun cancellationDate(cancellationDate: OffsetDateTime) = apply {
+        fun cancellationDate(cancellationDate: OffsetDateTime?) = apply {
             body.cancellationDate(cancellationDate)
         }
+
+        /**
+         * The date that the cancellation should take effect. This parameter can only be passed if
+         * the `cancel_option` is `requested_date`.
+         */
+        fun cancellationDate(cancellationDate: Optional<OffsetDateTime>) =
+            cancellationDate(cancellationDate.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

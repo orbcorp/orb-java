@@ -180,38 +180,81 @@ constructor(
              * will automatically begin reflecting throughout Orb at the close time. If not
              * specified, it will default to 1 day after the creation of the backfill.
              */
-            fun closeTime(closeTime: OffsetDateTime) = apply { this.closeTime = closeTime }
+            fun closeTime(closeTime: OffsetDateTime?) = apply { this.closeTime = closeTime }
+
+            /**
+             * The time at which no more events will be accepted for this backfill. The backfill
+             * will automatically begin reflecting throughout Orb at the close time. If not
+             * specified, it will default to 1 day after the creation of the backfill.
+             */
+            fun closeTime(closeTime: Optional<OffsetDateTime>) = closeTime(closeTime.orElse(null))
 
             /**
              * The Orb-generated ID of the customer to which this backfill is scoped. Omitting this
              * field will scope the backfill to all customers.
              */
-            fun customerId(customerId: String) = apply { this.customerId = customerId }
+            fun customerId(customerId: String?) = apply { this.customerId = customerId }
+
+            /**
+             * The Orb-generated ID of the customer to which this backfill is scoped. Omitting this
+             * field will scope the backfill to all customers.
+             */
+            fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
 
             /**
              * A boolean
              * [computed property](../guides/extensibility/advanced-metrics#computed-properties)
              * used to filter the set of events to deprecate
              */
-            fun deprecationFilter(deprecationFilter: String) = apply {
+            fun deprecationFilter(deprecationFilter: String?) = apply {
                 this.deprecationFilter = deprecationFilter
+            }
+
+            /**
+             * A boolean
+             * [computed property](../guides/extensibility/advanced-metrics#computed-properties)
+             * used to filter the set of events to deprecate
+             */
+            fun deprecationFilter(deprecationFilter: Optional<String>) =
+                deprecationFilter(deprecationFilter.orElse(null))
+
+            /**
+             * The external customer ID of the customer to which this backfill is scoped. Omitting
+             * this field will scope the backfill to all customers.
+             */
+            fun externalCustomerId(externalCustomerId: String?) = apply {
+                this.externalCustomerId = externalCustomerId
             }
 
             /**
              * The external customer ID of the customer to which this backfill is scoped. Omitting
              * this field will scope the backfill to all customers.
              */
-            fun externalCustomerId(externalCustomerId: String) = apply {
-                this.externalCustomerId = externalCustomerId
+            fun externalCustomerId(externalCustomerId: Optional<String>) =
+                externalCustomerId(externalCustomerId.orElse(null))
+
+            /**
+             * If true, replaces all existing events in the timeframe with the newly ingested
+             * events. If false, adds the newly ingested events to the existing events.
+             */
+            fun replaceExistingEvents(replaceExistingEvents: Boolean?) = apply {
+                this.replaceExistingEvents = replaceExistingEvents
             }
 
             /**
              * If true, replaces all existing events in the timeframe with the newly ingested
              * events. If false, adds the newly ingested events to the existing events.
              */
-            fun replaceExistingEvents(replaceExistingEvents: Boolean) = apply {
-                this.replaceExistingEvents = replaceExistingEvents
-            }
+            fun replaceExistingEvents(replaceExistingEvents: Boolean) =
+                replaceExistingEvents(replaceExistingEvents as Boolean?)
+
+            /**
+             * If true, replaces all existing events in the timeframe with the newly ingested
+             * events. If false, adds the newly ingested events to the existing events.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun replaceExistingEvents(replaceExistingEvents: Optional<Boolean>) =
+                replaceExistingEvents(replaceExistingEvents.orElse(null) as Boolean?)
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -297,38 +340,81 @@ constructor(
          * automatically begin reflecting throughout Orb at the close time. If not specified, it
          * will default to 1 day after the creation of the backfill.
          */
-        fun closeTime(closeTime: OffsetDateTime) = apply { body.closeTime(closeTime) }
+        fun closeTime(closeTime: OffsetDateTime?) = apply { body.closeTime(closeTime) }
+
+        /**
+         * The time at which no more events will be accepted for this backfill. The backfill will
+         * automatically begin reflecting throughout Orb at the close time. If not specified, it
+         * will default to 1 day after the creation of the backfill.
+         */
+        fun closeTime(closeTime: Optional<OffsetDateTime>) = closeTime(closeTime.orElse(null))
 
         /**
          * The Orb-generated ID of the customer to which this backfill is scoped. Omitting this
          * field will scope the backfill to all customers.
          */
-        fun customerId(customerId: String) = apply { body.customerId(customerId) }
+        fun customerId(customerId: String?) = apply { body.customerId(customerId) }
+
+        /**
+         * The Orb-generated ID of the customer to which this backfill is scoped. Omitting this
+         * field will scope the backfill to all customers.
+         */
+        fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
 
         /**
          * A boolean
          * [computed property](../guides/extensibility/advanced-metrics#computed-properties) used to
          * filter the set of events to deprecate
          */
-        fun deprecationFilter(deprecationFilter: String) = apply {
+        fun deprecationFilter(deprecationFilter: String?) = apply {
             body.deprecationFilter(deprecationFilter)
+        }
+
+        /**
+         * A boolean
+         * [computed property](../guides/extensibility/advanced-metrics#computed-properties) used to
+         * filter the set of events to deprecate
+         */
+        fun deprecationFilter(deprecationFilter: Optional<String>) =
+            deprecationFilter(deprecationFilter.orElse(null))
+
+        /**
+         * The external customer ID of the customer to which this backfill is scoped. Omitting this
+         * field will scope the backfill to all customers.
+         */
+        fun externalCustomerId(externalCustomerId: String?) = apply {
+            body.externalCustomerId(externalCustomerId)
         }
 
         /**
          * The external customer ID of the customer to which this backfill is scoped. Omitting this
          * field will scope the backfill to all customers.
          */
-        fun externalCustomerId(externalCustomerId: String) = apply {
-            body.externalCustomerId(externalCustomerId)
+        fun externalCustomerId(externalCustomerId: Optional<String>) =
+            externalCustomerId(externalCustomerId.orElse(null))
+
+        /**
+         * If true, replaces all existing events in the timeframe with the newly ingested events. If
+         * false, adds the newly ingested events to the existing events.
+         */
+        fun replaceExistingEvents(replaceExistingEvents: Boolean?) = apply {
+            body.replaceExistingEvents(replaceExistingEvents)
         }
 
         /**
          * If true, replaces all existing events in the timeframe with the newly ingested events. If
          * false, adds the newly ingested events to the existing events.
          */
-        fun replaceExistingEvents(replaceExistingEvents: Boolean) = apply {
-            body.replaceExistingEvents(replaceExistingEvents)
-        }
+        fun replaceExistingEvents(replaceExistingEvents: Boolean) =
+            replaceExistingEvents(replaceExistingEvents as Boolean?)
+
+        /**
+         * If true, replaces all existing events in the timeframe with the newly ingested events. If
+         * false, adds the newly ingested events to the existing events.
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun replaceExistingEvents(replaceExistingEvents: Optional<Boolean>) =
+            replaceExistingEvents(replaceExistingEvents.orElse(null) as Boolean?)
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
