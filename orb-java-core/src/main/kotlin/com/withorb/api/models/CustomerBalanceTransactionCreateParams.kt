@@ -108,7 +108,10 @@ constructor(
             fun type(type: Type) = apply { this.type = type }
 
             /** An optional description that can be specified around this entry. */
-            fun description(description: String) = apply { this.description = description }
+            fun description(description: String?) = apply { this.description = description }
+
+            /** An optional description that can be specified around this entry. */
+            fun description(description: Optional<String>) = description(description.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -190,7 +193,10 @@ constructor(
         fun type(type: Type) = apply { body.type(type) }
 
         /** An optional description that can be specified around this entry. */
-        fun description(description: String) = apply { body.description(description) }
+        fun description(description: String?) = apply { body.description(description) }
+
+        /** An optional description that can be specified around this entry. */
+        fun description(description: Optional<String>) = description(description.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

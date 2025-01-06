@@ -111,10 +111,23 @@ constructor(
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
          * initial request.
          */
-        fun cursor(cursor: String) = apply { this.cursor = cursor }
+        fun cursor(cursor: String?) = apply { this.cursor = cursor }
+
+        /**
+         * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
+         * initial request.
+         */
+        fun cursor(cursor: Optional<String>) = cursor(cursor.orElse(null))
 
         /** The number of items to fetch. Defaults to 20. */
-        fun limit(limit: Long) = apply { this.limit = limit }
+        fun limit(limit: Long?) = apply { this.limit = limit }
+
+        /** The number of items to fetch. Defaults to 20. */
+        fun limit(limit: Long) = limit(limit as Long?)
+
+        /** The number of items to fetch. Defaults to 20. */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun limit(limit: Optional<Long>) = limit(limit.orElse(null) as Long?)
 
         /**
          * The end of the timeframe, exclusive, in which to return event volume. If not specified,
@@ -122,7 +135,16 @@ constructor(
          * time isn't hour-aligned, the response includes the event volumecount for the hour the
          * time falls in.
          */
-        fun timeframeEnd(timeframeEnd: OffsetDateTime) = apply { this.timeframeEnd = timeframeEnd }
+        fun timeframeEnd(timeframeEnd: OffsetDateTime?) = apply { this.timeframeEnd = timeframeEnd }
+
+        /**
+         * The end of the timeframe, exclusive, in which to return event volume. If not specified,
+         * the current time is used. All datetime values are converted to UTC time.If the specified
+         * time isn't hour-aligned, the response includes the event volumecount for the hour the
+         * time falls in.
+         */
+        fun timeframeEnd(timeframeEnd: Optional<OffsetDateTime>) =
+            timeframeEnd(timeframeEnd.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

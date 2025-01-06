@@ -129,18 +129,43 @@ constructor(
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
          * initial request.
          */
-        fun cursor(cursor: String) = apply { this.cursor = cursor }
+        fun cursor(cursor: String?) = apply { this.cursor = cursor }
+
+        /**
+         * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
+         * initial request.
+         */
+        fun cursor(cursor: Optional<String>) = cursor(cursor.orElse(null))
 
         /** The number of items to fetch. Defaults to 20. */
-        fun limit(limit: Long) = apply { this.limit = limit }
+        fun limit(limit: Long?) = apply { this.limit = limit }
 
-        fun startDateGt(startDateGt: OffsetDateTime) = apply { this.startDateGt = startDateGt }
+        /** The number of items to fetch. Defaults to 20. */
+        fun limit(limit: Long) = limit(limit as Long?)
 
-        fun startDateGte(startDateGte: OffsetDateTime) = apply { this.startDateGte = startDateGte }
+        /** The number of items to fetch. Defaults to 20. */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun limit(limit: Optional<Long>) = limit(limit.orElse(null) as Long?)
 
-        fun startDateLt(startDateLt: OffsetDateTime) = apply { this.startDateLt = startDateLt }
+        fun startDateGt(startDateGt: OffsetDateTime?) = apply { this.startDateGt = startDateGt }
 
-        fun startDateLte(startDateLte: OffsetDateTime) = apply { this.startDateLte = startDateLte }
+        fun startDateGt(startDateGt: Optional<OffsetDateTime>) =
+            startDateGt(startDateGt.orElse(null))
+
+        fun startDateGte(startDateGte: OffsetDateTime?) = apply { this.startDateGte = startDateGte }
+
+        fun startDateGte(startDateGte: Optional<OffsetDateTime>) =
+            startDateGte(startDateGte.orElse(null))
+
+        fun startDateLt(startDateLt: OffsetDateTime?) = apply { this.startDateLt = startDateLt }
+
+        fun startDateLt(startDateLt: Optional<OffsetDateTime>) =
+            startDateLt(startDateLt.orElse(null))
+
+        fun startDateLte(startDateLte: OffsetDateTime?) = apply { this.startDateLte = startDateLte }
+
+        fun startDateLte(startDateLte: Optional<OffsetDateTime>) =
+            startDateLte(startDateLte.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

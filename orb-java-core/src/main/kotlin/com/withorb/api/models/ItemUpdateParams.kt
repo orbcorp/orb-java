@@ -98,16 +98,21 @@ constructor(
                 additionalProperties = itemUpdateBody.additionalProperties.toMutableMap()
             }
 
-            fun externalConnections(externalConnections: List<ExternalConnection>) = apply {
-                this.externalConnections = externalConnections.toMutableList()
+            fun externalConnections(externalConnections: List<ExternalConnection>?) = apply {
+                this.externalConnections = externalConnections?.toMutableList()
             }
+
+            fun externalConnections(externalConnections: Optional<List<ExternalConnection>>) =
+                externalConnections(externalConnections.orElse(null))
 
             fun addExternalConnection(externalConnection: ExternalConnection) = apply {
                 externalConnections =
                     (externalConnections ?: mutableListOf()).apply { add(externalConnection) }
             }
 
-            fun name(name: String) = apply { this.name = name }
+            fun name(name: String?) = apply { this.name = name }
+
+            fun name(name: Optional<String>) = name(name.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -179,15 +184,20 @@ constructor(
 
         fun itemId(itemId: String) = apply { this.itemId = itemId }
 
-        fun externalConnections(externalConnections: List<ExternalConnection>) = apply {
+        fun externalConnections(externalConnections: List<ExternalConnection>?) = apply {
             body.externalConnections(externalConnections)
         }
+
+        fun externalConnections(externalConnections: Optional<List<ExternalConnection>>) =
+            externalConnections(externalConnections.orElse(null))
 
         fun addExternalConnection(externalConnection: ExternalConnection) = apply {
             body.addExternalConnection(externalConnection)
         }
 
-        fun name(name: String) = apply { body.name(name) }
+        fun name(name: String?) = apply { body.name(name) }
+
+        fun name(name: Optional<String>) = name(name.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

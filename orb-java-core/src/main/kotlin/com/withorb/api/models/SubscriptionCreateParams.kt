@@ -486,9 +486,16 @@ constructor(
              * Additional adjustments to be added to the subscription. (Only available for accounts
              * that have migrated off of legacy subscription overrides)
              */
-            fun addAdjustments(addAdjustments: List<AddAdjustment>) = apply {
-                this.addAdjustments = addAdjustments.toMutableList()
+            fun addAdjustments(addAdjustments: List<AddAdjustment>?) = apply {
+                this.addAdjustments = addAdjustments?.toMutableList()
             }
+
+            /**
+             * Additional adjustments to be added to the subscription. (Only available for accounts
+             * that have migrated off of legacy subscription overrides)
+             */
+            fun addAdjustments(addAdjustments: Optional<List<AddAdjustment>>) =
+                addAdjustments(addAdjustments.orElse(null))
 
             /**
              * Additional adjustments to be added to the subscription. (Only available for accounts
@@ -502,9 +509,15 @@ constructor(
              * Additional prices to be added to the subscription. (Only available for accounts that
              * have migrated off of legacy subscription overrides)
              */
-            fun addPrices(addPrices: List<AddPrice>) = apply {
-                this.addPrices = addPrices.toMutableList()
+            fun addPrices(addPrices: List<AddPrice>?) = apply {
+                this.addPrices = addPrices?.toMutableList()
             }
+
+            /**
+             * Additional prices to be added to the subscription. (Only available for accounts that
+             * have migrated off of legacy subscription overrides)
+             */
+            fun addPrices(addPrices: Optional<List<AddPrice>>) = addPrices(addPrices.orElse(null))
 
             /**
              * Additional prices to be added to the subscription. (Only available for accounts that
@@ -515,9 +528,33 @@ constructor(
             }
 
             fun alignBillingWithSubscriptionStartDate(
-                alignBillingWithSubscriptionStartDate: Boolean
+                alignBillingWithSubscriptionStartDate: Boolean?
             ) = apply {
                 this.alignBillingWithSubscriptionStartDate = alignBillingWithSubscriptionStartDate
+            }
+
+            fun alignBillingWithSubscriptionStartDate(
+                alignBillingWithSubscriptionStartDate: Boolean
+            ) =
+                alignBillingWithSubscriptionStartDate(
+                    alignBillingWithSubscriptionStartDate as Boolean?
+                )
+
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun alignBillingWithSubscriptionStartDate(
+                alignBillingWithSubscriptionStartDate: Optional<Boolean>
+            ) =
+                alignBillingWithSubscriptionStartDate(
+                    alignBillingWithSubscriptionStartDate.orElse(null) as Boolean?
+                )
+
+            /**
+             * Determines whether issued invoices for this subscription will automatically be
+             * charged with the saved payment method on the due date. If not specified, this
+             * defaults to the behavior configured for this customer.
+             */
+            fun autoCollection(autoCollection: Boolean?) = apply {
+                this.autoCollection = autoCollection
             }
 
             /**
@@ -525,60 +562,115 @@ constructor(
              * charged with the saved payment method on the due date. If not specified, this
              * defaults to the behavior configured for this customer.
              */
-            fun autoCollection(autoCollection: Boolean) = apply {
-                this.autoCollection = autoCollection
-            }
+            fun autoCollection(autoCollection: Boolean) = autoCollection(autoCollection as Boolean?)
 
-            fun awsRegion(awsRegion: String) = apply { this.awsRegion = awsRegion }
+            /**
+             * Determines whether issued invoices for this subscription will automatically be
+             * charged with the saved payment method on the due date. If not specified, this
+             * defaults to the behavior configured for this customer.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun autoCollection(autoCollection: Optional<Boolean>) =
+                autoCollection(autoCollection.orElse(null) as Boolean?)
+
+            fun awsRegion(awsRegion: String?) = apply { this.awsRegion = awsRegion }
+
+            fun awsRegion(awsRegion: Optional<String>) = awsRegion(awsRegion.orElse(null))
 
             fun billingCycleAnchorConfiguration(
-                billingCycleAnchorConfiguration: BillingCycleAnchorConfiguration
+                billingCycleAnchorConfiguration: BillingCycleAnchorConfiguration?
             ) = apply { this.billingCycleAnchorConfiguration = billingCycleAnchorConfiguration }
+
+            fun billingCycleAnchorConfiguration(
+                billingCycleAnchorConfiguration: Optional<BillingCycleAnchorConfiguration>
+            ) = billingCycleAnchorConfiguration(billingCycleAnchorConfiguration.orElse(null))
 
             /**
              * Redemption code to be used for this subscription. If the coupon cannot be found by
              * its redemption code, or cannot be redeemed, an error response will be returned and
              * the subscription creation or plan change will not be scheduled.
              */
-            fun couponRedemptionCode(couponRedemptionCode: String) = apply {
+            fun couponRedemptionCode(couponRedemptionCode: String?) = apply {
                 this.couponRedemptionCode = couponRedemptionCode
             }
 
-            fun creditsOverageRate(creditsOverageRate: Double) = apply {
+            /**
+             * Redemption code to be used for this subscription. If the coupon cannot be found by
+             * its redemption code, or cannot be redeemed, an error response will be returned and
+             * the subscription creation or plan change will not be scheduled.
+             */
+            fun couponRedemptionCode(couponRedemptionCode: Optional<String>) =
+                couponRedemptionCode(couponRedemptionCode.orElse(null))
+
+            fun creditsOverageRate(creditsOverageRate: Double?) = apply {
                 this.creditsOverageRate = creditsOverageRate
             }
 
-            fun customerId(customerId: String) = apply { this.customerId = customerId }
+            fun creditsOverageRate(creditsOverageRate: Double) =
+                creditsOverageRate(creditsOverageRate as Double?)
+
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun creditsOverageRate(creditsOverageRate: Optional<Double>) =
+                creditsOverageRate(creditsOverageRate.orElse(null) as Double?)
+
+            fun customerId(customerId: String?) = apply { this.customerId = customerId }
+
+            fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
 
             /**
              * Determines the default memo on this subscription's invoices. Note that if this is not
              * provided, it is determined by the plan configuration.
              */
-            fun defaultInvoiceMemo(defaultInvoiceMemo: String) = apply {
+            fun defaultInvoiceMemo(defaultInvoiceMemo: String?) = apply {
                 this.defaultInvoiceMemo = defaultInvoiceMemo
             }
 
-            fun endDate(endDate: OffsetDateTime) = apply { this.endDate = endDate }
+            /**
+             * Determines the default memo on this subscription's invoices. Note that if this is not
+             * provided, it is determined by the plan configuration.
+             */
+            fun defaultInvoiceMemo(defaultInvoiceMemo: Optional<String>) =
+                defaultInvoiceMemo(defaultInvoiceMemo.orElse(null))
 
-            fun externalCustomerId(externalCustomerId: String) = apply {
+            fun endDate(endDate: OffsetDateTime?) = apply { this.endDate = endDate }
+
+            fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.orElse(null))
+
+            fun externalCustomerId(externalCustomerId: String?) = apply {
                 this.externalCustomerId = externalCustomerId
             }
 
-            fun externalMarketplace(externalMarketplace: ExternalMarketplace) = apply {
+            fun externalCustomerId(externalCustomerId: Optional<String>) =
+                externalCustomerId(externalCustomerId.orElse(null))
+
+            fun externalMarketplace(externalMarketplace: ExternalMarketplace?) = apply {
                 this.externalMarketplace = externalMarketplace
             }
 
-            fun externalMarketplaceReportingId(externalMarketplaceReportingId: String) = apply {
+            fun externalMarketplace(externalMarketplace: Optional<ExternalMarketplace>) =
+                externalMarketplace(externalMarketplace.orElse(null))
+
+            fun externalMarketplaceReportingId(externalMarketplaceReportingId: String?) = apply {
                 this.externalMarketplaceReportingId = externalMarketplaceReportingId
+            }
+
+            fun externalMarketplaceReportingId(externalMarketplaceReportingId: Optional<String>) =
+                externalMarketplaceReportingId(externalMarketplaceReportingId.orElse(null))
+
+            /**
+             * The external_plan_id of the plan that the given subscription should be switched to.
+             * Note that either this property or `plan_id` must be specified.
+             */
+            fun externalPlanId(externalPlanId: String?) = apply {
+                this.externalPlanId = externalPlanId
             }
 
             /**
              * The external_plan_id of the plan that the given subscription should be switched to.
              * Note that either this property or `plan_id` must be specified.
              */
-            fun externalPlanId(externalPlanId: String) = apply {
-                this.externalPlanId = externalPlanId
-            }
+            fun externalPlanId(externalPlanId: Optional<String>) =
+                externalPlanId(externalPlanId.orElse(null))
 
             /**
              * An additional filter to apply to usage queries. This filter must be expressed as a
@@ -586,11 +678,37 @@ constructor(
              * [computed property](../guides/extensibility/advanced-metrics#computed-properties). If
              * null, usage queries will not include any additional filter.
              */
-            fun filter(filter: String) = apply { this.filter = filter }
+            fun filter(filter: String?) = apply { this.filter = filter }
+
+            /**
+             * An additional filter to apply to usage queries. This filter must be expressed as a
+             * boolean
+             * [computed property](../guides/extensibility/advanced-metrics#computed-properties). If
+             * null, usage queries will not include any additional filter.
+             */
+            fun filter(filter: Optional<String>) = filter(filter.orElse(null))
 
             /** The phase of the plan to start with */
-            fun initialPhaseOrder(initialPhaseOrder: Long) = apply {
+            fun initialPhaseOrder(initialPhaseOrder: Long?) = apply {
                 this.initialPhaseOrder = initialPhaseOrder
+            }
+
+            /** The phase of the plan to start with */
+            fun initialPhaseOrder(initialPhaseOrder: Long) =
+                initialPhaseOrder(initialPhaseOrder as Long?)
+
+            /** The phase of the plan to start with */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun initialPhaseOrder(initialPhaseOrder: Optional<Long>) =
+                initialPhaseOrder(initialPhaseOrder.orElse(null) as Long?)
+
+            /**
+             * When this subscription's accrued usage reaches this threshold, an invoice will be
+             * issued for the subscription. If not specified, invoices will only be issued at the
+             * end of the billing period.
+             */
+            fun invoicingThreshold(invoicingThreshold: String?) = apply {
+                this.invoicingThreshold = invoicingThreshold
             }
 
             /**
@@ -598,46 +716,99 @@ constructor(
              * issued for the subscription. If not specified, invoices will only be issued at the
              * end of the billing period.
              */
-            fun invoicingThreshold(invoicingThreshold: String) = apply {
-                this.invoicingThreshold = invoicingThreshold
-            }
+            fun invoicingThreshold(invoicingThreshold: Optional<String>) =
+                invoicingThreshold(invoicingThreshold.orElse(null))
 
             /**
              * User-specified key/value pairs for the resource. Individual keys can be removed by
              * setting the value to `null`, and the entire metadata mapping can be cleared by
              * setting `metadata` to `null`.
              */
-            fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+            fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+            /**
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
+             */
+            fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
             /**
              * The net terms determines the difference between the invoice date and the issue date
              * for the invoice. If you intend the invoice to be due on issue, set this to 0. If not
              * provided, this defaults to the value specified in the plan.
              */
-            fun netTerms(netTerms: Long) = apply { this.netTerms = netTerms }
+            fun netTerms(netTerms: Long?) = apply { this.netTerms = netTerms }
 
-            fun perCreditOverageAmount(perCreditOverageAmount: Double) = apply {
+            /**
+             * The net terms determines the difference between the invoice date and the issue date
+             * for the invoice. If you intend the invoice to be due on issue, set this to 0. If not
+             * provided, this defaults to the value specified in the plan.
+             */
+            fun netTerms(netTerms: Long) = netTerms(netTerms as Long?)
+
+            /**
+             * The net terms determines the difference between the invoice date and the issue date
+             * for the invoice. If you intend the invoice to be due on issue, set this to 0. If not
+             * provided, this defaults to the value specified in the plan.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun netTerms(netTerms: Optional<Long>) = netTerms(netTerms.orElse(null) as Long?)
+
+            fun perCreditOverageAmount(perCreditOverageAmount: Double?) = apply {
                 this.perCreditOverageAmount = perCreditOverageAmount
             }
+
+            fun perCreditOverageAmount(perCreditOverageAmount: Double) =
+                perCreditOverageAmount(perCreditOverageAmount as Double?)
+
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun perCreditOverageAmount(perCreditOverageAmount: Optional<Double>) =
+                perCreditOverageAmount(perCreditOverageAmount.orElse(null) as Double?)
 
             /**
              * The plan that the given subscription should be switched to. Note that either this
              * property or `external_plan_id` must be specified.
              */
-            fun planId(planId: String) = apply { this.planId = planId }
+            fun planId(planId: String?) = apply { this.planId = planId }
+
+            /**
+             * The plan that the given subscription should be switched to. Note that either this
+             * property or `external_plan_id` must be specified.
+             */
+            fun planId(planId: Optional<String>) = planId(planId.orElse(null))
 
             /**
              * Specifies which version of the plan to subscribe to. If null, the default version
              * will be used.
              */
-            fun planVersionNumber(planVersionNumber: Long) = apply {
+            fun planVersionNumber(planVersionNumber: Long?) = apply {
                 this.planVersionNumber = planVersionNumber
             }
 
+            /**
+             * Specifies which version of the plan to subscribe to. If null, the default version
+             * will be used.
+             */
+            fun planVersionNumber(planVersionNumber: Long) =
+                planVersionNumber(planVersionNumber as Long?)
+
+            /**
+             * Specifies which version of the plan to subscribe to. If null, the default version
+             * will be used.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun planVersionNumber(planVersionNumber: Optional<Long>) =
+                planVersionNumber(planVersionNumber.orElse(null) as Long?)
+
             /** Optionally provide a list of overrides for prices on the plan */
-            fun priceOverrides(priceOverrides: List<JsonValue>) = apply {
-                this.priceOverrides = priceOverrides.toMutableList()
+            fun priceOverrides(priceOverrides: List<JsonValue>?) = apply {
+                this.priceOverrides = priceOverrides?.toMutableList()
             }
+
+            /** Optionally provide a list of overrides for prices on the plan */
+            fun priceOverrides(priceOverrides: Optional<List<JsonValue>>) =
+                priceOverrides(priceOverrides.orElse(null))
 
             /** Optionally provide a list of overrides for prices on the plan */
             fun addPriceOverride(priceOverride: JsonValue) = apply {
@@ -648,9 +819,16 @@ constructor(
              * Plan adjustments to be removed from the subscription. (Only available for accounts
              * that have migrated off of legacy subscription overrides)
              */
-            fun removeAdjustments(removeAdjustments: List<RemoveAdjustment>) = apply {
-                this.removeAdjustments = removeAdjustments.toMutableList()
+            fun removeAdjustments(removeAdjustments: List<RemoveAdjustment>?) = apply {
+                this.removeAdjustments = removeAdjustments?.toMutableList()
             }
+
+            /**
+             * Plan adjustments to be removed from the subscription. (Only available for accounts
+             * that have migrated off of legacy subscription overrides)
+             */
+            fun removeAdjustments(removeAdjustments: Optional<List<RemoveAdjustment>>) =
+                removeAdjustments(removeAdjustments.orElse(null))
 
             /**
              * Plan adjustments to be removed from the subscription. (Only available for accounts
@@ -665,9 +843,16 @@ constructor(
              * Plan prices to be removed from the subscription. (Only available for accounts that
              * have migrated off of legacy subscription overrides)
              */
-            fun removePrices(removePrices: List<RemovePrice>) = apply {
-                this.removePrices = removePrices.toMutableList()
+            fun removePrices(removePrices: List<RemovePrice>?) = apply {
+                this.removePrices = removePrices?.toMutableList()
             }
+
+            /**
+             * Plan prices to be removed from the subscription. (Only available for accounts that
+             * have migrated off of legacy subscription overrides)
+             */
+            fun removePrices(removePrices: Optional<List<RemovePrice>>) =
+                removePrices(removePrices.orElse(null))
 
             /**
              * Plan prices to be removed from the subscription. (Only available for accounts that
@@ -681,9 +866,16 @@ constructor(
              * Plan adjustments to be replaced with additional adjustments on the subscription.
              * (Only available for accounts that have migrated off of legacy subscription overrides)
              */
-            fun replaceAdjustments(replaceAdjustments: List<ReplaceAdjustment>) = apply {
-                this.replaceAdjustments = replaceAdjustments.toMutableList()
+            fun replaceAdjustments(replaceAdjustments: List<ReplaceAdjustment>?) = apply {
+                this.replaceAdjustments = replaceAdjustments?.toMutableList()
             }
+
+            /**
+             * Plan adjustments to be replaced with additional adjustments on the subscription.
+             * (Only available for accounts that have migrated off of legacy subscription overrides)
+             */
+            fun replaceAdjustments(replaceAdjustments: Optional<List<ReplaceAdjustment>>) =
+                replaceAdjustments(replaceAdjustments.orElse(null))
 
             /**
              * Plan adjustments to be replaced with additional adjustments on the subscription.
@@ -698,9 +890,16 @@ constructor(
              * Plan prices to be replaced with additional prices on the subscription. (Only
              * available for accounts that have migrated off of legacy subscription overrides)
              */
-            fun replacePrices(replacePrices: List<ReplacePrice>) = apply {
-                this.replacePrices = replacePrices.toMutableList()
+            fun replacePrices(replacePrices: List<ReplacePrice>?) = apply {
+                this.replacePrices = replacePrices?.toMutableList()
             }
+
+            /**
+             * Plan prices to be replaced with additional prices on the subscription. (Only
+             * available for accounts that have migrated off of legacy subscription overrides)
+             */
+            fun replacePrices(replacePrices: Optional<List<ReplacePrice>>) =
+                replacePrices(replacePrices.orElse(null))
 
             /**
              * Plan prices to be replaced with additional prices on the subscription. (Only
@@ -710,15 +909,32 @@ constructor(
                 replacePrices = (replacePrices ?: mutableListOf()).apply { add(replacePrice) }
             }
 
-            fun startDate(startDate: OffsetDateTime) = apply { this.startDate = startDate }
+            fun startDate(startDate: OffsetDateTime?) = apply { this.startDate = startDate }
+
+            fun startDate(startDate: Optional<OffsetDateTime>) = startDate(startDate.orElse(null))
 
             /**
              * The duration of the trial period in days. If not provided, this defaults to the value
              * specified in the plan. If `0` is provided, the trial on the plan will be skipped.
              */
-            fun trialDurationDays(trialDurationDays: Long) = apply {
+            fun trialDurationDays(trialDurationDays: Long?) = apply {
                 this.trialDurationDays = trialDurationDays
             }
+
+            /**
+             * The duration of the trial period in days. If not provided, this defaults to the value
+             * specified in the plan. If `0` is provided, the trial on the plan will be skipped.
+             */
+            fun trialDurationDays(trialDurationDays: Long) =
+                trialDurationDays(trialDurationDays as Long?)
+
+            /**
+             * The duration of the trial period in days. If not provided, this defaults to the value
+             * specified in the plan. If `0` is provided, the trial on the plan will be skipped.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun trialDurationDays(trialDurationDays: Optional<Long>) =
+                trialDurationDays(trialDurationDays.orElse(null) as Long?)
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -818,9 +1034,16 @@ constructor(
          * Additional adjustments to be added to the subscription. (Only available for accounts that
          * have migrated off of legacy subscription overrides)
          */
-        fun addAdjustments(addAdjustments: List<AddAdjustment>) = apply {
+        fun addAdjustments(addAdjustments: List<AddAdjustment>?) = apply {
             body.addAdjustments(addAdjustments)
         }
+
+        /**
+         * Additional adjustments to be added to the subscription. (Only available for accounts that
+         * have migrated off of legacy subscription overrides)
+         */
+        fun addAdjustments(addAdjustments: Optional<List<AddAdjustment>>) =
+            addAdjustments(addAdjustments.orElse(null))
 
         /**
          * Additional adjustments to be added to the subscription. (Only available for accounts that
@@ -834,7 +1057,13 @@ constructor(
          * Additional prices to be added to the subscription. (Only available for accounts that have
          * migrated off of legacy subscription overrides)
          */
-        fun addPrices(addPrices: List<AddPrice>) = apply { body.addPrices(addPrices) }
+        fun addPrices(addPrices: List<AddPrice>?) = apply { body.addPrices(addPrices) }
+
+        /**
+         * Additional prices to be added to the subscription. (Only available for accounts that have
+         * migrated off of legacy subscription overrides)
+         */
+        fun addPrices(addPrices: Optional<List<AddPrice>>) = addPrices(addPrices.orElse(null))
 
         /**
          * Additional prices to be added to the subscription. (Only available for accounts that have
@@ -842,66 +1071,141 @@ constructor(
          */
         fun addAddPrice(addPrice: AddPrice) = apply { body.addAddPrice(addPrice) }
 
-        fun alignBillingWithSubscriptionStartDate(alignBillingWithSubscriptionStartDate: Boolean) =
+        fun alignBillingWithSubscriptionStartDate(alignBillingWithSubscriptionStartDate: Boolean?) =
             apply {
                 body.alignBillingWithSubscriptionStartDate(alignBillingWithSubscriptionStartDate)
             }
+
+        fun alignBillingWithSubscriptionStartDate(alignBillingWithSubscriptionStartDate: Boolean) =
+            alignBillingWithSubscriptionStartDate(alignBillingWithSubscriptionStartDate as Boolean?)
+
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun alignBillingWithSubscriptionStartDate(
+            alignBillingWithSubscriptionStartDate: Optional<Boolean>
+        ) =
+            alignBillingWithSubscriptionStartDate(
+                alignBillingWithSubscriptionStartDate.orElse(null) as Boolean?
+            )
 
         /**
          * Determines whether issued invoices for this subscription will automatically be charged
          * with the saved payment method on the due date. If not specified, this defaults to the
          * behavior configured for this customer.
          */
-        fun autoCollection(autoCollection: Boolean) = apply { body.autoCollection(autoCollection) }
+        fun autoCollection(autoCollection: Boolean?) = apply { body.autoCollection(autoCollection) }
 
-        fun awsRegion(awsRegion: String) = apply { body.awsRegion(awsRegion) }
+        /**
+         * Determines whether issued invoices for this subscription will automatically be charged
+         * with the saved payment method on the due date. If not specified, this defaults to the
+         * behavior configured for this customer.
+         */
+        fun autoCollection(autoCollection: Boolean) = autoCollection(autoCollection as Boolean?)
+
+        /**
+         * Determines whether issued invoices for this subscription will automatically be charged
+         * with the saved payment method on the due date. If not specified, this defaults to the
+         * behavior configured for this customer.
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun autoCollection(autoCollection: Optional<Boolean>) =
+            autoCollection(autoCollection.orElse(null) as Boolean?)
+
+        fun awsRegion(awsRegion: String?) = apply { body.awsRegion(awsRegion) }
+
+        fun awsRegion(awsRegion: Optional<String>) = awsRegion(awsRegion.orElse(null))
 
         fun billingCycleAnchorConfiguration(
-            billingCycleAnchorConfiguration: BillingCycleAnchorConfiguration
+            billingCycleAnchorConfiguration: BillingCycleAnchorConfiguration?
         ) = apply { body.billingCycleAnchorConfiguration(billingCycleAnchorConfiguration) }
+
+        fun billingCycleAnchorConfiguration(
+            billingCycleAnchorConfiguration: Optional<BillingCycleAnchorConfiguration>
+        ) = billingCycleAnchorConfiguration(billingCycleAnchorConfiguration.orElse(null))
 
         /**
          * Redemption code to be used for this subscription. If the coupon cannot be found by its
          * redemption code, or cannot be redeemed, an error response will be returned and the
          * subscription creation or plan change will not be scheduled.
          */
-        fun couponRedemptionCode(couponRedemptionCode: String) = apply {
+        fun couponRedemptionCode(couponRedemptionCode: String?) = apply {
             body.couponRedemptionCode(couponRedemptionCode)
         }
 
-        fun creditsOverageRate(creditsOverageRate: Double) = apply {
+        /**
+         * Redemption code to be used for this subscription. If the coupon cannot be found by its
+         * redemption code, or cannot be redeemed, an error response will be returned and the
+         * subscription creation or plan change will not be scheduled.
+         */
+        fun couponRedemptionCode(couponRedemptionCode: Optional<String>) =
+            couponRedemptionCode(couponRedemptionCode.orElse(null))
+
+        fun creditsOverageRate(creditsOverageRate: Double?) = apply {
             body.creditsOverageRate(creditsOverageRate)
         }
 
-        fun customerId(customerId: String) = apply { body.customerId(customerId) }
+        fun creditsOverageRate(creditsOverageRate: Double) =
+            creditsOverageRate(creditsOverageRate as Double?)
+
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun creditsOverageRate(creditsOverageRate: Optional<Double>) =
+            creditsOverageRate(creditsOverageRate.orElse(null) as Double?)
+
+        fun customerId(customerId: String?) = apply { body.customerId(customerId) }
+
+        fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
 
         /**
          * Determines the default memo on this subscription's invoices. Note that if this is not
          * provided, it is determined by the plan configuration.
          */
-        fun defaultInvoiceMemo(defaultInvoiceMemo: String) = apply {
+        fun defaultInvoiceMemo(defaultInvoiceMemo: String?) = apply {
             body.defaultInvoiceMemo(defaultInvoiceMemo)
         }
 
-        fun endDate(endDate: OffsetDateTime) = apply { body.endDate(endDate) }
+        /**
+         * Determines the default memo on this subscription's invoices. Note that if this is not
+         * provided, it is determined by the plan configuration.
+         */
+        fun defaultInvoiceMemo(defaultInvoiceMemo: Optional<String>) =
+            defaultInvoiceMemo(defaultInvoiceMemo.orElse(null))
 
-        fun externalCustomerId(externalCustomerId: String) = apply {
+        fun endDate(endDate: OffsetDateTime?) = apply { body.endDate(endDate) }
+
+        fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.orElse(null))
+
+        fun externalCustomerId(externalCustomerId: String?) = apply {
             body.externalCustomerId(externalCustomerId)
         }
 
-        fun externalMarketplace(externalMarketplace: ExternalMarketplace) = apply {
+        fun externalCustomerId(externalCustomerId: Optional<String>) =
+            externalCustomerId(externalCustomerId.orElse(null))
+
+        fun externalMarketplace(externalMarketplace: ExternalMarketplace?) = apply {
             body.externalMarketplace(externalMarketplace)
         }
 
-        fun externalMarketplaceReportingId(externalMarketplaceReportingId: String) = apply {
+        fun externalMarketplace(externalMarketplace: Optional<ExternalMarketplace>) =
+            externalMarketplace(externalMarketplace.orElse(null))
+
+        fun externalMarketplaceReportingId(externalMarketplaceReportingId: String?) = apply {
             body.externalMarketplaceReportingId(externalMarketplaceReportingId)
         }
+
+        fun externalMarketplaceReportingId(externalMarketplaceReportingId: Optional<String>) =
+            externalMarketplaceReportingId(externalMarketplaceReportingId.orElse(null))
 
         /**
          * The external_plan_id of the plan that the given subscription should be switched to. Note
          * that either this property or `plan_id` must be specified.
          */
-        fun externalPlanId(externalPlanId: String) = apply { body.externalPlanId(externalPlanId) }
+        fun externalPlanId(externalPlanId: String?) = apply { body.externalPlanId(externalPlanId) }
+
+        /**
+         * The external_plan_id of the plan that the given subscription should be switched to. Note
+         * that either this property or `plan_id` must be specified.
+         */
+        fun externalPlanId(externalPlanId: Optional<String>) =
+            externalPlanId(externalPlanId.orElse(null))
 
         /**
          * An additional filter to apply to usage queries. This filter must be expressed as a
@@ -909,11 +1213,37 @@ constructor(
          * [computed property](../guides/extensibility/advanced-metrics#computed-properties). If
          * null, usage queries will not include any additional filter.
          */
-        fun filter(filter: String) = apply { body.filter(filter) }
+        fun filter(filter: String?) = apply { body.filter(filter) }
+
+        /**
+         * An additional filter to apply to usage queries. This filter must be expressed as a
+         * boolean
+         * [computed property](../guides/extensibility/advanced-metrics#computed-properties). If
+         * null, usage queries will not include any additional filter.
+         */
+        fun filter(filter: Optional<String>) = filter(filter.orElse(null))
 
         /** The phase of the plan to start with */
-        fun initialPhaseOrder(initialPhaseOrder: Long) = apply {
+        fun initialPhaseOrder(initialPhaseOrder: Long?) = apply {
             body.initialPhaseOrder(initialPhaseOrder)
+        }
+
+        /** The phase of the plan to start with */
+        fun initialPhaseOrder(initialPhaseOrder: Long) =
+            initialPhaseOrder(initialPhaseOrder as Long?)
+
+        /** The phase of the plan to start with */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun initialPhaseOrder(initialPhaseOrder: Optional<Long>) =
+            initialPhaseOrder(initialPhaseOrder.orElse(null) as Long?)
+
+        /**
+         * When this subscription's accrued usage reaches this threshold, an invoice will be issued
+         * for the subscription. If not specified, invoices will only be issued at the end of the
+         * billing period.
+         */
+        fun invoicingThreshold(invoicingThreshold: String?) = apply {
+            body.invoicingThreshold(invoicingThreshold)
         }
 
         /**
@@ -921,46 +1251,99 @@ constructor(
          * for the subscription. If not specified, invoices will only be issued at the end of the
          * billing period.
          */
-        fun invoicingThreshold(invoicingThreshold: String) = apply {
-            body.invoicingThreshold(invoicingThreshold)
-        }
+        fun invoicingThreshold(invoicingThreshold: Optional<String>) =
+            invoicingThreshold(invoicingThreshold.orElse(null))
 
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        fun metadata(metadata: Metadata) = apply { body.metadata(metadata) }
+        fun metadata(metadata: Metadata?) = apply { body.metadata(metadata) }
+
+        /**
+         * User-specified key/value pairs for the resource. Individual keys can be removed by
+         * setting the value to `null`, and the entire metadata mapping can be cleared by setting
+         * `metadata` to `null`.
+         */
+        fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
         /**
          * The net terms determines the difference between the invoice date and the issue date for
          * the invoice. If you intend the invoice to be due on issue, set this to 0. If not
          * provided, this defaults to the value specified in the plan.
          */
-        fun netTerms(netTerms: Long) = apply { body.netTerms(netTerms) }
+        fun netTerms(netTerms: Long?) = apply { body.netTerms(netTerms) }
 
-        fun perCreditOverageAmount(perCreditOverageAmount: Double) = apply {
+        /**
+         * The net terms determines the difference between the invoice date and the issue date for
+         * the invoice. If you intend the invoice to be due on issue, set this to 0. If not
+         * provided, this defaults to the value specified in the plan.
+         */
+        fun netTerms(netTerms: Long) = netTerms(netTerms as Long?)
+
+        /**
+         * The net terms determines the difference between the invoice date and the issue date for
+         * the invoice. If you intend the invoice to be due on issue, set this to 0. If not
+         * provided, this defaults to the value specified in the plan.
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun netTerms(netTerms: Optional<Long>) = netTerms(netTerms.orElse(null) as Long?)
+
+        fun perCreditOverageAmount(perCreditOverageAmount: Double?) = apply {
             body.perCreditOverageAmount(perCreditOverageAmount)
         }
+
+        fun perCreditOverageAmount(perCreditOverageAmount: Double) =
+            perCreditOverageAmount(perCreditOverageAmount as Double?)
+
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun perCreditOverageAmount(perCreditOverageAmount: Optional<Double>) =
+            perCreditOverageAmount(perCreditOverageAmount.orElse(null) as Double?)
 
         /**
          * The plan that the given subscription should be switched to. Note that either this
          * property or `external_plan_id` must be specified.
          */
-        fun planId(planId: String) = apply { body.planId(planId) }
+        fun planId(planId: String?) = apply { body.planId(planId) }
+
+        /**
+         * The plan that the given subscription should be switched to. Note that either this
+         * property or `external_plan_id` must be specified.
+         */
+        fun planId(planId: Optional<String>) = planId(planId.orElse(null))
 
         /**
          * Specifies which version of the plan to subscribe to. If null, the default version will be
          * used.
          */
-        fun planVersionNumber(planVersionNumber: Long) = apply {
+        fun planVersionNumber(planVersionNumber: Long?) = apply {
             body.planVersionNumber(planVersionNumber)
         }
 
+        /**
+         * Specifies which version of the plan to subscribe to. If null, the default version will be
+         * used.
+         */
+        fun planVersionNumber(planVersionNumber: Long) =
+            planVersionNumber(planVersionNumber as Long?)
+
+        /**
+         * Specifies which version of the plan to subscribe to. If null, the default version will be
+         * used.
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun planVersionNumber(planVersionNumber: Optional<Long>) =
+            planVersionNumber(planVersionNumber.orElse(null) as Long?)
+
         /** Optionally provide a list of overrides for prices on the plan */
-        fun priceOverrides(priceOverrides: List<JsonValue>) = apply {
+        fun priceOverrides(priceOverrides: List<JsonValue>?) = apply {
             body.priceOverrides(priceOverrides)
         }
+
+        /** Optionally provide a list of overrides for prices on the plan */
+        fun priceOverrides(priceOverrides: Optional<List<JsonValue>>) =
+            priceOverrides(priceOverrides.orElse(null))
 
         /** Optionally provide a list of overrides for prices on the plan */
         fun addPriceOverride(priceOverride: JsonValue) = apply {
@@ -971,9 +1354,16 @@ constructor(
          * Plan adjustments to be removed from the subscription. (Only available for accounts that
          * have migrated off of legacy subscription overrides)
          */
-        fun removeAdjustments(removeAdjustments: List<RemoveAdjustment>) = apply {
+        fun removeAdjustments(removeAdjustments: List<RemoveAdjustment>?) = apply {
             body.removeAdjustments(removeAdjustments)
         }
+
+        /**
+         * Plan adjustments to be removed from the subscription. (Only available for accounts that
+         * have migrated off of legacy subscription overrides)
+         */
+        fun removeAdjustments(removeAdjustments: Optional<List<RemoveAdjustment>>) =
+            removeAdjustments(removeAdjustments.orElse(null))
 
         /**
          * Plan adjustments to be removed from the subscription. (Only available for accounts that
@@ -987,9 +1377,16 @@ constructor(
          * Plan prices to be removed from the subscription. (Only available for accounts that have
          * migrated off of legacy subscription overrides)
          */
-        fun removePrices(removePrices: List<RemovePrice>) = apply {
+        fun removePrices(removePrices: List<RemovePrice>?) = apply {
             body.removePrices(removePrices)
         }
+
+        /**
+         * Plan prices to be removed from the subscription. (Only available for accounts that have
+         * migrated off of legacy subscription overrides)
+         */
+        fun removePrices(removePrices: Optional<List<RemovePrice>>) =
+            removePrices(removePrices.orElse(null))
 
         /**
          * Plan prices to be removed from the subscription. (Only available for accounts that have
@@ -1001,9 +1398,16 @@ constructor(
          * Plan adjustments to be replaced with additional adjustments on the subscription. (Only
          * available for accounts that have migrated off of legacy subscription overrides)
          */
-        fun replaceAdjustments(replaceAdjustments: List<ReplaceAdjustment>) = apply {
+        fun replaceAdjustments(replaceAdjustments: List<ReplaceAdjustment>?) = apply {
             body.replaceAdjustments(replaceAdjustments)
         }
+
+        /**
+         * Plan adjustments to be replaced with additional adjustments on the subscription. (Only
+         * available for accounts that have migrated off of legacy subscription overrides)
+         */
+        fun replaceAdjustments(replaceAdjustments: Optional<List<ReplaceAdjustment>>) =
+            replaceAdjustments(replaceAdjustments.orElse(null))
 
         /**
          * Plan adjustments to be replaced with additional adjustments on the subscription. (Only
@@ -1017,9 +1421,16 @@ constructor(
          * Plan prices to be replaced with additional prices on the subscription. (Only available
          * for accounts that have migrated off of legacy subscription overrides)
          */
-        fun replacePrices(replacePrices: List<ReplacePrice>) = apply {
+        fun replacePrices(replacePrices: List<ReplacePrice>?) = apply {
             body.replacePrices(replacePrices)
         }
+
+        /**
+         * Plan prices to be replaced with additional prices on the subscription. (Only available
+         * for accounts that have migrated off of legacy subscription overrides)
+         */
+        fun replacePrices(replacePrices: Optional<List<ReplacePrice>>) =
+            replacePrices(replacePrices.orElse(null))
 
         /**
          * Plan prices to be replaced with additional prices on the subscription. (Only available
@@ -1029,15 +1440,32 @@ constructor(
             body.addReplacePrice(replacePrice)
         }
 
-        fun startDate(startDate: OffsetDateTime) = apply { body.startDate(startDate) }
+        fun startDate(startDate: OffsetDateTime?) = apply { body.startDate(startDate) }
+
+        fun startDate(startDate: Optional<OffsetDateTime>) = startDate(startDate.orElse(null))
 
         /**
          * The duration of the trial period in days. If not provided, this defaults to the value
          * specified in the plan. If `0` is provided, the trial on the plan will be skipped.
          */
-        fun trialDurationDays(trialDurationDays: Long) = apply {
+        fun trialDurationDays(trialDurationDays: Long?) = apply {
             body.trialDurationDays(trialDurationDays)
         }
+
+        /**
+         * The duration of the trial period in days. If not provided, this defaults to the value
+         * specified in the plan. If `0` is provided, the trial on the plan will be skipped.
+         */
+        fun trialDurationDays(trialDurationDays: Long) =
+            trialDurationDays(trialDurationDays as Long?)
+
+        /**
+         * The duration of the trial period in days. If not provided, this defaults to the value
+         * specified in the plan. If `0` is provided, the trial on the plan will be skipped.
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun trialDurationDays(trialDurationDays: Optional<Long>) =
+            trialDurationDays(trialDurationDays.orElse(null) as Long?)
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -1255,19 +1683,41 @@ constructor(
              * stop affecting prices on the subscription. If null, the adjustment will start when
              * the phase or subscription starts.
              */
-            fun endDate(endDate: OffsetDateTime) = apply { this.endDate = endDate }
+            fun endDate(endDate: OffsetDateTime?) = apply { this.endDate = endDate }
+
+            /**
+             * The end date of the adjustment interval. This is the date that the adjustment will
+             * stop affecting prices on the subscription. If null, the adjustment will start when
+             * the phase or subscription starts.
+             */
+            fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.orElse(null))
 
             /** The phase to add this adjustment to. */
-            fun planPhaseOrder(planPhaseOrder: Long) = apply {
+            fun planPhaseOrder(planPhaseOrder: Long?) = apply {
                 this.planPhaseOrder = planPhaseOrder
             }
+
+            /** The phase to add this adjustment to. */
+            fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
+
+            /** The phase to add this adjustment to. */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
+                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
 
             /**
              * The start date of the adjustment interval. This is the date that the adjustment will
              * start affecting prices on the subscription. If null, the adjustment will start when
              * the phase or subscription starts.
              */
-            fun startDate(startDate: OffsetDateTime) = apply { this.startDate = startDate }
+            fun startDate(startDate: OffsetDateTime?) = apply { this.startDate = startDate }
+
+            /**
+             * The start date of the adjustment interval. This is the date that the adjustment will
+             * start affecting prices on the subscription. If null, the adjustment will start when
+             * the phase or subscription starts.
+             */
+            fun startDate(startDate: Optional<OffsetDateTime>) = startDate(startDate.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -1563,9 +2013,24 @@ constructor(
                      * When false, this adjustment will be applied to a single price. Otherwise, it
                      * will be applied at the invoice level, possibly to multiple prices.
                      */
-                    fun isInvoiceLevel(isInvoiceLevel: Boolean) = apply {
+                    fun isInvoiceLevel(isInvoiceLevel: Boolean?) = apply {
                         this.isInvoiceLevel = isInvoiceLevel
                     }
+
+                    /**
+                     * When false, this adjustment will be applied to a single price. Otherwise, it
+                     * will be applied at the invoice level, possibly to multiple prices.
+                     */
+                    fun isInvoiceLevel(isInvoiceLevel: Boolean) =
+                        isInvoiceLevel(isInvoiceLevel as Boolean?)
+
+                    /**
+                     * When false, this adjustment will be applied to a single price. Otherwise, it
+                     * will be applied at the invoice level, possibly to multiple prices.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun isInvoiceLevel(isInvoiceLevel: Optional<Boolean>) =
+                        isInvoiceLevel(isInvoiceLevel.orElse(null) as Boolean?)
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -1755,9 +2220,24 @@ constructor(
                      * When false, this adjustment will be applied to a single price. Otherwise, it
                      * will be applied at the invoice level, possibly to multiple prices.
                      */
-                    fun isInvoiceLevel(isInvoiceLevel: Boolean) = apply {
+                    fun isInvoiceLevel(isInvoiceLevel: Boolean?) = apply {
                         this.isInvoiceLevel = isInvoiceLevel
                     }
+
+                    /**
+                     * When false, this adjustment will be applied to a single price. Otherwise, it
+                     * will be applied at the invoice level, possibly to multiple prices.
+                     */
+                    fun isInvoiceLevel(isInvoiceLevel: Boolean) =
+                        isInvoiceLevel(isInvoiceLevel as Boolean?)
+
+                    /**
+                     * When false, this adjustment will be applied to a single price. Otherwise, it
+                     * will be applied at the invoice level, possibly to multiple prices.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun isInvoiceLevel(isInvoiceLevel: Optional<Boolean>) =
+                        isInvoiceLevel(isInvoiceLevel.orElse(null) as Boolean?)
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -1947,9 +2427,24 @@ constructor(
                      * When false, this adjustment will be applied to a single price. Otherwise, it
                      * will be applied at the invoice level, possibly to multiple prices.
                      */
-                    fun isInvoiceLevel(isInvoiceLevel: Boolean) = apply {
+                    fun isInvoiceLevel(isInvoiceLevel: Boolean?) = apply {
                         this.isInvoiceLevel = isInvoiceLevel
                     }
+
+                    /**
+                     * When false, this adjustment will be applied to a single price. Otherwise, it
+                     * will be applied at the invoice level, possibly to multiple prices.
+                     */
+                    fun isInvoiceLevel(isInvoiceLevel: Boolean) =
+                        isInvoiceLevel(isInvoiceLevel as Boolean?)
+
+                    /**
+                     * When false, this adjustment will be applied to a single price. Otherwise, it
+                     * will be applied at the invoice level, possibly to multiple prices.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun isInvoiceLevel(isInvoiceLevel: Optional<Boolean>) =
+                        isInvoiceLevel(isInvoiceLevel.orElse(null) as Boolean?)
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -2148,9 +2643,24 @@ constructor(
                      * When false, this adjustment will be applied to a single price. Otherwise, it
                      * will be applied at the invoice level, possibly to multiple prices.
                      */
-                    fun isInvoiceLevel(isInvoiceLevel: Boolean) = apply {
+                    fun isInvoiceLevel(isInvoiceLevel: Boolean?) = apply {
                         this.isInvoiceLevel = isInvoiceLevel
                     }
+
+                    /**
+                     * When false, this adjustment will be applied to a single price. Otherwise, it
+                     * will be applied at the invoice level, possibly to multiple prices.
+                     */
+                    fun isInvoiceLevel(isInvoiceLevel: Boolean) =
+                        isInvoiceLevel(isInvoiceLevel as Boolean?)
+
+                    /**
+                     * When false, this adjustment will be applied to a single price. Otherwise, it
+                     * will be applied at the invoice level, possibly to multiple prices.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun isInvoiceLevel(isInvoiceLevel: Optional<Boolean>) =
+                        isInvoiceLevel(isInvoiceLevel.orElse(null) as Boolean?)
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -2341,9 +2851,24 @@ constructor(
                      * When false, this adjustment will be applied to a single price. Otherwise, it
                      * will be applied at the invoice level, possibly to multiple prices.
                      */
-                    fun isInvoiceLevel(isInvoiceLevel: Boolean) = apply {
+                    fun isInvoiceLevel(isInvoiceLevel: Boolean?) = apply {
                         this.isInvoiceLevel = isInvoiceLevel
                     }
+
+                    /**
+                     * When false, this adjustment will be applied to a single price. Otherwise, it
+                     * will be applied at the invoice level, possibly to multiple prices.
+                     */
+                    fun isInvoiceLevel(isInvoiceLevel: Boolean) =
+                        isInvoiceLevel(isInvoiceLevel as Boolean?)
+
+                    /**
+                     * When false, this adjustment will be applied to a single price. Otherwise, it
+                     * will be applied at the invoice level, possibly to multiple prices.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun isInvoiceLevel(isInvoiceLevel: Optional<Boolean>) =
+                        isInvoiceLevel(isInvoiceLevel.orElse(null) as Boolean?)
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -2580,9 +3105,15 @@ constructor(
              * [DEPRECATED] Use add_adjustments instead. The subscription's discounts for this
              * price.
              */
-            fun discounts(discounts: List<Discount>) = apply {
-                this.discounts = discounts.toMutableList()
+            fun discounts(discounts: List<Discount>?) = apply {
+                this.discounts = discounts?.toMutableList()
             }
+
+            /**
+             * [DEPRECATED] Use add_adjustments instead. The subscription's discounts for this
+             * price.
+             */
+            fun discounts(discounts: Optional<List<Discount>>) = discounts(discounts.orElse(null))
 
             /**
              * [DEPRECATED] Use add_adjustments instead. The subscription's discounts for this
@@ -2596,32 +3127,67 @@ constructor(
              * The end date of the price interval. This is the date that the price will stop billing
              * on the subscription. If null, billing will end when the phase or subscription ends.
              */
-            fun endDate(endDate: OffsetDateTime) = apply { this.endDate = endDate }
+            fun endDate(endDate: OffsetDateTime?) = apply { this.endDate = endDate }
+
+            /**
+             * The end date of the price interval. This is the date that the price will stop billing
+             * on the subscription. If null, billing will end when the phase or subscription ends.
+             */
+            fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.orElse(null))
 
             /** The external price id of the price to add to the subscription. */
-            fun externalPriceId(externalPriceId: String) = apply {
+            fun externalPriceId(externalPriceId: String?) = apply {
                 this.externalPriceId = externalPriceId
             }
+
+            /** The external price id of the price to add to the subscription. */
+            fun externalPriceId(externalPriceId: Optional<String>) =
+                externalPriceId(externalPriceId.orElse(null))
 
             /**
              * [DEPRECATED] Use add_adjustments instead. The subscription's maximum amount for this
              * price.
              */
-            fun maximumAmount(maximumAmount: String) = apply { this.maximumAmount = maximumAmount }
+            fun maximumAmount(maximumAmount: String?) = apply { this.maximumAmount = maximumAmount }
+
+            /**
+             * [DEPRECATED] Use add_adjustments instead. The subscription's maximum amount for this
+             * price.
+             */
+            fun maximumAmount(maximumAmount: Optional<String>) =
+                maximumAmount(maximumAmount.orElse(null))
 
             /**
              * [DEPRECATED] Use add_adjustments instead. The subscription's minimum amount for this
              * price.
              */
-            fun minimumAmount(minimumAmount: String) = apply { this.minimumAmount = minimumAmount }
+            fun minimumAmount(minimumAmount: String?) = apply { this.minimumAmount = minimumAmount }
+
+            /**
+             * [DEPRECATED] Use add_adjustments instead. The subscription's minimum amount for this
+             * price.
+             */
+            fun minimumAmount(minimumAmount: Optional<String>) =
+                minimumAmount(minimumAmount.orElse(null))
 
             /** The phase to add this price to. */
-            fun planPhaseOrder(planPhaseOrder: Long) = apply {
+            fun planPhaseOrder(planPhaseOrder: Long?) = apply {
                 this.planPhaseOrder = planPhaseOrder
             }
 
+            /** The phase to add this price to. */
+            fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
+
+            /** The phase to add this price to. */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
+                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+
             /** The definition of a new price to create and add to the subscription. */
-            fun price(price: Price) = apply { this.price = price }
+            fun price(price: Price?) = apply { this.price = price }
+
+            /** The definition of a new price to create and add to the subscription. */
+            fun price(price: Optional<Price>) = price(price.orElse(null))
 
             fun price(newSubscriptionUnitPrice: Price.NewSubscriptionUnitPrice) = apply {
                 this.price = Price.ofNewSubscriptionUnitPrice(newSubscriptionUnitPrice)
@@ -2744,14 +3310,24 @@ constructor(
             }
 
             /** The id of the price to add to the subscription. */
-            fun priceId(priceId: String) = apply { this.priceId = priceId }
+            fun priceId(priceId: String?) = apply { this.priceId = priceId }
+
+            /** The id of the price to add to the subscription. */
+            fun priceId(priceId: Optional<String>) = priceId(priceId.orElse(null))
 
             /**
              * The start date of the price interval. This is the date that the price will start
              * billing on the subscription. If null, billing will start when the phase or
              * subscription starts.
              */
-            fun startDate(startDate: OffsetDateTime) = apply { this.startDate = startDate }
+            fun startDate(startDate: OffsetDateTime?) = apply { this.startDate = startDate }
+
+            /**
+             * The start date of the price interval. This is the date that the price will start
+             * billing on the subscription. If null, billing will start when the phase or
+             * subscription starts.
+             */
+            fun startDate(startDate: Optional<OffsetDateTime>) = startDate(startDate.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -2851,25 +3427,58 @@ constructor(
                 }
 
                 /** Only available if discount_type is `amount`. */
-                fun amountDiscount(amountDiscount: String) = apply {
+                fun amountDiscount(amountDiscount: String?) = apply {
                     this.amountDiscount = amountDiscount
+                }
+
+                /** Only available if discount_type is `amount`. */
+                fun amountDiscount(amountDiscount: Optional<String>) =
+                    amountDiscount(amountDiscount.orElse(null))
+
+                /**
+                 * Only available if discount_type is `percentage`. This is a number between 0
+                 * and 1.
+                 */
+                fun percentageDiscount(percentageDiscount: Double?) = apply {
+                    this.percentageDiscount = percentageDiscount
                 }
 
                 /**
                  * Only available if discount_type is `percentage`. This is a number between 0
                  * and 1.
                  */
-                fun percentageDiscount(percentageDiscount: Double) = apply {
-                    this.percentageDiscount = percentageDiscount
+                fun percentageDiscount(percentageDiscount: Double) =
+                    percentageDiscount(percentageDiscount as Double?)
+
+                /**
+                 * Only available if discount_type is `percentage`. This is a number between 0
+                 * and 1.
+                 */
+                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                fun percentageDiscount(percentageDiscount: Optional<Double>) =
+                    percentageDiscount(percentageDiscount.orElse(null) as Double?)
+
+                /**
+                 * Only available if discount_type is `usage`. Number of usage units that this
+                 * discount is for
+                 */
+                fun usageDiscount(usageDiscount: Double?) = apply {
+                    this.usageDiscount = usageDiscount
                 }
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
                  * discount is for
                  */
-                fun usageDiscount(usageDiscount: Double) = apply {
-                    this.usageDiscount = usageDiscount
-                }
+                fun usageDiscount(usageDiscount: Double) = usageDiscount(usageDiscount as Double?)
+
+                /**
+                 * Only available if discount_type is `usage`. Number of usage units that this
+                 * discount is for
+                 */
+                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                fun usageDiscount(usageDiscount: Optional<Double>) =
+                    usageDiscount(usageDiscount.orElse(null) as Double?)
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -3948,77 +4557,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -4893,77 +5596,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -5862,77 +6659,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -6988,77 +7879,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -7380,7 +8365,23 @@ constructor(
                              * Exclusive tier ending value. If null, this is treated as the last
                              * tier
                              */
-                            fun lastUnit(lastUnit: Double) = apply { this.lastUnit = lastUnit }
+                            fun lastUnit(lastUnit: Double?) = apply { this.lastUnit = lastUnit }
+
+                            /**
+                             * Exclusive tier ending value. If null, this is treated as the last
+                             * tier
+                             */
+                            fun lastUnit(lastUnit: Double) = lastUnit(lastUnit as Double?)
+
+                            /**
+                             * Exclusive tier ending value. If null, this is treated as the last
+                             * tier
+                             */
+                            @Suppress(
+                                "USELESS_CAST"
+                            ) // See https://youtrack.jetbrains.com/issue/KT-74228
+                            fun lastUnit(lastUnit: Optional<Double>) =
+                                lastUnit(lastUnit.orElse(null) as Double?)
 
                             fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
                                 apply {
@@ -8063,77 +9064,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -8463,14 +9558,22 @@ constructor(
                             }
 
                             /** Exclusive tier ending value */
-                            fun maximumAmount(maximumAmount: String) = apply {
+                            fun maximumAmount(maximumAmount: String?) = apply {
                                 this.maximumAmount = maximumAmount
                             }
 
+                            /** Exclusive tier ending value */
+                            fun maximumAmount(maximumAmount: Optional<String>) =
+                                maximumAmount(maximumAmount.orElse(null))
+
                             /** Per unit maximum to charge */
-                            fun perUnitMaximum(perUnitMaximum: String) = apply {
+                            fun perUnitMaximum(perUnitMaximum: String?) = apply {
                                 this.perUnitMaximum = perUnitMaximum
                             }
+
+                            /** Per unit maximum to charge */
+                            fun perUnitMaximum(perUnitMaximum: Optional<String>) =
+                                perUnitMaximum(perUnitMaximum.orElse(null))
 
                             fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
                                 apply {
@@ -9147,77 +10250,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -9309,9 +10506,13 @@ constructor(
                         fun bps(bps: Double) = apply { this.bps = bps }
 
                         /** Optional currency amount maximum to cap spend per event */
-                        fun perUnitMaximum(perUnitMaximum: String) = apply {
+                        fun perUnitMaximum(perUnitMaximum: String?) = apply {
                             this.perUnitMaximum = perUnitMaximum
                         }
+
+                        /** Optional currency amount maximum to cap spend per event */
+                        fun perUnitMaximum(perUnitMaximum: Optional<String>) =
+                            perUnitMaximum(perUnitMaximum.orElse(null))
 
                         fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
                             apply {
@@ -10103,77 +11304,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -10357,14 +11652,22 @@ constructor(
                             fun bps(bps: Double) = apply { this.bps = bps }
 
                             /** Upper bound for tier */
-                            fun maximumAmount(maximumAmount: String) = apply {
+                            fun maximumAmount(maximumAmount: String?) = apply {
                                 this.maximumAmount = maximumAmount
                             }
 
+                            /** Upper bound for tier */
+                            fun maximumAmount(maximumAmount: Optional<String>) =
+                                maximumAmount(maximumAmount.orElse(null))
+
                             /** The maximum amount to charge for any one event */
-                            fun perUnitMaximum(perUnitMaximum: String) = apply {
+                            fun perUnitMaximum(perUnitMaximum: String?) = apply {
                                 this.perUnitMaximum = perUnitMaximum
                             }
+
+                            /** The maximum amount to charge for any one event */
+                            fun perUnitMaximum(perUnitMaximum: Optional<String>) =
+                                perUnitMaximum(perUnitMaximum.orElse(null))
 
                             fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
                                 apply {
@@ -11172,77 +12475,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -11410,9 +12807,20 @@ constructor(
                             }
 
                             /** Upper bound for this tier */
-                            fun maximumUnits(maximumUnits: Double) = apply {
+                            fun maximumUnits(maximumUnits: Double?) = apply {
                                 this.maximumUnits = maximumUnits
                             }
+
+                            /** Upper bound for this tier */
+                            fun maximumUnits(maximumUnits: Double) =
+                                maximumUnits(maximumUnits as Double?)
+
+                            /** Upper bound for this tier */
+                            @Suppress(
+                                "USELESS_CAST"
+                            ) // See https://youtrack.jetbrains.com/issue/KT-74228
+                            fun maximumUnits(maximumUnits: Optional<Double>) =
+                                maximumUnits(maximumUnits.orElse(null) as Double?)
 
                             fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
                                 apply {
@@ -12233,77 +13641,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -13171,77 +14673,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -14113,77 +15709,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -15053,77 +16743,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -15997,77 +17781,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -16941,77 +18819,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -17884,77 +19856,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -18827,77 +20893,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -19781,77 +21941,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -20726,77 +22980,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -21566,13 +23914,39 @@ constructor(
              * The month on which the billing cycle is anchored (e.g. a quarterly price anchored in
              * February would have cycles starting February, May, August, and November).
              */
-            fun month(month: Long) = apply { this.month = month }
+            fun month(month: Long?) = apply { this.month = month }
+
+            /**
+             * The month on which the billing cycle is anchored (e.g. a quarterly price anchored in
+             * February would have cycles starting February, May, August, and November).
+             */
+            fun month(month: Long) = month(month as Long?)
+
+            /**
+             * The month on which the billing cycle is anchored (e.g. a quarterly price anchored in
+             * February would have cycles starting February, May, August, and November).
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun month(month: Optional<Long>) = month(month.orElse(null) as Long?)
 
             /**
              * The year on which the billing cycle is anchored (e.g. a 2 year billing cycle anchored
              * on 2021 would have cycles starting on 2021, 2023, 2025, etc.).
              */
-            fun year(year: Long) = apply { this.year = year }
+            fun year(year: Long?) = apply { this.year = year }
+
+            /**
+             * The year on which the billing cycle is anchored (e.g. a 2 year billing cycle anchored
+             * on 2021 would have cycles starting on 2021, 2023, 2025, etc.).
+             */
+            fun year(year: Long) = year(year as Long?)
+
+            /**
+             * The year on which the billing cycle is anchored (e.g. a 2 year billing cycle anchored
+             * on 2021 would have cycles starting on 2021, 2023, 2025, etc.).
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun year(year: Optional<Long>) = year(year.orElse(null) as Long?)
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -21878,12 +24252,19 @@ constructor(
             }
 
             /** The external price id of the price to remove on the subscription. */
-            fun externalPriceId(externalPriceId: String) = apply {
+            fun externalPriceId(externalPriceId: String?) = apply {
                 this.externalPriceId = externalPriceId
             }
 
+            /** The external price id of the price to remove on the subscription. */
+            fun externalPriceId(externalPriceId: Optional<String>) =
+                externalPriceId(externalPriceId.orElse(null))
+
             /** The id of the price to remove on the subscription. */
-            fun priceId(priceId: String) = apply { this.priceId = priceId }
+            fun priceId(priceId: String?) = apply { this.priceId = priceId }
+
+            /** The id of the price to remove on the subscription. */
+            fun priceId(priceId: Optional<String>) = priceId(priceId.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -22293,9 +24674,24 @@ constructor(
                      * When false, this adjustment will be applied to a single price. Otherwise, it
                      * will be applied at the invoice level, possibly to multiple prices.
                      */
-                    fun isInvoiceLevel(isInvoiceLevel: Boolean) = apply {
+                    fun isInvoiceLevel(isInvoiceLevel: Boolean?) = apply {
                         this.isInvoiceLevel = isInvoiceLevel
                     }
+
+                    /**
+                     * When false, this adjustment will be applied to a single price. Otherwise, it
+                     * will be applied at the invoice level, possibly to multiple prices.
+                     */
+                    fun isInvoiceLevel(isInvoiceLevel: Boolean) =
+                        isInvoiceLevel(isInvoiceLevel as Boolean?)
+
+                    /**
+                     * When false, this adjustment will be applied to a single price. Otherwise, it
+                     * will be applied at the invoice level, possibly to multiple prices.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun isInvoiceLevel(isInvoiceLevel: Optional<Boolean>) =
+                        isInvoiceLevel(isInvoiceLevel.orElse(null) as Boolean?)
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -22485,9 +24881,24 @@ constructor(
                      * When false, this adjustment will be applied to a single price. Otherwise, it
                      * will be applied at the invoice level, possibly to multiple prices.
                      */
-                    fun isInvoiceLevel(isInvoiceLevel: Boolean) = apply {
+                    fun isInvoiceLevel(isInvoiceLevel: Boolean?) = apply {
                         this.isInvoiceLevel = isInvoiceLevel
                     }
+
+                    /**
+                     * When false, this adjustment will be applied to a single price. Otherwise, it
+                     * will be applied at the invoice level, possibly to multiple prices.
+                     */
+                    fun isInvoiceLevel(isInvoiceLevel: Boolean) =
+                        isInvoiceLevel(isInvoiceLevel as Boolean?)
+
+                    /**
+                     * When false, this adjustment will be applied to a single price. Otherwise, it
+                     * will be applied at the invoice level, possibly to multiple prices.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun isInvoiceLevel(isInvoiceLevel: Optional<Boolean>) =
+                        isInvoiceLevel(isInvoiceLevel.orElse(null) as Boolean?)
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -22677,9 +25088,24 @@ constructor(
                      * When false, this adjustment will be applied to a single price. Otherwise, it
                      * will be applied at the invoice level, possibly to multiple prices.
                      */
-                    fun isInvoiceLevel(isInvoiceLevel: Boolean) = apply {
+                    fun isInvoiceLevel(isInvoiceLevel: Boolean?) = apply {
                         this.isInvoiceLevel = isInvoiceLevel
                     }
+
+                    /**
+                     * When false, this adjustment will be applied to a single price. Otherwise, it
+                     * will be applied at the invoice level, possibly to multiple prices.
+                     */
+                    fun isInvoiceLevel(isInvoiceLevel: Boolean) =
+                        isInvoiceLevel(isInvoiceLevel as Boolean?)
+
+                    /**
+                     * When false, this adjustment will be applied to a single price. Otherwise, it
+                     * will be applied at the invoice level, possibly to multiple prices.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun isInvoiceLevel(isInvoiceLevel: Optional<Boolean>) =
+                        isInvoiceLevel(isInvoiceLevel.orElse(null) as Boolean?)
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -22878,9 +25304,24 @@ constructor(
                      * When false, this adjustment will be applied to a single price. Otherwise, it
                      * will be applied at the invoice level, possibly to multiple prices.
                      */
-                    fun isInvoiceLevel(isInvoiceLevel: Boolean) = apply {
+                    fun isInvoiceLevel(isInvoiceLevel: Boolean?) = apply {
                         this.isInvoiceLevel = isInvoiceLevel
                     }
+
+                    /**
+                     * When false, this adjustment will be applied to a single price. Otherwise, it
+                     * will be applied at the invoice level, possibly to multiple prices.
+                     */
+                    fun isInvoiceLevel(isInvoiceLevel: Boolean) =
+                        isInvoiceLevel(isInvoiceLevel as Boolean?)
+
+                    /**
+                     * When false, this adjustment will be applied to a single price. Otherwise, it
+                     * will be applied at the invoice level, possibly to multiple prices.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun isInvoiceLevel(isInvoiceLevel: Optional<Boolean>) =
+                        isInvoiceLevel(isInvoiceLevel.orElse(null) as Boolean?)
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -23071,9 +25512,24 @@ constructor(
                      * When false, this adjustment will be applied to a single price. Otherwise, it
                      * will be applied at the invoice level, possibly to multiple prices.
                      */
-                    fun isInvoiceLevel(isInvoiceLevel: Boolean) = apply {
+                    fun isInvoiceLevel(isInvoiceLevel: Boolean?) = apply {
                         this.isInvoiceLevel = isInvoiceLevel
                     }
+
+                    /**
+                     * When false, this adjustment will be applied to a single price. Otherwise, it
+                     * will be applied at the invoice level, possibly to multiple prices.
+                     */
+                    fun isInvoiceLevel(isInvoiceLevel: Boolean) =
+                        isInvoiceLevel(isInvoiceLevel as Boolean?)
+
+                    /**
+                     * When false, this adjustment will be applied to a single price. Otherwise, it
+                     * will be applied at the invoice level, possibly to multiple prices.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun isInvoiceLevel(isInvoiceLevel: Optional<Boolean>) =
+                        isInvoiceLevel(isInvoiceLevel.orElse(null) as Boolean?)
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -23302,9 +25758,15 @@ constructor(
              * [DEPRECATED] Use add_adjustments instead. The subscription's discounts for the
              * replacement price.
              */
-            fun discounts(discounts: List<Discount>) = apply {
-                this.discounts = discounts.toMutableList()
+            fun discounts(discounts: List<Discount>?) = apply {
+                this.discounts = discounts?.toMutableList()
             }
+
+            /**
+             * [DEPRECATED] Use add_adjustments instead. The subscription's discounts for the
+             * replacement price.
+             */
+            fun discounts(discounts: Optional<List<Discount>>) = discounts(discounts.orElse(null))
 
             /**
              * [DEPRECATED] Use add_adjustments instead. The subscription's discounts for the
@@ -23315,29 +25777,59 @@ constructor(
             }
 
             /** The external price id of the price to add to the subscription. */
-            fun externalPriceId(externalPriceId: String) = apply {
+            fun externalPriceId(externalPriceId: String?) = apply {
                 this.externalPriceId = externalPriceId
             }
 
+            /** The external price id of the price to add to the subscription. */
+            fun externalPriceId(externalPriceId: Optional<String>) =
+                externalPriceId(externalPriceId.orElse(null))
+
             /** The new quantity of the price, if the price is a fixed price. */
-            fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
+            fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
             }
+
+            /** The new quantity of the price, if the price is a fixed price. */
+            fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+            /** The new quantity of the price, if the price is a fixed price. */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
 
             /**
              * [DEPRECATED] Use add_adjustments instead. The subscription's maximum amount for the
              * replacement price.
              */
-            fun maximumAmount(maximumAmount: String) = apply { this.maximumAmount = maximumAmount }
+            fun maximumAmount(maximumAmount: String?) = apply { this.maximumAmount = maximumAmount }
+
+            /**
+             * [DEPRECATED] Use add_adjustments instead. The subscription's maximum amount for the
+             * replacement price.
+             */
+            fun maximumAmount(maximumAmount: Optional<String>) =
+                maximumAmount(maximumAmount.orElse(null))
 
             /**
              * [DEPRECATED] Use add_adjustments instead. The subscription's minimum amount for the
              * replacement price.
              */
-            fun minimumAmount(minimumAmount: String) = apply { this.minimumAmount = minimumAmount }
+            fun minimumAmount(minimumAmount: String?) = apply { this.minimumAmount = minimumAmount }
+
+            /**
+             * [DEPRECATED] Use add_adjustments instead. The subscription's minimum amount for the
+             * replacement price.
+             */
+            fun minimumAmount(minimumAmount: Optional<String>) =
+                minimumAmount(minimumAmount.orElse(null))
 
             /** The definition of a new price to create and add to the subscription. */
-            fun price(price: Price) = apply { this.price = price }
+            fun price(price: Price?) = apply { this.price = price }
+
+            /** The definition of a new price to create and add to the subscription. */
+            fun price(price: Optional<Price>) = price(price.orElse(null))
 
             fun price(newSubscriptionUnitPrice: Price.NewSubscriptionUnitPrice) = apply {
                 this.price = Price.ofNewSubscriptionUnitPrice(newSubscriptionUnitPrice)
@@ -23460,7 +25952,10 @@ constructor(
             }
 
             /** The id of the price to add to the subscription. */
-            fun priceId(priceId: String) = apply { this.priceId = priceId }
+            fun priceId(priceId: String?) = apply { this.priceId = priceId }
+
+            /** The id of the price to add to the subscription. */
+            fun priceId(priceId: Optional<String>) = priceId(priceId.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -23561,25 +26056,58 @@ constructor(
                 }
 
                 /** Only available if discount_type is `amount`. */
-                fun amountDiscount(amountDiscount: String) = apply {
+                fun amountDiscount(amountDiscount: String?) = apply {
                     this.amountDiscount = amountDiscount
+                }
+
+                /** Only available if discount_type is `amount`. */
+                fun amountDiscount(amountDiscount: Optional<String>) =
+                    amountDiscount(amountDiscount.orElse(null))
+
+                /**
+                 * Only available if discount_type is `percentage`. This is a number between 0
+                 * and 1.
+                 */
+                fun percentageDiscount(percentageDiscount: Double?) = apply {
+                    this.percentageDiscount = percentageDiscount
                 }
 
                 /**
                  * Only available if discount_type is `percentage`. This is a number between 0
                  * and 1.
                  */
-                fun percentageDiscount(percentageDiscount: Double) = apply {
-                    this.percentageDiscount = percentageDiscount
+                fun percentageDiscount(percentageDiscount: Double) =
+                    percentageDiscount(percentageDiscount as Double?)
+
+                /**
+                 * Only available if discount_type is `percentage`. This is a number between 0
+                 * and 1.
+                 */
+                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                fun percentageDiscount(percentageDiscount: Optional<Double>) =
+                    percentageDiscount(percentageDiscount.orElse(null) as Double?)
+
+                /**
+                 * Only available if discount_type is `usage`. Number of usage units that this
+                 * discount is for
+                 */
+                fun usageDiscount(usageDiscount: Double?) = apply {
+                    this.usageDiscount = usageDiscount
                 }
 
                 /**
                  * Only available if discount_type is `usage`. Number of usage units that this
                  * discount is for
                  */
-                fun usageDiscount(usageDiscount: Double) = apply {
-                    this.usageDiscount = usageDiscount
-                }
+                fun usageDiscount(usageDiscount: Double) = usageDiscount(usageDiscount as Double?)
+
+                /**
+                 * Only available if discount_type is `usage`. Number of usage units that this
+                 * discount is for
+                 */
+                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                fun usageDiscount(usageDiscount: Optional<Double>) =
+                    usageDiscount(usageDiscount.orElse(null) as Double?)
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -24658,77 +27186,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -25603,77 +28225,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -26572,77 +29288,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -27698,77 +30508,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -28090,7 +30994,23 @@ constructor(
                              * Exclusive tier ending value. If null, this is treated as the last
                              * tier
                              */
-                            fun lastUnit(lastUnit: Double) = apply { this.lastUnit = lastUnit }
+                            fun lastUnit(lastUnit: Double?) = apply { this.lastUnit = lastUnit }
+
+                            /**
+                             * Exclusive tier ending value. If null, this is treated as the last
+                             * tier
+                             */
+                            fun lastUnit(lastUnit: Double) = lastUnit(lastUnit as Double?)
+
+                            /**
+                             * Exclusive tier ending value. If null, this is treated as the last
+                             * tier
+                             */
+                            @Suppress(
+                                "USELESS_CAST"
+                            ) // See https://youtrack.jetbrains.com/issue/KT-74228
+                            fun lastUnit(lastUnit: Optional<Double>) =
+                                lastUnit(lastUnit.orElse(null) as Double?)
 
                             fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
                                 apply {
@@ -28773,77 +31693,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -29173,14 +32187,22 @@ constructor(
                             }
 
                             /** Exclusive tier ending value */
-                            fun maximumAmount(maximumAmount: String) = apply {
+                            fun maximumAmount(maximumAmount: String?) = apply {
                                 this.maximumAmount = maximumAmount
                             }
 
+                            /** Exclusive tier ending value */
+                            fun maximumAmount(maximumAmount: Optional<String>) =
+                                maximumAmount(maximumAmount.orElse(null))
+
                             /** Per unit maximum to charge */
-                            fun perUnitMaximum(perUnitMaximum: String) = apply {
+                            fun perUnitMaximum(perUnitMaximum: String?) = apply {
                                 this.perUnitMaximum = perUnitMaximum
                             }
+
+                            /** Per unit maximum to charge */
+                            fun perUnitMaximum(perUnitMaximum: Optional<String>) =
+                                perUnitMaximum(perUnitMaximum.orElse(null))
 
                             fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
                                 apply {
@@ -29857,77 +32879,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -30019,9 +33135,13 @@ constructor(
                         fun bps(bps: Double) = apply { this.bps = bps }
 
                         /** Optional currency amount maximum to cap spend per event */
-                        fun perUnitMaximum(perUnitMaximum: String) = apply {
+                        fun perUnitMaximum(perUnitMaximum: String?) = apply {
                             this.perUnitMaximum = perUnitMaximum
                         }
+
+                        /** Optional currency amount maximum to cap spend per event */
+                        fun perUnitMaximum(perUnitMaximum: Optional<String>) =
+                            perUnitMaximum(perUnitMaximum.orElse(null))
 
                         fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
                             apply {
@@ -30813,77 +33933,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -31067,14 +34281,22 @@ constructor(
                             fun bps(bps: Double) = apply { this.bps = bps }
 
                             /** Upper bound for tier */
-                            fun maximumAmount(maximumAmount: String) = apply {
+                            fun maximumAmount(maximumAmount: String?) = apply {
                                 this.maximumAmount = maximumAmount
                             }
 
+                            /** Upper bound for tier */
+                            fun maximumAmount(maximumAmount: Optional<String>) =
+                                maximumAmount(maximumAmount.orElse(null))
+
                             /** The maximum amount to charge for any one event */
-                            fun perUnitMaximum(perUnitMaximum: String) = apply {
+                            fun perUnitMaximum(perUnitMaximum: String?) = apply {
                                 this.perUnitMaximum = perUnitMaximum
                             }
+
+                            /** The maximum amount to charge for any one event */
+                            fun perUnitMaximum(perUnitMaximum: Optional<String>) =
+                                perUnitMaximum(perUnitMaximum.orElse(null))
 
                             fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
                                 apply {
@@ -31882,77 +35104,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -32120,9 +35436,20 @@ constructor(
                             }
 
                             /** Upper bound for this tier */
-                            fun maximumUnits(maximumUnits: Double) = apply {
+                            fun maximumUnits(maximumUnits: Double?) = apply {
                                 this.maximumUnits = maximumUnits
                             }
+
+                            /** Upper bound for this tier */
+                            fun maximumUnits(maximumUnits: Double) =
+                                maximumUnits(maximumUnits as Double?)
+
+                            /** Upper bound for this tier */
+                            @Suppress(
+                                "USELESS_CAST"
+                            ) // See https://youtrack.jetbrains.com/issue/KT-74228
+                            fun maximumUnits(maximumUnits: Optional<Double>) =
+                                maximumUnits(maximumUnits.orElse(null) as Double?)
 
                             fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
                                 apply {
@@ -32943,77 +36270,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -33881,77 +37302,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -34823,77 +38338,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -35763,77 +39372,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -36707,77 +40410,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -37651,77 +41448,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -38594,77 +42485,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -39537,77 +43522,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -40491,77 +44570,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -41436,77 +45609,171 @@ constructor(
                      * The id of the billable metric for the price. Only needed if the price is
                      * usage-based.
                      */
-                    fun billableMetricId(billableMetricId: String) = apply {
+                    fun billableMetricId(billableMetricId: String?) = apply {
                         this.billableMetricId = billableMetricId
+                    }
+
+                    /**
+                     * The id of the billable metric for the price. Only needed if the price is
+                     * usage-based.
+                     */
+                    fun billableMetricId(billableMetricId: Optional<String>) =
+                        billableMetricId(billableMetricId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    fun billedInAdvance(billedInAdvance: Boolean?) = apply {
+                        this.billedInAdvance = billedInAdvance
                     }
 
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
-                    fun billedInAdvance(billedInAdvance: Boolean) = apply {
-                        this.billedInAdvance = billedInAdvance
-                    }
+                    fun billedInAdvance(billedInAdvance: Boolean) =
+                        billedInAdvance(billedInAdvance as Boolean?)
+
+                    /**
+                     * If the Price represents a fixed cost, the price will be billed in-advance if
+                     * this is true, and in-arrears if this is false.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
+                        billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
 
                     /**
                      * For custom cadence: specifies the duration of the billing period in days or
                      * months.
                      */
                     fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
+                        billingCycleConfiguration: BillingCycleConfiguration?
                     ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: Optional<BillingCycleConfiguration>
+                    ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
 
                     /**
                      * The per unit conversion rate of the price currency to the invoicing currency.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
+                    fun conversionRate(conversionRate: Double?) = apply {
                         this.conversionRate = conversionRate
                     }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) =
+                        conversionRate(conversionRate as Double?)
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun conversionRate(conversionRate: Optional<Double>) =
+                        conversionRate(conversionRate.orElse(null) as Double?)
 
                     /**
                      * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                      * price is billed.
                      */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun currency(currency: String?) = apply { this.currency = currency }
+
+                    /**
+                     * An ISO 4217 currency string, or custom pricing unit identifier, in which this
+                     * price is billed.
+                     */
+                    fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
                     /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
+                    fun externalPriceId(externalPriceId: String?) = apply {
                         this.externalPriceId = externalPriceId
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: Optional<String>) =
+                        externalPriceId(externalPriceId.orElse(null))
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double?) = apply {
+                        this.fixedPriceQuantity = fixedPriceQuantity
                     }
 
                     /**
                      * If the Price represents a fixed cost, this represents the quantity of units
                      * applied.
                      */
-                    fun fixedPriceQuantity(fixedPriceQuantity: Double) = apply {
-                        this.fixedPriceQuantity = fixedPriceQuantity
+                    fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                        fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+                    /**
+                     * If the Price represents a fixed cost, this represents the quantity of units
+                     * applied.
+                     */
+                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+                    fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                        fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+
+                    /** The property used to group this price on an invoice */
+                    fun invoiceGroupingKey(invoiceGroupingKey: String?) = apply {
+                        this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
                     /** The property used to group this price on an invoice */
-                    fun invoiceGroupingKey(invoiceGroupingKey: String) = apply {
-                        this.invoiceGroupingKey = invoiceGroupingKey
-                    }
+                    fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
+                        invoiceGroupingKey(invoiceGroupingKey.orElse(null))
 
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
                      */
                     fun invoicingCycleConfiguration(
-                        invoicingCycleConfiguration: InvoicingCycleConfiguration
+                        invoicingCycleConfiguration: InvoicingCycleConfiguration?
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+                    /**
+                     * Within each billing cycle, specifies the cadence at which invoices are
+                     * produced. If unspecified, a single invoice is produced per billing cycle.
+                     */
+                    fun invoicingCycleConfiguration(
+                        invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
+                    ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
 
                     /**
                      * User-specified key/value pairs for the resource. Individual keys can be
                      * removed by setting the value to `null`, and the entire metadata mapping can
                      * be cleared by setting `metadata` to `null`.
                      */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+                    /**
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
+                     */
+                    fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
                     /**
                      * A transient ID that can be used to reference this price when adding
                      * adjustments in the same API call.
                      */
-                    fun referenceId(referenceId: String) = apply { this.referenceId = referenceId }
+                    fun referenceId(referenceId: String?) = apply { this.referenceId = referenceId }
+
+                    /**
+                     * A transient ID that can be used to reference this price when adding
+                     * adjustments in the same API call.
+                     */
+                    fun referenceId(referenceId: Optional<String>) =
+                        referenceId(referenceId.orElse(null))
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()

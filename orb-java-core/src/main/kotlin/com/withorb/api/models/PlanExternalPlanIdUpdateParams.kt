@@ -113,16 +113,31 @@ constructor(
              * alias for this Plan. Use this field to identify a plan by an existing identifier in
              * your system.
              */
-            fun externalPlanId(externalPlanId: String) = apply {
+            fun externalPlanId(externalPlanId: String?) = apply {
                 this.externalPlanId = externalPlanId
             }
+
+            /**
+             * An optional user-defined ID for this plan resource, used throughout the system as an
+             * alias for this Plan. Use this field to identify a plan by an existing identifier in
+             * your system.
+             */
+            fun externalPlanId(externalPlanId: Optional<String>) =
+                externalPlanId(externalPlanId.orElse(null))
 
             /**
              * User-specified key/value pairs for the resource. Individual keys can be removed by
              * setting the value to `null`, and the entire metadata mapping can be cleared by
              * setting `metadata` to `null`.
              */
-            fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+            fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+            /**
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
+             */
+            fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -202,14 +217,29 @@ constructor(
          * alias for this Plan. Use this field to identify a plan by an existing identifier in your
          * system.
          */
-        fun externalPlanId(externalPlanId: String) = apply { body.externalPlanId(externalPlanId) }
+        fun externalPlanId(externalPlanId: String?) = apply { body.externalPlanId(externalPlanId) }
+
+        /**
+         * An optional user-defined ID for this plan resource, used throughout the system as an
+         * alias for this Plan. Use this field to identify a plan by an existing identifier in your
+         * system.
+         */
+        fun externalPlanId(externalPlanId: Optional<String>) =
+            externalPlanId(externalPlanId.orElse(null))
 
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        fun metadata(metadata: Metadata) = apply { body.metadata(metadata) }
+        fun metadata(metadata: Metadata?) = apply { body.metadata(metadata) }
+
+        /**
+         * User-specified key/value pairs for the resource. Individual keys can be removed by
+         * setting the value to `null`, and the entire metadata mapping can be cleared by setting
+         * `metadata` to `null`.
+         */
+        fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

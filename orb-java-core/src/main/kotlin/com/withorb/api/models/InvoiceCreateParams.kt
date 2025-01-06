@@ -233,10 +233,19 @@ constructor(
              * The id of the `Customer` to create this invoice for. One of `customer_id` and
              * `external_customer_id` are required.
              */
-            fun customerId(customerId: String) = apply { this.customerId = customerId }
+            fun customerId(customerId: String?) = apply { this.customerId = customerId }
+
+            /**
+             * The id of the `Customer` to create this invoice for. One of `customer_id` and
+             * `external_customer_id` are required.
+             */
+            fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
 
             /** An optional discount to attach to the invoice. */
-            fun discount(discount: Discount) = apply { this.discount = discount }
+            fun discount(discount: Discount?) = apply { this.discount = discount }
+
+            /** An optional discount to attach to the invoice. */
+            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
 
             fun discount(percentageDiscount: PercentageDiscount) = apply {
                 this.discount = Discount.ofPercentageDiscount(percentageDiscount)
@@ -258,25 +267,58 @@ constructor(
              * The `external_customer_id` of the `Customer` to create this invoice for. One of
              * `customer_id` and `external_customer_id` are required.
              */
-            fun externalCustomerId(externalCustomerId: String) = apply {
+            fun externalCustomerId(externalCustomerId: String?) = apply {
                 this.externalCustomerId = externalCustomerId
             }
 
+            /**
+             * The `external_customer_id` of the `Customer` to create this invoice for. One of
+             * `customer_id` and `external_customer_id` are required.
+             */
+            fun externalCustomerId(externalCustomerId: Optional<String>) =
+                externalCustomerId(externalCustomerId.orElse(null))
+
             /** An optional memo to attach to the invoice. */
-            fun memo(memo: String) = apply { this.memo = memo }
+            fun memo(memo: String?) = apply { this.memo = memo }
+
+            /** An optional memo to attach to the invoice. */
+            fun memo(memo: Optional<String>) = memo(memo.orElse(null))
 
             /**
              * User-specified key/value pairs for the resource. Individual keys can be removed by
              * setting the value to `null`, and the entire metadata mapping can be cleared by
              * setting `metadata` to `null`.
              */
-            fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+            fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+            /**
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
+             */
+            fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
             /**
              * When true, this invoice will automatically be issued upon creation. When false, the
              * resulting invoice will require manual review to issue. Defaulted to false.
              */
-            fun willAutoIssue(willAutoIssue: Boolean) = apply { this.willAutoIssue = willAutoIssue }
+            fun willAutoIssue(willAutoIssue: Boolean?) = apply {
+                this.willAutoIssue = willAutoIssue
+            }
+
+            /**
+             * When true, this invoice will automatically be issued upon creation. When false, the
+             * resulting invoice will require manual review to issue. Defaulted to false.
+             */
+            fun willAutoIssue(willAutoIssue: Boolean) = willAutoIssue(willAutoIssue as Boolean?)
+
+            /**
+             * When true, this invoice will automatically be issued upon creation. When false, the
+             * resulting invoice will require manual review to issue. Defaulted to false.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun willAutoIssue(willAutoIssue: Optional<Boolean>) =
+                willAutoIssue(willAutoIssue.orElse(null) as Boolean?)
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -379,10 +421,19 @@ constructor(
          * The id of the `Customer` to create this invoice for. One of `customer_id` and
          * `external_customer_id` are required.
          */
-        fun customerId(customerId: String) = apply { body.customerId(customerId) }
+        fun customerId(customerId: String?) = apply { body.customerId(customerId) }
+
+        /**
+         * The id of the `Customer` to create this invoice for. One of `customer_id` and
+         * `external_customer_id` are required.
+         */
+        fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
 
         /** An optional discount to attach to the invoice. */
-        fun discount(discount: Discount) = apply { body.discount(discount) }
+        fun discount(discount: Discount?) = apply { body.discount(discount) }
+
+        /** An optional discount to attach to the invoice. */
+        fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
 
         fun discount(percentageDiscount: PercentageDiscount) = apply {
             body.discount(percentageDiscount)
@@ -398,25 +449,56 @@ constructor(
          * The `external_customer_id` of the `Customer` to create this invoice for. One of
          * `customer_id` and `external_customer_id` are required.
          */
-        fun externalCustomerId(externalCustomerId: String) = apply {
+        fun externalCustomerId(externalCustomerId: String?) = apply {
             body.externalCustomerId(externalCustomerId)
         }
 
+        /**
+         * The `external_customer_id` of the `Customer` to create this invoice for. One of
+         * `customer_id` and `external_customer_id` are required.
+         */
+        fun externalCustomerId(externalCustomerId: Optional<String>) =
+            externalCustomerId(externalCustomerId.orElse(null))
+
         /** An optional memo to attach to the invoice. */
-        fun memo(memo: String) = apply { body.memo(memo) }
+        fun memo(memo: String?) = apply { body.memo(memo) }
+
+        /** An optional memo to attach to the invoice. */
+        fun memo(memo: Optional<String>) = memo(memo.orElse(null))
 
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        fun metadata(metadata: Metadata) = apply { body.metadata(metadata) }
+        fun metadata(metadata: Metadata?) = apply { body.metadata(metadata) }
+
+        /**
+         * User-specified key/value pairs for the resource. Individual keys can be removed by
+         * setting the value to `null`, and the entire metadata mapping can be cleared by setting
+         * `metadata` to `null`.
+         */
+        fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
 
         /**
          * When true, this invoice will automatically be issued upon creation. When false, the
          * resulting invoice will require manual review to issue. Defaulted to false.
          */
-        fun willAutoIssue(willAutoIssue: Boolean) = apply { body.willAutoIssue(willAutoIssue) }
+        fun willAutoIssue(willAutoIssue: Boolean?) = apply { body.willAutoIssue(willAutoIssue) }
+
+        /**
+         * When true, this invoice will automatically be issued upon creation. When false, the
+         * resulting invoice will require manual review to issue. Defaulted to false.
+         */
+        fun willAutoIssue(willAutoIssue: Boolean) = willAutoIssue(willAutoIssue as Boolean?)
+
+        /**
+         * When true, this invoice will automatically be issued upon creation. When false, the
+         * resulting invoice will require manual review to issue. Defaulted to false.
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun willAutoIssue(willAutoIssue: Optional<Boolean>) =
+            willAutoIssue(willAutoIssue.orElse(null) as Boolean?)
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

@@ -191,12 +191,30 @@ constructor(
              * The number of days or months after which the top-up expires. If unspecified, it does
              * not expire.
              */
-            fun expiresAfter(expiresAfter: Long) = apply { this.expiresAfter = expiresAfter }
+            fun expiresAfter(expiresAfter: Long?) = apply { this.expiresAfter = expiresAfter }
+
+            /**
+             * The number of days or months after which the top-up expires. If unspecified, it does
+             * not expire.
+             */
+            fun expiresAfter(expiresAfter: Long) = expiresAfter(expiresAfter as Long?)
+
+            /**
+             * The number of days or months after which the top-up expires. If unspecified, it does
+             * not expire.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun expiresAfter(expiresAfter: Optional<Long>) =
+                expiresAfter(expiresAfter.orElse(null) as Long?)
 
             /** The unit of expires_after. */
-            fun expiresAfterUnit(expiresAfterUnit: ExpiresAfterUnit) = apply {
+            fun expiresAfterUnit(expiresAfterUnit: ExpiresAfterUnit?) = apply {
                 this.expiresAfterUnit = expiresAfterUnit
             }
+
+            /** The unit of expires_after. */
+            fun expiresAfterUnit(expiresAfterUnit: Optional<ExpiresAfterUnit>) =
+                expiresAfterUnit(expiresAfterUnit.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -313,12 +331,30 @@ constructor(
          * The number of days or months after which the top-up expires. If unspecified, it does not
          * expire.
          */
-        fun expiresAfter(expiresAfter: Long) = apply { body.expiresAfter(expiresAfter) }
+        fun expiresAfter(expiresAfter: Long?) = apply { body.expiresAfter(expiresAfter) }
+
+        /**
+         * The number of days or months after which the top-up expires. If unspecified, it does not
+         * expire.
+         */
+        fun expiresAfter(expiresAfter: Long) = expiresAfter(expiresAfter as Long?)
+
+        /**
+         * The number of days or months after which the top-up expires. If unspecified, it does not
+         * expire.
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun expiresAfter(expiresAfter: Optional<Long>) =
+            expiresAfter(expiresAfter.orElse(null) as Long?)
 
         /** The unit of expires_after. */
-        fun expiresAfterUnit(expiresAfterUnit: ExpiresAfterUnit) = apply {
+        fun expiresAfterUnit(expiresAfterUnit: ExpiresAfterUnit?) = apply {
             body.expiresAfterUnit(expiresAfterUnit)
         }
+
+        /** The unit of expires_after. */
+        fun expiresAfterUnit(expiresAfterUnit: Optional<ExpiresAfterUnit>) =
+            expiresAfterUnit(expiresAfterUnit.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -527,15 +563,33 @@ constructor(
             fun netTerms(netTerms: Long) = apply { this.netTerms = netTerms }
 
             /** An optional memo to display on the invoice. */
-            fun memo(memo: String) = apply { this.memo = memo }
+            fun memo(memo: String?) = apply { this.memo = memo }
+
+            /** An optional memo to display on the invoice. */
+            fun memo(memo: Optional<String>) = memo(memo.orElse(null))
 
             /**
              * If true, new credit blocks created by this top-up will require that the corresponding
              * invoice is paid before they can be drawn down from.
              */
-            fun requireSuccessfulPayment(requireSuccessfulPayment: Boolean) = apply {
+            fun requireSuccessfulPayment(requireSuccessfulPayment: Boolean?) = apply {
                 this.requireSuccessfulPayment = requireSuccessfulPayment
             }
+
+            /**
+             * If true, new credit blocks created by this top-up will require that the corresponding
+             * invoice is paid before they can be drawn down from.
+             */
+            fun requireSuccessfulPayment(requireSuccessfulPayment: Boolean) =
+                requireSuccessfulPayment(requireSuccessfulPayment as Boolean?)
+
+            /**
+             * If true, new credit blocks created by this top-up will require that the corresponding
+             * invoice is paid before they can be drawn down from.
+             */
+            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+            fun requireSuccessfulPayment(requireSuccessfulPayment: Optional<Boolean>) =
+                requireSuccessfulPayment(requireSuccessfulPayment.orElse(null) as Boolean?)
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
