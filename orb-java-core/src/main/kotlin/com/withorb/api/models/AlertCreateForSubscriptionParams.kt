@@ -119,7 +119,10 @@ constructor(
             fun type(type: Type) = apply { this.type = type }
 
             /** The metric to track usage for. */
-            fun metricId(metricId: String) = apply { this.metricId = metricId }
+            fun metricId(metricId: String?) = apply { this.metricId = metricId }
+
+            /** The metric to track usage for. */
+            fun metricId(metricId: Optional<String>) = metricId(metricId.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -206,7 +209,10 @@ constructor(
         fun type(type: Type) = apply { body.type(type) }
 
         /** The metric to track usage for. */
-        fun metricId(metricId: String) = apply { body.metricId(metricId) }
+        fun metricId(metricId: String?) = apply { body.metricId(metricId) }
+
+        /** The metric to track usage for. */
+        fun metricId(metricId: Optional<String>) = metricId(metricId.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

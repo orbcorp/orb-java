@@ -100,10 +100,16 @@ constructor(
             }
 
             /** An optional memo to attach to the credit note. */
-            fun memo(memo: String) = apply { this.memo = memo }
+            fun memo(memo: String?) = apply { this.memo = memo }
+
+            /** An optional memo to attach to the credit note. */
+            fun memo(memo: Optional<String>) = memo(memo.orElse(null))
 
             /** An optional reason for the credit note. */
-            fun reason(reason: Reason) = apply { this.reason = reason }
+            fun reason(reason: Reason?) = apply { this.reason = reason }
+
+            /** An optional reason for the credit note. */
+            fun reason(reason: Optional<Reason>) = reason(reason.orElse(null))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -178,10 +184,16 @@ constructor(
         fun addLineItem(lineItem: LineItem) = apply { body.addLineItem(lineItem) }
 
         /** An optional memo to attach to the credit note. */
-        fun memo(memo: String) = apply { body.memo(memo) }
+        fun memo(memo: String?) = apply { body.memo(memo) }
+
+        /** An optional memo to attach to the credit note. */
+        fun memo(memo: Optional<String>) = memo(memo.orElse(null))
 
         /** An optional reason for the credit note. */
-        fun reason(reason: Reason) = apply { body.reason(reason) }
+        fun reason(reason: Reason?) = apply { body.reason(reason) }
+
+        /** An optional reason for the credit note. */
+        fun reason(reason: Optional<Reason>) = reason(reason.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

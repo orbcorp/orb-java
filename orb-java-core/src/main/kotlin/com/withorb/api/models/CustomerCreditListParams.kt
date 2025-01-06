@@ -94,24 +94,55 @@ constructor(
         fun customerId(customerId: String) = apply { this.customerId = customerId }
 
         /** The ledger currency or custom pricing unit to use. */
-        fun currency(currency: String) = apply { this.currency = currency }
+        fun currency(currency: String?) = apply { this.currency = currency }
+
+        /** The ledger currency or custom pricing unit to use. */
+        fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
         /**
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
          * initial request.
          */
-        fun cursor(cursor: String) = apply { this.cursor = cursor }
+        fun cursor(cursor: String?) = apply { this.cursor = cursor }
+
+        /**
+         * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
+         * initial request.
+         */
+        fun cursor(cursor: Optional<String>) = cursor(cursor.orElse(null))
 
         /**
          * If set to True, all expired and depleted blocks, as well as active block will be
          * returned.
          */
-        fun includeAllBlocks(includeAllBlocks: Boolean) = apply {
+        fun includeAllBlocks(includeAllBlocks: Boolean?) = apply {
             this.includeAllBlocks = includeAllBlocks
         }
 
+        /**
+         * If set to True, all expired and depleted blocks, as well as active block will be
+         * returned.
+         */
+        fun includeAllBlocks(includeAllBlocks: Boolean) =
+            includeAllBlocks(includeAllBlocks as Boolean?)
+
+        /**
+         * If set to True, all expired and depleted blocks, as well as active block will be
+         * returned.
+         */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun includeAllBlocks(includeAllBlocks: Optional<Boolean>) =
+            includeAllBlocks(includeAllBlocks.orElse(null) as Boolean?)
+
         /** The number of items to fetch. Defaults to 20. */
-        fun limit(limit: Long) = apply { this.limit = limit }
+        fun limit(limit: Long?) = apply { this.limit = limit }
+
+        /** The number of items to fetch. Defaults to 20. */
+        fun limit(limit: Long) = limit(limit as Long?)
+
+        /** The number of items to fetch. Defaults to 20. */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun limit(limit: Optional<Long>) = limit(limit.orElse(null) as Long?)
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

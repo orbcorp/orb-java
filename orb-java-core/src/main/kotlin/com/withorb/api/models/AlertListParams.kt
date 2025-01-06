@@ -132,33 +132,69 @@ constructor(
             additionalQueryParams = alertListParams.additionalQueryParams.toBuilder()
         }
 
-        fun createdAtGt(createdAtGt: OffsetDateTime) = apply { this.createdAtGt = createdAtGt }
+        fun createdAtGt(createdAtGt: OffsetDateTime?) = apply { this.createdAtGt = createdAtGt }
 
-        fun createdAtGte(createdAtGte: OffsetDateTime) = apply { this.createdAtGte = createdAtGte }
+        fun createdAtGt(createdAtGt: Optional<OffsetDateTime>) =
+            createdAtGt(createdAtGt.orElse(null))
 
-        fun createdAtLt(createdAtLt: OffsetDateTime) = apply { this.createdAtLt = createdAtLt }
+        fun createdAtGte(createdAtGte: OffsetDateTime?) = apply { this.createdAtGte = createdAtGte }
 
-        fun createdAtLte(createdAtLte: OffsetDateTime) = apply { this.createdAtLte = createdAtLte }
+        fun createdAtGte(createdAtGte: Optional<OffsetDateTime>) =
+            createdAtGte(createdAtGte.orElse(null))
+
+        fun createdAtLt(createdAtLt: OffsetDateTime?) = apply { this.createdAtLt = createdAtLt }
+
+        fun createdAtLt(createdAtLt: Optional<OffsetDateTime>) =
+            createdAtLt(createdAtLt.orElse(null))
+
+        fun createdAtLte(createdAtLte: OffsetDateTime?) = apply { this.createdAtLte = createdAtLte }
+
+        fun createdAtLte(createdAtLte: Optional<OffsetDateTime>) =
+            createdAtLte(createdAtLte.orElse(null))
 
         /**
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
          * initial request.
          */
-        fun cursor(cursor: String) = apply { this.cursor = cursor }
+        fun cursor(cursor: String?) = apply { this.cursor = cursor }
+
+        /**
+         * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
+         * initial request.
+         */
+        fun cursor(cursor: Optional<String>) = cursor(cursor.orElse(null))
 
         /** Fetch alerts scoped to this customer_id */
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String?) = apply { this.customerId = customerId }
+
+        /** Fetch alerts scoped to this customer_id */
+        fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
 
         /** Fetch alerts scoped to this external_customer_id */
-        fun externalCustomerId(externalCustomerId: String) = apply {
+        fun externalCustomerId(externalCustomerId: String?) = apply {
             this.externalCustomerId = externalCustomerId
         }
 
+        /** Fetch alerts scoped to this external_customer_id */
+        fun externalCustomerId(externalCustomerId: Optional<String>) =
+            externalCustomerId(externalCustomerId.orElse(null))
+
         /** The number of items to fetch. Defaults to 20. */
-        fun limit(limit: Long) = apply { this.limit = limit }
+        fun limit(limit: Long?) = apply { this.limit = limit }
+
+        /** The number of items to fetch. Defaults to 20. */
+        fun limit(limit: Long) = limit(limit as Long?)
+
+        /** The number of items to fetch. Defaults to 20. */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun limit(limit: Optional<Long>) = limit(limit.orElse(null) as Long?)
 
         /** Fetch alerts scoped to this subscription_id */
-        fun subscriptionId(subscriptionId: String) = apply { this.subscriptionId = subscriptionId }
+        fun subscriptionId(subscriptionId: String?) = apply { this.subscriptionId = subscriptionId }
+
+        /** Fetch alerts scoped to this subscription_id */
+        fun subscriptionId(subscriptionId: Optional<String>) =
+            subscriptionId(subscriptionId.orElse(null))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
