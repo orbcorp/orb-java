@@ -423,7 +423,7 @@ class InvoiceTest {
                         .build()
                 )
             )
-        assertThat(invoice.dueDate()).isEqualTo(OffsetDateTime.parse("2022-05-30T07:00:00+00:00"))
+        assertThat(invoice.dueDate()).contains(OffsetDateTime.parse("2022-05-30T07:00:00+00:00"))
         assertThat(invoice.eligibleToIssueAt())
             .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(invoice.hostedInvoiceUrl()).contains("hosted_invoice_url")
