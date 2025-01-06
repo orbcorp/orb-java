@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.19.0 (2025-01-06)
+
+Full Changelog: [v0.18.0...v0.19.0](https://github.com/orbcorp/orb-java/compare/v0.18.0...v0.19.0)
+
+### Features
+
+* **api:** api update ([#180](https://github.com/orbcorp/orb-java/issues/180)) ([4aa16b5](https://github.com/orbcorp/orb-java/commit/4aa16b536e853fd276832e491ad9b9ad94b42cf1))
+* **client:** allow passing null or optional for nullable fields ([#179](https://github.com/orbcorp/orb-java/issues/179)) ([1797a16](https://github.com/orbcorp/orb-java/commit/1797a16f486fefa201684321d07897d5b5b0937e))
+
+
+### Styles
+
+* **internal:** sort fields ([#177](https://github.com/orbcorp/orb-java/issues/177)) ([3313c08](https://github.com/orbcorp/orb-java/commit/3313c085e6c200cae6212b783d92ae731cbc786d))
+
 ## 0.18.0 (2025-01-06)
 
 Full Changelog: [v0.17.0...v0.18.0](https://github.com/orbcorp/orb-java/compare/v0.17.0...v0.18.0)
