@@ -402,34 +402,20 @@ constructor(
     class Add
     @JsonCreator
     private constructor(
-        @JsonProperty("price_id") private val priceId: String?,
-        @JsonProperty("external_price_id") private val externalPriceId: String?,
-        @JsonProperty("price") private val price: Price?,
-        @JsonProperty("allocation_price") private val allocationPrice: AllocationPrice?,
         @JsonProperty("start_date") private val startDate: StartDate,
+        @JsonProperty("allocation_price") private val allocationPrice: AllocationPrice?,
+        @JsonProperty("discounts") private val discounts: List<Discount>?,
         @JsonProperty("end_date") private val endDate: EndDate?,
+        @JsonProperty("external_price_id") private val externalPriceId: String?,
         @JsonProperty("fixed_fee_quantity_transitions")
         private val fixedFeeQuantityTransitions: List<FixedFeeQuantityTransition>?,
-        @JsonProperty("discounts") private val discounts: List<Discount>?,
-        @JsonProperty("minimum_amount") private val minimumAmount: Double?,
         @JsonProperty("maximum_amount") private val maximumAmount: Double?,
+        @JsonProperty("minimum_amount") private val minimumAmount: Double?,
+        @JsonProperty("price") private val price: Price?,
+        @JsonProperty("price_id") private val priceId: String?,
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
-
-        /** The id of the price to add to the subscription. */
-        @JsonProperty("price_id") fun priceId(): Optional<String> = Optional.ofNullable(priceId)
-
-        /** The external price id of the price to add to the subscription. */
-        @JsonProperty("external_price_id")
-        fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
-
-        /** The definition of a new price to create and add to the subscription. */
-        @JsonProperty("price") fun price(): Optional<Price> = Optional.ofNullable(price)
-
-        /** The definition of a new allocation price to create and add to the subscription. */
-        @JsonProperty("allocation_price")
-        fun allocationPrice(): Optional<AllocationPrice> = Optional.ofNullable(allocationPrice)
 
         /**
          * The start date of the price interval. This is the date that the price will start billing
@@ -437,20 +423,35 @@ constructor(
          */
         @JsonProperty("start_date") fun startDate(): StartDate = startDate
 
+        /** The definition of a new allocation price to create and add to the subscription. */
+        @JsonProperty("allocation_price")
+        fun allocationPrice(): Optional<AllocationPrice> = Optional.ofNullable(allocationPrice)
+
+        /** A list of discounts to initialize on the price interval. */
+        @JsonProperty("discounts")
+        fun discounts(): Optional<List<Discount>> = Optional.ofNullable(discounts)
+
         /**
          * The end date of the price interval. This is the date that the price will stop billing on
          * the subscription.
          */
         @JsonProperty("end_date") fun endDate(): Optional<EndDate> = Optional.ofNullable(endDate)
 
+        /** The external price id of the price to add to the subscription. */
+        @JsonProperty("external_price_id")
+        fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
+
         /** A list of fixed fee quantity transitions to initialize on the price interval. */
         @JsonProperty("fixed_fee_quantity_transitions")
         fun fixedFeeQuantityTransitions(): Optional<List<FixedFeeQuantityTransition>> =
             Optional.ofNullable(fixedFeeQuantityTransitions)
 
-        /** A list of discounts to initialize on the price interval. */
-        @JsonProperty("discounts")
-        fun discounts(): Optional<List<Discount>> = Optional.ofNullable(discounts)
+        /**
+         * The maximum amount that will be billed for this price interval for a given billing
+         * period.
+         */
+        @JsonProperty("maximum_amount")
+        fun maximumAmount(): Optional<Double> = Optional.ofNullable(maximumAmount)
 
         /**
          * The minimum amount that will be billed for this price interval for a given billing
@@ -459,12 +460,11 @@ constructor(
         @JsonProperty("minimum_amount")
         fun minimumAmount(): Optional<Double> = Optional.ofNullable(minimumAmount)
 
-        /**
-         * The maximum amount that will be billed for this price interval for a given billing
-         * period.
-         */
-        @JsonProperty("maximum_amount")
-        fun maximumAmount(): Optional<Double> = Optional.ofNullable(maximumAmount)
+        /** The definition of a new price to create and add to the subscription. */
+        @JsonProperty("price") fun price(): Optional<Price> = Optional.ofNullable(price)
+
+        /** The id of the price to add to the subscription. */
+        @JsonProperty("price_id") fun priceId(): Optional<String> = Optional.ofNullable(priceId)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -479,40 +479,109 @@ constructor(
 
         class Builder {
 
-            private var priceId: String? = null
-            private var externalPriceId: String? = null
-            private var price: Price? = null
-            private var allocationPrice: AllocationPrice? = null
             private var startDate: StartDate? = null
-            private var endDate: EndDate? = null
-            private var fixedFeeQuantityTransitions: MutableList<FixedFeeQuantityTransition>? = null
+            private var allocationPrice: AllocationPrice? = null
             private var discounts: MutableList<Discount>? = null
-            private var minimumAmount: Double? = null
+            private var endDate: EndDate? = null
+            private var externalPriceId: String? = null
+            private var fixedFeeQuantityTransitions: MutableList<FixedFeeQuantityTransition>? = null
             private var maximumAmount: Double? = null
+            private var minimumAmount: Double? = null
+            private var price: Price? = null
+            private var priceId: String? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(add: Add) = apply {
-                priceId = add.priceId
-                externalPriceId = add.externalPriceId
-                price = add.price
-                allocationPrice = add.allocationPrice
                 startDate = add.startDate
-                endDate = add.endDate
-                fixedFeeQuantityTransitions = add.fixedFeeQuantityTransitions?.toMutableList()
+                allocationPrice = add.allocationPrice
                 discounts = add.discounts?.toMutableList()
-                minimumAmount = add.minimumAmount
+                endDate = add.endDate
+                externalPriceId = add.externalPriceId
+                fixedFeeQuantityTransitions = add.fixedFeeQuantityTransitions?.toMutableList()
                 maximumAmount = add.maximumAmount
+                minimumAmount = add.minimumAmount
+                price = add.price
+                priceId = add.priceId
                 additionalProperties = add.additionalProperties.toMutableMap()
             }
 
-            /** The id of the price to add to the subscription. */
-            fun priceId(priceId: String) = apply { this.priceId = priceId }
+            /**
+             * The start date of the price interval. This is the date that the price will start
+             * billing on the subscription.
+             */
+            fun startDate(startDate: StartDate) = apply { this.startDate = startDate }
+
+            fun startDate(dateTime: OffsetDateTime) = apply {
+                this.startDate = StartDate.ofDateTime(dateTime)
+            }
+
+            fun startDate(billingCycleRelativeDate: BillingCycleRelativeDate) = apply {
+                this.startDate = StartDate.ofBillingCycleRelativeDate(billingCycleRelativeDate)
+            }
+
+            /** The definition of a new allocation price to create and add to the subscription. */
+            fun allocationPrice(allocationPrice: AllocationPrice) = apply {
+                this.allocationPrice = allocationPrice
+            }
+
+            /** A list of discounts to initialize on the price interval. */
+            fun discounts(discounts: List<Discount>) = apply {
+                this.discounts = discounts.toMutableList()
+            }
+
+            /** A list of discounts to initialize on the price interval. */
+            fun addDiscount(discount: Discount) = apply {
+                discounts = (discounts ?: mutableListOf()).apply { add(discount) }
+            }
+
+            /**
+             * The end date of the price interval. This is the date that the price will stop billing
+             * on the subscription.
+             */
+            fun endDate(endDate: EndDate) = apply { this.endDate = endDate }
+
+            fun endDate(dateTime: OffsetDateTime) = apply {
+                this.endDate = EndDate.ofDateTime(dateTime)
+            }
+
+            fun endDate(billingCycleRelativeDate: BillingCycleRelativeDate) = apply {
+                this.endDate = EndDate.ofBillingCycleRelativeDate(billingCycleRelativeDate)
+            }
 
             /** The external price id of the price to add to the subscription. */
             fun externalPriceId(externalPriceId: String) = apply {
                 this.externalPriceId = externalPriceId
             }
+
+            /** A list of fixed fee quantity transitions to initialize on the price interval. */
+            fun fixedFeeQuantityTransitions(
+                fixedFeeQuantityTransitions: List<FixedFeeQuantityTransition>
+            ) = apply {
+                this.fixedFeeQuantityTransitions = fixedFeeQuantityTransitions.toMutableList()
+            }
+
+            /** A list of fixed fee quantity transitions to initialize on the price interval. */
+            fun addFixedFeeQuantityTransition(
+                fixedFeeQuantityTransition: FixedFeeQuantityTransition
+            ) = apply {
+                fixedFeeQuantityTransitions =
+                    (fixedFeeQuantityTransitions ?: mutableListOf()).apply {
+                        add(fixedFeeQuantityTransition)
+                    }
+            }
+
+            /**
+             * The maximum amount that will be billed for this price interval for a given billing
+             * period.
+             */
+            fun maximumAmount(maximumAmount: Double) = apply { this.maximumAmount = maximumAmount }
+
+            /**
+             * The minimum amount that will be billed for this price interval for a given billing
+             * period.
+             */
+            fun minimumAmount(minimumAmount: Double) = apply { this.minimumAmount = minimumAmount }
 
             /** The definition of a new price to create and add to the subscription. */
             fun price(price: Price) = apply { this.price = price }
@@ -669,77 +738,8 @@ constructor(
                     )
             }
 
-            /** The definition of a new allocation price to create and add to the subscription. */
-            fun allocationPrice(allocationPrice: AllocationPrice) = apply {
-                this.allocationPrice = allocationPrice
-            }
-
-            /**
-             * The start date of the price interval. This is the date that the price will start
-             * billing on the subscription.
-             */
-            fun startDate(startDate: StartDate) = apply { this.startDate = startDate }
-
-            fun startDate(dateTime: OffsetDateTime) = apply {
-                this.startDate = StartDate.ofDateTime(dateTime)
-            }
-
-            fun startDate(billingCycleRelativeDate: BillingCycleRelativeDate) = apply {
-                this.startDate = StartDate.ofBillingCycleRelativeDate(billingCycleRelativeDate)
-            }
-
-            /**
-             * The end date of the price interval. This is the date that the price will stop billing
-             * on the subscription.
-             */
-            fun endDate(endDate: EndDate) = apply { this.endDate = endDate }
-
-            fun endDate(dateTime: OffsetDateTime) = apply {
-                this.endDate = EndDate.ofDateTime(dateTime)
-            }
-
-            fun endDate(billingCycleRelativeDate: BillingCycleRelativeDate) = apply {
-                this.endDate = EndDate.ofBillingCycleRelativeDate(billingCycleRelativeDate)
-            }
-
-            /** A list of fixed fee quantity transitions to initialize on the price interval. */
-            fun fixedFeeQuantityTransitions(
-                fixedFeeQuantityTransitions: List<FixedFeeQuantityTransition>
-            ) = apply {
-                this.fixedFeeQuantityTransitions = fixedFeeQuantityTransitions.toMutableList()
-            }
-
-            /** A list of fixed fee quantity transitions to initialize on the price interval. */
-            fun addFixedFeeQuantityTransition(
-                fixedFeeQuantityTransition: FixedFeeQuantityTransition
-            ) = apply {
-                fixedFeeQuantityTransitions =
-                    (fixedFeeQuantityTransitions ?: mutableListOf()).apply {
-                        add(fixedFeeQuantityTransition)
-                    }
-            }
-
-            /** A list of discounts to initialize on the price interval. */
-            fun discounts(discounts: List<Discount>) = apply {
-                this.discounts = discounts.toMutableList()
-            }
-
-            /** A list of discounts to initialize on the price interval. */
-            fun addDiscount(discount: Discount) = apply {
-                discounts = (discounts ?: mutableListOf()).apply { add(discount) }
-            }
-
-            /**
-             * The minimum amount that will be billed for this price interval for a given billing
-             * period.
-             */
-            fun minimumAmount(minimumAmount: Double) = apply { this.minimumAmount = minimumAmount }
-
-            /**
-             * The maximum amount that will be billed for this price interval for a given billing
-             * period.
-             */
-            fun maximumAmount(maximumAmount: Double) = apply { this.maximumAmount = maximumAmount }
+            /** The id of the price to add to the subscription. */
+            fun priceId(priceId: String) = apply { this.priceId = priceId }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -762,16 +762,16 @@ constructor(
 
             fun build(): Add =
                 Add(
-                    priceId,
-                    externalPriceId,
-                    price,
-                    allocationPrice,
                     checkNotNull(startDate) { "`startDate` is required but was not set" },
-                    endDate,
-                    fixedFeeQuantityTransitions?.toImmutable(),
+                    allocationPrice,
                     discounts?.toImmutable(),
-                    minimumAmount,
+                    endDate,
+                    externalPriceId,
+                    fixedFeeQuantityTransitions?.toImmutable(),
                     maximumAmount,
+                    minimumAmount,
+                    price,
+                    priceId,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -894,25 +894,25 @@ constructor(
         class AllocationPrice
         @JsonCreator
         private constructor(
-            @JsonProperty("currency") private val currency: String,
             @JsonProperty("amount") private val amount: String,
             @JsonProperty("cadence") private val cadence: Cadence,
+            @JsonProperty("currency") private val currency: String,
             @JsonProperty("expires_at_end_of_cadence") private val expiresAtEndOfCadence: Boolean,
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
-
-            /**
-             * An ISO 4217 currency string or a custom pricing unit identifier in which to bill this
-             * price.
-             */
-            @JsonProperty("currency") fun currency(): String = currency
 
             /** An amount of the currency to allocate to the customer at the specified cadence. */
             @JsonProperty("amount") fun amount(): String = amount
 
             /** The cadence at which to allocate the amount to the customer. */
             @JsonProperty("cadence") fun cadence(): Cadence = cadence
+
+            /**
+             * An ISO 4217 currency string or a custom pricing unit identifier in which to bill this
+             * price.
+             */
+            @JsonProperty("currency") fun currency(): String = currency
 
             /**
              * Whether the allocated amount should expire at the end of the cadence or roll over to
@@ -934,26 +934,20 @@ constructor(
 
             class Builder {
 
-                private var currency: String? = null
                 private var amount: String? = null
                 private var cadence: Cadence? = null
+                private var currency: String? = null
                 private var expiresAtEndOfCadence: Boolean? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(allocationPrice: AllocationPrice) = apply {
-                    currency = allocationPrice.currency
                     amount = allocationPrice.amount
                     cadence = allocationPrice.cadence
+                    currency = allocationPrice.currency
                     expiresAtEndOfCadence = allocationPrice.expiresAtEndOfCadence
                     additionalProperties = allocationPrice.additionalProperties.toMutableMap()
                 }
-
-                /**
-                 * An ISO 4217 currency string or a custom pricing unit identifier in which to bill
-                 * this price.
-                 */
-                fun currency(currency: String) = apply { this.currency = currency }
 
                 /**
                  * An amount of the currency to allocate to the customer at the specified cadence.
@@ -962,6 +956,12 @@ constructor(
 
                 /** The cadence at which to allocate the amount to the customer. */
                 fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
+
+                /**
+                 * An ISO 4217 currency string or a custom pricing unit identifier in which to bill
+                 * this price.
+                 */
+                fun currency(currency: String) = apply { this.currency = currency }
 
                 /**
                  * Whether the allocated amount should expire at the end of the cadence or roll over
@@ -995,9 +995,9 @@ constructor(
 
                 fun build(): AllocationPrice =
                     AllocationPrice(
-                        checkNotNull(currency) { "`currency` is required but was not set" },
                         checkNotNull(amount) { "`amount` is required but was not set" },
                         checkNotNull(cadence) { "`cadence` is required but was not set" },
+                        checkNotNull(currency) { "`currency` is required but was not set" },
                         checkNotNull(expiresAtEndOfCadence) {
                             "`expiresAtEndOfCadence` is required but was not set"
                         },
@@ -1091,17 +1091,17 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is AllocationPrice && currency == other.currency && amount == other.amount && cadence == other.cadence && expiresAtEndOfCadence == other.expiresAtEndOfCadence && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is AllocationPrice && amount == other.amount && cadence == other.cadence && currency == other.currency && expiresAtEndOfCadence == other.expiresAtEndOfCadence && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(currency, amount, cadence, expiresAtEndOfCadence, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(amount, cadence, currency, expiresAtEndOfCadence, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "AllocationPrice{currency=$currency, amount=$amount, cadence=$cadence, expiresAtEndOfCadence=$expiresAtEndOfCadence, additionalProperties=$additionalProperties}"
+                "AllocationPrice{amount=$amount, cadence=$cadence, currency=$currency, expiresAtEndOfCadence=$expiresAtEndOfCadence, additionalProperties=$additionalProperties}"
         }
 
         @JsonDeserialize(using = Discount.Deserializer::class)
@@ -1273,16 +1273,16 @@ constructor(
             class AmountDiscountCreationParams
             @JsonCreator
             private constructor(
-                @JsonProperty("discount_type") private val discountType: DiscountType,
                 @JsonProperty("amount_discount") private val amountDiscount: Double,
+                @JsonProperty("discount_type") private val discountType: DiscountType,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                @JsonProperty("discount_type") fun discountType(): DiscountType = discountType
-
                 /** Only available if discount_type is `amount`. */
                 @JsonProperty("amount_discount") fun amountDiscount(): Double = amountDiscount
+
+                @JsonProperty("discount_type") fun discountType(): DiscountType = discountType
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -1297,26 +1297,26 @@ constructor(
 
                 class Builder {
 
-                    private var discountType: DiscountType? = null
                     private var amountDiscount: Double? = null
+                    private var discountType: DiscountType? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(amountDiscountCreationParams: AmountDiscountCreationParams) =
                         apply {
-                            discountType = amountDiscountCreationParams.discountType
                             amountDiscount = amountDiscountCreationParams.amountDiscount
+                            discountType = amountDiscountCreationParams.discountType
                             additionalProperties =
                                 amountDiscountCreationParams.additionalProperties.toMutableMap()
                         }
 
-                    fun discountType(discountType: DiscountType) = apply {
-                        this.discountType = discountType
-                    }
-
                     /** Only available if discount_type is `amount`. */
                     fun amountDiscount(amountDiscount: Double) = apply {
                         this.amountDiscount = amountDiscount
+                    }
+
+                    fun discountType(discountType: DiscountType) = apply {
+                        this.discountType = discountType
                     }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -1343,11 +1343,11 @@ constructor(
 
                     fun build(): AmountDiscountCreationParams =
                         AmountDiscountCreationParams(
-                            checkNotNull(discountType) {
-                                "`discountType` is required but was not set"
-                            },
                             checkNotNull(amountDiscount) {
                                 "`amountDiscount` is required but was not set"
+                            },
+                            checkNotNull(discountType) {
+                                "`discountType` is required but was not set"
                             },
                             additionalProperties.toImmutable(),
                         )
@@ -1410,17 +1410,17 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is AmountDiscountCreationParams && discountType == other.discountType && amountDiscount == other.amountDiscount && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is AmountDiscountCreationParams && amountDiscount == other.amountDiscount && discountType == other.discountType && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(discountType, amountDiscount, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(amountDiscount, discountType, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "AmountDiscountCreationParams{discountType=$discountType, amountDiscount=$amountDiscount, additionalProperties=$additionalProperties}"
+                    "AmountDiscountCreationParams{amountDiscount=$amountDiscount, discountType=$discountType, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
@@ -1863,17 +1863,17 @@ constructor(
         class FixedFeeQuantityTransition
         @JsonCreator
         private constructor(
-            @JsonProperty("quantity") private val quantity: Long,
             @JsonProperty("effective_date") private val effectiveDate: OffsetDateTime,
+            @JsonProperty("quantity") private val quantity: Long,
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            /** The quantity of the fixed fee quantity transition. */
-            @JsonProperty("quantity") fun quantity(): Long = quantity
-
             /** The date that the fixed fee quantity transition should take effect. */
             @JsonProperty("effective_date") fun effectiveDate(): OffsetDateTime = effectiveDate
+
+            /** The quantity of the fixed fee quantity transition. */
+            @JsonProperty("quantity") fun quantity(): Long = quantity
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -1888,25 +1888,25 @@ constructor(
 
             class Builder {
 
-                private var quantity: Long? = null
                 private var effectiveDate: OffsetDateTime? = null
+                private var quantity: Long? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(fixedFeeQuantityTransition: FixedFeeQuantityTransition) = apply {
-                    quantity = fixedFeeQuantityTransition.quantity
                     effectiveDate = fixedFeeQuantityTransition.effectiveDate
+                    quantity = fixedFeeQuantityTransition.quantity
                     additionalProperties =
                         fixedFeeQuantityTransition.additionalProperties.toMutableMap()
                 }
-
-                /** The quantity of the fixed fee quantity transition. */
-                fun quantity(quantity: Long) = apply { this.quantity = quantity }
 
                 /** The date that the fixed fee quantity transition should take effect. */
                 fun effectiveDate(effectiveDate: OffsetDateTime) = apply {
                     this.effectiveDate = effectiveDate
                 }
+
+                /** The quantity of the fixed fee quantity transition. */
+                fun quantity(quantity: Long) = apply { this.quantity = quantity }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -1932,10 +1932,10 @@ constructor(
 
                 fun build(): FixedFeeQuantityTransition =
                     FixedFeeQuantityTransition(
-                        checkNotNull(quantity) { "`quantity` is required but was not set" },
                         checkNotNull(effectiveDate) {
                             "`effectiveDate` is required but was not set"
                         },
+                        checkNotNull(quantity) { "`quantity` is required but was not set" },
                         additionalProperties.toImmutable(),
                     )
             }
@@ -1945,17 +1945,17 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is FixedFeeQuantityTransition && quantity == other.quantity && effectiveDate == other.effectiveDate && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is FixedFeeQuantityTransition && effectiveDate == other.effectiveDate && quantity == other.quantity && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(quantity, effectiveDate, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(effectiveDate, quantity, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "FixedFeeQuantityTransition{quantity=$quantity, effectiveDate=$effectiveDate, additionalProperties=$additionalProperties}"
+                "FixedFeeQuantityTransition{effectiveDate=$effectiveDate, quantity=$quantity, additionalProperties=$additionalProperties}"
         }
 
         /** The definition of a new price to create and add to the subscription. */
@@ -2932,41 +2932,42 @@ constructor(
             class NewFloatingUnitPrice
             @JsonCreator
             private constructor(
-                @JsonProperty("metadata") private val metadata: Metadata?,
-                @JsonProperty("external_price_id") private val externalPriceId: String?,
-                @JsonProperty("name") private val name: String,
-                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
-                @JsonProperty("item_id") private val itemId: String,
-                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
-                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
-                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
                 @JsonProperty("cadence") private val cadence: Cadence,
+                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("item_id") private val itemId: String,
+                @JsonProperty("model_type") private val modelType: ModelType,
+                @JsonProperty("name") private val name: String,
+                @JsonProperty("unit_config") private val unitConfig: UnitConfig,
+                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
+                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
                 @JsonProperty("billing_cycle_configuration")
                 private val billingCycleConfiguration: BillingCycleConfiguration?,
+                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
+                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
                 @JsonProperty("invoicing_cycle_configuration")
                 private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
-                @JsonProperty("conversion_rate") private val conversionRate: Double?,
-                @JsonProperty("model_type") private val modelType: ModelType,
-                @JsonProperty("unit_config") private val unitConfig: UnitConfig,
-                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("metadata") private val metadata: Metadata?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /**
-                 * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
-                 * setting `metadata` to `null`.
-                 */
-                @JsonProperty("metadata")
-                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+                /** The cadence to bill for this price on. */
+                @JsonProperty("cadence") fun cadence(): Cadence = cadence
 
-                /** An alias for the price. */
-                @JsonProperty("external_price_id")
-                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
+                /** An ISO 4217 currency string for which this price is billed in. */
+                @JsonProperty("currency") fun currency(): String = currency
+
+                /** The id of the item the plan will be associated with. */
+                @JsonProperty("item_id") fun itemId(): String = itemId
+
+                @JsonProperty("model_type") fun modelType(): ModelType = modelType
 
                 /** The name of the price. */
                 @JsonProperty("name") fun name(): String = name
+
+                @JsonProperty("unit_config") fun unitConfig(): UnitConfig = unitConfig
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -2975,15 +2976,28 @@ constructor(
                 @JsonProperty("billable_metric_id")
                 fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
-                /** The id of the item the plan will be associated with. */
-                @JsonProperty("item_id") fun itemId(): String = itemId
-
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance)
+
+                /**
+                 * For custom cadence: specifies the duration of the billing period in days or
+                 * months.
+                 */
+                @JsonProperty("billing_cycle_configuration")
+                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+                    Optional.ofNullable(billingCycleConfiguration)
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
+
+                /** An alias for the price. */
+                @JsonProperty("external_price_id")
+                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -2996,17 +3010,6 @@ constructor(
                 @JsonProperty("invoice_grouping_key")
                 fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey)
 
-                /** The cadence to bill for this price on. */
-                @JsonProperty("cadence") fun cadence(): Cadence = cadence
-
-                /**
-                 * For custom cadence: specifies the duration of the billing period in days or
-                 * months.
-                 */
-                @JsonProperty("billing_cycle_configuration")
-                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(billingCycleConfiguration)
-
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
                  * If unspecified, a single invoice is produced per billing cycle.
@@ -3015,16 +3018,13 @@ constructor(
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
                     Optional.ofNullable(invoicingCycleConfiguration)
 
-                /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @JsonProperty("conversion_rate")
-                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
-
-                @JsonProperty("model_type") fun modelType(): ModelType = modelType
-
-                @JsonProperty("unit_config") fun unitConfig(): UnitConfig = unitConfig
-
-                /** An ISO 4217 currency string for which this price is billed in. */
-                @JsonProperty("currency") fun currency(): String = currency
+                /**
+                 * User-specified key/value pairs for the resource. Individual keys can be removed
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
+                 */
+                @JsonProperty("metadata")
+                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -3039,59 +3039,60 @@ constructor(
 
                 class Builder {
 
-                    private var metadata: Metadata? = null
-                    private var externalPriceId: String? = null
-                    private var name: String? = null
-                    private var billableMetricId: String? = null
+                    private var cadence: Cadence? = null
+                    private var currency: String? = null
                     private var itemId: String? = null
+                    private var modelType: ModelType? = null
+                    private var name: String? = null
+                    private var unitConfig: UnitConfig? = null
+                    private var billableMetricId: String? = null
                     private var billedInAdvance: Boolean? = null
+                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
+                    private var conversionRate: Double? = null
+                    private var externalPriceId: String? = null
                     private var fixedPriceQuantity: Double? = null
                     private var invoiceGroupingKey: String? = null
-                    private var cadence: Cadence? = null
-                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
                     private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
-                    private var conversionRate: Double? = null
-                    private var modelType: ModelType? = null
-                    private var unitConfig: UnitConfig? = null
-                    private var currency: String? = null
+                    private var metadata: Metadata? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(newFloatingUnitPrice: NewFloatingUnitPrice) = apply {
-                        metadata = newFloatingUnitPrice.metadata
-                        externalPriceId = newFloatingUnitPrice.externalPriceId
-                        name = newFloatingUnitPrice.name
-                        billableMetricId = newFloatingUnitPrice.billableMetricId
+                        cadence = newFloatingUnitPrice.cadence
+                        currency = newFloatingUnitPrice.currency
                         itemId = newFloatingUnitPrice.itemId
+                        modelType = newFloatingUnitPrice.modelType
+                        name = newFloatingUnitPrice.name
+                        unitConfig = newFloatingUnitPrice.unitConfig
+                        billableMetricId = newFloatingUnitPrice.billableMetricId
                         billedInAdvance = newFloatingUnitPrice.billedInAdvance
+                        billingCycleConfiguration = newFloatingUnitPrice.billingCycleConfiguration
+                        conversionRate = newFloatingUnitPrice.conversionRate
+                        externalPriceId = newFloatingUnitPrice.externalPriceId
                         fixedPriceQuantity = newFloatingUnitPrice.fixedPriceQuantity
                         invoiceGroupingKey = newFloatingUnitPrice.invoiceGroupingKey
-                        cadence = newFloatingUnitPrice.cadence
-                        billingCycleConfiguration = newFloatingUnitPrice.billingCycleConfiguration
                         invoicingCycleConfiguration =
                             newFloatingUnitPrice.invoicingCycleConfiguration
-                        conversionRate = newFloatingUnitPrice.conversionRate
-                        modelType = newFloatingUnitPrice.modelType
-                        unitConfig = newFloatingUnitPrice.unitConfig
-                        currency = newFloatingUnitPrice.currency
+                        metadata = newFloatingUnitPrice.metadata
                         additionalProperties =
                             newFloatingUnitPrice.additionalProperties.toMutableMap()
                     }
 
-                    /**
-                     * User-specified key/value pairs for the resource. Individual keys can be
-                     * removed by setting the value to `null`, and the entire metadata mapping can
-                     * be cleared by setting `metadata` to `null`.
-                     */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    /** The cadence to bill for this price on. */
+                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
-                    /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
-                        this.externalPriceId = externalPriceId
-                    }
+                    /** An ISO 4217 currency string for which this price is billed in. */
+                    fun currency(currency: String) = apply { this.currency = currency }
+
+                    /** The id of the item the plan will be associated with. */
+                    fun itemId(itemId: String) = apply { this.itemId = itemId }
+
+                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
 
                     /** The name of the price. */
                     fun name(name: String) = apply { this.name = name }
+
+                    fun unitConfig(unitConfig: UnitConfig) = apply { this.unitConfig = unitConfig }
 
                     /**
                      * The id of the billable metric for the price. Only needed if the price is
@@ -3101,15 +3102,32 @@ constructor(
                         this.billableMetricId = billableMetricId
                     }
 
-                    /** The id of the item the plan will be associated with. */
-                    fun itemId(itemId: String) = apply { this.itemId = itemId }
-
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
                     fun billedInAdvance(billedInAdvance: Boolean) = apply {
                         this.billedInAdvance = billedInAdvance
+                    }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: BillingCycleConfiguration
+                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) = apply {
+                        this.conversionRate = conversionRate
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: String) = apply {
+                        this.externalPriceId = externalPriceId
                     }
 
                     /**
@@ -3125,17 +3143,6 @@ constructor(
                         this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
-                    /** The cadence to bill for this price on. */
-                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
-
-                    /**
-                     * For custom cadence: specifies the duration of the billing period in days or
-                     * months.
-                     */
-                    fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
-                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
-
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
@@ -3145,18 +3152,11 @@ constructor(
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
 
                     /**
-                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
-                        this.conversionRate = conversionRate
-                    }
-
-                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
-
-                    fun unitConfig(unitConfig: UnitConfig) = apply { this.unitConfig = unitConfig }
-
-                    /** An ISO 4217 currency string for which this price is billed in. */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -3182,21 +3182,21 @@ constructor(
 
                     fun build(): NewFloatingUnitPrice =
                         NewFloatingUnitPrice(
-                            metadata,
-                            externalPriceId,
-                            checkNotNull(name) { "`name` is required but was not set" },
-                            billableMetricId,
+                            checkNotNull(cadence) { "`cadence` is required but was not set" },
+                            checkNotNull(currency) { "`currency` is required but was not set" },
                             checkNotNull(itemId) { "`itemId` is required but was not set" },
+                            checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(name) { "`name` is required but was not set" },
+                            checkNotNull(unitConfig) { "`unitConfig` is required but was not set" },
+                            billableMetricId,
                             billedInAdvance,
+                            billingCycleConfiguration,
+                            conversionRate,
+                            externalPriceId,
                             fixedPriceQuantity,
                             invoiceGroupingKey,
-                            checkNotNull(cadence) { "`cadence` is required but was not set" },
-                            billingCycleConfiguration,
                             invoicingCycleConfiguration,
-                            conversionRate,
-                            checkNotNull(modelType) { "`modelType` is required but was not set" },
-                            checkNotNull(unitConfig) { "`unitConfig` is required but was not set" },
-                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            metadata,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -3832,58 +3832,59 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewFloatingUnitPrice && metadata == other.metadata && externalPriceId == other.externalPriceId && name == other.name && billableMetricId == other.billableMetricId && itemId == other.itemId && billedInAdvance == other.billedInAdvance && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && cadence == other.cadence && billingCycleConfiguration == other.billingCycleConfiguration && invoicingCycleConfiguration == other.invoicingCycleConfiguration && conversionRate == other.conversionRate && modelType == other.modelType && unitConfig == other.unitConfig && currency == other.currency && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewFloatingUnitPrice && cadence == other.cadence && currency == other.currency && itemId == other.itemId && modelType == other.modelType && name == other.name && unitConfig == other.unitConfig && billableMetricId == other.billableMetricId && billedInAdvance == other.billedInAdvance && billingCycleConfiguration == other.billingCycleConfiguration && conversionRate == other.conversionRate && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && invoicingCycleConfiguration == other.invoicingCycleConfiguration && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(metadata, externalPriceId, name, billableMetricId, itemId, billedInAdvance, fixedPriceQuantity, invoiceGroupingKey, cadence, billingCycleConfiguration, invoicingCycleConfiguration, conversionRate, modelType, unitConfig, currency, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(cadence, currency, itemId, modelType, name, unitConfig, billableMetricId, billedInAdvance, billingCycleConfiguration, conversionRate, externalPriceId, fixedPriceQuantity, invoiceGroupingKey, invoicingCycleConfiguration, metadata, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewFloatingUnitPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, unitConfig=$unitConfig, currency=$currency, additionalProperties=$additionalProperties}"
+                    "NewFloatingUnitPrice{cadence=$cadence, currency=$currency, itemId=$itemId, modelType=$modelType, name=$name, unitConfig=$unitConfig, billableMetricId=$billableMetricId, billedInAdvance=$billedInAdvance, billingCycleConfiguration=$billingCycleConfiguration, conversionRate=$conversionRate, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, invoicingCycleConfiguration=$invoicingCycleConfiguration, metadata=$metadata, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class NewFloatingPackagePrice
             @JsonCreator
             private constructor(
-                @JsonProperty("metadata") private val metadata: Metadata?,
-                @JsonProperty("external_price_id") private val externalPriceId: String?,
-                @JsonProperty("name") private val name: String,
-                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
-                @JsonProperty("item_id") private val itemId: String,
-                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
-                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
-                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
                 @JsonProperty("cadence") private val cadence: Cadence,
+                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("item_id") private val itemId: String,
+                @JsonProperty("model_type") private val modelType: ModelType,
+                @JsonProperty("name") private val name: String,
+                @JsonProperty("package_config") private val packageConfig: PackageConfig,
+                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
+                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
                 @JsonProperty("billing_cycle_configuration")
                 private val billingCycleConfiguration: BillingCycleConfiguration?,
+                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
+                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
                 @JsonProperty("invoicing_cycle_configuration")
                 private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
-                @JsonProperty("conversion_rate") private val conversionRate: Double?,
-                @JsonProperty("model_type") private val modelType: ModelType,
-                @JsonProperty("package_config") private val packageConfig: PackageConfig,
-                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("metadata") private val metadata: Metadata?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /**
-                 * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
-                 * setting `metadata` to `null`.
-                 */
-                @JsonProperty("metadata")
-                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+                /** The cadence to bill for this price on. */
+                @JsonProperty("cadence") fun cadence(): Cadence = cadence
 
-                /** An alias for the price. */
-                @JsonProperty("external_price_id")
-                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
+                /** An ISO 4217 currency string for which this price is billed in. */
+                @JsonProperty("currency") fun currency(): String = currency
+
+                /** The id of the item the plan will be associated with. */
+                @JsonProperty("item_id") fun itemId(): String = itemId
+
+                @JsonProperty("model_type") fun modelType(): ModelType = modelType
 
                 /** The name of the price. */
                 @JsonProperty("name") fun name(): String = name
+
+                @JsonProperty("package_config") fun packageConfig(): PackageConfig = packageConfig
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -3892,15 +3893,28 @@ constructor(
                 @JsonProperty("billable_metric_id")
                 fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
-                /** The id of the item the plan will be associated with. */
-                @JsonProperty("item_id") fun itemId(): String = itemId
-
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance)
+
+                /**
+                 * For custom cadence: specifies the duration of the billing period in days or
+                 * months.
+                 */
+                @JsonProperty("billing_cycle_configuration")
+                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+                    Optional.ofNullable(billingCycleConfiguration)
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
+
+                /** An alias for the price. */
+                @JsonProperty("external_price_id")
+                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -3913,17 +3927,6 @@ constructor(
                 @JsonProperty("invoice_grouping_key")
                 fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey)
 
-                /** The cadence to bill for this price on. */
-                @JsonProperty("cadence") fun cadence(): Cadence = cadence
-
-                /**
-                 * For custom cadence: specifies the duration of the billing period in days or
-                 * months.
-                 */
-                @JsonProperty("billing_cycle_configuration")
-                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(billingCycleConfiguration)
-
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
                  * If unspecified, a single invoice is produced per billing cycle.
@@ -3932,16 +3935,13 @@ constructor(
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
                     Optional.ofNullable(invoicingCycleConfiguration)
 
-                /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @JsonProperty("conversion_rate")
-                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
-
-                @JsonProperty("model_type") fun modelType(): ModelType = modelType
-
-                @JsonProperty("package_config") fun packageConfig(): PackageConfig = packageConfig
-
-                /** An ISO 4217 currency string for which this price is billed in. */
-                @JsonProperty("currency") fun currency(): String = currency
+                /**
+                 * User-specified key/value pairs for the resource. Individual keys can be removed
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
+                 */
+                @JsonProperty("metadata")
+                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -3956,60 +3956,63 @@ constructor(
 
                 class Builder {
 
-                    private var metadata: Metadata? = null
-                    private var externalPriceId: String? = null
-                    private var name: String? = null
-                    private var billableMetricId: String? = null
+                    private var cadence: Cadence? = null
+                    private var currency: String? = null
                     private var itemId: String? = null
+                    private var modelType: ModelType? = null
+                    private var name: String? = null
+                    private var packageConfig: PackageConfig? = null
+                    private var billableMetricId: String? = null
                     private var billedInAdvance: Boolean? = null
+                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
+                    private var conversionRate: Double? = null
+                    private var externalPriceId: String? = null
                     private var fixedPriceQuantity: Double? = null
                     private var invoiceGroupingKey: String? = null
-                    private var cadence: Cadence? = null
-                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
                     private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
-                    private var conversionRate: Double? = null
-                    private var modelType: ModelType? = null
-                    private var packageConfig: PackageConfig? = null
-                    private var currency: String? = null
+                    private var metadata: Metadata? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(newFloatingPackagePrice: NewFloatingPackagePrice) = apply {
-                        metadata = newFloatingPackagePrice.metadata
-                        externalPriceId = newFloatingPackagePrice.externalPriceId
-                        name = newFloatingPackagePrice.name
-                        billableMetricId = newFloatingPackagePrice.billableMetricId
-                        itemId = newFloatingPackagePrice.itemId
-                        billedInAdvance = newFloatingPackagePrice.billedInAdvance
-                        fixedPriceQuantity = newFloatingPackagePrice.fixedPriceQuantity
-                        invoiceGroupingKey = newFloatingPackagePrice.invoiceGroupingKey
                         cadence = newFloatingPackagePrice.cadence
+                        currency = newFloatingPackagePrice.currency
+                        itemId = newFloatingPackagePrice.itemId
+                        modelType = newFloatingPackagePrice.modelType
+                        name = newFloatingPackagePrice.name
+                        packageConfig = newFloatingPackagePrice.packageConfig
+                        billableMetricId = newFloatingPackagePrice.billableMetricId
+                        billedInAdvance = newFloatingPackagePrice.billedInAdvance
                         billingCycleConfiguration =
                             newFloatingPackagePrice.billingCycleConfiguration
+                        conversionRate = newFloatingPackagePrice.conversionRate
+                        externalPriceId = newFloatingPackagePrice.externalPriceId
+                        fixedPriceQuantity = newFloatingPackagePrice.fixedPriceQuantity
+                        invoiceGroupingKey = newFloatingPackagePrice.invoiceGroupingKey
                         invoicingCycleConfiguration =
                             newFloatingPackagePrice.invoicingCycleConfiguration
-                        conversionRate = newFloatingPackagePrice.conversionRate
-                        modelType = newFloatingPackagePrice.modelType
-                        packageConfig = newFloatingPackagePrice.packageConfig
-                        currency = newFloatingPackagePrice.currency
+                        metadata = newFloatingPackagePrice.metadata
                         additionalProperties =
                             newFloatingPackagePrice.additionalProperties.toMutableMap()
                     }
 
-                    /**
-                     * User-specified key/value pairs for the resource. Individual keys can be
-                     * removed by setting the value to `null`, and the entire metadata mapping can
-                     * be cleared by setting `metadata` to `null`.
-                     */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    /** The cadence to bill for this price on. */
+                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
-                    /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
-                        this.externalPriceId = externalPriceId
-                    }
+                    /** An ISO 4217 currency string for which this price is billed in. */
+                    fun currency(currency: String) = apply { this.currency = currency }
+
+                    /** The id of the item the plan will be associated with. */
+                    fun itemId(itemId: String) = apply { this.itemId = itemId }
+
+                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
 
                     /** The name of the price. */
                     fun name(name: String) = apply { this.name = name }
+
+                    fun packageConfig(packageConfig: PackageConfig) = apply {
+                        this.packageConfig = packageConfig
+                    }
 
                     /**
                      * The id of the billable metric for the price. Only needed if the price is
@@ -4019,15 +4022,32 @@ constructor(
                         this.billableMetricId = billableMetricId
                     }
 
-                    /** The id of the item the plan will be associated with. */
-                    fun itemId(itemId: String) = apply { this.itemId = itemId }
-
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
                     fun billedInAdvance(billedInAdvance: Boolean) = apply {
                         this.billedInAdvance = billedInAdvance
+                    }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: BillingCycleConfiguration
+                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) = apply {
+                        this.conversionRate = conversionRate
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: String) = apply {
+                        this.externalPriceId = externalPriceId
                     }
 
                     /**
@@ -4043,17 +4063,6 @@ constructor(
                         this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
-                    /** The cadence to bill for this price on. */
-                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
-
-                    /**
-                     * For custom cadence: specifies the duration of the billing period in days or
-                     * months.
-                     */
-                    fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
-                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
-
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
@@ -4063,20 +4072,11 @@ constructor(
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
 
                     /**
-                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
-                        this.conversionRate = conversionRate
-                    }
-
-                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
-
-                    fun packageConfig(packageConfig: PackageConfig) = apply {
-                        this.packageConfig = packageConfig
-                    }
-
-                    /** An ISO 4217 currency string for which this price is billed in. */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -4102,23 +4102,23 @@ constructor(
 
                     fun build(): NewFloatingPackagePrice =
                         NewFloatingPackagePrice(
-                            metadata,
-                            externalPriceId,
-                            checkNotNull(name) { "`name` is required but was not set" },
-                            billableMetricId,
-                            checkNotNull(itemId) { "`itemId` is required but was not set" },
-                            billedInAdvance,
-                            fixedPriceQuantity,
-                            invoiceGroupingKey,
                             checkNotNull(cadence) { "`cadence` is required but was not set" },
-                            billingCycleConfiguration,
-                            invoicingCycleConfiguration,
-                            conversionRate,
+                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            checkNotNull(itemId) { "`itemId` is required but was not set" },
                             checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(name) { "`name` is required but was not set" },
                             checkNotNull(packageConfig) {
                                 "`packageConfig` is required but was not set"
                             },
-                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            billableMetricId,
+                            billedInAdvance,
+                            billingCycleConfiguration,
+                            conversionRate,
+                            externalPriceId,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            invoicingCycleConfiguration,
+                            metadata,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -4776,55 +4776,56 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewFloatingPackagePrice && metadata == other.metadata && externalPriceId == other.externalPriceId && name == other.name && billableMetricId == other.billableMetricId && itemId == other.itemId && billedInAdvance == other.billedInAdvance && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && cadence == other.cadence && billingCycleConfiguration == other.billingCycleConfiguration && invoicingCycleConfiguration == other.invoicingCycleConfiguration && conversionRate == other.conversionRate && modelType == other.modelType && packageConfig == other.packageConfig && currency == other.currency && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewFloatingPackagePrice && cadence == other.cadence && currency == other.currency && itemId == other.itemId && modelType == other.modelType && name == other.name && packageConfig == other.packageConfig && billableMetricId == other.billableMetricId && billedInAdvance == other.billedInAdvance && billingCycleConfiguration == other.billingCycleConfiguration && conversionRate == other.conversionRate && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && invoicingCycleConfiguration == other.invoicingCycleConfiguration && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(metadata, externalPriceId, name, billableMetricId, itemId, billedInAdvance, fixedPriceQuantity, invoiceGroupingKey, cadence, billingCycleConfiguration, invoicingCycleConfiguration, conversionRate, modelType, packageConfig, currency, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(cadence, currency, itemId, modelType, name, packageConfig, billableMetricId, billedInAdvance, billingCycleConfiguration, conversionRate, externalPriceId, fixedPriceQuantity, invoiceGroupingKey, invoicingCycleConfiguration, metadata, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewFloatingPackagePrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, packageConfig=$packageConfig, currency=$currency, additionalProperties=$additionalProperties}"
+                    "NewFloatingPackagePrice{cadence=$cadence, currency=$currency, itemId=$itemId, modelType=$modelType, name=$name, packageConfig=$packageConfig, billableMetricId=$billableMetricId, billedInAdvance=$billedInAdvance, billingCycleConfiguration=$billingCycleConfiguration, conversionRate=$conversionRate, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, invoicingCycleConfiguration=$invoicingCycleConfiguration, metadata=$metadata, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class NewFloatingMatrixPrice
             @JsonCreator
             private constructor(
-                @JsonProperty("metadata") private val metadata: Metadata?,
-                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("cadence") private val cadence: Cadence,
+                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("item_id") private val itemId: String,
+                @JsonProperty("matrix_config") private val matrixConfig: MatrixConfig,
+                @JsonProperty("model_type") private val modelType: ModelType,
                 @JsonProperty("name") private val name: String,
                 @JsonProperty("billable_metric_id") private val billableMetricId: String?,
-                @JsonProperty("item_id") private val itemId: String,
                 @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
-                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
-                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
-                @JsonProperty("cadence") private val cadence: Cadence,
                 @JsonProperty("billing_cycle_configuration")
                 private val billingCycleConfiguration: BillingCycleConfiguration?,
+                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
+                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
                 @JsonProperty("invoicing_cycle_configuration")
                 private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
-                @JsonProperty("conversion_rate") private val conversionRate: Double?,
-                @JsonProperty("model_type") private val modelType: ModelType,
-                @JsonProperty("matrix_config") private val matrixConfig: MatrixConfig,
-                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("metadata") private val metadata: Metadata?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /**
-                 * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
-                 * setting `metadata` to `null`.
-                 */
-                @JsonProperty("metadata")
-                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+                /** The cadence to bill for this price on. */
+                @JsonProperty("cadence") fun cadence(): Cadence = cadence
 
-                /** An alias for the price. */
-                @JsonProperty("external_price_id")
-                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
+                /** An ISO 4217 currency string for which this price is billed in. */
+                @JsonProperty("currency") fun currency(): String = currency
+
+                /** The id of the item the plan will be associated with. */
+                @JsonProperty("item_id") fun itemId(): String = itemId
+
+                @JsonProperty("matrix_config") fun matrixConfig(): MatrixConfig = matrixConfig
+
+                @JsonProperty("model_type") fun modelType(): ModelType = modelType
 
                 /** The name of the price. */
                 @JsonProperty("name") fun name(): String = name
@@ -4836,15 +4837,28 @@ constructor(
                 @JsonProperty("billable_metric_id")
                 fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
-                /** The id of the item the plan will be associated with. */
-                @JsonProperty("item_id") fun itemId(): String = itemId
-
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance)
+
+                /**
+                 * For custom cadence: specifies the duration of the billing period in days or
+                 * months.
+                 */
+                @JsonProperty("billing_cycle_configuration")
+                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+                    Optional.ofNullable(billingCycleConfiguration)
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
+
+                /** An alias for the price. */
+                @JsonProperty("external_price_id")
+                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -4857,17 +4871,6 @@ constructor(
                 @JsonProperty("invoice_grouping_key")
                 fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey)
 
-                /** The cadence to bill for this price on. */
-                @JsonProperty("cadence") fun cadence(): Cadence = cadence
-
-                /**
-                 * For custom cadence: specifies the duration of the billing period in days or
-                 * months.
-                 */
-                @JsonProperty("billing_cycle_configuration")
-                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(billingCycleConfiguration)
-
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
                  * If unspecified, a single invoice is produced per billing cycle.
@@ -4876,16 +4879,13 @@ constructor(
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
                     Optional.ofNullable(invoicingCycleConfiguration)
 
-                /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @JsonProperty("conversion_rate")
-                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
-
-                @JsonProperty("model_type") fun modelType(): ModelType = modelType
-
-                @JsonProperty("matrix_config") fun matrixConfig(): MatrixConfig = matrixConfig
-
-                /** An ISO 4217 currency string for which this price is billed in. */
-                @JsonProperty("currency") fun currency(): String = currency
+                /**
+                 * User-specified key/value pairs for the resource. Individual keys can be removed
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
+                 */
+                @JsonProperty("metadata")
+                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -4900,56 +4900,59 @@ constructor(
 
                 class Builder {
 
-                    private var metadata: Metadata? = null
-                    private var externalPriceId: String? = null
+                    private var cadence: Cadence? = null
+                    private var currency: String? = null
+                    private var itemId: String? = null
+                    private var matrixConfig: MatrixConfig? = null
+                    private var modelType: ModelType? = null
                     private var name: String? = null
                     private var billableMetricId: String? = null
-                    private var itemId: String? = null
                     private var billedInAdvance: Boolean? = null
+                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
+                    private var conversionRate: Double? = null
+                    private var externalPriceId: String? = null
                     private var fixedPriceQuantity: Double? = null
                     private var invoiceGroupingKey: String? = null
-                    private var cadence: Cadence? = null
-                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
                     private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
-                    private var conversionRate: Double? = null
-                    private var modelType: ModelType? = null
-                    private var matrixConfig: MatrixConfig? = null
-                    private var currency: String? = null
+                    private var metadata: Metadata? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(newFloatingMatrixPrice: NewFloatingMatrixPrice) = apply {
-                        metadata = newFloatingMatrixPrice.metadata
-                        externalPriceId = newFloatingMatrixPrice.externalPriceId
+                        cadence = newFloatingMatrixPrice.cadence
+                        currency = newFloatingMatrixPrice.currency
+                        itemId = newFloatingMatrixPrice.itemId
+                        matrixConfig = newFloatingMatrixPrice.matrixConfig
+                        modelType = newFloatingMatrixPrice.modelType
                         name = newFloatingMatrixPrice.name
                         billableMetricId = newFloatingMatrixPrice.billableMetricId
-                        itemId = newFloatingMatrixPrice.itemId
                         billedInAdvance = newFloatingMatrixPrice.billedInAdvance
+                        billingCycleConfiguration = newFloatingMatrixPrice.billingCycleConfiguration
+                        conversionRate = newFloatingMatrixPrice.conversionRate
+                        externalPriceId = newFloatingMatrixPrice.externalPriceId
                         fixedPriceQuantity = newFloatingMatrixPrice.fixedPriceQuantity
                         invoiceGroupingKey = newFloatingMatrixPrice.invoiceGroupingKey
-                        cadence = newFloatingMatrixPrice.cadence
-                        billingCycleConfiguration = newFloatingMatrixPrice.billingCycleConfiguration
                         invoicingCycleConfiguration =
                             newFloatingMatrixPrice.invoicingCycleConfiguration
-                        conversionRate = newFloatingMatrixPrice.conversionRate
-                        modelType = newFloatingMatrixPrice.modelType
-                        matrixConfig = newFloatingMatrixPrice.matrixConfig
-                        currency = newFloatingMatrixPrice.currency
+                        metadata = newFloatingMatrixPrice.metadata
                         additionalProperties =
                             newFloatingMatrixPrice.additionalProperties.toMutableMap()
                     }
 
-                    /**
-                     * User-specified key/value pairs for the resource. Individual keys can be
-                     * removed by setting the value to `null`, and the entire metadata mapping can
-                     * be cleared by setting `metadata` to `null`.
-                     */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    /** The cadence to bill for this price on. */
+                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
-                    /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
-                        this.externalPriceId = externalPriceId
+                    /** An ISO 4217 currency string for which this price is billed in. */
+                    fun currency(currency: String) = apply { this.currency = currency }
+
+                    /** The id of the item the plan will be associated with. */
+                    fun itemId(itemId: String) = apply { this.itemId = itemId }
+
+                    fun matrixConfig(matrixConfig: MatrixConfig) = apply {
+                        this.matrixConfig = matrixConfig
                     }
+
+                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
 
                     /** The name of the price. */
                     fun name(name: String) = apply { this.name = name }
@@ -4962,15 +4965,32 @@ constructor(
                         this.billableMetricId = billableMetricId
                     }
 
-                    /** The id of the item the plan will be associated with. */
-                    fun itemId(itemId: String) = apply { this.itemId = itemId }
-
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
                     fun billedInAdvance(billedInAdvance: Boolean) = apply {
                         this.billedInAdvance = billedInAdvance
+                    }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: BillingCycleConfiguration
+                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) = apply {
+                        this.conversionRate = conversionRate
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: String) = apply {
+                        this.externalPriceId = externalPriceId
                     }
 
                     /**
@@ -4986,17 +5006,6 @@ constructor(
                         this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
-                    /** The cadence to bill for this price on. */
-                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
-
-                    /**
-                     * For custom cadence: specifies the duration of the billing period in days or
-                     * months.
-                     */
-                    fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
-                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
-
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
@@ -5006,20 +5015,11 @@ constructor(
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
 
                     /**
-                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
-                        this.conversionRate = conversionRate
-                    }
-
-                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
-
-                    fun matrixConfig(matrixConfig: MatrixConfig) = apply {
-                        this.matrixConfig = matrixConfig
-                    }
-
-                    /** An ISO 4217 currency string for which this price is billed in. */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -5045,23 +5045,23 @@ constructor(
 
                     fun build(): NewFloatingMatrixPrice =
                         NewFloatingMatrixPrice(
-                            metadata,
-                            externalPriceId,
-                            checkNotNull(name) { "`name` is required but was not set" },
-                            billableMetricId,
-                            checkNotNull(itemId) { "`itemId` is required but was not set" },
-                            billedInAdvance,
-                            fixedPriceQuantity,
-                            invoiceGroupingKey,
                             checkNotNull(cadence) { "`cadence` is required but was not set" },
-                            billingCycleConfiguration,
-                            invoicingCycleConfiguration,
-                            conversionRate,
-                            checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            checkNotNull(itemId) { "`itemId` is required but was not set" },
                             checkNotNull(matrixConfig) {
                                 "`matrixConfig` is required but was not set"
                             },
-                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(name) { "`name` is required but was not set" },
+                            billableMetricId,
+                            billedInAdvance,
+                            billingCycleConfiguration,
+                            conversionRate,
+                            externalPriceId,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            invoicingCycleConfiguration,
+                            metadata,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -5152,15 +5152,12 @@ constructor(
                 class MatrixConfig
                 @JsonCreator
                 private constructor(
-                    @JsonProperty("dimensions") private val dimensions: List<String?>,
                     @JsonProperty("default_unit_amount") private val defaultUnitAmount: String,
+                    @JsonProperty("dimensions") private val dimensions: List<String?>,
                     @JsonProperty("matrix_values") private val matrixValues: List<MatrixValue>,
                     @JsonAnySetter
                     private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
                 ) {
-
-                    /** One or two event property values to evaluate matrix groups by */
-                    @JsonProperty("dimensions") fun dimensions(): List<String?> = dimensions
 
                     /**
                      * Default per unit rate for any usage not bucketed into a specified
@@ -5168,6 +5165,9 @@ constructor(
                      */
                     @JsonProperty("default_unit_amount")
                     fun defaultUnitAmount(): String = defaultUnitAmount
+
+                    /** One or two event property values to evaluate matrix groups by */
+                    @JsonProperty("dimensions") fun dimensions(): List<String?> = dimensions
 
                     /** Matrix values for specified matrix grouping keys */
                     @JsonProperty("matrix_values")
@@ -5186,18 +5186,26 @@ constructor(
 
                     class Builder {
 
-                        private var dimensions: MutableList<String?>? = null
                         private var defaultUnitAmount: String? = null
+                        private var dimensions: MutableList<String?>? = null
                         private var matrixValues: MutableList<MatrixValue>? = null
                         private var additionalProperties: MutableMap<String, JsonValue> =
                             mutableMapOf()
 
                         @JvmSynthetic
                         internal fun from(matrixConfig: MatrixConfig) = apply {
-                            dimensions = matrixConfig.dimensions.toMutableList()
                             defaultUnitAmount = matrixConfig.defaultUnitAmount
+                            dimensions = matrixConfig.dimensions.toMutableList()
                             matrixValues = matrixConfig.matrixValues.toMutableList()
                             additionalProperties = matrixConfig.additionalProperties.toMutableMap()
+                        }
+
+                        /**
+                         * Default per unit rate for any usage not bucketed into a specified
+                         * matrix_value
+                         */
+                        fun defaultUnitAmount(defaultUnitAmount: String) = apply {
+                            this.defaultUnitAmount = defaultUnitAmount
                         }
 
                         /** One or two event property values to evaluate matrix groups by */
@@ -5208,14 +5216,6 @@ constructor(
                         /** One or two event property values to evaluate matrix groups by */
                         fun addDimension(dimension: String) = apply {
                             dimensions = (dimensions ?: mutableListOf()).apply { add(dimension) }
-                        }
-
-                        /**
-                         * Default per unit rate for any usage not bucketed into a specified
-                         * matrix_value
-                         */
-                        fun defaultUnitAmount(defaultUnitAmount: String) = apply {
-                            this.defaultUnitAmount = defaultUnitAmount
                         }
 
                         /** Matrix values for specified matrix grouping keys */
@@ -5253,13 +5253,13 @@ constructor(
 
                         fun build(): MatrixConfig =
                             MatrixConfig(
+                                checkNotNull(defaultUnitAmount) {
+                                    "`defaultUnitAmount` is required but was not set"
+                                },
                                 checkNotNull(dimensions) {
                                         "`dimensions` is required but was not set"
                                     }
                                     .toImmutable(),
-                                checkNotNull(defaultUnitAmount) {
-                                    "`defaultUnitAmount` is required but was not set"
-                                },
                                 checkNotNull(matrixValues) {
                                         "`matrixValues` is required but was not set"
                                     }
@@ -5272,16 +5272,13 @@ constructor(
                     class MatrixValue
                     @JsonCreator
                     private constructor(
-                        @JsonProperty("unit_amount") private val unitAmount: String,
                         @JsonProperty("dimension_values")
                         private val dimensionValues: List<String?>,
+                        @JsonProperty("unit_amount") private val unitAmount: String,
                         @JsonAnySetter
                         private val additionalProperties: Map<String, JsonValue> =
                             immutableEmptyMap(),
                     ) {
-
-                        /** Unit price for the specified dimension_values */
-                        @JsonProperty("unit_amount") fun unitAmount(): String = unitAmount
 
                         /**
                          * One or two matrix keys to filter usage to this Matrix value by. For
@@ -5290,6 +5287,9 @@ constructor(
                          */
                         @JsonProperty("dimension_values")
                         fun dimensionValues(): List<String?> = dimensionValues
+
+                        /** Unit price for the specified dimension_values */
+                        @JsonProperty("unit_amount") fun unitAmount(): String = unitAmount
 
                         @JsonAnyGetter
                         @ExcludeMissing
@@ -5304,22 +5304,17 @@ constructor(
 
                         class Builder {
 
-                            private var unitAmount: String? = null
                             private var dimensionValues: MutableList<String?>? = null
+                            private var unitAmount: String? = null
                             private var additionalProperties: MutableMap<String, JsonValue> =
                                 mutableMapOf()
 
                             @JvmSynthetic
                             internal fun from(matrixValue: MatrixValue) = apply {
-                                unitAmount = matrixValue.unitAmount
                                 dimensionValues = matrixValue.dimensionValues.toMutableList()
+                                unitAmount = matrixValue.unitAmount
                                 additionalProperties =
                                     matrixValue.additionalProperties.toMutableMap()
-                            }
-
-                            /** Unit price for the specified dimension_values */
-                            fun unitAmount(unitAmount: String) = apply {
-                                this.unitAmount = unitAmount
                             }
 
                             /**
@@ -5341,6 +5336,11 @@ constructor(
                                     (dimensionValues ?: mutableListOf()).apply {
                                         add(dimensionValue)
                                     }
+                            }
+
+                            /** Unit price for the specified dimension_values */
+                            fun unitAmount(unitAmount: String) = apply {
+                                this.unitAmount = unitAmount
                             }
 
                             fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -5367,13 +5367,13 @@ constructor(
 
                             fun build(): MatrixValue =
                                 MatrixValue(
-                                    checkNotNull(unitAmount) {
-                                        "`unitAmount` is required but was not set"
-                                    },
                                     checkNotNull(dimensionValues) {
                                             "`dimensionValues` is required but was not set"
                                         }
                                         .toImmutable(),
+                                    checkNotNull(unitAmount) {
+                                        "`unitAmount` is required but was not set"
+                                    },
                                     additionalProperties.toImmutable(),
                                 )
                         }
@@ -5383,17 +5383,17 @@ constructor(
                                 return true
                             }
 
-                            return /* spotless:off */ other is MatrixValue && unitAmount == other.unitAmount && dimensionValues == other.dimensionValues && additionalProperties == other.additionalProperties /* spotless:on */
+                            return /* spotless:off */ other is MatrixValue && dimensionValues == other.dimensionValues && unitAmount == other.unitAmount && additionalProperties == other.additionalProperties /* spotless:on */
                         }
 
                         /* spotless:off */
-                        private val hashCode: Int by lazy { Objects.hash(unitAmount, dimensionValues, additionalProperties) }
+                        private val hashCode: Int by lazy { Objects.hash(dimensionValues, unitAmount, additionalProperties) }
                         /* spotless:on */
 
                         override fun hashCode(): Int = hashCode
 
                         override fun toString() =
-                            "MatrixValue{unitAmount=$unitAmount, dimensionValues=$dimensionValues, additionalProperties=$additionalProperties}"
+                            "MatrixValue{dimensionValues=$dimensionValues, unitAmount=$unitAmount, additionalProperties=$additionalProperties}"
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -5401,17 +5401,17 @@ constructor(
                             return true
                         }
 
-                        return /* spotless:off */ other is MatrixConfig && dimensions == other.dimensions && defaultUnitAmount == other.defaultUnitAmount && matrixValues == other.matrixValues && additionalProperties == other.additionalProperties /* spotless:on */
+                        return /* spotless:off */ other is MatrixConfig && defaultUnitAmount == other.defaultUnitAmount && dimensions == other.dimensions && matrixValues == other.matrixValues && additionalProperties == other.additionalProperties /* spotless:on */
                     }
 
                     /* spotless:off */
-                    private val hashCode: Int by lazy { Objects.hash(dimensions, defaultUnitAmount, matrixValues, additionalProperties) }
+                    private val hashCode: Int by lazy { Objects.hash(defaultUnitAmount, dimensions, matrixValues, additionalProperties) }
                     /* spotless:on */
 
                     override fun hashCode(): Int = hashCode
 
                     override fun toString() =
-                        "MatrixConfig{dimensions=$dimensions, defaultUnitAmount=$defaultUnitAmount, matrixValues=$matrixValues, additionalProperties=$additionalProperties}"
+                        "MatrixConfig{defaultUnitAmount=$defaultUnitAmount, dimensions=$dimensions, matrixValues=$matrixValues, additionalProperties=$additionalProperties}"
                 }
 
                 class ModelType
@@ -5876,56 +5876,59 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewFloatingMatrixPrice && metadata == other.metadata && externalPriceId == other.externalPriceId && name == other.name && billableMetricId == other.billableMetricId && itemId == other.itemId && billedInAdvance == other.billedInAdvance && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && cadence == other.cadence && billingCycleConfiguration == other.billingCycleConfiguration && invoicingCycleConfiguration == other.invoicingCycleConfiguration && conversionRate == other.conversionRate && modelType == other.modelType && matrixConfig == other.matrixConfig && currency == other.currency && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewFloatingMatrixPrice && cadence == other.cadence && currency == other.currency && itemId == other.itemId && matrixConfig == other.matrixConfig && modelType == other.modelType && name == other.name && billableMetricId == other.billableMetricId && billedInAdvance == other.billedInAdvance && billingCycleConfiguration == other.billingCycleConfiguration && conversionRate == other.conversionRate && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && invoicingCycleConfiguration == other.invoicingCycleConfiguration && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(metadata, externalPriceId, name, billableMetricId, itemId, billedInAdvance, fixedPriceQuantity, invoiceGroupingKey, cadence, billingCycleConfiguration, invoicingCycleConfiguration, conversionRate, modelType, matrixConfig, currency, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(cadence, currency, itemId, matrixConfig, modelType, name, billableMetricId, billedInAdvance, billingCycleConfiguration, conversionRate, externalPriceId, fixedPriceQuantity, invoiceGroupingKey, invoicingCycleConfiguration, metadata, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewFloatingMatrixPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, matrixConfig=$matrixConfig, currency=$currency, additionalProperties=$additionalProperties}"
+                    "NewFloatingMatrixPrice{cadence=$cadence, currency=$currency, itemId=$itemId, matrixConfig=$matrixConfig, modelType=$modelType, name=$name, billableMetricId=$billableMetricId, billedInAdvance=$billedInAdvance, billingCycleConfiguration=$billingCycleConfiguration, conversionRate=$conversionRate, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, invoicingCycleConfiguration=$invoicingCycleConfiguration, metadata=$metadata, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class NewFloatingMatrixWithAllocationPrice
             @JsonCreator
             private constructor(
-                @JsonProperty("metadata") private val metadata: Metadata?,
-                @JsonProperty("external_price_id") private val externalPriceId: String?,
-                @JsonProperty("name") private val name: String,
-                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
-                @JsonProperty("item_id") private val itemId: String,
-                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
-                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
-                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
                 @JsonProperty("cadence") private val cadence: Cadence,
-                @JsonProperty("billing_cycle_configuration")
-                private val billingCycleConfiguration: BillingCycleConfiguration?,
-                @JsonProperty("invoicing_cycle_configuration")
-                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
-                @JsonProperty("conversion_rate") private val conversionRate: Double?,
-                @JsonProperty("model_type") private val modelType: ModelType,
+                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("item_id") private val itemId: String,
                 @JsonProperty("matrix_with_allocation_config")
                 private val matrixWithAllocationConfig: MatrixWithAllocationConfig,
-                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("model_type") private val modelType: ModelType,
+                @JsonProperty("name") private val name: String,
+                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
+                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
+                @JsonProperty("billing_cycle_configuration")
+                private val billingCycleConfiguration: BillingCycleConfiguration?,
+                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
+                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
+                @JsonProperty("invoicing_cycle_configuration")
+                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
+                @JsonProperty("metadata") private val metadata: Metadata?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /**
-                 * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
-                 * setting `metadata` to `null`.
-                 */
-                @JsonProperty("metadata")
-                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+                /** The cadence to bill for this price on. */
+                @JsonProperty("cadence") fun cadence(): Cadence = cadence
 
-                /** An alias for the price. */
-                @JsonProperty("external_price_id")
-                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
+                /** An ISO 4217 currency string for which this price is billed in. */
+                @JsonProperty("currency") fun currency(): String = currency
+
+                /** The id of the item the plan will be associated with. */
+                @JsonProperty("item_id") fun itemId(): String = itemId
+
+                @JsonProperty("matrix_with_allocation_config")
+                fun matrixWithAllocationConfig(): MatrixWithAllocationConfig =
+                    matrixWithAllocationConfig
+
+                @JsonProperty("model_type") fun modelType(): ModelType = modelType
 
                 /** The name of the price. */
                 @JsonProperty("name") fun name(): String = name
@@ -5937,15 +5940,28 @@ constructor(
                 @JsonProperty("billable_metric_id")
                 fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
-                /** The id of the item the plan will be associated with. */
-                @JsonProperty("item_id") fun itemId(): String = itemId
-
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance)
+
+                /**
+                 * For custom cadence: specifies the duration of the billing period in days or
+                 * months.
+                 */
+                @JsonProperty("billing_cycle_configuration")
+                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+                    Optional.ofNullable(billingCycleConfiguration)
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
+
+                /** An alias for the price. */
+                @JsonProperty("external_price_id")
+                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -5958,17 +5974,6 @@ constructor(
                 @JsonProperty("invoice_grouping_key")
                 fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey)
 
-                /** The cadence to bill for this price on. */
-                @JsonProperty("cadence") fun cadence(): Cadence = cadence
-
-                /**
-                 * For custom cadence: specifies the duration of the billing period in days or
-                 * months.
-                 */
-                @JsonProperty("billing_cycle_configuration")
-                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(billingCycleConfiguration)
-
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
                  * If unspecified, a single invoice is produced per billing cycle.
@@ -5977,18 +5982,13 @@ constructor(
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
                     Optional.ofNullable(invoicingCycleConfiguration)
 
-                /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @JsonProperty("conversion_rate")
-                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
-
-                @JsonProperty("model_type") fun modelType(): ModelType = modelType
-
-                @JsonProperty("matrix_with_allocation_config")
-                fun matrixWithAllocationConfig(): MatrixWithAllocationConfig =
-                    matrixWithAllocationConfig
-
-                /** An ISO 4217 currency string for which this price is billed in. */
-                @JsonProperty("currency") fun currency(): String = currency
+                /**
+                 * User-specified key/value pairs for the resource. Individual keys can be removed
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
+                 */
+                @JsonProperty("metadata")
+                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -6003,60 +6003,63 @@ constructor(
 
                 class Builder {
 
-                    private var metadata: Metadata? = null
-                    private var externalPriceId: String? = null
+                    private var cadence: Cadence? = null
+                    private var currency: String? = null
+                    private var itemId: String? = null
+                    private var matrixWithAllocationConfig: MatrixWithAllocationConfig? = null
+                    private var modelType: ModelType? = null
                     private var name: String? = null
                     private var billableMetricId: String? = null
-                    private var itemId: String? = null
                     private var billedInAdvance: Boolean? = null
+                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
+                    private var conversionRate: Double? = null
+                    private var externalPriceId: String? = null
                     private var fixedPriceQuantity: Double? = null
                     private var invoiceGroupingKey: String? = null
-                    private var cadence: Cadence? = null
-                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
                     private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
-                    private var conversionRate: Double? = null
-                    private var modelType: ModelType? = null
-                    private var matrixWithAllocationConfig: MatrixWithAllocationConfig? = null
-                    private var currency: String? = null
+                    private var metadata: Metadata? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(
                         newFloatingMatrixWithAllocationPrice: NewFloatingMatrixWithAllocationPrice
                     ) = apply {
-                        metadata = newFloatingMatrixWithAllocationPrice.metadata
-                        externalPriceId = newFloatingMatrixWithAllocationPrice.externalPriceId
-                        name = newFloatingMatrixWithAllocationPrice.name
-                        billableMetricId = newFloatingMatrixWithAllocationPrice.billableMetricId
-                        itemId = newFloatingMatrixWithAllocationPrice.itemId
-                        billedInAdvance = newFloatingMatrixWithAllocationPrice.billedInAdvance
-                        fixedPriceQuantity = newFloatingMatrixWithAllocationPrice.fixedPriceQuantity
-                        invoiceGroupingKey = newFloatingMatrixWithAllocationPrice.invoiceGroupingKey
                         cadence = newFloatingMatrixWithAllocationPrice.cadence
-                        billingCycleConfiguration =
-                            newFloatingMatrixWithAllocationPrice.billingCycleConfiguration
-                        invoicingCycleConfiguration =
-                            newFloatingMatrixWithAllocationPrice.invoicingCycleConfiguration
-                        conversionRate = newFloatingMatrixWithAllocationPrice.conversionRate
-                        modelType = newFloatingMatrixWithAllocationPrice.modelType
+                        currency = newFloatingMatrixWithAllocationPrice.currency
+                        itemId = newFloatingMatrixWithAllocationPrice.itemId
                         matrixWithAllocationConfig =
                             newFloatingMatrixWithAllocationPrice.matrixWithAllocationConfig
-                        currency = newFloatingMatrixWithAllocationPrice.currency
+                        modelType = newFloatingMatrixWithAllocationPrice.modelType
+                        name = newFloatingMatrixWithAllocationPrice.name
+                        billableMetricId = newFloatingMatrixWithAllocationPrice.billableMetricId
+                        billedInAdvance = newFloatingMatrixWithAllocationPrice.billedInAdvance
+                        billingCycleConfiguration =
+                            newFloatingMatrixWithAllocationPrice.billingCycleConfiguration
+                        conversionRate = newFloatingMatrixWithAllocationPrice.conversionRate
+                        externalPriceId = newFloatingMatrixWithAllocationPrice.externalPriceId
+                        fixedPriceQuantity = newFloatingMatrixWithAllocationPrice.fixedPriceQuantity
+                        invoiceGroupingKey = newFloatingMatrixWithAllocationPrice.invoiceGroupingKey
+                        invoicingCycleConfiguration =
+                            newFloatingMatrixWithAllocationPrice.invoicingCycleConfiguration
+                        metadata = newFloatingMatrixWithAllocationPrice.metadata
                         additionalProperties =
                             newFloatingMatrixWithAllocationPrice.additionalProperties.toMutableMap()
                     }
 
-                    /**
-                     * User-specified key/value pairs for the resource. Individual keys can be
-                     * removed by setting the value to `null`, and the entire metadata mapping can
-                     * be cleared by setting `metadata` to `null`.
-                     */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    /** The cadence to bill for this price on. */
+                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
-                    /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
-                        this.externalPriceId = externalPriceId
-                    }
+                    /** An ISO 4217 currency string for which this price is billed in. */
+                    fun currency(currency: String) = apply { this.currency = currency }
+
+                    /** The id of the item the plan will be associated with. */
+                    fun itemId(itemId: String) = apply { this.itemId = itemId }
+
+                    fun matrixWithAllocationConfig(
+                        matrixWithAllocationConfig: MatrixWithAllocationConfig
+                    ) = apply { this.matrixWithAllocationConfig = matrixWithAllocationConfig }
+
+                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
 
                     /** The name of the price. */
                     fun name(name: String) = apply { this.name = name }
@@ -6069,15 +6072,32 @@ constructor(
                         this.billableMetricId = billableMetricId
                     }
 
-                    /** The id of the item the plan will be associated with. */
-                    fun itemId(itemId: String) = apply { this.itemId = itemId }
-
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
                     fun billedInAdvance(billedInAdvance: Boolean) = apply {
                         this.billedInAdvance = billedInAdvance
+                    }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: BillingCycleConfiguration
+                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) = apply {
+                        this.conversionRate = conversionRate
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: String) = apply {
+                        this.externalPriceId = externalPriceId
                     }
 
                     /**
@@ -6093,17 +6113,6 @@ constructor(
                         this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
-                    /** The cadence to bill for this price on. */
-                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
-
-                    /**
-                     * For custom cadence: specifies the duration of the billing period in days or
-                     * months.
-                     */
-                    fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
-                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
-
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
@@ -6113,20 +6122,11 @@ constructor(
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
 
                     /**
-                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
-                        this.conversionRate = conversionRate
-                    }
-
-                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
-
-                    fun matrixWithAllocationConfig(
-                        matrixWithAllocationConfig: MatrixWithAllocationConfig
-                    ) = apply { this.matrixWithAllocationConfig = matrixWithAllocationConfig }
-
-                    /** An ISO 4217 currency string for which this price is billed in. */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -6152,23 +6152,23 @@ constructor(
 
                     fun build(): NewFloatingMatrixWithAllocationPrice =
                         NewFloatingMatrixWithAllocationPrice(
-                            metadata,
-                            externalPriceId,
-                            checkNotNull(name) { "`name` is required but was not set" },
-                            billableMetricId,
-                            checkNotNull(itemId) { "`itemId` is required but was not set" },
-                            billedInAdvance,
-                            fixedPriceQuantity,
-                            invoiceGroupingKey,
                             checkNotNull(cadence) { "`cadence` is required but was not set" },
-                            billingCycleConfiguration,
-                            invoicingCycleConfiguration,
-                            conversionRate,
-                            checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            checkNotNull(itemId) { "`itemId` is required but was not set" },
                             checkNotNull(matrixWithAllocationConfig) {
                                 "`matrixWithAllocationConfig` is required but was not set"
                             },
-                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(name) { "`name` is required but was not set" },
+                            billableMetricId,
+                            billedInAdvance,
+                            billingCycleConfiguration,
+                            conversionRate,
+                            externalPriceId,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            invoicingCycleConfiguration,
+                            metadata,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -6259,16 +6259,16 @@ constructor(
                 class MatrixWithAllocationConfig
                 @JsonCreator
                 private constructor(
-                    @JsonProperty("dimensions") private val dimensions: List<String?>,
-                    @JsonProperty("default_unit_amount") private val defaultUnitAmount: String,
-                    @JsonProperty("matrix_values") private val matrixValues: List<MatrixValue>,
                     @JsonProperty("allocation") private val allocation: Double,
+                    @JsonProperty("default_unit_amount") private val defaultUnitAmount: String,
+                    @JsonProperty("dimensions") private val dimensions: List<String?>,
+                    @JsonProperty("matrix_values") private val matrixValues: List<MatrixValue>,
                     @JsonAnySetter
                     private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
                 ) {
 
-                    /** One or two event property values to evaluate matrix groups by */
-                    @JsonProperty("dimensions") fun dimensions(): List<String?> = dimensions
+                    /** Allocation to be used to calculate the price */
+                    @JsonProperty("allocation") fun allocation(): Double = allocation
 
                     /**
                      * Default per unit rate for any usage not bucketed into a specified
@@ -6277,12 +6277,12 @@ constructor(
                     @JsonProperty("default_unit_amount")
                     fun defaultUnitAmount(): String = defaultUnitAmount
 
+                    /** One or two event property values to evaluate matrix groups by */
+                    @JsonProperty("dimensions") fun dimensions(): List<String?> = dimensions
+
                     /** Matrix values for specified matrix grouping keys */
                     @JsonProperty("matrix_values")
                     fun matrixValues(): List<MatrixValue> = matrixValues
-
-                    /** Allocation to be used to calculate the price */
-                    @JsonProperty("allocation") fun allocation(): Double = allocation
 
                     @JsonAnyGetter
                     @ExcludeMissing
@@ -6297,24 +6297,35 @@ constructor(
 
                     class Builder {
 
-                        private var dimensions: MutableList<String?>? = null
-                        private var defaultUnitAmount: String? = null
-                        private var matrixValues: MutableList<MatrixValue>? = null
                         private var allocation: Double? = null
+                        private var defaultUnitAmount: String? = null
+                        private var dimensions: MutableList<String?>? = null
+                        private var matrixValues: MutableList<MatrixValue>? = null
                         private var additionalProperties: MutableMap<String, JsonValue> =
                             mutableMapOf()
 
                         @JvmSynthetic
                         internal fun from(matrixWithAllocationConfig: MatrixWithAllocationConfig) =
                             apply {
-                                dimensions = matrixWithAllocationConfig.dimensions.toMutableList()
+                                allocation = matrixWithAllocationConfig.allocation
                                 defaultUnitAmount = matrixWithAllocationConfig.defaultUnitAmount
+                                dimensions = matrixWithAllocationConfig.dimensions.toMutableList()
                                 matrixValues =
                                     matrixWithAllocationConfig.matrixValues.toMutableList()
-                                allocation = matrixWithAllocationConfig.allocation
                                 additionalProperties =
                                     matrixWithAllocationConfig.additionalProperties.toMutableMap()
                             }
+
+                        /** Allocation to be used to calculate the price */
+                        fun allocation(allocation: Double) = apply { this.allocation = allocation }
+
+                        /**
+                         * Default per unit rate for any usage not bucketed into a specified
+                         * matrix_value
+                         */
+                        fun defaultUnitAmount(defaultUnitAmount: String) = apply {
+                            this.defaultUnitAmount = defaultUnitAmount
+                        }
 
                         /** One or two event property values to evaluate matrix groups by */
                         fun dimensions(dimensions: List<String?>) = apply {
@@ -6324,14 +6335,6 @@ constructor(
                         /** One or two event property values to evaluate matrix groups by */
                         fun addDimension(dimension: String) = apply {
                             dimensions = (dimensions ?: mutableListOf()).apply { add(dimension) }
-                        }
-
-                        /**
-                         * Default per unit rate for any usage not bucketed into a specified
-                         * matrix_value
-                         */
-                        fun defaultUnitAmount(defaultUnitAmount: String) = apply {
-                            this.defaultUnitAmount = defaultUnitAmount
                         }
 
                         /** Matrix values for specified matrix grouping keys */
@@ -6344,9 +6347,6 @@ constructor(
                             matrixValues =
                                 (matrixValues ?: mutableListOf()).apply { add(matrixValue) }
                         }
-
-                        /** Allocation to be used to calculate the price */
-                        fun allocation(allocation: Double) = apply { this.allocation = allocation }
 
                         fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
                             apply {
@@ -6372,20 +6372,20 @@ constructor(
 
                         fun build(): MatrixWithAllocationConfig =
                             MatrixWithAllocationConfig(
+                                checkNotNull(allocation) {
+                                    "`allocation` is required but was not set"
+                                },
+                                checkNotNull(defaultUnitAmount) {
+                                    "`defaultUnitAmount` is required but was not set"
+                                },
                                 checkNotNull(dimensions) {
                                         "`dimensions` is required but was not set"
                                     }
                                     .toImmutable(),
-                                checkNotNull(defaultUnitAmount) {
-                                    "`defaultUnitAmount` is required but was not set"
-                                },
                                 checkNotNull(matrixValues) {
                                         "`matrixValues` is required but was not set"
                                     }
                                     .toImmutable(),
-                                checkNotNull(allocation) {
-                                    "`allocation` is required but was not set"
-                                },
                                 additionalProperties.toImmutable(),
                             )
                     }
@@ -6394,16 +6394,13 @@ constructor(
                     class MatrixValue
                     @JsonCreator
                     private constructor(
-                        @JsonProperty("unit_amount") private val unitAmount: String,
                         @JsonProperty("dimension_values")
                         private val dimensionValues: List<String?>,
+                        @JsonProperty("unit_amount") private val unitAmount: String,
                         @JsonAnySetter
                         private val additionalProperties: Map<String, JsonValue> =
                             immutableEmptyMap(),
                     ) {
-
-                        /** Unit price for the specified dimension_values */
-                        @JsonProperty("unit_amount") fun unitAmount(): String = unitAmount
 
                         /**
                          * One or two matrix keys to filter usage to this Matrix value by. For
@@ -6412,6 +6409,9 @@ constructor(
                          */
                         @JsonProperty("dimension_values")
                         fun dimensionValues(): List<String?> = dimensionValues
+
+                        /** Unit price for the specified dimension_values */
+                        @JsonProperty("unit_amount") fun unitAmount(): String = unitAmount
 
                         @JsonAnyGetter
                         @ExcludeMissing
@@ -6426,22 +6426,17 @@ constructor(
 
                         class Builder {
 
-                            private var unitAmount: String? = null
                             private var dimensionValues: MutableList<String?>? = null
+                            private var unitAmount: String? = null
                             private var additionalProperties: MutableMap<String, JsonValue> =
                                 mutableMapOf()
 
                             @JvmSynthetic
                             internal fun from(matrixValue: MatrixValue) = apply {
-                                unitAmount = matrixValue.unitAmount
                                 dimensionValues = matrixValue.dimensionValues.toMutableList()
+                                unitAmount = matrixValue.unitAmount
                                 additionalProperties =
                                     matrixValue.additionalProperties.toMutableMap()
-                            }
-
-                            /** Unit price for the specified dimension_values */
-                            fun unitAmount(unitAmount: String) = apply {
-                                this.unitAmount = unitAmount
                             }
 
                             /**
@@ -6463,6 +6458,11 @@ constructor(
                                     (dimensionValues ?: mutableListOf()).apply {
                                         add(dimensionValue)
                                     }
+                            }
+
+                            /** Unit price for the specified dimension_values */
+                            fun unitAmount(unitAmount: String) = apply {
+                                this.unitAmount = unitAmount
                             }
 
                             fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -6489,13 +6489,13 @@ constructor(
 
                             fun build(): MatrixValue =
                                 MatrixValue(
-                                    checkNotNull(unitAmount) {
-                                        "`unitAmount` is required but was not set"
-                                    },
                                     checkNotNull(dimensionValues) {
                                             "`dimensionValues` is required but was not set"
                                         }
                                         .toImmutable(),
+                                    checkNotNull(unitAmount) {
+                                        "`unitAmount` is required but was not set"
+                                    },
                                     additionalProperties.toImmutable(),
                                 )
                         }
@@ -6505,17 +6505,17 @@ constructor(
                                 return true
                             }
 
-                            return /* spotless:off */ other is MatrixValue && unitAmount == other.unitAmount && dimensionValues == other.dimensionValues && additionalProperties == other.additionalProperties /* spotless:on */
+                            return /* spotless:off */ other is MatrixValue && dimensionValues == other.dimensionValues && unitAmount == other.unitAmount && additionalProperties == other.additionalProperties /* spotless:on */
                         }
 
                         /* spotless:off */
-                        private val hashCode: Int by lazy { Objects.hash(unitAmount, dimensionValues, additionalProperties) }
+                        private val hashCode: Int by lazy { Objects.hash(dimensionValues, unitAmount, additionalProperties) }
                         /* spotless:on */
 
                         override fun hashCode(): Int = hashCode
 
                         override fun toString() =
-                            "MatrixValue{unitAmount=$unitAmount, dimensionValues=$dimensionValues, additionalProperties=$additionalProperties}"
+                            "MatrixValue{dimensionValues=$dimensionValues, unitAmount=$unitAmount, additionalProperties=$additionalProperties}"
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -6523,17 +6523,17 @@ constructor(
                             return true
                         }
 
-                        return /* spotless:off */ other is MatrixWithAllocationConfig && dimensions == other.dimensions && defaultUnitAmount == other.defaultUnitAmount && matrixValues == other.matrixValues && allocation == other.allocation && additionalProperties == other.additionalProperties /* spotless:on */
+                        return /* spotless:off */ other is MatrixWithAllocationConfig && allocation == other.allocation && defaultUnitAmount == other.defaultUnitAmount && dimensions == other.dimensions && matrixValues == other.matrixValues && additionalProperties == other.additionalProperties /* spotless:on */
                     }
 
                     /* spotless:off */
-                    private val hashCode: Int by lazy { Objects.hash(dimensions, defaultUnitAmount, matrixValues, allocation, additionalProperties) }
+                    private val hashCode: Int by lazy { Objects.hash(allocation, defaultUnitAmount, dimensions, matrixValues, additionalProperties) }
                     /* spotless:on */
 
                     override fun hashCode(): Int = hashCode
 
                     override fun toString() =
-                        "MatrixWithAllocationConfig{dimensions=$dimensions, defaultUnitAmount=$defaultUnitAmount, matrixValues=$matrixValues, allocation=$allocation, additionalProperties=$additionalProperties}"
+                        "MatrixWithAllocationConfig{allocation=$allocation, defaultUnitAmount=$defaultUnitAmount, dimensions=$dimensions, matrixValues=$matrixValues, additionalProperties=$additionalProperties}"
                 }
 
                 class ModelType
@@ -6998,58 +6998,59 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewFloatingMatrixWithAllocationPrice && metadata == other.metadata && externalPriceId == other.externalPriceId && name == other.name && billableMetricId == other.billableMetricId && itemId == other.itemId && billedInAdvance == other.billedInAdvance && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && cadence == other.cadence && billingCycleConfiguration == other.billingCycleConfiguration && invoicingCycleConfiguration == other.invoicingCycleConfiguration && conversionRate == other.conversionRate && modelType == other.modelType && matrixWithAllocationConfig == other.matrixWithAllocationConfig && currency == other.currency && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewFloatingMatrixWithAllocationPrice && cadence == other.cadence && currency == other.currency && itemId == other.itemId && matrixWithAllocationConfig == other.matrixWithAllocationConfig && modelType == other.modelType && name == other.name && billableMetricId == other.billableMetricId && billedInAdvance == other.billedInAdvance && billingCycleConfiguration == other.billingCycleConfiguration && conversionRate == other.conversionRate && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && invoicingCycleConfiguration == other.invoicingCycleConfiguration && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(metadata, externalPriceId, name, billableMetricId, itemId, billedInAdvance, fixedPriceQuantity, invoiceGroupingKey, cadence, billingCycleConfiguration, invoicingCycleConfiguration, conversionRate, modelType, matrixWithAllocationConfig, currency, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(cadence, currency, itemId, matrixWithAllocationConfig, modelType, name, billableMetricId, billedInAdvance, billingCycleConfiguration, conversionRate, externalPriceId, fixedPriceQuantity, invoiceGroupingKey, invoicingCycleConfiguration, metadata, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewFloatingMatrixWithAllocationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, matrixWithAllocationConfig=$matrixWithAllocationConfig, currency=$currency, additionalProperties=$additionalProperties}"
+                    "NewFloatingMatrixWithAllocationPrice{cadence=$cadence, currency=$currency, itemId=$itemId, matrixWithAllocationConfig=$matrixWithAllocationConfig, modelType=$modelType, name=$name, billableMetricId=$billableMetricId, billedInAdvance=$billedInAdvance, billingCycleConfiguration=$billingCycleConfiguration, conversionRate=$conversionRate, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, invoicingCycleConfiguration=$invoicingCycleConfiguration, metadata=$metadata, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class NewFloatingTieredPrice
             @JsonCreator
             private constructor(
-                @JsonProperty("metadata") private val metadata: Metadata?,
-                @JsonProperty("external_price_id") private val externalPriceId: String?,
-                @JsonProperty("name") private val name: String,
-                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
-                @JsonProperty("item_id") private val itemId: String,
-                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
-                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
-                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
                 @JsonProperty("cadence") private val cadence: Cadence,
+                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("item_id") private val itemId: String,
+                @JsonProperty("model_type") private val modelType: ModelType,
+                @JsonProperty("name") private val name: String,
+                @JsonProperty("tiered_config") private val tieredConfig: TieredConfig,
+                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
+                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
                 @JsonProperty("billing_cycle_configuration")
                 private val billingCycleConfiguration: BillingCycleConfiguration?,
+                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
+                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
                 @JsonProperty("invoicing_cycle_configuration")
                 private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
-                @JsonProperty("conversion_rate") private val conversionRate: Double?,
-                @JsonProperty("model_type") private val modelType: ModelType,
-                @JsonProperty("tiered_config") private val tieredConfig: TieredConfig,
-                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("metadata") private val metadata: Metadata?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /**
-                 * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
-                 * setting `metadata` to `null`.
-                 */
-                @JsonProperty("metadata")
-                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+                /** The cadence to bill for this price on. */
+                @JsonProperty("cadence") fun cadence(): Cadence = cadence
 
-                /** An alias for the price. */
-                @JsonProperty("external_price_id")
-                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
+                /** An ISO 4217 currency string for which this price is billed in. */
+                @JsonProperty("currency") fun currency(): String = currency
+
+                /** The id of the item the plan will be associated with. */
+                @JsonProperty("item_id") fun itemId(): String = itemId
+
+                @JsonProperty("model_type") fun modelType(): ModelType = modelType
 
                 /** The name of the price. */
                 @JsonProperty("name") fun name(): String = name
+
+                @JsonProperty("tiered_config") fun tieredConfig(): TieredConfig = tieredConfig
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -7058,15 +7059,28 @@ constructor(
                 @JsonProperty("billable_metric_id")
                 fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
-                /** The id of the item the plan will be associated with. */
-                @JsonProperty("item_id") fun itemId(): String = itemId
-
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance)
+
+                /**
+                 * For custom cadence: specifies the duration of the billing period in days or
+                 * months.
+                 */
+                @JsonProperty("billing_cycle_configuration")
+                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+                    Optional.ofNullable(billingCycleConfiguration)
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
+
+                /** An alias for the price. */
+                @JsonProperty("external_price_id")
+                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -7079,17 +7093,6 @@ constructor(
                 @JsonProperty("invoice_grouping_key")
                 fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey)
 
-                /** The cadence to bill for this price on. */
-                @JsonProperty("cadence") fun cadence(): Cadence = cadence
-
-                /**
-                 * For custom cadence: specifies the duration of the billing period in days or
-                 * months.
-                 */
-                @JsonProperty("billing_cycle_configuration")
-                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(billingCycleConfiguration)
-
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
                  * If unspecified, a single invoice is produced per billing cycle.
@@ -7098,16 +7101,13 @@ constructor(
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
                     Optional.ofNullable(invoicingCycleConfiguration)
 
-                /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @JsonProperty("conversion_rate")
-                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
-
-                @JsonProperty("model_type") fun modelType(): ModelType = modelType
-
-                @JsonProperty("tiered_config") fun tieredConfig(): TieredConfig = tieredConfig
-
-                /** An ISO 4217 currency string for which this price is billed in. */
-                @JsonProperty("currency") fun currency(): String = currency
+                /**
+                 * User-specified key/value pairs for the resource. Individual keys can be removed
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
+                 */
+                @JsonProperty("metadata")
+                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -7122,59 +7122,62 @@ constructor(
 
                 class Builder {
 
-                    private var metadata: Metadata? = null
-                    private var externalPriceId: String? = null
-                    private var name: String? = null
-                    private var billableMetricId: String? = null
+                    private var cadence: Cadence? = null
+                    private var currency: String? = null
                     private var itemId: String? = null
+                    private var modelType: ModelType? = null
+                    private var name: String? = null
+                    private var tieredConfig: TieredConfig? = null
+                    private var billableMetricId: String? = null
                     private var billedInAdvance: Boolean? = null
+                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
+                    private var conversionRate: Double? = null
+                    private var externalPriceId: String? = null
                     private var fixedPriceQuantity: Double? = null
                     private var invoiceGroupingKey: String? = null
-                    private var cadence: Cadence? = null
-                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
                     private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
-                    private var conversionRate: Double? = null
-                    private var modelType: ModelType? = null
-                    private var tieredConfig: TieredConfig? = null
-                    private var currency: String? = null
+                    private var metadata: Metadata? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(newFloatingTieredPrice: NewFloatingTieredPrice) = apply {
-                        metadata = newFloatingTieredPrice.metadata
-                        externalPriceId = newFloatingTieredPrice.externalPriceId
-                        name = newFloatingTieredPrice.name
-                        billableMetricId = newFloatingTieredPrice.billableMetricId
+                        cadence = newFloatingTieredPrice.cadence
+                        currency = newFloatingTieredPrice.currency
                         itemId = newFloatingTieredPrice.itemId
+                        modelType = newFloatingTieredPrice.modelType
+                        name = newFloatingTieredPrice.name
+                        tieredConfig = newFloatingTieredPrice.tieredConfig
+                        billableMetricId = newFloatingTieredPrice.billableMetricId
                         billedInAdvance = newFloatingTieredPrice.billedInAdvance
+                        billingCycleConfiguration = newFloatingTieredPrice.billingCycleConfiguration
+                        conversionRate = newFloatingTieredPrice.conversionRate
+                        externalPriceId = newFloatingTieredPrice.externalPriceId
                         fixedPriceQuantity = newFloatingTieredPrice.fixedPriceQuantity
                         invoiceGroupingKey = newFloatingTieredPrice.invoiceGroupingKey
-                        cadence = newFloatingTieredPrice.cadence
-                        billingCycleConfiguration = newFloatingTieredPrice.billingCycleConfiguration
                         invoicingCycleConfiguration =
                             newFloatingTieredPrice.invoicingCycleConfiguration
-                        conversionRate = newFloatingTieredPrice.conversionRate
-                        modelType = newFloatingTieredPrice.modelType
-                        tieredConfig = newFloatingTieredPrice.tieredConfig
-                        currency = newFloatingTieredPrice.currency
+                        metadata = newFloatingTieredPrice.metadata
                         additionalProperties =
                             newFloatingTieredPrice.additionalProperties.toMutableMap()
                     }
 
-                    /**
-                     * User-specified key/value pairs for the resource. Individual keys can be
-                     * removed by setting the value to `null`, and the entire metadata mapping can
-                     * be cleared by setting `metadata` to `null`.
-                     */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    /** The cadence to bill for this price on. */
+                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
-                    /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
-                        this.externalPriceId = externalPriceId
-                    }
+                    /** An ISO 4217 currency string for which this price is billed in. */
+                    fun currency(currency: String) = apply { this.currency = currency }
+
+                    /** The id of the item the plan will be associated with. */
+                    fun itemId(itemId: String) = apply { this.itemId = itemId }
+
+                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
 
                     /** The name of the price. */
                     fun name(name: String) = apply { this.name = name }
+
+                    fun tieredConfig(tieredConfig: TieredConfig) = apply {
+                        this.tieredConfig = tieredConfig
+                    }
 
                     /**
                      * The id of the billable metric for the price. Only needed if the price is
@@ -7184,15 +7187,32 @@ constructor(
                         this.billableMetricId = billableMetricId
                     }
 
-                    /** The id of the item the plan will be associated with. */
-                    fun itemId(itemId: String) = apply { this.itemId = itemId }
-
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
                     fun billedInAdvance(billedInAdvance: Boolean) = apply {
                         this.billedInAdvance = billedInAdvance
+                    }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: BillingCycleConfiguration
+                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) = apply {
+                        this.conversionRate = conversionRate
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: String) = apply {
+                        this.externalPriceId = externalPriceId
                     }
 
                     /**
@@ -7208,17 +7228,6 @@ constructor(
                         this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
-                    /** The cadence to bill for this price on. */
-                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
-
-                    /**
-                     * For custom cadence: specifies the duration of the billing period in days or
-                     * months.
-                     */
-                    fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
-                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
-
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
@@ -7228,20 +7237,11 @@ constructor(
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
 
                     /**
-                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
-                        this.conversionRate = conversionRate
-                    }
-
-                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
-
-                    fun tieredConfig(tieredConfig: TieredConfig) = apply {
-                        this.tieredConfig = tieredConfig
-                    }
-
-                    /** An ISO 4217 currency string for which this price is billed in. */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -7267,23 +7267,23 @@ constructor(
 
                     fun build(): NewFloatingTieredPrice =
                         NewFloatingTieredPrice(
-                            metadata,
-                            externalPriceId,
-                            checkNotNull(name) { "`name` is required but was not set" },
-                            billableMetricId,
-                            checkNotNull(itemId) { "`itemId` is required but was not set" },
-                            billedInAdvance,
-                            fixedPriceQuantity,
-                            invoiceGroupingKey,
                             checkNotNull(cadence) { "`cadence` is required but was not set" },
-                            billingCycleConfiguration,
-                            invoicingCycleConfiguration,
-                            conversionRate,
+                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            checkNotNull(itemId) { "`itemId` is required but was not set" },
                             checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(name) { "`name` is required but was not set" },
                             checkNotNull(tieredConfig) {
                                 "`tieredConfig` is required but was not set"
                             },
-                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            billableMetricId,
+                            billedInAdvance,
+                            billingCycleConfiguration,
+                            conversionRate,
+                            externalPriceId,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            invoicingCycleConfiguration,
+                            metadata,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -7504,8 +7504,8 @@ constructor(
                     @JsonCreator
                     private constructor(
                         @JsonProperty("first_unit") private val firstUnit: Double,
-                        @JsonProperty("last_unit") private val lastUnit: Double?,
                         @JsonProperty("unit_amount") private val unitAmount: String,
+                        @JsonProperty("last_unit") private val lastUnit: Double?,
                         @JsonAnySetter
                         private val additionalProperties: Map<String, JsonValue> =
                             immutableEmptyMap(),
@@ -7514,14 +7514,14 @@ constructor(
                         /** Inclusive tier starting value */
                         @JsonProperty("first_unit") fun firstUnit(): Double = firstUnit
 
+                        /** Amount per unit */
+                        @JsonProperty("unit_amount") fun unitAmount(): String = unitAmount
+
                         /**
                          * Exclusive tier ending value. If null, this is treated as the last tier
                          */
                         @JsonProperty("last_unit")
                         fun lastUnit(): Optional<Double> = Optional.ofNullable(lastUnit)
-
-                        /** Amount per unit */
-                        @JsonProperty("unit_amount") fun unitAmount(): String = unitAmount
 
                         @JsonAnyGetter
                         @ExcludeMissing
@@ -7537,32 +7537,32 @@ constructor(
                         class Builder {
 
                             private var firstUnit: Double? = null
-                            private var lastUnit: Double? = null
                             private var unitAmount: String? = null
+                            private var lastUnit: Double? = null
                             private var additionalProperties: MutableMap<String, JsonValue> =
                                 mutableMapOf()
 
                             @JvmSynthetic
                             internal fun from(tier: Tier) = apply {
                                 firstUnit = tier.firstUnit
-                                lastUnit = tier.lastUnit
                                 unitAmount = tier.unitAmount
+                                lastUnit = tier.lastUnit
                                 additionalProperties = tier.additionalProperties.toMutableMap()
                             }
 
                             /** Inclusive tier starting value */
                             fun firstUnit(firstUnit: Double) = apply { this.firstUnit = firstUnit }
 
+                            /** Amount per unit */
+                            fun unitAmount(unitAmount: String) = apply {
+                                this.unitAmount = unitAmount
+                            }
+
                             /**
                              * Exclusive tier ending value. If null, this is treated as the last
                              * tier
                              */
                             fun lastUnit(lastUnit: Double) = apply { this.lastUnit = lastUnit }
-
-                            /** Amount per unit */
-                            fun unitAmount(unitAmount: String) = apply {
-                                this.unitAmount = unitAmount
-                            }
 
                             fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
                                 apply {
@@ -7591,10 +7591,10 @@ constructor(
                                     checkNotNull(firstUnit) {
                                         "`firstUnit` is required but was not set"
                                     },
-                                    lastUnit,
                                     checkNotNull(unitAmount) {
                                         "`unitAmount` is required but was not set"
                                     },
+                                    lastUnit,
                                     additionalProperties.toImmutable(),
                                 )
                         }
@@ -7604,17 +7604,17 @@ constructor(
                                 return true
                             }
 
-                            return /* spotless:off */ other is Tier && firstUnit == other.firstUnit && lastUnit == other.lastUnit && unitAmount == other.unitAmount && additionalProperties == other.additionalProperties /* spotless:on */
+                            return /* spotless:off */ other is Tier && firstUnit == other.firstUnit && unitAmount == other.unitAmount && lastUnit == other.lastUnit && additionalProperties == other.additionalProperties /* spotless:on */
                         }
 
                         /* spotless:off */
-                        private val hashCode: Int by lazy { Objects.hash(firstUnit, lastUnit, unitAmount, additionalProperties) }
+                        private val hashCode: Int by lazy { Objects.hash(firstUnit, unitAmount, lastUnit, additionalProperties) }
                         /* spotless:on */
 
                         override fun hashCode(): Int = hashCode
 
                         override fun toString() =
-                            "Tier{firstUnit=$firstUnit, lastUnit=$lastUnit, unitAmount=$unitAmount, additionalProperties=$additionalProperties}"
+                            "Tier{firstUnit=$firstUnit, unitAmount=$unitAmount, lastUnit=$lastUnit, additionalProperties=$additionalProperties}"
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -8045,58 +8045,60 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewFloatingTieredPrice && metadata == other.metadata && externalPriceId == other.externalPriceId && name == other.name && billableMetricId == other.billableMetricId && itemId == other.itemId && billedInAdvance == other.billedInAdvance && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && cadence == other.cadence && billingCycleConfiguration == other.billingCycleConfiguration && invoicingCycleConfiguration == other.invoicingCycleConfiguration && conversionRate == other.conversionRate && modelType == other.modelType && tieredConfig == other.tieredConfig && currency == other.currency && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewFloatingTieredPrice && cadence == other.cadence && currency == other.currency && itemId == other.itemId && modelType == other.modelType && name == other.name && tieredConfig == other.tieredConfig && billableMetricId == other.billableMetricId && billedInAdvance == other.billedInAdvance && billingCycleConfiguration == other.billingCycleConfiguration && conversionRate == other.conversionRate && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && invoicingCycleConfiguration == other.invoicingCycleConfiguration && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(metadata, externalPriceId, name, billableMetricId, itemId, billedInAdvance, fixedPriceQuantity, invoiceGroupingKey, cadence, billingCycleConfiguration, invoicingCycleConfiguration, conversionRate, modelType, tieredConfig, currency, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(cadence, currency, itemId, modelType, name, tieredConfig, billableMetricId, billedInAdvance, billingCycleConfiguration, conversionRate, externalPriceId, fixedPriceQuantity, invoiceGroupingKey, invoicingCycleConfiguration, metadata, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewFloatingTieredPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, tieredConfig=$tieredConfig, currency=$currency, additionalProperties=$additionalProperties}"
+                    "NewFloatingTieredPrice{cadence=$cadence, currency=$currency, itemId=$itemId, modelType=$modelType, name=$name, tieredConfig=$tieredConfig, billableMetricId=$billableMetricId, billedInAdvance=$billedInAdvance, billingCycleConfiguration=$billingCycleConfiguration, conversionRate=$conversionRate, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, invoicingCycleConfiguration=$invoicingCycleConfiguration, metadata=$metadata, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class NewFloatingTieredBpsPrice
             @JsonCreator
             private constructor(
-                @JsonProperty("metadata") private val metadata: Metadata?,
-                @JsonProperty("external_price_id") private val externalPriceId: String?,
-                @JsonProperty("name") private val name: String,
-                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
-                @JsonProperty("item_id") private val itemId: String,
-                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
-                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
-                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
                 @JsonProperty("cadence") private val cadence: Cadence,
+                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("item_id") private val itemId: String,
+                @JsonProperty("model_type") private val modelType: ModelType,
+                @JsonProperty("name") private val name: String,
+                @JsonProperty("tiered_bps_config") private val tieredBpsConfig: TieredBpsConfig,
+                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
+                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
                 @JsonProperty("billing_cycle_configuration")
                 private val billingCycleConfiguration: BillingCycleConfiguration?,
+                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
+                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
                 @JsonProperty("invoicing_cycle_configuration")
                 private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
-                @JsonProperty("conversion_rate") private val conversionRate: Double?,
-                @JsonProperty("model_type") private val modelType: ModelType,
-                @JsonProperty("tiered_bps_config") private val tieredBpsConfig: TieredBpsConfig,
-                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("metadata") private val metadata: Metadata?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /**
-                 * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
-                 * setting `metadata` to `null`.
-                 */
-                @JsonProperty("metadata")
-                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+                /** The cadence to bill for this price on. */
+                @JsonProperty("cadence") fun cadence(): Cadence = cadence
 
-                /** An alias for the price. */
-                @JsonProperty("external_price_id")
-                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
+                /** An ISO 4217 currency string for which this price is billed in. */
+                @JsonProperty("currency") fun currency(): String = currency
+
+                /** The id of the item the plan will be associated with. */
+                @JsonProperty("item_id") fun itemId(): String = itemId
+
+                @JsonProperty("model_type") fun modelType(): ModelType = modelType
 
                 /** The name of the price. */
                 @JsonProperty("name") fun name(): String = name
+
+                @JsonProperty("tiered_bps_config")
+                fun tieredBpsConfig(): TieredBpsConfig = tieredBpsConfig
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -8105,15 +8107,28 @@ constructor(
                 @JsonProperty("billable_metric_id")
                 fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
-                /** The id of the item the plan will be associated with. */
-                @JsonProperty("item_id") fun itemId(): String = itemId
-
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance)
+
+                /**
+                 * For custom cadence: specifies the duration of the billing period in days or
+                 * months.
+                 */
+                @JsonProperty("billing_cycle_configuration")
+                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+                    Optional.ofNullable(billingCycleConfiguration)
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
+
+                /** An alias for the price. */
+                @JsonProperty("external_price_id")
+                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -8126,17 +8141,6 @@ constructor(
                 @JsonProperty("invoice_grouping_key")
                 fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey)
 
-                /** The cadence to bill for this price on. */
-                @JsonProperty("cadence") fun cadence(): Cadence = cadence
-
-                /**
-                 * For custom cadence: specifies the duration of the billing period in days or
-                 * months.
-                 */
-                @JsonProperty("billing_cycle_configuration")
-                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(billingCycleConfiguration)
-
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
                  * If unspecified, a single invoice is produced per billing cycle.
@@ -8145,17 +8149,13 @@ constructor(
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
                     Optional.ofNullable(invoicingCycleConfiguration)
 
-                /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @JsonProperty("conversion_rate")
-                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
-
-                @JsonProperty("model_type") fun modelType(): ModelType = modelType
-
-                @JsonProperty("tiered_bps_config")
-                fun tieredBpsConfig(): TieredBpsConfig = tieredBpsConfig
-
-                /** An ISO 4217 currency string for which this price is billed in. */
-                @JsonProperty("currency") fun currency(): String = currency
+                /**
+                 * User-specified key/value pairs for the resource. Individual keys can be removed
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
+                 */
+                @JsonProperty("metadata")
+                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -8170,61 +8170,64 @@ constructor(
 
                 class Builder {
 
-                    private var metadata: Metadata? = null
-                    private var externalPriceId: String? = null
-                    private var name: String? = null
-                    private var billableMetricId: String? = null
+                    private var cadence: Cadence? = null
+                    private var currency: String? = null
                     private var itemId: String? = null
+                    private var modelType: ModelType? = null
+                    private var name: String? = null
+                    private var tieredBpsConfig: TieredBpsConfig? = null
+                    private var billableMetricId: String? = null
                     private var billedInAdvance: Boolean? = null
+                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
+                    private var conversionRate: Double? = null
+                    private var externalPriceId: String? = null
                     private var fixedPriceQuantity: Double? = null
                     private var invoiceGroupingKey: String? = null
-                    private var cadence: Cadence? = null
-                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
                     private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
-                    private var conversionRate: Double? = null
-                    private var modelType: ModelType? = null
-                    private var tieredBpsConfig: TieredBpsConfig? = null
-                    private var currency: String? = null
+                    private var metadata: Metadata? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(newFloatingTieredBpsPrice: NewFloatingTieredBpsPrice) =
                         apply {
-                            metadata = newFloatingTieredBpsPrice.metadata
-                            externalPriceId = newFloatingTieredBpsPrice.externalPriceId
-                            name = newFloatingTieredBpsPrice.name
-                            billableMetricId = newFloatingTieredBpsPrice.billableMetricId
-                            itemId = newFloatingTieredBpsPrice.itemId
-                            billedInAdvance = newFloatingTieredBpsPrice.billedInAdvance
-                            fixedPriceQuantity = newFloatingTieredBpsPrice.fixedPriceQuantity
-                            invoiceGroupingKey = newFloatingTieredBpsPrice.invoiceGroupingKey
                             cadence = newFloatingTieredBpsPrice.cadence
+                            currency = newFloatingTieredBpsPrice.currency
+                            itemId = newFloatingTieredBpsPrice.itemId
+                            modelType = newFloatingTieredBpsPrice.modelType
+                            name = newFloatingTieredBpsPrice.name
+                            tieredBpsConfig = newFloatingTieredBpsPrice.tieredBpsConfig
+                            billableMetricId = newFloatingTieredBpsPrice.billableMetricId
+                            billedInAdvance = newFloatingTieredBpsPrice.billedInAdvance
                             billingCycleConfiguration =
                                 newFloatingTieredBpsPrice.billingCycleConfiguration
+                            conversionRate = newFloatingTieredBpsPrice.conversionRate
+                            externalPriceId = newFloatingTieredBpsPrice.externalPriceId
+                            fixedPriceQuantity = newFloatingTieredBpsPrice.fixedPriceQuantity
+                            invoiceGroupingKey = newFloatingTieredBpsPrice.invoiceGroupingKey
                             invoicingCycleConfiguration =
                                 newFloatingTieredBpsPrice.invoicingCycleConfiguration
-                            conversionRate = newFloatingTieredBpsPrice.conversionRate
-                            modelType = newFloatingTieredBpsPrice.modelType
-                            tieredBpsConfig = newFloatingTieredBpsPrice.tieredBpsConfig
-                            currency = newFloatingTieredBpsPrice.currency
+                            metadata = newFloatingTieredBpsPrice.metadata
                             additionalProperties =
                                 newFloatingTieredBpsPrice.additionalProperties.toMutableMap()
                         }
 
-                    /**
-                     * User-specified key/value pairs for the resource. Individual keys can be
-                     * removed by setting the value to `null`, and the entire metadata mapping can
-                     * be cleared by setting `metadata` to `null`.
-                     */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    /** The cadence to bill for this price on. */
+                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
-                    /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
-                        this.externalPriceId = externalPriceId
-                    }
+                    /** An ISO 4217 currency string for which this price is billed in. */
+                    fun currency(currency: String) = apply { this.currency = currency }
+
+                    /** The id of the item the plan will be associated with. */
+                    fun itemId(itemId: String) = apply { this.itemId = itemId }
+
+                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
 
                     /** The name of the price. */
                     fun name(name: String) = apply { this.name = name }
+
+                    fun tieredBpsConfig(tieredBpsConfig: TieredBpsConfig) = apply {
+                        this.tieredBpsConfig = tieredBpsConfig
+                    }
 
                     /**
                      * The id of the billable metric for the price. Only needed if the price is
@@ -8234,15 +8237,32 @@ constructor(
                         this.billableMetricId = billableMetricId
                     }
 
-                    /** The id of the item the plan will be associated with. */
-                    fun itemId(itemId: String) = apply { this.itemId = itemId }
-
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
                     fun billedInAdvance(billedInAdvance: Boolean) = apply {
                         this.billedInAdvance = billedInAdvance
+                    }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: BillingCycleConfiguration
+                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) = apply {
+                        this.conversionRate = conversionRate
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: String) = apply {
+                        this.externalPriceId = externalPriceId
                     }
 
                     /**
@@ -8258,17 +8278,6 @@ constructor(
                         this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
-                    /** The cadence to bill for this price on. */
-                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
-
-                    /**
-                     * For custom cadence: specifies the duration of the billing period in days or
-                     * months.
-                     */
-                    fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
-                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
-
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
@@ -8278,20 +8287,11 @@ constructor(
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
 
                     /**
-                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
-                        this.conversionRate = conversionRate
-                    }
-
-                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
-
-                    fun tieredBpsConfig(tieredBpsConfig: TieredBpsConfig) = apply {
-                        this.tieredBpsConfig = tieredBpsConfig
-                    }
-
-                    /** An ISO 4217 currency string for which this price is billed in. */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -8317,23 +8317,23 @@ constructor(
 
                     fun build(): NewFloatingTieredBpsPrice =
                         NewFloatingTieredBpsPrice(
-                            metadata,
-                            externalPriceId,
-                            checkNotNull(name) { "`name` is required but was not set" },
-                            billableMetricId,
-                            checkNotNull(itemId) { "`itemId` is required but was not set" },
-                            billedInAdvance,
-                            fixedPriceQuantity,
-                            invoiceGroupingKey,
                             checkNotNull(cadence) { "`cadence` is required but was not set" },
-                            billingCycleConfiguration,
-                            invoicingCycleConfiguration,
-                            conversionRate,
+                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            checkNotNull(itemId) { "`itemId` is required but was not set" },
                             checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(name) { "`name` is required but was not set" },
                             checkNotNull(tieredBpsConfig) {
                                 "`tieredBpsConfig` is required but was not set"
                             },
-                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            billableMetricId,
+                            billedInAdvance,
+                            billingCycleConfiguration,
+                            conversionRate,
+                            externalPriceId,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            invoicingCycleConfiguration,
+                            metadata,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -8559,14 +8559,17 @@ constructor(
                     class Tier
                     @JsonCreator
                     private constructor(
+                        @JsonProperty("bps") private val bps: Double,
                         @JsonProperty("minimum_amount") private val minimumAmount: String,
                         @JsonProperty("maximum_amount") private val maximumAmount: String?,
-                        @JsonProperty("bps") private val bps: Double,
                         @JsonProperty("per_unit_maximum") private val perUnitMaximum: String?,
                         @JsonAnySetter
                         private val additionalProperties: Map<String, JsonValue> =
                             immutableEmptyMap(),
                     ) {
+
+                        /** Per-event basis point rate */
+                        @JsonProperty("bps") fun bps(): Double = bps
 
                         /** Inclusive tier starting value */
                         @JsonProperty("minimum_amount") fun minimumAmount(): String = minimumAmount
@@ -8574,9 +8577,6 @@ constructor(
                         /** Exclusive tier ending value */
                         @JsonProperty("maximum_amount")
                         fun maximumAmount(): Optional<String> = Optional.ofNullable(maximumAmount)
-
-                        /** Per-event basis point rate */
-                        @JsonProperty("bps") fun bps(): Double = bps
 
                         /** Per unit maximum to charge */
                         @JsonProperty("per_unit_maximum")
@@ -8595,21 +8595,24 @@ constructor(
 
                         class Builder {
 
+                            private var bps: Double? = null
                             private var minimumAmount: String? = null
                             private var maximumAmount: String? = null
-                            private var bps: Double? = null
                             private var perUnitMaximum: String? = null
                             private var additionalProperties: MutableMap<String, JsonValue> =
                                 mutableMapOf()
 
                             @JvmSynthetic
                             internal fun from(tier: Tier) = apply {
+                                bps = tier.bps
                                 minimumAmount = tier.minimumAmount
                                 maximumAmount = tier.maximumAmount
-                                bps = tier.bps
                                 perUnitMaximum = tier.perUnitMaximum
                                 additionalProperties = tier.additionalProperties.toMutableMap()
                             }
+
+                            /** Per-event basis point rate */
+                            fun bps(bps: Double) = apply { this.bps = bps }
 
                             /** Inclusive tier starting value */
                             fun minimumAmount(minimumAmount: String) = apply {
@@ -8620,9 +8623,6 @@ constructor(
                             fun maximumAmount(maximumAmount: String) = apply {
                                 this.maximumAmount = maximumAmount
                             }
-
-                            /** Per-event basis point rate */
-                            fun bps(bps: Double) = apply { this.bps = bps }
 
                             /** Per unit maximum to charge */
                             fun perUnitMaximum(perUnitMaximum: String) = apply {
@@ -8653,11 +8653,11 @@ constructor(
 
                             fun build(): Tier =
                                 Tier(
+                                    checkNotNull(bps) { "`bps` is required but was not set" },
                                     checkNotNull(minimumAmount) {
                                         "`minimumAmount` is required but was not set"
                                     },
                                     maximumAmount,
-                                    checkNotNull(bps) { "`bps` is required but was not set" },
                                     perUnitMaximum,
                                     additionalProperties.toImmutable(),
                                 )
@@ -8668,17 +8668,17 @@ constructor(
                                 return true
                             }
 
-                            return /* spotless:off */ other is Tier && minimumAmount == other.minimumAmount && maximumAmount == other.maximumAmount && bps == other.bps && perUnitMaximum == other.perUnitMaximum && additionalProperties == other.additionalProperties /* spotless:on */
+                            return /* spotless:off */ other is Tier && bps == other.bps && minimumAmount == other.minimumAmount && maximumAmount == other.maximumAmount && perUnitMaximum == other.perUnitMaximum && additionalProperties == other.additionalProperties /* spotless:on */
                         }
 
                         /* spotless:off */
-                        private val hashCode: Int by lazy { Objects.hash(minimumAmount, maximumAmount, bps, perUnitMaximum, additionalProperties) }
+                        private val hashCode: Int by lazy { Objects.hash(bps, minimumAmount, maximumAmount, perUnitMaximum, additionalProperties) }
                         /* spotless:on */
 
                         override fun hashCode(): Int = hashCode
 
                         override fun toString() =
-                            "Tier{minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, bps=$bps, perUnitMaximum=$perUnitMaximum, additionalProperties=$additionalProperties}"
+                            "Tier{bps=$bps, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, perUnitMaximum=$perUnitMaximum, additionalProperties=$additionalProperties}"
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -9109,55 +9109,56 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewFloatingTieredBpsPrice && metadata == other.metadata && externalPriceId == other.externalPriceId && name == other.name && billableMetricId == other.billableMetricId && itemId == other.itemId && billedInAdvance == other.billedInAdvance && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && cadence == other.cadence && billingCycleConfiguration == other.billingCycleConfiguration && invoicingCycleConfiguration == other.invoicingCycleConfiguration && conversionRate == other.conversionRate && modelType == other.modelType && tieredBpsConfig == other.tieredBpsConfig && currency == other.currency && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewFloatingTieredBpsPrice && cadence == other.cadence && currency == other.currency && itemId == other.itemId && modelType == other.modelType && name == other.name && tieredBpsConfig == other.tieredBpsConfig && billableMetricId == other.billableMetricId && billedInAdvance == other.billedInAdvance && billingCycleConfiguration == other.billingCycleConfiguration && conversionRate == other.conversionRate && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && invoicingCycleConfiguration == other.invoicingCycleConfiguration && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(metadata, externalPriceId, name, billableMetricId, itemId, billedInAdvance, fixedPriceQuantity, invoiceGroupingKey, cadence, billingCycleConfiguration, invoicingCycleConfiguration, conversionRate, modelType, tieredBpsConfig, currency, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(cadence, currency, itemId, modelType, name, tieredBpsConfig, billableMetricId, billedInAdvance, billingCycleConfiguration, conversionRate, externalPriceId, fixedPriceQuantity, invoiceGroupingKey, invoicingCycleConfiguration, metadata, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewFloatingTieredBpsPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, tieredBpsConfig=$tieredBpsConfig, currency=$currency, additionalProperties=$additionalProperties}"
+                    "NewFloatingTieredBpsPrice{cadence=$cadence, currency=$currency, itemId=$itemId, modelType=$modelType, name=$name, tieredBpsConfig=$tieredBpsConfig, billableMetricId=$billableMetricId, billedInAdvance=$billedInAdvance, billingCycleConfiguration=$billingCycleConfiguration, conversionRate=$conversionRate, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, invoicingCycleConfiguration=$invoicingCycleConfiguration, metadata=$metadata, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class NewFloatingBpsPrice
             @JsonCreator
             private constructor(
-                @JsonProperty("metadata") private val metadata: Metadata?,
-                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("bps_config") private val bpsConfig: BpsConfig,
+                @JsonProperty("cadence") private val cadence: Cadence,
+                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("item_id") private val itemId: String,
+                @JsonProperty("model_type") private val modelType: ModelType,
                 @JsonProperty("name") private val name: String,
                 @JsonProperty("billable_metric_id") private val billableMetricId: String?,
-                @JsonProperty("item_id") private val itemId: String,
                 @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
-                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
-                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
-                @JsonProperty("cadence") private val cadence: Cadence,
                 @JsonProperty("billing_cycle_configuration")
                 private val billingCycleConfiguration: BillingCycleConfiguration?,
+                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
+                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
                 @JsonProperty("invoicing_cycle_configuration")
                 private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
-                @JsonProperty("conversion_rate") private val conversionRate: Double?,
-                @JsonProperty("model_type") private val modelType: ModelType,
-                @JsonProperty("bps_config") private val bpsConfig: BpsConfig,
-                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("metadata") private val metadata: Metadata?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /**
-                 * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
-                 * setting `metadata` to `null`.
-                 */
-                @JsonProperty("metadata")
-                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+                @JsonProperty("bps_config") fun bpsConfig(): BpsConfig = bpsConfig
 
-                /** An alias for the price. */
-                @JsonProperty("external_price_id")
-                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
+                /** The cadence to bill for this price on. */
+                @JsonProperty("cadence") fun cadence(): Cadence = cadence
+
+                /** An ISO 4217 currency string for which this price is billed in. */
+                @JsonProperty("currency") fun currency(): String = currency
+
+                /** The id of the item the plan will be associated with. */
+                @JsonProperty("item_id") fun itemId(): String = itemId
+
+                @JsonProperty("model_type") fun modelType(): ModelType = modelType
 
                 /** The name of the price. */
                 @JsonProperty("name") fun name(): String = name
@@ -9169,15 +9170,28 @@ constructor(
                 @JsonProperty("billable_metric_id")
                 fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
-                /** The id of the item the plan will be associated with. */
-                @JsonProperty("item_id") fun itemId(): String = itemId
-
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance)
+
+                /**
+                 * For custom cadence: specifies the duration of the billing period in days or
+                 * months.
+                 */
+                @JsonProperty("billing_cycle_configuration")
+                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+                    Optional.ofNullable(billingCycleConfiguration)
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
+
+                /** An alias for the price. */
+                @JsonProperty("external_price_id")
+                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -9190,17 +9204,6 @@ constructor(
                 @JsonProperty("invoice_grouping_key")
                 fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey)
 
-                /** The cadence to bill for this price on. */
-                @JsonProperty("cadence") fun cadence(): Cadence = cadence
-
-                /**
-                 * For custom cadence: specifies the duration of the billing period in days or
-                 * months.
-                 */
-                @JsonProperty("billing_cycle_configuration")
-                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(billingCycleConfiguration)
-
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
                  * If unspecified, a single invoice is produced per billing cycle.
@@ -9209,16 +9212,13 @@ constructor(
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
                     Optional.ofNullable(invoicingCycleConfiguration)
 
-                /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @JsonProperty("conversion_rate")
-                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
-
-                @JsonProperty("model_type") fun modelType(): ModelType = modelType
-
-                @JsonProperty("bps_config") fun bpsConfig(): BpsConfig = bpsConfig
-
-                /** An ISO 4217 currency string for which this price is billed in. */
-                @JsonProperty("currency") fun currency(): String = currency
+                /**
+                 * User-specified key/value pairs for the resource. Individual keys can be removed
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
+                 */
+                @JsonProperty("metadata")
+                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -9233,56 +9233,57 @@ constructor(
 
                 class Builder {
 
-                    private var metadata: Metadata? = null
-                    private var externalPriceId: String? = null
+                    private var bpsConfig: BpsConfig? = null
+                    private var cadence: Cadence? = null
+                    private var currency: String? = null
+                    private var itemId: String? = null
+                    private var modelType: ModelType? = null
                     private var name: String? = null
                     private var billableMetricId: String? = null
-                    private var itemId: String? = null
                     private var billedInAdvance: Boolean? = null
+                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
+                    private var conversionRate: Double? = null
+                    private var externalPriceId: String? = null
                     private var fixedPriceQuantity: Double? = null
                     private var invoiceGroupingKey: String? = null
-                    private var cadence: Cadence? = null
-                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
                     private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
-                    private var conversionRate: Double? = null
-                    private var modelType: ModelType? = null
-                    private var bpsConfig: BpsConfig? = null
-                    private var currency: String? = null
+                    private var metadata: Metadata? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(newFloatingBpsPrice: NewFloatingBpsPrice) = apply {
-                        metadata = newFloatingBpsPrice.metadata
-                        externalPriceId = newFloatingBpsPrice.externalPriceId
+                        bpsConfig = newFloatingBpsPrice.bpsConfig
+                        cadence = newFloatingBpsPrice.cadence
+                        currency = newFloatingBpsPrice.currency
+                        itemId = newFloatingBpsPrice.itemId
+                        modelType = newFloatingBpsPrice.modelType
                         name = newFloatingBpsPrice.name
                         billableMetricId = newFloatingBpsPrice.billableMetricId
-                        itemId = newFloatingBpsPrice.itemId
                         billedInAdvance = newFloatingBpsPrice.billedInAdvance
+                        billingCycleConfiguration = newFloatingBpsPrice.billingCycleConfiguration
+                        conversionRate = newFloatingBpsPrice.conversionRate
+                        externalPriceId = newFloatingBpsPrice.externalPriceId
                         fixedPriceQuantity = newFloatingBpsPrice.fixedPriceQuantity
                         invoiceGroupingKey = newFloatingBpsPrice.invoiceGroupingKey
-                        cadence = newFloatingBpsPrice.cadence
-                        billingCycleConfiguration = newFloatingBpsPrice.billingCycleConfiguration
                         invoicingCycleConfiguration =
                             newFloatingBpsPrice.invoicingCycleConfiguration
-                        conversionRate = newFloatingBpsPrice.conversionRate
-                        modelType = newFloatingBpsPrice.modelType
-                        bpsConfig = newFloatingBpsPrice.bpsConfig
-                        currency = newFloatingBpsPrice.currency
+                        metadata = newFloatingBpsPrice.metadata
                         additionalProperties =
                             newFloatingBpsPrice.additionalProperties.toMutableMap()
                     }
 
-                    /**
-                     * User-specified key/value pairs for the resource. Individual keys can be
-                     * removed by setting the value to `null`, and the entire metadata mapping can
-                     * be cleared by setting `metadata` to `null`.
-                     */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun bpsConfig(bpsConfig: BpsConfig) = apply { this.bpsConfig = bpsConfig }
 
-                    /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
-                        this.externalPriceId = externalPriceId
-                    }
+                    /** The cadence to bill for this price on. */
+                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
+
+                    /** An ISO 4217 currency string for which this price is billed in. */
+                    fun currency(currency: String) = apply { this.currency = currency }
+
+                    /** The id of the item the plan will be associated with. */
+                    fun itemId(itemId: String) = apply { this.itemId = itemId }
+
+                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
 
                     /** The name of the price. */
                     fun name(name: String) = apply { this.name = name }
@@ -9295,15 +9296,32 @@ constructor(
                         this.billableMetricId = billableMetricId
                     }
 
-                    /** The id of the item the plan will be associated with. */
-                    fun itemId(itemId: String) = apply { this.itemId = itemId }
-
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
                     fun billedInAdvance(billedInAdvance: Boolean) = apply {
                         this.billedInAdvance = billedInAdvance
+                    }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: BillingCycleConfiguration
+                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) = apply {
+                        this.conversionRate = conversionRate
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: String) = apply {
+                        this.externalPriceId = externalPriceId
                     }
 
                     /**
@@ -9319,17 +9337,6 @@ constructor(
                         this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
-                    /** The cadence to bill for this price on. */
-                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
-
-                    /**
-                     * For custom cadence: specifies the duration of the billing period in days or
-                     * months.
-                     */
-                    fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
-                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
-
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
@@ -9339,18 +9346,11 @@ constructor(
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
 
                     /**
-                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
-                        this.conversionRate = conversionRate
-                    }
-
-                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
-
-                    fun bpsConfig(bpsConfig: BpsConfig) = apply { this.bpsConfig = bpsConfig }
-
-                    /** An ISO 4217 currency string for which this price is billed in. */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -9376,21 +9376,21 @@ constructor(
 
                     fun build(): NewFloatingBpsPrice =
                         NewFloatingBpsPrice(
-                            metadata,
-                            externalPriceId,
+                            checkNotNull(bpsConfig) { "`bpsConfig` is required but was not set" },
+                            checkNotNull(cadence) { "`cadence` is required but was not set" },
+                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            checkNotNull(itemId) { "`itemId` is required but was not set" },
+                            checkNotNull(modelType) { "`modelType` is required but was not set" },
                             checkNotNull(name) { "`name` is required but was not set" },
                             billableMetricId,
-                            checkNotNull(itemId) { "`itemId` is required but was not set" },
                             billedInAdvance,
+                            billingCycleConfiguration,
+                            conversionRate,
+                            externalPriceId,
                             fixedPriceQuantity,
                             invoiceGroupingKey,
-                            checkNotNull(cadence) { "`cadence` is required but was not set" },
-                            billingCycleConfiguration,
                             invoicingCycleConfiguration,
-                            conversionRate,
-                            checkNotNull(modelType) { "`modelType` is required but was not set" },
-                            checkNotNull(bpsConfig) { "`bpsConfig` is required but was not set" },
-                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            metadata,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -10037,55 +10037,56 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewFloatingBpsPrice && metadata == other.metadata && externalPriceId == other.externalPriceId && name == other.name && billableMetricId == other.billableMetricId && itemId == other.itemId && billedInAdvance == other.billedInAdvance && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && cadence == other.cadence && billingCycleConfiguration == other.billingCycleConfiguration && invoicingCycleConfiguration == other.invoicingCycleConfiguration && conversionRate == other.conversionRate && modelType == other.modelType && bpsConfig == other.bpsConfig && currency == other.currency && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewFloatingBpsPrice && bpsConfig == other.bpsConfig && cadence == other.cadence && currency == other.currency && itemId == other.itemId && modelType == other.modelType && name == other.name && billableMetricId == other.billableMetricId && billedInAdvance == other.billedInAdvance && billingCycleConfiguration == other.billingCycleConfiguration && conversionRate == other.conversionRate && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && invoicingCycleConfiguration == other.invoicingCycleConfiguration && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(metadata, externalPriceId, name, billableMetricId, itemId, billedInAdvance, fixedPriceQuantity, invoiceGroupingKey, cadence, billingCycleConfiguration, invoicingCycleConfiguration, conversionRate, modelType, bpsConfig, currency, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(bpsConfig, cadence, currency, itemId, modelType, name, billableMetricId, billedInAdvance, billingCycleConfiguration, conversionRate, externalPriceId, fixedPriceQuantity, invoiceGroupingKey, invoicingCycleConfiguration, metadata, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewFloatingBpsPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, bpsConfig=$bpsConfig, currency=$currency, additionalProperties=$additionalProperties}"
+                    "NewFloatingBpsPrice{bpsConfig=$bpsConfig, cadence=$cadence, currency=$currency, itemId=$itemId, modelType=$modelType, name=$name, billableMetricId=$billableMetricId, billedInAdvance=$billedInAdvance, billingCycleConfiguration=$billingCycleConfiguration, conversionRate=$conversionRate, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, invoicingCycleConfiguration=$invoicingCycleConfiguration, metadata=$metadata, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class NewFloatingBulkBpsPrice
             @JsonCreator
             private constructor(
-                @JsonProperty("metadata") private val metadata: Metadata?,
-                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("bulk_bps_config") private val bulkBpsConfig: BulkBpsConfig,
+                @JsonProperty("cadence") private val cadence: Cadence,
+                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("item_id") private val itemId: String,
+                @JsonProperty("model_type") private val modelType: ModelType,
                 @JsonProperty("name") private val name: String,
                 @JsonProperty("billable_metric_id") private val billableMetricId: String?,
-                @JsonProperty("item_id") private val itemId: String,
                 @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
-                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
-                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
-                @JsonProperty("cadence") private val cadence: Cadence,
                 @JsonProperty("billing_cycle_configuration")
                 private val billingCycleConfiguration: BillingCycleConfiguration?,
+                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
+                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
                 @JsonProperty("invoicing_cycle_configuration")
                 private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
-                @JsonProperty("conversion_rate") private val conversionRate: Double?,
-                @JsonProperty("model_type") private val modelType: ModelType,
-                @JsonProperty("bulk_bps_config") private val bulkBpsConfig: BulkBpsConfig,
-                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("metadata") private val metadata: Metadata?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /**
-                 * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
-                 * setting `metadata` to `null`.
-                 */
-                @JsonProperty("metadata")
-                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+                @JsonProperty("bulk_bps_config") fun bulkBpsConfig(): BulkBpsConfig = bulkBpsConfig
 
-                /** An alias for the price. */
-                @JsonProperty("external_price_id")
-                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
+                /** The cadence to bill for this price on. */
+                @JsonProperty("cadence") fun cadence(): Cadence = cadence
+
+                /** An ISO 4217 currency string for which this price is billed in. */
+                @JsonProperty("currency") fun currency(): String = currency
+
+                /** The id of the item the plan will be associated with. */
+                @JsonProperty("item_id") fun itemId(): String = itemId
+
+                @JsonProperty("model_type") fun modelType(): ModelType = modelType
 
                 /** The name of the price. */
                 @JsonProperty("name") fun name(): String = name
@@ -10097,15 +10098,28 @@ constructor(
                 @JsonProperty("billable_metric_id")
                 fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
-                /** The id of the item the plan will be associated with. */
-                @JsonProperty("item_id") fun itemId(): String = itemId
-
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance)
+
+                /**
+                 * For custom cadence: specifies the duration of the billing period in days or
+                 * months.
+                 */
+                @JsonProperty("billing_cycle_configuration")
+                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+                    Optional.ofNullable(billingCycleConfiguration)
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
+
+                /** An alias for the price. */
+                @JsonProperty("external_price_id")
+                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -10118,17 +10132,6 @@ constructor(
                 @JsonProperty("invoice_grouping_key")
                 fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey)
 
-                /** The cadence to bill for this price on. */
-                @JsonProperty("cadence") fun cadence(): Cadence = cadence
-
-                /**
-                 * For custom cadence: specifies the duration of the billing period in days or
-                 * months.
-                 */
-                @JsonProperty("billing_cycle_configuration")
-                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(billingCycleConfiguration)
-
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
                  * If unspecified, a single invoice is produced per billing cycle.
@@ -10137,16 +10140,13 @@ constructor(
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
                     Optional.ofNullable(invoicingCycleConfiguration)
 
-                /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @JsonProperty("conversion_rate")
-                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
-
-                @JsonProperty("model_type") fun modelType(): ModelType = modelType
-
-                @JsonProperty("bulk_bps_config") fun bulkBpsConfig(): BulkBpsConfig = bulkBpsConfig
-
-                /** An ISO 4217 currency string for which this price is billed in. */
-                @JsonProperty("currency") fun currency(): String = currency
+                /**
+                 * User-specified key/value pairs for the resource. Individual keys can be removed
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
+                 */
+                @JsonProperty("metadata")
+                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -10161,57 +10161,60 @@ constructor(
 
                 class Builder {
 
-                    private var metadata: Metadata? = null
-                    private var externalPriceId: String? = null
+                    private var bulkBpsConfig: BulkBpsConfig? = null
+                    private var cadence: Cadence? = null
+                    private var currency: String? = null
+                    private var itemId: String? = null
+                    private var modelType: ModelType? = null
                     private var name: String? = null
                     private var billableMetricId: String? = null
-                    private var itemId: String? = null
                     private var billedInAdvance: Boolean? = null
+                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
+                    private var conversionRate: Double? = null
+                    private var externalPriceId: String? = null
                     private var fixedPriceQuantity: Double? = null
                     private var invoiceGroupingKey: String? = null
-                    private var cadence: Cadence? = null
-                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
                     private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
-                    private var conversionRate: Double? = null
-                    private var modelType: ModelType? = null
-                    private var bulkBpsConfig: BulkBpsConfig? = null
-                    private var currency: String? = null
+                    private var metadata: Metadata? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(newFloatingBulkBpsPrice: NewFloatingBulkBpsPrice) = apply {
-                        metadata = newFloatingBulkBpsPrice.metadata
-                        externalPriceId = newFloatingBulkBpsPrice.externalPriceId
+                        bulkBpsConfig = newFloatingBulkBpsPrice.bulkBpsConfig
+                        cadence = newFloatingBulkBpsPrice.cadence
+                        currency = newFloatingBulkBpsPrice.currency
+                        itemId = newFloatingBulkBpsPrice.itemId
+                        modelType = newFloatingBulkBpsPrice.modelType
                         name = newFloatingBulkBpsPrice.name
                         billableMetricId = newFloatingBulkBpsPrice.billableMetricId
-                        itemId = newFloatingBulkBpsPrice.itemId
                         billedInAdvance = newFloatingBulkBpsPrice.billedInAdvance
-                        fixedPriceQuantity = newFloatingBulkBpsPrice.fixedPriceQuantity
-                        invoiceGroupingKey = newFloatingBulkBpsPrice.invoiceGroupingKey
-                        cadence = newFloatingBulkBpsPrice.cadence
                         billingCycleConfiguration =
                             newFloatingBulkBpsPrice.billingCycleConfiguration
+                        conversionRate = newFloatingBulkBpsPrice.conversionRate
+                        externalPriceId = newFloatingBulkBpsPrice.externalPriceId
+                        fixedPriceQuantity = newFloatingBulkBpsPrice.fixedPriceQuantity
+                        invoiceGroupingKey = newFloatingBulkBpsPrice.invoiceGroupingKey
                         invoicingCycleConfiguration =
                             newFloatingBulkBpsPrice.invoicingCycleConfiguration
-                        conversionRate = newFloatingBulkBpsPrice.conversionRate
-                        modelType = newFloatingBulkBpsPrice.modelType
-                        bulkBpsConfig = newFloatingBulkBpsPrice.bulkBpsConfig
-                        currency = newFloatingBulkBpsPrice.currency
+                        metadata = newFloatingBulkBpsPrice.metadata
                         additionalProperties =
                             newFloatingBulkBpsPrice.additionalProperties.toMutableMap()
                     }
 
-                    /**
-                     * User-specified key/value pairs for the resource. Individual keys can be
-                     * removed by setting the value to `null`, and the entire metadata mapping can
-                     * be cleared by setting `metadata` to `null`.
-                     */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
-
-                    /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
-                        this.externalPriceId = externalPriceId
+                    fun bulkBpsConfig(bulkBpsConfig: BulkBpsConfig) = apply {
+                        this.bulkBpsConfig = bulkBpsConfig
                     }
+
+                    /** The cadence to bill for this price on. */
+                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
+
+                    /** An ISO 4217 currency string for which this price is billed in. */
+                    fun currency(currency: String) = apply { this.currency = currency }
+
+                    /** The id of the item the plan will be associated with. */
+                    fun itemId(itemId: String) = apply { this.itemId = itemId }
+
+                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
 
                     /** The name of the price. */
                     fun name(name: String) = apply { this.name = name }
@@ -10224,15 +10227,32 @@ constructor(
                         this.billableMetricId = billableMetricId
                     }
 
-                    /** The id of the item the plan will be associated with. */
-                    fun itemId(itemId: String) = apply { this.itemId = itemId }
-
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
                     fun billedInAdvance(billedInAdvance: Boolean) = apply {
                         this.billedInAdvance = billedInAdvance
+                    }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: BillingCycleConfiguration
+                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) = apply {
+                        this.conversionRate = conversionRate
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: String) = apply {
+                        this.externalPriceId = externalPriceId
                     }
 
                     /**
@@ -10248,17 +10268,6 @@ constructor(
                         this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
-                    /** The cadence to bill for this price on. */
-                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
-
-                    /**
-                     * For custom cadence: specifies the duration of the billing period in days or
-                     * months.
-                     */
-                    fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
-                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
-
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
@@ -10268,20 +10277,11 @@ constructor(
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
 
                     /**
-                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
-                        this.conversionRate = conversionRate
-                    }
-
-                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
-
-                    fun bulkBpsConfig(bulkBpsConfig: BulkBpsConfig) = apply {
-                        this.bulkBpsConfig = bulkBpsConfig
-                    }
-
-                    /** An ISO 4217 currency string for which this price is billed in. */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -10307,23 +10307,23 @@ constructor(
 
                     fun build(): NewFloatingBulkBpsPrice =
                         NewFloatingBulkBpsPrice(
-                            metadata,
-                            externalPriceId,
-                            checkNotNull(name) { "`name` is required but was not set" },
-                            billableMetricId,
-                            checkNotNull(itemId) { "`itemId` is required but was not set" },
-                            billedInAdvance,
-                            fixedPriceQuantity,
-                            invoiceGroupingKey,
-                            checkNotNull(cadence) { "`cadence` is required but was not set" },
-                            billingCycleConfiguration,
-                            invoicingCycleConfiguration,
-                            conversionRate,
-                            checkNotNull(modelType) { "`modelType` is required but was not set" },
                             checkNotNull(bulkBpsConfig) {
                                 "`bulkBpsConfig` is required but was not set"
                             },
+                            checkNotNull(cadence) { "`cadence` is required but was not set" },
                             checkNotNull(currency) { "`currency` is required but was not set" },
+                            checkNotNull(itemId) { "`itemId` is required but was not set" },
+                            checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(name) { "`name` is required but was not set" },
+                            billableMetricId,
+                            billedInAdvance,
+                            billingCycleConfiguration,
+                            conversionRate,
+                            externalPriceId,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            invoicingCycleConfiguration,
+                            metadata,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -10414,20 +10414,20 @@ constructor(
                     class Tier
                     @JsonCreator
                     private constructor(
-                        @JsonProperty("maximum_amount") private val maximumAmount: String?,
                         @JsonProperty("bps") private val bps: Double,
+                        @JsonProperty("maximum_amount") private val maximumAmount: String?,
                         @JsonProperty("per_unit_maximum") private val perUnitMaximum: String?,
                         @JsonAnySetter
                         private val additionalProperties: Map<String, JsonValue> =
                             immutableEmptyMap(),
                     ) {
 
+                        /** Basis points to rate on */
+                        @JsonProperty("bps") fun bps(): Double = bps
+
                         /** Upper bound for tier */
                         @JsonProperty("maximum_amount")
                         fun maximumAmount(): Optional<String> = Optional.ofNullable(maximumAmount)
-
-                        /** Basis points to rate on */
-                        @JsonProperty("bps") fun bps(): Double = bps
 
                         /** The maximum amount to charge for any one event */
                         @JsonProperty("per_unit_maximum")
@@ -10446,27 +10446,27 @@ constructor(
 
                         class Builder {
 
-                            private var maximumAmount: String? = null
                             private var bps: Double? = null
+                            private var maximumAmount: String? = null
                             private var perUnitMaximum: String? = null
                             private var additionalProperties: MutableMap<String, JsonValue> =
                                 mutableMapOf()
 
                             @JvmSynthetic
                             internal fun from(tier: Tier) = apply {
-                                maximumAmount = tier.maximumAmount
                                 bps = tier.bps
+                                maximumAmount = tier.maximumAmount
                                 perUnitMaximum = tier.perUnitMaximum
                                 additionalProperties = tier.additionalProperties.toMutableMap()
                             }
+
+                            /** Basis points to rate on */
+                            fun bps(bps: Double) = apply { this.bps = bps }
 
                             /** Upper bound for tier */
                             fun maximumAmount(maximumAmount: String) = apply {
                                 this.maximumAmount = maximumAmount
                             }
-
-                            /** Basis points to rate on */
-                            fun bps(bps: Double) = apply { this.bps = bps }
 
                             /** The maximum amount to charge for any one event */
                             fun perUnitMaximum(perUnitMaximum: String) = apply {
@@ -10497,8 +10497,8 @@ constructor(
 
                             fun build(): Tier =
                                 Tier(
-                                    maximumAmount,
                                     checkNotNull(bps) { "`bps` is required but was not set" },
+                                    maximumAmount,
                                     perUnitMaximum,
                                     additionalProperties.toImmutable(),
                                 )
@@ -10509,17 +10509,17 @@ constructor(
                                 return true
                             }
 
-                            return /* spotless:off */ other is Tier && maximumAmount == other.maximumAmount && bps == other.bps && perUnitMaximum == other.perUnitMaximum && additionalProperties == other.additionalProperties /* spotless:on */
+                            return /* spotless:off */ other is Tier && bps == other.bps && maximumAmount == other.maximumAmount && perUnitMaximum == other.perUnitMaximum && additionalProperties == other.additionalProperties /* spotless:on */
                         }
 
                         /* spotless:off */
-                        private val hashCode: Int by lazy { Objects.hash(maximumAmount, bps, perUnitMaximum, additionalProperties) }
+                        private val hashCode: Int by lazy { Objects.hash(bps, maximumAmount, perUnitMaximum, additionalProperties) }
                         /* spotless:on */
 
                         override fun hashCode(): Int = hashCode
 
                         override fun toString() =
-                            "Tier{maximumAmount=$maximumAmount, bps=$bps, perUnitMaximum=$perUnitMaximum, additionalProperties=$additionalProperties}"
+                            "Tier{bps=$bps, maximumAmount=$maximumAmount, perUnitMaximum=$perUnitMaximum, additionalProperties=$additionalProperties}"
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -11084,55 +11084,56 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewFloatingBulkBpsPrice && metadata == other.metadata && externalPriceId == other.externalPriceId && name == other.name && billableMetricId == other.billableMetricId && itemId == other.itemId && billedInAdvance == other.billedInAdvance && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && cadence == other.cadence && billingCycleConfiguration == other.billingCycleConfiguration && invoicingCycleConfiguration == other.invoicingCycleConfiguration && conversionRate == other.conversionRate && modelType == other.modelType && bulkBpsConfig == other.bulkBpsConfig && currency == other.currency && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewFloatingBulkBpsPrice && bulkBpsConfig == other.bulkBpsConfig && cadence == other.cadence && currency == other.currency && itemId == other.itemId && modelType == other.modelType && name == other.name && billableMetricId == other.billableMetricId && billedInAdvance == other.billedInAdvance && billingCycleConfiguration == other.billingCycleConfiguration && conversionRate == other.conversionRate && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && invoicingCycleConfiguration == other.invoicingCycleConfiguration && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(metadata, externalPriceId, name, billableMetricId, itemId, billedInAdvance, fixedPriceQuantity, invoiceGroupingKey, cadence, billingCycleConfiguration, invoicingCycleConfiguration, conversionRate, modelType, bulkBpsConfig, currency, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(bulkBpsConfig, cadence, currency, itemId, modelType, name, billableMetricId, billedInAdvance, billingCycleConfiguration, conversionRate, externalPriceId, fixedPriceQuantity, invoiceGroupingKey, invoicingCycleConfiguration, metadata, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewFloatingBulkBpsPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, bulkBpsConfig=$bulkBpsConfig, currency=$currency, additionalProperties=$additionalProperties}"
+                    "NewFloatingBulkBpsPrice{bulkBpsConfig=$bulkBpsConfig, cadence=$cadence, currency=$currency, itemId=$itemId, modelType=$modelType, name=$name, billableMetricId=$billableMetricId, billedInAdvance=$billedInAdvance, billingCycleConfiguration=$billingCycleConfiguration, conversionRate=$conversionRate, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, invoicingCycleConfiguration=$invoicingCycleConfiguration, metadata=$metadata, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class NewFloatingBulkPrice
             @JsonCreator
             private constructor(
-                @JsonProperty("metadata") private val metadata: Metadata?,
-                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("bulk_config") private val bulkConfig: BulkConfig,
+                @JsonProperty("cadence") private val cadence: Cadence,
+                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("item_id") private val itemId: String,
+                @JsonProperty("model_type") private val modelType: ModelType,
                 @JsonProperty("name") private val name: String,
                 @JsonProperty("billable_metric_id") private val billableMetricId: String?,
-                @JsonProperty("item_id") private val itemId: String,
                 @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
-                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
-                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
-                @JsonProperty("cadence") private val cadence: Cadence,
                 @JsonProperty("billing_cycle_configuration")
                 private val billingCycleConfiguration: BillingCycleConfiguration?,
+                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
+                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
                 @JsonProperty("invoicing_cycle_configuration")
                 private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
-                @JsonProperty("conversion_rate") private val conversionRate: Double?,
-                @JsonProperty("model_type") private val modelType: ModelType,
-                @JsonProperty("bulk_config") private val bulkConfig: BulkConfig,
-                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("metadata") private val metadata: Metadata?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /**
-                 * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
-                 * setting `metadata` to `null`.
-                 */
-                @JsonProperty("metadata")
-                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+                @JsonProperty("bulk_config") fun bulkConfig(): BulkConfig = bulkConfig
 
-                /** An alias for the price. */
-                @JsonProperty("external_price_id")
-                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
+                /** The cadence to bill for this price on. */
+                @JsonProperty("cadence") fun cadence(): Cadence = cadence
+
+                /** An ISO 4217 currency string for which this price is billed in. */
+                @JsonProperty("currency") fun currency(): String = currency
+
+                /** The id of the item the plan will be associated with. */
+                @JsonProperty("item_id") fun itemId(): String = itemId
+
+                @JsonProperty("model_type") fun modelType(): ModelType = modelType
 
                 /** The name of the price. */
                 @JsonProperty("name") fun name(): String = name
@@ -11144,15 +11145,28 @@ constructor(
                 @JsonProperty("billable_metric_id")
                 fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
-                /** The id of the item the plan will be associated with. */
-                @JsonProperty("item_id") fun itemId(): String = itemId
-
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance)
+
+                /**
+                 * For custom cadence: specifies the duration of the billing period in days or
+                 * months.
+                 */
+                @JsonProperty("billing_cycle_configuration")
+                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+                    Optional.ofNullable(billingCycleConfiguration)
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
+
+                /** An alias for the price. */
+                @JsonProperty("external_price_id")
+                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -11165,17 +11179,6 @@ constructor(
                 @JsonProperty("invoice_grouping_key")
                 fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey)
 
-                /** The cadence to bill for this price on. */
-                @JsonProperty("cadence") fun cadence(): Cadence = cadence
-
-                /**
-                 * For custom cadence: specifies the duration of the billing period in days or
-                 * months.
-                 */
-                @JsonProperty("billing_cycle_configuration")
-                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(billingCycleConfiguration)
-
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
                  * If unspecified, a single invoice is produced per billing cycle.
@@ -11184,16 +11187,13 @@ constructor(
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
                     Optional.ofNullable(invoicingCycleConfiguration)
 
-                /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @JsonProperty("conversion_rate")
-                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
-
-                @JsonProperty("model_type") fun modelType(): ModelType = modelType
-
-                @JsonProperty("bulk_config") fun bulkConfig(): BulkConfig = bulkConfig
-
-                /** An ISO 4217 currency string for which this price is billed in. */
-                @JsonProperty("currency") fun currency(): String = currency
+                /**
+                 * User-specified key/value pairs for the resource. Individual keys can be removed
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
+                 */
+                @JsonProperty("metadata")
+                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -11208,56 +11208,57 @@ constructor(
 
                 class Builder {
 
-                    private var metadata: Metadata? = null
-                    private var externalPriceId: String? = null
+                    private var bulkConfig: BulkConfig? = null
+                    private var cadence: Cadence? = null
+                    private var currency: String? = null
+                    private var itemId: String? = null
+                    private var modelType: ModelType? = null
                     private var name: String? = null
                     private var billableMetricId: String? = null
-                    private var itemId: String? = null
                     private var billedInAdvance: Boolean? = null
+                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
+                    private var conversionRate: Double? = null
+                    private var externalPriceId: String? = null
                     private var fixedPriceQuantity: Double? = null
                     private var invoiceGroupingKey: String? = null
-                    private var cadence: Cadence? = null
-                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
                     private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
-                    private var conversionRate: Double? = null
-                    private var modelType: ModelType? = null
-                    private var bulkConfig: BulkConfig? = null
-                    private var currency: String? = null
+                    private var metadata: Metadata? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(newFloatingBulkPrice: NewFloatingBulkPrice) = apply {
-                        metadata = newFloatingBulkPrice.metadata
-                        externalPriceId = newFloatingBulkPrice.externalPriceId
+                        bulkConfig = newFloatingBulkPrice.bulkConfig
+                        cadence = newFloatingBulkPrice.cadence
+                        currency = newFloatingBulkPrice.currency
+                        itemId = newFloatingBulkPrice.itemId
+                        modelType = newFloatingBulkPrice.modelType
                         name = newFloatingBulkPrice.name
                         billableMetricId = newFloatingBulkPrice.billableMetricId
-                        itemId = newFloatingBulkPrice.itemId
                         billedInAdvance = newFloatingBulkPrice.billedInAdvance
+                        billingCycleConfiguration = newFloatingBulkPrice.billingCycleConfiguration
+                        conversionRate = newFloatingBulkPrice.conversionRate
+                        externalPriceId = newFloatingBulkPrice.externalPriceId
                         fixedPriceQuantity = newFloatingBulkPrice.fixedPriceQuantity
                         invoiceGroupingKey = newFloatingBulkPrice.invoiceGroupingKey
-                        cadence = newFloatingBulkPrice.cadence
-                        billingCycleConfiguration = newFloatingBulkPrice.billingCycleConfiguration
                         invoicingCycleConfiguration =
                             newFloatingBulkPrice.invoicingCycleConfiguration
-                        conversionRate = newFloatingBulkPrice.conversionRate
-                        modelType = newFloatingBulkPrice.modelType
-                        bulkConfig = newFloatingBulkPrice.bulkConfig
-                        currency = newFloatingBulkPrice.currency
+                        metadata = newFloatingBulkPrice.metadata
                         additionalProperties =
                             newFloatingBulkPrice.additionalProperties.toMutableMap()
                     }
 
-                    /**
-                     * User-specified key/value pairs for the resource. Individual keys can be
-                     * removed by setting the value to `null`, and the entire metadata mapping can
-                     * be cleared by setting `metadata` to `null`.
-                     */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun bulkConfig(bulkConfig: BulkConfig) = apply { this.bulkConfig = bulkConfig }
 
-                    /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
-                        this.externalPriceId = externalPriceId
-                    }
+                    /** The cadence to bill for this price on. */
+                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
+
+                    /** An ISO 4217 currency string for which this price is billed in. */
+                    fun currency(currency: String) = apply { this.currency = currency }
+
+                    /** The id of the item the plan will be associated with. */
+                    fun itemId(itemId: String) = apply { this.itemId = itemId }
+
+                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
 
                     /** The name of the price. */
                     fun name(name: String) = apply { this.name = name }
@@ -11270,15 +11271,32 @@ constructor(
                         this.billableMetricId = billableMetricId
                     }
 
-                    /** The id of the item the plan will be associated with. */
-                    fun itemId(itemId: String) = apply { this.itemId = itemId }
-
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
                     fun billedInAdvance(billedInAdvance: Boolean) = apply {
                         this.billedInAdvance = billedInAdvance
+                    }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: BillingCycleConfiguration
+                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) = apply {
+                        this.conversionRate = conversionRate
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: String) = apply {
+                        this.externalPriceId = externalPriceId
                     }
 
                     /**
@@ -11294,17 +11312,6 @@ constructor(
                         this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
-                    /** The cadence to bill for this price on. */
-                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
-
-                    /**
-                     * For custom cadence: specifies the duration of the billing period in days or
-                     * months.
-                     */
-                    fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
-                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
-
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
@@ -11314,18 +11321,11 @@ constructor(
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
 
                     /**
-                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
-                        this.conversionRate = conversionRate
-                    }
-
-                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
-
-                    fun bulkConfig(bulkConfig: BulkConfig) = apply { this.bulkConfig = bulkConfig }
-
-                    /** An ISO 4217 currency string for which this price is billed in. */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -11351,21 +11351,21 @@ constructor(
 
                     fun build(): NewFloatingBulkPrice =
                         NewFloatingBulkPrice(
-                            metadata,
-                            externalPriceId,
+                            checkNotNull(bulkConfig) { "`bulkConfig` is required but was not set" },
+                            checkNotNull(cadence) { "`cadence` is required but was not set" },
+                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            checkNotNull(itemId) { "`itemId` is required but was not set" },
+                            checkNotNull(modelType) { "`modelType` is required but was not set" },
                             checkNotNull(name) { "`name` is required but was not set" },
                             billableMetricId,
-                            checkNotNull(itemId) { "`itemId` is required but was not set" },
                             billedInAdvance,
+                            billingCycleConfiguration,
+                            conversionRate,
+                            externalPriceId,
                             fixedPriceQuantity,
                             invoiceGroupingKey,
-                            checkNotNull(cadence) { "`cadence` is required but was not set" },
-                            billingCycleConfiguration,
                             invoicingCycleConfiguration,
-                            conversionRate,
-                            checkNotNull(modelType) { "`modelType` is required but was not set" },
-                            checkNotNull(bulkConfig) { "`bulkConfig` is required but was not set" },
-                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            metadata,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -11447,19 +11447,19 @@ constructor(
                     class Tier
                     @JsonCreator
                     private constructor(
-                        @JsonProperty("maximum_units") private val maximumUnits: Double?,
                         @JsonProperty("unit_amount") private val unitAmount: String,
+                        @JsonProperty("maximum_units") private val maximumUnits: Double?,
                         @JsonAnySetter
                         private val additionalProperties: Map<String, JsonValue> =
                             immutableEmptyMap(),
                     ) {
 
+                        /** Amount per unit */
+                        @JsonProperty("unit_amount") fun unitAmount(): String = unitAmount
+
                         /** Upper bound for this tier */
                         @JsonProperty("maximum_units")
                         fun maximumUnits(): Optional<Double> = Optional.ofNullable(maximumUnits)
-
-                        /** Amount per unit */
-                        @JsonProperty("unit_amount") fun unitAmount(): String = unitAmount
 
                         @JsonAnyGetter
                         @ExcludeMissing
@@ -11474,26 +11474,26 @@ constructor(
 
                         class Builder {
 
-                            private var maximumUnits: Double? = null
                             private var unitAmount: String? = null
+                            private var maximumUnits: Double? = null
                             private var additionalProperties: MutableMap<String, JsonValue> =
                                 mutableMapOf()
 
                             @JvmSynthetic
                             internal fun from(tier: Tier) = apply {
-                                maximumUnits = tier.maximumUnits
                                 unitAmount = tier.unitAmount
+                                maximumUnits = tier.maximumUnits
                                 additionalProperties = tier.additionalProperties.toMutableMap()
-                            }
-
-                            /** Upper bound for this tier */
-                            fun maximumUnits(maximumUnits: Double) = apply {
-                                this.maximumUnits = maximumUnits
                             }
 
                             /** Amount per unit */
                             fun unitAmount(unitAmount: String) = apply {
                                 this.unitAmount = unitAmount
+                            }
+
+                            /** Upper bound for this tier */
+                            fun maximumUnits(maximumUnits: Double) = apply {
+                                this.maximumUnits = maximumUnits
                             }
 
                             fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -11520,10 +11520,10 @@ constructor(
 
                             fun build(): Tier =
                                 Tier(
-                                    maximumUnits,
                                     checkNotNull(unitAmount) {
                                         "`unitAmount` is required but was not set"
                                     },
+                                    maximumUnits,
                                     additionalProperties.toImmutable(),
                                 )
                         }
@@ -11533,17 +11533,17 @@ constructor(
                                 return true
                             }
 
-                            return /* spotless:off */ other is Tier && maximumUnits == other.maximumUnits && unitAmount == other.unitAmount && additionalProperties == other.additionalProperties /* spotless:on */
+                            return /* spotless:off */ other is Tier && unitAmount == other.unitAmount && maximumUnits == other.maximumUnits && additionalProperties == other.additionalProperties /* spotless:on */
                         }
 
                         /* spotless:off */
-                        private val hashCode: Int by lazy { Objects.hash(maximumUnits, unitAmount, additionalProperties) }
+                        private val hashCode: Int by lazy { Objects.hash(unitAmount, maximumUnits, additionalProperties) }
                         /* spotless:on */
 
                         override fun hashCode(): Int = hashCode
 
                         override fun toString() =
-                            "Tier{maximumUnits=$maximumUnits, unitAmount=$unitAmount, additionalProperties=$additionalProperties}"
+                            "Tier{unitAmount=$unitAmount, maximumUnits=$maximumUnits, additionalProperties=$additionalProperties}"
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -12108,59 +12108,62 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewFloatingBulkPrice && metadata == other.metadata && externalPriceId == other.externalPriceId && name == other.name && billableMetricId == other.billableMetricId && itemId == other.itemId && billedInAdvance == other.billedInAdvance && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && cadence == other.cadence && billingCycleConfiguration == other.billingCycleConfiguration && invoicingCycleConfiguration == other.invoicingCycleConfiguration && conversionRate == other.conversionRate && modelType == other.modelType && bulkConfig == other.bulkConfig && currency == other.currency && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewFloatingBulkPrice && bulkConfig == other.bulkConfig && cadence == other.cadence && currency == other.currency && itemId == other.itemId && modelType == other.modelType && name == other.name && billableMetricId == other.billableMetricId && billedInAdvance == other.billedInAdvance && billingCycleConfiguration == other.billingCycleConfiguration && conversionRate == other.conversionRate && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && invoicingCycleConfiguration == other.invoicingCycleConfiguration && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(metadata, externalPriceId, name, billableMetricId, itemId, billedInAdvance, fixedPriceQuantity, invoiceGroupingKey, cadence, billingCycleConfiguration, invoicingCycleConfiguration, conversionRate, modelType, bulkConfig, currency, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(bulkConfig, cadence, currency, itemId, modelType, name, billableMetricId, billedInAdvance, billingCycleConfiguration, conversionRate, externalPriceId, fixedPriceQuantity, invoiceGroupingKey, invoicingCycleConfiguration, metadata, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewFloatingBulkPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, bulkConfig=$bulkConfig, currency=$currency, additionalProperties=$additionalProperties}"
+                    "NewFloatingBulkPrice{bulkConfig=$bulkConfig, cadence=$cadence, currency=$currency, itemId=$itemId, modelType=$modelType, name=$name, billableMetricId=$billableMetricId, billedInAdvance=$billedInAdvance, billingCycleConfiguration=$billingCycleConfiguration, conversionRate=$conversionRate, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, invoicingCycleConfiguration=$invoicingCycleConfiguration, metadata=$metadata, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class NewFloatingThresholdTotalAmountPrice
             @JsonCreator
             private constructor(
-                @JsonProperty("metadata") private val metadata: Metadata?,
-                @JsonProperty("external_price_id") private val externalPriceId: String?,
-                @JsonProperty("name") private val name: String,
-                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
-                @JsonProperty("item_id") private val itemId: String,
-                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
-                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
-                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
                 @JsonProperty("cadence") private val cadence: Cadence,
-                @JsonProperty("billing_cycle_configuration")
-                private val billingCycleConfiguration: BillingCycleConfiguration?,
-                @JsonProperty("invoicing_cycle_configuration")
-                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
-                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("item_id") private val itemId: String,
                 @JsonProperty("model_type") private val modelType: ModelType,
+                @JsonProperty("name") private val name: String,
                 @JsonProperty("threshold_total_amount_config")
                 private val thresholdTotalAmountConfig: ThresholdTotalAmountConfig,
-                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
+                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
+                @JsonProperty("billing_cycle_configuration")
+                private val billingCycleConfiguration: BillingCycleConfiguration?,
+                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
+                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
+                @JsonProperty("invoicing_cycle_configuration")
+                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
+                @JsonProperty("metadata") private val metadata: Metadata?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /**
-                 * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
-                 * setting `metadata` to `null`.
-                 */
-                @JsonProperty("metadata")
-                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+                /** The cadence to bill for this price on. */
+                @JsonProperty("cadence") fun cadence(): Cadence = cadence
 
-                /** An alias for the price. */
-                @JsonProperty("external_price_id")
-                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
+                /** An ISO 4217 currency string for which this price is billed in. */
+                @JsonProperty("currency") fun currency(): String = currency
+
+                /** The id of the item the plan will be associated with. */
+                @JsonProperty("item_id") fun itemId(): String = itemId
+
+                @JsonProperty("model_type") fun modelType(): ModelType = modelType
 
                 /** The name of the price. */
                 @JsonProperty("name") fun name(): String = name
+
+                @JsonProperty("threshold_total_amount_config")
+                fun thresholdTotalAmountConfig(): ThresholdTotalAmountConfig =
+                    thresholdTotalAmountConfig
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -12169,15 +12172,28 @@ constructor(
                 @JsonProperty("billable_metric_id")
                 fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
-                /** The id of the item the plan will be associated with. */
-                @JsonProperty("item_id") fun itemId(): String = itemId
-
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance)
+
+                /**
+                 * For custom cadence: specifies the duration of the billing period in days or
+                 * months.
+                 */
+                @JsonProperty("billing_cycle_configuration")
+                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+                    Optional.ofNullable(billingCycleConfiguration)
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
+
+                /** An alias for the price. */
+                @JsonProperty("external_price_id")
+                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -12190,17 +12206,6 @@ constructor(
                 @JsonProperty("invoice_grouping_key")
                 fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey)
 
-                /** The cadence to bill for this price on. */
-                @JsonProperty("cadence") fun cadence(): Cadence = cadence
-
-                /**
-                 * For custom cadence: specifies the duration of the billing period in days or
-                 * months.
-                 */
-                @JsonProperty("billing_cycle_configuration")
-                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(billingCycleConfiguration)
-
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
                  * If unspecified, a single invoice is produced per billing cycle.
@@ -12209,18 +12214,13 @@ constructor(
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
                     Optional.ofNullable(invoicingCycleConfiguration)
 
-                /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @JsonProperty("conversion_rate")
-                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
-
-                @JsonProperty("model_type") fun modelType(): ModelType = modelType
-
-                @JsonProperty("threshold_total_amount_config")
-                fun thresholdTotalAmountConfig(): ThresholdTotalAmountConfig =
-                    thresholdTotalAmountConfig
-
-                /** An ISO 4217 currency string for which this price is billed in. */
-                @JsonProperty("currency") fun currency(): String = currency
+                /**
+                 * User-specified key/value pairs for the resource. Individual keys can be removed
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
+                 */
+                @JsonProperty("metadata")
+                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -12235,63 +12235,66 @@ constructor(
 
                 class Builder {
 
-                    private var metadata: Metadata? = null
-                    private var externalPriceId: String? = null
-                    private var name: String? = null
-                    private var billableMetricId: String? = null
+                    private var cadence: Cadence? = null
+                    private var currency: String? = null
                     private var itemId: String? = null
+                    private var modelType: ModelType? = null
+                    private var name: String? = null
+                    private var thresholdTotalAmountConfig: ThresholdTotalAmountConfig? = null
+                    private var billableMetricId: String? = null
                     private var billedInAdvance: Boolean? = null
+                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
+                    private var conversionRate: Double? = null
+                    private var externalPriceId: String? = null
                     private var fixedPriceQuantity: Double? = null
                     private var invoiceGroupingKey: String? = null
-                    private var cadence: Cadence? = null
-                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
                     private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
-                    private var conversionRate: Double? = null
-                    private var modelType: ModelType? = null
-                    private var thresholdTotalAmountConfig: ThresholdTotalAmountConfig? = null
-                    private var currency: String? = null
+                    private var metadata: Metadata? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(
                         newFloatingThresholdTotalAmountPrice: NewFloatingThresholdTotalAmountPrice
                     ) = apply {
-                        metadata = newFloatingThresholdTotalAmountPrice.metadata
-                        externalPriceId = newFloatingThresholdTotalAmountPrice.externalPriceId
-                        name = newFloatingThresholdTotalAmountPrice.name
-                        billableMetricId = newFloatingThresholdTotalAmountPrice.billableMetricId
-                        itemId = newFloatingThresholdTotalAmountPrice.itemId
-                        billedInAdvance = newFloatingThresholdTotalAmountPrice.billedInAdvance
-                        fixedPriceQuantity = newFloatingThresholdTotalAmountPrice.fixedPriceQuantity
-                        invoiceGroupingKey = newFloatingThresholdTotalAmountPrice.invoiceGroupingKey
                         cadence = newFloatingThresholdTotalAmountPrice.cadence
-                        billingCycleConfiguration =
-                            newFloatingThresholdTotalAmountPrice.billingCycleConfiguration
-                        invoicingCycleConfiguration =
-                            newFloatingThresholdTotalAmountPrice.invoicingCycleConfiguration
-                        conversionRate = newFloatingThresholdTotalAmountPrice.conversionRate
+                        currency = newFloatingThresholdTotalAmountPrice.currency
+                        itemId = newFloatingThresholdTotalAmountPrice.itemId
                         modelType = newFloatingThresholdTotalAmountPrice.modelType
+                        name = newFloatingThresholdTotalAmountPrice.name
                         thresholdTotalAmountConfig =
                             newFloatingThresholdTotalAmountPrice.thresholdTotalAmountConfig
-                        currency = newFloatingThresholdTotalAmountPrice.currency
+                        billableMetricId = newFloatingThresholdTotalAmountPrice.billableMetricId
+                        billedInAdvance = newFloatingThresholdTotalAmountPrice.billedInAdvance
+                        billingCycleConfiguration =
+                            newFloatingThresholdTotalAmountPrice.billingCycleConfiguration
+                        conversionRate = newFloatingThresholdTotalAmountPrice.conversionRate
+                        externalPriceId = newFloatingThresholdTotalAmountPrice.externalPriceId
+                        fixedPriceQuantity = newFloatingThresholdTotalAmountPrice.fixedPriceQuantity
+                        invoiceGroupingKey = newFloatingThresholdTotalAmountPrice.invoiceGroupingKey
+                        invoicingCycleConfiguration =
+                            newFloatingThresholdTotalAmountPrice.invoicingCycleConfiguration
+                        metadata = newFloatingThresholdTotalAmountPrice.metadata
                         additionalProperties =
                             newFloatingThresholdTotalAmountPrice.additionalProperties.toMutableMap()
                     }
 
-                    /**
-                     * User-specified key/value pairs for the resource. Individual keys can be
-                     * removed by setting the value to `null`, and the entire metadata mapping can
-                     * be cleared by setting `metadata` to `null`.
-                     */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    /** The cadence to bill for this price on. */
+                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
-                    /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
-                        this.externalPriceId = externalPriceId
-                    }
+                    /** An ISO 4217 currency string for which this price is billed in. */
+                    fun currency(currency: String) = apply { this.currency = currency }
+
+                    /** The id of the item the plan will be associated with. */
+                    fun itemId(itemId: String) = apply { this.itemId = itemId }
+
+                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
 
                     /** The name of the price. */
                     fun name(name: String) = apply { this.name = name }
+
+                    fun thresholdTotalAmountConfig(
+                        thresholdTotalAmountConfig: ThresholdTotalAmountConfig
+                    ) = apply { this.thresholdTotalAmountConfig = thresholdTotalAmountConfig }
 
                     /**
                      * The id of the billable metric for the price. Only needed if the price is
@@ -12301,15 +12304,32 @@ constructor(
                         this.billableMetricId = billableMetricId
                     }
 
-                    /** The id of the item the plan will be associated with. */
-                    fun itemId(itemId: String) = apply { this.itemId = itemId }
-
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
                     fun billedInAdvance(billedInAdvance: Boolean) = apply {
                         this.billedInAdvance = billedInAdvance
+                    }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: BillingCycleConfiguration
+                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) = apply {
+                        this.conversionRate = conversionRate
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: String) = apply {
+                        this.externalPriceId = externalPriceId
                     }
 
                     /**
@@ -12325,17 +12345,6 @@ constructor(
                         this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
-                    /** The cadence to bill for this price on. */
-                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
-
-                    /**
-                     * For custom cadence: specifies the duration of the billing period in days or
-                     * months.
-                     */
-                    fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
-                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
-
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
@@ -12345,20 +12354,11 @@ constructor(
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
 
                     /**
-                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
-                        this.conversionRate = conversionRate
-                    }
-
-                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
-
-                    fun thresholdTotalAmountConfig(
-                        thresholdTotalAmountConfig: ThresholdTotalAmountConfig
-                    ) = apply { this.thresholdTotalAmountConfig = thresholdTotalAmountConfig }
-
-                    /** An ISO 4217 currency string for which this price is billed in. */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -12384,23 +12384,23 @@ constructor(
 
                     fun build(): NewFloatingThresholdTotalAmountPrice =
                         NewFloatingThresholdTotalAmountPrice(
-                            metadata,
-                            externalPriceId,
-                            checkNotNull(name) { "`name` is required but was not set" },
-                            billableMetricId,
-                            checkNotNull(itemId) { "`itemId` is required but was not set" },
-                            billedInAdvance,
-                            fixedPriceQuantity,
-                            invoiceGroupingKey,
                             checkNotNull(cadence) { "`cadence` is required but was not set" },
-                            billingCycleConfiguration,
-                            invoicingCycleConfiguration,
-                            conversionRate,
+                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            checkNotNull(itemId) { "`itemId` is required but was not set" },
                             checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(name) { "`name` is required but was not set" },
                             checkNotNull(thresholdTotalAmountConfig) {
                                 "`thresholdTotalAmountConfig` is required but was not set"
                             },
-                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            billableMetricId,
+                            billedInAdvance,
+                            billingCycleConfiguration,
+                            conversionRate,
+                            externalPriceId,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            invoicingCycleConfiguration,
+                            metadata,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -13024,59 +13024,61 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewFloatingThresholdTotalAmountPrice && metadata == other.metadata && externalPriceId == other.externalPriceId && name == other.name && billableMetricId == other.billableMetricId && itemId == other.itemId && billedInAdvance == other.billedInAdvance && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && cadence == other.cadence && billingCycleConfiguration == other.billingCycleConfiguration && invoicingCycleConfiguration == other.invoicingCycleConfiguration && conversionRate == other.conversionRate && modelType == other.modelType && thresholdTotalAmountConfig == other.thresholdTotalAmountConfig && currency == other.currency && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewFloatingThresholdTotalAmountPrice && cadence == other.cadence && currency == other.currency && itemId == other.itemId && modelType == other.modelType && name == other.name && thresholdTotalAmountConfig == other.thresholdTotalAmountConfig && billableMetricId == other.billableMetricId && billedInAdvance == other.billedInAdvance && billingCycleConfiguration == other.billingCycleConfiguration && conversionRate == other.conversionRate && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && invoicingCycleConfiguration == other.invoicingCycleConfiguration && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(metadata, externalPriceId, name, billableMetricId, itemId, billedInAdvance, fixedPriceQuantity, invoiceGroupingKey, cadence, billingCycleConfiguration, invoicingCycleConfiguration, conversionRate, modelType, thresholdTotalAmountConfig, currency, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(cadence, currency, itemId, modelType, name, thresholdTotalAmountConfig, billableMetricId, billedInAdvance, billingCycleConfiguration, conversionRate, externalPriceId, fixedPriceQuantity, invoiceGroupingKey, invoicingCycleConfiguration, metadata, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewFloatingThresholdTotalAmountPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, thresholdTotalAmountConfig=$thresholdTotalAmountConfig, currency=$currency, additionalProperties=$additionalProperties}"
+                    "NewFloatingThresholdTotalAmountPrice{cadence=$cadence, currency=$currency, itemId=$itemId, modelType=$modelType, name=$name, thresholdTotalAmountConfig=$thresholdTotalAmountConfig, billableMetricId=$billableMetricId, billedInAdvance=$billedInAdvance, billingCycleConfiguration=$billingCycleConfiguration, conversionRate=$conversionRate, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, invoicingCycleConfiguration=$invoicingCycleConfiguration, metadata=$metadata, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class NewFloatingTieredPackagePrice
             @JsonCreator
             private constructor(
-                @JsonProperty("metadata") private val metadata: Metadata?,
-                @JsonProperty("external_price_id") private val externalPriceId: String?,
-                @JsonProperty("name") private val name: String,
-                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
-                @JsonProperty("item_id") private val itemId: String,
-                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
-                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
-                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
                 @JsonProperty("cadence") private val cadence: Cadence,
-                @JsonProperty("billing_cycle_configuration")
-                private val billingCycleConfiguration: BillingCycleConfiguration?,
-                @JsonProperty("invoicing_cycle_configuration")
-                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
-                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("item_id") private val itemId: String,
                 @JsonProperty("model_type") private val modelType: ModelType,
+                @JsonProperty("name") private val name: String,
                 @JsonProperty("tiered_package_config")
                 private val tieredPackageConfig: TieredPackageConfig,
-                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
+                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
+                @JsonProperty("billing_cycle_configuration")
+                private val billingCycleConfiguration: BillingCycleConfiguration?,
+                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
+                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
+                @JsonProperty("invoicing_cycle_configuration")
+                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
+                @JsonProperty("metadata") private val metadata: Metadata?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /**
-                 * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
-                 * setting `metadata` to `null`.
-                 */
-                @JsonProperty("metadata")
-                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+                /** The cadence to bill for this price on. */
+                @JsonProperty("cadence") fun cadence(): Cadence = cadence
 
-                /** An alias for the price. */
-                @JsonProperty("external_price_id")
-                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
+                /** An ISO 4217 currency string for which this price is billed in. */
+                @JsonProperty("currency") fun currency(): String = currency
+
+                /** The id of the item the plan will be associated with. */
+                @JsonProperty("item_id") fun itemId(): String = itemId
+
+                @JsonProperty("model_type") fun modelType(): ModelType = modelType
 
                 /** The name of the price. */
                 @JsonProperty("name") fun name(): String = name
+
+                @JsonProperty("tiered_package_config")
+                fun tieredPackageConfig(): TieredPackageConfig = tieredPackageConfig
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -13085,15 +13087,28 @@ constructor(
                 @JsonProperty("billable_metric_id")
                 fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
-                /** The id of the item the plan will be associated with. */
-                @JsonProperty("item_id") fun itemId(): String = itemId
-
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance)
+
+                /**
+                 * For custom cadence: specifies the duration of the billing period in days or
+                 * months.
+                 */
+                @JsonProperty("billing_cycle_configuration")
+                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+                    Optional.ofNullable(billingCycleConfiguration)
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
+
+                /** An alias for the price. */
+                @JsonProperty("external_price_id")
+                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -13106,17 +13121,6 @@ constructor(
                 @JsonProperty("invoice_grouping_key")
                 fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey)
 
-                /** The cadence to bill for this price on. */
-                @JsonProperty("cadence") fun cadence(): Cadence = cadence
-
-                /**
-                 * For custom cadence: specifies the duration of the billing period in days or
-                 * months.
-                 */
-                @JsonProperty("billing_cycle_configuration")
-                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(billingCycleConfiguration)
-
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
                  * If unspecified, a single invoice is produced per billing cycle.
@@ -13125,17 +13129,13 @@ constructor(
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
                     Optional.ofNullable(invoicingCycleConfiguration)
 
-                /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @JsonProperty("conversion_rate")
-                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
-
-                @JsonProperty("model_type") fun modelType(): ModelType = modelType
-
-                @JsonProperty("tiered_package_config")
-                fun tieredPackageConfig(): TieredPackageConfig = tieredPackageConfig
-
-                /** An ISO 4217 currency string for which this price is billed in. */
-                @JsonProperty("currency") fun currency(): String = currency
+                /**
+                 * User-specified key/value pairs for the resource. Individual keys can be removed
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
+                 */
+                @JsonProperty("metadata")
+                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -13150,62 +13150,65 @@ constructor(
 
                 class Builder {
 
-                    private var metadata: Metadata? = null
-                    private var externalPriceId: String? = null
-                    private var name: String? = null
-                    private var billableMetricId: String? = null
+                    private var cadence: Cadence? = null
+                    private var currency: String? = null
                     private var itemId: String? = null
+                    private var modelType: ModelType? = null
+                    private var name: String? = null
+                    private var tieredPackageConfig: TieredPackageConfig? = null
+                    private var billableMetricId: String? = null
                     private var billedInAdvance: Boolean? = null
+                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
+                    private var conversionRate: Double? = null
+                    private var externalPriceId: String? = null
                     private var fixedPriceQuantity: Double? = null
                     private var invoiceGroupingKey: String? = null
-                    private var cadence: Cadence? = null
-                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
                     private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
-                    private var conversionRate: Double? = null
-                    private var modelType: ModelType? = null
-                    private var tieredPackageConfig: TieredPackageConfig? = null
-                    private var currency: String? = null
+                    private var metadata: Metadata? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(
                         newFloatingTieredPackagePrice: NewFloatingTieredPackagePrice
                     ) = apply {
-                        metadata = newFloatingTieredPackagePrice.metadata
-                        externalPriceId = newFloatingTieredPackagePrice.externalPriceId
-                        name = newFloatingTieredPackagePrice.name
-                        billableMetricId = newFloatingTieredPackagePrice.billableMetricId
-                        itemId = newFloatingTieredPackagePrice.itemId
-                        billedInAdvance = newFloatingTieredPackagePrice.billedInAdvance
-                        fixedPriceQuantity = newFloatingTieredPackagePrice.fixedPriceQuantity
-                        invoiceGroupingKey = newFloatingTieredPackagePrice.invoiceGroupingKey
                         cadence = newFloatingTieredPackagePrice.cadence
+                        currency = newFloatingTieredPackagePrice.currency
+                        itemId = newFloatingTieredPackagePrice.itemId
+                        modelType = newFloatingTieredPackagePrice.modelType
+                        name = newFloatingTieredPackagePrice.name
+                        tieredPackageConfig = newFloatingTieredPackagePrice.tieredPackageConfig
+                        billableMetricId = newFloatingTieredPackagePrice.billableMetricId
+                        billedInAdvance = newFloatingTieredPackagePrice.billedInAdvance
                         billingCycleConfiguration =
                             newFloatingTieredPackagePrice.billingCycleConfiguration
+                        conversionRate = newFloatingTieredPackagePrice.conversionRate
+                        externalPriceId = newFloatingTieredPackagePrice.externalPriceId
+                        fixedPriceQuantity = newFloatingTieredPackagePrice.fixedPriceQuantity
+                        invoiceGroupingKey = newFloatingTieredPackagePrice.invoiceGroupingKey
                         invoicingCycleConfiguration =
                             newFloatingTieredPackagePrice.invoicingCycleConfiguration
-                        conversionRate = newFloatingTieredPackagePrice.conversionRate
-                        modelType = newFloatingTieredPackagePrice.modelType
-                        tieredPackageConfig = newFloatingTieredPackagePrice.tieredPackageConfig
-                        currency = newFloatingTieredPackagePrice.currency
+                        metadata = newFloatingTieredPackagePrice.metadata
                         additionalProperties =
                             newFloatingTieredPackagePrice.additionalProperties.toMutableMap()
                     }
 
-                    /**
-                     * User-specified key/value pairs for the resource. Individual keys can be
-                     * removed by setting the value to `null`, and the entire metadata mapping can
-                     * be cleared by setting `metadata` to `null`.
-                     */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    /** The cadence to bill for this price on. */
+                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
-                    /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
-                        this.externalPriceId = externalPriceId
-                    }
+                    /** An ISO 4217 currency string for which this price is billed in. */
+                    fun currency(currency: String) = apply { this.currency = currency }
+
+                    /** The id of the item the plan will be associated with. */
+                    fun itemId(itemId: String) = apply { this.itemId = itemId }
+
+                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
 
                     /** The name of the price. */
                     fun name(name: String) = apply { this.name = name }
+
+                    fun tieredPackageConfig(tieredPackageConfig: TieredPackageConfig) = apply {
+                        this.tieredPackageConfig = tieredPackageConfig
+                    }
 
                     /**
                      * The id of the billable metric for the price. Only needed if the price is
@@ -13215,15 +13218,32 @@ constructor(
                         this.billableMetricId = billableMetricId
                     }
 
-                    /** The id of the item the plan will be associated with. */
-                    fun itemId(itemId: String) = apply { this.itemId = itemId }
-
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
                     fun billedInAdvance(billedInAdvance: Boolean) = apply {
                         this.billedInAdvance = billedInAdvance
+                    }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: BillingCycleConfiguration
+                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) = apply {
+                        this.conversionRate = conversionRate
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: String) = apply {
+                        this.externalPriceId = externalPriceId
                     }
 
                     /**
@@ -13239,17 +13259,6 @@ constructor(
                         this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
-                    /** The cadence to bill for this price on. */
-                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
-
-                    /**
-                     * For custom cadence: specifies the duration of the billing period in days or
-                     * months.
-                     */
-                    fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
-                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
-
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
@@ -13259,20 +13268,11 @@ constructor(
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
 
                     /**
-                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
-                        this.conversionRate = conversionRate
-                    }
-
-                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
-
-                    fun tieredPackageConfig(tieredPackageConfig: TieredPackageConfig) = apply {
-                        this.tieredPackageConfig = tieredPackageConfig
-                    }
-
-                    /** An ISO 4217 currency string for which this price is billed in. */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -13298,23 +13298,23 @@ constructor(
 
                     fun build(): NewFloatingTieredPackagePrice =
                         NewFloatingTieredPackagePrice(
-                            metadata,
-                            externalPriceId,
-                            checkNotNull(name) { "`name` is required but was not set" },
-                            billableMetricId,
-                            checkNotNull(itemId) { "`itemId` is required but was not set" },
-                            billedInAdvance,
-                            fixedPriceQuantity,
-                            invoiceGroupingKey,
                             checkNotNull(cadence) { "`cadence` is required but was not set" },
-                            billingCycleConfiguration,
-                            invoicingCycleConfiguration,
-                            conversionRate,
+                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            checkNotNull(itemId) { "`itemId` is required but was not set" },
                             checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(name) { "`name` is required but was not set" },
                             checkNotNull(tieredPackageConfig) {
                                 "`tieredPackageConfig` is required but was not set"
                             },
-                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            billableMetricId,
+                            billedInAdvance,
+                            billingCycleConfiguration,
+                            conversionRate,
+                            externalPriceId,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            invoicingCycleConfiguration,
+                            metadata,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -13937,56 +13937,58 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewFloatingTieredPackagePrice && metadata == other.metadata && externalPriceId == other.externalPriceId && name == other.name && billableMetricId == other.billableMetricId && itemId == other.itemId && billedInAdvance == other.billedInAdvance && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && cadence == other.cadence && billingCycleConfiguration == other.billingCycleConfiguration && invoicingCycleConfiguration == other.invoicingCycleConfiguration && conversionRate == other.conversionRate && modelType == other.modelType && tieredPackageConfig == other.tieredPackageConfig && currency == other.currency && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewFloatingTieredPackagePrice && cadence == other.cadence && currency == other.currency && itemId == other.itemId && modelType == other.modelType && name == other.name && tieredPackageConfig == other.tieredPackageConfig && billableMetricId == other.billableMetricId && billedInAdvance == other.billedInAdvance && billingCycleConfiguration == other.billingCycleConfiguration && conversionRate == other.conversionRate && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && invoicingCycleConfiguration == other.invoicingCycleConfiguration && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(metadata, externalPriceId, name, billableMetricId, itemId, billedInAdvance, fixedPriceQuantity, invoiceGroupingKey, cadence, billingCycleConfiguration, invoicingCycleConfiguration, conversionRate, modelType, tieredPackageConfig, currency, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(cadence, currency, itemId, modelType, name, tieredPackageConfig, billableMetricId, billedInAdvance, billingCycleConfiguration, conversionRate, externalPriceId, fixedPriceQuantity, invoiceGroupingKey, invoicingCycleConfiguration, metadata, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewFloatingTieredPackagePrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, tieredPackageConfig=$tieredPackageConfig, currency=$currency, additionalProperties=$additionalProperties}"
+                    "NewFloatingTieredPackagePrice{cadence=$cadence, currency=$currency, itemId=$itemId, modelType=$modelType, name=$name, tieredPackageConfig=$tieredPackageConfig, billableMetricId=$billableMetricId, billedInAdvance=$billedInAdvance, billingCycleConfiguration=$billingCycleConfiguration, conversionRate=$conversionRate, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, invoicingCycleConfiguration=$invoicingCycleConfiguration, metadata=$metadata, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class NewFloatingGroupedTieredPrice
             @JsonCreator
             private constructor(
-                @JsonProperty("metadata") private val metadata: Metadata?,
-                @JsonProperty("external_price_id") private val externalPriceId: String?,
-                @JsonProperty("name") private val name: String,
-                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
-                @JsonProperty("item_id") private val itemId: String,
-                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
-                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
-                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
                 @JsonProperty("cadence") private val cadence: Cadence,
-                @JsonProperty("billing_cycle_configuration")
-                private val billingCycleConfiguration: BillingCycleConfiguration?,
-                @JsonProperty("invoicing_cycle_configuration")
-                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
-                @JsonProperty("conversion_rate") private val conversionRate: Double?,
-                @JsonProperty("model_type") private val modelType: ModelType,
+                @JsonProperty("currency") private val currency: String,
                 @JsonProperty("grouped_tiered_config")
                 private val groupedTieredConfig: GroupedTieredConfig,
-                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("item_id") private val itemId: String,
+                @JsonProperty("model_type") private val modelType: ModelType,
+                @JsonProperty("name") private val name: String,
+                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
+                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
+                @JsonProperty("billing_cycle_configuration")
+                private val billingCycleConfiguration: BillingCycleConfiguration?,
+                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
+                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
+                @JsonProperty("invoicing_cycle_configuration")
+                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
+                @JsonProperty("metadata") private val metadata: Metadata?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /**
-                 * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
-                 * setting `metadata` to `null`.
-                 */
-                @JsonProperty("metadata")
-                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+                /** The cadence to bill for this price on. */
+                @JsonProperty("cadence") fun cadence(): Cadence = cadence
 
-                /** An alias for the price. */
-                @JsonProperty("external_price_id")
-                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
+                /** An ISO 4217 currency string for which this price is billed in. */
+                @JsonProperty("currency") fun currency(): String = currency
+
+                @JsonProperty("grouped_tiered_config")
+                fun groupedTieredConfig(): GroupedTieredConfig = groupedTieredConfig
+
+                /** The id of the item the plan will be associated with. */
+                @JsonProperty("item_id") fun itemId(): String = itemId
+
+                @JsonProperty("model_type") fun modelType(): ModelType = modelType
 
                 /** The name of the price. */
                 @JsonProperty("name") fun name(): String = name
@@ -13998,15 +14000,28 @@ constructor(
                 @JsonProperty("billable_metric_id")
                 fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
-                /** The id of the item the plan will be associated with. */
-                @JsonProperty("item_id") fun itemId(): String = itemId
-
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance)
+
+                /**
+                 * For custom cadence: specifies the duration of the billing period in days or
+                 * months.
+                 */
+                @JsonProperty("billing_cycle_configuration")
+                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+                    Optional.ofNullable(billingCycleConfiguration)
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
+
+                /** An alias for the price. */
+                @JsonProperty("external_price_id")
+                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -14019,17 +14034,6 @@ constructor(
                 @JsonProperty("invoice_grouping_key")
                 fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey)
 
-                /** The cadence to bill for this price on. */
-                @JsonProperty("cadence") fun cadence(): Cadence = cadence
-
-                /**
-                 * For custom cadence: specifies the duration of the billing period in days or
-                 * months.
-                 */
-                @JsonProperty("billing_cycle_configuration")
-                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(billingCycleConfiguration)
-
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
                  * If unspecified, a single invoice is produced per billing cycle.
@@ -14038,17 +14042,13 @@ constructor(
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
                     Optional.ofNullable(invoicingCycleConfiguration)
 
-                /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @JsonProperty("conversion_rate")
-                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
-
-                @JsonProperty("model_type") fun modelType(): ModelType = modelType
-
-                @JsonProperty("grouped_tiered_config")
-                fun groupedTieredConfig(): GroupedTieredConfig = groupedTieredConfig
-
-                /** An ISO 4217 currency string for which this price is billed in. */
-                @JsonProperty("currency") fun currency(): String = currency
+                /**
+                 * User-specified key/value pairs for the resource. Individual keys can be removed
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
+                 */
+                @JsonProperty("metadata")
+                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -14063,59 +14063,62 @@ constructor(
 
                 class Builder {
 
-                    private var metadata: Metadata? = null
-                    private var externalPriceId: String? = null
+                    private var cadence: Cadence? = null
+                    private var currency: String? = null
+                    private var groupedTieredConfig: GroupedTieredConfig? = null
+                    private var itemId: String? = null
+                    private var modelType: ModelType? = null
                     private var name: String? = null
                     private var billableMetricId: String? = null
-                    private var itemId: String? = null
                     private var billedInAdvance: Boolean? = null
+                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
+                    private var conversionRate: Double? = null
+                    private var externalPriceId: String? = null
                     private var fixedPriceQuantity: Double? = null
                     private var invoiceGroupingKey: String? = null
-                    private var cadence: Cadence? = null
-                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
                     private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
-                    private var conversionRate: Double? = null
-                    private var modelType: ModelType? = null
-                    private var groupedTieredConfig: GroupedTieredConfig? = null
-                    private var currency: String? = null
+                    private var metadata: Metadata? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(
                         newFloatingGroupedTieredPrice: NewFloatingGroupedTieredPrice
                     ) = apply {
-                        metadata = newFloatingGroupedTieredPrice.metadata
-                        externalPriceId = newFloatingGroupedTieredPrice.externalPriceId
+                        cadence = newFloatingGroupedTieredPrice.cadence
+                        currency = newFloatingGroupedTieredPrice.currency
+                        groupedTieredConfig = newFloatingGroupedTieredPrice.groupedTieredConfig
+                        itemId = newFloatingGroupedTieredPrice.itemId
+                        modelType = newFloatingGroupedTieredPrice.modelType
                         name = newFloatingGroupedTieredPrice.name
                         billableMetricId = newFloatingGroupedTieredPrice.billableMetricId
-                        itemId = newFloatingGroupedTieredPrice.itemId
                         billedInAdvance = newFloatingGroupedTieredPrice.billedInAdvance
-                        fixedPriceQuantity = newFloatingGroupedTieredPrice.fixedPriceQuantity
-                        invoiceGroupingKey = newFloatingGroupedTieredPrice.invoiceGroupingKey
-                        cadence = newFloatingGroupedTieredPrice.cadence
                         billingCycleConfiguration =
                             newFloatingGroupedTieredPrice.billingCycleConfiguration
+                        conversionRate = newFloatingGroupedTieredPrice.conversionRate
+                        externalPriceId = newFloatingGroupedTieredPrice.externalPriceId
+                        fixedPriceQuantity = newFloatingGroupedTieredPrice.fixedPriceQuantity
+                        invoiceGroupingKey = newFloatingGroupedTieredPrice.invoiceGroupingKey
                         invoicingCycleConfiguration =
                             newFloatingGroupedTieredPrice.invoicingCycleConfiguration
-                        conversionRate = newFloatingGroupedTieredPrice.conversionRate
-                        modelType = newFloatingGroupedTieredPrice.modelType
-                        groupedTieredConfig = newFloatingGroupedTieredPrice.groupedTieredConfig
-                        currency = newFloatingGroupedTieredPrice.currency
+                        metadata = newFloatingGroupedTieredPrice.metadata
                         additionalProperties =
                             newFloatingGroupedTieredPrice.additionalProperties.toMutableMap()
                     }
 
-                    /**
-                     * User-specified key/value pairs for the resource. Individual keys can be
-                     * removed by setting the value to `null`, and the entire metadata mapping can
-                     * be cleared by setting `metadata` to `null`.
-                     */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    /** The cadence to bill for this price on. */
+                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
-                    /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
-                        this.externalPriceId = externalPriceId
+                    /** An ISO 4217 currency string for which this price is billed in. */
+                    fun currency(currency: String) = apply { this.currency = currency }
+
+                    fun groupedTieredConfig(groupedTieredConfig: GroupedTieredConfig) = apply {
+                        this.groupedTieredConfig = groupedTieredConfig
                     }
+
+                    /** The id of the item the plan will be associated with. */
+                    fun itemId(itemId: String) = apply { this.itemId = itemId }
+
+                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
 
                     /** The name of the price. */
                     fun name(name: String) = apply { this.name = name }
@@ -14128,15 +14131,32 @@ constructor(
                         this.billableMetricId = billableMetricId
                     }
 
-                    /** The id of the item the plan will be associated with. */
-                    fun itemId(itemId: String) = apply { this.itemId = itemId }
-
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
                     fun billedInAdvance(billedInAdvance: Boolean) = apply {
                         this.billedInAdvance = billedInAdvance
+                    }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: BillingCycleConfiguration
+                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) = apply {
+                        this.conversionRate = conversionRate
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: String) = apply {
+                        this.externalPriceId = externalPriceId
                     }
 
                     /**
@@ -14152,17 +14172,6 @@ constructor(
                         this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
-                    /** The cadence to bill for this price on. */
-                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
-
-                    /**
-                     * For custom cadence: specifies the duration of the billing period in days or
-                     * months.
-                     */
-                    fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
-                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
-
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
@@ -14172,20 +14181,11 @@ constructor(
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
 
                     /**
-                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
-                        this.conversionRate = conversionRate
-                    }
-
-                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
-
-                    fun groupedTieredConfig(groupedTieredConfig: GroupedTieredConfig) = apply {
-                        this.groupedTieredConfig = groupedTieredConfig
-                    }
-
-                    /** An ISO 4217 currency string for which this price is billed in. */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -14211,23 +14211,23 @@ constructor(
 
                     fun build(): NewFloatingGroupedTieredPrice =
                         NewFloatingGroupedTieredPrice(
-                            metadata,
-                            externalPriceId,
-                            checkNotNull(name) { "`name` is required but was not set" },
-                            billableMetricId,
-                            checkNotNull(itemId) { "`itemId` is required but was not set" },
-                            billedInAdvance,
-                            fixedPriceQuantity,
-                            invoiceGroupingKey,
                             checkNotNull(cadence) { "`cadence` is required but was not set" },
-                            billingCycleConfiguration,
-                            invoicingCycleConfiguration,
-                            conversionRate,
-                            checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(currency) { "`currency` is required but was not set" },
                             checkNotNull(groupedTieredConfig) {
                                 "`groupedTieredConfig` is required but was not set"
                             },
-                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            checkNotNull(itemId) { "`itemId` is required but was not set" },
+                            checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(name) { "`name` is required but was not set" },
+                            billableMetricId,
+                            billedInAdvance,
+                            billingCycleConfiguration,
+                            conversionRate,
+                            externalPriceId,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            invoicingCycleConfiguration,
+                            metadata,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -14850,59 +14850,61 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewFloatingGroupedTieredPrice && metadata == other.metadata && externalPriceId == other.externalPriceId && name == other.name && billableMetricId == other.billableMetricId && itemId == other.itemId && billedInAdvance == other.billedInAdvance && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && cadence == other.cadence && billingCycleConfiguration == other.billingCycleConfiguration && invoicingCycleConfiguration == other.invoicingCycleConfiguration && conversionRate == other.conversionRate && modelType == other.modelType && groupedTieredConfig == other.groupedTieredConfig && currency == other.currency && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewFloatingGroupedTieredPrice && cadence == other.cadence && currency == other.currency && groupedTieredConfig == other.groupedTieredConfig && itemId == other.itemId && modelType == other.modelType && name == other.name && billableMetricId == other.billableMetricId && billedInAdvance == other.billedInAdvance && billingCycleConfiguration == other.billingCycleConfiguration && conversionRate == other.conversionRate && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && invoicingCycleConfiguration == other.invoicingCycleConfiguration && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(metadata, externalPriceId, name, billableMetricId, itemId, billedInAdvance, fixedPriceQuantity, invoiceGroupingKey, cadence, billingCycleConfiguration, invoicingCycleConfiguration, conversionRate, modelType, groupedTieredConfig, currency, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(cadence, currency, groupedTieredConfig, itemId, modelType, name, billableMetricId, billedInAdvance, billingCycleConfiguration, conversionRate, externalPriceId, fixedPriceQuantity, invoiceGroupingKey, invoicingCycleConfiguration, metadata, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewFloatingGroupedTieredPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, groupedTieredConfig=$groupedTieredConfig, currency=$currency, additionalProperties=$additionalProperties}"
+                    "NewFloatingGroupedTieredPrice{cadence=$cadence, currency=$currency, groupedTieredConfig=$groupedTieredConfig, itemId=$itemId, modelType=$modelType, name=$name, billableMetricId=$billableMetricId, billedInAdvance=$billedInAdvance, billingCycleConfiguration=$billingCycleConfiguration, conversionRate=$conversionRate, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, invoicingCycleConfiguration=$invoicingCycleConfiguration, metadata=$metadata, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class NewFloatingTieredWithMinimumPrice
             @JsonCreator
             private constructor(
-                @JsonProperty("metadata") private val metadata: Metadata?,
-                @JsonProperty("external_price_id") private val externalPriceId: String?,
-                @JsonProperty("name") private val name: String,
-                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
-                @JsonProperty("item_id") private val itemId: String,
-                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
-                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
-                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
                 @JsonProperty("cadence") private val cadence: Cadence,
-                @JsonProperty("billing_cycle_configuration")
-                private val billingCycleConfiguration: BillingCycleConfiguration?,
-                @JsonProperty("invoicing_cycle_configuration")
-                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
-                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("item_id") private val itemId: String,
                 @JsonProperty("model_type") private val modelType: ModelType,
+                @JsonProperty("name") private val name: String,
                 @JsonProperty("tiered_with_minimum_config")
                 private val tieredWithMinimumConfig: TieredWithMinimumConfig,
-                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
+                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
+                @JsonProperty("billing_cycle_configuration")
+                private val billingCycleConfiguration: BillingCycleConfiguration?,
+                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
+                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
+                @JsonProperty("invoicing_cycle_configuration")
+                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
+                @JsonProperty("metadata") private val metadata: Metadata?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /**
-                 * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
-                 * setting `metadata` to `null`.
-                 */
-                @JsonProperty("metadata")
-                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+                /** The cadence to bill for this price on. */
+                @JsonProperty("cadence") fun cadence(): Cadence = cadence
 
-                /** An alias for the price. */
-                @JsonProperty("external_price_id")
-                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
+                /** An ISO 4217 currency string for which this price is billed in. */
+                @JsonProperty("currency") fun currency(): String = currency
+
+                /** The id of the item the plan will be associated with. */
+                @JsonProperty("item_id") fun itemId(): String = itemId
+
+                @JsonProperty("model_type") fun modelType(): ModelType = modelType
 
                 /** The name of the price. */
                 @JsonProperty("name") fun name(): String = name
+
+                @JsonProperty("tiered_with_minimum_config")
+                fun tieredWithMinimumConfig(): TieredWithMinimumConfig = tieredWithMinimumConfig
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -14911,15 +14913,28 @@ constructor(
                 @JsonProperty("billable_metric_id")
                 fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
-                /** The id of the item the plan will be associated with. */
-                @JsonProperty("item_id") fun itemId(): String = itemId
-
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance)
+
+                /**
+                 * For custom cadence: specifies the duration of the billing period in days or
+                 * months.
+                 */
+                @JsonProperty("billing_cycle_configuration")
+                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+                    Optional.ofNullable(billingCycleConfiguration)
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
+
+                /** An alias for the price. */
+                @JsonProperty("external_price_id")
+                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -14932,17 +14947,6 @@ constructor(
                 @JsonProperty("invoice_grouping_key")
                 fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey)
 
-                /** The cadence to bill for this price on. */
-                @JsonProperty("cadence") fun cadence(): Cadence = cadence
-
-                /**
-                 * For custom cadence: specifies the duration of the billing period in days or
-                 * months.
-                 */
-                @JsonProperty("billing_cycle_configuration")
-                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(billingCycleConfiguration)
-
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
                  * If unspecified, a single invoice is produced per billing cycle.
@@ -14951,17 +14955,13 @@ constructor(
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
                     Optional.ofNullable(invoicingCycleConfiguration)
 
-                /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @JsonProperty("conversion_rate")
-                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
-
-                @JsonProperty("model_type") fun modelType(): ModelType = modelType
-
-                @JsonProperty("tiered_with_minimum_config")
-                fun tieredWithMinimumConfig(): TieredWithMinimumConfig = tieredWithMinimumConfig
-
-                /** An ISO 4217 currency string for which this price is billed in. */
-                @JsonProperty("currency") fun currency(): String = currency
+                /**
+                 * User-specified key/value pairs for the resource. Individual keys can be removed
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
+                 */
+                @JsonProperty("metadata")
+                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -14976,63 +14976,67 @@ constructor(
 
                 class Builder {
 
-                    private var metadata: Metadata? = null
-                    private var externalPriceId: String? = null
-                    private var name: String? = null
-                    private var billableMetricId: String? = null
+                    private var cadence: Cadence? = null
+                    private var currency: String? = null
                     private var itemId: String? = null
+                    private var modelType: ModelType? = null
+                    private var name: String? = null
+                    private var tieredWithMinimumConfig: TieredWithMinimumConfig? = null
+                    private var billableMetricId: String? = null
                     private var billedInAdvance: Boolean? = null
+                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
+                    private var conversionRate: Double? = null
+                    private var externalPriceId: String? = null
                     private var fixedPriceQuantity: Double? = null
                     private var invoiceGroupingKey: String? = null
-                    private var cadence: Cadence? = null
-                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
                     private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
-                    private var conversionRate: Double? = null
-                    private var modelType: ModelType? = null
-                    private var tieredWithMinimumConfig: TieredWithMinimumConfig? = null
-                    private var currency: String? = null
+                    private var metadata: Metadata? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(
                         newFloatingTieredWithMinimumPrice: NewFloatingTieredWithMinimumPrice
                     ) = apply {
-                        metadata = newFloatingTieredWithMinimumPrice.metadata
-                        externalPriceId = newFloatingTieredWithMinimumPrice.externalPriceId
-                        name = newFloatingTieredWithMinimumPrice.name
-                        billableMetricId = newFloatingTieredWithMinimumPrice.billableMetricId
-                        itemId = newFloatingTieredWithMinimumPrice.itemId
-                        billedInAdvance = newFloatingTieredWithMinimumPrice.billedInAdvance
-                        fixedPriceQuantity = newFloatingTieredWithMinimumPrice.fixedPriceQuantity
-                        invoiceGroupingKey = newFloatingTieredWithMinimumPrice.invoiceGroupingKey
                         cadence = newFloatingTieredWithMinimumPrice.cadence
-                        billingCycleConfiguration =
-                            newFloatingTieredWithMinimumPrice.billingCycleConfiguration
-                        invoicingCycleConfiguration =
-                            newFloatingTieredWithMinimumPrice.invoicingCycleConfiguration
-                        conversionRate = newFloatingTieredWithMinimumPrice.conversionRate
+                        currency = newFloatingTieredWithMinimumPrice.currency
+                        itemId = newFloatingTieredWithMinimumPrice.itemId
                         modelType = newFloatingTieredWithMinimumPrice.modelType
+                        name = newFloatingTieredWithMinimumPrice.name
                         tieredWithMinimumConfig =
                             newFloatingTieredWithMinimumPrice.tieredWithMinimumConfig
-                        currency = newFloatingTieredWithMinimumPrice.currency
+                        billableMetricId = newFloatingTieredWithMinimumPrice.billableMetricId
+                        billedInAdvance = newFloatingTieredWithMinimumPrice.billedInAdvance
+                        billingCycleConfiguration =
+                            newFloatingTieredWithMinimumPrice.billingCycleConfiguration
+                        conversionRate = newFloatingTieredWithMinimumPrice.conversionRate
+                        externalPriceId = newFloatingTieredWithMinimumPrice.externalPriceId
+                        fixedPriceQuantity = newFloatingTieredWithMinimumPrice.fixedPriceQuantity
+                        invoiceGroupingKey = newFloatingTieredWithMinimumPrice.invoiceGroupingKey
+                        invoicingCycleConfiguration =
+                            newFloatingTieredWithMinimumPrice.invoicingCycleConfiguration
+                        metadata = newFloatingTieredWithMinimumPrice.metadata
                         additionalProperties =
                             newFloatingTieredWithMinimumPrice.additionalProperties.toMutableMap()
                     }
 
-                    /**
-                     * User-specified key/value pairs for the resource. Individual keys can be
-                     * removed by setting the value to `null`, and the entire metadata mapping can
-                     * be cleared by setting `metadata` to `null`.
-                     */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    /** The cadence to bill for this price on. */
+                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
-                    /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
-                        this.externalPriceId = externalPriceId
-                    }
+                    /** An ISO 4217 currency string for which this price is billed in. */
+                    fun currency(currency: String) = apply { this.currency = currency }
+
+                    /** The id of the item the plan will be associated with. */
+                    fun itemId(itemId: String) = apply { this.itemId = itemId }
+
+                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
 
                     /** The name of the price. */
                     fun name(name: String) = apply { this.name = name }
+
+                    fun tieredWithMinimumConfig(tieredWithMinimumConfig: TieredWithMinimumConfig) =
+                        apply {
+                            this.tieredWithMinimumConfig = tieredWithMinimumConfig
+                        }
 
                     /**
                      * The id of the billable metric for the price. Only needed if the price is
@@ -15042,15 +15046,32 @@ constructor(
                         this.billableMetricId = billableMetricId
                     }
 
-                    /** The id of the item the plan will be associated with. */
-                    fun itemId(itemId: String) = apply { this.itemId = itemId }
-
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
                     fun billedInAdvance(billedInAdvance: Boolean) = apply {
                         this.billedInAdvance = billedInAdvance
+                    }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: BillingCycleConfiguration
+                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) = apply {
+                        this.conversionRate = conversionRate
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: String) = apply {
+                        this.externalPriceId = externalPriceId
                     }
 
                     /**
@@ -15066,17 +15087,6 @@ constructor(
                         this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
-                    /** The cadence to bill for this price on. */
-                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
-
-                    /**
-                     * For custom cadence: specifies the duration of the billing period in days or
-                     * months.
-                     */
-                    fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
-                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
-
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
@@ -15086,21 +15096,11 @@ constructor(
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
 
                     /**
-                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
-                        this.conversionRate = conversionRate
-                    }
-
-                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
-
-                    fun tieredWithMinimumConfig(tieredWithMinimumConfig: TieredWithMinimumConfig) =
-                        apply {
-                            this.tieredWithMinimumConfig = tieredWithMinimumConfig
-                        }
-
-                    /** An ISO 4217 currency string for which this price is billed in. */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -15126,23 +15126,23 @@ constructor(
 
                     fun build(): NewFloatingTieredWithMinimumPrice =
                         NewFloatingTieredWithMinimumPrice(
-                            metadata,
-                            externalPriceId,
-                            checkNotNull(name) { "`name` is required but was not set" },
-                            billableMetricId,
-                            checkNotNull(itemId) { "`itemId` is required but was not set" },
-                            billedInAdvance,
-                            fixedPriceQuantity,
-                            invoiceGroupingKey,
                             checkNotNull(cadence) { "`cadence` is required but was not set" },
-                            billingCycleConfiguration,
-                            invoicingCycleConfiguration,
-                            conversionRate,
+                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            checkNotNull(itemId) { "`itemId` is required but was not set" },
                             checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(name) { "`name` is required but was not set" },
                             checkNotNull(tieredWithMinimumConfig) {
                                 "`tieredWithMinimumConfig` is required but was not set"
                             },
-                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            billableMetricId,
+                            billedInAdvance,
+                            billingCycleConfiguration,
+                            conversionRate,
+                            externalPriceId,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            invoicingCycleConfiguration,
+                            metadata,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -15766,59 +15766,62 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewFloatingTieredWithMinimumPrice && metadata == other.metadata && externalPriceId == other.externalPriceId && name == other.name && billableMetricId == other.billableMetricId && itemId == other.itemId && billedInAdvance == other.billedInAdvance && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && cadence == other.cadence && billingCycleConfiguration == other.billingCycleConfiguration && invoicingCycleConfiguration == other.invoicingCycleConfiguration && conversionRate == other.conversionRate && modelType == other.modelType && tieredWithMinimumConfig == other.tieredWithMinimumConfig && currency == other.currency && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewFloatingTieredWithMinimumPrice && cadence == other.cadence && currency == other.currency && itemId == other.itemId && modelType == other.modelType && name == other.name && tieredWithMinimumConfig == other.tieredWithMinimumConfig && billableMetricId == other.billableMetricId && billedInAdvance == other.billedInAdvance && billingCycleConfiguration == other.billingCycleConfiguration && conversionRate == other.conversionRate && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && invoicingCycleConfiguration == other.invoicingCycleConfiguration && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(metadata, externalPriceId, name, billableMetricId, itemId, billedInAdvance, fixedPriceQuantity, invoiceGroupingKey, cadence, billingCycleConfiguration, invoicingCycleConfiguration, conversionRate, modelType, tieredWithMinimumConfig, currency, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(cadence, currency, itemId, modelType, name, tieredWithMinimumConfig, billableMetricId, billedInAdvance, billingCycleConfiguration, conversionRate, externalPriceId, fixedPriceQuantity, invoiceGroupingKey, invoicingCycleConfiguration, metadata, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewFloatingTieredWithMinimumPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, tieredWithMinimumConfig=$tieredWithMinimumConfig, currency=$currency, additionalProperties=$additionalProperties}"
+                    "NewFloatingTieredWithMinimumPrice{cadence=$cadence, currency=$currency, itemId=$itemId, modelType=$modelType, name=$name, tieredWithMinimumConfig=$tieredWithMinimumConfig, billableMetricId=$billableMetricId, billedInAdvance=$billedInAdvance, billingCycleConfiguration=$billingCycleConfiguration, conversionRate=$conversionRate, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, invoicingCycleConfiguration=$invoicingCycleConfiguration, metadata=$metadata, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class NewFloatingPackageWithAllocationPrice
             @JsonCreator
             private constructor(
-                @JsonProperty("metadata") private val metadata: Metadata?,
-                @JsonProperty("external_price_id") private val externalPriceId: String?,
-                @JsonProperty("name") private val name: String,
-                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
-                @JsonProperty("item_id") private val itemId: String,
-                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
-                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
-                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
                 @JsonProperty("cadence") private val cadence: Cadence,
-                @JsonProperty("billing_cycle_configuration")
-                private val billingCycleConfiguration: BillingCycleConfiguration?,
-                @JsonProperty("invoicing_cycle_configuration")
-                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
-                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("item_id") private val itemId: String,
                 @JsonProperty("model_type") private val modelType: ModelType,
+                @JsonProperty("name") private val name: String,
                 @JsonProperty("package_with_allocation_config")
                 private val packageWithAllocationConfig: PackageWithAllocationConfig,
-                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
+                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
+                @JsonProperty("billing_cycle_configuration")
+                private val billingCycleConfiguration: BillingCycleConfiguration?,
+                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
+                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
+                @JsonProperty("invoicing_cycle_configuration")
+                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
+                @JsonProperty("metadata") private val metadata: Metadata?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /**
-                 * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
-                 * setting `metadata` to `null`.
-                 */
-                @JsonProperty("metadata")
-                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+                /** The cadence to bill for this price on. */
+                @JsonProperty("cadence") fun cadence(): Cadence = cadence
 
-                /** An alias for the price. */
-                @JsonProperty("external_price_id")
-                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
+                /** An ISO 4217 currency string for which this price is billed in. */
+                @JsonProperty("currency") fun currency(): String = currency
+
+                /** The id of the item the plan will be associated with. */
+                @JsonProperty("item_id") fun itemId(): String = itemId
+
+                @JsonProperty("model_type") fun modelType(): ModelType = modelType
 
                 /** The name of the price. */
                 @JsonProperty("name") fun name(): String = name
+
+                @JsonProperty("package_with_allocation_config")
+                fun packageWithAllocationConfig(): PackageWithAllocationConfig =
+                    packageWithAllocationConfig
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -15827,15 +15830,28 @@ constructor(
                 @JsonProperty("billable_metric_id")
                 fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
-                /** The id of the item the plan will be associated with. */
-                @JsonProperty("item_id") fun itemId(): String = itemId
-
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance)
+
+                /**
+                 * For custom cadence: specifies the duration of the billing period in days or
+                 * months.
+                 */
+                @JsonProperty("billing_cycle_configuration")
+                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+                    Optional.ofNullable(billingCycleConfiguration)
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
+
+                /** An alias for the price. */
+                @JsonProperty("external_price_id")
+                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -15848,17 +15864,6 @@ constructor(
                 @JsonProperty("invoice_grouping_key")
                 fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey)
 
-                /** The cadence to bill for this price on. */
-                @JsonProperty("cadence") fun cadence(): Cadence = cadence
-
-                /**
-                 * For custom cadence: specifies the duration of the billing period in days or
-                 * months.
-                 */
-                @JsonProperty("billing_cycle_configuration")
-                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(billingCycleConfiguration)
-
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
                  * If unspecified, a single invoice is produced per billing cycle.
@@ -15867,18 +15872,13 @@ constructor(
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
                     Optional.ofNullable(invoicingCycleConfiguration)
 
-                /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @JsonProperty("conversion_rate")
-                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
-
-                @JsonProperty("model_type") fun modelType(): ModelType = modelType
-
-                @JsonProperty("package_with_allocation_config")
-                fun packageWithAllocationConfig(): PackageWithAllocationConfig =
-                    packageWithAllocationConfig
-
-                /** An ISO 4217 currency string for which this price is billed in. */
-                @JsonProperty("currency") fun currency(): String = currency
+                /**
+                 * User-specified key/value pairs for the resource. Individual keys can be removed
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
+                 */
+                @JsonProperty("metadata")
+                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -15893,66 +15893,69 @@ constructor(
 
                 class Builder {
 
-                    private var metadata: Metadata? = null
-                    private var externalPriceId: String? = null
-                    private var name: String? = null
-                    private var billableMetricId: String? = null
+                    private var cadence: Cadence? = null
+                    private var currency: String? = null
                     private var itemId: String? = null
+                    private var modelType: ModelType? = null
+                    private var name: String? = null
+                    private var packageWithAllocationConfig: PackageWithAllocationConfig? = null
+                    private var billableMetricId: String? = null
                     private var billedInAdvance: Boolean? = null
+                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
+                    private var conversionRate: Double? = null
+                    private var externalPriceId: String? = null
                     private var fixedPriceQuantity: Double? = null
                     private var invoiceGroupingKey: String? = null
-                    private var cadence: Cadence? = null
-                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
                     private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
-                    private var conversionRate: Double? = null
-                    private var modelType: ModelType? = null
-                    private var packageWithAllocationConfig: PackageWithAllocationConfig? = null
-                    private var currency: String? = null
+                    private var metadata: Metadata? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(
                         newFloatingPackageWithAllocationPrice: NewFloatingPackageWithAllocationPrice
                     ) = apply {
-                        metadata = newFloatingPackageWithAllocationPrice.metadata
-                        externalPriceId = newFloatingPackageWithAllocationPrice.externalPriceId
-                        name = newFloatingPackageWithAllocationPrice.name
-                        billableMetricId = newFloatingPackageWithAllocationPrice.billableMetricId
+                        cadence = newFloatingPackageWithAllocationPrice.cadence
+                        currency = newFloatingPackageWithAllocationPrice.currency
                         itemId = newFloatingPackageWithAllocationPrice.itemId
+                        modelType = newFloatingPackageWithAllocationPrice.modelType
+                        name = newFloatingPackageWithAllocationPrice.name
+                        packageWithAllocationConfig =
+                            newFloatingPackageWithAllocationPrice.packageWithAllocationConfig
+                        billableMetricId = newFloatingPackageWithAllocationPrice.billableMetricId
                         billedInAdvance = newFloatingPackageWithAllocationPrice.billedInAdvance
+                        billingCycleConfiguration =
+                            newFloatingPackageWithAllocationPrice.billingCycleConfiguration
+                        conversionRate = newFloatingPackageWithAllocationPrice.conversionRate
+                        externalPriceId = newFloatingPackageWithAllocationPrice.externalPriceId
                         fixedPriceQuantity =
                             newFloatingPackageWithAllocationPrice.fixedPriceQuantity
                         invoiceGroupingKey =
                             newFloatingPackageWithAllocationPrice.invoiceGroupingKey
-                        cadence = newFloatingPackageWithAllocationPrice.cadence
-                        billingCycleConfiguration =
-                            newFloatingPackageWithAllocationPrice.billingCycleConfiguration
                         invoicingCycleConfiguration =
                             newFloatingPackageWithAllocationPrice.invoicingCycleConfiguration
-                        conversionRate = newFloatingPackageWithAllocationPrice.conversionRate
-                        modelType = newFloatingPackageWithAllocationPrice.modelType
-                        packageWithAllocationConfig =
-                            newFloatingPackageWithAllocationPrice.packageWithAllocationConfig
-                        currency = newFloatingPackageWithAllocationPrice.currency
+                        metadata = newFloatingPackageWithAllocationPrice.metadata
                         additionalProperties =
                             newFloatingPackageWithAllocationPrice.additionalProperties
                                 .toMutableMap()
                     }
 
-                    /**
-                     * User-specified key/value pairs for the resource. Individual keys can be
-                     * removed by setting the value to `null`, and the entire metadata mapping can
-                     * be cleared by setting `metadata` to `null`.
-                     */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    /** The cadence to bill for this price on. */
+                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
-                    /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
-                        this.externalPriceId = externalPriceId
-                    }
+                    /** An ISO 4217 currency string for which this price is billed in. */
+                    fun currency(currency: String) = apply { this.currency = currency }
+
+                    /** The id of the item the plan will be associated with. */
+                    fun itemId(itemId: String) = apply { this.itemId = itemId }
+
+                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
 
                     /** The name of the price. */
                     fun name(name: String) = apply { this.name = name }
+
+                    fun packageWithAllocationConfig(
+                        packageWithAllocationConfig: PackageWithAllocationConfig
+                    ) = apply { this.packageWithAllocationConfig = packageWithAllocationConfig }
 
                     /**
                      * The id of the billable metric for the price. Only needed if the price is
@@ -15962,15 +15965,32 @@ constructor(
                         this.billableMetricId = billableMetricId
                     }
 
-                    /** The id of the item the plan will be associated with. */
-                    fun itemId(itemId: String) = apply { this.itemId = itemId }
-
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
                     fun billedInAdvance(billedInAdvance: Boolean) = apply {
                         this.billedInAdvance = billedInAdvance
+                    }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: BillingCycleConfiguration
+                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) = apply {
+                        this.conversionRate = conversionRate
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: String) = apply {
+                        this.externalPriceId = externalPriceId
                     }
 
                     /**
@@ -15986,17 +16006,6 @@ constructor(
                         this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
-                    /** The cadence to bill for this price on. */
-                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
-
-                    /**
-                     * For custom cadence: specifies the duration of the billing period in days or
-                     * months.
-                     */
-                    fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
-                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
-
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
@@ -16006,20 +16015,11 @@ constructor(
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
 
                     /**
-                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
-                        this.conversionRate = conversionRate
-                    }
-
-                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
-
-                    fun packageWithAllocationConfig(
-                        packageWithAllocationConfig: PackageWithAllocationConfig
-                    ) = apply { this.packageWithAllocationConfig = packageWithAllocationConfig }
-
-                    /** An ISO 4217 currency string for which this price is billed in. */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -16045,23 +16045,23 @@ constructor(
 
                     fun build(): NewFloatingPackageWithAllocationPrice =
                         NewFloatingPackageWithAllocationPrice(
-                            metadata,
-                            externalPriceId,
-                            checkNotNull(name) { "`name` is required but was not set" },
-                            billableMetricId,
-                            checkNotNull(itemId) { "`itemId` is required but was not set" },
-                            billedInAdvance,
-                            fixedPriceQuantity,
-                            invoiceGroupingKey,
                             checkNotNull(cadence) { "`cadence` is required but was not set" },
-                            billingCycleConfiguration,
-                            invoicingCycleConfiguration,
-                            conversionRate,
+                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            checkNotNull(itemId) { "`itemId` is required but was not set" },
                             checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(name) { "`name` is required but was not set" },
                             checkNotNull(packageWithAllocationConfig) {
                                 "`packageWithAllocationConfig` is required but was not set"
                             },
-                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            billableMetricId,
+                            billedInAdvance,
+                            billingCycleConfiguration,
+                            conversionRate,
+                            externalPriceId,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            invoicingCycleConfiguration,
+                            metadata,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -16686,59 +16686,62 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewFloatingPackageWithAllocationPrice && metadata == other.metadata && externalPriceId == other.externalPriceId && name == other.name && billableMetricId == other.billableMetricId && itemId == other.itemId && billedInAdvance == other.billedInAdvance && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && cadence == other.cadence && billingCycleConfiguration == other.billingCycleConfiguration && invoicingCycleConfiguration == other.invoicingCycleConfiguration && conversionRate == other.conversionRate && modelType == other.modelType && packageWithAllocationConfig == other.packageWithAllocationConfig && currency == other.currency && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewFloatingPackageWithAllocationPrice && cadence == other.cadence && currency == other.currency && itemId == other.itemId && modelType == other.modelType && name == other.name && packageWithAllocationConfig == other.packageWithAllocationConfig && billableMetricId == other.billableMetricId && billedInAdvance == other.billedInAdvance && billingCycleConfiguration == other.billingCycleConfiguration && conversionRate == other.conversionRate && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && invoicingCycleConfiguration == other.invoicingCycleConfiguration && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(metadata, externalPriceId, name, billableMetricId, itemId, billedInAdvance, fixedPriceQuantity, invoiceGroupingKey, cadence, billingCycleConfiguration, invoicingCycleConfiguration, conversionRate, modelType, packageWithAllocationConfig, currency, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(cadence, currency, itemId, modelType, name, packageWithAllocationConfig, billableMetricId, billedInAdvance, billingCycleConfiguration, conversionRate, externalPriceId, fixedPriceQuantity, invoiceGroupingKey, invoicingCycleConfiguration, metadata, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewFloatingPackageWithAllocationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, packageWithAllocationConfig=$packageWithAllocationConfig, currency=$currency, additionalProperties=$additionalProperties}"
+                    "NewFloatingPackageWithAllocationPrice{cadence=$cadence, currency=$currency, itemId=$itemId, modelType=$modelType, name=$name, packageWithAllocationConfig=$packageWithAllocationConfig, billableMetricId=$billableMetricId, billedInAdvance=$billedInAdvance, billingCycleConfiguration=$billingCycleConfiguration, conversionRate=$conversionRate, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, invoicingCycleConfiguration=$invoicingCycleConfiguration, metadata=$metadata, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class NewFloatingTieredPackageWithMinimumPrice
             @JsonCreator
             private constructor(
-                @JsonProperty("metadata") private val metadata: Metadata?,
-                @JsonProperty("external_price_id") private val externalPriceId: String?,
-                @JsonProperty("name") private val name: String,
-                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
-                @JsonProperty("item_id") private val itemId: String,
-                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
-                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
-                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
                 @JsonProperty("cadence") private val cadence: Cadence,
-                @JsonProperty("billing_cycle_configuration")
-                private val billingCycleConfiguration: BillingCycleConfiguration?,
-                @JsonProperty("invoicing_cycle_configuration")
-                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
-                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("item_id") private val itemId: String,
                 @JsonProperty("model_type") private val modelType: ModelType,
+                @JsonProperty("name") private val name: String,
                 @JsonProperty("tiered_package_with_minimum_config")
                 private val tieredPackageWithMinimumConfig: TieredPackageWithMinimumConfig,
-                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
+                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
+                @JsonProperty("billing_cycle_configuration")
+                private val billingCycleConfiguration: BillingCycleConfiguration?,
+                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
+                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
+                @JsonProperty("invoicing_cycle_configuration")
+                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
+                @JsonProperty("metadata") private val metadata: Metadata?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /**
-                 * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
-                 * setting `metadata` to `null`.
-                 */
-                @JsonProperty("metadata")
-                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+                /** The cadence to bill for this price on. */
+                @JsonProperty("cadence") fun cadence(): Cadence = cadence
 
-                /** An alias for the price. */
-                @JsonProperty("external_price_id")
-                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
+                /** An ISO 4217 currency string for which this price is billed in. */
+                @JsonProperty("currency") fun currency(): String = currency
+
+                /** The id of the item the plan will be associated with. */
+                @JsonProperty("item_id") fun itemId(): String = itemId
+
+                @JsonProperty("model_type") fun modelType(): ModelType = modelType
 
                 /** The name of the price. */
                 @JsonProperty("name") fun name(): String = name
+
+                @JsonProperty("tiered_package_with_minimum_config")
+                fun tieredPackageWithMinimumConfig(): TieredPackageWithMinimumConfig =
+                    tieredPackageWithMinimumConfig
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -16747,15 +16750,28 @@ constructor(
                 @JsonProperty("billable_metric_id")
                 fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
-                /** The id of the item the plan will be associated with. */
-                @JsonProperty("item_id") fun itemId(): String = itemId
-
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance)
+
+                /**
+                 * For custom cadence: specifies the duration of the billing period in days or
+                 * months.
+                 */
+                @JsonProperty("billing_cycle_configuration")
+                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+                    Optional.ofNullable(billingCycleConfiguration)
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
+
+                /** An alias for the price. */
+                @JsonProperty("external_price_id")
+                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -16768,17 +16784,6 @@ constructor(
                 @JsonProperty("invoice_grouping_key")
                 fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey)
 
-                /** The cadence to bill for this price on. */
-                @JsonProperty("cadence") fun cadence(): Cadence = cadence
-
-                /**
-                 * For custom cadence: specifies the duration of the billing period in days or
-                 * months.
-                 */
-                @JsonProperty("billing_cycle_configuration")
-                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(billingCycleConfiguration)
-
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
                  * If unspecified, a single invoice is produced per billing cycle.
@@ -16787,18 +16792,13 @@ constructor(
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
                     Optional.ofNullable(invoicingCycleConfiguration)
 
-                /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @JsonProperty("conversion_rate")
-                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
-
-                @JsonProperty("model_type") fun modelType(): ModelType = modelType
-
-                @JsonProperty("tiered_package_with_minimum_config")
-                fun tieredPackageWithMinimumConfig(): TieredPackageWithMinimumConfig =
-                    tieredPackageWithMinimumConfig
-
-                /** An ISO 4217 currency string for which this price is billed in. */
-                @JsonProperty("currency") fun currency(): String = currency
+                /**
+                 * User-specified key/value pairs for the resource. Individual keys can be removed
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
+                 */
+                @JsonProperty("metadata")
+                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -16813,22 +16813,22 @@ constructor(
 
                 class Builder {
 
-                    private var metadata: Metadata? = null
-                    private var externalPriceId: String? = null
-                    private var name: String? = null
-                    private var billableMetricId: String? = null
-                    private var itemId: String? = null
-                    private var billedInAdvance: Boolean? = null
-                    private var fixedPriceQuantity: Double? = null
-                    private var invoiceGroupingKey: String? = null
                     private var cadence: Cadence? = null
-                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
-                    private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
-                    private var conversionRate: Double? = null
+                    private var currency: String? = null
+                    private var itemId: String? = null
                     private var modelType: ModelType? = null
+                    private var name: String? = null
                     private var tieredPackageWithMinimumConfig: TieredPackageWithMinimumConfig? =
                         null
-                    private var currency: String? = null
+                    private var billableMetricId: String? = null
+                    private var billedInAdvance: Boolean? = null
+                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
+                    private var conversionRate: Double? = null
+                    private var externalPriceId: String? = null
+                    private var fixedPriceQuantity: Double? = null
+                    private var invoiceGroupingKey: String? = null
+                    private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
+                    private var metadata: Metadata? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
@@ -16836,45 +16836,50 @@ constructor(
                         newFloatingTieredPackageWithMinimumPrice:
                             NewFloatingTieredPackageWithMinimumPrice
                     ) = apply {
-                        metadata = newFloatingTieredPackageWithMinimumPrice.metadata
-                        externalPriceId = newFloatingTieredPackageWithMinimumPrice.externalPriceId
-                        name = newFloatingTieredPackageWithMinimumPrice.name
-                        billableMetricId = newFloatingTieredPackageWithMinimumPrice.billableMetricId
+                        cadence = newFloatingTieredPackageWithMinimumPrice.cadence
+                        currency = newFloatingTieredPackageWithMinimumPrice.currency
                         itemId = newFloatingTieredPackageWithMinimumPrice.itemId
+                        modelType = newFloatingTieredPackageWithMinimumPrice.modelType
+                        name = newFloatingTieredPackageWithMinimumPrice.name
+                        tieredPackageWithMinimumConfig =
+                            newFloatingTieredPackageWithMinimumPrice.tieredPackageWithMinimumConfig
+                        billableMetricId = newFloatingTieredPackageWithMinimumPrice.billableMetricId
                         billedInAdvance = newFloatingTieredPackageWithMinimumPrice.billedInAdvance
+                        billingCycleConfiguration =
+                            newFloatingTieredPackageWithMinimumPrice.billingCycleConfiguration
+                        conversionRate = newFloatingTieredPackageWithMinimumPrice.conversionRate
+                        externalPriceId = newFloatingTieredPackageWithMinimumPrice.externalPriceId
                         fixedPriceQuantity =
                             newFloatingTieredPackageWithMinimumPrice.fixedPriceQuantity
                         invoiceGroupingKey =
                             newFloatingTieredPackageWithMinimumPrice.invoiceGroupingKey
-                        cadence = newFloatingTieredPackageWithMinimumPrice.cadence
-                        billingCycleConfiguration =
-                            newFloatingTieredPackageWithMinimumPrice.billingCycleConfiguration
                         invoicingCycleConfiguration =
                             newFloatingTieredPackageWithMinimumPrice.invoicingCycleConfiguration
-                        conversionRate = newFloatingTieredPackageWithMinimumPrice.conversionRate
-                        modelType = newFloatingTieredPackageWithMinimumPrice.modelType
-                        tieredPackageWithMinimumConfig =
-                            newFloatingTieredPackageWithMinimumPrice.tieredPackageWithMinimumConfig
-                        currency = newFloatingTieredPackageWithMinimumPrice.currency
+                        metadata = newFloatingTieredPackageWithMinimumPrice.metadata
                         additionalProperties =
                             newFloatingTieredPackageWithMinimumPrice.additionalProperties
                                 .toMutableMap()
                     }
 
-                    /**
-                     * User-specified key/value pairs for the resource. Individual keys can be
-                     * removed by setting the value to `null`, and the entire metadata mapping can
-                     * be cleared by setting `metadata` to `null`.
-                     */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    /** The cadence to bill for this price on. */
+                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
-                    /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
-                        this.externalPriceId = externalPriceId
-                    }
+                    /** An ISO 4217 currency string for which this price is billed in. */
+                    fun currency(currency: String) = apply { this.currency = currency }
+
+                    /** The id of the item the plan will be associated with. */
+                    fun itemId(itemId: String) = apply { this.itemId = itemId }
+
+                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
 
                     /** The name of the price. */
                     fun name(name: String) = apply { this.name = name }
+
+                    fun tieredPackageWithMinimumConfig(
+                        tieredPackageWithMinimumConfig: TieredPackageWithMinimumConfig
+                    ) = apply {
+                        this.tieredPackageWithMinimumConfig = tieredPackageWithMinimumConfig
+                    }
 
                     /**
                      * The id of the billable metric for the price. Only needed if the price is
@@ -16884,15 +16889,32 @@ constructor(
                         this.billableMetricId = billableMetricId
                     }
 
-                    /** The id of the item the plan will be associated with. */
-                    fun itemId(itemId: String) = apply { this.itemId = itemId }
-
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
                     fun billedInAdvance(billedInAdvance: Boolean) = apply {
                         this.billedInAdvance = billedInAdvance
+                    }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: BillingCycleConfiguration
+                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) = apply {
+                        this.conversionRate = conversionRate
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: String) = apply {
+                        this.externalPriceId = externalPriceId
                     }
 
                     /**
@@ -16908,17 +16930,6 @@ constructor(
                         this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
-                    /** The cadence to bill for this price on. */
-                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
-
-                    /**
-                     * For custom cadence: specifies the duration of the billing period in days or
-                     * months.
-                     */
-                    fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
-                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
-
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
@@ -16928,22 +16939,11 @@ constructor(
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
 
                     /**
-                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
-                        this.conversionRate = conversionRate
-                    }
-
-                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
-
-                    fun tieredPackageWithMinimumConfig(
-                        tieredPackageWithMinimumConfig: TieredPackageWithMinimumConfig
-                    ) = apply {
-                        this.tieredPackageWithMinimumConfig = tieredPackageWithMinimumConfig
-                    }
-
-                    /** An ISO 4217 currency string for which this price is billed in. */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -16969,23 +16969,23 @@ constructor(
 
                     fun build(): NewFloatingTieredPackageWithMinimumPrice =
                         NewFloatingTieredPackageWithMinimumPrice(
-                            metadata,
-                            externalPriceId,
-                            checkNotNull(name) { "`name` is required but was not set" },
-                            billableMetricId,
-                            checkNotNull(itemId) { "`itemId` is required but was not set" },
-                            billedInAdvance,
-                            fixedPriceQuantity,
-                            invoiceGroupingKey,
                             checkNotNull(cadence) { "`cadence` is required but was not set" },
-                            billingCycleConfiguration,
-                            invoicingCycleConfiguration,
-                            conversionRate,
+                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            checkNotNull(itemId) { "`itemId` is required but was not set" },
                             checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(name) { "`name` is required but was not set" },
                             checkNotNull(tieredPackageWithMinimumConfig) {
                                 "`tieredPackageWithMinimumConfig` is required but was not set"
                             },
-                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            billableMetricId,
+                            billedInAdvance,
+                            billingCycleConfiguration,
+                            conversionRate,
+                            externalPriceId,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            invoicingCycleConfiguration,
+                            metadata,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -17611,59 +17611,61 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewFloatingTieredPackageWithMinimumPrice && metadata == other.metadata && externalPriceId == other.externalPriceId && name == other.name && billableMetricId == other.billableMetricId && itemId == other.itemId && billedInAdvance == other.billedInAdvance && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && cadence == other.cadence && billingCycleConfiguration == other.billingCycleConfiguration && invoicingCycleConfiguration == other.invoicingCycleConfiguration && conversionRate == other.conversionRate && modelType == other.modelType && tieredPackageWithMinimumConfig == other.tieredPackageWithMinimumConfig && currency == other.currency && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewFloatingTieredPackageWithMinimumPrice && cadence == other.cadence && currency == other.currency && itemId == other.itemId && modelType == other.modelType && name == other.name && tieredPackageWithMinimumConfig == other.tieredPackageWithMinimumConfig && billableMetricId == other.billableMetricId && billedInAdvance == other.billedInAdvance && billingCycleConfiguration == other.billingCycleConfiguration && conversionRate == other.conversionRate && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && invoicingCycleConfiguration == other.invoicingCycleConfiguration && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(metadata, externalPriceId, name, billableMetricId, itemId, billedInAdvance, fixedPriceQuantity, invoiceGroupingKey, cadence, billingCycleConfiguration, invoicingCycleConfiguration, conversionRate, modelType, tieredPackageWithMinimumConfig, currency, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(cadence, currency, itemId, modelType, name, tieredPackageWithMinimumConfig, billableMetricId, billedInAdvance, billingCycleConfiguration, conversionRate, externalPriceId, fixedPriceQuantity, invoiceGroupingKey, invoicingCycleConfiguration, metadata, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewFloatingTieredPackageWithMinimumPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, tieredPackageWithMinimumConfig=$tieredPackageWithMinimumConfig, currency=$currency, additionalProperties=$additionalProperties}"
+                    "NewFloatingTieredPackageWithMinimumPrice{cadence=$cadence, currency=$currency, itemId=$itemId, modelType=$modelType, name=$name, tieredPackageWithMinimumConfig=$tieredPackageWithMinimumConfig, billableMetricId=$billableMetricId, billedInAdvance=$billedInAdvance, billingCycleConfiguration=$billingCycleConfiguration, conversionRate=$conversionRate, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, invoicingCycleConfiguration=$invoicingCycleConfiguration, metadata=$metadata, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class NewFloatingUnitWithPercentPrice
             @JsonCreator
             private constructor(
-                @JsonProperty("metadata") private val metadata: Metadata?,
-                @JsonProperty("external_price_id") private val externalPriceId: String?,
-                @JsonProperty("name") private val name: String,
-                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
-                @JsonProperty("item_id") private val itemId: String,
-                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
-                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
-                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
                 @JsonProperty("cadence") private val cadence: Cadence,
-                @JsonProperty("billing_cycle_configuration")
-                private val billingCycleConfiguration: BillingCycleConfiguration?,
-                @JsonProperty("invoicing_cycle_configuration")
-                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
-                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("item_id") private val itemId: String,
                 @JsonProperty("model_type") private val modelType: ModelType,
+                @JsonProperty("name") private val name: String,
                 @JsonProperty("unit_with_percent_config")
                 private val unitWithPercentConfig: UnitWithPercentConfig,
-                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
+                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
+                @JsonProperty("billing_cycle_configuration")
+                private val billingCycleConfiguration: BillingCycleConfiguration?,
+                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
+                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
+                @JsonProperty("invoicing_cycle_configuration")
+                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
+                @JsonProperty("metadata") private val metadata: Metadata?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /**
-                 * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
-                 * setting `metadata` to `null`.
-                 */
-                @JsonProperty("metadata")
-                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+                /** The cadence to bill for this price on. */
+                @JsonProperty("cadence") fun cadence(): Cadence = cadence
 
-                /** An alias for the price. */
-                @JsonProperty("external_price_id")
-                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
+                /** An ISO 4217 currency string for which this price is billed in. */
+                @JsonProperty("currency") fun currency(): String = currency
+
+                /** The id of the item the plan will be associated with. */
+                @JsonProperty("item_id") fun itemId(): String = itemId
+
+                @JsonProperty("model_type") fun modelType(): ModelType = modelType
 
                 /** The name of the price. */
                 @JsonProperty("name") fun name(): String = name
+
+                @JsonProperty("unit_with_percent_config")
+                fun unitWithPercentConfig(): UnitWithPercentConfig = unitWithPercentConfig
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -17672,15 +17674,28 @@ constructor(
                 @JsonProperty("billable_metric_id")
                 fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
-                /** The id of the item the plan will be associated with. */
-                @JsonProperty("item_id") fun itemId(): String = itemId
-
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance)
+
+                /**
+                 * For custom cadence: specifies the duration of the billing period in days or
+                 * months.
+                 */
+                @JsonProperty("billing_cycle_configuration")
+                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+                    Optional.ofNullable(billingCycleConfiguration)
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
+
+                /** An alias for the price. */
+                @JsonProperty("external_price_id")
+                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -17693,17 +17708,6 @@ constructor(
                 @JsonProperty("invoice_grouping_key")
                 fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey)
 
-                /** The cadence to bill for this price on. */
-                @JsonProperty("cadence") fun cadence(): Cadence = cadence
-
-                /**
-                 * For custom cadence: specifies the duration of the billing period in days or
-                 * months.
-                 */
-                @JsonProperty("billing_cycle_configuration")
-                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(billingCycleConfiguration)
-
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
                  * If unspecified, a single invoice is produced per billing cycle.
@@ -17712,17 +17716,13 @@ constructor(
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
                     Optional.ofNullable(invoicingCycleConfiguration)
 
-                /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @JsonProperty("conversion_rate")
-                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
-
-                @JsonProperty("model_type") fun modelType(): ModelType = modelType
-
-                @JsonProperty("unit_with_percent_config")
-                fun unitWithPercentConfig(): UnitWithPercentConfig = unitWithPercentConfig
-
-                /** An ISO 4217 currency string for which this price is billed in. */
-                @JsonProperty("currency") fun currency(): String = currency
+                /**
+                 * User-specified key/value pairs for the resource. Individual keys can be removed
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
+                 */
+                @JsonProperty("metadata")
+                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -17737,63 +17737,67 @@ constructor(
 
                 class Builder {
 
-                    private var metadata: Metadata? = null
-                    private var externalPriceId: String? = null
-                    private var name: String? = null
-                    private var billableMetricId: String? = null
+                    private var cadence: Cadence? = null
+                    private var currency: String? = null
                     private var itemId: String? = null
+                    private var modelType: ModelType? = null
+                    private var name: String? = null
+                    private var unitWithPercentConfig: UnitWithPercentConfig? = null
+                    private var billableMetricId: String? = null
                     private var billedInAdvance: Boolean? = null
+                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
+                    private var conversionRate: Double? = null
+                    private var externalPriceId: String? = null
                     private var fixedPriceQuantity: Double? = null
                     private var invoiceGroupingKey: String? = null
-                    private var cadence: Cadence? = null
-                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
                     private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
-                    private var conversionRate: Double? = null
-                    private var modelType: ModelType? = null
-                    private var unitWithPercentConfig: UnitWithPercentConfig? = null
-                    private var currency: String? = null
+                    private var metadata: Metadata? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(
                         newFloatingUnitWithPercentPrice: NewFloatingUnitWithPercentPrice
                     ) = apply {
-                        metadata = newFloatingUnitWithPercentPrice.metadata
-                        externalPriceId = newFloatingUnitWithPercentPrice.externalPriceId
-                        name = newFloatingUnitWithPercentPrice.name
-                        billableMetricId = newFloatingUnitWithPercentPrice.billableMetricId
-                        itemId = newFloatingUnitWithPercentPrice.itemId
-                        billedInAdvance = newFloatingUnitWithPercentPrice.billedInAdvance
-                        fixedPriceQuantity = newFloatingUnitWithPercentPrice.fixedPriceQuantity
-                        invoiceGroupingKey = newFloatingUnitWithPercentPrice.invoiceGroupingKey
                         cadence = newFloatingUnitWithPercentPrice.cadence
-                        billingCycleConfiguration =
-                            newFloatingUnitWithPercentPrice.billingCycleConfiguration
-                        invoicingCycleConfiguration =
-                            newFloatingUnitWithPercentPrice.invoicingCycleConfiguration
-                        conversionRate = newFloatingUnitWithPercentPrice.conversionRate
+                        currency = newFloatingUnitWithPercentPrice.currency
+                        itemId = newFloatingUnitWithPercentPrice.itemId
                         modelType = newFloatingUnitWithPercentPrice.modelType
+                        name = newFloatingUnitWithPercentPrice.name
                         unitWithPercentConfig =
                             newFloatingUnitWithPercentPrice.unitWithPercentConfig
-                        currency = newFloatingUnitWithPercentPrice.currency
+                        billableMetricId = newFloatingUnitWithPercentPrice.billableMetricId
+                        billedInAdvance = newFloatingUnitWithPercentPrice.billedInAdvance
+                        billingCycleConfiguration =
+                            newFloatingUnitWithPercentPrice.billingCycleConfiguration
+                        conversionRate = newFloatingUnitWithPercentPrice.conversionRate
+                        externalPriceId = newFloatingUnitWithPercentPrice.externalPriceId
+                        fixedPriceQuantity = newFloatingUnitWithPercentPrice.fixedPriceQuantity
+                        invoiceGroupingKey = newFloatingUnitWithPercentPrice.invoiceGroupingKey
+                        invoicingCycleConfiguration =
+                            newFloatingUnitWithPercentPrice.invoicingCycleConfiguration
+                        metadata = newFloatingUnitWithPercentPrice.metadata
                         additionalProperties =
                             newFloatingUnitWithPercentPrice.additionalProperties.toMutableMap()
                     }
 
-                    /**
-                     * User-specified key/value pairs for the resource. Individual keys can be
-                     * removed by setting the value to `null`, and the entire metadata mapping can
-                     * be cleared by setting `metadata` to `null`.
-                     */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    /** The cadence to bill for this price on. */
+                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
-                    /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
-                        this.externalPriceId = externalPriceId
-                    }
+                    /** An ISO 4217 currency string for which this price is billed in. */
+                    fun currency(currency: String) = apply { this.currency = currency }
+
+                    /** The id of the item the plan will be associated with. */
+                    fun itemId(itemId: String) = apply { this.itemId = itemId }
+
+                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
 
                     /** The name of the price. */
                     fun name(name: String) = apply { this.name = name }
+
+                    fun unitWithPercentConfig(unitWithPercentConfig: UnitWithPercentConfig) =
+                        apply {
+                            this.unitWithPercentConfig = unitWithPercentConfig
+                        }
 
                     /**
                      * The id of the billable metric for the price. Only needed if the price is
@@ -17803,15 +17807,32 @@ constructor(
                         this.billableMetricId = billableMetricId
                     }
 
-                    /** The id of the item the plan will be associated with. */
-                    fun itemId(itemId: String) = apply { this.itemId = itemId }
-
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
                     fun billedInAdvance(billedInAdvance: Boolean) = apply {
                         this.billedInAdvance = billedInAdvance
+                    }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: BillingCycleConfiguration
+                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) = apply {
+                        this.conversionRate = conversionRate
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: String) = apply {
+                        this.externalPriceId = externalPriceId
                     }
 
                     /**
@@ -17827,17 +17848,6 @@ constructor(
                         this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
-                    /** The cadence to bill for this price on. */
-                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
-
-                    /**
-                     * For custom cadence: specifies the duration of the billing period in days or
-                     * months.
-                     */
-                    fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
-                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
-
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
@@ -17847,21 +17857,11 @@ constructor(
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
 
                     /**
-                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
-                        this.conversionRate = conversionRate
-                    }
-
-                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
-
-                    fun unitWithPercentConfig(unitWithPercentConfig: UnitWithPercentConfig) =
-                        apply {
-                            this.unitWithPercentConfig = unitWithPercentConfig
-                        }
-
-                    /** An ISO 4217 currency string for which this price is billed in. */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -17887,23 +17887,23 @@ constructor(
 
                     fun build(): NewFloatingUnitWithPercentPrice =
                         NewFloatingUnitWithPercentPrice(
-                            metadata,
-                            externalPriceId,
-                            checkNotNull(name) { "`name` is required but was not set" },
-                            billableMetricId,
-                            checkNotNull(itemId) { "`itemId` is required but was not set" },
-                            billedInAdvance,
-                            fixedPriceQuantity,
-                            invoiceGroupingKey,
                             checkNotNull(cadence) { "`cadence` is required but was not set" },
-                            billingCycleConfiguration,
-                            invoicingCycleConfiguration,
-                            conversionRate,
+                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            checkNotNull(itemId) { "`itemId` is required but was not set" },
                             checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(name) { "`name` is required but was not set" },
                             checkNotNull(unitWithPercentConfig) {
                                 "`unitWithPercentConfig` is required but was not set"
                             },
-                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            billableMetricId,
+                            billedInAdvance,
+                            billingCycleConfiguration,
+                            conversionRate,
+                            externalPriceId,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            invoicingCycleConfiguration,
+                            metadata,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -18526,59 +18526,62 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewFloatingUnitWithPercentPrice && metadata == other.metadata && externalPriceId == other.externalPriceId && name == other.name && billableMetricId == other.billableMetricId && itemId == other.itemId && billedInAdvance == other.billedInAdvance && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && cadence == other.cadence && billingCycleConfiguration == other.billingCycleConfiguration && invoicingCycleConfiguration == other.invoicingCycleConfiguration && conversionRate == other.conversionRate && modelType == other.modelType && unitWithPercentConfig == other.unitWithPercentConfig && currency == other.currency && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewFloatingUnitWithPercentPrice && cadence == other.cadence && currency == other.currency && itemId == other.itemId && modelType == other.modelType && name == other.name && unitWithPercentConfig == other.unitWithPercentConfig && billableMetricId == other.billableMetricId && billedInAdvance == other.billedInAdvance && billingCycleConfiguration == other.billingCycleConfiguration && conversionRate == other.conversionRate && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && invoicingCycleConfiguration == other.invoicingCycleConfiguration && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(metadata, externalPriceId, name, billableMetricId, itemId, billedInAdvance, fixedPriceQuantity, invoiceGroupingKey, cadence, billingCycleConfiguration, invoicingCycleConfiguration, conversionRate, modelType, unitWithPercentConfig, currency, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(cadence, currency, itemId, modelType, name, unitWithPercentConfig, billableMetricId, billedInAdvance, billingCycleConfiguration, conversionRate, externalPriceId, fixedPriceQuantity, invoiceGroupingKey, invoicingCycleConfiguration, metadata, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewFloatingUnitWithPercentPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, unitWithPercentConfig=$unitWithPercentConfig, currency=$currency, additionalProperties=$additionalProperties}"
+                    "NewFloatingUnitWithPercentPrice{cadence=$cadence, currency=$currency, itemId=$itemId, modelType=$modelType, name=$name, unitWithPercentConfig=$unitWithPercentConfig, billableMetricId=$billableMetricId, billedInAdvance=$billedInAdvance, billingCycleConfiguration=$billingCycleConfiguration, conversionRate=$conversionRate, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, invoicingCycleConfiguration=$invoicingCycleConfiguration, metadata=$metadata, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class NewFloatingTieredWithProrationPrice
             @JsonCreator
             private constructor(
-                @JsonProperty("metadata") private val metadata: Metadata?,
-                @JsonProperty("external_price_id") private val externalPriceId: String?,
-                @JsonProperty("name") private val name: String,
-                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
-                @JsonProperty("item_id") private val itemId: String,
-                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
-                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
-                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
                 @JsonProperty("cadence") private val cadence: Cadence,
-                @JsonProperty("billing_cycle_configuration")
-                private val billingCycleConfiguration: BillingCycleConfiguration?,
-                @JsonProperty("invoicing_cycle_configuration")
-                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
-                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("item_id") private val itemId: String,
                 @JsonProperty("model_type") private val modelType: ModelType,
+                @JsonProperty("name") private val name: String,
                 @JsonProperty("tiered_with_proration_config")
                 private val tieredWithProrationConfig: TieredWithProrationConfig,
-                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
+                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
+                @JsonProperty("billing_cycle_configuration")
+                private val billingCycleConfiguration: BillingCycleConfiguration?,
+                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
+                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
+                @JsonProperty("invoicing_cycle_configuration")
+                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
+                @JsonProperty("metadata") private val metadata: Metadata?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /**
-                 * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
-                 * setting `metadata` to `null`.
-                 */
-                @JsonProperty("metadata")
-                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+                /** The cadence to bill for this price on. */
+                @JsonProperty("cadence") fun cadence(): Cadence = cadence
 
-                /** An alias for the price. */
-                @JsonProperty("external_price_id")
-                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
+                /** An ISO 4217 currency string for which this price is billed in. */
+                @JsonProperty("currency") fun currency(): String = currency
+
+                /** The id of the item the plan will be associated with. */
+                @JsonProperty("item_id") fun itemId(): String = itemId
+
+                @JsonProperty("model_type") fun modelType(): ModelType = modelType
 
                 /** The name of the price. */
                 @JsonProperty("name") fun name(): String = name
+
+                @JsonProperty("tiered_with_proration_config")
+                fun tieredWithProrationConfig(): TieredWithProrationConfig =
+                    tieredWithProrationConfig
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -18587,15 +18590,28 @@ constructor(
                 @JsonProperty("billable_metric_id")
                 fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
-                /** The id of the item the plan will be associated with. */
-                @JsonProperty("item_id") fun itemId(): String = itemId
-
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance)
+
+                /**
+                 * For custom cadence: specifies the duration of the billing period in days or
+                 * months.
+                 */
+                @JsonProperty("billing_cycle_configuration")
+                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+                    Optional.ofNullable(billingCycleConfiguration)
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
+
+                /** An alias for the price. */
+                @JsonProperty("external_price_id")
+                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -18608,17 +18624,6 @@ constructor(
                 @JsonProperty("invoice_grouping_key")
                 fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey)
 
-                /** The cadence to bill for this price on. */
-                @JsonProperty("cadence") fun cadence(): Cadence = cadence
-
-                /**
-                 * For custom cadence: specifies the duration of the billing period in days or
-                 * months.
-                 */
-                @JsonProperty("billing_cycle_configuration")
-                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(billingCycleConfiguration)
-
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
                  * If unspecified, a single invoice is produced per billing cycle.
@@ -18627,18 +18632,13 @@ constructor(
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
                     Optional.ofNullable(invoicingCycleConfiguration)
 
-                /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @JsonProperty("conversion_rate")
-                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
-
-                @JsonProperty("model_type") fun modelType(): ModelType = modelType
-
-                @JsonProperty("tiered_with_proration_config")
-                fun tieredWithProrationConfig(): TieredWithProrationConfig =
-                    tieredWithProrationConfig
-
-                /** An ISO 4217 currency string for which this price is billed in. */
-                @JsonProperty("currency") fun currency(): String = currency
+                /**
+                 * User-specified key/value pairs for the resource. Individual keys can be removed
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
+                 */
+                @JsonProperty("metadata")
+                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -18653,63 +18653,66 @@ constructor(
 
                 class Builder {
 
-                    private var metadata: Metadata? = null
-                    private var externalPriceId: String? = null
-                    private var name: String? = null
-                    private var billableMetricId: String? = null
+                    private var cadence: Cadence? = null
+                    private var currency: String? = null
                     private var itemId: String? = null
+                    private var modelType: ModelType? = null
+                    private var name: String? = null
+                    private var tieredWithProrationConfig: TieredWithProrationConfig? = null
+                    private var billableMetricId: String? = null
                     private var billedInAdvance: Boolean? = null
+                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
+                    private var conversionRate: Double? = null
+                    private var externalPriceId: String? = null
                     private var fixedPriceQuantity: Double? = null
                     private var invoiceGroupingKey: String? = null
-                    private var cadence: Cadence? = null
-                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
                     private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
-                    private var conversionRate: Double? = null
-                    private var modelType: ModelType? = null
-                    private var tieredWithProrationConfig: TieredWithProrationConfig? = null
-                    private var currency: String? = null
+                    private var metadata: Metadata? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(
                         newFloatingTieredWithProrationPrice: NewFloatingTieredWithProrationPrice
                     ) = apply {
-                        metadata = newFloatingTieredWithProrationPrice.metadata
-                        externalPriceId = newFloatingTieredWithProrationPrice.externalPriceId
-                        name = newFloatingTieredWithProrationPrice.name
-                        billableMetricId = newFloatingTieredWithProrationPrice.billableMetricId
-                        itemId = newFloatingTieredWithProrationPrice.itemId
-                        billedInAdvance = newFloatingTieredWithProrationPrice.billedInAdvance
-                        fixedPriceQuantity = newFloatingTieredWithProrationPrice.fixedPriceQuantity
-                        invoiceGroupingKey = newFloatingTieredWithProrationPrice.invoiceGroupingKey
                         cadence = newFloatingTieredWithProrationPrice.cadence
-                        billingCycleConfiguration =
-                            newFloatingTieredWithProrationPrice.billingCycleConfiguration
-                        invoicingCycleConfiguration =
-                            newFloatingTieredWithProrationPrice.invoicingCycleConfiguration
-                        conversionRate = newFloatingTieredWithProrationPrice.conversionRate
+                        currency = newFloatingTieredWithProrationPrice.currency
+                        itemId = newFloatingTieredWithProrationPrice.itemId
                         modelType = newFloatingTieredWithProrationPrice.modelType
+                        name = newFloatingTieredWithProrationPrice.name
                         tieredWithProrationConfig =
                             newFloatingTieredWithProrationPrice.tieredWithProrationConfig
-                        currency = newFloatingTieredWithProrationPrice.currency
+                        billableMetricId = newFloatingTieredWithProrationPrice.billableMetricId
+                        billedInAdvance = newFloatingTieredWithProrationPrice.billedInAdvance
+                        billingCycleConfiguration =
+                            newFloatingTieredWithProrationPrice.billingCycleConfiguration
+                        conversionRate = newFloatingTieredWithProrationPrice.conversionRate
+                        externalPriceId = newFloatingTieredWithProrationPrice.externalPriceId
+                        fixedPriceQuantity = newFloatingTieredWithProrationPrice.fixedPriceQuantity
+                        invoiceGroupingKey = newFloatingTieredWithProrationPrice.invoiceGroupingKey
+                        invoicingCycleConfiguration =
+                            newFloatingTieredWithProrationPrice.invoicingCycleConfiguration
+                        metadata = newFloatingTieredWithProrationPrice.metadata
                         additionalProperties =
                             newFloatingTieredWithProrationPrice.additionalProperties.toMutableMap()
                     }
 
-                    /**
-                     * User-specified key/value pairs for the resource. Individual keys can be
-                     * removed by setting the value to `null`, and the entire metadata mapping can
-                     * be cleared by setting `metadata` to `null`.
-                     */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    /** The cadence to bill for this price on. */
+                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
-                    /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
-                        this.externalPriceId = externalPriceId
-                    }
+                    /** An ISO 4217 currency string for which this price is billed in. */
+                    fun currency(currency: String) = apply { this.currency = currency }
+
+                    /** The id of the item the plan will be associated with. */
+                    fun itemId(itemId: String) = apply { this.itemId = itemId }
+
+                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
 
                     /** The name of the price. */
                     fun name(name: String) = apply { this.name = name }
+
+                    fun tieredWithProrationConfig(
+                        tieredWithProrationConfig: TieredWithProrationConfig
+                    ) = apply { this.tieredWithProrationConfig = tieredWithProrationConfig }
 
                     /**
                      * The id of the billable metric for the price. Only needed if the price is
@@ -18719,15 +18722,32 @@ constructor(
                         this.billableMetricId = billableMetricId
                     }
 
-                    /** The id of the item the plan will be associated with. */
-                    fun itemId(itemId: String) = apply { this.itemId = itemId }
-
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
                     fun billedInAdvance(billedInAdvance: Boolean) = apply {
                         this.billedInAdvance = billedInAdvance
+                    }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: BillingCycleConfiguration
+                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) = apply {
+                        this.conversionRate = conversionRate
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: String) = apply {
+                        this.externalPriceId = externalPriceId
                     }
 
                     /**
@@ -18743,17 +18763,6 @@ constructor(
                         this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
-                    /** The cadence to bill for this price on. */
-                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
-
-                    /**
-                     * For custom cadence: specifies the duration of the billing period in days or
-                     * months.
-                     */
-                    fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
-                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
-
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
@@ -18763,20 +18772,11 @@ constructor(
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
 
                     /**
-                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
-                        this.conversionRate = conversionRate
-                    }
-
-                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
-
-                    fun tieredWithProrationConfig(
-                        tieredWithProrationConfig: TieredWithProrationConfig
-                    ) = apply { this.tieredWithProrationConfig = tieredWithProrationConfig }
-
-                    /** An ISO 4217 currency string for which this price is billed in. */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -18802,23 +18802,23 @@ constructor(
 
                     fun build(): NewFloatingTieredWithProrationPrice =
                         NewFloatingTieredWithProrationPrice(
-                            metadata,
-                            externalPriceId,
-                            checkNotNull(name) { "`name` is required but was not set" },
-                            billableMetricId,
-                            checkNotNull(itemId) { "`itemId` is required but was not set" },
-                            billedInAdvance,
-                            fixedPriceQuantity,
-                            invoiceGroupingKey,
                             checkNotNull(cadence) { "`cadence` is required but was not set" },
-                            billingCycleConfiguration,
-                            invoicingCycleConfiguration,
-                            conversionRate,
+                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            checkNotNull(itemId) { "`itemId` is required but was not set" },
                             checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(name) { "`name` is required but was not set" },
                             checkNotNull(tieredWithProrationConfig) {
                                 "`tieredWithProrationConfig` is required but was not set"
                             },
-                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            billableMetricId,
+                            billedInAdvance,
+                            billingCycleConfiguration,
+                            conversionRate,
+                            externalPriceId,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            invoicingCycleConfiguration,
+                            metadata,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -19442,59 +19442,61 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewFloatingTieredWithProrationPrice && metadata == other.metadata && externalPriceId == other.externalPriceId && name == other.name && billableMetricId == other.billableMetricId && itemId == other.itemId && billedInAdvance == other.billedInAdvance && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && cadence == other.cadence && billingCycleConfiguration == other.billingCycleConfiguration && invoicingCycleConfiguration == other.invoicingCycleConfiguration && conversionRate == other.conversionRate && modelType == other.modelType && tieredWithProrationConfig == other.tieredWithProrationConfig && currency == other.currency && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewFloatingTieredWithProrationPrice && cadence == other.cadence && currency == other.currency && itemId == other.itemId && modelType == other.modelType && name == other.name && tieredWithProrationConfig == other.tieredWithProrationConfig && billableMetricId == other.billableMetricId && billedInAdvance == other.billedInAdvance && billingCycleConfiguration == other.billingCycleConfiguration && conversionRate == other.conversionRate && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && invoicingCycleConfiguration == other.invoicingCycleConfiguration && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(metadata, externalPriceId, name, billableMetricId, itemId, billedInAdvance, fixedPriceQuantity, invoiceGroupingKey, cadence, billingCycleConfiguration, invoicingCycleConfiguration, conversionRate, modelType, tieredWithProrationConfig, currency, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(cadence, currency, itemId, modelType, name, tieredWithProrationConfig, billableMetricId, billedInAdvance, billingCycleConfiguration, conversionRate, externalPriceId, fixedPriceQuantity, invoiceGroupingKey, invoicingCycleConfiguration, metadata, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewFloatingTieredWithProrationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, tieredWithProrationConfig=$tieredWithProrationConfig, currency=$currency, additionalProperties=$additionalProperties}"
+                    "NewFloatingTieredWithProrationPrice{cadence=$cadence, currency=$currency, itemId=$itemId, modelType=$modelType, name=$name, tieredWithProrationConfig=$tieredWithProrationConfig, billableMetricId=$billableMetricId, billedInAdvance=$billedInAdvance, billingCycleConfiguration=$billingCycleConfiguration, conversionRate=$conversionRate, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, invoicingCycleConfiguration=$invoicingCycleConfiguration, metadata=$metadata, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class NewFloatingUnitWithProrationPrice
             @JsonCreator
             private constructor(
-                @JsonProperty("metadata") private val metadata: Metadata?,
-                @JsonProperty("external_price_id") private val externalPriceId: String?,
-                @JsonProperty("name") private val name: String,
-                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
-                @JsonProperty("item_id") private val itemId: String,
-                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
-                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
-                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
                 @JsonProperty("cadence") private val cadence: Cadence,
-                @JsonProperty("billing_cycle_configuration")
-                private val billingCycleConfiguration: BillingCycleConfiguration?,
-                @JsonProperty("invoicing_cycle_configuration")
-                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
-                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("item_id") private val itemId: String,
                 @JsonProperty("model_type") private val modelType: ModelType,
+                @JsonProperty("name") private val name: String,
                 @JsonProperty("unit_with_proration_config")
                 private val unitWithProrationConfig: UnitWithProrationConfig,
-                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
+                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
+                @JsonProperty("billing_cycle_configuration")
+                private val billingCycleConfiguration: BillingCycleConfiguration?,
+                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
+                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
+                @JsonProperty("invoicing_cycle_configuration")
+                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
+                @JsonProperty("metadata") private val metadata: Metadata?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /**
-                 * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
-                 * setting `metadata` to `null`.
-                 */
-                @JsonProperty("metadata")
-                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+                /** The cadence to bill for this price on. */
+                @JsonProperty("cadence") fun cadence(): Cadence = cadence
 
-                /** An alias for the price. */
-                @JsonProperty("external_price_id")
-                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
+                /** An ISO 4217 currency string for which this price is billed in. */
+                @JsonProperty("currency") fun currency(): String = currency
+
+                /** The id of the item the plan will be associated with. */
+                @JsonProperty("item_id") fun itemId(): String = itemId
+
+                @JsonProperty("model_type") fun modelType(): ModelType = modelType
 
                 /** The name of the price. */
                 @JsonProperty("name") fun name(): String = name
+
+                @JsonProperty("unit_with_proration_config")
+                fun unitWithProrationConfig(): UnitWithProrationConfig = unitWithProrationConfig
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -19503,15 +19505,28 @@ constructor(
                 @JsonProperty("billable_metric_id")
                 fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
-                /** The id of the item the plan will be associated with. */
-                @JsonProperty("item_id") fun itemId(): String = itemId
-
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance)
+
+                /**
+                 * For custom cadence: specifies the duration of the billing period in days or
+                 * months.
+                 */
+                @JsonProperty("billing_cycle_configuration")
+                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+                    Optional.ofNullable(billingCycleConfiguration)
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
+
+                /** An alias for the price. */
+                @JsonProperty("external_price_id")
+                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -19524,17 +19539,6 @@ constructor(
                 @JsonProperty("invoice_grouping_key")
                 fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey)
 
-                /** The cadence to bill for this price on. */
-                @JsonProperty("cadence") fun cadence(): Cadence = cadence
-
-                /**
-                 * For custom cadence: specifies the duration of the billing period in days or
-                 * months.
-                 */
-                @JsonProperty("billing_cycle_configuration")
-                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(billingCycleConfiguration)
-
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
                  * If unspecified, a single invoice is produced per billing cycle.
@@ -19543,17 +19547,13 @@ constructor(
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
                     Optional.ofNullable(invoicingCycleConfiguration)
 
-                /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @JsonProperty("conversion_rate")
-                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
-
-                @JsonProperty("model_type") fun modelType(): ModelType = modelType
-
-                @JsonProperty("unit_with_proration_config")
-                fun unitWithProrationConfig(): UnitWithProrationConfig = unitWithProrationConfig
-
-                /** An ISO 4217 currency string for which this price is billed in. */
-                @JsonProperty("currency") fun currency(): String = currency
+                /**
+                 * User-specified key/value pairs for the resource. Individual keys can be removed
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
+                 */
+                @JsonProperty("metadata")
+                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -19568,63 +19568,67 @@ constructor(
 
                 class Builder {
 
-                    private var metadata: Metadata? = null
-                    private var externalPriceId: String? = null
-                    private var name: String? = null
-                    private var billableMetricId: String? = null
+                    private var cadence: Cadence? = null
+                    private var currency: String? = null
                     private var itemId: String? = null
+                    private var modelType: ModelType? = null
+                    private var name: String? = null
+                    private var unitWithProrationConfig: UnitWithProrationConfig? = null
+                    private var billableMetricId: String? = null
                     private var billedInAdvance: Boolean? = null
+                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
+                    private var conversionRate: Double? = null
+                    private var externalPriceId: String? = null
                     private var fixedPriceQuantity: Double? = null
                     private var invoiceGroupingKey: String? = null
-                    private var cadence: Cadence? = null
-                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
                     private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
-                    private var conversionRate: Double? = null
-                    private var modelType: ModelType? = null
-                    private var unitWithProrationConfig: UnitWithProrationConfig? = null
-                    private var currency: String? = null
+                    private var metadata: Metadata? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(
                         newFloatingUnitWithProrationPrice: NewFloatingUnitWithProrationPrice
                     ) = apply {
-                        metadata = newFloatingUnitWithProrationPrice.metadata
-                        externalPriceId = newFloatingUnitWithProrationPrice.externalPriceId
-                        name = newFloatingUnitWithProrationPrice.name
-                        billableMetricId = newFloatingUnitWithProrationPrice.billableMetricId
-                        itemId = newFloatingUnitWithProrationPrice.itemId
-                        billedInAdvance = newFloatingUnitWithProrationPrice.billedInAdvance
-                        fixedPriceQuantity = newFloatingUnitWithProrationPrice.fixedPriceQuantity
-                        invoiceGroupingKey = newFloatingUnitWithProrationPrice.invoiceGroupingKey
                         cadence = newFloatingUnitWithProrationPrice.cadence
-                        billingCycleConfiguration =
-                            newFloatingUnitWithProrationPrice.billingCycleConfiguration
-                        invoicingCycleConfiguration =
-                            newFloatingUnitWithProrationPrice.invoicingCycleConfiguration
-                        conversionRate = newFloatingUnitWithProrationPrice.conversionRate
+                        currency = newFloatingUnitWithProrationPrice.currency
+                        itemId = newFloatingUnitWithProrationPrice.itemId
                         modelType = newFloatingUnitWithProrationPrice.modelType
+                        name = newFloatingUnitWithProrationPrice.name
                         unitWithProrationConfig =
                             newFloatingUnitWithProrationPrice.unitWithProrationConfig
-                        currency = newFloatingUnitWithProrationPrice.currency
+                        billableMetricId = newFloatingUnitWithProrationPrice.billableMetricId
+                        billedInAdvance = newFloatingUnitWithProrationPrice.billedInAdvance
+                        billingCycleConfiguration =
+                            newFloatingUnitWithProrationPrice.billingCycleConfiguration
+                        conversionRate = newFloatingUnitWithProrationPrice.conversionRate
+                        externalPriceId = newFloatingUnitWithProrationPrice.externalPriceId
+                        fixedPriceQuantity = newFloatingUnitWithProrationPrice.fixedPriceQuantity
+                        invoiceGroupingKey = newFloatingUnitWithProrationPrice.invoiceGroupingKey
+                        invoicingCycleConfiguration =
+                            newFloatingUnitWithProrationPrice.invoicingCycleConfiguration
+                        metadata = newFloatingUnitWithProrationPrice.metadata
                         additionalProperties =
                             newFloatingUnitWithProrationPrice.additionalProperties.toMutableMap()
                     }
 
-                    /**
-                     * User-specified key/value pairs for the resource. Individual keys can be
-                     * removed by setting the value to `null`, and the entire metadata mapping can
-                     * be cleared by setting `metadata` to `null`.
-                     */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    /** The cadence to bill for this price on. */
+                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
-                    /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
-                        this.externalPriceId = externalPriceId
-                    }
+                    /** An ISO 4217 currency string for which this price is billed in. */
+                    fun currency(currency: String) = apply { this.currency = currency }
+
+                    /** The id of the item the plan will be associated with. */
+                    fun itemId(itemId: String) = apply { this.itemId = itemId }
+
+                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
 
                     /** The name of the price. */
                     fun name(name: String) = apply { this.name = name }
+
+                    fun unitWithProrationConfig(unitWithProrationConfig: UnitWithProrationConfig) =
+                        apply {
+                            this.unitWithProrationConfig = unitWithProrationConfig
+                        }
 
                     /**
                      * The id of the billable metric for the price. Only needed if the price is
@@ -19634,15 +19638,32 @@ constructor(
                         this.billableMetricId = billableMetricId
                     }
 
-                    /** The id of the item the plan will be associated with. */
-                    fun itemId(itemId: String) = apply { this.itemId = itemId }
-
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
                     fun billedInAdvance(billedInAdvance: Boolean) = apply {
                         this.billedInAdvance = billedInAdvance
+                    }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: BillingCycleConfiguration
+                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) = apply {
+                        this.conversionRate = conversionRate
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: String) = apply {
+                        this.externalPriceId = externalPriceId
                     }
 
                     /**
@@ -19658,17 +19679,6 @@ constructor(
                         this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
-                    /** The cadence to bill for this price on. */
-                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
-
-                    /**
-                     * For custom cadence: specifies the duration of the billing period in days or
-                     * months.
-                     */
-                    fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
-                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
-
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
@@ -19678,21 +19688,11 @@ constructor(
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
 
                     /**
-                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
-                        this.conversionRate = conversionRate
-                    }
-
-                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
-
-                    fun unitWithProrationConfig(unitWithProrationConfig: UnitWithProrationConfig) =
-                        apply {
-                            this.unitWithProrationConfig = unitWithProrationConfig
-                        }
-
-                    /** An ISO 4217 currency string for which this price is billed in. */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -19718,23 +19718,23 @@ constructor(
 
                     fun build(): NewFloatingUnitWithProrationPrice =
                         NewFloatingUnitWithProrationPrice(
-                            metadata,
-                            externalPriceId,
-                            checkNotNull(name) { "`name` is required but was not set" },
-                            billableMetricId,
-                            checkNotNull(itemId) { "`itemId` is required but was not set" },
-                            billedInAdvance,
-                            fixedPriceQuantity,
-                            invoiceGroupingKey,
                             checkNotNull(cadence) { "`cadence` is required but was not set" },
-                            billingCycleConfiguration,
-                            invoicingCycleConfiguration,
-                            conversionRate,
+                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            checkNotNull(itemId) { "`itemId` is required but was not set" },
                             checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(name) { "`name` is required but was not set" },
                             checkNotNull(unitWithProrationConfig) {
                                 "`unitWithProrationConfig` is required but was not set"
                             },
-                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            billableMetricId,
+                            billedInAdvance,
+                            billingCycleConfiguration,
+                            conversionRate,
+                            externalPriceId,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            invoicingCycleConfiguration,
+                            metadata,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -20358,56 +20358,58 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewFloatingUnitWithProrationPrice && metadata == other.metadata && externalPriceId == other.externalPriceId && name == other.name && billableMetricId == other.billableMetricId && itemId == other.itemId && billedInAdvance == other.billedInAdvance && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && cadence == other.cadence && billingCycleConfiguration == other.billingCycleConfiguration && invoicingCycleConfiguration == other.invoicingCycleConfiguration && conversionRate == other.conversionRate && modelType == other.modelType && unitWithProrationConfig == other.unitWithProrationConfig && currency == other.currency && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewFloatingUnitWithProrationPrice && cadence == other.cadence && currency == other.currency && itemId == other.itemId && modelType == other.modelType && name == other.name && unitWithProrationConfig == other.unitWithProrationConfig && billableMetricId == other.billableMetricId && billedInAdvance == other.billedInAdvance && billingCycleConfiguration == other.billingCycleConfiguration && conversionRate == other.conversionRate && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && invoicingCycleConfiguration == other.invoicingCycleConfiguration && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(metadata, externalPriceId, name, billableMetricId, itemId, billedInAdvance, fixedPriceQuantity, invoiceGroupingKey, cadence, billingCycleConfiguration, invoicingCycleConfiguration, conversionRate, modelType, unitWithProrationConfig, currency, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(cadence, currency, itemId, modelType, name, unitWithProrationConfig, billableMetricId, billedInAdvance, billingCycleConfiguration, conversionRate, externalPriceId, fixedPriceQuantity, invoiceGroupingKey, invoicingCycleConfiguration, metadata, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewFloatingUnitWithProrationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, unitWithProrationConfig=$unitWithProrationConfig, currency=$currency, additionalProperties=$additionalProperties}"
+                    "NewFloatingUnitWithProrationPrice{cadence=$cadence, currency=$currency, itemId=$itemId, modelType=$modelType, name=$name, unitWithProrationConfig=$unitWithProrationConfig, billableMetricId=$billableMetricId, billedInAdvance=$billedInAdvance, billingCycleConfiguration=$billingCycleConfiguration, conversionRate=$conversionRate, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, invoicingCycleConfiguration=$invoicingCycleConfiguration, metadata=$metadata, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class NewFloatingGroupedAllocationPrice
             @JsonCreator
             private constructor(
-                @JsonProperty("metadata") private val metadata: Metadata?,
-                @JsonProperty("external_price_id") private val externalPriceId: String?,
-                @JsonProperty("name") private val name: String,
-                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
-                @JsonProperty("item_id") private val itemId: String,
-                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
-                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
-                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
                 @JsonProperty("cadence") private val cadence: Cadence,
-                @JsonProperty("billing_cycle_configuration")
-                private val billingCycleConfiguration: BillingCycleConfiguration?,
-                @JsonProperty("invoicing_cycle_configuration")
-                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
-                @JsonProperty("conversion_rate") private val conversionRate: Double?,
-                @JsonProperty("model_type") private val modelType: ModelType,
+                @JsonProperty("currency") private val currency: String,
                 @JsonProperty("grouped_allocation_config")
                 private val groupedAllocationConfig: GroupedAllocationConfig,
-                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("item_id") private val itemId: String,
+                @JsonProperty("model_type") private val modelType: ModelType,
+                @JsonProperty("name") private val name: String,
+                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
+                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
+                @JsonProperty("billing_cycle_configuration")
+                private val billingCycleConfiguration: BillingCycleConfiguration?,
+                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
+                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
+                @JsonProperty("invoicing_cycle_configuration")
+                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
+                @JsonProperty("metadata") private val metadata: Metadata?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /**
-                 * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
-                 * setting `metadata` to `null`.
-                 */
-                @JsonProperty("metadata")
-                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+                /** The cadence to bill for this price on. */
+                @JsonProperty("cadence") fun cadence(): Cadence = cadence
 
-                /** An alias for the price. */
-                @JsonProperty("external_price_id")
-                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
+                /** An ISO 4217 currency string for which this price is billed in. */
+                @JsonProperty("currency") fun currency(): String = currency
+
+                @JsonProperty("grouped_allocation_config")
+                fun groupedAllocationConfig(): GroupedAllocationConfig = groupedAllocationConfig
+
+                /** The id of the item the plan will be associated with. */
+                @JsonProperty("item_id") fun itemId(): String = itemId
+
+                @JsonProperty("model_type") fun modelType(): ModelType = modelType
 
                 /** The name of the price. */
                 @JsonProperty("name") fun name(): String = name
@@ -20419,15 +20421,28 @@ constructor(
                 @JsonProperty("billable_metric_id")
                 fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
-                /** The id of the item the plan will be associated with. */
-                @JsonProperty("item_id") fun itemId(): String = itemId
-
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance)
+
+                /**
+                 * For custom cadence: specifies the duration of the billing period in days or
+                 * months.
+                 */
+                @JsonProperty("billing_cycle_configuration")
+                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+                    Optional.ofNullable(billingCycleConfiguration)
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
+
+                /** An alias for the price. */
+                @JsonProperty("external_price_id")
+                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -20440,17 +20455,6 @@ constructor(
                 @JsonProperty("invoice_grouping_key")
                 fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey)
 
-                /** The cadence to bill for this price on. */
-                @JsonProperty("cadence") fun cadence(): Cadence = cadence
-
-                /**
-                 * For custom cadence: specifies the duration of the billing period in days or
-                 * months.
-                 */
-                @JsonProperty("billing_cycle_configuration")
-                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(billingCycleConfiguration)
-
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
                  * If unspecified, a single invoice is produced per billing cycle.
@@ -20459,17 +20463,13 @@ constructor(
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
                     Optional.ofNullable(invoicingCycleConfiguration)
 
-                /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @JsonProperty("conversion_rate")
-                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
-
-                @JsonProperty("model_type") fun modelType(): ModelType = modelType
-
-                @JsonProperty("grouped_allocation_config")
-                fun groupedAllocationConfig(): GroupedAllocationConfig = groupedAllocationConfig
-
-                /** An ISO 4217 currency string for which this price is billed in. */
-                @JsonProperty("currency") fun currency(): String = currency
+                /**
+                 * User-specified key/value pairs for the resource. Individual keys can be removed
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
+                 */
+                @JsonProperty("metadata")
+                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -20484,60 +20484,64 @@ constructor(
 
                 class Builder {
 
-                    private var metadata: Metadata? = null
-                    private var externalPriceId: String? = null
+                    private var cadence: Cadence? = null
+                    private var currency: String? = null
+                    private var groupedAllocationConfig: GroupedAllocationConfig? = null
+                    private var itemId: String? = null
+                    private var modelType: ModelType? = null
                     private var name: String? = null
                     private var billableMetricId: String? = null
-                    private var itemId: String? = null
                     private var billedInAdvance: Boolean? = null
+                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
+                    private var conversionRate: Double? = null
+                    private var externalPriceId: String? = null
                     private var fixedPriceQuantity: Double? = null
                     private var invoiceGroupingKey: String? = null
-                    private var cadence: Cadence? = null
-                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
                     private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
-                    private var conversionRate: Double? = null
-                    private var modelType: ModelType? = null
-                    private var groupedAllocationConfig: GroupedAllocationConfig? = null
-                    private var currency: String? = null
+                    private var metadata: Metadata? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(
                         newFloatingGroupedAllocationPrice: NewFloatingGroupedAllocationPrice
                     ) = apply {
-                        metadata = newFloatingGroupedAllocationPrice.metadata
-                        externalPriceId = newFloatingGroupedAllocationPrice.externalPriceId
-                        name = newFloatingGroupedAllocationPrice.name
-                        billableMetricId = newFloatingGroupedAllocationPrice.billableMetricId
-                        itemId = newFloatingGroupedAllocationPrice.itemId
-                        billedInAdvance = newFloatingGroupedAllocationPrice.billedInAdvance
-                        fixedPriceQuantity = newFloatingGroupedAllocationPrice.fixedPriceQuantity
-                        invoiceGroupingKey = newFloatingGroupedAllocationPrice.invoiceGroupingKey
                         cadence = newFloatingGroupedAllocationPrice.cadence
-                        billingCycleConfiguration =
-                            newFloatingGroupedAllocationPrice.billingCycleConfiguration
-                        invoicingCycleConfiguration =
-                            newFloatingGroupedAllocationPrice.invoicingCycleConfiguration
-                        conversionRate = newFloatingGroupedAllocationPrice.conversionRate
-                        modelType = newFloatingGroupedAllocationPrice.modelType
+                        currency = newFloatingGroupedAllocationPrice.currency
                         groupedAllocationConfig =
                             newFloatingGroupedAllocationPrice.groupedAllocationConfig
-                        currency = newFloatingGroupedAllocationPrice.currency
+                        itemId = newFloatingGroupedAllocationPrice.itemId
+                        modelType = newFloatingGroupedAllocationPrice.modelType
+                        name = newFloatingGroupedAllocationPrice.name
+                        billableMetricId = newFloatingGroupedAllocationPrice.billableMetricId
+                        billedInAdvance = newFloatingGroupedAllocationPrice.billedInAdvance
+                        billingCycleConfiguration =
+                            newFloatingGroupedAllocationPrice.billingCycleConfiguration
+                        conversionRate = newFloatingGroupedAllocationPrice.conversionRate
+                        externalPriceId = newFloatingGroupedAllocationPrice.externalPriceId
+                        fixedPriceQuantity = newFloatingGroupedAllocationPrice.fixedPriceQuantity
+                        invoiceGroupingKey = newFloatingGroupedAllocationPrice.invoiceGroupingKey
+                        invoicingCycleConfiguration =
+                            newFloatingGroupedAllocationPrice.invoicingCycleConfiguration
+                        metadata = newFloatingGroupedAllocationPrice.metadata
                         additionalProperties =
                             newFloatingGroupedAllocationPrice.additionalProperties.toMutableMap()
                     }
 
-                    /**
-                     * User-specified key/value pairs for the resource. Individual keys can be
-                     * removed by setting the value to `null`, and the entire metadata mapping can
-                     * be cleared by setting `metadata` to `null`.
-                     */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    /** The cadence to bill for this price on. */
+                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
-                    /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
-                        this.externalPriceId = externalPriceId
-                    }
+                    /** An ISO 4217 currency string for which this price is billed in. */
+                    fun currency(currency: String) = apply { this.currency = currency }
+
+                    fun groupedAllocationConfig(groupedAllocationConfig: GroupedAllocationConfig) =
+                        apply {
+                            this.groupedAllocationConfig = groupedAllocationConfig
+                        }
+
+                    /** The id of the item the plan will be associated with. */
+                    fun itemId(itemId: String) = apply { this.itemId = itemId }
+
+                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
 
                     /** The name of the price. */
                     fun name(name: String) = apply { this.name = name }
@@ -20550,15 +20554,32 @@ constructor(
                         this.billableMetricId = billableMetricId
                     }
 
-                    /** The id of the item the plan will be associated with. */
-                    fun itemId(itemId: String) = apply { this.itemId = itemId }
-
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
                     fun billedInAdvance(billedInAdvance: Boolean) = apply {
                         this.billedInAdvance = billedInAdvance
+                    }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: BillingCycleConfiguration
+                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) = apply {
+                        this.conversionRate = conversionRate
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: String) = apply {
+                        this.externalPriceId = externalPriceId
                     }
 
                     /**
@@ -20574,17 +20595,6 @@ constructor(
                         this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
-                    /** The cadence to bill for this price on. */
-                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
-
-                    /**
-                     * For custom cadence: specifies the duration of the billing period in days or
-                     * months.
-                     */
-                    fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
-                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
-
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
@@ -20594,21 +20604,11 @@ constructor(
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
 
                     /**
-                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
-                        this.conversionRate = conversionRate
-                    }
-
-                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
-
-                    fun groupedAllocationConfig(groupedAllocationConfig: GroupedAllocationConfig) =
-                        apply {
-                            this.groupedAllocationConfig = groupedAllocationConfig
-                        }
-
-                    /** An ISO 4217 currency string for which this price is billed in. */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -20634,23 +20634,23 @@ constructor(
 
                     fun build(): NewFloatingGroupedAllocationPrice =
                         NewFloatingGroupedAllocationPrice(
-                            metadata,
-                            externalPriceId,
-                            checkNotNull(name) { "`name` is required but was not set" },
-                            billableMetricId,
-                            checkNotNull(itemId) { "`itemId` is required but was not set" },
-                            billedInAdvance,
-                            fixedPriceQuantity,
-                            invoiceGroupingKey,
                             checkNotNull(cadence) { "`cadence` is required but was not set" },
-                            billingCycleConfiguration,
-                            invoicingCycleConfiguration,
-                            conversionRate,
-                            checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(currency) { "`currency` is required but was not set" },
                             checkNotNull(groupedAllocationConfig) {
                                 "`groupedAllocationConfig` is required but was not set"
                             },
-                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            checkNotNull(itemId) { "`itemId` is required but was not set" },
+                            checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(name) { "`name` is required but was not set" },
+                            billableMetricId,
+                            billedInAdvance,
+                            billingCycleConfiguration,
+                            conversionRate,
+                            externalPriceId,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            invoicingCycleConfiguration,
+                            metadata,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -21274,56 +21274,59 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewFloatingGroupedAllocationPrice && metadata == other.metadata && externalPriceId == other.externalPriceId && name == other.name && billableMetricId == other.billableMetricId && itemId == other.itemId && billedInAdvance == other.billedInAdvance && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && cadence == other.cadence && billingCycleConfiguration == other.billingCycleConfiguration && invoicingCycleConfiguration == other.invoicingCycleConfiguration && conversionRate == other.conversionRate && modelType == other.modelType && groupedAllocationConfig == other.groupedAllocationConfig && currency == other.currency && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewFloatingGroupedAllocationPrice && cadence == other.cadence && currency == other.currency && groupedAllocationConfig == other.groupedAllocationConfig && itemId == other.itemId && modelType == other.modelType && name == other.name && billableMetricId == other.billableMetricId && billedInAdvance == other.billedInAdvance && billingCycleConfiguration == other.billingCycleConfiguration && conversionRate == other.conversionRate && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && invoicingCycleConfiguration == other.invoicingCycleConfiguration && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(metadata, externalPriceId, name, billableMetricId, itemId, billedInAdvance, fixedPriceQuantity, invoiceGroupingKey, cadence, billingCycleConfiguration, invoicingCycleConfiguration, conversionRate, modelType, groupedAllocationConfig, currency, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(cadence, currency, groupedAllocationConfig, itemId, modelType, name, billableMetricId, billedInAdvance, billingCycleConfiguration, conversionRate, externalPriceId, fixedPriceQuantity, invoiceGroupingKey, invoicingCycleConfiguration, metadata, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewFloatingGroupedAllocationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, groupedAllocationConfig=$groupedAllocationConfig, currency=$currency, additionalProperties=$additionalProperties}"
+                    "NewFloatingGroupedAllocationPrice{cadence=$cadence, currency=$currency, groupedAllocationConfig=$groupedAllocationConfig, itemId=$itemId, modelType=$modelType, name=$name, billableMetricId=$billableMetricId, billedInAdvance=$billedInAdvance, billingCycleConfiguration=$billingCycleConfiguration, conversionRate=$conversionRate, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, invoicingCycleConfiguration=$invoicingCycleConfiguration, metadata=$metadata, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class NewFloatingGroupedWithProratedMinimumPrice
             @JsonCreator
             private constructor(
-                @JsonProperty("metadata") private val metadata: Metadata?,
-                @JsonProperty("external_price_id") private val externalPriceId: String?,
-                @JsonProperty("name") private val name: String,
-                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
-                @JsonProperty("item_id") private val itemId: String,
-                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
-                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
-                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
                 @JsonProperty("cadence") private val cadence: Cadence,
-                @JsonProperty("billing_cycle_configuration")
-                private val billingCycleConfiguration: BillingCycleConfiguration?,
-                @JsonProperty("invoicing_cycle_configuration")
-                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
-                @JsonProperty("conversion_rate") private val conversionRate: Double?,
-                @JsonProperty("model_type") private val modelType: ModelType,
+                @JsonProperty("currency") private val currency: String,
                 @JsonProperty("grouped_with_prorated_minimum_config")
                 private val groupedWithProratedMinimumConfig: GroupedWithProratedMinimumConfig,
-                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("item_id") private val itemId: String,
+                @JsonProperty("model_type") private val modelType: ModelType,
+                @JsonProperty("name") private val name: String,
+                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
+                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
+                @JsonProperty("billing_cycle_configuration")
+                private val billingCycleConfiguration: BillingCycleConfiguration?,
+                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
+                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
+                @JsonProperty("invoicing_cycle_configuration")
+                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
+                @JsonProperty("metadata") private val metadata: Metadata?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /**
-                 * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
-                 * setting `metadata` to `null`.
-                 */
-                @JsonProperty("metadata")
-                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+                /** The cadence to bill for this price on. */
+                @JsonProperty("cadence") fun cadence(): Cadence = cadence
 
-                /** An alias for the price. */
-                @JsonProperty("external_price_id")
-                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
+                /** An ISO 4217 currency string for which this price is billed in. */
+                @JsonProperty("currency") fun currency(): String = currency
+
+                @JsonProperty("grouped_with_prorated_minimum_config")
+                fun groupedWithProratedMinimumConfig(): GroupedWithProratedMinimumConfig =
+                    groupedWithProratedMinimumConfig
+
+                /** The id of the item the plan will be associated with. */
+                @JsonProperty("item_id") fun itemId(): String = itemId
+
+                @JsonProperty("model_type") fun modelType(): ModelType = modelType
 
                 /** The name of the price. */
                 @JsonProperty("name") fun name(): String = name
@@ -21335,15 +21338,28 @@ constructor(
                 @JsonProperty("billable_metric_id")
                 fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
-                /** The id of the item the plan will be associated with. */
-                @JsonProperty("item_id") fun itemId(): String = itemId
-
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance)
+
+                /**
+                 * For custom cadence: specifies the duration of the billing period in days or
+                 * months.
+                 */
+                @JsonProperty("billing_cycle_configuration")
+                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+                    Optional.ofNullable(billingCycleConfiguration)
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
+
+                /** An alias for the price. */
+                @JsonProperty("external_price_id")
+                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -21356,17 +21372,6 @@ constructor(
                 @JsonProperty("invoice_grouping_key")
                 fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey)
 
-                /** The cadence to bill for this price on. */
-                @JsonProperty("cadence") fun cadence(): Cadence = cadence
-
-                /**
-                 * For custom cadence: specifies the duration of the billing period in days or
-                 * months.
-                 */
-                @JsonProperty("billing_cycle_configuration")
-                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(billingCycleConfiguration)
-
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
                  * If unspecified, a single invoice is produced per billing cycle.
@@ -21375,18 +21380,13 @@ constructor(
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
                     Optional.ofNullable(invoicingCycleConfiguration)
 
-                /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @JsonProperty("conversion_rate")
-                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
-
-                @JsonProperty("model_type") fun modelType(): ModelType = modelType
-
-                @JsonProperty("grouped_with_prorated_minimum_config")
-                fun groupedWithProratedMinimumConfig(): GroupedWithProratedMinimumConfig =
-                    groupedWithProratedMinimumConfig
-
-                /** An ISO 4217 currency string for which this price is billed in. */
-                @JsonProperty("currency") fun currency(): String = currency
+                /**
+                 * User-specified key/value pairs for the resource. Individual keys can be removed
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
+                 */
+                @JsonProperty("metadata")
+                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -21401,23 +21401,23 @@ constructor(
 
                 class Builder {
 
-                    private var metadata: Metadata? = null
-                    private var externalPriceId: String? = null
-                    private var name: String? = null
-                    private var billableMetricId: String? = null
-                    private var itemId: String? = null
-                    private var billedInAdvance: Boolean? = null
-                    private var fixedPriceQuantity: Double? = null
-                    private var invoiceGroupingKey: String? = null
                     private var cadence: Cadence? = null
-                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
-                    private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
-                    private var conversionRate: Double? = null
-                    private var modelType: ModelType? = null
+                    private var currency: String? = null
                     private var groupedWithProratedMinimumConfig:
                         GroupedWithProratedMinimumConfig? =
                         null
-                    private var currency: String? = null
+                    private var itemId: String? = null
+                    private var modelType: ModelType? = null
+                    private var name: String? = null
+                    private var billableMetricId: String? = null
+                    private var billedInAdvance: Boolean? = null
+                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
+                    private var conversionRate: Double? = null
+                    private var externalPriceId: String? = null
+                    private var fixedPriceQuantity: Double? = null
+                    private var invoiceGroupingKey: String? = null
+                    private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
+                    private var metadata: Metadata? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
@@ -21425,44 +21425,49 @@ constructor(
                         newFloatingGroupedWithProratedMinimumPrice:
                             NewFloatingGroupedWithProratedMinimumPrice
                     ) = apply {
-                        metadata = newFloatingGroupedWithProratedMinimumPrice.metadata
-                        externalPriceId = newFloatingGroupedWithProratedMinimumPrice.externalPriceId
+                        cadence = newFloatingGroupedWithProratedMinimumPrice.cadence
+                        currency = newFloatingGroupedWithProratedMinimumPrice.currency
+                        groupedWithProratedMinimumConfig =
+                            newFloatingGroupedWithProratedMinimumPrice
+                                .groupedWithProratedMinimumConfig
+                        itemId = newFloatingGroupedWithProratedMinimumPrice.itemId
+                        modelType = newFloatingGroupedWithProratedMinimumPrice.modelType
                         name = newFloatingGroupedWithProratedMinimumPrice.name
                         billableMetricId =
                             newFloatingGroupedWithProratedMinimumPrice.billableMetricId
-                        itemId = newFloatingGroupedWithProratedMinimumPrice.itemId
                         billedInAdvance = newFloatingGroupedWithProratedMinimumPrice.billedInAdvance
+                        billingCycleConfiguration =
+                            newFloatingGroupedWithProratedMinimumPrice.billingCycleConfiguration
+                        conversionRate = newFloatingGroupedWithProratedMinimumPrice.conversionRate
+                        externalPriceId = newFloatingGroupedWithProratedMinimumPrice.externalPriceId
                         fixedPriceQuantity =
                             newFloatingGroupedWithProratedMinimumPrice.fixedPriceQuantity
                         invoiceGroupingKey =
                             newFloatingGroupedWithProratedMinimumPrice.invoiceGroupingKey
-                        cadence = newFloatingGroupedWithProratedMinimumPrice.cadence
-                        billingCycleConfiguration =
-                            newFloatingGroupedWithProratedMinimumPrice.billingCycleConfiguration
                         invoicingCycleConfiguration =
                             newFloatingGroupedWithProratedMinimumPrice.invoicingCycleConfiguration
-                        conversionRate = newFloatingGroupedWithProratedMinimumPrice.conversionRate
-                        modelType = newFloatingGroupedWithProratedMinimumPrice.modelType
-                        groupedWithProratedMinimumConfig =
-                            newFloatingGroupedWithProratedMinimumPrice
-                                .groupedWithProratedMinimumConfig
-                        currency = newFloatingGroupedWithProratedMinimumPrice.currency
+                        metadata = newFloatingGroupedWithProratedMinimumPrice.metadata
                         additionalProperties =
                             newFloatingGroupedWithProratedMinimumPrice.additionalProperties
                                 .toMutableMap()
                     }
 
-                    /**
-                     * User-specified key/value pairs for the resource. Individual keys can be
-                     * removed by setting the value to `null`, and the entire metadata mapping can
-                     * be cleared by setting `metadata` to `null`.
-                     */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    /** The cadence to bill for this price on. */
+                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
-                    /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
-                        this.externalPriceId = externalPriceId
+                    /** An ISO 4217 currency string for which this price is billed in. */
+                    fun currency(currency: String) = apply { this.currency = currency }
+
+                    fun groupedWithProratedMinimumConfig(
+                        groupedWithProratedMinimumConfig: GroupedWithProratedMinimumConfig
+                    ) = apply {
+                        this.groupedWithProratedMinimumConfig = groupedWithProratedMinimumConfig
                     }
+
+                    /** The id of the item the plan will be associated with. */
+                    fun itemId(itemId: String) = apply { this.itemId = itemId }
+
+                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
 
                     /** The name of the price. */
                     fun name(name: String) = apply { this.name = name }
@@ -21475,15 +21480,32 @@ constructor(
                         this.billableMetricId = billableMetricId
                     }
 
-                    /** The id of the item the plan will be associated with. */
-                    fun itemId(itemId: String) = apply { this.itemId = itemId }
-
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
                     fun billedInAdvance(billedInAdvance: Boolean) = apply {
                         this.billedInAdvance = billedInAdvance
+                    }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: BillingCycleConfiguration
+                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) = apply {
+                        this.conversionRate = conversionRate
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: String) = apply {
+                        this.externalPriceId = externalPriceId
                     }
 
                     /**
@@ -21499,17 +21521,6 @@ constructor(
                         this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
-                    /** The cadence to bill for this price on. */
-                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
-
-                    /**
-                     * For custom cadence: specifies the duration of the billing period in days or
-                     * months.
-                     */
-                    fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
-                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
-
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
@@ -21519,22 +21530,11 @@ constructor(
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
 
                     /**
-                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
-                        this.conversionRate = conversionRate
-                    }
-
-                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
-
-                    fun groupedWithProratedMinimumConfig(
-                        groupedWithProratedMinimumConfig: GroupedWithProratedMinimumConfig
-                    ) = apply {
-                        this.groupedWithProratedMinimumConfig = groupedWithProratedMinimumConfig
-                    }
-
-                    /** An ISO 4217 currency string for which this price is billed in. */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -21560,23 +21560,23 @@ constructor(
 
                     fun build(): NewFloatingGroupedWithProratedMinimumPrice =
                         NewFloatingGroupedWithProratedMinimumPrice(
-                            metadata,
-                            externalPriceId,
-                            checkNotNull(name) { "`name` is required but was not set" },
-                            billableMetricId,
-                            checkNotNull(itemId) { "`itemId` is required but was not set" },
-                            billedInAdvance,
-                            fixedPriceQuantity,
-                            invoiceGroupingKey,
                             checkNotNull(cadence) { "`cadence` is required but was not set" },
-                            billingCycleConfiguration,
-                            invoicingCycleConfiguration,
-                            conversionRate,
-                            checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(currency) { "`currency` is required but was not set" },
                             checkNotNull(groupedWithProratedMinimumConfig) {
                                 "`groupedWithProratedMinimumConfig` is required but was not set"
                             },
-                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            checkNotNull(itemId) { "`itemId` is required but was not set" },
+                            checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(name) { "`name` is required but was not set" },
+                            billableMetricId,
+                            billedInAdvance,
+                            billingCycleConfiguration,
+                            conversionRate,
+                            externalPriceId,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            invoicingCycleConfiguration,
+                            metadata,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -22202,56 +22202,59 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewFloatingGroupedWithProratedMinimumPrice && metadata == other.metadata && externalPriceId == other.externalPriceId && name == other.name && billableMetricId == other.billableMetricId && itemId == other.itemId && billedInAdvance == other.billedInAdvance && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && cadence == other.cadence && billingCycleConfiguration == other.billingCycleConfiguration && invoicingCycleConfiguration == other.invoicingCycleConfiguration && conversionRate == other.conversionRate && modelType == other.modelType && groupedWithProratedMinimumConfig == other.groupedWithProratedMinimumConfig && currency == other.currency && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewFloatingGroupedWithProratedMinimumPrice && cadence == other.cadence && currency == other.currency && groupedWithProratedMinimumConfig == other.groupedWithProratedMinimumConfig && itemId == other.itemId && modelType == other.modelType && name == other.name && billableMetricId == other.billableMetricId && billedInAdvance == other.billedInAdvance && billingCycleConfiguration == other.billingCycleConfiguration && conversionRate == other.conversionRate && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && invoicingCycleConfiguration == other.invoicingCycleConfiguration && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(metadata, externalPriceId, name, billableMetricId, itemId, billedInAdvance, fixedPriceQuantity, invoiceGroupingKey, cadence, billingCycleConfiguration, invoicingCycleConfiguration, conversionRate, modelType, groupedWithProratedMinimumConfig, currency, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(cadence, currency, groupedWithProratedMinimumConfig, itemId, modelType, name, billableMetricId, billedInAdvance, billingCycleConfiguration, conversionRate, externalPriceId, fixedPriceQuantity, invoiceGroupingKey, invoicingCycleConfiguration, metadata, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewFloatingGroupedWithProratedMinimumPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, groupedWithProratedMinimumConfig=$groupedWithProratedMinimumConfig, currency=$currency, additionalProperties=$additionalProperties}"
+                    "NewFloatingGroupedWithProratedMinimumPrice{cadence=$cadence, currency=$currency, groupedWithProratedMinimumConfig=$groupedWithProratedMinimumConfig, itemId=$itemId, modelType=$modelType, name=$name, billableMetricId=$billableMetricId, billedInAdvance=$billedInAdvance, billingCycleConfiguration=$billingCycleConfiguration, conversionRate=$conversionRate, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, invoicingCycleConfiguration=$invoicingCycleConfiguration, metadata=$metadata, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class NewFloatingGroupedWithMeteredMinimumPrice
             @JsonCreator
             private constructor(
-                @JsonProperty("metadata") private val metadata: Metadata?,
-                @JsonProperty("external_price_id") private val externalPriceId: String?,
-                @JsonProperty("name") private val name: String,
-                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
-                @JsonProperty("item_id") private val itemId: String,
-                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
-                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
-                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
                 @JsonProperty("cadence") private val cadence: Cadence,
-                @JsonProperty("billing_cycle_configuration")
-                private val billingCycleConfiguration: BillingCycleConfiguration?,
-                @JsonProperty("invoicing_cycle_configuration")
-                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
-                @JsonProperty("conversion_rate") private val conversionRate: Double?,
-                @JsonProperty("model_type") private val modelType: ModelType,
+                @JsonProperty("currency") private val currency: String,
                 @JsonProperty("grouped_with_metered_minimum_config")
                 private val groupedWithMeteredMinimumConfig: GroupedWithMeteredMinimumConfig,
-                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("item_id") private val itemId: String,
+                @JsonProperty("model_type") private val modelType: ModelType,
+                @JsonProperty("name") private val name: String,
+                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
+                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
+                @JsonProperty("billing_cycle_configuration")
+                private val billingCycleConfiguration: BillingCycleConfiguration?,
+                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
+                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
+                @JsonProperty("invoicing_cycle_configuration")
+                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
+                @JsonProperty("metadata") private val metadata: Metadata?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /**
-                 * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
-                 * setting `metadata` to `null`.
-                 */
-                @JsonProperty("metadata")
-                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+                /** The cadence to bill for this price on. */
+                @JsonProperty("cadence") fun cadence(): Cadence = cadence
 
-                /** An alias for the price. */
-                @JsonProperty("external_price_id")
-                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
+                /** An ISO 4217 currency string for which this price is billed in. */
+                @JsonProperty("currency") fun currency(): String = currency
+
+                @JsonProperty("grouped_with_metered_minimum_config")
+                fun groupedWithMeteredMinimumConfig(): GroupedWithMeteredMinimumConfig =
+                    groupedWithMeteredMinimumConfig
+
+                /** The id of the item the plan will be associated with. */
+                @JsonProperty("item_id") fun itemId(): String = itemId
+
+                @JsonProperty("model_type") fun modelType(): ModelType = modelType
 
                 /** The name of the price. */
                 @JsonProperty("name") fun name(): String = name
@@ -22263,15 +22266,28 @@ constructor(
                 @JsonProperty("billable_metric_id")
                 fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
-                /** The id of the item the plan will be associated with. */
-                @JsonProperty("item_id") fun itemId(): String = itemId
-
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance)
+
+                /**
+                 * For custom cadence: specifies the duration of the billing period in days or
+                 * months.
+                 */
+                @JsonProperty("billing_cycle_configuration")
+                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+                    Optional.ofNullable(billingCycleConfiguration)
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
+
+                /** An alias for the price. */
+                @JsonProperty("external_price_id")
+                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -22284,17 +22300,6 @@ constructor(
                 @JsonProperty("invoice_grouping_key")
                 fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey)
 
-                /** The cadence to bill for this price on. */
-                @JsonProperty("cadence") fun cadence(): Cadence = cadence
-
-                /**
-                 * For custom cadence: specifies the duration of the billing period in days or
-                 * months.
-                 */
-                @JsonProperty("billing_cycle_configuration")
-                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(billingCycleConfiguration)
-
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
                  * If unspecified, a single invoice is produced per billing cycle.
@@ -22303,18 +22308,13 @@ constructor(
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
                     Optional.ofNullable(invoicingCycleConfiguration)
 
-                /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @JsonProperty("conversion_rate")
-                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
-
-                @JsonProperty("model_type") fun modelType(): ModelType = modelType
-
-                @JsonProperty("grouped_with_metered_minimum_config")
-                fun groupedWithMeteredMinimumConfig(): GroupedWithMeteredMinimumConfig =
-                    groupedWithMeteredMinimumConfig
-
-                /** An ISO 4217 currency string for which this price is billed in. */
-                @JsonProperty("currency") fun currency(): String = currency
+                /**
+                 * User-specified key/value pairs for the resource. Individual keys can be removed
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
+                 */
+                @JsonProperty("metadata")
+                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -22329,22 +22329,22 @@ constructor(
 
                 class Builder {
 
-                    private var metadata: Metadata? = null
-                    private var externalPriceId: String? = null
-                    private var name: String? = null
-                    private var billableMetricId: String? = null
-                    private var itemId: String? = null
-                    private var billedInAdvance: Boolean? = null
-                    private var fixedPriceQuantity: Double? = null
-                    private var invoiceGroupingKey: String? = null
                     private var cadence: Cadence? = null
-                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
-                    private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
-                    private var conversionRate: Double? = null
-                    private var modelType: ModelType? = null
+                    private var currency: String? = null
                     private var groupedWithMeteredMinimumConfig: GroupedWithMeteredMinimumConfig? =
                         null
-                    private var currency: String? = null
+                    private var itemId: String? = null
+                    private var modelType: ModelType? = null
+                    private var name: String? = null
+                    private var billableMetricId: String? = null
+                    private var billedInAdvance: Boolean? = null
+                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
+                    private var conversionRate: Double? = null
+                    private var externalPriceId: String? = null
+                    private var fixedPriceQuantity: Double? = null
+                    private var invoiceGroupingKey: String? = null
+                    private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
+                    private var metadata: Metadata? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
@@ -22352,44 +22352,49 @@ constructor(
                         newFloatingGroupedWithMeteredMinimumPrice:
                             NewFloatingGroupedWithMeteredMinimumPrice
                     ) = apply {
-                        metadata = newFloatingGroupedWithMeteredMinimumPrice.metadata
-                        externalPriceId = newFloatingGroupedWithMeteredMinimumPrice.externalPriceId
+                        cadence = newFloatingGroupedWithMeteredMinimumPrice.cadence
+                        currency = newFloatingGroupedWithMeteredMinimumPrice.currency
+                        groupedWithMeteredMinimumConfig =
+                            newFloatingGroupedWithMeteredMinimumPrice
+                                .groupedWithMeteredMinimumConfig
+                        itemId = newFloatingGroupedWithMeteredMinimumPrice.itemId
+                        modelType = newFloatingGroupedWithMeteredMinimumPrice.modelType
                         name = newFloatingGroupedWithMeteredMinimumPrice.name
                         billableMetricId =
                             newFloatingGroupedWithMeteredMinimumPrice.billableMetricId
-                        itemId = newFloatingGroupedWithMeteredMinimumPrice.itemId
                         billedInAdvance = newFloatingGroupedWithMeteredMinimumPrice.billedInAdvance
+                        billingCycleConfiguration =
+                            newFloatingGroupedWithMeteredMinimumPrice.billingCycleConfiguration
+                        conversionRate = newFloatingGroupedWithMeteredMinimumPrice.conversionRate
+                        externalPriceId = newFloatingGroupedWithMeteredMinimumPrice.externalPriceId
                         fixedPriceQuantity =
                             newFloatingGroupedWithMeteredMinimumPrice.fixedPriceQuantity
                         invoiceGroupingKey =
                             newFloatingGroupedWithMeteredMinimumPrice.invoiceGroupingKey
-                        cadence = newFloatingGroupedWithMeteredMinimumPrice.cadence
-                        billingCycleConfiguration =
-                            newFloatingGroupedWithMeteredMinimumPrice.billingCycleConfiguration
                         invoicingCycleConfiguration =
                             newFloatingGroupedWithMeteredMinimumPrice.invoicingCycleConfiguration
-                        conversionRate = newFloatingGroupedWithMeteredMinimumPrice.conversionRate
-                        modelType = newFloatingGroupedWithMeteredMinimumPrice.modelType
-                        groupedWithMeteredMinimumConfig =
-                            newFloatingGroupedWithMeteredMinimumPrice
-                                .groupedWithMeteredMinimumConfig
-                        currency = newFloatingGroupedWithMeteredMinimumPrice.currency
+                        metadata = newFloatingGroupedWithMeteredMinimumPrice.metadata
                         additionalProperties =
                             newFloatingGroupedWithMeteredMinimumPrice.additionalProperties
                                 .toMutableMap()
                     }
 
-                    /**
-                     * User-specified key/value pairs for the resource. Individual keys can be
-                     * removed by setting the value to `null`, and the entire metadata mapping can
-                     * be cleared by setting `metadata` to `null`.
-                     */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    /** The cadence to bill for this price on. */
+                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
-                    /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
-                        this.externalPriceId = externalPriceId
+                    /** An ISO 4217 currency string for which this price is billed in. */
+                    fun currency(currency: String) = apply { this.currency = currency }
+
+                    fun groupedWithMeteredMinimumConfig(
+                        groupedWithMeteredMinimumConfig: GroupedWithMeteredMinimumConfig
+                    ) = apply {
+                        this.groupedWithMeteredMinimumConfig = groupedWithMeteredMinimumConfig
                     }
+
+                    /** The id of the item the plan will be associated with. */
+                    fun itemId(itemId: String) = apply { this.itemId = itemId }
+
+                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
 
                     /** The name of the price. */
                     fun name(name: String) = apply { this.name = name }
@@ -22402,15 +22407,32 @@ constructor(
                         this.billableMetricId = billableMetricId
                     }
 
-                    /** The id of the item the plan will be associated with. */
-                    fun itemId(itemId: String) = apply { this.itemId = itemId }
-
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
                     fun billedInAdvance(billedInAdvance: Boolean) = apply {
                         this.billedInAdvance = billedInAdvance
+                    }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: BillingCycleConfiguration
+                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) = apply {
+                        this.conversionRate = conversionRate
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: String) = apply {
+                        this.externalPriceId = externalPriceId
                     }
 
                     /**
@@ -22426,17 +22448,6 @@ constructor(
                         this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
-                    /** The cadence to bill for this price on. */
-                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
-
-                    /**
-                     * For custom cadence: specifies the duration of the billing period in days or
-                     * months.
-                     */
-                    fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
-                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
-
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
@@ -22446,22 +22457,11 @@ constructor(
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
 
                     /**
-                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
-                        this.conversionRate = conversionRate
-                    }
-
-                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
-
-                    fun groupedWithMeteredMinimumConfig(
-                        groupedWithMeteredMinimumConfig: GroupedWithMeteredMinimumConfig
-                    ) = apply {
-                        this.groupedWithMeteredMinimumConfig = groupedWithMeteredMinimumConfig
-                    }
-
-                    /** An ISO 4217 currency string for which this price is billed in. */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -22487,23 +22487,23 @@ constructor(
 
                     fun build(): NewFloatingGroupedWithMeteredMinimumPrice =
                         NewFloatingGroupedWithMeteredMinimumPrice(
-                            metadata,
-                            externalPriceId,
-                            checkNotNull(name) { "`name` is required but was not set" },
-                            billableMetricId,
-                            checkNotNull(itemId) { "`itemId` is required but was not set" },
-                            billedInAdvance,
-                            fixedPriceQuantity,
-                            invoiceGroupingKey,
                             checkNotNull(cadence) { "`cadence` is required but was not set" },
-                            billingCycleConfiguration,
-                            invoicingCycleConfiguration,
-                            conversionRate,
-                            checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(currency) { "`currency` is required but was not set" },
                             checkNotNull(groupedWithMeteredMinimumConfig) {
                                 "`groupedWithMeteredMinimumConfig` is required but was not set"
                             },
-                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            checkNotNull(itemId) { "`itemId` is required but was not set" },
+                            checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(name) { "`name` is required but was not set" },
+                            billableMetricId,
+                            billedInAdvance,
+                            billingCycleConfiguration,
+                            conversionRate,
+                            externalPriceId,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            invoicingCycleConfiguration,
+                            metadata,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -23129,56 +23129,59 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewFloatingGroupedWithMeteredMinimumPrice && metadata == other.metadata && externalPriceId == other.externalPriceId && name == other.name && billableMetricId == other.billableMetricId && itemId == other.itemId && billedInAdvance == other.billedInAdvance && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && cadence == other.cadence && billingCycleConfiguration == other.billingCycleConfiguration && invoicingCycleConfiguration == other.invoicingCycleConfiguration && conversionRate == other.conversionRate && modelType == other.modelType && groupedWithMeteredMinimumConfig == other.groupedWithMeteredMinimumConfig && currency == other.currency && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewFloatingGroupedWithMeteredMinimumPrice && cadence == other.cadence && currency == other.currency && groupedWithMeteredMinimumConfig == other.groupedWithMeteredMinimumConfig && itemId == other.itemId && modelType == other.modelType && name == other.name && billableMetricId == other.billableMetricId && billedInAdvance == other.billedInAdvance && billingCycleConfiguration == other.billingCycleConfiguration && conversionRate == other.conversionRate && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && invoicingCycleConfiguration == other.invoicingCycleConfiguration && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(metadata, externalPriceId, name, billableMetricId, itemId, billedInAdvance, fixedPriceQuantity, invoiceGroupingKey, cadence, billingCycleConfiguration, invoicingCycleConfiguration, conversionRate, modelType, groupedWithMeteredMinimumConfig, currency, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(cadence, currency, groupedWithMeteredMinimumConfig, itemId, modelType, name, billableMetricId, billedInAdvance, billingCycleConfiguration, conversionRate, externalPriceId, fixedPriceQuantity, invoiceGroupingKey, invoicingCycleConfiguration, metadata, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewFloatingGroupedWithMeteredMinimumPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, groupedWithMeteredMinimumConfig=$groupedWithMeteredMinimumConfig, currency=$currency, additionalProperties=$additionalProperties}"
+                    "NewFloatingGroupedWithMeteredMinimumPrice{cadence=$cadence, currency=$currency, groupedWithMeteredMinimumConfig=$groupedWithMeteredMinimumConfig, itemId=$itemId, modelType=$modelType, name=$name, billableMetricId=$billableMetricId, billedInAdvance=$billedInAdvance, billingCycleConfiguration=$billingCycleConfiguration, conversionRate=$conversionRate, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, invoicingCycleConfiguration=$invoicingCycleConfiguration, metadata=$metadata, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class NewFloatingMatrixWithDisplayNamePrice
             @JsonCreator
             private constructor(
-                @JsonProperty("metadata") private val metadata: Metadata?,
-                @JsonProperty("external_price_id") private val externalPriceId: String?,
-                @JsonProperty("name") private val name: String,
-                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
-                @JsonProperty("item_id") private val itemId: String,
-                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
-                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
-                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
                 @JsonProperty("cadence") private val cadence: Cadence,
-                @JsonProperty("billing_cycle_configuration")
-                private val billingCycleConfiguration: BillingCycleConfiguration?,
-                @JsonProperty("invoicing_cycle_configuration")
-                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
-                @JsonProperty("conversion_rate") private val conversionRate: Double?,
-                @JsonProperty("model_type") private val modelType: ModelType,
+                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("item_id") private val itemId: String,
                 @JsonProperty("matrix_with_display_name_config")
                 private val matrixWithDisplayNameConfig: MatrixWithDisplayNameConfig,
-                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("model_type") private val modelType: ModelType,
+                @JsonProperty("name") private val name: String,
+                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
+                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
+                @JsonProperty("billing_cycle_configuration")
+                private val billingCycleConfiguration: BillingCycleConfiguration?,
+                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
+                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
+                @JsonProperty("invoicing_cycle_configuration")
+                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
+                @JsonProperty("metadata") private val metadata: Metadata?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /**
-                 * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
-                 * setting `metadata` to `null`.
-                 */
-                @JsonProperty("metadata")
-                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+                /** The cadence to bill for this price on. */
+                @JsonProperty("cadence") fun cadence(): Cadence = cadence
 
-                /** An alias for the price. */
-                @JsonProperty("external_price_id")
-                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
+                /** An ISO 4217 currency string for which this price is billed in. */
+                @JsonProperty("currency") fun currency(): String = currency
+
+                /** The id of the item the plan will be associated with. */
+                @JsonProperty("item_id") fun itemId(): String = itemId
+
+                @JsonProperty("matrix_with_display_name_config")
+                fun matrixWithDisplayNameConfig(): MatrixWithDisplayNameConfig =
+                    matrixWithDisplayNameConfig
+
+                @JsonProperty("model_type") fun modelType(): ModelType = modelType
 
                 /** The name of the price. */
                 @JsonProperty("name") fun name(): String = name
@@ -23190,15 +23193,28 @@ constructor(
                 @JsonProperty("billable_metric_id")
                 fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
-                /** The id of the item the plan will be associated with. */
-                @JsonProperty("item_id") fun itemId(): String = itemId
-
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance)
+
+                /**
+                 * For custom cadence: specifies the duration of the billing period in days or
+                 * months.
+                 */
+                @JsonProperty("billing_cycle_configuration")
+                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+                    Optional.ofNullable(billingCycleConfiguration)
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
+
+                /** An alias for the price. */
+                @JsonProperty("external_price_id")
+                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -23211,17 +23227,6 @@ constructor(
                 @JsonProperty("invoice_grouping_key")
                 fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey)
 
-                /** The cadence to bill for this price on. */
-                @JsonProperty("cadence") fun cadence(): Cadence = cadence
-
-                /**
-                 * For custom cadence: specifies the duration of the billing period in days or
-                 * months.
-                 */
-                @JsonProperty("billing_cycle_configuration")
-                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(billingCycleConfiguration)
-
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
                  * If unspecified, a single invoice is produced per billing cycle.
@@ -23230,18 +23235,13 @@ constructor(
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
                     Optional.ofNullable(invoicingCycleConfiguration)
 
-                /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @JsonProperty("conversion_rate")
-                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
-
-                @JsonProperty("model_type") fun modelType(): ModelType = modelType
-
-                @JsonProperty("matrix_with_display_name_config")
-                fun matrixWithDisplayNameConfig(): MatrixWithDisplayNameConfig =
-                    matrixWithDisplayNameConfig
-
-                /** An ISO 4217 currency string for which this price is billed in. */
-                @JsonProperty("currency") fun currency(): String = currency
+                /**
+                 * User-specified key/value pairs for the resource. Individual keys can be removed
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
+                 */
+                @JsonProperty("metadata")
+                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -23256,63 +23256,66 @@ constructor(
 
                 class Builder {
 
-                    private var metadata: Metadata? = null
-                    private var externalPriceId: String? = null
+                    private var cadence: Cadence? = null
+                    private var currency: String? = null
+                    private var itemId: String? = null
+                    private var matrixWithDisplayNameConfig: MatrixWithDisplayNameConfig? = null
+                    private var modelType: ModelType? = null
                     private var name: String? = null
                     private var billableMetricId: String? = null
-                    private var itemId: String? = null
                     private var billedInAdvance: Boolean? = null
+                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
+                    private var conversionRate: Double? = null
+                    private var externalPriceId: String? = null
                     private var fixedPriceQuantity: Double? = null
                     private var invoiceGroupingKey: String? = null
-                    private var cadence: Cadence? = null
-                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
                     private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
-                    private var conversionRate: Double? = null
-                    private var modelType: ModelType? = null
-                    private var matrixWithDisplayNameConfig: MatrixWithDisplayNameConfig? = null
-                    private var currency: String? = null
+                    private var metadata: Metadata? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(
                         newFloatingMatrixWithDisplayNamePrice: NewFloatingMatrixWithDisplayNamePrice
                     ) = apply {
-                        metadata = newFloatingMatrixWithDisplayNamePrice.metadata
-                        externalPriceId = newFloatingMatrixWithDisplayNamePrice.externalPriceId
+                        cadence = newFloatingMatrixWithDisplayNamePrice.cadence
+                        currency = newFloatingMatrixWithDisplayNamePrice.currency
+                        itemId = newFloatingMatrixWithDisplayNamePrice.itemId
+                        matrixWithDisplayNameConfig =
+                            newFloatingMatrixWithDisplayNamePrice.matrixWithDisplayNameConfig
+                        modelType = newFloatingMatrixWithDisplayNamePrice.modelType
                         name = newFloatingMatrixWithDisplayNamePrice.name
                         billableMetricId = newFloatingMatrixWithDisplayNamePrice.billableMetricId
-                        itemId = newFloatingMatrixWithDisplayNamePrice.itemId
                         billedInAdvance = newFloatingMatrixWithDisplayNamePrice.billedInAdvance
+                        billingCycleConfiguration =
+                            newFloatingMatrixWithDisplayNamePrice.billingCycleConfiguration
+                        conversionRate = newFloatingMatrixWithDisplayNamePrice.conversionRate
+                        externalPriceId = newFloatingMatrixWithDisplayNamePrice.externalPriceId
                         fixedPriceQuantity =
                             newFloatingMatrixWithDisplayNamePrice.fixedPriceQuantity
                         invoiceGroupingKey =
                             newFloatingMatrixWithDisplayNamePrice.invoiceGroupingKey
-                        cadence = newFloatingMatrixWithDisplayNamePrice.cadence
-                        billingCycleConfiguration =
-                            newFloatingMatrixWithDisplayNamePrice.billingCycleConfiguration
                         invoicingCycleConfiguration =
                             newFloatingMatrixWithDisplayNamePrice.invoicingCycleConfiguration
-                        conversionRate = newFloatingMatrixWithDisplayNamePrice.conversionRate
-                        modelType = newFloatingMatrixWithDisplayNamePrice.modelType
-                        matrixWithDisplayNameConfig =
-                            newFloatingMatrixWithDisplayNamePrice.matrixWithDisplayNameConfig
-                        currency = newFloatingMatrixWithDisplayNamePrice.currency
+                        metadata = newFloatingMatrixWithDisplayNamePrice.metadata
                         additionalProperties =
                             newFloatingMatrixWithDisplayNamePrice.additionalProperties
                                 .toMutableMap()
                     }
 
-                    /**
-                     * User-specified key/value pairs for the resource. Individual keys can be
-                     * removed by setting the value to `null`, and the entire metadata mapping can
-                     * be cleared by setting `metadata` to `null`.
-                     */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    /** The cadence to bill for this price on. */
+                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
-                    /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
-                        this.externalPriceId = externalPriceId
-                    }
+                    /** An ISO 4217 currency string for which this price is billed in. */
+                    fun currency(currency: String) = apply { this.currency = currency }
+
+                    /** The id of the item the plan will be associated with. */
+                    fun itemId(itemId: String) = apply { this.itemId = itemId }
+
+                    fun matrixWithDisplayNameConfig(
+                        matrixWithDisplayNameConfig: MatrixWithDisplayNameConfig
+                    ) = apply { this.matrixWithDisplayNameConfig = matrixWithDisplayNameConfig }
+
+                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
 
                     /** The name of the price. */
                     fun name(name: String) = apply { this.name = name }
@@ -23325,15 +23328,32 @@ constructor(
                         this.billableMetricId = billableMetricId
                     }
 
-                    /** The id of the item the plan will be associated with. */
-                    fun itemId(itemId: String) = apply { this.itemId = itemId }
-
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
                     fun billedInAdvance(billedInAdvance: Boolean) = apply {
                         this.billedInAdvance = billedInAdvance
+                    }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: BillingCycleConfiguration
+                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) = apply {
+                        this.conversionRate = conversionRate
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: String) = apply {
+                        this.externalPriceId = externalPriceId
                     }
 
                     /**
@@ -23349,17 +23369,6 @@ constructor(
                         this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
-                    /** The cadence to bill for this price on. */
-                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
-
-                    /**
-                     * For custom cadence: specifies the duration of the billing period in days or
-                     * months.
-                     */
-                    fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
-                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
-
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
@@ -23369,20 +23378,11 @@ constructor(
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
 
                     /**
-                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
-                        this.conversionRate = conversionRate
-                    }
-
-                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
-
-                    fun matrixWithDisplayNameConfig(
-                        matrixWithDisplayNameConfig: MatrixWithDisplayNameConfig
-                    ) = apply { this.matrixWithDisplayNameConfig = matrixWithDisplayNameConfig }
-
-                    /** An ISO 4217 currency string for which this price is billed in. */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -23408,23 +23408,23 @@ constructor(
 
                     fun build(): NewFloatingMatrixWithDisplayNamePrice =
                         NewFloatingMatrixWithDisplayNamePrice(
-                            metadata,
-                            externalPriceId,
-                            checkNotNull(name) { "`name` is required but was not set" },
-                            billableMetricId,
-                            checkNotNull(itemId) { "`itemId` is required but was not set" },
-                            billedInAdvance,
-                            fixedPriceQuantity,
-                            invoiceGroupingKey,
                             checkNotNull(cadence) { "`cadence` is required but was not set" },
-                            billingCycleConfiguration,
-                            invoicingCycleConfiguration,
-                            conversionRate,
-                            checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            checkNotNull(itemId) { "`itemId` is required but was not set" },
                             checkNotNull(matrixWithDisplayNameConfig) {
                                 "`matrixWithDisplayNameConfig` is required but was not set"
                             },
-                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(name) { "`name` is required but was not set" },
+                            billableMetricId,
+                            billedInAdvance,
+                            billingCycleConfiguration,
+                            conversionRate,
+                            externalPriceId,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            invoicingCycleConfiguration,
+                            metadata,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -24049,56 +24049,58 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewFloatingMatrixWithDisplayNamePrice && metadata == other.metadata && externalPriceId == other.externalPriceId && name == other.name && billableMetricId == other.billableMetricId && itemId == other.itemId && billedInAdvance == other.billedInAdvance && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && cadence == other.cadence && billingCycleConfiguration == other.billingCycleConfiguration && invoicingCycleConfiguration == other.invoicingCycleConfiguration && conversionRate == other.conversionRate && modelType == other.modelType && matrixWithDisplayNameConfig == other.matrixWithDisplayNameConfig && currency == other.currency && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewFloatingMatrixWithDisplayNamePrice && cadence == other.cadence && currency == other.currency && itemId == other.itemId && matrixWithDisplayNameConfig == other.matrixWithDisplayNameConfig && modelType == other.modelType && name == other.name && billableMetricId == other.billableMetricId && billedInAdvance == other.billedInAdvance && billingCycleConfiguration == other.billingCycleConfiguration && conversionRate == other.conversionRate && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && invoicingCycleConfiguration == other.invoicingCycleConfiguration && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(metadata, externalPriceId, name, billableMetricId, itemId, billedInAdvance, fixedPriceQuantity, invoiceGroupingKey, cadence, billingCycleConfiguration, invoicingCycleConfiguration, conversionRate, modelType, matrixWithDisplayNameConfig, currency, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(cadence, currency, itemId, matrixWithDisplayNameConfig, modelType, name, billableMetricId, billedInAdvance, billingCycleConfiguration, conversionRate, externalPriceId, fixedPriceQuantity, invoiceGroupingKey, invoicingCycleConfiguration, metadata, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewFloatingMatrixWithDisplayNamePrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, matrixWithDisplayNameConfig=$matrixWithDisplayNameConfig, currency=$currency, additionalProperties=$additionalProperties}"
+                    "NewFloatingMatrixWithDisplayNamePrice{cadence=$cadence, currency=$currency, itemId=$itemId, matrixWithDisplayNameConfig=$matrixWithDisplayNameConfig, modelType=$modelType, name=$name, billableMetricId=$billableMetricId, billedInAdvance=$billedInAdvance, billingCycleConfiguration=$billingCycleConfiguration, conversionRate=$conversionRate, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, invoicingCycleConfiguration=$invoicingCycleConfiguration, metadata=$metadata, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class NewFloatingBulkWithProrationPrice
             @JsonCreator
             private constructor(
-                @JsonProperty("metadata") private val metadata: Metadata?,
-                @JsonProperty("external_price_id") private val externalPriceId: String?,
-                @JsonProperty("name") private val name: String,
-                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
-                @JsonProperty("item_id") private val itemId: String,
-                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
-                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
-                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
-                @JsonProperty("cadence") private val cadence: Cadence,
-                @JsonProperty("billing_cycle_configuration")
-                private val billingCycleConfiguration: BillingCycleConfiguration?,
-                @JsonProperty("invoicing_cycle_configuration")
-                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
-                @JsonProperty("conversion_rate") private val conversionRate: Double?,
-                @JsonProperty("model_type") private val modelType: ModelType,
                 @JsonProperty("bulk_with_proration_config")
                 private val bulkWithProrationConfig: BulkWithProrationConfig,
+                @JsonProperty("cadence") private val cadence: Cadence,
                 @JsonProperty("currency") private val currency: String,
+                @JsonProperty("item_id") private val itemId: String,
+                @JsonProperty("model_type") private val modelType: ModelType,
+                @JsonProperty("name") private val name: String,
+                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
+                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
+                @JsonProperty("billing_cycle_configuration")
+                private val billingCycleConfiguration: BillingCycleConfiguration?,
+                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
+                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
+                @JsonProperty("invoicing_cycle_configuration")
+                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
+                @JsonProperty("metadata") private val metadata: Metadata?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /**
-                 * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
-                 * setting `metadata` to `null`.
-                 */
-                @JsonProperty("metadata")
-                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+                @JsonProperty("bulk_with_proration_config")
+                fun bulkWithProrationConfig(): BulkWithProrationConfig = bulkWithProrationConfig
 
-                /** An alias for the price. */
-                @JsonProperty("external_price_id")
-                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
+                /** The cadence to bill for this price on. */
+                @JsonProperty("cadence") fun cadence(): Cadence = cadence
+
+                /** An ISO 4217 currency string for which this price is billed in. */
+                @JsonProperty("currency") fun currency(): String = currency
+
+                /** The id of the item the plan will be associated with. */
+                @JsonProperty("item_id") fun itemId(): String = itemId
+
+                @JsonProperty("model_type") fun modelType(): ModelType = modelType
 
                 /** The name of the price. */
                 @JsonProperty("name") fun name(): String = name
@@ -24110,15 +24112,28 @@ constructor(
                 @JsonProperty("billable_metric_id")
                 fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
-                /** The id of the item the plan will be associated with. */
-                @JsonProperty("item_id") fun itemId(): String = itemId
-
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance)
+
+                /**
+                 * For custom cadence: specifies the duration of the billing period in days or
+                 * months.
+                 */
+                @JsonProperty("billing_cycle_configuration")
+                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+                    Optional.ofNullable(billingCycleConfiguration)
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
+
+                /** An alias for the price. */
+                @JsonProperty("external_price_id")
+                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -24131,17 +24146,6 @@ constructor(
                 @JsonProperty("invoice_grouping_key")
                 fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey)
 
-                /** The cadence to bill for this price on. */
-                @JsonProperty("cadence") fun cadence(): Cadence = cadence
-
-                /**
-                 * For custom cadence: specifies the duration of the billing period in days or
-                 * months.
-                 */
-                @JsonProperty("billing_cycle_configuration")
-                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(billingCycleConfiguration)
-
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
                  * If unspecified, a single invoice is produced per billing cycle.
@@ -24150,17 +24154,13 @@ constructor(
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
                     Optional.ofNullable(invoicingCycleConfiguration)
 
-                /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @JsonProperty("conversion_rate")
-                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
-
-                @JsonProperty("model_type") fun modelType(): ModelType = modelType
-
-                @JsonProperty("bulk_with_proration_config")
-                fun bulkWithProrationConfig(): BulkWithProrationConfig = bulkWithProrationConfig
-
-                /** An ISO 4217 currency string for which this price is billed in. */
-                @JsonProperty("currency") fun currency(): String = currency
+                /**
+                 * User-specified key/value pairs for the resource. Individual keys can be removed
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
+                 */
+                @JsonProperty("metadata")
+                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -24175,60 +24175,64 @@ constructor(
 
                 class Builder {
 
-                    private var metadata: Metadata? = null
-                    private var externalPriceId: String? = null
+                    private var bulkWithProrationConfig: BulkWithProrationConfig? = null
+                    private var cadence: Cadence? = null
+                    private var currency: String? = null
+                    private var itemId: String? = null
+                    private var modelType: ModelType? = null
                     private var name: String? = null
                     private var billableMetricId: String? = null
-                    private var itemId: String? = null
                     private var billedInAdvance: Boolean? = null
+                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
+                    private var conversionRate: Double? = null
+                    private var externalPriceId: String? = null
                     private var fixedPriceQuantity: Double? = null
                     private var invoiceGroupingKey: String? = null
-                    private var cadence: Cadence? = null
-                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
                     private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
-                    private var conversionRate: Double? = null
-                    private var modelType: ModelType? = null
-                    private var bulkWithProrationConfig: BulkWithProrationConfig? = null
-                    private var currency: String? = null
+                    private var metadata: Metadata? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(
                         newFloatingBulkWithProrationPrice: NewFloatingBulkWithProrationPrice
                     ) = apply {
-                        metadata = newFloatingBulkWithProrationPrice.metadata
-                        externalPriceId = newFloatingBulkWithProrationPrice.externalPriceId
-                        name = newFloatingBulkWithProrationPrice.name
-                        billableMetricId = newFloatingBulkWithProrationPrice.billableMetricId
-                        itemId = newFloatingBulkWithProrationPrice.itemId
-                        billedInAdvance = newFloatingBulkWithProrationPrice.billedInAdvance
-                        fixedPriceQuantity = newFloatingBulkWithProrationPrice.fixedPriceQuantity
-                        invoiceGroupingKey = newFloatingBulkWithProrationPrice.invoiceGroupingKey
-                        cadence = newFloatingBulkWithProrationPrice.cadence
-                        billingCycleConfiguration =
-                            newFloatingBulkWithProrationPrice.billingCycleConfiguration
-                        invoicingCycleConfiguration =
-                            newFloatingBulkWithProrationPrice.invoicingCycleConfiguration
-                        conversionRate = newFloatingBulkWithProrationPrice.conversionRate
-                        modelType = newFloatingBulkWithProrationPrice.modelType
                         bulkWithProrationConfig =
                             newFloatingBulkWithProrationPrice.bulkWithProrationConfig
+                        cadence = newFloatingBulkWithProrationPrice.cadence
                         currency = newFloatingBulkWithProrationPrice.currency
+                        itemId = newFloatingBulkWithProrationPrice.itemId
+                        modelType = newFloatingBulkWithProrationPrice.modelType
+                        name = newFloatingBulkWithProrationPrice.name
+                        billableMetricId = newFloatingBulkWithProrationPrice.billableMetricId
+                        billedInAdvance = newFloatingBulkWithProrationPrice.billedInAdvance
+                        billingCycleConfiguration =
+                            newFloatingBulkWithProrationPrice.billingCycleConfiguration
+                        conversionRate = newFloatingBulkWithProrationPrice.conversionRate
+                        externalPriceId = newFloatingBulkWithProrationPrice.externalPriceId
+                        fixedPriceQuantity = newFloatingBulkWithProrationPrice.fixedPriceQuantity
+                        invoiceGroupingKey = newFloatingBulkWithProrationPrice.invoiceGroupingKey
+                        invoicingCycleConfiguration =
+                            newFloatingBulkWithProrationPrice.invoicingCycleConfiguration
+                        metadata = newFloatingBulkWithProrationPrice.metadata
                         additionalProperties =
                             newFloatingBulkWithProrationPrice.additionalProperties.toMutableMap()
                     }
 
-                    /**
-                     * User-specified key/value pairs for the resource. Individual keys can be
-                     * removed by setting the value to `null`, and the entire metadata mapping can
-                     * be cleared by setting `metadata` to `null`.
-                     */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    fun bulkWithProrationConfig(bulkWithProrationConfig: BulkWithProrationConfig) =
+                        apply {
+                            this.bulkWithProrationConfig = bulkWithProrationConfig
+                        }
 
-                    /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
-                        this.externalPriceId = externalPriceId
-                    }
+                    /** The cadence to bill for this price on. */
+                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
+
+                    /** An ISO 4217 currency string for which this price is billed in. */
+                    fun currency(currency: String) = apply { this.currency = currency }
+
+                    /** The id of the item the plan will be associated with. */
+                    fun itemId(itemId: String) = apply { this.itemId = itemId }
+
+                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
 
                     /** The name of the price. */
                     fun name(name: String) = apply { this.name = name }
@@ -24241,15 +24245,32 @@ constructor(
                         this.billableMetricId = billableMetricId
                     }
 
-                    /** The id of the item the plan will be associated with. */
-                    fun itemId(itemId: String) = apply { this.itemId = itemId }
-
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
                     fun billedInAdvance(billedInAdvance: Boolean) = apply {
                         this.billedInAdvance = billedInAdvance
+                    }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: BillingCycleConfiguration
+                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) = apply {
+                        this.conversionRate = conversionRate
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: String) = apply {
+                        this.externalPriceId = externalPriceId
                     }
 
                     /**
@@ -24265,17 +24286,6 @@ constructor(
                         this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
-                    /** The cadence to bill for this price on. */
-                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
-
-                    /**
-                     * For custom cadence: specifies the duration of the billing period in days or
-                     * months.
-                     */
-                    fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
-                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
-
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
@@ -24285,21 +24295,11 @@ constructor(
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
 
                     /**
-                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
-                        this.conversionRate = conversionRate
-                    }
-
-                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
-
-                    fun bulkWithProrationConfig(bulkWithProrationConfig: BulkWithProrationConfig) =
-                        apply {
-                            this.bulkWithProrationConfig = bulkWithProrationConfig
-                        }
-
-                    /** An ISO 4217 currency string for which this price is billed in. */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -24325,23 +24325,23 @@ constructor(
 
                     fun build(): NewFloatingBulkWithProrationPrice =
                         NewFloatingBulkWithProrationPrice(
-                            metadata,
-                            externalPriceId,
-                            checkNotNull(name) { "`name` is required but was not set" },
-                            billableMetricId,
-                            checkNotNull(itemId) { "`itemId` is required but was not set" },
-                            billedInAdvance,
-                            fixedPriceQuantity,
-                            invoiceGroupingKey,
-                            checkNotNull(cadence) { "`cadence` is required but was not set" },
-                            billingCycleConfiguration,
-                            invoicingCycleConfiguration,
-                            conversionRate,
-                            checkNotNull(modelType) { "`modelType` is required but was not set" },
                             checkNotNull(bulkWithProrationConfig) {
                                 "`bulkWithProrationConfig` is required but was not set"
                             },
+                            checkNotNull(cadence) { "`cadence` is required but was not set" },
                             checkNotNull(currency) { "`currency` is required but was not set" },
+                            checkNotNull(itemId) { "`itemId` is required but was not set" },
+                            checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(name) { "`name` is required but was not set" },
+                            billableMetricId,
+                            billedInAdvance,
+                            billingCycleConfiguration,
+                            conversionRate,
+                            externalPriceId,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            invoicingCycleConfiguration,
+                            metadata,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -24965,56 +24965,59 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewFloatingBulkWithProrationPrice && metadata == other.metadata && externalPriceId == other.externalPriceId && name == other.name && billableMetricId == other.billableMetricId && itemId == other.itemId && billedInAdvance == other.billedInAdvance && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && cadence == other.cadence && billingCycleConfiguration == other.billingCycleConfiguration && invoicingCycleConfiguration == other.invoicingCycleConfiguration && conversionRate == other.conversionRate && modelType == other.modelType && bulkWithProrationConfig == other.bulkWithProrationConfig && currency == other.currency && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewFloatingBulkWithProrationPrice && bulkWithProrationConfig == other.bulkWithProrationConfig && cadence == other.cadence && currency == other.currency && itemId == other.itemId && modelType == other.modelType && name == other.name && billableMetricId == other.billableMetricId && billedInAdvance == other.billedInAdvance && billingCycleConfiguration == other.billingCycleConfiguration && conversionRate == other.conversionRate && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && invoicingCycleConfiguration == other.invoicingCycleConfiguration && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(metadata, externalPriceId, name, billableMetricId, itemId, billedInAdvance, fixedPriceQuantity, invoiceGroupingKey, cadence, billingCycleConfiguration, invoicingCycleConfiguration, conversionRate, modelType, bulkWithProrationConfig, currency, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(bulkWithProrationConfig, cadence, currency, itemId, modelType, name, billableMetricId, billedInAdvance, billingCycleConfiguration, conversionRate, externalPriceId, fixedPriceQuantity, invoiceGroupingKey, invoicingCycleConfiguration, metadata, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewFloatingBulkWithProrationPrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, bulkWithProrationConfig=$bulkWithProrationConfig, currency=$currency, additionalProperties=$additionalProperties}"
+                    "NewFloatingBulkWithProrationPrice{bulkWithProrationConfig=$bulkWithProrationConfig, cadence=$cadence, currency=$currency, itemId=$itemId, modelType=$modelType, name=$name, billableMetricId=$billableMetricId, billedInAdvance=$billedInAdvance, billingCycleConfiguration=$billingCycleConfiguration, conversionRate=$conversionRate, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, invoicingCycleConfiguration=$invoicingCycleConfiguration, metadata=$metadata, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class NewFloatingGroupedTieredPackagePrice
             @JsonCreator
             private constructor(
-                @JsonProperty("metadata") private val metadata: Metadata?,
-                @JsonProperty("external_price_id") private val externalPriceId: String?,
-                @JsonProperty("name") private val name: String,
-                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
-                @JsonProperty("item_id") private val itemId: String,
-                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
-                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
-                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
                 @JsonProperty("cadence") private val cadence: Cadence,
-                @JsonProperty("billing_cycle_configuration")
-                private val billingCycleConfiguration: BillingCycleConfiguration?,
-                @JsonProperty("invoicing_cycle_configuration")
-                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
-                @JsonProperty("conversion_rate") private val conversionRate: Double?,
-                @JsonProperty("model_type") private val modelType: ModelType,
+                @JsonProperty("currency") private val currency: String,
                 @JsonProperty("grouped_tiered_package_config")
                 private val groupedTieredPackageConfig: GroupedTieredPackageConfig,
-                @JsonProperty("currency") private val currency: String,
+                @JsonProperty("item_id") private val itemId: String,
+                @JsonProperty("model_type") private val modelType: ModelType,
+                @JsonProperty("name") private val name: String,
+                @JsonProperty("billable_metric_id") private val billableMetricId: String?,
+                @JsonProperty("billed_in_advance") private val billedInAdvance: Boolean?,
+                @JsonProperty("billing_cycle_configuration")
+                private val billingCycleConfiguration: BillingCycleConfiguration?,
+                @JsonProperty("conversion_rate") private val conversionRate: Double?,
+                @JsonProperty("external_price_id") private val externalPriceId: String?,
+                @JsonProperty("fixed_price_quantity") private val fixedPriceQuantity: Double?,
+                @JsonProperty("invoice_grouping_key") private val invoiceGroupingKey: String?,
+                @JsonProperty("invoicing_cycle_configuration")
+                private val invoicingCycleConfiguration: InvoicingCycleConfiguration?,
+                @JsonProperty("metadata") private val metadata: Metadata?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /**
-                 * User-specified key/value pairs for the resource. Individual keys can be removed
-                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
-                 * setting `metadata` to `null`.
-                 */
-                @JsonProperty("metadata")
-                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+                /** The cadence to bill for this price on. */
+                @JsonProperty("cadence") fun cadence(): Cadence = cadence
 
-                /** An alias for the price. */
-                @JsonProperty("external_price_id")
-                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
+                /** An ISO 4217 currency string for which this price is billed in. */
+                @JsonProperty("currency") fun currency(): String = currency
+
+                @JsonProperty("grouped_tiered_package_config")
+                fun groupedTieredPackageConfig(): GroupedTieredPackageConfig =
+                    groupedTieredPackageConfig
+
+                /** The id of the item the plan will be associated with. */
+                @JsonProperty("item_id") fun itemId(): String = itemId
+
+                @JsonProperty("model_type") fun modelType(): ModelType = modelType
 
                 /** The name of the price. */
                 @JsonProperty("name") fun name(): String = name
@@ -25026,15 +25029,28 @@ constructor(
                 @JsonProperty("billable_metric_id")
                 fun billableMetricId(): Optional<String> = Optional.ofNullable(billableMetricId)
 
-                /** The id of the item the plan will be associated with. */
-                @JsonProperty("item_id") fun itemId(): String = itemId
-
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
                 @JsonProperty("billed_in_advance")
                 fun billedInAdvance(): Optional<Boolean> = Optional.ofNullable(billedInAdvance)
+
+                /**
+                 * For custom cadence: specifies the duration of the billing period in days or
+                 * months.
+                 */
+                @JsonProperty("billing_cycle_configuration")
+                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+                    Optional.ofNullable(billingCycleConfiguration)
+
+                /** The per unit conversion rate of the price currency to the invoicing currency. */
+                @JsonProperty("conversion_rate")
+                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
+
+                /** An alias for the price. */
+                @JsonProperty("external_price_id")
+                fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -25047,17 +25063,6 @@ constructor(
                 @JsonProperty("invoice_grouping_key")
                 fun invoiceGroupingKey(): Optional<String> = Optional.ofNullable(invoiceGroupingKey)
 
-                /** The cadence to bill for this price on. */
-                @JsonProperty("cadence") fun cadence(): Cadence = cadence
-
-                /**
-                 * For custom cadence: specifies the duration of the billing period in days or
-                 * months.
-                 */
-                @JsonProperty("billing_cycle_configuration")
-                fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(billingCycleConfiguration)
-
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
                  * If unspecified, a single invoice is produced per billing cycle.
@@ -25066,18 +25071,13 @@ constructor(
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
                     Optional.ofNullable(invoicingCycleConfiguration)
 
-                /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @JsonProperty("conversion_rate")
-                fun conversionRate(): Optional<Double> = Optional.ofNullable(conversionRate)
-
-                @JsonProperty("model_type") fun modelType(): ModelType = modelType
-
-                @JsonProperty("grouped_tiered_package_config")
-                fun groupedTieredPackageConfig(): GroupedTieredPackageConfig =
-                    groupedTieredPackageConfig
-
-                /** An ISO 4217 currency string for which this price is billed in. */
-                @JsonProperty("currency") fun currency(): String = currency
+                /**
+                 * User-specified key/value pairs for the resource. Individual keys can be removed
+                 * by setting the value to `null`, and the entire metadata mapping can be cleared by
+                 * setting `metadata` to `null`.
+                 */
+                @JsonProperty("metadata")
+                fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -25092,60 +25092,63 @@ constructor(
 
                 class Builder {
 
-                    private var metadata: Metadata? = null
-                    private var externalPriceId: String? = null
+                    private var cadence: Cadence? = null
+                    private var currency: String? = null
+                    private var groupedTieredPackageConfig: GroupedTieredPackageConfig? = null
+                    private var itemId: String? = null
+                    private var modelType: ModelType? = null
                     private var name: String? = null
                     private var billableMetricId: String? = null
-                    private var itemId: String? = null
                     private var billedInAdvance: Boolean? = null
+                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
+                    private var conversionRate: Double? = null
+                    private var externalPriceId: String? = null
                     private var fixedPriceQuantity: Double? = null
                     private var invoiceGroupingKey: String? = null
-                    private var cadence: Cadence? = null
-                    private var billingCycleConfiguration: BillingCycleConfiguration? = null
                     private var invoicingCycleConfiguration: InvoicingCycleConfiguration? = null
-                    private var conversionRate: Double? = null
-                    private var modelType: ModelType? = null
-                    private var groupedTieredPackageConfig: GroupedTieredPackageConfig? = null
-                    private var currency: String? = null
+                    private var metadata: Metadata? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(
                         newFloatingGroupedTieredPackagePrice: NewFloatingGroupedTieredPackagePrice
                     ) = apply {
-                        metadata = newFloatingGroupedTieredPackagePrice.metadata
-                        externalPriceId = newFloatingGroupedTieredPackagePrice.externalPriceId
-                        name = newFloatingGroupedTieredPackagePrice.name
-                        billableMetricId = newFloatingGroupedTieredPackagePrice.billableMetricId
-                        itemId = newFloatingGroupedTieredPackagePrice.itemId
-                        billedInAdvance = newFloatingGroupedTieredPackagePrice.billedInAdvance
-                        fixedPriceQuantity = newFloatingGroupedTieredPackagePrice.fixedPriceQuantity
-                        invoiceGroupingKey = newFloatingGroupedTieredPackagePrice.invoiceGroupingKey
                         cadence = newFloatingGroupedTieredPackagePrice.cadence
-                        billingCycleConfiguration =
-                            newFloatingGroupedTieredPackagePrice.billingCycleConfiguration
-                        invoicingCycleConfiguration =
-                            newFloatingGroupedTieredPackagePrice.invoicingCycleConfiguration
-                        conversionRate = newFloatingGroupedTieredPackagePrice.conversionRate
-                        modelType = newFloatingGroupedTieredPackagePrice.modelType
+                        currency = newFloatingGroupedTieredPackagePrice.currency
                         groupedTieredPackageConfig =
                             newFloatingGroupedTieredPackagePrice.groupedTieredPackageConfig
-                        currency = newFloatingGroupedTieredPackagePrice.currency
+                        itemId = newFloatingGroupedTieredPackagePrice.itemId
+                        modelType = newFloatingGroupedTieredPackagePrice.modelType
+                        name = newFloatingGroupedTieredPackagePrice.name
+                        billableMetricId = newFloatingGroupedTieredPackagePrice.billableMetricId
+                        billedInAdvance = newFloatingGroupedTieredPackagePrice.billedInAdvance
+                        billingCycleConfiguration =
+                            newFloatingGroupedTieredPackagePrice.billingCycleConfiguration
+                        conversionRate = newFloatingGroupedTieredPackagePrice.conversionRate
+                        externalPriceId = newFloatingGroupedTieredPackagePrice.externalPriceId
+                        fixedPriceQuantity = newFloatingGroupedTieredPackagePrice.fixedPriceQuantity
+                        invoiceGroupingKey = newFloatingGroupedTieredPackagePrice.invoiceGroupingKey
+                        invoicingCycleConfiguration =
+                            newFloatingGroupedTieredPackagePrice.invoicingCycleConfiguration
+                        metadata = newFloatingGroupedTieredPackagePrice.metadata
                         additionalProperties =
                             newFloatingGroupedTieredPackagePrice.additionalProperties.toMutableMap()
                     }
 
-                    /**
-                     * User-specified key/value pairs for the resource. Individual keys can be
-                     * removed by setting the value to `null`, and the entire metadata mapping can
-                     * be cleared by setting `metadata` to `null`.
-                     */
-                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+                    /** The cadence to bill for this price on. */
+                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
 
-                    /** An alias for the price. */
-                    fun externalPriceId(externalPriceId: String) = apply {
-                        this.externalPriceId = externalPriceId
-                    }
+                    /** An ISO 4217 currency string for which this price is billed in. */
+                    fun currency(currency: String) = apply { this.currency = currency }
+
+                    fun groupedTieredPackageConfig(
+                        groupedTieredPackageConfig: GroupedTieredPackageConfig
+                    ) = apply { this.groupedTieredPackageConfig = groupedTieredPackageConfig }
+
+                    /** The id of the item the plan will be associated with. */
+                    fun itemId(itemId: String) = apply { this.itemId = itemId }
+
+                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
 
                     /** The name of the price. */
                     fun name(name: String) = apply { this.name = name }
@@ -25158,15 +25161,32 @@ constructor(
                         this.billableMetricId = billableMetricId
                     }
 
-                    /** The id of the item the plan will be associated with. */
-                    fun itemId(itemId: String) = apply { this.itemId = itemId }
-
                     /**
                      * If the Price represents a fixed cost, the price will be billed in-advance if
                      * this is true, and in-arrears if this is false.
                      */
                     fun billedInAdvance(billedInAdvance: Boolean) = apply {
                         this.billedInAdvance = billedInAdvance
+                    }
+
+                    /**
+                     * For custom cadence: specifies the duration of the billing period in days or
+                     * months.
+                     */
+                    fun billingCycleConfiguration(
+                        billingCycleConfiguration: BillingCycleConfiguration
+                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+                    /**
+                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     */
+                    fun conversionRate(conversionRate: Double) = apply {
+                        this.conversionRate = conversionRate
+                    }
+
+                    /** An alias for the price. */
+                    fun externalPriceId(externalPriceId: String) = apply {
+                        this.externalPriceId = externalPriceId
                     }
 
                     /**
@@ -25182,17 +25202,6 @@ constructor(
                         this.invoiceGroupingKey = invoiceGroupingKey
                     }
 
-                    /** The cadence to bill for this price on. */
-                    fun cadence(cadence: Cadence) = apply { this.cadence = cadence }
-
-                    /**
-                     * For custom cadence: specifies the duration of the billing period in days or
-                     * months.
-                     */
-                    fun billingCycleConfiguration(
-                        billingCycleConfiguration: BillingCycleConfiguration
-                    ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
-
                     /**
                      * Within each billing cycle, specifies the cadence at which invoices are
                      * produced. If unspecified, a single invoice is produced per billing cycle.
@@ -25202,20 +25211,11 @@ constructor(
                     ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
 
                     /**
-                     * The per unit conversion rate of the price currency to the invoicing currency.
+                     * User-specified key/value pairs for the resource. Individual keys can be
+                     * removed by setting the value to `null`, and the entire metadata mapping can
+                     * be cleared by setting `metadata` to `null`.
                      */
-                    fun conversionRate(conversionRate: Double) = apply {
-                        this.conversionRate = conversionRate
-                    }
-
-                    fun modelType(modelType: ModelType) = apply { this.modelType = modelType }
-
-                    fun groupedTieredPackageConfig(
-                        groupedTieredPackageConfig: GroupedTieredPackageConfig
-                    ) = apply { this.groupedTieredPackageConfig = groupedTieredPackageConfig }
-
-                    /** An ISO 4217 currency string for which this price is billed in. */
-                    fun currency(currency: String) = apply { this.currency = currency }
+                    fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -25241,23 +25241,23 @@ constructor(
 
                     fun build(): NewFloatingGroupedTieredPackagePrice =
                         NewFloatingGroupedTieredPackagePrice(
-                            metadata,
-                            externalPriceId,
-                            checkNotNull(name) { "`name` is required but was not set" },
-                            billableMetricId,
-                            checkNotNull(itemId) { "`itemId` is required but was not set" },
-                            billedInAdvance,
-                            fixedPriceQuantity,
-                            invoiceGroupingKey,
                             checkNotNull(cadence) { "`cadence` is required but was not set" },
-                            billingCycleConfiguration,
-                            invoicingCycleConfiguration,
-                            conversionRate,
-                            checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(currency) { "`currency` is required but was not set" },
                             checkNotNull(groupedTieredPackageConfig) {
                                 "`groupedTieredPackageConfig` is required but was not set"
                             },
-                            checkNotNull(currency) { "`currency` is required but was not set" },
+                            checkNotNull(itemId) { "`itemId` is required but was not set" },
+                            checkNotNull(modelType) { "`modelType` is required but was not set" },
+                            checkNotNull(name) { "`name` is required but was not set" },
+                            billableMetricId,
+                            billedInAdvance,
+                            billingCycleConfiguration,
+                            conversionRate,
+                            externalPriceId,
+                            fixedPriceQuantity,
+                            invoiceGroupingKey,
+                            invoicingCycleConfiguration,
+                            metadata,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -25881,17 +25881,17 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewFloatingGroupedTieredPackagePrice && metadata == other.metadata && externalPriceId == other.externalPriceId && name == other.name && billableMetricId == other.billableMetricId && itemId == other.itemId && billedInAdvance == other.billedInAdvance && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && cadence == other.cadence && billingCycleConfiguration == other.billingCycleConfiguration && invoicingCycleConfiguration == other.invoicingCycleConfiguration && conversionRate == other.conversionRate && modelType == other.modelType && groupedTieredPackageConfig == other.groupedTieredPackageConfig && currency == other.currency && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewFloatingGroupedTieredPackagePrice && cadence == other.cadence && currency == other.currency && groupedTieredPackageConfig == other.groupedTieredPackageConfig && itemId == other.itemId && modelType == other.modelType && name == other.name && billableMetricId == other.billableMetricId && billedInAdvance == other.billedInAdvance && billingCycleConfiguration == other.billingCycleConfiguration && conversionRate == other.conversionRate && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoiceGroupingKey == other.invoiceGroupingKey && invoicingCycleConfiguration == other.invoicingCycleConfiguration && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(metadata, externalPriceId, name, billableMetricId, itemId, billedInAdvance, fixedPriceQuantity, invoiceGroupingKey, cadence, billingCycleConfiguration, invoicingCycleConfiguration, conversionRate, modelType, groupedTieredPackageConfig, currency, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(cadence, currency, groupedTieredPackageConfig, itemId, modelType, name, billableMetricId, billedInAdvance, billingCycleConfiguration, conversionRate, externalPriceId, fixedPriceQuantity, invoiceGroupingKey, invoicingCycleConfiguration, metadata, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewFloatingGroupedTieredPackagePrice{metadata=$metadata, externalPriceId=$externalPriceId, name=$name, billableMetricId=$billableMetricId, itemId=$itemId, billedInAdvance=$billedInAdvance, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, cadence=$cadence, billingCycleConfiguration=$billingCycleConfiguration, invoicingCycleConfiguration=$invoicingCycleConfiguration, conversionRate=$conversionRate, modelType=$modelType, groupedTieredPackageConfig=$groupedTieredPackageConfig, currency=$currency, additionalProperties=$additionalProperties}"
+                    "NewFloatingGroupedTieredPackagePrice{cadence=$cadence, currency=$currency, groupedTieredPackageConfig=$groupedTieredPackageConfig, itemId=$itemId, modelType=$modelType, name=$name, billableMetricId=$billableMetricId, billedInAdvance=$billedInAdvance, billingCycleConfiguration=$billingCycleConfiguration, conversionRate=$conversionRate, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, invoicingCycleConfiguration=$invoicingCycleConfiguration, metadata=$metadata, additionalProperties=$additionalProperties}"
             }
         }
 
@@ -25900,17 +25900,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Add && priceId == other.priceId && externalPriceId == other.externalPriceId && price == other.price && allocationPrice == other.allocationPrice && startDate == other.startDate && endDate == other.endDate && fixedFeeQuantityTransitions == other.fixedFeeQuantityTransitions && discounts == other.discounts && minimumAmount == other.minimumAmount && maximumAmount == other.maximumAmount && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Add && startDate == other.startDate && allocationPrice == other.allocationPrice && discounts == other.discounts && endDate == other.endDate && externalPriceId == other.externalPriceId && fixedFeeQuantityTransitions == other.fixedFeeQuantityTransitions && maximumAmount == other.maximumAmount && minimumAmount == other.minimumAmount && price == other.price && priceId == other.priceId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(priceId, externalPriceId, price, allocationPrice, startDate, endDate, fixedFeeQuantityTransitions, discounts, minimumAmount, maximumAmount, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(startDate, allocationPrice, discounts, endDate, externalPriceId, fixedFeeQuantityTransitions, maximumAmount, minimumAmount, price, priceId, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Add{priceId=$priceId, externalPriceId=$externalPriceId, price=$price, allocationPrice=$allocationPrice, startDate=$startDate, endDate=$endDate, fixedFeeQuantityTransitions=$fixedFeeQuantityTransitions, discounts=$discounts, minimumAmount=$minimumAmount, maximumAmount=$maximumAmount, additionalProperties=$additionalProperties}"
+            "Add{startDate=$startDate, allocationPrice=$allocationPrice, discounts=$discounts, endDate=$endDate, externalPriceId=$externalPriceId, fixedFeeQuantityTransitions=$fixedFeeQuantityTransitions, maximumAmount=$maximumAmount, minimumAmount=$minimumAmount, price=$price, priceId=$priceId, additionalProperties=$additionalProperties}"
     }
 
     @NoAutoDetect
@@ -26232,17 +26232,23 @@ constructor(
             class NewPercentageDiscount
             @JsonCreator
             private constructor(
-                @JsonProperty("applies_to_price_ids") private val appliesToPriceIds: List<String>,
-                @JsonProperty("is_invoice_level") private val isInvoiceLevel: Boolean?,
                 @JsonProperty("adjustment_type") private val adjustmentType: AdjustmentType,
+                @JsonProperty("applies_to_price_ids") private val appliesToPriceIds: List<String>,
                 @JsonProperty("percentage_discount") private val percentageDiscount: Double,
+                @JsonProperty("is_invoice_level") private val isInvoiceLevel: Boolean?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
+                @JsonProperty("adjustment_type")
+                fun adjustmentType(): AdjustmentType = adjustmentType
+
                 /** The set of price IDs to which this adjustment applies. */
                 @JsonProperty("applies_to_price_ids")
                 fun appliesToPriceIds(): List<String> = appliesToPriceIds
+
+                @JsonProperty("percentage_discount")
+                fun percentageDiscount(): Double = percentageDiscount
 
                 /**
                  * When false, this adjustment will be applied to a single price. Otherwise, it will
@@ -26250,12 +26256,6 @@ constructor(
                  */
                 @JsonProperty("is_invoice_level")
                 fun isInvoiceLevel(): Optional<Boolean> = Optional.ofNullable(isInvoiceLevel)
-
-                @JsonProperty("adjustment_type")
-                fun adjustmentType(): AdjustmentType = adjustmentType
-
-                @JsonProperty("percentage_discount")
-                fun percentageDiscount(): Double = percentageDiscount
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -26270,20 +26270,24 @@ constructor(
 
                 class Builder {
 
-                    private var appliesToPriceIds: MutableList<String>? = null
-                    private var isInvoiceLevel: Boolean? = null
                     private var adjustmentType: AdjustmentType? = null
+                    private var appliesToPriceIds: MutableList<String>? = null
                     private var percentageDiscount: Double? = null
+                    private var isInvoiceLevel: Boolean? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(newPercentageDiscount: NewPercentageDiscount) = apply {
-                        appliesToPriceIds = newPercentageDiscount.appliesToPriceIds.toMutableList()
-                        isInvoiceLevel = newPercentageDiscount.isInvoiceLevel
                         adjustmentType = newPercentageDiscount.adjustmentType
+                        appliesToPriceIds = newPercentageDiscount.appliesToPriceIds.toMutableList()
                         percentageDiscount = newPercentageDiscount.percentageDiscount
+                        isInvoiceLevel = newPercentageDiscount.isInvoiceLevel
                         additionalProperties =
                             newPercentageDiscount.additionalProperties.toMutableMap()
+                    }
+
+                    fun adjustmentType(adjustmentType: AdjustmentType) = apply {
+                        this.adjustmentType = adjustmentType
                     }
 
                     /** The set of price IDs to which this adjustment applies. */
@@ -26297,20 +26301,16 @@ constructor(
                             (appliesToPriceIds ?: mutableListOf()).apply { add(appliesToPriceId) }
                     }
 
+                    fun percentageDiscount(percentageDiscount: Double) = apply {
+                        this.percentageDiscount = percentageDiscount
+                    }
+
                     /**
                      * When false, this adjustment will be applied to a single price. Otherwise, it
                      * will be applied at the invoice level, possibly to multiple prices.
                      */
                     fun isInvoiceLevel(isInvoiceLevel: Boolean) = apply {
                         this.isInvoiceLevel = isInvoiceLevel
-                    }
-
-                    fun adjustmentType(adjustmentType: AdjustmentType) = apply {
-                        this.adjustmentType = adjustmentType
-                    }
-
-                    fun percentageDiscount(percentageDiscount: Double) = apply {
-                        this.percentageDiscount = percentageDiscount
                     }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -26337,17 +26337,17 @@ constructor(
 
                     fun build(): NewPercentageDiscount =
                         NewPercentageDiscount(
+                            checkNotNull(adjustmentType) {
+                                "`adjustmentType` is required but was not set"
+                            },
                             checkNotNull(appliesToPriceIds) {
                                     "`appliesToPriceIds` is required but was not set"
                                 }
                                 .toImmutable(),
-                            isInvoiceLevel,
-                            checkNotNull(adjustmentType) {
-                                "`adjustmentType` is required but was not set"
-                            },
                             checkNotNull(percentageDiscount) {
                                 "`percentageDiscount` is required but was not set"
                             },
+                            isInvoiceLevel,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -26409,34 +26409,39 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewPercentageDiscount && appliesToPriceIds == other.appliesToPriceIds && isInvoiceLevel == other.isInvoiceLevel && adjustmentType == other.adjustmentType && percentageDiscount == other.percentageDiscount && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewPercentageDiscount && adjustmentType == other.adjustmentType && appliesToPriceIds == other.appliesToPriceIds && percentageDiscount == other.percentageDiscount && isInvoiceLevel == other.isInvoiceLevel && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(appliesToPriceIds, isInvoiceLevel, adjustmentType, percentageDiscount, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(adjustmentType, appliesToPriceIds, percentageDiscount, isInvoiceLevel, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewPercentageDiscount{appliesToPriceIds=$appliesToPriceIds, isInvoiceLevel=$isInvoiceLevel, adjustmentType=$adjustmentType, percentageDiscount=$percentageDiscount, additionalProperties=$additionalProperties}"
+                    "NewPercentageDiscount{adjustmentType=$adjustmentType, appliesToPriceIds=$appliesToPriceIds, percentageDiscount=$percentageDiscount, isInvoiceLevel=$isInvoiceLevel, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class NewUsageDiscount
             @JsonCreator
             private constructor(
-                @JsonProperty("applies_to_price_ids") private val appliesToPriceIds: List<String>,
-                @JsonProperty("is_invoice_level") private val isInvoiceLevel: Boolean?,
                 @JsonProperty("adjustment_type") private val adjustmentType: AdjustmentType,
+                @JsonProperty("applies_to_price_ids") private val appliesToPriceIds: List<String>,
                 @JsonProperty("usage_discount") private val usageDiscount: Double,
+                @JsonProperty("is_invoice_level") private val isInvoiceLevel: Boolean?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
+                @JsonProperty("adjustment_type")
+                fun adjustmentType(): AdjustmentType = adjustmentType
+
                 /** The set of price IDs to which this adjustment applies. */
                 @JsonProperty("applies_to_price_ids")
                 fun appliesToPriceIds(): List<String> = appliesToPriceIds
+
+                @JsonProperty("usage_discount") fun usageDiscount(): Double = usageDiscount
 
                 /**
                  * When false, this adjustment will be applied to a single price. Otherwise, it will
@@ -26444,11 +26449,6 @@ constructor(
                  */
                 @JsonProperty("is_invoice_level")
                 fun isInvoiceLevel(): Optional<Boolean> = Optional.ofNullable(isInvoiceLevel)
-
-                @JsonProperty("adjustment_type")
-                fun adjustmentType(): AdjustmentType = adjustmentType
-
-                @JsonProperty("usage_discount") fun usageDiscount(): Double = usageDiscount
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -26463,19 +26463,23 @@ constructor(
 
                 class Builder {
 
-                    private var appliesToPriceIds: MutableList<String>? = null
-                    private var isInvoiceLevel: Boolean? = null
                     private var adjustmentType: AdjustmentType? = null
+                    private var appliesToPriceIds: MutableList<String>? = null
                     private var usageDiscount: Double? = null
+                    private var isInvoiceLevel: Boolean? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(newUsageDiscount: NewUsageDiscount) = apply {
-                        appliesToPriceIds = newUsageDiscount.appliesToPriceIds.toMutableList()
-                        isInvoiceLevel = newUsageDiscount.isInvoiceLevel
                         adjustmentType = newUsageDiscount.adjustmentType
+                        appliesToPriceIds = newUsageDiscount.appliesToPriceIds.toMutableList()
                         usageDiscount = newUsageDiscount.usageDiscount
+                        isInvoiceLevel = newUsageDiscount.isInvoiceLevel
                         additionalProperties = newUsageDiscount.additionalProperties.toMutableMap()
+                    }
+
+                    fun adjustmentType(adjustmentType: AdjustmentType) = apply {
+                        this.adjustmentType = adjustmentType
                     }
 
                     /** The set of price IDs to which this adjustment applies. */
@@ -26489,20 +26493,16 @@ constructor(
                             (appliesToPriceIds ?: mutableListOf()).apply { add(appliesToPriceId) }
                     }
 
+                    fun usageDiscount(usageDiscount: Double) = apply {
+                        this.usageDiscount = usageDiscount
+                    }
+
                     /**
                      * When false, this adjustment will be applied to a single price. Otherwise, it
                      * will be applied at the invoice level, possibly to multiple prices.
                      */
                     fun isInvoiceLevel(isInvoiceLevel: Boolean) = apply {
                         this.isInvoiceLevel = isInvoiceLevel
-                    }
-
-                    fun adjustmentType(adjustmentType: AdjustmentType) = apply {
-                        this.adjustmentType = adjustmentType
-                    }
-
-                    fun usageDiscount(usageDiscount: Double) = apply {
-                        this.usageDiscount = usageDiscount
                     }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -26529,17 +26529,17 @@ constructor(
 
                     fun build(): NewUsageDiscount =
                         NewUsageDiscount(
+                            checkNotNull(adjustmentType) {
+                                "`adjustmentType` is required but was not set"
+                            },
                             checkNotNull(appliesToPriceIds) {
                                     "`appliesToPriceIds` is required but was not set"
                                 }
                                 .toImmutable(),
-                            isInvoiceLevel,
-                            checkNotNull(adjustmentType) {
-                                "`adjustmentType` is required but was not set"
-                            },
                             checkNotNull(usageDiscount) {
                                 "`usageDiscount` is required but was not set"
                             },
+                            isInvoiceLevel,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -26601,30 +26601,35 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewUsageDiscount && appliesToPriceIds == other.appliesToPriceIds && isInvoiceLevel == other.isInvoiceLevel && adjustmentType == other.adjustmentType && usageDiscount == other.usageDiscount && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewUsageDiscount && adjustmentType == other.adjustmentType && appliesToPriceIds == other.appliesToPriceIds && usageDiscount == other.usageDiscount && isInvoiceLevel == other.isInvoiceLevel && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(appliesToPriceIds, isInvoiceLevel, adjustmentType, usageDiscount, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(adjustmentType, appliesToPriceIds, usageDiscount, isInvoiceLevel, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewUsageDiscount{appliesToPriceIds=$appliesToPriceIds, isInvoiceLevel=$isInvoiceLevel, adjustmentType=$adjustmentType, usageDiscount=$usageDiscount, additionalProperties=$additionalProperties}"
+                    "NewUsageDiscount{adjustmentType=$adjustmentType, appliesToPriceIds=$appliesToPriceIds, usageDiscount=$usageDiscount, isInvoiceLevel=$isInvoiceLevel, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class NewAmountDiscount
             @JsonCreator
             private constructor(
-                @JsonProperty("applies_to_price_ids") private val appliesToPriceIds: List<String>,
-                @JsonProperty("is_invoice_level") private val isInvoiceLevel: Boolean?,
                 @JsonProperty("adjustment_type") private val adjustmentType: AdjustmentType,
                 @JsonProperty("amount_discount") private val amountDiscount: String,
+                @JsonProperty("applies_to_price_ids") private val appliesToPriceIds: List<String>,
+                @JsonProperty("is_invoice_level") private val isInvoiceLevel: Boolean?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
+
+                @JsonProperty("adjustment_type")
+                fun adjustmentType(): AdjustmentType = adjustmentType
+
+                @JsonProperty("amount_discount") fun amountDiscount(): String = amountDiscount
 
                 /** The set of price IDs to which this adjustment applies. */
                 @JsonProperty("applies_to_price_ids")
@@ -26636,11 +26641,6 @@ constructor(
                  */
                 @JsonProperty("is_invoice_level")
                 fun isInvoiceLevel(): Optional<Boolean> = Optional.ofNullable(isInvoiceLevel)
-
-                @JsonProperty("adjustment_type")
-                fun adjustmentType(): AdjustmentType = adjustmentType
-
-                @JsonProperty("amount_discount") fun amountDiscount(): String = amountDiscount
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -26655,19 +26655,27 @@ constructor(
 
                 class Builder {
 
-                    private var appliesToPriceIds: MutableList<String>? = null
-                    private var isInvoiceLevel: Boolean? = null
                     private var adjustmentType: AdjustmentType? = null
                     private var amountDiscount: String? = null
+                    private var appliesToPriceIds: MutableList<String>? = null
+                    private var isInvoiceLevel: Boolean? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(newAmountDiscount: NewAmountDiscount) = apply {
-                        appliesToPriceIds = newAmountDiscount.appliesToPriceIds.toMutableList()
-                        isInvoiceLevel = newAmountDiscount.isInvoiceLevel
                         adjustmentType = newAmountDiscount.adjustmentType
                         amountDiscount = newAmountDiscount.amountDiscount
+                        appliesToPriceIds = newAmountDiscount.appliesToPriceIds.toMutableList()
+                        isInvoiceLevel = newAmountDiscount.isInvoiceLevel
                         additionalProperties = newAmountDiscount.additionalProperties.toMutableMap()
+                    }
+
+                    fun adjustmentType(adjustmentType: AdjustmentType) = apply {
+                        this.adjustmentType = adjustmentType
+                    }
+
+                    fun amountDiscount(amountDiscount: String) = apply {
+                        this.amountDiscount = amountDiscount
                     }
 
                     /** The set of price IDs to which this adjustment applies. */
@@ -26687,14 +26695,6 @@ constructor(
                      */
                     fun isInvoiceLevel(isInvoiceLevel: Boolean) = apply {
                         this.isInvoiceLevel = isInvoiceLevel
-                    }
-
-                    fun adjustmentType(adjustmentType: AdjustmentType) = apply {
-                        this.adjustmentType = adjustmentType
-                    }
-
-                    fun amountDiscount(amountDiscount: String) = apply {
-                        this.amountDiscount = amountDiscount
                     }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -26721,17 +26721,17 @@ constructor(
 
                     fun build(): NewAmountDiscount =
                         NewAmountDiscount(
-                            checkNotNull(appliesToPriceIds) {
-                                    "`appliesToPriceIds` is required but was not set"
-                                }
-                                .toImmutable(),
-                            isInvoiceLevel,
                             checkNotNull(adjustmentType) {
                                 "`adjustmentType` is required but was not set"
                             },
                             checkNotNull(amountDiscount) {
                                 "`amountDiscount` is required but was not set"
                             },
+                            checkNotNull(appliesToPriceIds) {
+                                    "`appliesToPriceIds` is required but was not set"
+                                }
+                                .toImmutable(),
+                            isInvoiceLevel,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -26793,35 +26793,43 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewAmountDiscount && appliesToPriceIds == other.appliesToPriceIds && isInvoiceLevel == other.isInvoiceLevel && adjustmentType == other.adjustmentType && amountDiscount == other.amountDiscount && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewAmountDiscount && adjustmentType == other.adjustmentType && amountDiscount == other.amountDiscount && appliesToPriceIds == other.appliesToPriceIds && isInvoiceLevel == other.isInvoiceLevel && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(appliesToPriceIds, isInvoiceLevel, adjustmentType, amountDiscount, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(adjustmentType, amountDiscount, appliesToPriceIds, isInvoiceLevel, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewAmountDiscount{appliesToPriceIds=$appliesToPriceIds, isInvoiceLevel=$isInvoiceLevel, adjustmentType=$adjustmentType, amountDiscount=$amountDiscount, additionalProperties=$additionalProperties}"
+                    "NewAmountDiscount{adjustmentType=$adjustmentType, amountDiscount=$amountDiscount, appliesToPriceIds=$appliesToPriceIds, isInvoiceLevel=$isInvoiceLevel, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class NewMinimum
             @JsonCreator
             private constructor(
-                @JsonProperty("applies_to_price_ids") private val appliesToPriceIds: List<String>,
-                @JsonProperty("is_invoice_level") private val isInvoiceLevel: Boolean?,
                 @JsonProperty("adjustment_type") private val adjustmentType: AdjustmentType,
-                @JsonProperty("minimum_amount") private val minimumAmount: String,
+                @JsonProperty("applies_to_price_ids") private val appliesToPriceIds: List<String>,
                 @JsonProperty("item_id") private val itemId: String,
+                @JsonProperty("minimum_amount") private val minimumAmount: String,
+                @JsonProperty("is_invoice_level") private val isInvoiceLevel: Boolean?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
+                @JsonProperty("adjustment_type")
+                fun adjustmentType(): AdjustmentType = adjustmentType
+
                 /** The set of price IDs to which this adjustment applies. */
                 @JsonProperty("applies_to_price_ids")
                 fun appliesToPriceIds(): List<String> = appliesToPriceIds
+
+                /** The item ID that revenue from this minimum will be attributed to. */
+                @JsonProperty("item_id") fun itemId(): String = itemId
+
+                @JsonProperty("minimum_amount") fun minimumAmount(): String = minimumAmount
 
                 /**
                  * When false, this adjustment will be applied to a single price. Otherwise, it will
@@ -26829,14 +26837,6 @@ constructor(
                  */
                 @JsonProperty("is_invoice_level")
                 fun isInvoiceLevel(): Optional<Boolean> = Optional.ofNullable(isInvoiceLevel)
-
-                @JsonProperty("adjustment_type")
-                fun adjustmentType(): AdjustmentType = adjustmentType
-
-                @JsonProperty("minimum_amount") fun minimumAmount(): String = minimumAmount
-
-                /** The item ID that revenue from this minimum will be attributed to. */
-                @JsonProperty("item_id") fun itemId(): String = itemId
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -26851,21 +26851,25 @@ constructor(
 
                 class Builder {
 
-                    private var appliesToPriceIds: MutableList<String>? = null
-                    private var isInvoiceLevel: Boolean? = null
                     private var adjustmentType: AdjustmentType? = null
-                    private var minimumAmount: String? = null
+                    private var appliesToPriceIds: MutableList<String>? = null
                     private var itemId: String? = null
+                    private var minimumAmount: String? = null
+                    private var isInvoiceLevel: Boolean? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(newMinimum: NewMinimum) = apply {
-                        appliesToPriceIds = newMinimum.appliesToPriceIds.toMutableList()
-                        isInvoiceLevel = newMinimum.isInvoiceLevel
                         adjustmentType = newMinimum.adjustmentType
-                        minimumAmount = newMinimum.minimumAmount
+                        appliesToPriceIds = newMinimum.appliesToPriceIds.toMutableList()
                         itemId = newMinimum.itemId
+                        minimumAmount = newMinimum.minimumAmount
+                        isInvoiceLevel = newMinimum.isInvoiceLevel
                         additionalProperties = newMinimum.additionalProperties.toMutableMap()
+                    }
+
+                    fun adjustmentType(adjustmentType: AdjustmentType) = apply {
+                        this.adjustmentType = adjustmentType
                     }
 
                     /** The set of price IDs to which this adjustment applies. */
@@ -26879,6 +26883,13 @@ constructor(
                             (appliesToPriceIds ?: mutableListOf()).apply { add(appliesToPriceId) }
                     }
 
+                    /** The item ID that revenue from this minimum will be attributed to. */
+                    fun itemId(itemId: String) = apply { this.itemId = itemId }
+
+                    fun minimumAmount(minimumAmount: String) = apply {
+                        this.minimumAmount = minimumAmount
+                    }
+
                     /**
                      * When false, this adjustment will be applied to a single price. Otherwise, it
                      * will be applied at the invoice level, possibly to multiple prices.
@@ -26886,17 +26897,6 @@ constructor(
                     fun isInvoiceLevel(isInvoiceLevel: Boolean) = apply {
                         this.isInvoiceLevel = isInvoiceLevel
                     }
-
-                    fun adjustmentType(adjustmentType: AdjustmentType) = apply {
-                        this.adjustmentType = adjustmentType
-                    }
-
-                    fun minimumAmount(minimumAmount: String) = apply {
-                        this.minimumAmount = minimumAmount
-                    }
-
-                    /** The item ID that revenue from this minimum will be attributed to. */
-                    fun itemId(itemId: String) = apply { this.itemId = itemId }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -26922,18 +26922,18 @@ constructor(
 
                     fun build(): NewMinimum =
                         NewMinimum(
+                            checkNotNull(adjustmentType) {
+                                "`adjustmentType` is required but was not set"
+                            },
                             checkNotNull(appliesToPriceIds) {
                                     "`appliesToPriceIds` is required but was not set"
                                 }
                                 .toImmutable(),
-                            isInvoiceLevel,
-                            checkNotNull(adjustmentType) {
-                                "`adjustmentType` is required but was not set"
-                            },
+                            checkNotNull(itemId) { "`itemId` is required but was not set" },
                             checkNotNull(minimumAmount) {
                                 "`minimumAmount` is required but was not set"
                             },
-                            checkNotNull(itemId) { "`itemId` is required but was not set" },
+                            isInvoiceLevel,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -26995,34 +26995,39 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewMinimum && appliesToPriceIds == other.appliesToPriceIds && isInvoiceLevel == other.isInvoiceLevel && adjustmentType == other.adjustmentType && minimumAmount == other.minimumAmount && itemId == other.itemId && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewMinimum && adjustmentType == other.adjustmentType && appliesToPriceIds == other.appliesToPriceIds && itemId == other.itemId && minimumAmount == other.minimumAmount && isInvoiceLevel == other.isInvoiceLevel && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(appliesToPriceIds, isInvoiceLevel, adjustmentType, minimumAmount, itemId, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(adjustmentType, appliesToPriceIds, itemId, minimumAmount, isInvoiceLevel, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewMinimum{appliesToPriceIds=$appliesToPriceIds, isInvoiceLevel=$isInvoiceLevel, adjustmentType=$adjustmentType, minimumAmount=$minimumAmount, itemId=$itemId, additionalProperties=$additionalProperties}"
+                    "NewMinimum{adjustmentType=$adjustmentType, appliesToPriceIds=$appliesToPriceIds, itemId=$itemId, minimumAmount=$minimumAmount, isInvoiceLevel=$isInvoiceLevel, additionalProperties=$additionalProperties}"
             }
 
             @NoAutoDetect
             class NewMaximum
             @JsonCreator
             private constructor(
-                @JsonProperty("applies_to_price_ids") private val appliesToPriceIds: List<String>,
-                @JsonProperty("is_invoice_level") private val isInvoiceLevel: Boolean?,
                 @JsonProperty("adjustment_type") private val adjustmentType: AdjustmentType,
+                @JsonProperty("applies_to_price_ids") private val appliesToPriceIds: List<String>,
                 @JsonProperty("maximum_amount") private val maximumAmount: String,
+                @JsonProperty("is_invoice_level") private val isInvoiceLevel: Boolean?,
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
+                @JsonProperty("adjustment_type")
+                fun adjustmentType(): AdjustmentType = adjustmentType
+
                 /** The set of price IDs to which this adjustment applies. */
                 @JsonProperty("applies_to_price_ids")
                 fun appliesToPriceIds(): List<String> = appliesToPriceIds
+
+                @JsonProperty("maximum_amount") fun maximumAmount(): String = maximumAmount
 
                 /**
                  * When false, this adjustment will be applied to a single price. Otherwise, it will
@@ -27030,11 +27035,6 @@ constructor(
                  */
                 @JsonProperty("is_invoice_level")
                 fun isInvoiceLevel(): Optional<Boolean> = Optional.ofNullable(isInvoiceLevel)
-
-                @JsonProperty("adjustment_type")
-                fun adjustmentType(): AdjustmentType = adjustmentType
-
-                @JsonProperty("maximum_amount") fun maximumAmount(): String = maximumAmount
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -27049,19 +27049,23 @@ constructor(
 
                 class Builder {
 
-                    private var appliesToPriceIds: MutableList<String>? = null
-                    private var isInvoiceLevel: Boolean? = null
                     private var adjustmentType: AdjustmentType? = null
+                    private var appliesToPriceIds: MutableList<String>? = null
                     private var maximumAmount: String? = null
+                    private var isInvoiceLevel: Boolean? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(newMaximum: NewMaximum) = apply {
-                        appliesToPriceIds = newMaximum.appliesToPriceIds.toMutableList()
-                        isInvoiceLevel = newMaximum.isInvoiceLevel
                         adjustmentType = newMaximum.adjustmentType
+                        appliesToPriceIds = newMaximum.appliesToPriceIds.toMutableList()
                         maximumAmount = newMaximum.maximumAmount
+                        isInvoiceLevel = newMaximum.isInvoiceLevel
                         additionalProperties = newMaximum.additionalProperties.toMutableMap()
+                    }
+
+                    fun adjustmentType(adjustmentType: AdjustmentType) = apply {
+                        this.adjustmentType = adjustmentType
                     }
 
                     /** The set of price IDs to which this adjustment applies. */
@@ -27075,20 +27079,16 @@ constructor(
                             (appliesToPriceIds ?: mutableListOf()).apply { add(appliesToPriceId) }
                     }
 
+                    fun maximumAmount(maximumAmount: String) = apply {
+                        this.maximumAmount = maximumAmount
+                    }
+
                     /**
                      * When false, this adjustment will be applied to a single price. Otherwise, it
                      * will be applied at the invoice level, possibly to multiple prices.
                      */
                     fun isInvoiceLevel(isInvoiceLevel: Boolean) = apply {
                         this.isInvoiceLevel = isInvoiceLevel
-                    }
-
-                    fun adjustmentType(adjustmentType: AdjustmentType) = apply {
-                        this.adjustmentType = adjustmentType
-                    }
-
-                    fun maximumAmount(maximumAmount: String) = apply {
-                        this.maximumAmount = maximumAmount
                     }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -27115,17 +27115,17 @@ constructor(
 
                     fun build(): NewMaximum =
                         NewMaximum(
+                            checkNotNull(adjustmentType) {
+                                "`adjustmentType` is required but was not set"
+                            },
                             checkNotNull(appliesToPriceIds) {
                                     "`appliesToPriceIds` is required but was not set"
                                 }
                                 .toImmutable(),
-                            isInvoiceLevel,
-                            checkNotNull(adjustmentType) {
-                                "`adjustmentType` is required but was not set"
-                            },
                             checkNotNull(maximumAmount) {
                                 "`maximumAmount` is required but was not set"
                             },
+                            isInvoiceLevel,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -27187,17 +27187,17 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is NewMaximum && appliesToPriceIds == other.appliesToPriceIds && isInvoiceLevel == other.isInvoiceLevel && adjustmentType == other.adjustmentType && maximumAmount == other.maximumAmount && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is NewMaximum && adjustmentType == other.adjustmentType && appliesToPriceIds == other.appliesToPriceIds && maximumAmount == other.maximumAmount && isInvoiceLevel == other.isInvoiceLevel && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(appliesToPriceIds, isInvoiceLevel, adjustmentType, maximumAmount, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(adjustmentType, appliesToPriceIds, maximumAmount, isInvoiceLevel, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "NewMaximum{appliesToPriceIds=$appliesToPriceIds, isInvoiceLevel=$isInvoiceLevel, adjustmentType=$adjustmentType, maximumAmount=$maximumAmount, additionalProperties=$additionalProperties}"
+                    "NewMaximum{adjustmentType=$adjustmentType, appliesToPriceIds=$appliesToPriceIds, maximumAmount=$maximumAmount, isInvoiceLevel=$isInvoiceLevel, additionalProperties=$additionalProperties}"
             }
         }
 
@@ -27450,11 +27450,11 @@ constructor(
     @JsonCreator
     private constructor(
         @JsonProperty("price_interval_id") private val priceIntervalId: String,
-        @JsonProperty("start_date") private val startDate: StartDate?,
+        @JsonProperty("billing_cycle_day") private val billingCycleDay: Long?,
         @JsonProperty("end_date") private val endDate: EndDate?,
         @JsonProperty("fixed_fee_quantity_transitions")
         private val fixedFeeQuantityTransitions: List<FixedFeeQuantityTransition>?,
-        @JsonProperty("billing_cycle_day") private val billingCycleDay: Long?,
+        @JsonProperty("start_date") private val startDate: StartDate?,
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
@@ -27463,11 +27463,12 @@ constructor(
         @JsonProperty("price_interval_id") fun priceIntervalId(): String = priceIntervalId
 
         /**
-         * The updated start date of this price interval. If not specified, the start date will not
-         * be updated.
+         * The updated billing cycle day for this price interval. If not specified, the billing
+         * cycle day will not be updated. Note that overlapping price intervals must have the same
+         * billing cycle day.
          */
-        @JsonProperty("start_date")
-        fun startDate(): Optional<StartDate> = Optional.ofNullable(startDate)
+        @JsonProperty("billing_cycle_day")
+        fun billingCycleDay(): Optional<Long> = Optional.ofNullable(billingCycleDay)
 
         /**
          * The updated end date of this price interval. If not specified, the start date will not be
@@ -27484,12 +27485,11 @@ constructor(
             Optional.ofNullable(fixedFeeQuantityTransitions)
 
         /**
-         * The updated billing cycle day for this price interval. If not specified, the billing
-         * cycle day will not be updated. Note that overlapping price intervals must have the same
-         * billing cycle day.
+         * The updated start date of this price interval. If not specified, the start date will not
+         * be updated.
          */
-        @JsonProperty("billing_cycle_day")
-        fun billingCycleDay(): Optional<Long> = Optional.ofNullable(billingCycleDay)
+        @JsonProperty("start_date")
+        fun startDate(): Optional<StartDate> = Optional.ofNullable(startDate)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -27505,19 +27505,19 @@ constructor(
         class Builder {
 
             private var priceIntervalId: String? = null
-            private var startDate: StartDate? = null
+            private var billingCycleDay: Long? = null
             private var endDate: EndDate? = null
             private var fixedFeeQuantityTransitions: MutableList<FixedFeeQuantityTransition>? = null
-            private var billingCycleDay: Long? = null
+            private var startDate: StartDate? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(edit: Edit) = apply {
                 priceIntervalId = edit.priceIntervalId
-                startDate = edit.startDate
+                billingCycleDay = edit.billingCycleDay
                 endDate = edit.endDate
                 fixedFeeQuantityTransitions = edit.fixedFeeQuantityTransitions?.toMutableList()
-                billingCycleDay = edit.billingCycleDay
+                startDate = edit.startDate
                 additionalProperties = edit.additionalProperties.toMutableMap()
             }
 
@@ -27527,17 +27527,12 @@ constructor(
             }
 
             /**
-             * The updated start date of this price interval. If not specified, the start date will
-             * not be updated.
+             * The updated billing cycle day for this price interval. If not specified, the billing
+             * cycle day will not be updated. Note that overlapping price intervals must have the
+             * same billing cycle day.
              */
-            fun startDate(startDate: StartDate) = apply { this.startDate = startDate }
-
-            fun startDate(dateTime: OffsetDateTime) = apply {
-                this.startDate = StartDate.ofDateTime(dateTime)
-            }
-
-            fun startDate(billingCycleRelativeDate: BillingCycleRelativeDate) = apply {
-                this.startDate = StartDate.ofBillingCycleRelativeDate(billingCycleRelativeDate)
+            fun billingCycleDay(billingCycleDay: Long) = apply {
+                this.billingCycleDay = billingCycleDay
             }
 
             /**
@@ -27580,12 +27575,17 @@ constructor(
             }
 
             /**
-             * The updated billing cycle day for this price interval. If not specified, the billing
-             * cycle day will not be updated. Note that overlapping price intervals must have the
-             * same billing cycle day.
+             * The updated start date of this price interval. If not specified, the start date will
+             * not be updated.
              */
-            fun billingCycleDay(billingCycleDay: Long) = apply {
-                this.billingCycleDay = billingCycleDay
+            fun startDate(startDate: StartDate) = apply { this.startDate = startDate }
+
+            fun startDate(dateTime: OffsetDateTime) = apply {
+                this.startDate = StartDate.ofDateTime(dateTime)
+            }
+
+            fun startDate(billingCycleRelativeDate: BillingCycleRelativeDate) = apply {
+                this.startDate = StartDate.ofBillingCycleRelativeDate(billingCycleRelativeDate)
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -27612,10 +27612,10 @@ constructor(
                     checkNotNull(priceIntervalId) {
                         "`priceIntervalId` is required but was not set"
                     },
-                    startDate,
+                    billingCycleDay,
                     endDate,
                     fixedFeeQuantityTransitions?.toImmutable(),
-                    billingCycleDay,
+                    startDate,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -27737,17 +27737,17 @@ constructor(
         class FixedFeeQuantityTransition
         @JsonCreator
         private constructor(
-            @JsonProperty("quantity") private val quantity: Long,
             @JsonProperty("effective_date") private val effectiveDate: OffsetDateTime,
+            @JsonProperty("quantity") private val quantity: Long,
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            /** The quantity of the fixed fee quantity transition. */
-            @JsonProperty("quantity") fun quantity(): Long = quantity
-
             /** The date that the fixed fee quantity transition should take effect. */
             @JsonProperty("effective_date") fun effectiveDate(): OffsetDateTime = effectiveDate
+
+            /** The quantity of the fixed fee quantity transition. */
+            @JsonProperty("quantity") fun quantity(): Long = quantity
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -27762,25 +27762,25 @@ constructor(
 
             class Builder {
 
-                private var quantity: Long? = null
                 private var effectiveDate: OffsetDateTime? = null
+                private var quantity: Long? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(fixedFeeQuantityTransition: FixedFeeQuantityTransition) = apply {
-                    quantity = fixedFeeQuantityTransition.quantity
                     effectiveDate = fixedFeeQuantityTransition.effectiveDate
+                    quantity = fixedFeeQuantityTransition.quantity
                     additionalProperties =
                         fixedFeeQuantityTransition.additionalProperties.toMutableMap()
                 }
-
-                /** The quantity of the fixed fee quantity transition. */
-                fun quantity(quantity: Long) = apply { this.quantity = quantity }
 
                 /** The date that the fixed fee quantity transition should take effect. */
                 fun effectiveDate(effectiveDate: OffsetDateTime) = apply {
                     this.effectiveDate = effectiveDate
                 }
+
+                /** The quantity of the fixed fee quantity transition. */
+                fun quantity(quantity: Long) = apply { this.quantity = quantity }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -27806,10 +27806,10 @@ constructor(
 
                 fun build(): FixedFeeQuantityTransition =
                     FixedFeeQuantityTransition(
-                        checkNotNull(quantity) { "`quantity` is required but was not set" },
                         checkNotNull(effectiveDate) {
                             "`effectiveDate` is required but was not set"
                         },
+                        checkNotNull(quantity) { "`quantity` is required but was not set" },
                         additionalProperties.toImmutable(),
                     )
             }
@@ -27819,17 +27819,17 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is FixedFeeQuantityTransition && quantity == other.quantity && effectiveDate == other.effectiveDate && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is FixedFeeQuantityTransition && effectiveDate == other.effectiveDate && quantity == other.quantity && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(quantity, effectiveDate, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(effectiveDate, quantity, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "FixedFeeQuantityTransition{quantity=$quantity, effectiveDate=$effectiveDate, additionalProperties=$additionalProperties}"
+                "FixedFeeQuantityTransition{effectiveDate=$effectiveDate, quantity=$quantity, additionalProperties=$additionalProperties}"
         }
 
         /**
@@ -27950,17 +27950,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Edit && priceIntervalId == other.priceIntervalId && startDate == other.startDate && endDate == other.endDate && fixedFeeQuantityTransitions == other.fixedFeeQuantityTransitions && billingCycleDay == other.billingCycleDay && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Edit && priceIntervalId == other.priceIntervalId && billingCycleDay == other.billingCycleDay && endDate == other.endDate && fixedFeeQuantityTransitions == other.fixedFeeQuantityTransitions && startDate == other.startDate && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(priceIntervalId, startDate, endDate, fixedFeeQuantityTransitions, billingCycleDay, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(priceIntervalId, billingCycleDay, endDate, fixedFeeQuantityTransitions, startDate, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Edit{priceIntervalId=$priceIntervalId, startDate=$startDate, endDate=$endDate, fixedFeeQuantityTransitions=$fixedFeeQuantityTransitions, billingCycleDay=$billingCycleDay, additionalProperties=$additionalProperties}"
+            "Edit{priceIntervalId=$priceIntervalId, billingCycleDay=$billingCycleDay, endDate=$endDate, fixedFeeQuantityTransitions=$fixedFeeQuantityTransitions, startDate=$startDate, additionalProperties=$additionalProperties}"
     }
 
     @NoAutoDetect
@@ -27968,8 +27968,8 @@ constructor(
     @JsonCreator
     private constructor(
         @JsonProperty("adjustment_interval_id") private val adjustmentIntervalId: String,
-        @JsonProperty("start_date") private val startDate: StartDate?,
         @JsonProperty("end_date") private val endDate: EndDate?,
+        @JsonProperty("start_date") private val startDate: StartDate?,
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
@@ -27979,17 +27979,17 @@ constructor(
         fun adjustmentIntervalId(): String = adjustmentIntervalId
 
         /**
+         * The updated end date of this adjustment interval. If not specified, the start date will
+         * not be updated.
+         */
+        @JsonProperty("end_date") fun endDate(): Optional<EndDate> = Optional.ofNullable(endDate)
+
+        /**
          * The updated start date of this adjustment interval. If not specified, the start date will
          * not be updated.
          */
         @JsonProperty("start_date")
         fun startDate(): Optional<StartDate> = Optional.ofNullable(startDate)
-
-        /**
-         * The updated end date of this adjustment interval. If not specified, the start date will
-         * not be updated.
-         */
-        @JsonProperty("end_date") fun endDate(): Optional<EndDate> = Optional.ofNullable(endDate)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -28005,35 +28005,21 @@ constructor(
         class Builder {
 
             private var adjustmentIntervalId: String? = null
-            private var startDate: StartDate? = null
             private var endDate: EndDate? = null
+            private var startDate: StartDate? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(editAdjustment: EditAdjustment) = apply {
                 adjustmentIntervalId = editAdjustment.adjustmentIntervalId
-                startDate = editAdjustment.startDate
                 endDate = editAdjustment.endDate
+                startDate = editAdjustment.startDate
                 additionalProperties = editAdjustment.additionalProperties.toMutableMap()
             }
 
             /** The id of the adjustment interval to edit. */
             fun adjustmentIntervalId(adjustmentIntervalId: String) = apply {
                 this.adjustmentIntervalId = adjustmentIntervalId
-            }
-
-            /**
-             * The updated start date of this adjustment interval. If not specified, the start date
-             * will not be updated.
-             */
-            fun startDate(startDate: StartDate) = apply { this.startDate = startDate }
-
-            fun startDate(dateTime: OffsetDateTime) = apply {
-                this.startDate = StartDate.ofDateTime(dateTime)
-            }
-
-            fun startDate(billingCycleRelativeDate: BillingCycleRelativeDate) = apply {
-                this.startDate = StartDate.ofBillingCycleRelativeDate(billingCycleRelativeDate)
             }
 
             /**
@@ -28048,6 +28034,20 @@ constructor(
 
             fun endDate(billingCycleRelativeDate: BillingCycleRelativeDate) = apply {
                 this.endDate = EndDate.ofBillingCycleRelativeDate(billingCycleRelativeDate)
+            }
+
+            /**
+             * The updated start date of this adjustment interval. If not specified, the start date
+             * will not be updated.
+             */
+            fun startDate(startDate: StartDate) = apply { this.startDate = startDate }
+
+            fun startDate(dateTime: OffsetDateTime) = apply {
+                this.startDate = StartDate.ofDateTime(dateTime)
+            }
+
+            fun startDate(billingCycleRelativeDate: BillingCycleRelativeDate) = apply {
+                this.startDate = StartDate.ofBillingCycleRelativeDate(billingCycleRelativeDate)
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -28074,8 +28074,8 @@ constructor(
                     checkNotNull(adjustmentIntervalId) {
                         "`adjustmentIntervalId` is required but was not set"
                     },
-                    startDate,
                     endDate,
+                    startDate,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -28311,17 +28311,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is EditAdjustment && adjustmentIntervalId == other.adjustmentIntervalId && startDate == other.startDate && endDate == other.endDate && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is EditAdjustment && adjustmentIntervalId == other.adjustmentIntervalId && endDate == other.endDate && startDate == other.startDate && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(adjustmentIntervalId, startDate, endDate, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(adjustmentIntervalId, endDate, startDate, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "EditAdjustment{adjustmentIntervalId=$adjustmentIntervalId, startDate=$startDate, endDate=$endDate, additionalProperties=$additionalProperties}"
+            "EditAdjustment{adjustmentIntervalId=$adjustmentIntervalId, endDate=$endDate, startDate=$startDate, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

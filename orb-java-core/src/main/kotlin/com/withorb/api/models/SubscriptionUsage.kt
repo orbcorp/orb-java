@@ -240,12 +240,12 @@ private constructor(
         class Data
         @JsonCreator
         private constructor(
-            @JsonProperty("usage")
-            @ExcludeMissing
-            private val usage: JsonField<List<Usage>> = JsonMissing.of(),
             @JsonProperty("billable_metric")
             @ExcludeMissing
             private val billableMetric: JsonField<BillableMetric> = JsonMissing.of(),
+            @JsonProperty("usage")
+            @ExcludeMissing
+            private val usage: JsonField<List<Usage>> = JsonMissing.of(),
             @JsonProperty("view_mode")
             @ExcludeMissing
             private val viewMode: JsonField<ViewMode> = JsonMissing.of(),
@@ -253,15 +253,15 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            fun usage(): List<Usage> = usage.getRequired("usage")
-
             fun billableMetric(): BillableMetric = billableMetric.getRequired("billable_metric")
+
+            fun usage(): List<Usage> = usage.getRequired("usage")
 
             fun viewMode(): ViewMode = viewMode.getRequired("view_mode")
 
-            @JsonProperty("usage") @ExcludeMissing fun _usage() = usage
-
             @JsonProperty("billable_metric") @ExcludeMissing fun _billableMetric() = billableMetric
+
+            @JsonProperty("usage") @ExcludeMissing fun _usage() = usage
 
             @JsonProperty("view_mode") @ExcludeMissing fun _viewMode() = viewMode
 
@@ -273,8 +273,8 @@ private constructor(
 
             fun validate(): Data = apply {
                 if (!validated) {
-                    usage().forEach { it.validate() }
                     billableMetric().validate()
+                    usage().forEach { it.validate() }
                     viewMode()
                     validated = true
                 }
@@ -289,22 +289,18 @@ private constructor(
 
             class Builder {
 
-                private var usage: JsonField<List<Usage>> = JsonMissing.of()
                 private var billableMetric: JsonField<BillableMetric> = JsonMissing.of()
+                private var usage: JsonField<List<Usage>> = JsonMissing.of()
                 private var viewMode: JsonField<ViewMode> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(data: Data) = apply {
-                    usage = data.usage
                     billableMetric = data.billableMetric
+                    usage = data.usage
                     viewMode = data.viewMode
                     additionalProperties = data.additionalProperties.toMutableMap()
                 }
-
-                fun usage(usage: List<Usage>) = usage(JsonField.of(usage))
-
-                fun usage(usage: JsonField<List<Usage>>) = apply { this.usage = usage }
 
                 fun billableMetric(billableMetric: BillableMetric) =
                     billableMetric(JsonField.of(billableMetric))
@@ -312,6 +308,10 @@ private constructor(
                 fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                     this.billableMetric = billableMetric
                 }
+
+                fun usage(usage: List<Usage>) = usage(JsonField.of(usage))
+
+                fun usage(usage: JsonField<List<Usage>>) = apply { this.usage = usage }
 
                 fun viewMode(viewMode: ViewMode) = viewMode(JsonField.of(viewMode))
 
@@ -341,8 +341,8 @@ private constructor(
 
                 fun build(): Data =
                     Data(
-                        usage.map { it.toImmutable() },
                         billableMetric,
+                        usage.map { it.toImmutable() },
                         viewMode,
                         additionalProperties.toImmutable(),
                     )
@@ -467,29 +467,29 @@ private constructor(
                 @JsonProperty("quantity")
                 @ExcludeMissing
                 private val quantity: JsonField<Double> = JsonMissing.of(),
-                @JsonProperty("timeframe_start")
-                @ExcludeMissing
-                private val timeframeStart: JsonField<OffsetDateTime> = JsonMissing.of(),
                 @JsonProperty("timeframe_end")
                 @ExcludeMissing
                 private val timeframeEnd: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("timeframe_start")
+                @ExcludeMissing
+                private val timeframeStart: JsonField<OffsetDateTime> = JsonMissing.of(),
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
                 fun quantity(): Double = quantity.getRequired("quantity")
 
-                fun timeframeStart(): OffsetDateTime = timeframeStart.getRequired("timeframe_start")
-
                 fun timeframeEnd(): OffsetDateTime = timeframeEnd.getRequired("timeframe_end")
 
+                fun timeframeStart(): OffsetDateTime = timeframeStart.getRequired("timeframe_start")
+
                 @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
+
+                @JsonProperty("timeframe_end") @ExcludeMissing fun _timeframeEnd() = timeframeEnd
 
                 @JsonProperty("timeframe_start")
                 @ExcludeMissing
                 fun _timeframeStart() = timeframeStart
-
-                @JsonProperty("timeframe_end") @ExcludeMissing fun _timeframeEnd() = timeframeEnd
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -500,8 +500,8 @@ private constructor(
                 fun validate(): Usage = apply {
                     if (!validated) {
                         quantity()
-                        timeframeStart()
                         timeframeEnd()
+                        timeframeStart()
                         validated = true
                     }
                 }
@@ -516,15 +516,15 @@ private constructor(
                 class Builder {
 
                     private var quantity: JsonField<Double> = JsonMissing.of()
-                    private var timeframeStart: JsonField<OffsetDateTime> = JsonMissing.of()
                     private var timeframeEnd: JsonField<OffsetDateTime> = JsonMissing.of()
+                    private var timeframeStart: JsonField<OffsetDateTime> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(usage: Usage) = apply {
                         quantity = usage.quantity
-                        timeframeStart = usage.timeframeStart
                         timeframeEnd = usage.timeframeEnd
+                        timeframeStart = usage.timeframeStart
                         additionalProperties = usage.additionalProperties.toMutableMap()
                     }
 
@@ -532,18 +532,18 @@ private constructor(
 
                     fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
-                    fun timeframeStart(timeframeStart: OffsetDateTime) =
-                        timeframeStart(JsonField.of(timeframeStart))
-
-                    fun timeframeStart(timeframeStart: JsonField<OffsetDateTime>) = apply {
-                        this.timeframeStart = timeframeStart
-                    }
-
                     fun timeframeEnd(timeframeEnd: OffsetDateTime) =
                         timeframeEnd(JsonField.of(timeframeEnd))
 
                     fun timeframeEnd(timeframeEnd: JsonField<OffsetDateTime>) = apply {
                         this.timeframeEnd = timeframeEnd
+                    }
+
+                    fun timeframeStart(timeframeStart: OffsetDateTime) =
+                        timeframeStart(JsonField.of(timeframeStart))
+
+                    fun timeframeStart(timeframeStart: JsonField<OffsetDateTime>) = apply {
+                        this.timeframeStart = timeframeStart
                     }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -571,8 +571,8 @@ private constructor(
                     fun build(): Usage =
                         Usage(
                             quantity,
-                            timeframeStart,
                             timeframeEnd,
+                            timeframeStart,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -582,17 +582,17 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is Usage && quantity == other.quantity && timeframeStart == other.timeframeStart && timeframeEnd == other.timeframeEnd && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is Usage && quantity == other.quantity && timeframeEnd == other.timeframeEnd && timeframeStart == other.timeframeStart && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(quantity, timeframeStart, timeframeEnd, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(quantity, timeframeEnd, timeframeStart, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "Usage{quantity=$quantity, timeframeStart=$timeframeStart, timeframeEnd=$timeframeEnd, additionalProperties=$additionalProperties}"
+                    "Usage{quantity=$quantity, timeframeEnd=$timeframeEnd, timeframeStart=$timeframeStart, additionalProperties=$additionalProperties}"
             }
 
             class ViewMode
@@ -657,17 +657,17 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Data && usage == other.usage && billableMetric == other.billableMetric && viewMode == other.viewMode && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is Data && billableMetric == other.billableMetric && usage == other.usage && viewMode == other.viewMode && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(usage, billableMetric, viewMode, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(billableMetric, usage, viewMode, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Data{usage=$usage, billableMetric=$billableMetric, viewMode=$viewMode, additionalProperties=$additionalProperties}"
+                "Data{billableMetric=$billableMetric, usage=$usage, viewMode=$viewMode, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
@@ -789,15 +789,15 @@ private constructor(
         class Data
         @JsonCreator
         private constructor(
-            @JsonProperty("usage")
-            @ExcludeMissing
-            private val usage: JsonField<List<Usage>> = JsonMissing.of(),
             @JsonProperty("billable_metric")
             @ExcludeMissing
             private val billableMetric: JsonField<BillableMetric> = JsonMissing.of(),
             @JsonProperty("metric_group")
             @ExcludeMissing
             private val metricGroup: JsonField<MetricGroup> = JsonMissing.of(),
+            @JsonProperty("usage")
+            @ExcludeMissing
+            private val usage: JsonField<List<Usage>> = JsonMissing.of(),
             @JsonProperty("view_mode")
             @ExcludeMissing
             private val viewMode: JsonField<ViewMode> = JsonMissing.of(),
@@ -805,19 +805,19 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            fun usage(): List<Usage> = usage.getRequired("usage")
-
             fun billableMetric(): BillableMetric = billableMetric.getRequired("billable_metric")
 
             fun metricGroup(): MetricGroup = metricGroup.getRequired("metric_group")
 
-            fun viewMode(): ViewMode = viewMode.getRequired("view_mode")
+            fun usage(): List<Usage> = usage.getRequired("usage")
 
-            @JsonProperty("usage") @ExcludeMissing fun _usage() = usage
+            fun viewMode(): ViewMode = viewMode.getRequired("view_mode")
 
             @JsonProperty("billable_metric") @ExcludeMissing fun _billableMetric() = billableMetric
 
             @JsonProperty("metric_group") @ExcludeMissing fun _metricGroup() = metricGroup
+
+            @JsonProperty("usage") @ExcludeMissing fun _usage() = usage
 
             @JsonProperty("view_mode") @ExcludeMissing fun _viewMode() = viewMode
 
@@ -829,9 +829,9 @@ private constructor(
 
             fun validate(): Data = apply {
                 if (!validated) {
-                    usage().forEach { it.validate() }
                     billableMetric().validate()
                     metricGroup().validate()
+                    usage().forEach { it.validate() }
                     viewMode()
                     validated = true
                 }
@@ -846,24 +846,20 @@ private constructor(
 
             class Builder {
 
-                private var usage: JsonField<List<Usage>> = JsonMissing.of()
                 private var billableMetric: JsonField<BillableMetric> = JsonMissing.of()
                 private var metricGroup: JsonField<MetricGroup> = JsonMissing.of()
+                private var usage: JsonField<List<Usage>> = JsonMissing.of()
                 private var viewMode: JsonField<ViewMode> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(data: Data) = apply {
-                    usage = data.usage
                     billableMetric = data.billableMetric
                     metricGroup = data.metricGroup
+                    usage = data.usage
                     viewMode = data.viewMode
                     additionalProperties = data.additionalProperties.toMutableMap()
                 }
-
-                fun usage(usage: List<Usage>) = usage(JsonField.of(usage))
-
-                fun usage(usage: JsonField<List<Usage>>) = apply { this.usage = usage }
 
                 fun billableMetric(billableMetric: BillableMetric) =
                     billableMetric(JsonField.of(billableMetric))
@@ -877,6 +873,10 @@ private constructor(
                 fun metricGroup(metricGroup: JsonField<MetricGroup>) = apply {
                     this.metricGroup = metricGroup
                 }
+
+                fun usage(usage: List<Usage>) = usage(JsonField.of(usage))
+
+                fun usage(usage: JsonField<List<Usage>>) = apply { this.usage = usage }
 
                 fun viewMode(viewMode: ViewMode) = viewMode(JsonField.of(viewMode))
 
@@ -906,9 +906,9 @@ private constructor(
 
                 fun build(): Data =
                     Data(
-                        usage.map { it.toImmutable() },
                         billableMetric,
                         metricGroup,
+                        usage.map { it.toImmutable() },
                         viewMode,
                         additionalProperties.toImmutable(),
                     )
@@ -1150,29 +1150,29 @@ private constructor(
                 @JsonProperty("quantity")
                 @ExcludeMissing
                 private val quantity: JsonField<Double> = JsonMissing.of(),
-                @JsonProperty("timeframe_start")
-                @ExcludeMissing
-                private val timeframeStart: JsonField<OffsetDateTime> = JsonMissing.of(),
                 @JsonProperty("timeframe_end")
                 @ExcludeMissing
                 private val timeframeEnd: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("timeframe_start")
+                @ExcludeMissing
+                private val timeframeStart: JsonField<OffsetDateTime> = JsonMissing.of(),
                 @JsonAnySetter
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
                 fun quantity(): Double = quantity.getRequired("quantity")
 
-                fun timeframeStart(): OffsetDateTime = timeframeStart.getRequired("timeframe_start")
-
                 fun timeframeEnd(): OffsetDateTime = timeframeEnd.getRequired("timeframe_end")
 
+                fun timeframeStart(): OffsetDateTime = timeframeStart.getRequired("timeframe_start")
+
                 @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
+
+                @JsonProperty("timeframe_end") @ExcludeMissing fun _timeframeEnd() = timeframeEnd
 
                 @JsonProperty("timeframe_start")
                 @ExcludeMissing
                 fun _timeframeStart() = timeframeStart
-
-                @JsonProperty("timeframe_end") @ExcludeMissing fun _timeframeEnd() = timeframeEnd
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -1183,8 +1183,8 @@ private constructor(
                 fun validate(): Usage = apply {
                     if (!validated) {
                         quantity()
-                        timeframeStart()
                         timeframeEnd()
+                        timeframeStart()
                         validated = true
                     }
                 }
@@ -1199,15 +1199,15 @@ private constructor(
                 class Builder {
 
                     private var quantity: JsonField<Double> = JsonMissing.of()
-                    private var timeframeStart: JsonField<OffsetDateTime> = JsonMissing.of()
                     private var timeframeEnd: JsonField<OffsetDateTime> = JsonMissing.of()
+                    private var timeframeStart: JsonField<OffsetDateTime> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(usage: Usage) = apply {
                         quantity = usage.quantity
-                        timeframeStart = usage.timeframeStart
                         timeframeEnd = usage.timeframeEnd
+                        timeframeStart = usage.timeframeStart
                         additionalProperties = usage.additionalProperties.toMutableMap()
                     }
 
@@ -1215,18 +1215,18 @@ private constructor(
 
                     fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
-                    fun timeframeStart(timeframeStart: OffsetDateTime) =
-                        timeframeStart(JsonField.of(timeframeStart))
-
-                    fun timeframeStart(timeframeStart: JsonField<OffsetDateTime>) = apply {
-                        this.timeframeStart = timeframeStart
-                    }
-
                     fun timeframeEnd(timeframeEnd: OffsetDateTime) =
                         timeframeEnd(JsonField.of(timeframeEnd))
 
                     fun timeframeEnd(timeframeEnd: JsonField<OffsetDateTime>) = apply {
                         this.timeframeEnd = timeframeEnd
+                    }
+
+                    fun timeframeStart(timeframeStart: OffsetDateTime) =
+                        timeframeStart(JsonField.of(timeframeStart))
+
+                    fun timeframeStart(timeframeStart: JsonField<OffsetDateTime>) = apply {
+                        this.timeframeStart = timeframeStart
                     }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -1254,8 +1254,8 @@ private constructor(
                     fun build(): Usage =
                         Usage(
                             quantity,
-                            timeframeStart,
                             timeframeEnd,
+                            timeframeStart,
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -1265,17 +1265,17 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is Usage && quantity == other.quantity && timeframeStart == other.timeframeStart && timeframeEnd == other.timeframeEnd && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is Usage && quantity == other.quantity && timeframeEnd == other.timeframeEnd && timeframeStart == other.timeframeStart && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(quantity, timeframeStart, timeframeEnd, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(quantity, timeframeEnd, timeframeStart, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "Usage{quantity=$quantity, timeframeStart=$timeframeStart, timeframeEnd=$timeframeEnd, additionalProperties=$additionalProperties}"
+                    "Usage{quantity=$quantity, timeframeEnd=$timeframeEnd, timeframeStart=$timeframeStart, additionalProperties=$additionalProperties}"
             }
 
             class ViewMode
@@ -1340,17 +1340,17 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Data && usage == other.usage && billableMetric == other.billableMetric && metricGroup == other.metricGroup && viewMode == other.viewMode && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is Data && billableMetric == other.billableMetric && metricGroup == other.metricGroup && usage == other.usage && viewMode == other.viewMode && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(usage, billableMetric, metricGroup, viewMode, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(billableMetric, metricGroup, usage, viewMode, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Data{usage=$usage, billableMetric=$billableMetric, metricGroup=$metricGroup, viewMode=$viewMode, additionalProperties=$additionalProperties}"
+                "Data{billableMetric=$billableMetric, metricGroup=$metricGroup, usage=$usage, viewMode=$viewMode, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
