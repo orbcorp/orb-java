@@ -18,6 +18,7 @@ import com.withorb.api.core.BaseSerializer
 import com.withorb.api.core.Enum
 import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonField
+import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
 import com.withorb.api.core.getOrThrow
@@ -58,11 +59,28 @@ constructor(
      */
     fun maxRedemptions(): Optional<Long> = body.maxRedemptions()
 
+    fun _discount(): JsonField<Discount> = body._discount()
+
+    /** This string can be used to redeem this coupon for a given subscription. */
+    fun _redemptionCode(): JsonField<String> = body._redemptionCode()
+
+    /**
+     * This allows for a coupon's discount to apply for a limited time (determined in months); a
+     * `null` value here means "unlimited time".
+     */
+    fun _durationInMonths(): JsonField<Long> = body._durationInMonths()
+
+    /**
+     * The maximum number of redemptions allowed for this coupon before it is exhausted;`null` here
+     * means "unlimited".
+     */
+    fun _maxRedemptions(): JsonField<Long> = body._maxRedemptions()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): CouponCreateBody = body
 
@@ -74,36 +92,79 @@ constructor(
     class CouponCreateBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("discount") private val discount: Discount,
-        @JsonProperty("redemption_code") private val redemptionCode: String,
-        @JsonProperty("duration_in_months") private val durationInMonths: Long?,
-        @JsonProperty("max_redemptions") private val maxRedemptions: Long?,
+        @JsonProperty("discount")
+        @ExcludeMissing
+        private val discount: JsonField<Discount> = JsonMissing.of(),
+        @JsonProperty("redemption_code")
+        @ExcludeMissing
+        private val redemptionCode: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("duration_in_months")
+        @ExcludeMissing
+        private val durationInMonths: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("max_redemptions")
+        @ExcludeMissing
+        private val maxRedemptions: JsonField<Long> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("discount") fun discount(): Discount = discount
+        fun discount(): Discount = discount.getRequired("discount")
 
         /** This string can be used to redeem this coupon for a given subscription. */
-        @JsonProperty("redemption_code") fun redemptionCode(): String = redemptionCode
+        fun redemptionCode(): String = redemptionCode.getRequired("redemption_code")
+
+        /**
+         * This allows for a coupon's discount to apply for a limited time (determined in months); a
+         * `null` value here means "unlimited time".
+         */
+        fun durationInMonths(): Optional<Long> =
+            Optional.ofNullable(durationInMonths.getNullable("duration_in_months"))
+
+        /**
+         * The maximum number of redemptions allowed for this coupon before it is exhausted;`null`
+         * here means "unlimited".
+         */
+        fun maxRedemptions(): Optional<Long> =
+            Optional.ofNullable(maxRedemptions.getNullable("max_redemptions"))
+
+        @JsonProperty("discount") @ExcludeMissing fun _discount(): JsonField<Discount> = discount
+
+        /** This string can be used to redeem this coupon for a given subscription. */
+        @JsonProperty("redemption_code")
+        @ExcludeMissing
+        fun _redemptionCode(): JsonField<String> = redemptionCode
 
         /**
          * This allows for a coupon's discount to apply for a limited time (determined in months); a
          * `null` value here means "unlimited time".
          */
         @JsonProperty("duration_in_months")
-        fun durationInMonths(): Optional<Long> = Optional.ofNullable(durationInMonths)
+        @ExcludeMissing
+        fun _durationInMonths(): JsonField<Long> = durationInMonths
 
         /**
          * The maximum number of redemptions allowed for this coupon before it is exhausted;`null`
          * here means "unlimited".
          */
         @JsonProperty("max_redemptions")
-        fun maxRedemptions(): Optional<Long> = Optional.ofNullable(maxRedemptions)
+        @ExcludeMissing
+        fun _maxRedemptions(): JsonField<Long> = maxRedemptions
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CouponCreateBody = apply {
+            if (!validated) {
+                discount()
+                redemptionCode()
+                durationInMonths()
+                maxRedemptions()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -114,10 +175,10 @@ constructor(
 
         class Builder {
 
-            private var discount: Discount? = null
-            private var redemptionCode: String? = null
-            private var durationInMonths: Long? = null
-            private var maxRedemptions: Long? = null
+            private var discount: JsonField<Discount>? = null
+            private var redemptionCode: JsonField<String>? = null
+            private var durationInMonths: JsonField<Long> = JsonMissing.of()
+            private var maxRedemptions: JsonField<Long> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -129,20 +190,22 @@ constructor(
                 additionalProperties = couponCreateBody.additionalProperties.toMutableMap()
             }
 
-            fun discount(discount: Discount) = apply { this.discount = discount }
+            fun discount(discount: Discount) = discount(JsonField.of(discount))
+
+            fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
             fun discount(newCouponPercentageDiscount: Discount.NewCouponPercentageDiscount) =
-                apply {
-                    this.discount =
-                        Discount.ofNewCouponPercentageDiscount(newCouponPercentageDiscount)
-                }
+                discount(Discount.ofNewCouponPercentageDiscount(newCouponPercentageDiscount))
 
-            fun discount(newCouponAmountDiscount: Discount.NewCouponAmountDiscount) = apply {
-                this.discount = Discount.ofNewCouponAmountDiscount(newCouponAmountDiscount)
-            }
+            fun discount(newCouponAmountDiscount: Discount.NewCouponAmountDiscount) =
+                discount(Discount.ofNewCouponAmountDiscount(newCouponAmountDiscount))
 
             /** This string can be used to redeem this coupon for a given subscription. */
-            fun redemptionCode(redemptionCode: String) = apply {
+            fun redemptionCode(redemptionCode: String) =
+                redemptionCode(JsonField.of(redemptionCode))
+
+            /** This string can be used to redeem this coupon for a given subscription. */
+            fun redemptionCode(redemptionCode: JsonField<String>) = apply {
                 this.redemptionCode = redemptionCode
             }
 
@@ -150,9 +213,8 @@ constructor(
              * This allows for a coupon's discount to apply for a limited time (determined in
              * months); a `null` value here means "unlimited time".
              */
-            fun durationInMonths(durationInMonths: Long?) = apply {
-                this.durationInMonths = durationInMonths
-            }
+            fun durationInMonths(durationInMonths: Long?) =
+                durationInMonths(JsonField.ofNullable(durationInMonths))
 
             /**
              * This allows for a coupon's discount to apply for a limited time (determined in
@@ -170,12 +232,19 @@ constructor(
                 durationInMonths(durationInMonths.orElse(null) as Long?)
 
             /**
+             * This allows for a coupon's discount to apply for a limited time (determined in
+             * months); a `null` value here means "unlimited time".
+             */
+            fun durationInMonths(durationInMonths: JsonField<Long>) = apply {
+                this.durationInMonths = durationInMonths
+            }
+
+            /**
              * The maximum number of redemptions allowed for this coupon before it is
              * exhausted;`null` here means "unlimited".
              */
-            fun maxRedemptions(maxRedemptions: Long?) = apply {
-                this.maxRedemptions = maxRedemptions
-            }
+            fun maxRedemptions(maxRedemptions: Long?) =
+                maxRedemptions(JsonField.ofNullable(maxRedemptions))
 
             /**
              * The maximum number of redemptions allowed for this coupon before it is
@@ -190,6 +259,14 @@ constructor(
             @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun maxRedemptions(maxRedemptions: Optional<Long>) =
                 maxRedemptions(maxRedemptions.orElse(null) as Long?)
+
+            /**
+             * The maximum number of redemptions allowed for this coupon before it is
+             * exhausted;`null` here means "unlimited".
+             */
+            fun maxRedemptions(maxRedemptions: JsonField<Long>) = apply {
+                this.maxRedemptions = maxRedemptions
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -261,6 +338,8 @@ constructor(
 
         fun discount(discount: Discount) = apply { body.discount(discount) }
 
+        fun discount(discount: JsonField<Discount>) = apply { body.discount(discount) }
+
         fun discount(newCouponPercentageDiscount: Discount.NewCouponPercentageDiscount) = apply {
             body.discount(newCouponPercentageDiscount)
         }
@@ -271,6 +350,11 @@ constructor(
 
         /** This string can be used to redeem this coupon for a given subscription. */
         fun redemptionCode(redemptionCode: String) = apply { body.redemptionCode(redemptionCode) }
+
+        /** This string can be used to redeem this coupon for a given subscription. */
+        fun redemptionCode(redemptionCode: JsonField<String>) = apply {
+            body.redemptionCode(redemptionCode)
+        }
 
         /**
          * This allows for a coupon's discount to apply for a limited time (determined in months); a
@@ -295,6 +379,14 @@ constructor(
             durationInMonths(durationInMonths.orElse(null) as Long?)
 
         /**
+         * This allows for a coupon's discount to apply for a limited time (determined in months); a
+         * `null` value here means "unlimited time".
+         */
+        fun durationInMonths(durationInMonths: JsonField<Long>) = apply {
+            body.durationInMonths(durationInMonths)
+        }
+
+        /**
          * The maximum number of redemptions allowed for this coupon before it is exhausted;`null`
          * here means "unlimited".
          */
@@ -313,6 +405,33 @@ constructor(
         @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
         fun maxRedemptions(maxRedemptions: Optional<Long>) =
             maxRedemptions(maxRedemptions.orElse(null) as Long?)
+
+        /**
+         * The maximum number of redemptions allowed for this coupon before it is exhausted;`null`
+         * here means "unlimited".
+         */
+        fun maxRedemptions(maxRedemptions: JsonField<Long>) = apply {
+            body.maxRedemptions(maxRedemptions)
+        }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -412,25 +531,6 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
-        }
-
         fun build(): CouponCreateParams =
             CouponCreateParams(
                 body.build(),
@@ -447,6 +547,8 @@ constructor(
         private val newCouponAmountDiscount: NewCouponAmountDiscount? = null,
         private val _json: JsonValue? = null,
     ) {
+
+        private var validated: Boolean = false
 
         fun newCouponPercentageDiscount(): Optional<NewCouponPercentageDiscount> =
             Optional.ofNullable(newCouponPercentageDiscount)
@@ -473,6 +575,17 @@ constructor(
                 newCouponAmountDiscount != null ->
                     visitor.visitNewCouponAmountDiscount(newCouponAmountDiscount)
                 else -> visitor.unknown(_json)
+            }
+        }
+
+        fun validate(): Discount = apply {
+            if (!validated) {
+                if (newCouponPercentageDiscount == null && newCouponAmountDiscount == null) {
+                    throw OrbInvalidDataException("Unknown Discount: $_json")
+                }
+                newCouponPercentageDiscount?.validate()
+                newCouponAmountDiscount?.validate()
+                validated = true
             }
         }
 
@@ -530,14 +643,20 @@ constructor(
 
                 when (discountType) {
                     "percentage" -> {
-                        tryDeserialize(node, jacksonTypeRef<NewCouponPercentageDiscount>())?.let {
-                            return Discount(newCouponPercentageDiscount = it, _json = json)
-                        }
+                        tryDeserialize(node, jacksonTypeRef<NewCouponPercentageDiscount>()) {
+                                it.validate()
+                            }
+                            ?.let {
+                                return Discount(newCouponPercentageDiscount = it, _json = json)
+                            }
                     }
                     "amount" -> {
-                        tryDeserialize(node, jacksonTypeRef<NewCouponAmountDiscount>())?.let {
-                            return Discount(newCouponAmountDiscount = it, _json = json)
-                        }
+                        tryDeserialize(node, jacksonTypeRef<NewCouponAmountDiscount>()) {
+                                it.validate()
+                            }
+                            ?.let {
+                                return Discount(newCouponAmountDiscount = it, _json = json)
+                            }
                     }
                 }
 
@@ -567,20 +686,41 @@ constructor(
         class NewCouponPercentageDiscount
         @JsonCreator
         private constructor(
-            @JsonProperty("discount_type") private val discountType: DiscountType,
-            @JsonProperty("percentage_discount") private val percentageDiscount: Double,
+            @JsonProperty("discount_type")
+            @ExcludeMissing
+            private val discountType: JsonField<DiscountType> = JsonMissing.of(),
+            @JsonProperty("percentage_discount")
+            @ExcludeMissing
+            private val percentageDiscount: JsonField<Double> = JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            @JsonProperty("discount_type") fun discountType(): DiscountType = discountType
+            fun discountType(): DiscountType = discountType.getRequired("discount_type")
+
+            fun percentageDiscount(): Double = percentageDiscount.getRequired("percentage_discount")
+
+            @JsonProperty("discount_type")
+            @ExcludeMissing
+            fun _discountType(): JsonField<DiscountType> = discountType
 
             @JsonProperty("percentage_discount")
-            fun percentageDiscount(): Double = percentageDiscount
+            @ExcludeMissing
+            fun _percentageDiscount(): JsonField<Double> = percentageDiscount
 
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): NewCouponPercentageDiscount = apply {
+                if (!validated) {
+                    discountType()
+                    percentageDiscount()
+                    validated = true
+                }
+            }
 
             fun toBuilder() = Builder().from(this)
 
@@ -591,8 +731,8 @@ constructor(
 
             class Builder {
 
-                private var discountType: DiscountType? = null
-                private var percentageDiscount: Double? = null
+                private var discountType: JsonField<DiscountType>? = null
+                private var percentageDiscount: JsonField<Double>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -604,11 +744,17 @@ constructor(
                             newCouponPercentageDiscount.additionalProperties.toMutableMap()
                     }
 
-                fun discountType(discountType: DiscountType) = apply {
+                fun discountType(discountType: DiscountType) =
+                    discountType(JsonField.of(discountType))
+
+                fun discountType(discountType: JsonField<DiscountType>) = apply {
                     this.discountType = discountType
                 }
 
-                fun percentageDiscount(percentageDiscount: Double) = apply {
+                fun percentageDiscount(percentageDiscount: Double) =
+                    percentageDiscount(JsonField.of(percentageDiscount))
+
+                fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
                     this.percentageDiscount = percentageDiscount
                 }
 
@@ -717,19 +863,41 @@ constructor(
         class NewCouponAmountDiscount
         @JsonCreator
         private constructor(
-            @JsonProperty("amount_discount") private val amountDiscount: String,
-            @JsonProperty("discount_type") private val discountType: DiscountType,
+            @JsonProperty("amount_discount")
+            @ExcludeMissing
+            private val amountDiscount: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("discount_type")
+            @ExcludeMissing
+            private val discountType: JsonField<DiscountType> = JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            @JsonProperty("amount_discount") fun amountDiscount(): String = amountDiscount
+            fun amountDiscount(): String = amountDiscount.getRequired("amount_discount")
 
-            @JsonProperty("discount_type") fun discountType(): DiscountType = discountType
+            fun discountType(): DiscountType = discountType.getRequired("discount_type")
+
+            @JsonProperty("amount_discount")
+            @ExcludeMissing
+            fun _amountDiscount(): JsonField<String> = amountDiscount
+
+            @JsonProperty("discount_type")
+            @ExcludeMissing
+            fun _discountType(): JsonField<DiscountType> = discountType
 
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            private var validated: Boolean = false
+
+            fun validate(): NewCouponAmountDiscount = apply {
+                if (!validated) {
+                    amountDiscount()
+                    discountType()
+                    validated = true
+                }
+            }
 
             fun toBuilder() = Builder().from(this)
 
@@ -740,8 +908,8 @@ constructor(
 
             class Builder {
 
-                private var amountDiscount: String? = null
-                private var discountType: DiscountType? = null
+                private var amountDiscount: JsonField<String>? = null
+                private var discountType: JsonField<DiscountType>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -752,11 +920,17 @@ constructor(
                         newCouponAmountDiscount.additionalProperties.toMutableMap()
                 }
 
-                fun amountDiscount(amountDiscount: String) = apply {
+                fun amountDiscount(amountDiscount: String) =
+                    amountDiscount(JsonField.of(amountDiscount))
+
+                fun amountDiscount(amountDiscount: JsonField<String>) = apply {
                     this.amountDiscount = amountDiscount
                 }
 
-                fun discountType(discountType: DiscountType) = apply {
+                fun discountType(discountType: DiscountType) =
+                    discountType(JsonField.of(discountType))
+
+                fun discountType(discountType: JsonField<DiscountType>) = apply {
                     this.discountType = discountType
                 }
 

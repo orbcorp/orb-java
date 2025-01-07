@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.withorb.api.core.ExcludeMissing
+import com.withorb.api.core.JsonField
+import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
 import com.withorb.api.core.http.Headers
@@ -73,7 +75,7 @@ constructor(
      * A dictionary of custom properties. Values in this dictionary must be numeric, boolean, or
      * strings. Nested dictionaries are disallowed.
      */
-    fun properties(): JsonValue = body.properties()
+    fun _properties(): JsonValue = body._properties()
 
     /**
      * An ISO 8601 format date with no timezone offset (i.e. UTC). This should represent the time
@@ -88,11 +90,27 @@ constructor(
     /** An alias for the Orb customer, whose mapping is specified when creating the customer */
     fun externalCustomerId(): Optional<String> = body.externalCustomerId()
 
+    /** A name to meaningfully identify the action or event type. */
+    fun _eventName(): JsonField<String> = body._eventName()
+
+    /**
+     * An ISO 8601 format date with no timezone offset (i.e. UTC). This should represent the time
+     * that usage was recorded, and is particularly important to attribute usage to a given billing
+     * period.
+     */
+    fun _timestamp(): JsonField<OffsetDateTime> = body._timestamp()
+
+    /** The Orb Customer identifier */
+    fun _customerId(): JsonField<String> = body._customerId()
+
+    /** An alias for the Orb customer, whose mapping is specified when creating the customer */
+    fun _externalCustomerId(): JsonField<String> = body._externalCustomerId()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): EventUpdateBody = body
 
@@ -111,42 +129,86 @@ constructor(
     class EventUpdateBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("event_name") private val eventName: String,
-        @JsonProperty("properties") private val properties: JsonValue,
-        @JsonProperty("timestamp") private val timestamp: OffsetDateTime,
-        @JsonProperty("customer_id") private val customerId: String?,
-        @JsonProperty("external_customer_id") private val externalCustomerId: String?,
+        @JsonProperty("event_name")
+        @ExcludeMissing
+        private val eventName: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("properties")
+        @ExcludeMissing
+        private val properties: JsonValue = JsonMissing.of(),
+        @JsonProperty("timestamp")
+        @ExcludeMissing
+        private val timestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        private val customerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("external_customer_id")
+        @ExcludeMissing
+        private val externalCustomerId: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** A name to meaningfully identify the action or event type. */
-        @JsonProperty("event_name") fun eventName(): String = eventName
+        fun eventName(): String = eventName.getRequired("event_name")
 
         /**
          * A dictionary of custom properties. Values in this dictionary must be numeric, boolean, or
          * strings. Nested dictionaries are disallowed.
          */
-        @JsonProperty("properties") fun properties(): JsonValue = properties
+        @JsonProperty("properties") @ExcludeMissing fun _properties(): JsonValue = properties
 
         /**
          * An ISO 8601 format date with no timezone offset (i.e. UTC). This should represent the
          * time that usage was recorded, and is particularly important to attribute usage to a given
          * billing period.
          */
-        @JsonProperty("timestamp") fun timestamp(): OffsetDateTime = timestamp
+        fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
+
+        /** The Orb Customer identifier */
+        fun customerId(): Optional<String> =
+            Optional.ofNullable(customerId.getNullable("customer_id"))
+
+        /** An alias for the Orb customer, whose mapping is specified when creating the customer */
+        fun externalCustomerId(): Optional<String> =
+            Optional.ofNullable(externalCustomerId.getNullable("external_customer_id"))
+
+        /** A name to meaningfully identify the action or event type. */
+        @JsonProperty("event_name") @ExcludeMissing fun _eventName(): JsonField<String> = eventName
+
+        /**
+         * An ISO 8601 format date with no timezone offset (i.e. UTC). This should represent the
+         * time that usage was recorded, and is particularly important to attribute usage to a given
+         * billing period.
+         */
+        @JsonProperty("timestamp")
+        @ExcludeMissing
+        fun _timestamp(): JsonField<OffsetDateTime> = timestamp
 
         /** The Orb Customer identifier */
         @JsonProperty("customer_id")
-        fun customerId(): Optional<String> = Optional.ofNullable(customerId)
+        @ExcludeMissing
+        fun _customerId(): JsonField<String> = customerId
 
         /** An alias for the Orb customer, whose mapping is specified when creating the customer */
         @JsonProperty("external_customer_id")
-        fun externalCustomerId(): Optional<String> = Optional.ofNullable(externalCustomerId)
+        @ExcludeMissing
+        fun _externalCustomerId(): JsonField<String> = externalCustomerId
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): EventUpdateBody = apply {
+            if (!validated) {
+                eventName()
+                timestamp()
+                customerId()
+                externalCustomerId()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -157,11 +219,11 @@ constructor(
 
         class Builder {
 
-            private var eventName: String? = null
+            private var eventName: JsonField<String>? = null
             private var properties: JsonValue? = null
-            private var timestamp: OffsetDateTime? = null
-            private var customerId: String? = null
-            private var externalCustomerId: String? = null
+            private var timestamp: JsonField<OffsetDateTime>? = null
+            private var customerId: JsonField<String> = JsonMissing.of()
+            private var externalCustomerId: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -175,7 +237,10 @@ constructor(
             }
 
             /** A name to meaningfully identify the action or event type. */
-            fun eventName(eventName: String) = apply { this.eventName = eventName }
+            fun eventName(eventName: String) = eventName(JsonField.of(eventName))
+
+            /** A name to meaningfully identify the action or event type. */
+            fun eventName(eventName: JsonField<String>) = apply { this.eventName = eventName }
 
             /**
              * A dictionary of custom properties. Values in this dictionary must be numeric,
@@ -188,26 +253,44 @@ constructor(
              * time that usage was recorded, and is particularly important to attribute usage to a
              * given billing period.
              */
-            fun timestamp(timestamp: OffsetDateTime) = apply { this.timestamp = timestamp }
+            fun timestamp(timestamp: OffsetDateTime) = timestamp(JsonField.of(timestamp))
+
+            /**
+             * An ISO 8601 format date with no timezone offset (i.e. UTC). This should represent the
+             * time that usage was recorded, and is particularly important to attribute usage to a
+             * given billing period.
+             */
+            fun timestamp(timestamp: JsonField<OffsetDateTime>) = apply {
+                this.timestamp = timestamp
+            }
 
             /** The Orb Customer identifier */
-            fun customerId(customerId: String?) = apply { this.customerId = customerId }
+            fun customerId(customerId: String?) = customerId(JsonField.ofNullable(customerId))
 
             /** The Orb Customer identifier */
             fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
 
+            /** The Orb Customer identifier */
+            fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
+
             /**
              * An alias for the Orb customer, whose mapping is specified when creating the customer
              */
-            fun externalCustomerId(externalCustomerId: String?) = apply {
-                this.externalCustomerId = externalCustomerId
-            }
+            fun externalCustomerId(externalCustomerId: String?) =
+                externalCustomerId(JsonField.ofNullable(externalCustomerId))
 
             /**
              * An alias for the Orb customer, whose mapping is specified when creating the customer
              */
             fun externalCustomerId(externalCustomerId: Optional<String>) =
                 externalCustomerId(externalCustomerId.orElse(null))
+
+            /**
+             * An alias for the Orb customer, whose mapping is specified when creating the customer
+             */
+            fun externalCustomerId(externalCustomerId: JsonField<String>) = apply {
+                this.externalCustomerId = externalCustomerId
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -285,6 +368,9 @@ constructor(
         /** A name to meaningfully identify the action or event type. */
         fun eventName(eventName: String) = apply { body.eventName(eventName) }
 
+        /** A name to meaningfully identify the action or event type. */
+        fun eventName(eventName: JsonField<String>) = apply { body.eventName(eventName) }
+
         /**
          * A dictionary of custom properties. Values in this dictionary must be numeric, boolean, or
          * strings. Nested dictionaries are disallowed.
@@ -298,11 +384,21 @@ constructor(
          */
         fun timestamp(timestamp: OffsetDateTime) = apply { body.timestamp(timestamp) }
 
+        /**
+         * An ISO 8601 format date with no timezone offset (i.e. UTC). This should represent the
+         * time that usage was recorded, and is particularly important to attribute usage to a given
+         * billing period.
+         */
+        fun timestamp(timestamp: JsonField<OffsetDateTime>) = apply { body.timestamp(timestamp) }
+
         /** The Orb Customer identifier */
         fun customerId(customerId: String?) = apply { body.customerId(customerId) }
 
         /** The Orb Customer identifier */
         fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
+
+        /** The Orb Customer identifier */
+        fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
 
         /** An alias for the Orb customer, whose mapping is specified when creating the customer */
         fun externalCustomerId(externalCustomerId: String?) = apply {
@@ -312,6 +408,30 @@ constructor(
         /** An alias for the Orb customer, whose mapping is specified when creating the customer */
         fun externalCustomerId(externalCustomerId: Optional<String>) =
             externalCustomerId(externalCustomerId.orElse(null))
+
+        /** An alias for the Orb customer, whose mapping is specified when creating the customer */
+        fun externalCustomerId(externalCustomerId: JsonField<String>) = apply {
+            body.externalCustomerId(externalCustomerId)
+        }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -409,25 +529,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): EventUpdateParams =

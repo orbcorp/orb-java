@@ -64,21 +64,23 @@ private constructor(
      */
     @JsonProperty("applies_to_price_ids")
     @ExcludeMissing
-    fun _appliesToPriceIds() = appliesToPriceIds
+    fun _appliesToPriceIds(): JsonField<List<String>> = appliesToPriceIds
 
-    @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
+    @JsonProperty("discount_type")
+    @ExcludeMissing
+    fun _discountType(): JsonField<DiscountType> = discountType
 
-    @JsonProperty("reason") @ExcludeMissing fun _reason() = reason
+    @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<String> = reason
 
     /** Only available if discount_type is `trial` */
     @JsonProperty("trial_amount_discount")
     @ExcludeMissing
-    fun _trialAmountDiscount() = trialAmountDiscount
+    fun _trialAmountDiscount(): JsonField<String> = trialAmountDiscount
 
     /** Only available if discount_type is `trial` */
     @JsonProperty("trial_percentage_discount")
     @ExcludeMissing
-    fun _trialPercentageDiscount() = trialPercentageDiscount
+    fun _trialPercentageDiscount(): JsonField<Double> = trialPercentageDiscount
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -106,8 +108,8 @@ private constructor(
 
     class Builder {
 
-        private var appliesToPriceIds: JsonField<List<String>> = JsonMissing.of()
-        private var discountType: JsonField<DiscountType> = JsonMissing.of()
+        private var appliesToPriceIds: JsonField<MutableList<String>>? = null
+        private var discountType: JsonField<DiscountType>? = null
         private var reason: JsonField<String> = JsonMissing.of()
         private var trialAmountDiscount: JsonField<String> = JsonMissing.of()
         private var trialPercentageDiscount: JsonField<Double> = JsonMissing.of()
@@ -115,7 +117,7 @@ private constructor(
 
         @JvmSynthetic
         internal fun from(trialDiscount: TrialDiscount) = apply {
-            appliesToPriceIds = trialDiscount.appliesToPriceIds
+            appliesToPriceIds = trialDiscount.appliesToPriceIds.map { it.toMutableList() }
             discountType = trialDiscount.discountType
             reason = trialDiscount.reason
             trialAmountDiscount = trialDiscount.trialAmountDiscount
@@ -135,7 +137,24 @@ private constructor(
          * be a subset of prices.
          */
         fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
-            this.appliesToPriceIds = appliesToPriceIds
+            this.appliesToPriceIds = appliesToPriceIds.map { it.toMutableList() }
+        }
+
+        /**
+         * List of price_ids that this discount applies to. For plan/plan phase discounts, this can
+         * be a subset of prices.
+         */
+        fun addAppliesToPriceId(appliesToPriceId: String) = apply {
+            appliesToPriceIds =
+                (appliesToPriceIds ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(appliesToPriceId)
+                }
         }
 
         fun discountType(discountType: DiscountType) = discountType(JsonField.of(discountType))
@@ -144,13 +163,19 @@ private constructor(
             this.discountType = discountType
         }
 
-        fun reason(reason: String) = reason(JsonField.of(reason))
+        fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
+
+        fun reason(reason: Optional<String>) = reason(reason.orElse(null))
 
         fun reason(reason: JsonField<String>) = apply { this.reason = reason }
 
         /** Only available if discount_type is `trial` */
-        fun trialAmountDiscount(trialAmountDiscount: String) =
-            trialAmountDiscount(JsonField.of(trialAmountDiscount))
+        fun trialAmountDiscount(trialAmountDiscount: String?) =
+            trialAmountDiscount(JsonField.ofNullable(trialAmountDiscount))
+
+        /** Only available if discount_type is `trial` */
+        fun trialAmountDiscount(trialAmountDiscount: Optional<String>) =
+            trialAmountDiscount(trialAmountDiscount.orElse(null))
 
         /** Only available if discount_type is `trial` */
         fun trialAmountDiscount(trialAmountDiscount: JsonField<String>) = apply {
@@ -158,8 +183,17 @@ private constructor(
         }
 
         /** Only available if discount_type is `trial` */
+        fun trialPercentageDiscount(trialPercentageDiscount: Double?) =
+            trialPercentageDiscount(JsonField.ofNullable(trialPercentageDiscount))
+
+        /** Only available if discount_type is `trial` */
         fun trialPercentageDiscount(trialPercentageDiscount: Double) =
-            trialPercentageDiscount(JsonField.of(trialPercentageDiscount))
+            trialPercentageDiscount(trialPercentageDiscount as Double?)
+
+        /** Only available if discount_type is `trial` */
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun trialPercentageDiscount(trialPercentageDiscount: Optional<Double>) =
+            trialPercentageDiscount(trialPercentageDiscount.orElse(null) as Double?)
 
         /** Only available if discount_type is `trial` */
         fun trialPercentageDiscount(trialPercentageDiscount: JsonField<Double>) = apply {
@@ -187,8 +221,11 @@ private constructor(
 
         fun build(): TrialDiscount =
             TrialDiscount(
-                appliesToPriceIds.map { it.toImmutable() },
-                discountType,
+                checkNotNull(appliesToPriceIds) {
+                        "`appliesToPriceIds` is required but was not set"
+                    }
+                    .map { it.toImmutable() },
+                checkNotNull(discountType) { "`discountType` is required but was not set" },
                 reason,
                 trialAmountDiscount,
                 trialPercentageDiscount,

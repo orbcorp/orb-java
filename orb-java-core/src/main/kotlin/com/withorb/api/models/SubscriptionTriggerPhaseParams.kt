@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.withorb.api.core.ExcludeMissing
+import com.withorb.api.core.JsonField
+import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
 import com.withorb.api.core.http.Headers
@@ -34,11 +36,17 @@ constructor(
      */
     fun effectiveDate(): Optional<LocalDate> = body.effectiveDate()
 
+    /**
+     * The date on which the phase change should take effect. If not provided, defaults to today in
+     * the customer's timezone.
+     */
+    fun _effectiveDate(): JsonField<LocalDate> = body._effectiveDate()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): SubscriptionTriggerPhaseBody = body
 
@@ -57,7 +65,9 @@ constructor(
     class SubscriptionTriggerPhaseBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("effective_date") private val effectiveDate: LocalDate?,
+        @JsonProperty("effective_date")
+        @ExcludeMissing
+        private val effectiveDate: JsonField<LocalDate> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
@@ -66,12 +76,29 @@ constructor(
          * The date on which the phase change should take effect. If not provided, defaults to today
          * in the customer's timezone.
          */
+        fun effectiveDate(): Optional<LocalDate> =
+            Optional.ofNullable(effectiveDate.getNullable("effective_date"))
+
+        /**
+         * The date on which the phase change should take effect. If not provided, defaults to today
+         * in the customer's timezone.
+         */
         @JsonProperty("effective_date")
-        fun effectiveDate(): Optional<LocalDate> = Optional.ofNullable(effectiveDate)
+        @ExcludeMissing
+        fun _effectiveDate(): JsonField<LocalDate> = effectiveDate
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): SubscriptionTriggerPhaseBody = apply {
+            if (!validated) {
+                effectiveDate()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -82,7 +109,7 @@ constructor(
 
         class Builder {
 
-            private var effectiveDate: LocalDate? = null
+            private var effectiveDate: JsonField<LocalDate> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -96,9 +123,8 @@ constructor(
              * The date on which the phase change should take effect. If not provided, defaults to
              * today in the customer's timezone.
              */
-            fun effectiveDate(effectiveDate: LocalDate?) = apply {
-                this.effectiveDate = effectiveDate
-            }
+            fun effectiveDate(effectiveDate: LocalDate?) =
+                effectiveDate(JsonField.ofNullable(effectiveDate))
 
             /**
              * The date on which the phase change should take effect. If not provided, defaults to
@@ -106,6 +132,14 @@ constructor(
              */
             fun effectiveDate(effectiveDate: Optional<LocalDate>) =
                 effectiveDate(effectiveDate.orElse(null))
+
+            /**
+             * The date on which the phase change should take effect. If not provided, defaults to
+             * today in the customer's timezone.
+             */
+            fun effectiveDate(effectiveDate: JsonField<LocalDate>) = apply {
+                this.effectiveDate = effectiveDate
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -186,6 +220,33 @@ constructor(
          */
         fun effectiveDate(effectiveDate: Optional<LocalDate>) =
             effectiveDate(effectiveDate.orElse(null))
+
+        /**
+         * The date on which the phase change should take effect. If not provided, defaults to today
+         * in the customer's timezone.
+         */
+        fun effectiveDate(effectiveDate: JsonField<LocalDate>) = apply {
+            body.effectiveDate(effectiveDate)
+        }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -283,25 +344,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): SubscriptionTriggerPhaseParams =

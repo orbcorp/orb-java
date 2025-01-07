@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.withorb.api.core.ExcludeMissing
+import com.withorb.api.core.JsonField
+import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
 import com.withorb.api.core.http.Headers
@@ -44,11 +46,24 @@ constructor(
      */
     fun metadata(): Optional<Metadata> = body.metadata()
 
+    /**
+     * An optional user-defined ID for this plan resource, used throughout the system as an alias
+     * for this Plan. Use this field to identify a plan by an existing identifier in your system.
+     */
+    fun _externalPlanId(): JsonField<String> = body._externalPlanId()
+
+    /**
+     * User-specified key/value pairs for the resource. Individual keys can be removed by setting
+     * the value to `null`, and the entire metadata mapping can be cleared by setting `metadata` to
+     * `null`.
+     */
+    fun _metadata(): JsonField<Metadata> = body._metadata()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     @JvmSynthetic internal fun getBody(): PlanExternalPlanIdUpdateBody = body
 
@@ -67,8 +82,12 @@ constructor(
     class PlanExternalPlanIdUpdateBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("external_plan_id") private val externalPlanId: String?,
-        @JsonProperty("metadata") private val metadata: Metadata?,
+        @JsonProperty("external_plan_id")
+        @ExcludeMissing
+        private val externalPlanId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("metadata")
+        @ExcludeMissing
+        private val metadata: JsonField<Metadata> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
@@ -78,19 +97,45 @@ constructor(
          * alias for this Plan. Use this field to identify a plan by an existing identifier in your
          * system.
          */
-        @JsonProperty("external_plan_id")
-        fun externalPlanId(): Optional<String> = Optional.ofNullable(externalPlanId)
+        fun externalPlanId(): Optional<String> =
+            Optional.ofNullable(externalPlanId.getNullable("external_plan_id"))
 
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        @JsonProperty("metadata") fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+        fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata.getNullable("metadata"))
+
+        /**
+         * An optional user-defined ID for this plan resource, used throughout the system as an
+         * alias for this Plan. Use this field to identify a plan by an existing identifier in your
+         * system.
+         */
+        @JsonProperty("external_plan_id")
+        @ExcludeMissing
+        fun _externalPlanId(): JsonField<String> = externalPlanId
+
+        /**
+         * User-specified key/value pairs for the resource. Individual keys can be removed by
+         * setting the value to `null`, and the entire metadata mapping can be cleared by setting
+         * `metadata` to `null`.
+         */
+        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): PlanExternalPlanIdUpdateBody = apply {
+            if (!validated) {
+                externalPlanId()
+                metadata().map { it.validate() }
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -101,8 +146,8 @@ constructor(
 
         class Builder {
 
-            private var externalPlanId: String? = null
-            private var metadata: Metadata? = null
+            private var externalPlanId: JsonField<String> = JsonMissing.of()
+            private var metadata: JsonField<Metadata> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -118,9 +163,8 @@ constructor(
              * alias for this Plan. Use this field to identify a plan by an existing identifier in
              * your system.
              */
-            fun externalPlanId(externalPlanId: String?) = apply {
-                this.externalPlanId = externalPlanId
-            }
+            fun externalPlanId(externalPlanId: String?) =
+                externalPlanId(JsonField.ofNullable(externalPlanId))
 
             /**
              * An optional user-defined ID for this plan resource, used throughout the system as an
@@ -131,11 +175,20 @@ constructor(
                 externalPlanId(externalPlanId.orElse(null))
 
             /**
+             * An optional user-defined ID for this plan resource, used throughout the system as an
+             * alias for this Plan. Use this field to identify a plan by an existing identifier in
+             * your system.
+             */
+            fun externalPlanId(externalPlanId: JsonField<String>) = apply {
+                this.externalPlanId = externalPlanId
+            }
+
+            /**
              * User-specified key/value pairs for the resource. Individual keys can be removed by
              * setting the value to `null`, and the entire metadata mapping can be cleared by
              * setting `metadata` to `null`.
              */
-            fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+            fun metadata(metadata: Metadata?) = metadata(JsonField.ofNullable(metadata))
 
             /**
              * User-specified key/value pairs for the resource. Individual keys can be removed by
@@ -143,6 +196,13 @@ constructor(
              * setting `metadata` to `null`.
              */
             fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+
+            /**
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
+             */
+            fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -233,6 +293,15 @@ constructor(
             externalPlanId(externalPlanId.orElse(null))
 
         /**
+         * An optional user-defined ID for this plan resource, used throughout the system as an
+         * alias for this Plan. Use this field to identify a plan by an existing identifier in your
+         * system.
+         */
+        fun externalPlanId(externalPlanId: JsonField<String>) = apply {
+            body.externalPlanId(externalPlanId)
+        }
+
+        /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
@@ -245,6 +314,32 @@ constructor(
          * `metadata` to `null`.
          */
         fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+
+        /**
+         * User-specified key/value pairs for the resource. Individual keys can be removed by
+         * setting the value to `null`, and the entire metadata mapping can be cleared by setting
+         * `metadata` to `null`.
+         */
+        fun metadata(metadata: JsonField<Metadata>) = apply { body.metadata(metadata) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -344,25 +439,6 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
-        }
-
         fun build(): PlanExternalPlanIdUpdateParams =
             PlanExternalPlanIdUpdateParams(
                 checkNotNull(otherExternalPlanId) {
@@ -390,6 +466,14 @@ constructor(
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): Metadata = apply {
+            if (!validated) {
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
