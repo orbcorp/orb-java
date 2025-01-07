@@ -10,6 +10,7 @@ import com.withorb.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
+/** This endpoint can be used to unschedule any pending plan changes on an existing subscription. */
 class SubscriptionUnschedulePendingPlanChangesParams
 constructor(
     private val subscriptionId: String,

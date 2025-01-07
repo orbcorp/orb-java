@@ -16,6 +16,12 @@ import com.withorb.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
+/**
+ * This endpoint allows you to update the `metadata` property on an invoice. If you pass null for
+ * the metadata value, it will clear any existing metadata for that invoice.
+ *
+ * `metadata` can be modified regardless of invoice state.
+ */
 class InvoiceUpdateParams
 constructor(
     private val invoiceId: String,

@@ -10,6 +10,13 @@ import com.withorb.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
+/**
+ * This endpoint can be used to unschedule any pending cancellations for a subscription.
+ *
+ * To be eligible, the subscription must currently be active and have a future cancellation. This
+ * operation will turn on auto-renew, ensuring that the subscription does not end at the currently
+ * scheduled cancellation time.
+ */
 class SubscriptionUnscheduleCancellationParams
 constructor(
     private val subscriptionId: String,

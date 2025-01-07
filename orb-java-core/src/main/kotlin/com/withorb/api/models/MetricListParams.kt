@@ -10,6 +10,10 @@ import java.time.format.DateTimeFormatter
 import java.util.Objects
 import java.util.Optional
 
+/**
+ * This endpoint is used to fetch [metric](../guides/concepts#metric) details given a metric
+ * identifier. It returns information about the metrics including its name, description, and item.
+ */
 class MetricListParams
 constructor(
     private val createdAtGt: OffsetDateTime?,

@@ -30,6 +30,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
+/** This endpoint allows creation of plans including their prices. */
 class PlanCreateParams
 constructor(
     private val body: PlanCreateBody,
