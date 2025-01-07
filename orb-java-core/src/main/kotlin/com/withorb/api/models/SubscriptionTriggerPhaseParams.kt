@@ -17,6 +17,7 @@ import java.time.LocalDate
 import java.util.Objects
 import java.util.Optional
 
+/** Manually trigger a phase, effective the given date (or the current time, if not specified). */
 class SubscriptionTriggerPhaseParams
 constructor(
     private val subscriptionId: String,

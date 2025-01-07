@@ -8,6 +8,7 @@ import com.withorb.api.core.http.QueryParams
 import java.util.Objects
 import java.util.Optional
 
+/** List top-ups */
 class CustomerCreditTopUpListParams
 constructor(
     private val customerId: String,

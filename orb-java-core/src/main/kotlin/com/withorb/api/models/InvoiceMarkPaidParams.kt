@@ -17,6 +17,10 @@ import java.time.LocalDate
 import java.util.Objects
 import java.util.Optional
 
+/**
+ * This endpoint allows an invoice's status to be set the `paid` status. This can only be done to
+ * invoices that are in the `issued` status.
+ */
 class InvoiceMarkPaidParams
 constructor(
     private val invoiceId: String,

@@ -10,6 +10,11 @@ import com.withorb.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
+/**
+ * Closing a backfill makes the updated usage visible in Orb. Upon closing a backfill, Orb will
+ * asynchronously reflect the updated usage in invoice amounts and usage graphs. Once all of the
+ * updates are complete, the backfill's status will transition to `reflected`.
+ */
 class EventBackfillCloseParams
 constructor(
     private val backfillId: String,
