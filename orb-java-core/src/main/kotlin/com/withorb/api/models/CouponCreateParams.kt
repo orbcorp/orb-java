@@ -30,6 +30,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * This endpoint allows the creation of coupons, which can then be redeemed at subscription creation
+ * or plan change.
+ */
 class CouponCreateParams
 constructor(
     private val body: CouponCreateBody,

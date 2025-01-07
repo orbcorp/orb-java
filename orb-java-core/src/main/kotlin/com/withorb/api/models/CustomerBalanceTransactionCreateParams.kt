@@ -19,6 +19,10 @@ import com.withorb.api.errors.OrbInvalidDataException
 import java.util.Objects
 import java.util.Optional
 
+/**
+ * Creates an immutable balance transaction that updates the customer's balance and returns back the
+ * newly created transaction.
+ */
 class CustomerBalanceTransactionCreateParams
 constructor(
     private val customerId: String,
