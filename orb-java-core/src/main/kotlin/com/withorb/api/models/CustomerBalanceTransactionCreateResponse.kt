@@ -86,35 +86,43 @@ private constructor(
     fun type(): Type = type.getRequired("type")
 
     /** A unique id for this transaction. */
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-    @JsonProperty("action") @ExcludeMissing fun _action() = action
+    @JsonProperty("action") @ExcludeMissing fun _action(): JsonField<Action> = action
 
     /** The value of the amount changed in the transaction. */
-    @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
+    @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<String> = amount
 
     /** The creation time of this transaction. */
-    @JsonProperty("created_at") @ExcludeMissing fun _createdAt() = createdAt
+    @JsonProperty("created_at")
+    @ExcludeMissing
+    fun _createdAt(): JsonField<OffsetDateTime> = createdAt
 
-    @JsonProperty("credit_note") @ExcludeMissing fun _creditNote() = creditNote
+    @JsonProperty("credit_note")
+    @ExcludeMissing
+    fun _creditNote(): JsonField<CreditNote> = creditNote
 
     /** An optional description provided for manual customer balance adjustments. */
-    @JsonProperty("description") @ExcludeMissing fun _description() = description
+    @JsonProperty("description") @ExcludeMissing fun _description(): JsonField<String> = description
 
     /**
      * The new value of the customer's balance prior to the transaction, in the customer's currency.
      */
-    @JsonProperty("ending_balance") @ExcludeMissing fun _endingBalance() = endingBalance
+    @JsonProperty("ending_balance")
+    @ExcludeMissing
+    fun _endingBalance(): JsonField<String> = endingBalance
 
-    @JsonProperty("invoice") @ExcludeMissing fun _invoice() = invoice
+    @JsonProperty("invoice") @ExcludeMissing fun _invoice(): JsonField<Invoice> = invoice
 
     /**
      * The original value of the customer's balance prior to the transaction, in the customer's
      * currency.
      */
-    @JsonProperty("starting_balance") @ExcludeMissing fun _startingBalance() = startingBalance
+    @JsonProperty("starting_balance")
+    @ExcludeMissing
+    fun _startingBalance(): JsonField<String> = startingBalance
 
-    @JsonProperty("type") @ExcludeMissing fun _type() = type
+    @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -147,16 +155,16 @@ private constructor(
 
     class Builder {
 
-        private var id: JsonField<String> = JsonMissing.of()
-        private var action: JsonField<Action> = JsonMissing.of()
-        private var amount: JsonField<String> = JsonMissing.of()
-        private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var creditNote: JsonField<CreditNote> = JsonMissing.of()
-        private var description: JsonField<String> = JsonMissing.of()
-        private var endingBalance: JsonField<String> = JsonMissing.of()
-        private var invoice: JsonField<Invoice> = JsonMissing.of()
-        private var startingBalance: JsonField<String> = JsonMissing.of()
-        private var type: JsonField<Type> = JsonMissing.of()
+        private var id: JsonField<String>? = null
+        private var action: JsonField<Action>? = null
+        private var amount: JsonField<String>? = null
+        private var createdAt: JsonField<OffsetDateTime>? = null
+        private var creditNote: JsonField<CreditNote>? = null
+        private var description: JsonField<String>? = null
+        private var endingBalance: JsonField<String>? = null
+        private var invoice: JsonField<Invoice>? = null
+        private var startingBalance: JsonField<String>? = null
+        private var type: JsonField<Type>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -199,12 +207,17 @@ private constructor(
         /** The creation time of this transaction. */
         fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
-        fun creditNote(creditNote: CreditNote) = creditNote(JsonField.of(creditNote))
+        fun creditNote(creditNote: CreditNote?) = creditNote(JsonField.ofNullable(creditNote))
+
+        fun creditNote(creditNote: Optional<CreditNote>) = creditNote(creditNote.orElse(null))
 
         fun creditNote(creditNote: JsonField<CreditNote>) = apply { this.creditNote = creditNote }
 
         /** An optional description provided for manual customer balance adjustments. */
-        fun description(description: String) = description(JsonField.of(description))
+        fun description(description: String?) = description(JsonField.ofNullable(description))
+
+        /** An optional description provided for manual customer balance adjustments. */
+        fun description(description: Optional<String>) = description(description.orElse(null))
 
         /** An optional description provided for manual customer balance adjustments. */
         fun description(description: JsonField<String>) = apply { this.description = description }
@@ -223,7 +236,9 @@ private constructor(
             this.endingBalance = endingBalance
         }
 
-        fun invoice(invoice: Invoice) = invoice(JsonField.of(invoice))
+        fun invoice(invoice: Invoice?) = invoice(JsonField.ofNullable(invoice))
+
+        fun invoice(invoice: Optional<Invoice>) = invoice(invoice.orElse(null))
 
         fun invoice(invoice: JsonField<Invoice>) = apply { this.invoice = invoice }
 
@@ -267,16 +282,16 @@ private constructor(
 
         fun build(): CustomerBalanceTransactionCreateResponse =
             CustomerBalanceTransactionCreateResponse(
-                id,
-                action,
-                amount,
-                createdAt,
-                creditNote,
-                description,
-                endingBalance,
-                invoice,
-                startingBalance,
-                type,
+                checkNotNull(id) { "`id` is required but was not set" },
+                checkNotNull(action) { "`action` is required but was not set" },
+                checkNotNull(amount) { "`amount` is required but was not set" },
+                checkNotNull(createdAt) { "`createdAt` is required but was not set" },
+                checkNotNull(creditNote) { "`creditNote` is required but was not set" },
+                checkNotNull(description) { "`description` is required but was not set" },
+                checkNotNull(endingBalance) { "`endingBalance` is required but was not set" },
+                checkNotNull(invoice) { "`invoice` is required but was not set" },
+                checkNotNull(startingBalance) { "`startingBalance` is required but was not set" },
+                checkNotNull(type) { "`type` is required but was not set" },
                 additionalProperties.toImmutable(),
             )
     }
@@ -387,7 +402,7 @@ private constructor(
         fun id(): String = id.getRequired("id")
 
         /** The id of the Credit note */
-        @JsonProperty("id") @ExcludeMissing fun _id() = id
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -411,7 +426,7 @@ private constructor(
 
         class Builder {
 
-            private var id: JsonField<String> = JsonMissing.of()
+            private var id: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -445,7 +460,11 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): CreditNote = CreditNote(id, additionalProperties.toImmutable())
+            fun build(): CreditNote =
+                CreditNote(
+                    checkNotNull(id) { "`id` is required but was not set" },
+                    additionalProperties.toImmutable()
+                )
         }
 
         override fun equals(other: Any?): Boolean {
@@ -478,7 +497,7 @@ private constructor(
         fun id(): String = id.getRequired("id")
 
         /** The Invoice id */
-        @JsonProperty("id") @ExcludeMissing fun _id() = id
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -502,7 +521,7 @@ private constructor(
 
         class Builder {
 
-            private var id: JsonField<String> = JsonMissing.of()
+            private var id: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -536,7 +555,11 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): Invoice = Invoice(id, additionalProperties.toImmutable())
+            fun build(): Invoice =
+                Invoice(
+                    checkNotNull(id) { "`id` is required but was not set" },
+                    additionalProperties.toImmutable()
+                )
         }
 
         override fun equals(other: Any?): Boolean {

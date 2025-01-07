@@ -248,17 +248,21 @@ private constructor(
          */
         @JsonProperty("applies_to_price_ids")
         @ExcludeMissing
-        fun _appliesToPriceIds() = appliesToPriceIds
+        fun _appliesToPriceIds(): JsonField<List<String>> = appliesToPriceIds
 
-        @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
+        @JsonProperty("discount_type")
+        @ExcludeMissing
+        fun _discountType(): JsonField<DiscountType> = discountType
 
         /**
          * Only available if discount_type is `usage`. Number of usage units that this discount is
          * for
          */
-        @JsonProperty("usage_discount") @ExcludeMissing fun _usageDiscount() = usageDiscount
+        @JsonProperty("usage_discount")
+        @ExcludeMissing
+        fun _usageDiscount(): JsonField<Double> = usageDiscount
 
-        @JsonProperty("reason") @ExcludeMissing fun _reason() = reason
+        @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<String> = reason
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -285,15 +289,15 @@ private constructor(
 
         class Builder {
 
-            private var appliesToPriceIds: JsonField<List<String>> = JsonMissing.of()
-            private var discountType: JsonField<DiscountType> = JsonMissing.of()
-            private var usageDiscount: JsonField<Double> = JsonMissing.of()
+            private var appliesToPriceIds: JsonField<MutableList<String>>? = null
+            private var discountType: JsonField<DiscountType>? = null
+            private var usageDiscount: JsonField<Double>? = null
             private var reason: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(usageDiscount: UsageDiscount) = apply {
-                appliesToPriceIds = usageDiscount.appliesToPriceIds
+                appliesToPriceIds = usageDiscount.appliesToPriceIds.map { it.toMutableList() }
                 discountType = usageDiscount.discountType
                 this.usageDiscount = usageDiscount.usageDiscount
                 reason = usageDiscount.reason
@@ -312,7 +316,24 @@ private constructor(
              * can be a subset of prices.
              */
             fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
-                this.appliesToPriceIds = appliesToPriceIds
+                this.appliesToPriceIds = appliesToPriceIds.map { it.toMutableList() }
+            }
+
+            /**
+             * List of price_ids that this discount applies to. For plan/plan phase discounts, this
+             * can be a subset of prices.
+             */
+            fun addAppliesToPriceId(appliesToPriceId: String) = apply {
+                appliesToPriceIds =
+                    (appliesToPriceIds ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(appliesToPriceId)
+                    }
             }
 
             fun discountType(discountType: DiscountType) = discountType(JsonField.of(discountType))
@@ -335,7 +356,9 @@ private constructor(
                 this.usageDiscount = usageDiscount
             }
 
-            fun reason(reason: String) = reason(JsonField.of(reason))
+            fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
+
+            fun reason(reason: Optional<String>) = reason(reason.orElse(null))
 
             fun reason(reason: JsonField<String>) = apply { this.reason = reason }
 
@@ -360,9 +383,12 @@ private constructor(
 
             fun build(): UsageDiscount =
                 UsageDiscount(
-                    appliesToPriceIds.map { it.toImmutable() },
-                    discountType,
-                    usageDiscount,
+                    checkNotNull(appliesToPriceIds) {
+                            "`appliesToPriceIds` is required but was not set"
+                        }
+                        .map { it.toImmutable() },
+                    checkNotNull(discountType) { "`discountType` is required but was not set" },
+                    checkNotNull(usageDiscount) { "`usageDiscount` is required but was not set" },
                     reason,
                     additionalProperties.toImmutable(),
                 )
