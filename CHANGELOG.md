@@ -1,5 +1,33 @@
 # Changelog
 
+## 0.20.0 (2025-01-07)
+
+Full Changelog: [v0.19.0...v0.20.0](https://github.com/orbcorp/orb-java/compare/v0.19.0...v0.20.0)
+
+### Features
+
+* **client:** add various convenience setters to models ([#184](https://github.com/orbcorp/orb-java/issues/184)) ([5a7e67f](https://github.com/orbcorp/orb-java/commit/5a7e67f4aff5cd005c04148c72c4f9dbb1f65449))
+* **client:** allow setting arbitrary JSON for top-level body params ([5a7e67f](https://github.com/orbcorp/orb-java/commit/5a7e67f4aff5cd005c04148c72c4f9dbb1f65449))
+* **client:** expose getters for `JsonField` of body params ([5a7e67f](https://github.com/orbcorp/orb-java/commit/5a7e67f4aff5cd005c04148c72c4f9dbb1f65449))
+
+
+### Bug Fixes
+
+* **client:** consistently throw on omitting required fields ([5a7e67f](https://github.com/orbcorp/orb-java/commit/5a7e67f4aff5cd005c04148c72c4f9dbb1f65449))
+* **client:** convert `JsonField` containing list type to mutable in builder ([5a7e67f](https://github.com/orbcorp/orb-java/commit/5a7e67f4aff5cd005c04148c72c4f9dbb1f65449))
+
+
+### Documentation
+
+* add params class javadocs ([#182](https://github.com/orbcorp/orb-java/issues/182)) ([e98658d](https://github.com/orbcorp/orb-java/commit/e98658d54e9ef45334ae98fe2901a2db1574a900))
+
+
+### Styles
+
+* **internal:** explicitly add some method return types ([5a7e67f](https://github.com/orbcorp/orb-java/commit/5a7e67f4aff5cd005c04148c72c4f9dbb1f65449))
+* **internal:** move headers and query params setters below others ([5a7e67f](https://github.com/orbcorp/orb-java/commit/5a7e67f4aff5cd005c04148c72c4f9dbb1f65449))
+* **internal:** simplify existing convenience setters on params ([5a7e67f](https://github.com/orbcorp/orb-java/commit/5a7e67f4aff5cd005c04148c72c4f9dbb1f65449))
+
 ## 0.19.0 (2025-01-06)
 
 Full Changelog: [v0.18.0...v0.19.0](https://github.com/orbcorp/orb-java/compare/v0.18.0...v0.19.0)
