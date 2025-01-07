@@ -287,32 +287,42 @@ private constructor(
     fun reportingConfiguration(): Optional<ReportingConfiguration> =
         Optional.ofNullable(reportingConfiguration.getNullable("reporting_configuration"))
 
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-    @JsonProperty("additional_emails") @ExcludeMissing fun _additionalEmails() = additionalEmails
+    @JsonProperty("additional_emails")
+    @ExcludeMissing
+    fun _additionalEmails(): JsonField<List<String>> = additionalEmails
 
-    @JsonProperty("auto_collection") @ExcludeMissing fun _autoCollection() = autoCollection
+    @JsonProperty("auto_collection")
+    @ExcludeMissing
+    fun _autoCollection(): JsonField<Boolean> = autoCollection
 
     /** The customer's current balance in their currency. */
-    @JsonProperty("balance") @ExcludeMissing fun _balance() = balance
+    @JsonProperty("balance") @ExcludeMissing fun _balance(): JsonField<String> = balance
 
-    @JsonProperty("billing_address") @ExcludeMissing fun _billingAddress() = billingAddress
+    @JsonProperty("billing_address")
+    @ExcludeMissing
+    fun _billingAddress(): JsonField<BillingAddress> = billingAddress
 
-    @JsonProperty("created_at") @ExcludeMissing fun _createdAt() = createdAt
+    @JsonProperty("created_at")
+    @ExcludeMissing
+    fun _createdAt(): JsonField<OffsetDateTime> = createdAt
 
-    @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
+    @JsonProperty("currency") @ExcludeMissing fun _currency(): JsonField<String> = currency
 
     /**
      * A valid customer email, to be used for notifications. When Orb triggers payment through a
      * payment gateway, this email will be used for any automatically issued receipts.
      */
-    @JsonProperty("email") @ExcludeMissing fun _email() = email
+    @JsonProperty("email") @ExcludeMissing fun _email(): JsonField<String> = email
 
-    @JsonProperty("email_delivery") @ExcludeMissing fun _emailDelivery() = emailDelivery
+    @JsonProperty("email_delivery")
+    @ExcludeMissing
+    fun _emailDelivery(): JsonField<Boolean> = emailDelivery
 
     @JsonProperty("exempt_from_automated_tax")
     @ExcludeMissing
-    fun _exemptFromAutomatedTax() = exemptFromAutomatedTax
+    fun _exemptFromAutomatedTax(): JsonField<Boolean> = exemptFromAutomatedTax
 
     /**
      * An optional user-defined ID for this customer resource, used throughout the system as an
@@ -321,23 +331,25 @@ private constructor(
      */
     @JsonProperty("external_customer_id")
     @ExcludeMissing
-    fun _externalCustomerId() = externalCustomerId
+    fun _externalCustomerId(): JsonField<String> = externalCustomerId
 
     /**
      * User specified key-value pairs for the resource. If not present, this defaults to an empty
      * dictionary. Individual keys can be removed by setting the value to `null`, and the entire
      * metadata mapping can be cleared by setting `metadata` to `null`.
      */
-    @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
+    @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
 
     /** The full name of the customer */
-    @JsonProperty("name") @ExcludeMissing fun _name() = name
+    @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
     /**
      * This is used for creating charges or invoices in an external system via Orb. When not in test
      * mode, the connection must first be configured in the Orb webapp.
      */
-    @JsonProperty("payment_provider") @ExcludeMissing fun _paymentProvider() = paymentProvider
+    @JsonProperty("payment_provider")
+    @ExcludeMissing
+    fun _paymentProvider(): JsonField<PaymentProvider> = paymentProvider
 
     /**
      * The ID of this customer in an external payments solution, such as Stripe. This is used for
@@ -345,11 +357,13 @@ private constructor(
      */
     @JsonProperty("payment_provider_id")
     @ExcludeMissing
-    fun _paymentProviderId() = paymentProviderId
+    fun _paymentProviderId(): JsonField<String> = paymentProviderId
 
-    @JsonProperty("portal_url") @ExcludeMissing fun _portalUrl() = portalUrl
+    @JsonProperty("portal_url") @ExcludeMissing fun _portalUrl(): JsonField<String> = portalUrl
 
-    @JsonProperty("shipping_address") @ExcludeMissing fun _shippingAddress() = shippingAddress
+    @JsonProperty("shipping_address")
+    @ExcludeMissing
+    fun _shippingAddress(): JsonField<ShippingAddress> = shippingAddress
 
     /**
      * Tax IDs are commonly required to be displayed on customer invoices, which are added to the
@@ -457,22 +471,23 @@ private constructor(
      * |Venezuela           |`ve_rif`    |Venezuelan RIF Number                                                                                  |
      * |Vietnam             |`vn_tin`    |Vietnamese Tax ID Number                                                                               |
      */
-    @JsonProperty("tax_id") @ExcludeMissing fun _taxId() = taxId
+    @JsonProperty("tax_id") @ExcludeMissing fun _taxId(): JsonField<TaxId> = taxId
 
     /**
      * A timezone identifier from the IANA timezone database, such as "America/Los_Angeles". This
      * "defaults to your account's timezone if not set. This cannot be changed after customer
      * creation.
      */
-    @JsonProperty("timezone") @ExcludeMissing fun _timezone() = timezone
+    @JsonProperty("timezone") @ExcludeMissing fun _timezone(): JsonField<String> = timezone
 
     @JsonProperty("accounting_sync_configuration")
     @ExcludeMissing
-    fun _accountingSyncConfiguration() = accountingSyncConfiguration
+    fun _accountingSyncConfiguration(): JsonField<AccountingSyncConfiguration> =
+        accountingSyncConfiguration
 
     @JsonProperty("reporting_configuration")
     @ExcludeMissing
-    fun _reportingConfiguration() = reportingConfiguration
+    fun _reportingConfiguration(): JsonField<ReportingConfiguration> = reportingConfiguration
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -516,25 +531,25 @@ private constructor(
 
     class Builder {
 
-        private var id: JsonField<String> = JsonMissing.of()
-        private var additionalEmails: JsonField<List<String>> = JsonMissing.of()
-        private var autoCollection: JsonField<Boolean> = JsonMissing.of()
-        private var balance: JsonField<String> = JsonMissing.of()
-        private var billingAddress: JsonField<BillingAddress> = JsonMissing.of()
-        private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var currency: JsonField<String> = JsonMissing.of()
-        private var email: JsonField<String> = JsonMissing.of()
-        private var emailDelivery: JsonField<Boolean> = JsonMissing.of()
-        private var exemptFromAutomatedTax: JsonField<Boolean> = JsonMissing.of()
-        private var externalCustomerId: JsonField<String> = JsonMissing.of()
-        private var metadata: JsonField<Metadata> = JsonMissing.of()
-        private var name: JsonField<String> = JsonMissing.of()
-        private var paymentProvider: JsonField<PaymentProvider> = JsonMissing.of()
-        private var paymentProviderId: JsonField<String> = JsonMissing.of()
-        private var portalUrl: JsonField<String> = JsonMissing.of()
-        private var shippingAddress: JsonField<ShippingAddress> = JsonMissing.of()
-        private var taxId: JsonField<TaxId> = JsonMissing.of()
-        private var timezone: JsonField<String> = JsonMissing.of()
+        private var id: JsonField<String>? = null
+        private var additionalEmails: JsonField<MutableList<String>>? = null
+        private var autoCollection: JsonField<Boolean>? = null
+        private var balance: JsonField<String>? = null
+        private var billingAddress: JsonField<BillingAddress>? = null
+        private var createdAt: JsonField<OffsetDateTime>? = null
+        private var currency: JsonField<String>? = null
+        private var email: JsonField<String>? = null
+        private var emailDelivery: JsonField<Boolean>? = null
+        private var exemptFromAutomatedTax: JsonField<Boolean>? = null
+        private var externalCustomerId: JsonField<String>? = null
+        private var metadata: JsonField<Metadata>? = null
+        private var name: JsonField<String>? = null
+        private var paymentProvider: JsonField<PaymentProvider>? = null
+        private var paymentProviderId: JsonField<String>? = null
+        private var portalUrl: JsonField<String>? = null
+        private var shippingAddress: JsonField<ShippingAddress>? = null
+        private var taxId: JsonField<TaxId>? = null
+        private var timezone: JsonField<String>? = null
         private var accountingSyncConfiguration: JsonField<AccountingSyncConfiguration> =
             JsonMissing.of()
         private var reportingConfiguration: JsonField<ReportingConfiguration> = JsonMissing.of()
@@ -543,7 +558,7 @@ private constructor(
         @JvmSynthetic
         internal fun from(customer: Customer) = apply {
             id = customer.id
-            additionalEmails = customer.additionalEmails
+            additionalEmails = customer.additionalEmails.map { it.toMutableList() }
             autoCollection = customer.autoCollection
             balance = customer.balance
             billingAddress = customer.billingAddress
@@ -574,7 +589,20 @@ private constructor(
             additionalEmails(JsonField.of(additionalEmails))
 
         fun additionalEmails(additionalEmails: JsonField<List<String>>) = apply {
-            this.additionalEmails = additionalEmails
+            this.additionalEmails = additionalEmails.map { it.toMutableList() }
+        }
+
+        fun addAdditionalEmail(additionalEmail: String) = apply {
+            additionalEmails =
+                (additionalEmails ?: JsonField.of(mutableListOf())).apply {
+                    asKnown()
+                        .orElseThrow {
+                            IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            )
+                        }
+                        .add(additionalEmail)
+                }
         }
 
         fun autoCollection(autoCollection: Boolean) = autoCollection(JsonField.of(autoCollection))
@@ -589,8 +617,11 @@ private constructor(
         /** The customer's current balance in their currency. */
         fun balance(balance: JsonField<String>) = apply { this.balance = balance }
 
-        fun billingAddress(billingAddress: BillingAddress) =
-            billingAddress(JsonField.of(billingAddress))
+        fun billingAddress(billingAddress: BillingAddress?) =
+            billingAddress(JsonField.ofNullable(billingAddress))
+
+        fun billingAddress(billingAddress: Optional<BillingAddress>) =
+            billingAddress(billingAddress.orElse(null))
 
         fun billingAddress(billingAddress: JsonField<BillingAddress>) = apply {
             this.billingAddress = billingAddress
@@ -600,7 +631,9 @@ private constructor(
 
         fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
-        fun currency(currency: String) = currency(JsonField.of(currency))
+        fun currency(currency: String?) = currency(JsonField.ofNullable(currency))
+
+        fun currency(currency: Optional<String>) = currency(currency.orElse(null))
 
         fun currency(currency: JsonField<String>) = apply { this.currency = currency }
 
@@ -622,8 +655,15 @@ private constructor(
             this.emailDelivery = emailDelivery
         }
 
+        fun exemptFromAutomatedTax(exemptFromAutomatedTax: Boolean?) =
+            exemptFromAutomatedTax(JsonField.ofNullable(exemptFromAutomatedTax))
+
         fun exemptFromAutomatedTax(exemptFromAutomatedTax: Boolean) =
-            exemptFromAutomatedTax(JsonField.of(exemptFromAutomatedTax))
+            exemptFromAutomatedTax(exemptFromAutomatedTax as Boolean?)
+
+        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
+        fun exemptFromAutomatedTax(exemptFromAutomatedTax: Optional<Boolean>) =
+            exemptFromAutomatedTax(exemptFromAutomatedTax.orElse(null) as Boolean?)
 
         fun exemptFromAutomatedTax(exemptFromAutomatedTax: JsonField<Boolean>) = apply {
             this.exemptFromAutomatedTax = exemptFromAutomatedTax
@@ -634,8 +674,16 @@ private constructor(
          * alias for this Customer. Use this field to identify a customer by an existing identifier
          * in your system.
          */
-        fun externalCustomerId(externalCustomerId: String) =
-            externalCustomerId(JsonField.of(externalCustomerId))
+        fun externalCustomerId(externalCustomerId: String?) =
+            externalCustomerId(JsonField.ofNullable(externalCustomerId))
+
+        /**
+         * An optional user-defined ID for this customer resource, used throughout the system as an
+         * alias for this Customer. Use this field to identify a customer by an existing identifier
+         * in your system.
+         */
+        fun externalCustomerId(externalCustomerId: Optional<String>) =
+            externalCustomerId(externalCustomerId.orElse(null))
 
         /**
          * An optional user-defined ID for this customer resource, used throughout the system as an
@@ -670,8 +718,15 @@ private constructor(
          * This is used for creating charges or invoices in an external system via Orb. When not in
          * test mode, the connection must first be configured in the Orb webapp.
          */
-        fun paymentProvider(paymentProvider: PaymentProvider) =
-            paymentProvider(JsonField.of(paymentProvider))
+        fun paymentProvider(paymentProvider: PaymentProvider?) =
+            paymentProvider(JsonField.ofNullable(paymentProvider))
+
+        /**
+         * This is used for creating charges or invoices in an external system via Orb. When not in
+         * test mode, the connection must first be configured in the Orb webapp.
+         */
+        fun paymentProvider(paymentProvider: Optional<PaymentProvider>) =
+            paymentProvider(paymentProvider.orElse(null))
 
         /**
          * This is used for creating charges or invoices in an external system via Orb. When not in
@@ -685,8 +740,15 @@ private constructor(
          * The ID of this customer in an external payments solution, such as Stripe. This is used
          * for creating charges or invoices in the external system via Orb.
          */
-        fun paymentProviderId(paymentProviderId: String) =
-            paymentProviderId(JsonField.of(paymentProviderId))
+        fun paymentProviderId(paymentProviderId: String?) =
+            paymentProviderId(JsonField.ofNullable(paymentProviderId))
+
+        /**
+         * The ID of this customer in an external payments solution, such as Stripe. This is used
+         * for creating charges or invoices in the external system via Orb.
+         */
+        fun paymentProviderId(paymentProviderId: Optional<String>) =
+            paymentProviderId(paymentProviderId.orElse(null))
 
         /**
          * The ID of this customer in an external payments solution, such as Stripe. This is used
@@ -696,12 +758,17 @@ private constructor(
             this.paymentProviderId = paymentProviderId
         }
 
-        fun portalUrl(portalUrl: String) = portalUrl(JsonField.of(portalUrl))
+        fun portalUrl(portalUrl: String?) = portalUrl(JsonField.ofNullable(portalUrl))
+
+        fun portalUrl(portalUrl: Optional<String>) = portalUrl(portalUrl.orElse(null))
 
         fun portalUrl(portalUrl: JsonField<String>) = apply { this.portalUrl = portalUrl }
 
-        fun shippingAddress(shippingAddress: ShippingAddress) =
-            shippingAddress(JsonField.of(shippingAddress))
+        fun shippingAddress(shippingAddress: ShippingAddress?) =
+            shippingAddress(JsonField.ofNullable(shippingAddress))
+
+        fun shippingAddress(shippingAddress: Optional<ShippingAddress>) =
+            shippingAddress(shippingAddress.orElse(null))
 
         fun shippingAddress(shippingAddress: JsonField<ShippingAddress>) = apply {
             this.shippingAddress = shippingAddress
@@ -813,7 +880,115 @@ private constructor(
          * |Venezuela           |`ve_rif`    |Venezuelan RIF Number                                                                                  |
          * |Vietnam             |`vn_tin`    |Vietnamese Tax ID Number                                                                               |
          */
-        fun taxId(taxId: TaxId) = taxId(JsonField.of(taxId))
+        fun taxId(taxId: TaxId?) = taxId(JsonField.ofNullable(taxId))
+
+        /**
+         * Tax IDs are commonly required to be displayed on customer invoices, which are added to
+         * the headers of invoices.
+         *
+         * ### Supported Tax ID Countries and Types
+         * |Country             |Type        |Description                                                                                            |
+         * |--------------------|------------|-------------------------------------------------------------------------------------------------------|
+         * |Andorra             |`ad_nrt`    |Andorran NRT Number                                                                                    |
+         * |Argentina           |`ar_cuit`   |Argentinian Tax ID Number                                                                              |
+         * |Australia           |`au_abn`    |Australian Business Number (AU ABN)                                                                    |
+         * |Australia           |`au_arn`    |Australian Taxation Office Reference Number                                                            |
+         * |Austria             |`eu_vat`    |European VAT Number                                                                                    |
+         * |Bahrain             |`bh_vat`    |Bahraini VAT Number                                                                                    |
+         * |Belgium             |`eu_vat`    |European VAT Number                                                                                    |
+         * |Bolivia             |`bo_tin`    |Bolivian Tax ID                                                                                        |
+         * |Brazil              |`br_cnpj`   |Brazilian CNPJ Number                                                                                  |
+         * |Brazil              |`br_cpf`    |Brazilian CPF Number                                                                                   |
+         * |Bulgaria            |`bg_uic`    |Bulgaria Unified Identification Code                                                                   |
+         * |Bulgaria            |`eu_vat`    |European VAT Number                                                                                    |
+         * |Canada              |`ca_bn`     |Canadian BN                                                                                            |
+         * |Canada              |`ca_gst_hst`|Canadian GST/HST Number                                                                                |
+         * |Canada              |`ca_pst_bc` |Canadian PST Number (British Columbia)                                                                 |
+         * |Canada              |`ca_pst_mb` |Canadian PST Number (Manitoba)                                                                         |
+         * |Canada              |`ca_pst_sk` |Canadian PST Number (Saskatchewan)                                                                     |
+         * |Canada              |`ca_qst`    |Canadian QST Number (Québec)                                                                           |
+         * |Chile               |`cl_tin`    |Chilean TIN                                                                                            |
+         * |China               |`cn_tin`    |Chinese Tax ID                                                                                         |
+         * |Colombia            |`co_nit`    |Colombian NIT Number                                                                                   |
+         * |Costa Rica          |`cr_tin`    |Costa Rican Tax ID                                                                                     |
+         * |Croatia             |`eu_vat`    |European VAT Number                                                                                    |
+         * |Cyprus              |`eu_vat`    |European VAT Number                                                                                    |
+         * |Czech Republic      |`eu_vat`    |European VAT Number                                                                                    |
+         * |Denmark             |`eu_vat`    |European VAT Number                                                                                    |
+         * |Dominican Republic  |`do_rcn`    |Dominican RCN Number                                                                                   |
+         * |Ecuador             |`ec_ruc`    |Ecuadorian RUC Number                                                                                  |
+         * |Egypt               |`eg_tin`    |Egyptian Tax Identification Number                                                                     |
+         * |El Salvador         |`sv_nit`    |El Salvadorian NIT Number                                                                              |
+         * |Estonia             |`eu_vat`    |European VAT Number                                                                                    |
+         * |EU                  |`eu_oss_vat`|European One Stop Shop VAT Number for non-Union scheme                                                 |
+         * |Finland             |`eu_vat`    |European VAT Number                                                                                    |
+         * |France              |`eu_vat`    |European VAT Number                                                                                    |
+         * |Georgia             |`ge_vat`    |Georgian VAT                                                                                           |
+         * |Germany             |`eu_vat`    |European VAT Number                                                                                    |
+         * |Greece              |`eu_vat`    |European VAT Number                                                                                    |
+         * |Hong Kong           |`hk_br`     |Hong Kong BR Number                                                                                    |
+         * |Hungary             |`eu_vat`    |European VAT Number                                                                                    |
+         * |Hungary             |`hu_tin`    |Hungary Tax Number (adószám)                                                                           |
+         * |Iceland             |`is_vat`    |Icelandic VAT                                                                                          |
+         * |India               |`in_gst`    |Indian GST Number                                                                                      |
+         * |Indonesia           |`id_npwp`   |Indonesian NPWP Number                                                                                 |
+         * |Ireland             |`eu_vat`    |European VAT Number                                                                                    |
+         * |Israel              |`il_vat`    |Israel VAT                                                                                             |
+         * |Italy               |`eu_vat`    |European VAT Number                                                                                    |
+         * |Japan               |`jp_cn`     |Japanese Corporate Number (_Hōjin Bangō_)                                                              |
+         * |Japan               |`jp_rn`     |Japanese Registered Foreign Businesses' Registration Number (_Tōroku Kokugai Jigyōsha no Tōroku Bangō_)|
+         * |Japan               |`jp_trn`    |Japanese Tax Registration Number (_Tōroku Bangō_)                                                      |
+         * |Kazakhstan          |`kz_bin`    |Kazakhstani Business Identification Number                                                             |
+         * |Kenya               |`ke_pin`    |Kenya Revenue Authority Personal Identification Number                                                 |
+         * |Latvia              |`eu_vat`    |European VAT Number                                                                                    |
+         * |Liechtenstein       |`li_uid`    |Liechtensteinian UID Number                                                                            |
+         * |Lithuania           |`eu_vat`    |European VAT Number                                                                                    |
+         * |Luxembourg          |`eu_vat`    |European VAT Number                                                                                    |
+         * |Malaysia            |`my_frp`    |Malaysian FRP Number                                                                                   |
+         * |Malaysia            |`my_itn`    |Malaysian ITN                                                                                          |
+         * |Malaysia            |`my_sst`    |Malaysian SST Number                                                                                   |
+         * |Malta               |`eu_vat `   |European VAT Number                                                                                    |
+         * |Mexico              |`mx_rfc`    |Mexican RFC Number                                                                                     |
+         * |Netherlands         |`eu_vat`    |European VAT Number                                                                                    |
+         * |New Zealand         |`nz_gst`    |New Zealand GST Number                                                                                 |
+         * |Nigeria             |`ng_tin`    |Nigerian Tax Identification Number                                                                     |
+         * |Norway              |`no_vat`    |Norwegian VAT Number                                                                                   |
+         * |Norway              |`no_voec`   |Norwegian VAT on e-commerce Number                                                                     |
+         * |Oman                |`om_vat`    |Omani VAT Number                                                                                       |
+         * |Peru                |`pe_ruc`    |Peruvian RUC Number                                                                                    |
+         * |Philippines         |`ph_tin `   |Philippines Tax Identification Number                                                                  |
+         * |Poland              |`eu_vat`    |European VAT Number                                                                                    |
+         * |Portugal            |`eu_vat`    |European VAT Number                                                                                    |
+         * |Romania             |`eu_vat`    |European VAT Number                                                                                    |
+         * |Romania             |`ro_tin`    |Romanian Tax ID Number                                                                                 |
+         * |Russia              |`ru_inn`    |Russian INN                                                                                            |
+         * |Russia              |`ru_kpp`    |Russian KPP                                                                                            |
+         * |Saudi Arabia        |`sa_vat`    |Saudi Arabia VAT                                                                                       |
+         * |Serbia              |`rs_pib`    |Serbian PIB Number                                                                                     |
+         * |Singapore           |`sg_gst`    |Singaporean GST                                                                                        |
+         * |Singapore           |`sg_uen`    |Singaporean UEN                                                                                        |
+         * |Slovakia            |`eu_vat`    |European VAT Number                                                                                    |
+         * |Slovenia            |`eu_vat`    |European VAT Number                                                                                    |
+         * |Slovenia            |`si_tin`    |Slovenia Tax Number (davčna številka)                                                                  |
+         * |South Africa        |`za_vat`    |South African VAT Number                                                                               |
+         * |South Korea         |`kr_brn`    |Korean BRN                                                                                             |
+         * |Spain               |`es_cif`    |Spanish NIF Number (previously Spanish CIF Number)                                                     |
+         * |Spain               |`eu_vat`    |European VAT Number                                                                                    |
+         * |Sweden              |`eu_vat`    |European VAT Number                                                                                    |
+         * |Switzerland         |`ch_vat`    |Switzerland VAT Number                                                                                 |
+         * |Taiwan              |`tw_vat`    |Taiwanese VAT                                                                                          |
+         * |Thailand            |`th_vat`    |Thai VAT                                                                                               |
+         * |Turkey              |`tr_tin`    |Turkish Tax Identification Number                                                                      |
+         * |Ukraine             |`ua_vat`    |Ukrainian VAT                                                                                          |
+         * |United Arab Emirates|`ae_trn`    |United Arab Emirates TRN                                                                               |
+         * |United Kingdom      |`eu_vat`    |Northern Ireland VAT Number                                                                            |
+         * |United Kingdom      |`gb_vat`    |United Kingdom VAT Number                                                                              |
+         * |United States       |`us_ein`    |United States EIN                                                                                      |
+         * |Uruguay             |`uy_ruc`    |Uruguayan RUC Number                                                                                   |
+         * |Venezuela           |`ve_rif`    |Venezuelan RIF Number                                                                                  |
+         * |Vietnam             |`vn_tin`    |Vietnamese Tax ID Number                                                                               |
+         */
+        fun taxId(taxId: Optional<TaxId>) = taxId(taxId.orElse(null))
 
         /**
          * Tax IDs are commonly required to be displayed on customer invoices, which are added to
@@ -937,15 +1112,22 @@ private constructor(
          */
         fun timezone(timezone: JsonField<String>) = apply { this.timezone = timezone }
 
-        fun accountingSyncConfiguration(accountingSyncConfiguration: AccountingSyncConfiguration) =
-            accountingSyncConfiguration(JsonField.of(accountingSyncConfiguration))
+        fun accountingSyncConfiguration(accountingSyncConfiguration: AccountingSyncConfiguration?) =
+            accountingSyncConfiguration(JsonField.ofNullable(accountingSyncConfiguration))
+
+        fun accountingSyncConfiguration(
+            accountingSyncConfiguration: Optional<AccountingSyncConfiguration>
+        ) = accountingSyncConfiguration(accountingSyncConfiguration.orElse(null))
 
         fun accountingSyncConfiguration(
             accountingSyncConfiguration: JsonField<AccountingSyncConfiguration>
         ) = apply { this.accountingSyncConfiguration = accountingSyncConfiguration }
 
-        fun reportingConfiguration(reportingConfiguration: ReportingConfiguration) =
-            reportingConfiguration(JsonField.of(reportingConfiguration))
+        fun reportingConfiguration(reportingConfiguration: ReportingConfiguration?) =
+            reportingConfiguration(JsonField.ofNullable(reportingConfiguration))
+
+        fun reportingConfiguration(reportingConfiguration: Optional<ReportingConfiguration>) =
+            reportingConfiguration(reportingConfiguration.orElse(null))
 
         fun reportingConfiguration(reportingConfiguration: JsonField<ReportingConfiguration>) =
             apply {
@@ -973,25 +1155,32 @@ private constructor(
 
         fun build(): Customer =
             Customer(
-                id,
-                additionalEmails.map { it.toImmutable() },
-                autoCollection,
-                balance,
-                billingAddress,
-                createdAt,
-                currency,
-                email,
-                emailDelivery,
-                exemptFromAutomatedTax,
-                externalCustomerId,
-                metadata,
-                name,
-                paymentProvider,
-                paymentProviderId,
-                portalUrl,
-                shippingAddress,
-                taxId,
-                timezone,
+                checkNotNull(id) { "`id` is required but was not set" },
+                checkNotNull(additionalEmails) { "`additionalEmails` is required but was not set" }
+                    .map { it.toImmutable() },
+                checkNotNull(autoCollection) { "`autoCollection` is required but was not set" },
+                checkNotNull(balance) { "`balance` is required but was not set" },
+                checkNotNull(billingAddress) { "`billingAddress` is required but was not set" },
+                checkNotNull(createdAt) { "`createdAt` is required but was not set" },
+                checkNotNull(currency) { "`currency` is required but was not set" },
+                checkNotNull(email) { "`email` is required but was not set" },
+                checkNotNull(emailDelivery) { "`emailDelivery` is required but was not set" },
+                checkNotNull(exemptFromAutomatedTax) {
+                    "`exemptFromAutomatedTax` is required but was not set"
+                },
+                checkNotNull(externalCustomerId) {
+                    "`externalCustomerId` is required but was not set"
+                },
+                checkNotNull(metadata) { "`metadata` is required but was not set" },
+                checkNotNull(name) { "`name` is required but was not set" },
+                checkNotNull(paymentProvider) { "`paymentProvider` is required but was not set" },
+                checkNotNull(paymentProviderId) {
+                    "`paymentProviderId` is required but was not set"
+                },
+                checkNotNull(portalUrl) { "`portalUrl` is required but was not set" },
+                checkNotNull(shippingAddress) { "`shippingAddress` is required but was not set" },
+                checkNotNull(taxId) { "`taxId` is required but was not set" },
+                checkNotNull(timezone) { "`timezone` is required but was not set" },
                 accountingSyncConfiguration,
                 reportingConfiguration,
                 additionalProperties.toImmutable(),
@@ -1037,17 +1226,19 @@ private constructor(
 
         fun state(): Optional<String> = Optional.ofNullable(state.getNullable("state"))
 
-        @JsonProperty("city") @ExcludeMissing fun _city() = city
+        @JsonProperty("city") @ExcludeMissing fun _city(): JsonField<String> = city
 
-        @JsonProperty("country") @ExcludeMissing fun _country() = country
+        @JsonProperty("country") @ExcludeMissing fun _country(): JsonField<String> = country
 
-        @JsonProperty("line1") @ExcludeMissing fun _line1() = line1
+        @JsonProperty("line1") @ExcludeMissing fun _line1(): JsonField<String> = line1
 
-        @JsonProperty("line2") @ExcludeMissing fun _line2() = line2
+        @JsonProperty("line2") @ExcludeMissing fun _line2(): JsonField<String> = line2
 
-        @JsonProperty("postal_code") @ExcludeMissing fun _postalCode() = postalCode
+        @JsonProperty("postal_code")
+        @ExcludeMissing
+        fun _postalCode(): JsonField<String> = postalCode
 
-        @JsonProperty("state") @ExcludeMissing fun _state() = state
+        @JsonProperty("state") @ExcludeMissing fun _state(): JsonField<String> = state
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -1076,12 +1267,12 @@ private constructor(
 
         class Builder {
 
-            private var city: JsonField<String> = JsonMissing.of()
-            private var country: JsonField<String> = JsonMissing.of()
-            private var line1: JsonField<String> = JsonMissing.of()
-            private var line2: JsonField<String> = JsonMissing.of()
-            private var postalCode: JsonField<String> = JsonMissing.of()
-            private var state: JsonField<String> = JsonMissing.of()
+            private var city: JsonField<String>? = null
+            private var country: JsonField<String>? = null
+            private var line1: JsonField<String>? = null
+            private var line2: JsonField<String>? = null
+            private var postalCode: JsonField<String>? = null
+            private var state: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -1095,27 +1286,39 @@ private constructor(
                 additionalProperties = billingAddress.additionalProperties.toMutableMap()
             }
 
-            fun city(city: String) = city(JsonField.of(city))
+            fun city(city: String?) = city(JsonField.ofNullable(city))
+
+            fun city(city: Optional<String>) = city(city.orElse(null))
 
             fun city(city: JsonField<String>) = apply { this.city = city }
 
-            fun country(country: String) = country(JsonField.of(country))
+            fun country(country: String?) = country(JsonField.ofNullable(country))
+
+            fun country(country: Optional<String>) = country(country.orElse(null))
 
             fun country(country: JsonField<String>) = apply { this.country = country }
 
-            fun line1(line1: String) = line1(JsonField.of(line1))
+            fun line1(line1: String?) = line1(JsonField.ofNullable(line1))
+
+            fun line1(line1: Optional<String>) = line1(line1.orElse(null))
 
             fun line1(line1: JsonField<String>) = apply { this.line1 = line1 }
 
-            fun line2(line2: String) = line2(JsonField.of(line2))
+            fun line2(line2: String?) = line2(JsonField.ofNullable(line2))
+
+            fun line2(line2: Optional<String>) = line2(line2.orElse(null))
 
             fun line2(line2: JsonField<String>) = apply { this.line2 = line2 }
 
-            fun postalCode(postalCode: String) = postalCode(JsonField.of(postalCode))
+            fun postalCode(postalCode: String?) = postalCode(JsonField.ofNullable(postalCode))
+
+            fun postalCode(postalCode: Optional<String>) = postalCode(postalCode.orElse(null))
 
             fun postalCode(postalCode: JsonField<String>) = apply { this.postalCode = postalCode }
 
-            fun state(state: String) = state(JsonField.of(state))
+            fun state(state: String?) = state(JsonField.ofNullable(state))
+
+            fun state(state: Optional<String>) = state(state.orElse(null))
 
             fun state(state: JsonField<String>) = apply { this.state = state }
 
@@ -1140,12 +1343,12 @@ private constructor(
 
             fun build(): BillingAddress =
                 BillingAddress(
-                    city,
-                    country,
-                    line1,
-                    line2,
-                    postalCode,
-                    state,
+                    checkNotNull(city) { "`city` is required but was not set" },
+                    checkNotNull(country) { "`country` is required but was not set" },
+                    checkNotNull(line1) { "`line1` is required but was not set" },
+                    checkNotNull(line2) { "`line2` is required but was not set" },
+                    checkNotNull(postalCode) { "`postalCode` is required but was not set" },
+                    checkNotNull(state) { "`state` is required but was not set" },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -1362,17 +1565,19 @@ private constructor(
 
         fun state(): Optional<String> = Optional.ofNullable(state.getNullable("state"))
 
-        @JsonProperty("city") @ExcludeMissing fun _city() = city
+        @JsonProperty("city") @ExcludeMissing fun _city(): JsonField<String> = city
 
-        @JsonProperty("country") @ExcludeMissing fun _country() = country
+        @JsonProperty("country") @ExcludeMissing fun _country(): JsonField<String> = country
 
-        @JsonProperty("line1") @ExcludeMissing fun _line1() = line1
+        @JsonProperty("line1") @ExcludeMissing fun _line1(): JsonField<String> = line1
 
-        @JsonProperty("line2") @ExcludeMissing fun _line2() = line2
+        @JsonProperty("line2") @ExcludeMissing fun _line2(): JsonField<String> = line2
 
-        @JsonProperty("postal_code") @ExcludeMissing fun _postalCode() = postalCode
+        @JsonProperty("postal_code")
+        @ExcludeMissing
+        fun _postalCode(): JsonField<String> = postalCode
 
-        @JsonProperty("state") @ExcludeMissing fun _state() = state
+        @JsonProperty("state") @ExcludeMissing fun _state(): JsonField<String> = state
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -1401,12 +1606,12 @@ private constructor(
 
         class Builder {
 
-            private var city: JsonField<String> = JsonMissing.of()
-            private var country: JsonField<String> = JsonMissing.of()
-            private var line1: JsonField<String> = JsonMissing.of()
-            private var line2: JsonField<String> = JsonMissing.of()
-            private var postalCode: JsonField<String> = JsonMissing.of()
-            private var state: JsonField<String> = JsonMissing.of()
+            private var city: JsonField<String>? = null
+            private var country: JsonField<String>? = null
+            private var line1: JsonField<String>? = null
+            private var line2: JsonField<String>? = null
+            private var postalCode: JsonField<String>? = null
+            private var state: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -1420,27 +1625,39 @@ private constructor(
                 additionalProperties = shippingAddress.additionalProperties.toMutableMap()
             }
 
-            fun city(city: String) = city(JsonField.of(city))
+            fun city(city: String?) = city(JsonField.ofNullable(city))
+
+            fun city(city: Optional<String>) = city(city.orElse(null))
 
             fun city(city: JsonField<String>) = apply { this.city = city }
 
-            fun country(country: String) = country(JsonField.of(country))
+            fun country(country: String?) = country(JsonField.ofNullable(country))
+
+            fun country(country: Optional<String>) = country(country.orElse(null))
 
             fun country(country: JsonField<String>) = apply { this.country = country }
 
-            fun line1(line1: String) = line1(JsonField.of(line1))
+            fun line1(line1: String?) = line1(JsonField.ofNullable(line1))
+
+            fun line1(line1: Optional<String>) = line1(line1.orElse(null))
 
             fun line1(line1: JsonField<String>) = apply { this.line1 = line1 }
 
-            fun line2(line2: String) = line2(JsonField.of(line2))
+            fun line2(line2: String?) = line2(JsonField.ofNullable(line2))
+
+            fun line2(line2: Optional<String>) = line2(line2.orElse(null))
 
             fun line2(line2: JsonField<String>) = apply { this.line2 = line2 }
 
-            fun postalCode(postalCode: String) = postalCode(JsonField.of(postalCode))
+            fun postalCode(postalCode: String?) = postalCode(JsonField.ofNullable(postalCode))
+
+            fun postalCode(postalCode: Optional<String>) = postalCode(postalCode.orElse(null))
 
             fun postalCode(postalCode: JsonField<String>) = apply { this.postalCode = postalCode }
 
-            fun state(state: String) = state(JsonField.of(state))
+            fun state(state: String?) = state(JsonField.ofNullable(state))
+
+            fun state(state: Optional<String>) = state(state.orElse(null))
 
             fun state(state: JsonField<String>) = apply { this.state = state }
 
@@ -1465,12 +1682,12 @@ private constructor(
 
             fun build(): ShippingAddress =
                 ShippingAddress(
-                    city,
-                    country,
-                    line1,
-                    line2,
-                    postalCode,
-                    state,
+                    checkNotNull(city) { "`city` is required but was not set" },
+                    checkNotNull(country) { "`country` is required but was not set" },
+                    checkNotNull(line1) { "`line1` is required but was not set" },
+                    checkNotNull(line2) { "`line2` is required but was not set" },
+                    checkNotNull(postalCode) { "`postalCode` is required but was not set" },
+                    checkNotNull(state) { "`state` is required but was not set" },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -1620,11 +1837,11 @@ private constructor(
 
         fun value(): String = value.getRequired("value")
 
-        @JsonProperty("country") @ExcludeMissing fun _country() = country
+        @JsonProperty("country") @ExcludeMissing fun _country(): JsonField<Country> = country
 
-        @JsonProperty("type") @ExcludeMissing fun _type() = type
+        @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
-        @JsonProperty("value") @ExcludeMissing fun _value() = value
+        @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<String> = value
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -1650,9 +1867,9 @@ private constructor(
 
         class Builder {
 
-            private var country: JsonField<Country> = JsonMissing.of()
-            private var type: JsonField<Type> = JsonMissing.of()
-            private var value: JsonField<String> = JsonMissing.of()
+            private var country: JsonField<Country>? = null
+            private var type: JsonField<Type>? = null
+            private var value: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -1696,9 +1913,9 @@ private constructor(
 
             fun build(): TaxId =
                 TaxId(
-                    country,
-                    type,
-                    value,
+                    checkNotNull(country) { "`country` is required but was not set" },
+                    checkNotNull(type) { "`type` is required but was not set" },
+                    checkNotNull(value) { "`value` is required but was not set" },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -2726,9 +2943,9 @@ private constructor(
 
         @JsonProperty("accounting_providers")
         @ExcludeMissing
-        fun _accountingProviders() = accountingProviders
+        fun _accountingProviders(): JsonField<List<AccountingProvider>> = accountingProviders
 
-        @JsonProperty("excluded") @ExcludeMissing fun _excluded() = excluded
+        @JsonProperty("excluded") @ExcludeMissing fun _excluded(): JsonField<Boolean> = excluded
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -2753,13 +2970,14 @@ private constructor(
 
         class Builder {
 
-            private var accountingProviders: JsonField<List<AccountingProvider>> = JsonMissing.of()
-            private var excluded: JsonField<Boolean> = JsonMissing.of()
+            private var accountingProviders: JsonField<MutableList<AccountingProvider>>? = null
+            private var excluded: JsonField<Boolean>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(accountingSyncConfiguration: AccountingSyncConfiguration) = apply {
-                accountingProviders = accountingSyncConfiguration.accountingProviders
+                accountingProviders =
+                    accountingSyncConfiguration.accountingProviders.map { it.toMutableList() }
                 excluded = accountingSyncConfiguration.excluded
                 additionalProperties =
                     accountingSyncConfiguration.additionalProperties.toMutableMap()
@@ -2770,8 +2988,21 @@ private constructor(
 
             fun accountingProviders(accountingProviders: JsonField<List<AccountingProvider>>) =
                 apply {
-                    this.accountingProviders = accountingProviders
+                    this.accountingProviders = accountingProviders.map { it.toMutableList() }
                 }
+
+            fun addAccountingProvider(accountingProvider: AccountingProvider) = apply {
+                accountingProviders =
+                    (accountingProviders ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(accountingProvider)
+                    }
+            }
 
             fun excluded(excluded: Boolean) = excluded(JsonField.of(excluded))
 
@@ -2798,8 +3029,11 @@ private constructor(
 
             fun build(): AccountingSyncConfiguration =
                 AccountingSyncConfiguration(
-                    accountingProviders.map { it.toImmutable() },
-                    excluded,
+                    checkNotNull(accountingProviders) {
+                            "`accountingProviders` is required but was not set"
+                        }
+                        .map { it.toImmutable() },
+                    checkNotNull(excluded) { "`excluded` is required but was not set" },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -2825,9 +3059,11 @@ private constructor(
 
             @JsonProperty("external_provider_id")
             @ExcludeMissing
-            fun _externalProviderId() = externalProviderId
+            fun _externalProviderId(): JsonField<String> = externalProviderId
 
-            @JsonProperty("provider_type") @ExcludeMissing fun _providerType() = providerType
+            @JsonProperty("provider_type")
+            @ExcludeMissing
+            fun _providerType(): JsonField<ProviderType> = providerType
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -2852,8 +3088,8 @@ private constructor(
 
             class Builder {
 
-                private var externalProviderId: JsonField<String> = JsonMissing.of()
-                private var providerType: JsonField<ProviderType> = JsonMissing.of()
+                private var externalProviderId: JsonField<String>? = null
+                private var providerType: JsonField<ProviderType>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -2863,8 +3099,11 @@ private constructor(
                     additionalProperties = accountingProvider.additionalProperties.toMutableMap()
                 }
 
-                fun externalProviderId(externalProviderId: String) =
-                    externalProviderId(JsonField.of(externalProviderId))
+                fun externalProviderId(externalProviderId: String?) =
+                    externalProviderId(JsonField.ofNullable(externalProviderId))
+
+                fun externalProviderId(externalProviderId: Optional<String>) =
+                    externalProviderId(externalProviderId.orElse(null))
 
                 fun externalProviderId(externalProviderId: JsonField<String>) = apply {
                     this.externalProviderId = externalProviderId
@@ -2901,8 +3140,10 @@ private constructor(
 
                 fun build(): AccountingProvider =
                     AccountingProvider(
-                        externalProviderId,
-                        providerType,
+                        checkNotNull(externalProviderId) {
+                            "`externalProviderId` is required but was not set"
+                        },
+                        checkNotNull(providerType) { "`providerType` is required but was not set" },
                         additionalProperties.toImmutable(),
                     )
             }
@@ -3013,7 +3254,7 @@ private constructor(
 
         fun exempt(): Boolean = exempt.getRequired("exempt")
 
-        @JsonProperty("exempt") @ExcludeMissing fun _exempt() = exempt
+        @JsonProperty("exempt") @ExcludeMissing fun _exempt(): JsonField<Boolean> = exempt
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -3037,7 +3278,7 @@ private constructor(
 
         class Builder {
 
-            private var exempt: JsonField<Boolean> = JsonMissing.of()
+            private var exempt: JsonField<Boolean>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -3070,7 +3311,10 @@ private constructor(
             }
 
             fun build(): ReportingConfiguration =
-                ReportingConfiguration(exempt, additionalProperties.toImmutable())
+                ReportingConfiguration(
+                    checkNotNull(exempt) { "`exempt` is required but was not set" },
+                    additionalProperties.toImmutable()
+                )
         }
 
         override fun equals(other: Any?): Boolean {

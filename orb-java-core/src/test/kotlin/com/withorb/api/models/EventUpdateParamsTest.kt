@@ -35,7 +35,7 @@ class EventUpdateParamsTest {
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.eventName()).isEqualTo("event_name")
-        assertThat(body.properties()).isEqualTo(JsonValue.from(mapOf<String, Any>()))
+        assertThat(body._properties()).isEqualTo(JsonValue.from(mapOf<String, Any>()))
         assertThat(body.timestamp()).isEqualTo(OffsetDateTime.parse("2020-12-09T16:09:53Z"))
         assertThat(body.customerId()).contains("customer_id")
         assertThat(body.externalCustomerId()).contains("external_customer_id")
@@ -53,7 +53,7 @@ class EventUpdateParamsTest {
         val body = params.getBody()
         assertThat(body).isNotNull
         assertThat(body.eventName()).isEqualTo("event_name")
-        assertThat(body.properties()).isEqualTo(JsonValue.from(mapOf<String, Any>()))
+        assertThat(body._properties()).isEqualTo(JsonValue.from(mapOf<String, Any>()))
         assertThat(body.timestamp()).isEqualTo(OffsetDateTime.parse("2020-12-09T16:09:53Z"))
     }
 
