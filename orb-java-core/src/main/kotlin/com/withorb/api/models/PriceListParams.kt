@@ -8,6 +8,10 @@ import com.withorb.api.core.http.QueryParams
 import java.util.Objects
 import java.util.Optional
 
+/**
+ * This endpoint is used to list all add-on prices created using the
+ * [price creation endpoint](../reference/create-price).
+ */
 class PriceListParams
 constructor(
     private val cursor: String?,

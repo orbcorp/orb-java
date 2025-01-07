@@ -16,6 +16,10 @@ import com.withorb.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
+/**
+ * This endpoint allows you to update the `metadata` property on a price. If you pass null for the
+ * metadata value, it will clear any existing metadata for that price.
+ */
 class PriceUpdateParams
 constructor(
     private val priceId: String,
