@@ -496,30 +496,32 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): Customer = apply {
-        if (!validated) {
-            id()
-            additionalEmails()
-            autoCollection()
-            balance()
-            billingAddress().map { it.validate() }
-            createdAt()
-            currency()
-            email()
-            emailDelivery()
-            exemptFromAutomatedTax()
-            externalCustomerId()
-            metadata().validate()
-            name()
-            paymentProvider()
-            paymentProviderId()
-            portalUrl()
-            shippingAddress().map { it.validate() }
-            taxId().map { it.validate() }
-            timezone()
-            accountingSyncConfiguration().map { it.validate() }
-            reportingConfiguration().map { it.validate() }
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        additionalEmails()
+        autoCollection()
+        balance()
+        billingAddress().ifPresent { it.validate() }
+        createdAt()
+        currency()
+        email()
+        emailDelivery()
+        exemptFromAutomatedTax()
+        externalCustomerId()
+        metadata().validate()
+        name()
+        paymentProvider()
+        paymentProviderId()
+        portalUrl()
+        shippingAddress().ifPresent { it.validate() }
+        taxId().ifPresent { it.validate() }
+        timezone()
+        accountingSyncConfiguration().ifPresent { it.validate() }
+        reportingConfiguration().ifPresent { it.validate() }
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -1247,15 +1249,17 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): BillingAddress = apply {
-            if (!validated) {
-                city()
-                country()
-                line1()
-                line2()
-                postalCode()
-                state()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            city()
+            country()
+            line1()
+            line2()
+            postalCode()
+            state()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1391,9 +1395,11 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Metadata = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1586,15 +1592,17 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): ShippingAddress = apply {
-            if (!validated) {
-                city()
-                country()
-                line1()
-                line2()
-                postalCode()
-                state()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            city()
+            country()
+            line1()
+            line2()
+            postalCode()
+            state()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1850,12 +1858,14 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): TaxId = apply {
-            if (!validated) {
-                country()
-                type()
-                value()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            country()
+            type()
+            value()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -2954,11 +2964,13 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): AccountingSyncConfiguration = apply {
-            if (!validated) {
-                accountingProviders().forEach { it.validate() }
-                excluded()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            accountingProviders().forEach { it.validate() }
+            excluded()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -3072,11 +3084,13 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): AccountingProvider = apply {
-                if (!validated) {
-                    externalProviderId()
-                    providerType()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                externalProviderId()
+                providerType()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -3263,10 +3277,12 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): ReportingConfiguration = apply {
-            if (!validated) {
-                exempt()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            exempt()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

@@ -131,19 +131,21 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): CustomerBalanceTransactionListResponse = apply {
-        if (!validated) {
-            id()
-            action()
-            amount()
-            createdAt()
-            creditNote().map { it.validate() }
-            description()
-            endingBalance()
-            invoice().map { it.validate() }
-            startingBalance()
-            type()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        action()
+        amount()
+        createdAt()
+        creditNote().ifPresent { it.validate() }
+        description()
+        endingBalance()
+        invoice().ifPresent { it.validate() }
+        startingBalance()
+        type()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -411,10 +413,12 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): CreditNote = apply {
-            if (!validated) {
-                id()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -506,10 +510,12 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Invoice = apply {
-            if (!validated) {
-                id()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

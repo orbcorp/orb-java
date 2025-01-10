@@ -70,12 +70,14 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): EvaluatePriceGroup = apply {
-        if (!validated) {
-            amount()
-            groupingValues()
-            quantity()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        amount()
+        groupingValues().forEach { it.validate() }
+        quantity()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -183,8 +185,6 @@ private constructor(
         private val _json: JsonValue? = null,
     ) {
 
-        private var validated: Boolean = false
-
         fun string(): Optional<String> = Optional.ofNullable(string)
 
         fun number(): Optional<Double> = Optional.ofNullable(number)
@@ -214,13 +214,23 @@ private constructor(
             }
         }
 
+        private var validated: Boolean = false
+
         fun validate(): GroupingValue = apply {
-            if (!validated) {
-                if (string == null && number == null && bool == null) {
-                    throw OrbInvalidDataException("Unknown GroupingValue: $_json")
-                }
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            accept(
+                object : Visitor<Unit> {
+                    override fun visitString(string: String) {}
+
+                    override fun visitNumber(number: Double) {}
+
+                    override fun visitBool(bool: Boolean) {}
+                }
+            )
+            validated = true
         }
 
         override fun equals(other: Any?): Boolean {
