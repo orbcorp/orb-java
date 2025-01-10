@@ -38,8 +38,6 @@ private constructor(
     private val _json: JsonValue? = null,
 ) {
 
-    private var validated: Boolean = false
-
     fun ungroupedSubscriptionUsage(): Optional<UngroupedSubscriptionUsage> =
         Optional.ofNullable(ungroupedSubscriptionUsage)
 
@@ -68,15 +66,29 @@ private constructor(
         }
     }
 
+    private var validated: Boolean = false
+
     fun validate(): SubscriptionUsage = apply {
-        if (!validated) {
-            if (ungroupedSubscriptionUsage == null && groupedSubscriptionUsage == null) {
-                throw OrbInvalidDataException("Unknown SubscriptionUsage: $_json")
-            }
-            ungroupedSubscriptionUsage?.validate()
-            groupedSubscriptionUsage?.validate()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        accept(
+            object : Visitor<Unit> {
+                override fun visitUngroupedSubscriptionUsage(
+                    ungroupedSubscriptionUsage: UngroupedSubscriptionUsage
+                ) {
+                    ungroupedSubscriptionUsage.validate()
+                }
+
+                override fun visitGroupedSubscriptionUsage(
+                    groupedSubscriptionUsage: GroupedSubscriptionUsage
+                ) {
+                    groupedSubscriptionUsage.validate()
+                }
+            }
+        )
+        validated = true
     }
 
     override fun equals(other: Any?): Boolean {
@@ -181,10 +193,12 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): UngroupedSubscriptionUsage = apply {
-            if (!validated) {
-                data().forEach { it.validate() }
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            data().forEach { it.validate() }
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -292,12 +306,14 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): Data = apply {
-                if (!validated) {
-                    billableMetric().validate()
-                    usage().forEach { it.validate() }
-                    viewMode()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                billableMetric().validate()
+                usage().forEach { it.validate() }
+                viewMode()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -415,11 +431,13 @@ private constructor(
                 private var validated: Boolean = false
 
                 fun validate(): BillableMetric = apply {
-                    if (!validated) {
-                        id()
-                        name()
-                        validated = true
+                    if (validated) {
+                        return@apply
                     }
+
+                    id()
+                    name()
+                    validated = true
                 }
 
                 fun toBuilder() = Builder().from(this)
@@ -540,12 +558,14 @@ private constructor(
                 private var validated: Boolean = false
 
                 fun validate(): Usage = apply {
-                    if (!validated) {
-                        quantity()
-                        timeframeEnd()
-                        timeframeStart()
-                        validated = true
+                    if (validated) {
+                        return@apply
                     }
+
+                    quantity()
+                    timeframeEnd()
+                    timeframeStart()
+                    validated = true
                 }
 
                 fun toBuilder() = Builder().from(this)
@@ -766,11 +786,13 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): GroupedSubscriptionUsage = apply {
-            if (!validated) {
-                data().forEach { it.validate() }
-                paginationMetadata().map { it.validate() }
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            data().forEach { it.validate() }
+            paginationMetadata().ifPresent { it.validate() }
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -899,13 +921,15 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): Data = apply {
-                if (!validated) {
-                    billableMetric().validate()
-                    metricGroup().validate()
-                    usage().forEach { it.validate() }
-                    viewMode()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                billableMetric().validate()
+                metricGroup().validate()
+                usage().forEach { it.validate() }
+                viewMode()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -1032,11 +1056,13 @@ private constructor(
                 private var validated: Boolean = false
 
                 fun validate(): BillableMetric = apply {
-                    if (!validated) {
-                        id()
-                        name()
-                        validated = true
+                    if (validated) {
+                        return@apply
                     }
+
+                    id()
+                    name()
+                    validated = true
                 }
 
                 fun toBuilder() = Builder().from(this)
@@ -1148,11 +1174,13 @@ private constructor(
                 private var validated: Boolean = false
 
                 fun validate(): MetricGroup = apply {
-                    if (!validated) {
-                        propertyKey()
-                        propertyValue()
-                        validated = true
+                    if (validated) {
+                        return@apply
                     }
+
+                    propertyKey()
+                    propertyValue()
+                    validated = true
                 }
 
                 fun toBuilder() = Builder().from(this)
@@ -1282,12 +1310,14 @@ private constructor(
                 private var validated: Boolean = false
 
                 fun validate(): Usage = apply {
-                    if (!validated) {
-                        quantity()
-                        timeframeEnd()
-                        timeframeStart()
-                        validated = true
+                    if (validated) {
+                        return@apply
                     }
+
+                    quantity()
+                    timeframeEnd()
+                    timeframeStart()
+                    validated = true
                 }
 
                 fun toBuilder() = Builder().from(this)
