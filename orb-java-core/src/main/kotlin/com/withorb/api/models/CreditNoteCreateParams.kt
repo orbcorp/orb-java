@@ -98,12 +98,14 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CreditNoteCreateBody = apply {
-            if (!validated) {
-                lineItems().forEach { it.validate() }
-                memo()
-                reason()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            lineItems().forEach { it.validate() }
+            memo()
+            reason()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -417,11 +419,13 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): LineItem = apply {
-            if (!validated) {
-                amount()
-                invoiceLineItemId()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            amount()
+            invoiceLineItemId()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

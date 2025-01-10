@@ -131,19 +131,21 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): Alert = apply {
-        if (!validated) {
-            id()
-            createdAt()
-            currency()
-            customer().map { it.validate() }
-            enabled()
-            metric().map { it.validate() }
-            plan().map { it.validate() }
-            subscription().map { it.validate() }
-            thresholds().map { it.forEach { it.validate() } }
-            type()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        createdAt()
+        currency()
+        customer().ifPresent { it.validate() }
+        enabled()
+        metric().ifPresent { it.validate() }
+        plan().ifPresent { it.validate() }
+        subscription().ifPresent { it.validate() }
+        thresholds().ifPresent { it.forEach { it.validate() } }
+        type()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -347,11 +349,13 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Customer = apply {
-            if (!validated) {
-                id()
-                externalCustomerId()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            externalCustomerId()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -456,10 +460,12 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Metric = apply {
-            if (!validated) {
-                id()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -584,13 +590,15 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Plan = apply {
-            if (!validated) {
-                id()
-                externalPlanId()
-                name()
-                planVersion()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            externalPlanId()
+            name()
+            planVersion()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -728,10 +736,12 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Subscription = apply {
-            if (!validated) {
-                id()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -832,10 +842,12 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Threshold = apply {
-            if (!validated) {
-                value()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            value()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
