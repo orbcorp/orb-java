@@ -48,8 +48,6 @@ private constructor(
     private val _json: JsonValue? = null,
 ) {
 
-    private var validated: Boolean = false
-
     fun incrementLedgerEntry(): Optional<IncrementLedgerEntry> =
         Optional.ofNullable(incrementLedgerEntry)
 
@@ -122,30 +120,51 @@ private constructor(
         }
     }
 
+    private var validated: Boolean = false
+
     fun validate(): CustomerCreditLedgerCreateEntryByExternalIdResponse = apply {
-        if (!validated) {
-            if (
-                incrementLedgerEntry == null &&
-                    decrementLedgerEntry == null &&
-                    expirationChangeLedgerEntry == null &&
-                    creditBlockExpiryLedgerEntry == null &&
-                    voidLedgerEntry == null &&
-                    voidInitiatedLedgerEntry == null &&
-                    amendmentLedgerEntry == null
-            ) {
-                throw OrbInvalidDataException(
-                    "Unknown CustomerCreditLedgerCreateEntryByExternalIdResponse: $_json"
-                )
-            }
-            incrementLedgerEntry?.validate()
-            decrementLedgerEntry?.validate()
-            expirationChangeLedgerEntry?.validate()
-            creditBlockExpiryLedgerEntry?.validate()
-            voidLedgerEntry?.validate()
-            voidInitiatedLedgerEntry?.validate()
-            amendmentLedgerEntry?.validate()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        accept(
+            object : Visitor<Unit> {
+                override fun visitIncrementLedgerEntry(incrementLedgerEntry: IncrementLedgerEntry) {
+                    incrementLedgerEntry.validate()
+                }
+
+                override fun visitDecrementLedgerEntry(decrementLedgerEntry: DecrementLedgerEntry) {
+                    decrementLedgerEntry.validate()
+                }
+
+                override fun visitExpirationChangeLedgerEntry(
+                    expirationChangeLedgerEntry: ExpirationChangeLedgerEntry
+                ) {
+                    expirationChangeLedgerEntry.validate()
+                }
+
+                override fun visitCreditBlockExpiryLedgerEntry(
+                    creditBlockExpiryLedgerEntry: CreditBlockExpiryLedgerEntry
+                ) {
+                    creditBlockExpiryLedgerEntry.validate()
+                }
+
+                override fun visitVoidLedgerEntry(voidLedgerEntry: VoidLedgerEntry) {
+                    voidLedgerEntry.validate()
+                }
+
+                override fun visitVoidInitiatedLedgerEntry(
+                    voidInitiatedLedgerEntry: VoidInitiatedLedgerEntry
+                ) {
+                    voidInitiatedLedgerEntry.validate()
+                }
+
+                override fun visitAmendmentLedgerEntry(amendmentLedgerEntry: AmendmentLedgerEntry) {
+                    amendmentLedgerEntry.validate()
+                }
+            }
+        )
+        validated = true
     }
 
     override fun equals(other: Any?): Boolean {
@@ -507,22 +526,24 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): IncrementLedgerEntry = apply {
-            if (!validated) {
-                id()
-                amount()
-                createdAt()
-                creditBlock().validate()
-                currency()
-                customer().validate()
-                description()
-                endingBalance()
-                entryStatus()
-                entryType()
-                ledgerSequenceNumber()
-                metadata().validate()
-                startingBalance()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            amount()
+            createdAt()
+            creditBlock().validate()
+            currency()
+            customer().validate()
+            description()
+            endingBalance()
+            entryStatus()
+            entryType()
+            ledgerSequenceNumber()
+            metadata().validate()
+            startingBalance()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -731,12 +752,14 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): CreditBlock = apply {
-                if (!validated) {
-                    id()
-                    expiryDate()
-                    perUnitCostBasis()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                id()
+                expiryDate()
+                perUnitCostBasis()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -868,11 +891,13 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): Customer = apply {
-                if (!validated) {
-                    id()
-                    externalCustomerId()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                id()
+                externalCustomerId()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -1087,9 +1112,11 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): Metadata = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -1321,25 +1348,27 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): DecrementLedgerEntry = apply {
-            if (!validated) {
-                id()
-                amount()
-                createdAt()
-                creditBlock().validate()
-                currency()
-                customer().validate()
-                description()
-                endingBalance()
-                entryStatus()
-                entryType()
-                ledgerSequenceNumber()
-                metadata().validate()
-                startingBalance()
-                eventId()
-                invoiceId()
-                priceId()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            amount()
+            createdAt()
+            creditBlock().validate()
+            currency()
+            customer().validate()
+            description()
+            endingBalance()
+            entryStatus()
+            entryType()
+            ledgerSequenceNumber()
+            metadata().validate()
+            startingBalance()
+            eventId()
+            invoiceId()
+            priceId()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1575,12 +1604,14 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): CreditBlock = apply {
-                if (!validated) {
-                    id()
-                    expiryDate()
-                    perUnitCostBasis()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                id()
+                expiryDate()
+                perUnitCostBasis()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -1712,11 +1743,13 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): Customer = apply {
-                if (!validated) {
-                    id()
-                    externalCustomerId()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                id()
+                externalCustomerId()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -1931,9 +1964,11 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): Metadata = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -2154,23 +2189,25 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): ExpirationChangeLedgerEntry = apply {
-            if (!validated) {
-                id()
-                amount()
-                createdAt()
-                creditBlock().validate()
-                currency()
-                customer().validate()
-                description()
-                endingBalance()
-                entryStatus()
-                entryType()
-                ledgerSequenceNumber()
-                metadata().validate()
-                newBlockExpiryDate()
-                startingBalance()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            amount()
+            createdAt()
+            creditBlock().validate()
+            currency()
+            customer().validate()
+            description()
+            endingBalance()
+            entryStatus()
+            entryType()
+            ledgerSequenceNumber()
+            metadata().validate()
+            newBlockExpiryDate()
+            startingBalance()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -2395,12 +2432,14 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): CreditBlock = apply {
-                if (!validated) {
-                    id()
-                    expiryDate()
-                    perUnitCostBasis()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                id()
+                expiryDate()
+                perUnitCostBasis()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -2532,11 +2571,13 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): Customer = apply {
-                if (!validated) {
-                    id()
-                    externalCustomerId()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                id()
+                externalCustomerId()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -2751,9 +2792,11 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): Metadata = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -2964,22 +3007,24 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): CreditBlockExpiryLedgerEntry = apply {
-            if (!validated) {
-                id()
-                amount()
-                createdAt()
-                creditBlock().validate()
-                currency()
-                customer().validate()
-                description()
-                endingBalance()
-                entryStatus()
-                entryType()
-                ledgerSequenceNumber()
-                metadata().validate()
-                startingBalance()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            amount()
+            createdAt()
+            creditBlock().validate()
+            currency()
+            customer().validate()
+            description()
+            endingBalance()
+            entryStatus()
+            entryType()
+            ledgerSequenceNumber()
+            metadata().validate()
+            startingBalance()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -3189,12 +3234,14 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): CreditBlock = apply {
-                if (!validated) {
-                    id()
-                    expiryDate()
-                    perUnitCostBasis()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                id()
+                expiryDate()
+                perUnitCostBasis()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -3326,11 +3373,13 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): Customer = apply {
-                if (!validated) {
-                    id()
-                    externalCustomerId()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                id()
+                externalCustomerId()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -3545,9 +3594,11 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): Metadata = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -3777,24 +3828,26 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): VoidLedgerEntry = apply {
-            if (!validated) {
-                id()
-                amount()
-                createdAt()
-                creditBlock().validate()
-                currency()
-                customer().validate()
-                description()
-                endingBalance()
-                entryStatus()
-                entryType()
-                ledgerSequenceNumber()
-                metadata().validate()
-                startingBalance()
-                voidAmount()
-                voidReason()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            amount()
+            createdAt()
+            creditBlock().validate()
+            currency()
+            customer().validate()
+            description()
+            endingBalance()
+            entryStatus()
+            entryType()
+            ledgerSequenceNumber()
+            metadata().validate()
+            startingBalance()
+            voidAmount()
+            voidReason()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -4019,12 +4072,14 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): CreditBlock = apply {
-                if (!validated) {
-                    id()
-                    expiryDate()
-                    perUnitCostBasis()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                id()
+                expiryDate()
+                perUnitCostBasis()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -4156,11 +4211,13 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): Customer = apply {
-                if (!validated) {
-                    id()
-                    externalCustomerId()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                id()
+                externalCustomerId()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -4375,9 +4432,11 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): Metadata = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -4617,25 +4676,27 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): VoidInitiatedLedgerEntry = apply {
-            if (!validated) {
-                id()
-                amount()
-                createdAt()
-                creditBlock().validate()
-                currency()
-                customer().validate()
-                description()
-                endingBalance()
-                entryStatus()
-                entryType()
-                ledgerSequenceNumber()
-                metadata().validate()
-                newBlockExpiryDate()
-                startingBalance()
-                voidAmount()
-                voidReason()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            amount()
+            createdAt()
+            creditBlock().validate()
+            currency()
+            customer().validate()
+            description()
+            endingBalance()
+            entryStatus()
+            entryType()
+            ledgerSequenceNumber()
+            metadata().validate()
+            newBlockExpiryDate()
+            startingBalance()
+            voidAmount()
+            voidReason()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -4872,12 +4933,14 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): CreditBlock = apply {
-                if (!validated) {
-                    id()
-                    expiryDate()
-                    perUnitCostBasis()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                id()
+                expiryDate()
+                perUnitCostBasis()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -5009,11 +5072,13 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): Customer = apply {
-                if (!validated) {
-                    id()
-                    externalCustomerId()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                id()
+                externalCustomerId()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -5228,9 +5293,11 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): Metadata = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -5441,22 +5508,24 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): AmendmentLedgerEntry = apply {
-            if (!validated) {
-                id()
-                amount()
-                createdAt()
-                creditBlock().validate()
-                currency()
-                customer().validate()
-                description()
-                endingBalance()
-                entryStatus()
-                entryType()
-                ledgerSequenceNumber()
-                metadata().validate()
-                startingBalance()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            amount()
+            createdAt()
+            creditBlock().validate()
+            currency()
+            customer().validate()
+            description()
+            endingBalance()
+            entryStatus()
+            entryType()
+            ledgerSequenceNumber()
+            metadata().validate()
+            startingBalance()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -5665,12 +5734,14 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): CreditBlock = apply {
-                if (!validated) {
-                    id()
-                    expiryDate()
-                    perUnitCostBasis()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                id()
+                expiryDate()
+                perUnitCostBasis()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -5802,11 +5873,13 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): Customer = apply {
-                if (!validated) {
-                    id()
-                    externalCustomerId()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                id()
+                externalCustomerId()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -6021,9 +6094,11 @@ private constructor(
             private var validated: Boolean = false
 
             fun validate(): Metadata = apply {
-                if (!validated) {
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)

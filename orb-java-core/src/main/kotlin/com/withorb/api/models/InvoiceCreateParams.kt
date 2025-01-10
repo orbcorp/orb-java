@@ -300,19 +300,21 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): InvoiceCreateBody = apply {
-            if (!validated) {
-                currency()
-                invoiceDate()
-                lineItems().forEach { it.validate() }
-                netTerms()
-                customerId()
-                discount()
-                externalCustomerId()
-                memo()
-                metadata().map { it.validate() }
-                willAutoIssue()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            currency()
+            invoiceDate()
+            lineItems().forEach { it.validate() }
+            netTerms()
+            customerId()
+            discount().ifPresent { it.validate() }
+            externalCustomerId()
+            memo()
+            metadata().ifPresent { it.validate() }
+            willAutoIssue()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -439,15 +441,19 @@ constructor(
             /** An optional discount to attach to the invoice. */
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
+            /** An optional discount to attach to the invoice. */
             fun discount(percentageDiscount: PercentageDiscount) =
                 discount(Discount.ofPercentageDiscount(percentageDiscount))
 
+            /** An optional discount to attach to the invoice. */
             fun discount(trialDiscount: TrialDiscount) =
                 discount(Discount.ofTrialDiscount(trialDiscount))
 
+            /** An optional discount to attach to the invoice. */
             fun discount(usageDiscount: Discount.UsageDiscount) =
                 discount(Discount.ofUsageDiscount(usageDiscount))
 
+            /** An optional discount to attach to the invoice. */
             fun discount(amountDiscount: AmountDiscount) =
                 discount(Discount.ofAmountDiscount(amountDiscount))
 
@@ -663,14 +669,18 @@ constructor(
         /** An optional discount to attach to the invoice. */
         fun discount(discount: JsonField<Discount>) = apply { body.discount(discount) }
 
+        /** An optional discount to attach to the invoice. */
         fun discount(percentageDiscount: PercentageDiscount) = apply {
             body.discount(percentageDiscount)
         }
 
+        /** An optional discount to attach to the invoice. */
         fun discount(trialDiscount: TrialDiscount) = apply { body.discount(trialDiscount) }
 
+        /** An optional discount to attach to the invoice. */
         fun discount(usageDiscount: Discount.UsageDiscount) = apply { body.discount(usageDiscount) }
 
+        /** An optional discount to attach to the invoice. */
         fun discount(amountDiscount: AmountDiscount) = apply { body.discount(amountDiscount) }
 
         /**
@@ -943,16 +953,18 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): LineItem = apply {
-            if (!validated) {
-                endDate()
-                itemId()
-                modelType()
-                name()
-                quantity()
-                startDate()
-                unitConfig().validate()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            endDate()
+            itemId()
+            modelType()
+            name()
+            quantity()
+            startDate()
+            unitConfig().validate()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -1132,10 +1144,12 @@ constructor(
             private var validated: Boolean = false
 
             fun validate(): UnitConfig = apply {
-                if (!validated) {
-                    unitAmount()
-                    validated = true
+                if (validated) {
+                    return@apply
                 }
+
+                unitAmount()
+                validated = true
             }
 
             fun toBuilder() = Builder().from(this)
@@ -1249,9 +1263,11 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): Metadata = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

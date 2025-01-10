@@ -38,10 +38,12 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): EventSearchResponse = apply {
-        if (!validated) {
-            data().forEach { it.validate() }
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        data().forEach { it.validate() }
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -215,15 +217,17 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Data = apply {
-            if (!validated) {
-                id()
-                customerId()
-                deprecated()
-                eventName()
-                externalCustomerId()
-                timestamp()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            customerId()
+            deprecated()
+            eventName()
+            externalCustomerId()
+            timestamp()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

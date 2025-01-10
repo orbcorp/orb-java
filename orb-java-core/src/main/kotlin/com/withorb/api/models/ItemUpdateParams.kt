@@ -95,11 +95,13 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): ItemUpdateBody = apply {
-            if (!validated) {
-                externalConnections().map { it.forEach { it.validate() } }
-                name()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            externalConnections().ifPresent { it.forEach { it.validate() } }
+            name()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -403,11 +405,13 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): ExternalConnection = apply {
-            if (!validated) {
-                externalConnectionName()
-                externalEntityId()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            externalConnectionName()
+            externalEntityId()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

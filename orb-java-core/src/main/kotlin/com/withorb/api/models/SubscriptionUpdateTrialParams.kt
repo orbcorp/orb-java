@@ -149,11 +149,13 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): SubscriptionUpdateTrialBody = apply {
-            if (!validated) {
-                trialEndDate()
-                shift()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            trialEndDate().validate()
+            shift()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -191,9 +193,17 @@ constructor(
                 this.trialEndDate = trialEndDate
             }
 
+            /**
+             * The new date that the trial should end, or the literal string `immediate` to end the
+             * trial immediately.
+             */
             fun trialEndDate(offsetDateTime: OffsetDateTime) =
                 trialEndDate(TrialEndDate.ofOffsetDateTime(offsetDateTime))
 
+            /**
+             * The new date that the trial should end, or the literal string `immediate` to end the
+             * trial immediately.
+             */
             fun trialEndDate(unionMember1: TrialEndDate.UnionMember1) =
                 trialEndDate(TrialEndDate.ofUnionMember1(unionMember1))
 
@@ -294,10 +304,18 @@ constructor(
             body.trialEndDate(trialEndDate)
         }
 
+        /**
+         * The new date that the trial should end, or the literal string `immediate` to end the
+         * trial immediately.
+         */
         fun trialEndDate(offsetDateTime: OffsetDateTime) = apply {
             body.trialEndDate(offsetDateTime)
         }
 
+        /**
+         * The new date that the trial should end, or the literal string `immediate` to end the
+         * trial immediately.
+         */
         fun trialEndDate(unionMember1: TrialEndDate.UnionMember1) = apply {
             body.trialEndDate(unionMember1)
         }
@@ -453,8 +471,6 @@ constructor(
         private val _json: JsonValue? = null,
     ) {
 
-        private var validated: Boolean = false
-
         fun offsetDateTime(): Optional<OffsetDateTime> = Optional.ofNullable(offsetDateTime)
 
         fun unionMember1(): Optional<UnionMember1> = Optional.ofNullable(unionMember1)
@@ -477,13 +493,21 @@ constructor(
             }
         }
 
+        private var validated: Boolean = false
+
         fun validate(): TrialEndDate = apply {
-            if (!validated) {
-                if (offsetDateTime == null && unionMember1 == null) {
-                    throw OrbInvalidDataException("Unknown TrialEndDate: $_json")
-                }
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            accept(
+                object : Visitor<Unit> {
+                    override fun visitOffsetDateTime(offsetDateTime: OffsetDateTime) {}
+
+                    override fun visitUnionMember1(unionMember1: UnionMember1) {}
+                }
+            )
+            validated = true
         }
 
         override fun equals(other: Any?): Boolean {

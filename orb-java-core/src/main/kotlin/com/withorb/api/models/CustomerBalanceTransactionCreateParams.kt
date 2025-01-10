@@ -106,12 +106,14 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CustomerBalanceTransactionCreateBody = apply {
-            if (!validated) {
-                amount()
-                type()
-                description()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            amount()
+            type()
+            description()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
