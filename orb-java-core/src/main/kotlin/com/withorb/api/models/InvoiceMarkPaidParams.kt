@@ -11,6 +11,7 @@ import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.immutableEmptyMap
@@ -198,9 +199,7 @@ constructor(
 
             fun build(): InvoiceMarkPaidBody =
                 InvoiceMarkPaidBody(
-                    checkNotNull(paymentReceivedDate) {
-                        "`paymentReceivedDate` is required but was not set"
-                    },
+                    checkRequired("paymentReceivedDate", paymentReceivedDate),
                     externalId,
                     notes,
                     additionalProperties.toImmutable(),
@@ -397,7 +396,7 @@ constructor(
 
         fun build(): InvoiceMarkPaidParams =
             InvoiceMarkPaidParams(
-                checkNotNull(invoiceId) { "`invoiceId` is required but was not set" },
+                checkRequired("invoiceId", invoiceId),
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),

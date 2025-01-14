@@ -21,6 +21,7 @@ import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.getOrThrow
 import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
@@ -260,8 +261,7 @@ private constructor(
 
             fun build(): UngroupedSubscriptionUsage =
                 UngroupedSubscriptionUsage(
-                    checkNotNull(data) { "`data` is required but was not set" }
-                        .map { it.toImmutable() },
+                    checkRequired("data", data).map { it.toImmutable() },
                     additionalProperties.toImmutable()
                 )
         }
@@ -392,12 +392,9 @@ private constructor(
 
                 fun build(): Data =
                     Data(
-                        checkNotNull(billableMetric) {
-                            "`billableMetric` is required but was not set"
-                        },
-                        checkNotNull(usage) { "`usage` is required but was not set" }
-                            .map { it.toImmutable() },
-                        checkNotNull(viewMode) { "`viewMode` is required but was not set" },
+                        checkRequired("billableMetric", billableMetric),
+                        checkRequired("usage", usage).map { it.toImmutable() },
+                        checkRequired("viewMode", viewMode),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -492,8 +489,8 @@ private constructor(
 
                     fun build(): BillableMetric =
                         BillableMetric(
-                            checkNotNull(id) { "`id` is required but was not set" },
-                            checkNotNull(name) { "`name` is required but was not set" },
+                            checkRequired("id", id),
+                            checkRequired("name", name),
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -632,13 +629,9 @@ private constructor(
 
                     fun build(): Usage =
                         Usage(
-                            checkNotNull(quantity) { "`quantity` is required but was not set" },
-                            checkNotNull(timeframeEnd) {
-                                "`timeframeEnd` is required but was not set"
-                            },
-                            checkNotNull(timeframeStart) {
-                                "`timeframeStart` is required but was not set"
-                            },
+                            checkRequired("quantity", quantity),
+                            checkRequired("timeframeEnd", timeframeEnd),
+                            checkRequired("timeframeStart", timeframeStart),
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -865,8 +858,7 @@ private constructor(
 
             fun build(): GroupedSubscriptionUsage =
                 GroupedSubscriptionUsage(
-                    checkNotNull(data) { "`data` is required but was not set" }
-                        .map { it.toImmutable() },
+                    checkRequired("data", data).map { it.toImmutable() },
                     paginationMetadata,
                     additionalProperties.toImmutable(),
                 )
@@ -1016,13 +1008,10 @@ private constructor(
 
                 fun build(): Data =
                     Data(
-                        checkNotNull(billableMetric) {
-                            "`billableMetric` is required but was not set"
-                        },
-                        checkNotNull(metricGroup) { "`metricGroup` is required but was not set" },
-                        checkNotNull(usage) { "`usage` is required but was not set" }
-                            .map { it.toImmutable() },
-                        checkNotNull(viewMode) { "`viewMode` is required but was not set" },
+                        checkRequired("billableMetric", billableMetric),
+                        checkRequired("metricGroup", metricGroup),
+                        checkRequired("usage", usage).map { it.toImmutable() },
+                        checkRequired("viewMode", viewMode),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -1117,8 +1106,8 @@ private constructor(
 
                     fun build(): BillableMetric =
                         BillableMetric(
-                            checkNotNull(id) { "`id` is required but was not set" },
-                            checkNotNull(name) { "`name` is required but was not set" },
+                            checkRequired("id", id),
+                            checkRequired("name", name),
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -1240,12 +1229,8 @@ private constructor(
 
                     fun build(): MetricGroup =
                         MetricGroup(
-                            checkNotNull(propertyKey) {
-                                "`propertyKey` is required but was not set"
-                            },
-                            checkNotNull(propertyValue) {
-                                "`propertyValue` is required but was not set"
-                            },
+                            checkRequired("propertyKey", propertyKey),
+                            checkRequired("propertyValue", propertyValue),
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -1384,13 +1369,9 @@ private constructor(
 
                     fun build(): Usage =
                         Usage(
-                            checkNotNull(quantity) { "`quantity` is required but was not set" },
-                            checkNotNull(timeframeEnd) {
-                                "`timeframeEnd` is required but was not set"
-                            },
-                            checkNotNull(timeframeStart) {
-                                "`timeframeStart` is required but was not set"
-                            },
+                            checkRequired("quantity", quantity),
+                            checkRequired("timeframeEnd", timeframeEnd),
+                            checkRequired("timeframeStart", timeframeStart),
                             additionalProperties.toImmutable(),
                         )
                 }
