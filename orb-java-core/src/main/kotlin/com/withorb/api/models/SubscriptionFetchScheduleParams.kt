@@ -3,6 +3,7 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import java.time.OffsetDateTime
@@ -272,7 +273,7 @@ constructor(
 
         fun build(): SubscriptionFetchScheduleParams =
             SubscriptionFetchScheduleParams(
-                checkNotNull(subscriptionId) { "`subscriptionId` is required but was not set" },
+                checkRequired("subscriptionId", subscriptionId),
                 cursor,
                 limit,
                 startDateGt,

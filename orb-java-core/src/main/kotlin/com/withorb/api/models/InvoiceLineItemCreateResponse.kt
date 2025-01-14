@@ -21,6 +21,7 @@ import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.getOrThrow
 import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
@@ -7167,24 +7168,22 @@ private constructor(
 
         fun build(): InvoiceLineItemCreateResponse =
             InvoiceLineItemCreateResponse(
-                checkNotNull(id) { "`id` is required but was not set" },
-                checkNotNull(amount) { "`amount` is required but was not set" },
-                checkNotNull(discount) { "`discount` is required but was not set" },
-                checkNotNull(endDate) { "`endDate` is required but was not set" },
-                checkNotNull(grouping) { "`grouping` is required but was not set" },
-                checkNotNull(maximum) { "`maximum` is required but was not set" },
-                checkNotNull(maximumAmount) { "`maximumAmount` is required but was not set" },
-                checkNotNull(minimum) { "`minimum` is required but was not set" },
-                checkNotNull(minimumAmount) { "`minimumAmount` is required but was not set" },
-                checkNotNull(name) { "`name` is required but was not set" },
-                checkNotNull(price) { "`price` is required but was not set" },
-                checkNotNull(quantity) { "`quantity` is required but was not set" },
-                checkNotNull(startDate) { "`startDate` is required but was not set" },
-                checkNotNull(subLineItems) { "`subLineItems` is required but was not set" }
-                    .map { it.toImmutable() },
-                checkNotNull(subtotal) { "`subtotal` is required but was not set" },
-                checkNotNull(taxAmounts) { "`taxAmounts` is required but was not set" }
-                    .map { it.toImmutable() },
+                checkRequired("id", id),
+                checkRequired("amount", amount),
+                checkRequired("discount", discount),
+                checkRequired("endDate", endDate),
+                checkRequired("grouping", grouping),
+                checkRequired("maximum", maximum),
+                checkRequired("maximumAmount", maximumAmount),
+                checkRequired("minimum", minimum),
+                checkRequired("minimumAmount", minimumAmount),
+                checkRequired("name", name),
+                checkRequired("price", price),
+                checkRequired("quantity", quantity),
+                checkRequired("startDate", startDate),
+                checkRequired("subLineItems", subLineItems).map { it.toImmutable() },
+                checkRequired("subtotal", subtotal),
+                checkRequired("taxAmounts", taxAmounts).map { it.toImmutable() },
                 additionalProperties.toImmutable(),
             )
     }
@@ -7323,11 +7322,8 @@ private constructor(
 
             fun build(): Maximum =
                 Maximum(
-                    checkNotNull(appliesToPriceIds) {
-                            "`appliesToPriceIds` is required but was not set"
-                        }
-                        .map { it.toImmutable() },
-                    checkNotNull(maximumAmount) { "`maximumAmount` is required but was not set" },
+                    checkRequired("appliesToPriceIds", appliesToPriceIds).map { it.toImmutable() },
+                    checkRequired("maximumAmount", maximumAmount),
                     additionalProperties.toImmutable(),
                 )
         }
@@ -7484,11 +7480,8 @@ private constructor(
 
             fun build(): Minimum =
                 Minimum(
-                    checkNotNull(appliesToPriceIds) {
-                            "`appliesToPriceIds` is required but was not set"
-                        }
-                        .map { it.toImmutable() },
-                    checkNotNull(minimumAmount) { "`minimumAmount` is required but was not set" },
+                    checkRequired("appliesToPriceIds", appliesToPriceIds).map { it.toImmutable() },
+                    checkRequired("minimumAmount", minimumAmount),
                     additionalProperties.toImmutable(),
                 )
         }
@@ -7833,12 +7826,12 @@ private constructor(
 
                 fun build(): MatrixSubLineItem =
                     MatrixSubLineItem(
-                        checkNotNull(amount) { "`amount` is required but was not set" },
-                        checkNotNull(grouping) { "`grouping` is required but was not set" },
-                        checkNotNull(matrixConfig) { "`matrixConfig` is required but was not set" },
-                        checkNotNull(name) { "`name` is required but was not set" },
-                        checkNotNull(quantity) { "`quantity` is required but was not set" },
-                        checkNotNull(type) { "`type` is required but was not set" },
+                        checkRequired("amount", amount),
+                        checkRequired("grouping", grouping),
+                        checkRequired("matrixConfig", matrixConfig),
+                        checkRequired("name", name),
+                        checkRequired("quantity", quantity),
+                        checkRequired("type", type),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -7940,8 +7933,8 @@ private constructor(
 
                     fun build(): Grouping =
                         Grouping(
-                            checkNotNull(key) { "`key` is required but was not set" },
-                            checkNotNull(value) { "`value` is required but was not set" },
+                            checkRequired("key", key),
+                            checkRequired("value", value),
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -8064,10 +8057,9 @@ private constructor(
 
                     fun build(): MatrixConfig =
                         MatrixConfig(
-                            checkNotNull(dimensionValues) {
-                                    "`dimensionValues` is required but was not set"
-                                }
-                                .map { it.toImmutable() },
+                            checkRequired("dimensionValues", dimensionValues).map {
+                                it.toImmutable()
+                            },
                             additionalProperties.toImmutable()
                         )
                 }
@@ -8318,12 +8310,12 @@ private constructor(
 
                 fun build(): TierSubLineItem =
                     TierSubLineItem(
-                        checkNotNull(amount) { "`amount` is required but was not set" },
-                        checkNotNull(grouping) { "`grouping` is required but was not set" },
-                        checkNotNull(name) { "`name` is required but was not set" },
-                        checkNotNull(quantity) { "`quantity` is required but was not set" },
-                        checkNotNull(tierConfig) { "`tierConfig` is required but was not set" },
-                        checkNotNull(type) { "`type` is required but was not set" },
+                        checkRequired("amount", amount),
+                        checkRequired("grouping", grouping),
+                        checkRequired("name", name),
+                        checkRequired("quantity", quantity),
+                        checkRequired("tierConfig", tierConfig),
+                        checkRequired("type", type),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -8425,8 +8417,8 @@ private constructor(
 
                     fun build(): Grouping =
                         Grouping(
-                            checkNotNull(key) { "`key` is required but was not set" },
-                            checkNotNull(value) { "`value` is required but was not set" },
+                            checkRequired("key", key),
+                            checkRequired("value", value),
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -8570,9 +8562,9 @@ private constructor(
 
                     fun build(): TierConfig =
                         TierConfig(
-                            checkNotNull(firstUnit) { "`firstUnit` is required but was not set" },
-                            checkNotNull(lastUnit) { "`lastUnit` is required but was not set" },
-                            checkNotNull(unitAmount) { "`unitAmount` is required but was not set" },
+                            checkRequired("firstUnit", firstUnit),
+                            checkRequired("lastUnit", lastUnit),
+                            checkRequired("unitAmount", unitAmount),
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -8805,11 +8797,11 @@ private constructor(
 
                 fun build(): OtherSubLineItem =
                     OtherSubLineItem(
-                        checkNotNull(amount) { "`amount` is required but was not set" },
-                        checkNotNull(grouping) { "`grouping` is required but was not set" },
-                        checkNotNull(name) { "`name` is required but was not set" },
-                        checkNotNull(quantity) { "`quantity` is required but was not set" },
-                        checkNotNull(type) { "`type` is required but was not set" },
+                        checkRequired("amount", amount),
+                        checkRequired("grouping", grouping),
+                        checkRequired("name", name),
+                        checkRequired("quantity", quantity),
+                        checkRequired("type", type),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -8911,8 +8903,8 @@ private constructor(
 
                     fun build(): Grouping =
                         Grouping(
-                            checkNotNull(key) { "`key` is required but was not set" },
-                            checkNotNull(value) { "`value` is required but was not set" },
+                            checkRequired("key", key),
+                            checkRequired("value", value),
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -9133,13 +9125,9 @@ private constructor(
 
             fun build(): TaxAmount =
                 TaxAmount(
-                    checkNotNull(amount) { "`amount` is required but was not set" },
-                    checkNotNull(taxRateDescription) {
-                        "`taxRateDescription` is required but was not set"
-                    },
-                    checkNotNull(taxRatePercentage) {
-                        "`taxRatePercentage` is required but was not set"
-                    },
+                    checkRequired("amount", amount),
+                    checkRequired("taxRateDescription", taxRateDescription),
+                    checkRequired("taxRatePercentage", taxRatePercentage),
                     additionalProperties.toImmutable(),
                 )
         }

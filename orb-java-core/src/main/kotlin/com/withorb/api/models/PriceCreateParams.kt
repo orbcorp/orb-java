@@ -21,6 +21,7 @@ import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.getOrThrow
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
@@ -1861,12 +1862,12 @@ constructor(
 
             fun build(): NewFloatingUnitPrice =
                 NewFloatingUnitPrice(
-                    checkNotNull(cadence) { "`cadence` is required but was not set" },
-                    checkNotNull(currency) { "`currency` is required but was not set" },
-                    checkNotNull(itemId) { "`itemId` is required but was not set" },
-                    checkNotNull(modelType) { "`modelType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
-                    checkNotNull(unitConfig) { "`unitConfig` is required but was not set" },
+                    checkRequired("cadence", cadence),
+                    checkRequired("currency", currency),
+                    checkRequired("itemId", itemId),
+                    checkRequired("modelType", modelType),
+                    checkRequired("name", name),
+                    checkRequired("unitConfig", unitConfig),
                     billableMetricId,
                     billedInAdvance,
                     billingCycleConfiguration,
@@ -2096,7 +2097,7 @@ constructor(
 
                 fun build(): UnitConfig =
                     UnitConfig(
-                        checkNotNull(unitAmount) { "`unitAmount` is required but was not set" },
+                        checkRequired("unitAmount", unitAmount),
                         additionalProperties.toImmutable()
                     )
             }
@@ -2224,8 +2225,8 @@ constructor(
 
                 fun build(): BillingCycleConfiguration =
                     BillingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -2414,8 +2415,8 @@ constructor(
 
                 fun build(): InvoicingCycleConfiguration =
                     InvoicingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -3109,12 +3110,12 @@ constructor(
 
             fun build(): NewFloatingPackagePrice =
                 NewFloatingPackagePrice(
-                    checkNotNull(cadence) { "`cadence` is required but was not set" },
-                    checkNotNull(currency) { "`currency` is required but was not set" },
-                    checkNotNull(itemId) { "`itemId` is required but was not set" },
-                    checkNotNull(modelType) { "`modelType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
-                    checkNotNull(packageConfig) { "`packageConfig` is required but was not set" },
+                    checkRequired("cadence", cadence),
+                    checkRequired("currency", currency),
+                    checkRequired("itemId", itemId),
+                    checkRequired("modelType", modelType),
+                    checkRequired("name", name),
+                    checkRequired("packageConfig", packageConfig),
                     billableMetricId,
                     billedInAdvance,
                     billingCycleConfiguration,
@@ -3379,10 +3380,8 @@ constructor(
 
                 fun build(): PackageConfig =
                     PackageConfig(
-                        checkNotNull(packageAmount) {
-                            "`packageAmount` is required but was not set"
-                        },
-                        checkNotNull(packageSize) { "`packageSize` is required but was not set" },
+                        checkRequired("packageAmount", packageAmount),
+                        checkRequired("packageSize", packageSize),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -3510,8 +3509,8 @@ constructor(
 
                 fun build(): BillingCycleConfiguration =
                     BillingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -3700,8 +3699,8 @@ constructor(
 
                 fun build(): InvoicingCycleConfiguration =
                     InvoicingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -4394,12 +4393,12 @@ constructor(
 
             fun build(): NewFloatingMatrixPrice =
                 NewFloatingMatrixPrice(
-                    checkNotNull(cadence) { "`cadence` is required but was not set" },
-                    checkNotNull(currency) { "`currency` is required but was not set" },
-                    checkNotNull(itemId) { "`itemId` is required but was not set" },
-                    checkNotNull(matrixConfig) { "`matrixConfig` is required but was not set" },
-                    checkNotNull(modelType) { "`modelType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
+                    checkRequired("cadence", cadence),
+                    checkRequired("currency", currency),
+                    checkRequired("itemId", itemId),
+                    checkRequired("matrixConfig", matrixConfig),
+                    checkRequired("modelType", modelType),
+                    checkRequired("name", name),
                     billableMetricId,
                     billedInAdvance,
                     billingCycleConfiguration,
@@ -4656,13 +4655,9 @@ constructor(
 
                 fun build(): MatrixConfig =
                     MatrixConfig(
-                        checkNotNull(defaultUnitAmount) {
-                            "`defaultUnitAmount` is required but was not set"
-                        },
-                        checkNotNull(dimensions) { "`dimensions` is required but was not set" }
-                            .map { it.toImmutable() },
-                        checkNotNull(matrixValues) { "`matrixValues` is required but was not set" }
-                            .map { it.toImmutable() },
+                        checkRequired("defaultUnitAmount", defaultUnitAmount),
+                        checkRequired("dimensions", dimensions).map { it.toImmutable() },
+                        checkRequired("matrixValues", matrixValues).map { it.toImmutable() },
                         additionalProperties.toImmutable(),
                     )
             }
@@ -4809,11 +4804,10 @@ constructor(
 
                     fun build(): MatrixValue =
                         MatrixValue(
-                            checkNotNull(dimensionValues) {
-                                    "`dimensionValues` is required but was not set"
-                                }
-                                .map { it.toImmutable() },
-                            checkNotNull(unitAmount) { "`unitAmount` is required but was not set" },
+                            checkRequired("dimensionValues", dimensionValues).map {
+                                it.toImmutable()
+                            },
+                            checkRequired("unitAmount", unitAmount),
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -5010,8 +5004,8 @@ constructor(
 
                 fun build(): BillingCycleConfiguration =
                     BillingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -5200,8 +5194,8 @@ constructor(
 
                 fun build(): InvoicingCycleConfiguration =
                     InvoicingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -5904,14 +5898,12 @@ constructor(
 
             fun build(): NewFloatingMatrixWithAllocationPrice =
                 NewFloatingMatrixWithAllocationPrice(
-                    checkNotNull(cadence) { "`cadence` is required but was not set" },
-                    checkNotNull(currency) { "`currency` is required but was not set" },
-                    checkNotNull(itemId) { "`itemId` is required but was not set" },
-                    checkNotNull(matrixWithAllocationConfig) {
-                        "`matrixWithAllocationConfig` is required but was not set"
-                    },
-                    checkNotNull(modelType) { "`modelType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
+                    checkRequired("cadence", cadence),
+                    checkRequired("currency", currency),
+                    checkRequired("itemId", itemId),
+                    checkRequired("matrixWithAllocationConfig", matrixWithAllocationConfig),
+                    checkRequired("modelType", modelType),
+                    checkRequired("name", name),
                     billableMetricId,
                     billedInAdvance,
                     billingCycleConfiguration,
@@ -6192,14 +6184,10 @@ constructor(
 
                 fun build(): MatrixWithAllocationConfig =
                     MatrixWithAllocationConfig(
-                        checkNotNull(allocation) { "`allocation` is required but was not set" },
-                        checkNotNull(defaultUnitAmount) {
-                            "`defaultUnitAmount` is required but was not set"
-                        },
-                        checkNotNull(dimensions) { "`dimensions` is required but was not set" }
-                            .map { it.toImmutable() },
-                        checkNotNull(matrixValues) { "`matrixValues` is required but was not set" }
-                            .map { it.toImmutable() },
+                        checkRequired("allocation", allocation),
+                        checkRequired("defaultUnitAmount", defaultUnitAmount),
+                        checkRequired("dimensions", dimensions).map { it.toImmutable() },
+                        checkRequired("matrixValues", matrixValues).map { it.toImmutable() },
                         additionalProperties.toImmutable(),
                     )
             }
@@ -6346,11 +6334,10 @@ constructor(
 
                     fun build(): MatrixValue =
                         MatrixValue(
-                            checkNotNull(dimensionValues) {
-                                    "`dimensionValues` is required but was not set"
-                                }
-                                .map { it.toImmutable() },
-                            checkNotNull(unitAmount) { "`unitAmount` is required but was not set" },
+                            checkRequired("dimensionValues", dimensionValues).map {
+                                it.toImmutable()
+                            },
+                            checkRequired("unitAmount", unitAmount),
                             additionalProperties.toImmutable(),
                         )
                 }
@@ -6547,8 +6534,8 @@ constructor(
 
                 fun build(): BillingCycleConfiguration =
                     BillingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -6737,8 +6724,8 @@ constructor(
 
                 fun build(): InvoicingCycleConfiguration =
                     InvoicingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -7431,12 +7418,12 @@ constructor(
 
             fun build(): NewFloatingTieredPrice =
                 NewFloatingTieredPrice(
-                    checkNotNull(cadence) { "`cadence` is required but was not set" },
-                    checkNotNull(currency) { "`currency` is required but was not set" },
-                    checkNotNull(itemId) { "`itemId` is required but was not set" },
-                    checkNotNull(modelType) { "`modelType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
-                    checkNotNull(tieredConfig) { "`tieredConfig` is required but was not set" },
+                    checkRequired("cadence", cadence),
+                    checkRequired("currency", currency),
+                    checkRequired("itemId", itemId),
+                    checkRequired("modelType", modelType),
+                    checkRequired("name", name),
+                    checkRequired("tieredConfig", tieredConfig),
                     billableMetricId,
                     billedInAdvance,
                     billingCycleConfiguration,
@@ -7678,8 +7665,7 @@ constructor(
 
                 fun build(): TieredConfig =
                     TieredConfig(
-                        checkNotNull(tiers) { "`tiers` is required but was not set" }
-                            .map { it.toImmutable() },
+                        checkRequired("tiers", tiers).map { it.toImmutable() },
                         additionalProperties.toImmutable()
                     )
             }
@@ -7819,8 +7805,8 @@ constructor(
 
                     fun build(): Tier =
                         Tier(
-                            checkNotNull(firstUnit) { "`firstUnit` is required but was not set" },
-                            checkNotNull(unitAmount) { "`unitAmount` is required but was not set" },
+                            checkRequired("firstUnit", firstUnit),
+                            checkRequired("unitAmount", unitAmount),
                             lastUnit,
                             additionalProperties.toImmutable(),
                         )
@@ -7967,8 +7953,8 @@ constructor(
 
                 fun build(): BillingCycleConfiguration =
                     BillingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -8157,8 +8143,8 @@ constructor(
 
                 fun build(): InvoicingCycleConfiguration =
                     InvoicingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -8852,14 +8838,12 @@ constructor(
 
             fun build(): NewFloatingTieredBpsPrice =
                 NewFloatingTieredBpsPrice(
-                    checkNotNull(cadence) { "`cadence` is required but was not set" },
-                    checkNotNull(currency) { "`currency` is required but was not set" },
-                    checkNotNull(itemId) { "`itemId` is required but was not set" },
-                    checkNotNull(modelType) { "`modelType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
-                    checkNotNull(tieredBpsConfig) {
-                        "`tieredBpsConfig` is required but was not set"
-                    },
+                    checkRequired("cadence", cadence),
+                    checkRequired("currency", currency),
+                    checkRequired("itemId", itemId),
+                    checkRequired("modelType", modelType),
+                    checkRequired("name", name),
+                    checkRequired("tieredBpsConfig", tieredBpsConfig),
                     billableMetricId,
                     billedInAdvance,
                     billingCycleConfiguration,
@@ -9114,8 +9098,7 @@ constructor(
 
                 fun build(): TieredBpsConfig =
                     TieredBpsConfig(
-                        checkNotNull(tiers) { "`tiers` is required but was not set" }
-                            .map { it.toImmutable() },
+                        checkRequired("tiers", tiers).map { it.toImmutable() },
                         additionalProperties.toImmutable()
                     )
             }
@@ -9279,10 +9262,8 @@ constructor(
 
                     fun build(): Tier =
                         Tier(
-                            checkNotNull(bps) { "`bps` is required but was not set" },
-                            checkNotNull(minimumAmount) {
-                                "`minimumAmount` is required but was not set"
-                            },
+                            checkRequired("bps", bps),
+                            checkRequired("minimumAmount", minimumAmount),
                             maximumAmount,
                             perUnitMaximum,
                             additionalProperties.toImmutable(),
@@ -9430,8 +9411,8 @@ constructor(
 
                 fun build(): BillingCycleConfiguration =
                     BillingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -9620,8 +9601,8 @@ constructor(
 
                 fun build(): InvoicingCycleConfiguration =
                     InvoicingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -10312,12 +10293,12 @@ constructor(
 
             fun build(): NewFloatingBpsPrice =
                 NewFloatingBpsPrice(
-                    checkNotNull(bpsConfig) { "`bpsConfig` is required but was not set" },
-                    checkNotNull(cadence) { "`cadence` is required but was not set" },
-                    checkNotNull(currency) { "`currency` is required but was not set" },
-                    checkNotNull(itemId) { "`itemId` is required but was not set" },
-                    checkNotNull(modelType) { "`modelType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
+                    checkRequired("bpsConfig", bpsConfig),
+                    checkRequired("cadence", cadence),
+                    checkRequired("currency", currency),
+                    checkRequired("itemId", itemId),
+                    checkRequired("modelType", modelType),
+                    checkRequired("name", name),
                     billableMetricId,
                     billedInAdvance,
                     billingCycleConfiguration,
@@ -10439,7 +10420,7 @@ constructor(
 
                 fun build(): BpsConfig =
                     BpsConfig(
-                        checkNotNull(bps) { "`bps` is required but was not set" },
+                        checkRequired("bps", bps),
                         perUnitMaximum,
                         additionalProperties.toImmutable(),
                     )
@@ -10700,8 +10681,8 @@ constructor(
 
                 fun build(): BillingCycleConfiguration =
                     BillingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -10890,8 +10871,8 @@ constructor(
 
                 fun build(): InvoicingCycleConfiguration =
                     InvoicingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -11585,12 +11566,12 @@ constructor(
 
             fun build(): NewFloatingBulkBpsPrice =
                 NewFloatingBulkBpsPrice(
-                    checkNotNull(bulkBpsConfig) { "`bulkBpsConfig` is required but was not set" },
-                    checkNotNull(cadence) { "`cadence` is required but was not set" },
-                    checkNotNull(currency) { "`currency` is required but was not set" },
-                    checkNotNull(itemId) { "`itemId` is required but was not set" },
-                    checkNotNull(modelType) { "`modelType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
+                    checkRequired("bulkBpsConfig", bulkBpsConfig),
+                    checkRequired("cadence", cadence),
+                    checkRequired("currency", currency),
+                    checkRequired("itemId", itemId),
+                    checkRequired("modelType", modelType),
+                    checkRequired("name", name),
                     billableMetricId,
                     billedInAdvance,
                     billingCycleConfiguration,
@@ -11715,8 +11696,7 @@ constructor(
 
                 fun build(): BulkBpsConfig =
                     BulkBpsConfig(
-                        checkNotNull(tiers) { "`tiers` is required but was not set" }
-                            .map { it.toImmutable() },
+                        checkRequired("tiers", tiers).map { it.toImmutable() },
                         additionalProperties.toImmutable()
                     )
             }
@@ -11857,7 +11837,7 @@ constructor(
 
                     fun build(): Tier =
                         Tier(
-                            checkNotNull(bps) { "`bps` is required but was not set" },
+                            checkRequired("bps", bps),
                             maximumAmount,
                             perUnitMaximum,
                             additionalProperties.toImmutable(),
@@ -12137,8 +12117,8 @@ constructor(
 
                 fun build(): BillingCycleConfiguration =
                     BillingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -12327,8 +12307,8 @@ constructor(
 
                 fun build(): InvoicingCycleConfiguration =
                     InvoicingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -13021,12 +13001,12 @@ constructor(
 
             fun build(): NewFloatingBulkPrice =
                 NewFloatingBulkPrice(
-                    checkNotNull(bulkConfig) { "`bulkConfig` is required but was not set" },
-                    checkNotNull(cadence) { "`cadence` is required but was not set" },
-                    checkNotNull(currency) { "`currency` is required but was not set" },
-                    checkNotNull(itemId) { "`itemId` is required but was not set" },
-                    checkNotNull(modelType) { "`modelType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
+                    checkRequired("bulkConfig", bulkConfig),
+                    checkRequired("cadence", cadence),
+                    checkRequired("currency", currency),
+                    checkRequired("itemId", itemId),
+                    checkRequired("modelType", modelType),
+                    checkRequired("name", name),
                     billableMetricId,
                     billedInAdvance,
                     billingCycleConfiguration,
@@ -13136,8 +13116,7 @@ constructor(
 
                 fun build(): BulkConfig =
                     BulkConfig(
-                        checkNotNull(tiers) { "`tiers` is required but was not set" }
-                            .map { it.toImmutable() },
+                        checkRequired("tiers", tiers).map { it.toImmutable() },
                         additionalProperties.toImmutable()
                     )
             }
@@ -13258,7 +13237,7 @@ constructor(
 
                     fun build(): Tier =
                         Tier(
-                            checkNotNull(unitAmount) { "`unitAmount` is required but was not set" },
+                            checkRequired("unitAmount", unitAmount),
                             maximumUnits,
                             additionalProperties.toImmutable(),
                         )
@@ -13537,8 +13516,8 @@ constructor(
 
                 fun build(): BillingCycleConfiguration =
                     BillingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -13727,8 +13706,8 @@ constructor(
 
                 fun build(): InvoicingCycleConfiguration =
                     InvoicingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -14431,14 +14410,12 @@ constructor(
 
             fun build(): NewFloatingThresholdTotalAmountPrice =
                 NewFloatingThresholdTotalAmountPrice(
-                    checkNotNull(cadence) { "`cadence` is required but was not set" },
-                    checkNotNull(currency) { "`currency` is required but was not set" },
-                    checkNotNull(itemId) { "`itemId` is required but was not set" },
-                    checkNotNull(modelType) { "`modelType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
-                    checkNotNull(thresholdTotalAmountConfig) {
-                        "`thresholdTotalAmountConfig` is required but was not set"
-                    },
+                    checkRequired("cadence", cadence),
+                    checkRequired("currency", currency),
+                    checkRequired("itemId", itemId),
+                    checkRequired("modelType", modelType),
+                    checkRequired("name", name),
+                    checkRequired("thresholdTotalAmountConfig", thresholdTotalAmountConfig),
                     billableMetricId,
                     billedInAdvance,
                     billingCycleConfiguration,
@@ -14772,8 +14749,8 @@ constructor(
 
                 fun build(): BillingCycleConfiguration =
                     BillingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -14962,8 +14939,8 @@ constructor(
 
                 fun build(): InvoicingCycleConfiguration =
                     InvoicingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -15662,14 +15639,12 @@ constructor(
 
             fun build(): NewFloatingTieredPackagePrice =
                 NewFloatingTieredPackagePrice(
-                    checkNotNull(cadence) { "`cadence` is required but was not set" },
-                    checkNotNull(currency) { "`currency` is required but was not set" },
-                    checkNotNull(itemId) { "`itemId` is required but was not set" },
-                    checkNotNull(modelType) { "`modelType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
-                    checkNotNull(tieredPackageConfig) {
-                        "`tieredPackageConfig` is required but was not set"
-                    },
+                    checkRequired("cadence", cadence),
+                    checkRequired("currency", currency),
+                    checkRequired("itemId", itemId),
+                    checkRequired("modelType", modelType),
+                    checkRequired("name", name),
+                    checkRequired("tieredPackageConfig", tieredPackageConfig),
                     billableMetricId,
                     billedInAdvance,
                     billingCycleConfiguration,
@@ -16002,8 +15977,8 @@ constructor(
 
                 fun build(): BillingCycleConfiguration =
                     BillingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -16192,8 +16167,8 @@ constructor(
 
                 fun build(): InvoicingCycleConfiguration =
                     InvoicingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -16892,14 +16867,12 @@ constructor(
 
             fun build(): NewFloatingGroupedTieredPrice =
                 NewFloatingGroupedTieredPrice(
-                    checkNotNull(cadence) { "`cadence` is required but was not set" },
-                    checkNotNull(currency) { "`currency` is required but was not set" },
-                    checkNotNull(groupedTieredConfig) {
-                        "`groupedTieredConfig` is required but was not set"
-                    },
-                    checkNotNull(itemId) { "`itemId` is required but was not set" },
-                    checkNotNull(modelType) { "`modelType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
+                    checkRequired("cadence", cadence),
+                    checkRequired("currency", currency),
+                    checkRequired("groupedTieredConfig", groupedTieredConfig),
+                    checkRequired("itemId", itemId),
+                    checkRequired("modelType", modelType),
+                    checkRequired("name", name),
                     billableMetricId,
                     billedInAdvance,
                     billingCycleConfiguration,
@@ -17232,8 +17205,8 @@ constructor(
 
                 fun build(): BillingCycleConfiguration =
                     BillingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -17422,8 +17395,8 @@ constructor(
 
                 fun build(): InvoicingCycleConfiguration =
                     InvoicingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -18123,14 +18096,12 @@ constructor(
 
             fun build(): NewFloatingTieredWithMinimumPrice =
                 NewFloatingTieredWithMinimumPrice(
-                    checkNotNull(cadence) { "`cadence` is required but was not set" },
-                    checkNotNull(currency) { "`currency` is required but was not set" },
-                    checkNotNull(itemId) { "`itemId` is required but was not set" },
-                    checkNotNull(modelType) { "`modelType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
-                    checkNotNull(tieredWithMinimumConfig) {
-                        "`tieredWithMinimumConfig` is required but was not set"
-                    },
+                    checkRequired("cadence", cadence),
+                    checkRequired("currency", currency),
+                    checkRequired("itemId", itemId),
+                    checkRequired("modelType", modelType),
+                    checkRequired("name", name),
+                    checkRequired("tieredWithMinimumConfig", tieredWithMinimumConfig),
                     billableMetricId,
                     billedInAdvance,
                     billingCycleConfiguration,
@@ -18464,8 +18435,8 @@ constructor(
 
                 fun build(): BillingCycleConfiguration =
                     BillingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -18654,8 +18625,8 @@ constructor(
 
                 fun build(): InvoicingCycleConfiguration =
                     InvoicingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -19359,14 +19330,12 @@ constructor(
 
             fun build(): NewFloatingPackageWithAllocationPrice =
                 NewFloatingPackageWithAllocationPrice(
-                    checkNotNull(cadence) { "`cadence` is required but was not set" },
-                    checkNotNull(currency) { "`currency` is required but was not set" },
-                    checkNotNull(itemId) { "`itemId` is required but was not set" },
-                    checkNotNull(modelType) { "`modelType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
-                    checkNotNull(packageWithAllocationConfig) {
-                        "`packageWithAllocationConfig` is required but was not set"
-                    },
+                    checkRequired("cadence", cadence),
+                    checkRequired("currency", currency),
+                    checkRequired("itemId", itemId),
+                    checkRequired("modelType", modelType),
+                    checkRequired("name", name),
+                    checkRequired("packageWithAllocationConfig", packageWithAllocationConfig),
                     billableMetricId,
                     billedInAdvance,
                     billingCycleConfiguration,
@@ -19701,8 +19670,8 @@ constructor(
 
                 fun build(): BillingCycleConfiguration =
                     BillingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -19891,8 +19860,8 @@ constructor(
 
                 fun build(): InvoicingCycleConfiguration =
                     InvoicingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -20597,14 +20566,12 @@ constructor(
 
             fun build(): NewFloatingTieredPackageWithMinimumPrice =
                 NewFloatingTieredPackageWithMinimumPrice(
-                    checkNotNull(cadence) { "`cadence` is required but was not set" },
-                    checkNotNull(currency) { "`currency` is required but was not set" },
-                    checkNotNull(itemId) { "`itemId` is required but was not set" },
-                    checkNotNull(modelType) { "`modelType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
-                    checkNotNull(tieredPackageWithMinimumConfig) {
-                        "`tieredPackageWithMinimumConfig` is required but was not set"
-                    },
+                    checkRequired("cadence", cadence),
+                    checkRequired("currency", currency),
+                    checkRequired("itemId", itemId),
+                    checkRequired("modelType", modelType),
+                    checkRequired("name", name),
+                    checkRequired("tieredPackageWithMinimumConfig", tieredPackageWithMinimumConfig),
                     billableMetricId,
                     billedInAdvance,
                     billingCycleConfiguration,
@@ -20939,8 +20906,8 @@ constructor(
 
                 fun build(): BillingCycleConfiguration =
                     BillingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -21129,8 +21096,8 @@ constructor(
 
                 fun build(): InvoicingCycleConfiguration =
                     InvoicingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -21830,14 +21797,12 @@ constructor(
 
             fun build(): NewFloatingUnitWithPercentPrice =
                 NewFloatingUnitWithPercentPrice(
-                    checkNotNull(cadence) { "`cadence` is required but was not set" },
-                    checkNotNull(currency) { "`currency` is required but was not set" },
-                    checkNotNull(itemId) { "`itemId` is required but was not set" },
-                    checkNotNull(modelType) { "`modelType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
-                    checkNotNull(unitWithPercentConfig) {
-                        "`unitWithPercentConfig` is required but was not set"
-                    },
+                    checkRequired("cadence", cadence),
+                    checkRequired("currency", currency),
+                    checkRequired("itemId", itemId),
+                    checkRequired("modelType", modelType),
+                    checkRequired("name", name),
+                    checkRequired("unitWithPercentConfig", unitWithPercentConfig),
                     billableMetricId,
                     billedInAdvance,
                     billingCycleConfiguration,
@@ -22170,8 +22135,8 @@ constructor(
 
                 fun build(): BillingCycleConfiguration =
                     BillingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -22360,8 +22325,8 @@ constructor(
 
                 fun build(): InvoicingCycleConfiguration =
                     InvoicingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -23064,14 +23029,12 @@ constructor(
 
             fun build(): NewFloatingTieredWithProrationPrice =
                 NewFloatingTieredWithProrationPrice(
-                    checkNotNull(cadence) { "`cadence` is required but was not set" },
-                    checkNotNull(currency) { "`currency` is required but was not set" },
-                    checkNotNull(itemId) { "`itemId` is required but was not set" },
-                    checkNotNull(modelType) { "`modelType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
-                    checkNotNull(tieredWithProrationConfig) {
-                        "`tieredWithProrationConfig` is required but was not set"
-                    },
+                    checkRequired("cadence", cadence),
+                    checkRequired("currency", currency),
+                    checkRequired("itemId", itemId),
+                    checkRequired("modelType", modelType),
+                    checkRequired("name", name),
+                    checkRequired("tieredWithProrationConfig", tieredWithProrationConfig),
                     billableMetricId,
                     billedInAdvance,
                     billingCycleConfiguration,
@@ -23405,8 +23368,8 @@ constructor(
 
                 fun build(): BillingCycleConfiguration =
                     BillingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -23595,8 +23558,8 @@ constructor(
 
                 fun build(): InvoicingCycleConfiguration =
                     InvoicingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -24296,14 +24259,12 @@ constructor(
 
             fun build(): NewFloatingUnitWithProrationPrice =
                 NewFloatingUnitWithProrationPrice(
-                    checkNotNull(cadence) { "`cadence` is required but was not set" },
-                    checkNotNull(currency) { "`currency` is required but was not set" },
-                    checkNotNull(itemId) { "`itemId` is required but was not set" },
-                    checkNotNull(modelType) { "`modelType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
-                    checkNotNull(unitWithProrationConfig) {
-                        "`unitWithProrationConfig` is required but was not set"
-                    },
+                    checkRequired("cadence", cadence),
+                    checkRequired("currency", currency),
+                    checkRequired("itemId", itemId),
+                    checkRequired("modelType", modelType),
+                    checkRequired("name", name),
+                    checkRequired("unitWithProrationConfig", unitWithProrationConfig),
                     billableMetricId,
                     billedInAdvance,
                     billingCycleConfiguration,
@@ -24637,8 +24598,8 @@ constructor(
 
                 fun build(): BillingCycleConfiguration =
                     BillingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -24827,8 +24788,8 @@ constructor(
 
                 fun build(): InvoicingCycleConfiguration =
                     InvoicingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -25528,14 +25489,12 @@ constructor(
 
             fun build(): NewFloatingGroupedAllocationPrice =
                 NewFloatingGroupedAllocationPrice(
-                    checkNotNull(cadence) { "`cadence` is required but was not set" },
-                    checkNotNull(currency) { "`currency` is required but was not set" },
-                    checkNotNull(groupedAllocationConfig) {
-                        "`groupedAllocationConfig` is required but was not set"
-                    },
-                    checkNotNull(itemId) { "`itemId` is required but was not set" },
-                    checkNotNull(modelType) { "`modelType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
+                    checkRequired("cadence", cadence),
+                    checkRequired("currency", currency),
+                    checkRequired("groupedAllocationConfig", groupedAllocationConfig),
+                    checkRequired("itemId", itemId),
+                    checkRequired("modelType", modelType),
+                    checkRequired("name", name),
                     billableMetricId,
                     billedInAdvance,
                     billingCycleConfiguration,
@@ -25869,8 +25828,8 @@ constructor(
 
                 fun build(): BillingCycleConfiguration =
                     BillingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -26059,8 +26018,8 @@ constructor(
 
                 fun build(): InvoicingCycleConfiguration =
                     InvoicingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -26767,14 +26726,15 @@ constructor(
 
             fun build(): NewFloatingGroupedWithProratedMinimumPrice =
                 NewFloatingGroupedWithProratedMinimumPrice(
-                    checkNotNull(cadence) { "`cadence` is required but was not set" },
-                    checkNotNull(currency) { "`currency` is required but was not set" },
-                    checkNotNull(groupedWithProratedMinimumConfig) {
-                        "`groupedWithProratedMinimumConfig` is required but was not set"
-                    },
-                    checkNotNull(itemId) { "`itemId` is required but was not set" },
-                    checkNotNull(modelType) { "`modelType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
+                    checkRequired("cadence", cadence),
+                    checkRequired("currency", currency),
+                    checkRequired(
+                        "groupedWithProratedMinimumConfig",
+                        groupedWithProratedMinimumConfig
+                    ),
+                    checkRequired("itemId", itemId),
+                    checkRequired("modelType", modelType),
+                    checkRequired("name", name),
                     billableMetricId,
                     billedInAdvance,
                     billingCycleConfiguration,
@@ -27110,8 +27070,8 @@ constructor(
 
                 fun build(): BillingCycleConfiguration =
                     BillingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -27300,8 +27260,8 @@ constructor(
 
                 fun build(): InvoicingCycleConfiguration =
                     InvoicingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -28007,14 +27967,15 @@ constructor(
 
             fun build(): NewFloatingGroupedWithMeteredMinimumPrice =
                 NewFloatingGroupedWithMeteredMinimumPrice(
-                    checkNotNull(cadence) { "`cadence` is required but was not set" },
-                    checkNotNull(currency) { "`currency` is required but was not set" },
-                    checkNotNull(groupedWithMeteredMinimumConfig) {
-                        "`groupedWithMeteredMinimumConfig` is required but was not set"
-                    },
-                    checkNotNull(itemId) { "`itemId` is required but was not set" },
-                    checkNotNull(modelType) { "`modelType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
+                    checkRequired("cadence", cadence),
+                    checkRequired("currency", currency),
+                    checkRequired(
+                        "groupedWithMeteredMinimumConfig",
+                        groupedWithMeteredMinimumConfig
+                    ),
+                    checkRequired("itemId", itemId),
+                    checkRequired("modelType", modelType),
+                    checkRequired("name", name),
                     billableMetricId,
                     billedInAdvance,
                     billingCycleConfiguration,
@@ -28350,8 +28311,8 @@ constructor(
 
                 fun build(): BillingCycleConfiguration =
                     BillingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -28540,8 +28501,8 @@ constructor(
 
                 fun build(): InvoicingCycleConfiguration =
                     InvoicingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -29245,14 +29206,12 @@ constructor(
 
             fun build(): NewFloatingMatrixWithDisplayNamePrice =
                 NewFloatingMatrixWithDisplayNamePrice(
-                    checkNotNull(cadence) { "`cadence` is required but was not set" },
-                    checkNotNull(currency) { "`currency` is required but was not set" },
-                    checkNotNull(itemId) { "`itemId` is required but was not set" },
-                    checkNotNull(matrixWithDisplayNameConfig) {
-                        "`matrixWithDisplayNameConfig` is required but was not set"
-                    },
-                    checkNotNull(modelType) { "`modelType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
+                    checkRequired("cadence", cadence),
+                    checkRequired("currency", currency),
+                    checkRequired("itemId", itemId),
+                    checkRequired("matrixWithDisplayNameConfig", matrixWithDisplayNameConfig),
+                    checkRequired("modelType", modelType),
+                    checkRequired("name", name),
                     billableMetricId,
                     billedInAdvance,
                     billingCycleConfiguration,
@@ -29587,8 +29546,8 @@ constructor(
 
                 fun build(): BillingCycleConfiguration =
                     BillingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -29777,8 +29736,8 @@ constructor(
 
                 fun build(): InvoicingCycleConfiguration =
                     InvoicingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -30478,14 +30437,12 @@ constructor(
 
             fun build(): NewFloatingBulkWithProrationPrice =
                 NewFloatingBulkWithProrationPrice(
-                    checkNotNull(bulkWithProrationConfig) {
-                        "`bulkWithProrationConfig` is required but was not set"
-                    },
-                    checkNotNull(cadence) { "`cadence` is required but was not set" },
-                    checkNotNull(currency) { "`currency` is required but was not set" },
-                    checkNotNull(itemId) { "`itemId` is required but was not set" },
-                    checkNotNull(modelType) { "`modelType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
+                    checkRequired("bulkWithProrationConfig", bulkWithProrationConfig),
+                    checkRequired("cadence", cadence),
+                    checkRequired("currency", currency),
+                    checkRequired("itemId", itemId),
+                    checkRequired("modelType", modelType),
+                    checkRequired("name", name),
                     billableMetricId,
                     billedInAdvance,
                     billingCycleConfiguration,
@@ -30819,8 +30776,8 @@ constructor(
 
                 fun build(): BillingCycleConfiguration =
                     BillingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -31009,8 +30966,8 @@ constructor(
 
                 fun build(): InvoicingCycleConfiguration =
                     InvoicingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -31713,14 +31670,12 @@ constructor(
 
             fun build(): NewFloatingGroupedTieredPackagePrice =
                 NewFloatingGroupedTieredPackagePrice(
-                    checkNotNull(cadence) { "`cadence` is required but was not set" },
-                    checkNotNull(currency) { "`currency` is required but was not set" },
-                    checkNotNull(groupedTieredPackageConfig) {
-                        "`groupedTieredPackageConfig` is required but was not set"
-                    },
-                    checkNotNull(itemId) { "`itemId` is required but was not set" },
-                    checkNotNull(modelType) { "`modelType` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
+                    checkRequired("cadence", cadence),
+                    checkRequired("currency", currency),
+                    checkRequired("groupedTieredPackageConfig", groupedTieredPackageConfig),
+                    checkRequired("itemId", itemId),
+                    checkRequired("modelType", modelType),
+                    checkRequired("name", name),
                     billableMetricId,
                     billedInAdvance,
                     billingCycleConfiguration,
@@ -32054,8 +32009,8 @@ constructor(
 
                 fun build(): BillingCycleConfiguration =
                     BillingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
@@ -32244,8 +32199,8 @@ constructor(
 
                 fun build(): InvoicingCycleConfiguration =
                     InvoicingCycleConfiguration(
-                        checkNotNull(duration) { "`duration` is required but was not set" },
-                        checkNotNull(durationUnit) { "`durationUnit` is required but was not set" },
+                        checkRequired("duration", duration),
+                        checkRequired("durationUnit", durationUnit),
                         additionalProperties.toImmutable(),
                     )
             }
