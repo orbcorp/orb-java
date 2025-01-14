@@ -11,6 +11,7 @@ import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
 import java.time.OffsetDateTime
@@ -104,8 +105,7 @@ private constructor(
 
         fun build(): EventSearchResponse =
             EventSearchResponse(
-                checkNotNull(data) { "`data` is required but was not set" }
-                    .map { it.toImmutable() },
+                checkRequired("data", data).map { it.toImmutable() },
                 additionalProperties.toImmutable()
             )
     }
@@ -357,15 +357,13 @@ private constructor(
 
             fun build(): Data =
                 Data(
-                    checkNotNull(id) { "`id` is required but was not set" },
-                    checkNotNull(customerId) { "`customerId` is required but was not set" },
-                    checkNotNull(deprecated) { "`deprecated` is required but was not set" },
-                    checkNotNull(eventName) { "`eventName` is required but was not set" },
-                    checkNotNull(externalCustomerId) {
-                        "`externalCustomerId` is required but was not set"
-                    },
-                    checkNotNull(properties) { "`properties` is required but was not set" },
-                    checkNotNull(timestamp) { "`timestamp` is required but was not set" },
+                    checkRequired("id", id),
+                    checkRequired("customerId", customerId),
+                    checkRequired("deprecated", deprecated),
+                    checkRequired("eventName", eventName),
+                    checkRequired("externalCustomerId", externalCustomerId),
+                    checkRequired("properties", properties),
+                    checkRequired("timestamp", timestamp),
                     additionalProperties.toImmutable(),
                 )
         }

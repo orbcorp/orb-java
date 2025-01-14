@@ -12,6 +12,7 @@ import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.immutableEmptyMap
@@ -243,7 +244,7 @@ constructor(
 
             fun build(): SubscriptionCancelBody =
                 SubscriptionCancelBody(
-                    checkNotNull(cancelOption) { "`cancelOption` is required but was not set" },
+                    checkRequired("cancelOption", cancelOption),
                     cancellationDate,
                     additionalProperties.toImmutable(),
                 )
@@ -442,7 +443,7 @@ constructor(
 
         fun build(): SubscriptionCancelParams =
             SubscriptionCancelParams(
-                checkNotNull(subscriptionId) { "`subscriptionId` is required but was not set" },
+                checkRequired("subscriptionId", subscriptionId),
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
