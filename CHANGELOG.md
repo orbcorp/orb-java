@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.21.0 (2025-01-15)
+
+Full Changelog: [v0.20.0...v0.21.0](https://github.com/orbcorp/orb-java/compare/v0.20.0...v0.21.0)
+
+### Features
+
+* **api:** api update ([#198](https://github.com/orbcorp/orb-java/issues/198)) ([5c3b405](https://github.com/orbcorp/orb-java/commit/5c3b4056210b7767bfb459a8aeebb89868ca94ed))
+* **client:** add more builder convenience methods for lists ([#188](https://github.com/orbcorp/orb-java/issues/188)) ([2cc7b59](https://github.com/orbcorp/orb-java/commit/2cc7b59eef370132838b0a1c5035b54235e071e8))
+
+
+### Chores
+
+* **internal:** add and tweak check functions ([#195](https://github.com/orbcorp/orb-java/issues/195)) ([059140b](https://github.com/orbcorp/orb-java/commit/059140b58e537e077a1fdac7147b69f6a2287d3c))
+* **internal:** codegen related update ([#186](https://github.com/orbcorp/orb-java/issues/186)) ([80ba077](https://github.com/orbcorp/orb-java/commit/80ba077b082aa2e8293b1389f3a24a6acf8f2d16))
+* **internal:** codegen related update ([#189](https://github.com/orbcorp/orb-java/issues/189)) ([02ac7e7](https://github.com/orbcorp/orb-java/commit/02ac7e7f881d9474582f8c7a4e7ac6da9c08c24e))
+* **internal:** extract a `checkRequired` function ([#194](https://github.com/orbcorp/orb-java/issues/194)) ([4d7ef18](https://github.com/orbcorp/orb-java/commit/4d7ef182abe288e73d704d490baea3129739aea9))
+* **internal:** fix up root `build.gradle.kts` formatting ([#190](https://github.com/orbcorp/orb-java/issues/190)) ([c6877ff](https://github.com/orbcorp/orb-java/commit/c6877ff9cbf213990d401994bf09c11c40abfe48))
+* **internal:** remove unused Gradle imports ([#191](https://github.com/orbcorp/orb-java/issues/191)) ([dc9baca](https://github.com/orbcorp/orb-java/commit/dc9bacac05d8cae6d70faee128ca9a2425a30275))
+* **internal:** remove unused or unnecessary Gradle imports ([#192](https://github.com/orbcorp/orb-java/issues/192)) ([1d55476](https://github.com/orbcorp/orb-java/commit/1d55476c9984ae3c0b8bc3160c40466e04e96fad))
+* **internal:** tweak client options nullability handling ([059140b](https://github.com/orbcorp/orb-java/commit/059140b58e537e077a1fdac7147b69f6a2287d3c))
+* **internal:** update some gradle formatting ([#193](https://github.com/orbcorp/orb-java/issues/193)) ([84dffdc](https://github.com/orbcorp/orb-java/commit/84dffdce3a40890a70e8d486bc92efe7d7d40e7f))
+* simplify examples involving lists ([#196](https://github.com/orbcorp/orb-java/issues/196)) ([087813e](https://github.com/orbcorp/orb-java/commit/087813e8217eaea12439a2b8c6df46ba32ea4d1d))
+* simplify examples involving unions ([#197](https://github.com/orbcorp/orb-java/issues/197)) ([6f4b238](https://github.com/orbcorp/orb-java/commit/6f4b23885505fb6cd3cc8e94c3a405c01e7336f6))
+
 ## 0.20.0 (2025-01-07)
 
 Full Changelog: [v0.19.0...v0.20.0](https://github.com/orbcorp/orb-java/compare/v0.19.0...v0.20.0)
