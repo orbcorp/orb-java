@@ -1525,6 +1525,7 @@ constructor(
                     )
             }
 
+            /** The cadence at which to allocate the amount to the customer. */
             class Cadence
             @JsonCreator
             private constructor(
@@ -4479,6 +4480,7 @@ constructor(
                         )
                 }
 
+                /** The cadence to bill for this price on. */
                 class Cadence
                 @JsonCreator
                 private constructor(
@@ -4839,6 +4841,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -5035,6 +5038,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -5803,6 +5807,7 @@ constructor(
                         )
                 }
 
+                /** The cadence to bill for this price on. */
                 class Cadence
                 @JsonCreator
                 private constructor(
@@ -6199,6 +6204,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -6395,6 +6401,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -7162,6 +7169,7 @@ constructor(
                         )
                 }
 
+                /** The cadence to bill for this price on. */
                 class Cadence
                 @JsonCreator
                 private constructor(
@@ -7788,6 +7796,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -7984,6 +7993,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -8760,6 +8770,7 @@ constructor(
                         )
                 }
 
+                /** The cadence to bill for this price on. */
                 class Cadence
                 @JsonCreator
                 private constructor(
@@ -9415,6 +9426,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -9611,6 +9623,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -10378,6 +10391,7 @@ constructor(
                         )
                 }
 
+                /** The cadence to bill for this price on. */
                 class Cadence
                 @JsonCreator
                 private constructor(
@@ -10942,6 +10956,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -11138,6 +11153,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -11908,6 +11924,7 @@ constructor(
                         )
                 }
 
+                /** The cadence to bill for this price on. */
                 class Cadence
                 @JsonCreator
                 private constructor(
@@ -12485,6 +12502,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -12681,6 +12699,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -13580,6 +13599,7 @@ constructor(
                         "BpsConfig{bps=$bps, perUnitMaximum=$perUnitMaximum, additionalProperties=$additionalProperties}"
                 }
 
+                /** The cadence to bill for this price on. */
                 class Cadence
                 @JsonCreator
                 private constructor(
@@ -13832,6 +13852,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -14028,6 +14049,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -15096,6 +15118,7 @@ constructor(
                         "BulkBpsConfig{tiers=$tiers, additionalProperties=$additionalProperties}"
                 }
 
+                /** The cadence to bill for this price on. */
                 class Cadence
                 @JsonCreator
                 private constructor(
@@ -15348,6 +15371,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -15544,6 +15568,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -16578,6 +16603,7 @@ constructor(
                         "BulkConfig{tiers=$tiers, additionalProperties=$additionalProperties}"
                 }
 
+                /** The cadence to bill for this price on. */
                 class Cadence
                 @JsonCreator
                 private constructor(
@@ -16830,6 +16856,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -17026,6 +17053,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -17802,6 +17830,7 @@ constructor(
                         )
                 }
 
+                /** The cadence to bill for this price on. */
                 class Cadence
                 @JsonCreator
                 private constructor(
@@ -18139,6 +18168,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -18335,6 +18365,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -19107,6 +19138,7 @@ constructor(
                         )
                 }
 
+                /** The cadence to bill for this price on. */
                 class Cadence
                 @JsonCreator
                 private constructor(
@@ -19443,6 +19475,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -19639,6 +19672,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -20411,6 +20445,7 @@ constructor(
                         )
                 }
 
+                /** The cadence to bill for this price on. */
                 class Cadence
                 @JsonCreator
                 private constructor(
@@ -20747,6 +20782,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -20943,6 +20979,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -21715,6 +21752,7 @@ constructor(
                         )
                 }
 
+                /** The cadence to bill for this price on. */
                 class Cadence
                 @JsonCreator
                 private constructor(
@@ -22051,6 +22089,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -22247,6 +22286,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -23021,6 +23061,7 @@ constructor(
                         )
                 }
 
+                /** The cadence to bill for this price on. */
                 class Cadence
                 @JsonCreator
                 private constructor(
@@ -23358,6 +23399,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -23554,6 +23596,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -24337,6 +24380,7 @@ constructor(
                         )
                 }
 
+                /** The cadence to bill for this price on. */
                 class Cadence
                 @JsonCreator
                 private constructor(
@@ -24675,6 +24719,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -24871,6 +24916,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -25658,6 +25704,7 @@ constructor(
                         )
                 }
 
+                /** The cadence to bill for this price on. */
                 class Cadence
                 @JsonCreator
                 private constructor(
@@ -25997,6 +26044,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -26193,6 +26241,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -26967,6 +27016,7 @@ constructor(
                         )
                 }
 
+                /** The cadence to bill for this price on. */
                 class Cadence
                 @JsonCreator
                 private constructor(
@@ -27303,6 +27353,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -27499,6 +27550,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -28275,6 +28327,7 @@ constructor(
                         )
                 }
 
+                /** The cadence to bill for this price on. */
                 class Cadence
                 @JsonCreator
                 private constructor(
@@ -28612,6 +28665,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -28808,6 +28862,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -29582,6 +29637,7 @@ constructor(
                         )
                 }
 
+                /** The cadence to bill for this price on. */
                 class Cadence
                 @JsonCreator
                 private constructor(
@@ -29919,6 +29975,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -30115,6 +30172,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -30889,6 +30947,7 @@ constructor(
                         )
                 }
 
+                /** The cadence to bill for this price on. */
                 class Cadence
                 @JsonCreator
                 private constructor(
@@ -31226,6 +31285,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -31422,6 +31482,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -32217,6 +32278,7 @@ constructor(
                         )
                 }
 
+                /** The cadence to bill for this price on. */
                 class Cadence
                 @JsonCreator
                 private constructor(
@@ -32556,6 +32618,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -32752,6 +32815,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -33546,6 +33610,7 @@ constructor(
                         )
                 }
 
+                /** The cadence to bill for this price on. */
                 class Cadence
                 @JsonCreator
                 private constructor(
@@ -33885,6 +33950,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -34081,6 +34147,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -34864,6 +34931,7 @@ constructor(
                         )
                 }
 
+                /** The cadence to bill for this price on. */
                 class Cadence
                 @JsonCreator
                 private constructor(
@@ -35202,6 +35270,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -35398,6 +35467,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -36257,6 +36327,7 @@ constructor(
                         "BulkWithProrationConfig{additionalProperties=$additionalProperties}"
                 }
 
+                /** The cadence to bill for this price on. */
                 class Cadence
                 @JsonCreator
                 private constructor(
@@ -36509,6 +36580,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -36705,6 +36777,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -37481,6 +37554,7 @@ constructor(
                         )
                 }
 
+                /** The cadence to bill for this price on. */
                 class Cadence
                 @JsonCreator
                 private constructor(
@@ -37818,6 +37892,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(
@@ -38014,6 +38089,7 @@ constructor(
                             )
                     }
 
+                    /** The unit of billing period duration. */
                     class DurationUnit
                     @JsonCreator
                     private constructor(

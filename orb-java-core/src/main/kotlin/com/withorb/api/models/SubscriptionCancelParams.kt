@@ -450,6 +450,7 @@ constructor(
             )
     }
 
+    /** Determines the timing of subscription cancellation */
     class CancelOption
     @JsonCreator
     private constructor(

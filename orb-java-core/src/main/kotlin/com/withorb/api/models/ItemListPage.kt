@@ -19,6 +19,7 @@ import java.util.Optional
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
+/** This endpoint returns a list of all Items, ordered in descending order by creation time. */
 class ItemListPage
 private constructor(
     private val itemsService: ItemService,

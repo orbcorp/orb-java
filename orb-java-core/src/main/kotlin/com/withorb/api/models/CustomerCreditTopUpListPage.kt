@@ -19,6 +19,7 @@ import java.util.Optional
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
+/** List top-ups */
 class CustomerCreditTopUpListPage
 private constructor(
     private val topUpsService: TopUpService,

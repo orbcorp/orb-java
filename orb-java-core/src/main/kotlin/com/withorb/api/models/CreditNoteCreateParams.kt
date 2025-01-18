@@ -508,6 +508,7 @@ constructor(
             "LineItem{amount=$amount, invoiceLineItemId=$invoiceLineItemId, additionalProperties=$additionalProperties}"
     }
 
+    /** An optional reason for the credit note. */
     class Reason
     @JsonCreator
     private constructor(

@@ -20,6 +20,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
 
+/** This endpoint returns a list of all Items, ordered in descending order by creation time. */
 class ItemListPageAsync
 private constructor(
     private val itemsService: ItemServiceAsync,

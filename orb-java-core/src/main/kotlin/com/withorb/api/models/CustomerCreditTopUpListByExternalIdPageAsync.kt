@@ -20,6 +20,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
 
+/** List top-ups by external ID */
 class CustomerCreditTopUpListByExternalIdPageAsync
 private constructor(
     private val topUpsService: TopUpServiceAsync,

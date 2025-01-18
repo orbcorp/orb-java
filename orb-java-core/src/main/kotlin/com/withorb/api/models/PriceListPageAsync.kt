@@ -20,6 +20,10 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
 
+/**
+ * This endpoint is used to list all add-on prices created using the
+ * [price creation endpoint](../reference/create-price).
+ */
 class PriceListPageAsync
 private constructor(
     private val pricesService: PriceServiceAsync,
