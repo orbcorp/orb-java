@@ -19,6 +19,10 @@ import java.util.Optional
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
+/**
+ * This endpoint is used to list all add-on prices created using the
+ * [price creation endpoint](../reference/create-price).
+ */
 class PriceListPage
 private constructor(
     private val pricesService: PriceService,
