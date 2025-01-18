@@ -20,6 +20,11 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
 
+/**
+ * This endpoint returns a [paginated](../reference/pagination) list of all plans associated with a
+ * subscription along with their start and end dates. This list contains the subscription's initial
+ * plan along with past and future plan changes.
+ */
 class SubscriptionFetchSchedulePageAsync
 private constructor(
     private val subscriptionsService: SubscriptionServiceAsync,

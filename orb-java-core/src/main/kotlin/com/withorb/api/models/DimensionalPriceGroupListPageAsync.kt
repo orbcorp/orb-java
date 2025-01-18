@@ -20,6 +20,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
 
+/** List dimensional price groups */
 class DimensionalPriceGroupListPageAsync
 private constructor(
     private val dimensionalPriceGroupsService: DimensionalPriceGroupServiceAsync,
