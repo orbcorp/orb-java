@@ -21,7 +21,7 @@ import java.util.stream.StreamSupport
 
 /**
  * This endpoint is used to list all add-on prices created using the
- * [price creation endpoint](../reference/create-price).
+ * [price creation endpoint](/api-reference/price/create-price).
  */
 class PriceListPage
 private constructor(
