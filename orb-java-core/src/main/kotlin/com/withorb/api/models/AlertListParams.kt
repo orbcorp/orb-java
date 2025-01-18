@@ -19,7 +19,7 @@ import java.util.Optional
  * the plan level alerts associated with the subscription.
  *
  * The list of alerts is ordered starting from the most recently created alert. This endpoint
- * follows Orb's [standardized pagination format](../reference/pagination).
+ * follows Orb's [standardized pagination format](/api-reference/pagination).
  */
 class AlertListParams
 constructor(

@@ -21,8 +21,8 @@ import java.util.Objects
 import java.util.Optional
 
 /**
- * The [Credit Note](/guides/invoicing/credit-notes) resource represents a credit that has been
- * applied to a particular invoice.
+ * The [Credit Note](/invoicing/credit-notes) resource represents a credit that has been applied to
+ * a particular invoice.
  */
 @NoAutoDetect
 class CreditNote

@@ -14,9 +14,7 @@ import java.util.concurrent.CompletableFuture
 
 interface CreditNoteServiceAsync {
 
-    /**
-     * This endpoint is used to create a single [`Credit Note`](../guides/invoicing/credit-notes).
-     */
+    /** This endpoint is used to create a single [`Credit Note`](/invoicing/credit-notes). */
     @JvmOverloads
     fun create(
         params: CreditNoteCreateParams,
@@ -35,8 +33,8 @@ interface CreditNoteServiceAsync {
     ): CompletableFuture<CreditNoteListPageAsync>
 
     /**
-     * This endpoint is used to fetch a single [`Credit Note`](../guides/invoicing/credit-notes)
-     * given an identifier.
+     * This endpoint is used to fetch a single [`Credit Note`](/invoicing/credit-notes) given an
+     * identifier.
      */
     @JvmOverloads
     fun fetch(

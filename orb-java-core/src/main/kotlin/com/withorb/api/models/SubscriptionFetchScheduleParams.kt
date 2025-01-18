@@ -12,9 +12,9 @@ import java.util.Objects
 import java.util.Optional
 
 /**
- * This endpoint returns a [paginated](../reference/pagination) list of all plans associated with a
- * subscription along with their start and end dates. This list contains the subscription's initial
- * plan along with past and future plan changes.
+ * This endpoint returns a [paginated](/api-reference/pagination) list of all plans associated with
+ * a subscription along with their start and end dates. This list contains the subscription's
+ * initial plan along with past and future plan changes.
  */
 class SubscriptionFetchScheduleParams
 constructor(
