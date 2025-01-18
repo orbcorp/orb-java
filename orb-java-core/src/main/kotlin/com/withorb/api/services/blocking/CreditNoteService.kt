@@ -13,9 +13,7 @@ import com.withorb.api.models.CreditNoteListParams
 
 interface CreditNoteService {
 
-    /**
-     * This endpoint is used to create a single [`Credit Note`](../guides/invoicing/credit-notes).
-     */
+    /** This endpoint is used to create a single [`Credit Note`](/invoicing/credit-notes). */
     @JvmOverloads
     fun create(
         params: CreditNoteCreateParams,
@@ -34,8 +32,8 @@ interface CreditNoteService {
     ): CreditNoteListPage
 
     /**
-     * This endpoint is used to fetch a single [`Credit Note`](../guides/invoicing/credit-notes)
-     * given an identifier.
+     * This endpoint is used to fetch a single [`Credit Note`](/invoicing/credit-notes) given an
+     * identifier.
      */
     @JvmOverloads
     fun fetch(

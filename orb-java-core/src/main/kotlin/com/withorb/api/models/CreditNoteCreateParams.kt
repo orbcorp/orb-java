@@ -21,7 +21,7 @@ import com.withorb.api.errors.OrbInvalidDataException
 import java.util.Objects
 import java.util.Optional
 
-/** This endpoint is used to create a single [`Credit Note`](../guides/invoicing/credit-notes). */
+/** This endpoint is used to create a single [`Credit Note`](/invoicing/credit-notes). */
 class CreditNoteCreateParams
 constructor(
     private val body: CreditNoteCreateBody,

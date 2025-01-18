@@ -28,16 +28,16 @@ interface CustomerService {
 
     /**
      * This operation is used to create an Orb customer, who is party to the core billing
-     * relationship. See [Customer](../guides/concepts#customer) for an overview of the customer
+     * relationship. See [Customer](/core-concepts##customer) for an overview of the customer
      * resource.
      *
      * This endpoint is critical in the following Orb functionality:
      * - Automated charges can be configured by setting `payment_provider` and `payment_provider_id`
      *   to automatically issue invoices
-     * - [Customer ID Aliases](../guides/events-and-metrics/customer-aliases) can be configured by
-     *   setting `external_customer_id`
-     * - [Timezone localization](../guides/product-catalog/timezones.md) can be configured on a
-     *   per-customer basis by setting the `timezone` parameter
+     * - [Customer ID Aliases](/events-and-metrics/customer-aliases) can be configured by setting
+     *   `external_customer_id`
+     * - [Timezone localization](/essentials/timezones) can be configured on a per-customer basis by
+     *   setting the `timezone` parameter
      */
     @JvmOverloads
     fun create(
@@ -60,9 +60,9 @@ interface CustomerService {
     /**
      * This endpoint returns a list of all customers for an account. The list of customers is
      * ordered starting from the most recently created customer. This endpoint follows Orb's
-     * [standardized pagination format](../reference/pagination).
+     * [standardized pagination format](/api-reference/pagination).
      *
-     * See [Customer](../guides/concepts#customer) for an overview of the customer model.
+     * See [Customer](/core-concepts##customer) for an overview of the customer model.
      */
     @JvmOverloads
     fun list(
@@ -91,8 +91,8 @@ interface CustomerService {
      * This endpoint is used to fetch customer details given an identifier. If the `Customer` is in
      * the process of being deleted, only the properties `id` and `deleted: true` will be returned.
      *
-     * See the [Customer resource](../guides/core-concepts.mdx#customer) for a full discussion of
-     * the Customer model.
+     * See the [Customer resource](/core-concepts#customer) for a full discussion of the Customer
+     * model.
      */
     @JvmOverloads
     fun fetch(
@@ -102,7 +102,7 @@ interface CustomerService {
 
     /**
      * This endpoint is used to fetch customer details given an `external_customer_id` (see
-     * [Customer ID Aliases](../guides/events-and-metrics/customer-aliases)).
+     * [Customer ID Aliases](/events-and-metrics/customer-aliases)).
      *
      * Note that the resource and semantics of this endpoint exactly mirror
      * [Get Customer](fetch-customer).
@@ -115,8 +115,8 @@ interface CustomerService {
 
     /**
      * This endpoint is used to update customer details given an `external_customer_id` (see
-     * [Customer ID Aliases](../guides/events-and-metrics/customer-aliases)). Note that the resource
-     * and semantics of this endpoint exactly mirror [Update Customer](update-customer).
+     * [Customer ID Aliases](/events-and-metrics/customer-aliases)). Note that the resource and
+     * semantics of this endpoint exactly mirror [Update Customer](update-customer).
      */
     @JvmOverloads
     fun updateByExternalId(

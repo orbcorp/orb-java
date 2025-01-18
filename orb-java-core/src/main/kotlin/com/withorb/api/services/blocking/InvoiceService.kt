@@ -40,11 +40,11 @@ interface InvoiceService {
     ): Invoice
 
     /**
-     * This endpoint returns a list of all [`Invoice`](../guides/concepts#invoice)s for an account
-     * in a list format.
+     * This endpoint returns a list of all [`Invoice`](/core-concepts#invoice)s for an account in a
+     * list format.
      *
      * The list of invoices is ordered starting from the most recently issued invoice date. The
-     * response also includes [`pagination_metadata`](../reference/pagination), which lets the
+     * response also includes [`pagination_metadata`](/api-reference/pagination), which lets the
      * caller retrieve the next page of results if they exist.
      *
      * By default, this only returns invoices that are `issued`, `paid`, or `synced`.
@@ -60,8 +60,7 @@ interface InvoiceService {
     ): InvoiceListPage
 
     /**
-     * This endpoint is used to fetch an [`Invoice`](../guides/concepts#invoice) given an
-     * identifier.
+     * This endpoint is used to fetch an [`Invoice`](/core-concepts#invoice) given an identifier.
      */
     @JvmOverloads
     fun fetch(
@@ -70,7 +69,7 @@ interface InvoiceService {
     ): Invoice
 
     /**
-     * This endpoint can be used to fetch the upcoming [invoice](../guides/concepts#invoice) for the
+     * This endpoint can be used to fetch the upcoming [invoice](/core-concepts#invoice) for the
      * current billing period given a subscription.
      */
     @JvmOverloads
