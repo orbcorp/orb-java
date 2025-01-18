@@ -19,6 +19,12 @@ import java.util.Optional
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
+/**
+ * This endpoint returns a list of all subscriptions that have redeemed a given coupon as a
+ * [paginated](../reference/pagination) list, ordered starting from the most recently created
+ * subscription. For a full discussion of the subscription resource, see
+ * [Subscription](../guides/concepts#subscription).
+ */
 class CouponSubscriptionListPage
 private constructor(
     private val subscriptionsService: SubscriptionService,

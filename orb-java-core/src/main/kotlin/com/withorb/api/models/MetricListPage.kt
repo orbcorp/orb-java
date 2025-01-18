@@ -19,6 +19,10 @@ import java.util.Optional
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
+/**
+ * This endpoint is used to fetch [metric](../guides/concepts#metric) details given a metric
+ * identifier. It returns information about the metrics including its name, description, and item.
+ */
 class MetricListPage
 private constructor(
     private val metricsService: MetricService,

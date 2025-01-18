@@ -348,6 +348,7 @@ private constructor(
             )
     }
 
+    /** The status of the backfill. */
     class Status
     @JsonCreator
     private constructor(

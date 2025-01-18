@@ -19,6 +19,11 @@ import java.util.Optional
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
+/**
+ * Get a paginated list of CreditNotes. Users can also filter by customer_id, subscription_id, or
+ * external_customer_id. The credit notes will be returned in reverse chronological order by
+ * `creation_time`.
+ */
 class CreditNoteListPage
 private constructor(
     private val creditNotesService: CreditNoteService,

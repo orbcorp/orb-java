@@ -866,6 +866,7 @@ constructor(
             "InvoiceSettings{autoCollection=$autoCollection, netTerms=$netTerms, memo=$memo, requireSuccessfulPayment=$requireSuccessfulPayment, additionalProperties=$additionalProperties}"
     }
 
+    /** The unit of expires_after. */
     class ExpiresAfterUnit
     @JsonCreator
     private constructor(

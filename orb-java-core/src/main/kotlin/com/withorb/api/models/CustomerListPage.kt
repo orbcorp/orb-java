@@ -19,6 +19,13 @@ import java.util.Optional
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
+/**
+ * This endpoint returns a list of all customers for an account. The list of customers is ordered
+ * starting from the most recently created customer. This endpoint follows Orb's
+ * [standardized pagination format](../reference/pagination).
+ *
+ * See [Customer](../guides/concepts#customer) for an overview of the customer model.
+ */
 class CustomerListPage
 private constructor(
     private val customersService: CustomerService,
