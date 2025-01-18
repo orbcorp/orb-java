@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.23.0 (2025-01-18)
+
+Full Changelog: [v0.22.0...v0.23.0](https://github.com/orbcorp/orb-java/compare/v0.22.0...v0.23.0)
+
+### Features
+
+* **api:** api update ([#206](https://github.com/orbcorp/orb-java/issues/206)) ([e2eef46](https://github.com/orbcorp/orb-java/commit/e2eef4669606db8745234da24a04814da1118f86))
+
+
+### Chores
+
+* **internal:** upgrade kotlin compiler and gradle ([#203](https://github.com/orbcorp/orb-java/issues/203)) ([3e03f2b](https://github.com/orbcorp/orb-java/commit/3e03f2bb7a247262f89871ecec0a957ee50b64f4))
+
+
+### Documentation
+
+* add more documentation ([#205](https://github.com/orbcorp/orb-java/issues/205)) ([c8fbcb6](https://github.com/orbcorp/orb-java/commit/c8fbcb675e81cf8683c92843fffdbe7b4aa6286f))
+
 ## 0.22.0 (2025-01-16)
 
 Full Changelog: [v0.21.0...v0.22.0](https://github.com/orbcorp/orb-java/compare/v0.21.0...v0.22.0)
