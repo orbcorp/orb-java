@@ -16,7 +16,7 @@ import com.withorb.api.models.TopLevelPingResponse
 import java.util.concurrent.CompletableFuture
 
 class TopLevelServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : TopLevelServiceAsync {
 

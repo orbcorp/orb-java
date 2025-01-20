@@ -22,7 +22,7 @@ import com.withorb.api.services.async.dimensionalPriceGroups.ExternalDimensional
 import java.util.concurrent.CompletableFuture
 
 class DimensionalPriceGroupServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : DimensionalPriceGroupServiceAsync {
 
