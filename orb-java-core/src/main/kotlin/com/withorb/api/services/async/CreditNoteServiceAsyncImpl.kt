@@ -20,7 +20,7 @@ import com.withorb.api.models.CreditNoteListParams
 import java.util.concurrent.CompletableFuture
 
 class CreditNoteServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : CreditNoteServiceAsync {
 

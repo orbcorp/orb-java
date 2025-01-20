@@ -25,7 +25,7 @@ import com.withorb.api.models.AlertUpdateParams
 import java.util.concurrent.CompletableFuture
 
 class AlertServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : AlertServiceAsync {
 

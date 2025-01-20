@@ -23,7 +23,7 @@ import com.withorb.api.services.async.coupons.SubscriptionServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 
 class CouponServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : CouponServiceAsync {
 

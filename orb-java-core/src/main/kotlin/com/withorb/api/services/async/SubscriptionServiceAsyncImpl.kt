@@ -46,7 +46,7 @@ import com.withorb.api.models.SubscriptionUsage
 import java.util.concurrent.CompletableFuture
 
 class SubscriptionServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : SubscriptionServiceAsync {
 

@@ -27,7 +27,7 @@ import com.withorb.api.services.async.events.VolumeServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 
 class EventServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : EventServiceAsync {
 
