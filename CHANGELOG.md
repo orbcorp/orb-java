@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.23.1 (2025-01-20)
+
+Full Changelog: [v0.23.0...v0.23.1](https://github.com/orbcorp/orb-java/compare/v0.23.0...v0.23.1)
+
+### Bug Fixes
+
+* **client:** make service impl constructors internal ([#208](https://github.com/orbcorp/orb-java/issues/208)) ([50db282](https://github.com/orbcorp/orb-java/commit/50db282d60416892f293c80c9e5c0e34187f2a8c))
+
 ## 0.23.0 (2025-01-18)
 
 Full Changelog: [v0.22.0...v0.23.0](https://github.com/orbcorp/orb-java/compare/v0.22.0...v0.23.0)
