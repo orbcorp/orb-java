@@ -31,7 +31,7 @@ import com.withorb.api.services.async.customers.CreditServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 
 class CustomerServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : CustomerServiceAsync {
 

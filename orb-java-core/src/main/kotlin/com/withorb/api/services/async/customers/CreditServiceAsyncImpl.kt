@@ -22,7 +22,7 @@ import com.withorb.api.services.async.customers.credits.TopUpServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 
 class CreditServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : CreditServiceAsync {
 

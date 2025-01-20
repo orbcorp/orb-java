@@ -19,7 +19,7 @@ import com.withorb.api.models.CustomerBalanceTransactionListParams
 import java.util.concurrent.CompletableFuture
 
 class BalanceTransactionServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : BalanceTransactionServiceAsync {
 

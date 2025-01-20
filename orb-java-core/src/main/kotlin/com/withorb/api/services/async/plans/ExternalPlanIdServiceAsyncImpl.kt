@@ -18,7 +18,7 @@ import com.withorb.api.models.PlanExternalPlanIdUpdateParams
 import java.util.concurrent.CompletableFuture
 
 class ExternalPlanIdServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : ExternalPlanIdServiceAsync {
 
