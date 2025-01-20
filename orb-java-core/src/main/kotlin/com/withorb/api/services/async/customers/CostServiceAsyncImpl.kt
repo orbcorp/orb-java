@@ -18,7 +18,7 @@ import com.withorb.api.models.CustomerCostListResponse
 import java.util.concurrent.CompletableFuture
 
 class CostServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : CostServiceAsync {
 

@@ -21,7 +21,7 @@ import com.withorb.api.models.ItemUpdateParams
 import java.util.concurrent.CompletableFuture
 
 class ItemServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : ItemServiceAsync {
 

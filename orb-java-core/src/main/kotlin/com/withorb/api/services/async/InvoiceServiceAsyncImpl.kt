@@ -27,7 +27,7 @@ import com.withorb.api.models.InvoiceVoidInvoiceParams
 import java.util.concurrent.CompletableFuture
 
 class InvoiceServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : InvoiceServiceAsync {
 

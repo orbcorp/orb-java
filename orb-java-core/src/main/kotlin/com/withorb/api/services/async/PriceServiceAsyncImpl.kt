@@ -25,7 +25,7 @@ import com.withorb.api.services.async.prices.ExternalPriceIdServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 
 class PriceServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : PriceServiceAsync {
 

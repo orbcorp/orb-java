@@ -25,7 +25,7 @@ import com.withorb.api.models.EventBackfillRevertResponse
 import java.util.concurrent.CompletableFuture
 
 class BackfillServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : BackfillServiceAsync {
 

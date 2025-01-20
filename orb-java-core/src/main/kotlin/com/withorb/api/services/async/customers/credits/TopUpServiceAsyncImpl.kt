@@ -26,7 +26,7 @@ import com.withorb.api.models.CustomerCreditTopUpListParams
 import java.util.concurrent.CompletableFuture
 
 class TopUpServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : TopUpServiceAsync {
 

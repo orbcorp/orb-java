@@ -16,7 +16,7 @@ import com.withorb.api.models.DimensionalPriceGroupExternalDimensionalPriceGroup
 import java.util.concurrent.CompletableFuture
 
 class ExternalDimensionalPriceGroupIdServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : ExternalDimensionalPriceGroupIdServiceAsync {
 

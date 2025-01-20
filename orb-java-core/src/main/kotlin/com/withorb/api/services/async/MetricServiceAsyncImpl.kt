@@ -21,7 +21,7 @@ import com.withorb.api.models.MetricUpdateParams
 import java.util.concurrent.CompletableFuture
 
 class MetricServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : MetricServiceAsync {
 
