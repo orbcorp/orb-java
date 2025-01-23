@@ -12,6 +12,8 @@ import com.withorb.api.models.CustomerFetchByExternalIdParams
 import com.withorb.api.models.CustomerFetchParams
 import com.withorb.api.models.CustomerListPageAsync
 import com.withorb.api.models.CustomerListParams
+import com.withorb.api.models.CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams
+import com.withorb.api.models.CustomerSyncPaymentMethodsFromGatewayParams
 import com.withorb.api.models.CustomerUpdateByExternalIdParams
 import com.withorb.api.models.CustomerUpdateParams
 import com.withorb.api.services.async.customers.BalanceTransactionServiceAsync
@@ -117,6 +119,34 @@ interface CustomerServiceAsync {
         params: CustomerFetchByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none()
     ): CompletableFuture<Customer>
+
+    /**
+     * Sync Orb's payment methods for the customer with their gateway.
+     *
+     * This method can be called before taking an action that may cause the customer to be charged,
+     * ensuring that the most up-to-date payment method is charged.
+     *
+     * **Note**: This functionality is currently only available for Stripe.
+     */
+    @JvmOverloads
+    fun syncPaymentMethodsFromGateway(
+        params: CustomerSyncPaymentMethodsFromGatewayParams,
+        requestOptions: RequestOptions = RequestOptions.none()
+    ): CompletableFuture<Void>
+
+    /**
+     * Sync Orb's payment methods for the customer with their gateway.
+     *
+     * This method can be called before taking an action that may cause the customer to be charged,
+     * ensuring that the most up-to-date payment method is charged.
+     *
+     * **Note**: This functionality is currently only available for Stripe.
+     */
+    @JvmOverloads
+    fun syncPaymentMethodsFromGatewayByExternalCustomerId(
+        params: CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams,
+        requestOptions: RequestOptions = RequestOptions.none()
+    ): CompletableFuture<Void>
 
     /**
      * This endpoint is used to update customer details given an `external_customer_id` (see
