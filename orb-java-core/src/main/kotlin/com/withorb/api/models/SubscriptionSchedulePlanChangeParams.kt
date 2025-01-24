@@ -4745,131 +4745,99 @@ constructor(
             fun price(price: JsonField<Price>) = apply { this.price = price }
 
             /** The definition of a new price to create and add to the subscription. */
-            fun price(newSubscriptionUnitPrice: Price.NewSubscriptionUnitPrice) =
-                price(Price.ofNewSubscriptionUnitPrice(newSubscriptionUnitPrice))
+            fun price(newSubscriptionUnit: Price.NewSubscriptionUnitPrice) =
+                price(Price.ofNewSubscriptionUnit(newSubscriptionUnit))
 
             /** The definition of a new price to create and add to the subscription. */
-            fun price(newSubscriptionPackagePrice: Price.NewSubscriptionPackagePrice) =
-                price(Price.ofNewSubscriptionPackagePrice(newSubscriptionPackagePrice))
+            fun price(newSubscriptionPackage: Price.NewSubscriptionPackagePrice) =
+                price(Price.ofNewSubscriptionPackage(newSubscriptionPackage))
 
             /** The definition of a new price to create and add to the subscription. */
-            fun price(newSubscriptionMatrixPrice: Price.NewSubscriptionMatrixPrice) =
-                price(Price.ofNewSubscriptionMatrixPrice(newSubscriptionMatrixPrice))
+            fun price(newSubscriptionMatrix: Price.NewSubscriptionMatrixPrice) =
+                price(Price.ofNewSubscriptionMatrix(newSubscriptionMatrix))
 
             /** The definition of a new price to create and add to the subscription. */
-            fun price(newSubscriptionTieredPrice: Price.NewSubscriptionTieredPrice) =
-                price(Price.ofNewSubscriptionTieredPrice(newSubscriptionTieredPrice))
+            fun price(newSubscriptionTiered: Price.NewSubscriptionTieredPrice) =
+                price(Price.ofNewSubscriptionTiered(newSubscriptionTiered))
 
             /** The definition of a new price to create and add to the subscription. */
-            fun price(newSubscriptionTieredBpsPrice: Price.NewSubscriptionTieredBpsPrice) =
-                price(Price.ofNewSubscriptionTieredBpsPrice(newSubscriptionTieredBpsPrice))
+            fun price(newSubscriptionTieredBps: Price.NewSubscriptionTieredBpsPrice) =
+                price(Price.ofNewSubscriptionTieredBps(newSubscriptionTieredBps))
 
             /** The definition of a new price to create and add to the subscription. */
-            fun price(newSubscriptionBpsPrice: Price.NewSubscriptionBpsPrice) =
-                price(Price.ofNewSubscriptionBpsPrice(newSubscriptionBpsPrice))
+            fun price(newSubscriptionBps: Price.NewSubscriptionBpsPrice) =
+                price(Price.ofNewSubscriptionBps(newSubscriptionBps))
 
             /** The definition of a new price to create and add to the subscription. */
-            fun price(newSubscriptionBulkBpsPrice: Price.NewSubscriptionBulkBpsPrice) =
-                price(Price.ofNewSubscriptionBulkBpsPrice(newSubscriptionBulkBpsPrice))
+            fun price(newSubscriptionBulkBps: Price.NewSubscriptionBulkBpsPrice) =
+                price(Price.ofNewSubscriptionBulkBps(newSubscriptionBulkBps))
 
             /** The definition of a new price to create and add to the subscription. */
-            fun price(newSubscriptionBulkPrice: Price.NewSubscriptionBulkPrice) =
-                price(Price.ofNewSubscriptionBulkPrice(newSubscriptionBulkPrice))
+            fun price(newSubscriptionBulk: Price.NewSubscriptionBulkPrice) =
+                price(Price.ofNewSubscriptionBulk(newSubscriptionBulk))
 
             /** The definition of a new price to create and add to the subscription. */
             fun price(
-                newSubscriptionThresholdTotalAmountPrice:
-                    Price.NewSubscriptionThresholdTotalAmountPrice
+                newSubscriptionThresholdTotalAmount: Price.NewSubscriptionThresholdTotalAmountPrice
             ) =
                 price(
-                    Price.ofNewSubscriptionThresholdTotalAmountPrice(
-                        newSubscriptionThresholdTotalAmountPrice
-                    )
+                    Price.ofNewSubscriptionThresholdTotalAmount(newSubscriptionThresholdTotalAmount)
                 )
 
             /** The definition of a new price to create and add to the subscription. */
-            fun price(newSubscriptionTieredPackagePrice: Price.NewSubscriptionTieredPackagePrice) =
-                price(Price.ofNewSubscriptionTieredPackagePrice(newSubscriptionTieredPackagePrice))
+            fun price(newSubscriptionTieredPackage: Price.NewSubscriptionTieredPackagePrice) =
+                price(Price.ofNewSubscriptionTieredPackage(newSubscriptionTieredPackage))
 
             /** The definition of a new price to create and add to the subscription. */
             fun price(
-                newSubscriptionTieredWithMinimumPrice: Price.NewSubscriptionTieredWithMinimumPrice
-            ) =
-                price(
-                    Price.ofNewSubscriptionTieredWithMinimumPrice(
-                        newSubscriptionTieredWithMinimumPrice
-                    )
-                )
+                newSubscriptionTieredWithMinimum: Price.NewSubscriptionTieredWithMinimumPrice
+            ) = price(Price.ofNewSubscriptionTieredWithMinimum(newSubscriptionTieredWithMinimum))
+
+            /** The definition of a new price to create and add to the subscription. */
+            fun price(newSubscriptionUnitWithPercent: Price.NewSubscriptionUnitWithPercentPrice) =
+                price(Price.ofNewSubscriptionUnitWithPercent(newSubscriptionUnitWithPercent))
 
             /** The definition of a new price to create and add to the subscription. */
             fun price(
-                newSubscriptionUnitWithPercentPrice: Price.NewSubscriptionUnitWithPercentPrice
-            ) =
-                price(
-                    Price.ofNewSubscriptionUnitWithPercentPrice(newSubscriptionUnitWithPercentPrice)
-                )
-
-            /** The definition of a new price to create and add to the subscription. */
-            fun price(
-                newSubscriptionPackageWithAllocationPrice:
+                newSubscriptionPackageWithAllocation:
                     Price.NewSubscriptionPackageWithAllocationPrice
             ) =
                 price(
-                    Price.ofNewSubscriptionPackageWithAllocationPrice(
-                        newSubscriptionPackageWithAllocationPrice
+                    Price.ofNewSubscriptionPackageWithAllocation(
+                        newSubscriptionPackageWithAllocation
                     )
                 )
 
             /** The definition of a new price to create and add to the subscription. */
             fun price(
-                newSubscriptionTierWithProrationPrice: Price.NewSubscriptionTierWithProrationPrice
-            ) =
-                price(
-                    Price.ofNewSubscriptionTierWithProrationPrice(
-                        newSubscriptionTierWithProrationPrice
-                    )
-                )
+                newSubscriptionTierWithProration: Price.NewSubscriptionTierWithProrationPrice
+            ) = price(Price.ofNewSubscriptionTierWithProration(newSubscriptionTierWithProration))
 
             /** The definition of a new price to create and add to the subscription. */
             fun price(
-                newSubscriptionUnitWithProrationPrice: Price.NewSubscriptionUnitWithProrationPrice
-            ) =
-                price(
-                    Price.ofNewSubscriptionUnitWithProrationPrice(
-                        newSubscriptionUnitWithProrationPrice
-                    )
-                )
+                newSubscriptionUnitWithProration: Price.NewSubscriptionUnitWithProrationPrice
+            ) = price(Price.ofNewSubscriptionUnitWithProration(newSubscriptionUnitWithProration))
 
             /** The definition of a new price to create and add to the subscription. */
             fun price(
-                newSubscriptionGroupedAllocationPrice: Price.NewSubscriptionGroupedAllocationPrice
-            ) =
-                price(
-                    Price.ofNewSubscriptionGroupedAllocationPrice(
-                        newSubscriptionGroupedAllocationPrice
-                    )
-                )
+                newSubscriptionGroupedAllocation: Price.NewSubscriptionGroupedAllocationPrice
+            ) = price(Price.ofNewSubscriptionGroupedAllocation(newSubscriptionGroupedAllocation))
 
             /** The definition of a new price to create and add to the subscription. */
             fun price(
-                newSubscriptionGroupedWithProratedMinimumPrice:
+                newSubscriptionGroupedWithProratedMinimum:
                     Price.NewSubscriptionGroupedWithProratedMinimumPrice
             ) =
                 price(
-                    Price.ofNewSubscriptionGroupedWithProratedMinimumPrice(
-                        newSubscriptionGroupedWithProratedMinimumPrice
+                    Price.ofNewSubscriptionGroupedWithProratedMinimum(
+                        newSubscriptionGroupedWithProratedMinimum
                     )
                 )
 
             /** The definition of a new price to create and add to the subscription. */
             fun price(
-                newSubscriptionBulkWithProrationPrice: Price.NewSubscriptionBulkWithProrationPrice
-            ) =
-                price(
-                    Price.ofNewSubscriptionBulkWithProrationPrice(
-                        newSubscriptionBulkWithProrationPrice
-                    )
-                )
+                newSubscriptionBulkWithProration: Price.NewSubscriptionBulkWithProrationPrice
+            ) = price(Price.ofNewSubscriptionBulkWithProration(newSubscriptionBulkWithProration))
 
             /** The id of the price to add to the subscription. */
             fun priceId(priceId: String?) = priceId(JsonField.ofNullable(priceId))
@@ -5239,288 +5207,261 @@ constructor(
         @JsonSerialize(using = Price.Serializer::class)
         class Price
         private constructor(
-            private val newSubscriptionUnitPrice: NewSubscriptionUnitPrice? = null,
-            private val newSubscriptionPackagePrice: NewSubscriptionPackagePrice? = null,
-            private val newSubscriptionMatrixPrice: NewSubscriptionMatrixPrice? = null,
-            private val newSubscriptionTieredPrice: NewSubscriptionTieredPrice? = null,
-            private val newSubscriptionTieredBpsPrice: NewSubscriptionTieredBpsPrice? = null,
-            private val newSubscriptionBpsPrice: NewSubscriptionBpsPrice? = null,
-            private val newSubscriptionBulkBpsPrice: NewSubscriptionBulkBpsPrice? = null,
-            private val newSubscriptionBulkPrice: NewSubscriptionBulkPrice? = null,
-            private val newSubscriptionThresholdTotalAmountPrice:
+            private val newSubscriptionUnit: NewSubscriptionUnitPrice? = null,
+            private val newSubscriptionPackage: NewSubscriptionPackagePrice? = null,
+            private val newSubscriptionMatrix: NewSubscriptionMatrixPrice? = null,
+            private val newSubscriptionTiered: NewSubscriptionTieredPrice? = null,
+            private val newSubscriptionTieredBps: NewSubscriptionTieredBpsPrice? = null,
+            private val newSubscriptionBps: NewSubscriptionBpsPrice? = null,
+            private val newSubscriptionBulkBps: NewSubscriptionBulkBpsPrice? = null,
+            private val newSubscriptionBulk: NewSubscriptionBulkPrice? = null,
+            private val newSubscriptionThresholdTotalAmount:
                 NewSubscriptionThresholdTotalAmountPrice? =
                 null,
-            private val newSubscriptionTieredPackagePrice: NewSubscriptionTieredPackagePrice? =
+            private val newSubscriptionTieredPackage: NewSubscriptionTieredPackagePrice? = null,
+            private val newSubscriptionTieredWithMinimum: NewSubscriptionTieredWithMinimumPrice? =
                 null,
-            private val newSubscriptionTieredWithMinimumPrice:
-                NewSubscriptionTieredWithMinimumPrice? =
-                null,
-            private val newSubscriptionUnitWithPercentPrice: NewSubscriptionUnitWithPercentPrice? =
-                null,
-            private val newSubscriptionPackageWithAllocationPrice:
+            private val newSubscriptionUnitWithPercent: NewSubscriptionUnitWithPercentPrice? = null,
+            private val newSubscriptionPackageWithAllocation:
                 NewSubscriptionPackageWithAllocationPrice? =
                 null,
-            private val newSubscriptionTierWithProrationPrice:
-                NewSubscriptionTierWithProrationPrice? =
+            private val newSubscriptionTierWithProration: NewSubscriptionTierWithProrationPrice? =
                 null,
-            private val newSubscriptionUnitWithProrationPrice:
-                NewSubscriptionUnitWithProrationPrice? =
+            private val newSubscriptionUnitWithProration: NewSubscriptionUnitWithProrationPrice? =
                 null,
-            private val newSubscriptionGroupedAllocationPrice:
-                NewSubscriptionGroupedAllocationPrice? =
+            private val newSubscriptionGroupedAllocation: NewSubscriptionGroupedAllocationPrice? =
                 null,
-            private val newSubscriptionGroupedWithProratedMinimumPrice:
+            private val newSubscriptionGroupedWithProratedMinimum:
                 NewSubscriptionGroupedWithProratedMinimumPrice? =
                 null,
-            private val newSubscriptionBulkWithProrationPrice:
-                NewSubscriptionBulkWithProrationPrice? =
+            private val newSubscriptionBulkWithProration: NewSubscriptionBulkWithProrationPrice? =
                 null,
             private val _json: JsonValue? = null,
         ) {
 
-            fun newSubscriptionUnitPrice(): Optional<NewSubscriptionUnitPrice> =
-                Optional.ofNullable(newSubscriptionUnitPrice)
+            fun newSubscriptionUnit(): Optional<NewSubscriptionUnitPrice> =
+                Optional.ofNullable(newSubscriptionUnit)
 
-            fun newSubscriptionPackagePrice(): Optional<NewSubscriptionPackagePrice> =
-                Optional.ofNullable(newSubscriptionPackagePrice)
+            fun newSubscriptionPackage(): Optional<NewSubscriptionPackagePrice> =
+                Optional.ofNullable(newSubscriptionPackage)
 
-            fun newSubscriptionMatrixPrice(): Optional<NewSubscriptionMatrixPrice> =
-                Optional.ofNullable(newSubscriptionMatrixPrice)
+            fun newSubscriptionMatrix(): Optional<NewSubscriptionMatrixPrice> =
+                Optional.ofNullable(newSubscriptionMatrix)
 
-            fun newSubscriptionTieredPrice(): Optional<NewSubscriptionTieredPrice> =
-                Optional.ofNullable(newSubscriptionTieredPrice)
+            fun newSubscriptionTiered(): Optional<NewSubscriptionTieredPrice> =
+                Optional.ofNullable(newSubscriptionTiered)
 
-            fun newSubscriptionTieredBpsPrice(): Optional<NewSubscriptionTieredBpsPrice> =
-                Optional.ofNullable(newSubscriptionTieredBpsPrice)
+            fun newSubscriptionTieredBps(): Optional<NewSubscriptionTieredBpsPrice> =
+                Optional.ofNullable(newSubscriptionTieredBps)
 
-            fun newSubscriptionBpsPrice(): Optional<NewSubscriptionBpsPrice> =
-                Optional.ofNullable(newSubscriptionBpsPrice)
+            fun newSubscriptionBps(): Optional<NewSubscriptionBpsPrice> =
+                Optional.ofNullable(newSubscriptionBps)
 
-            fun newSubscriptionBulkBpsPrice(): Optional<NewSubscriptionBulkBpsPrice> =
-                Optional.ofNullable(newSubscriptionBulkBpsPrice)
+            fun newSubscriptionBulkBps(): Optional<NewSubscriptionBulkBpsPrice> =
+                Optional.ofNullable(newSubscriptionBulkBps)
 
-            fun newSubscriptionBulkPrice(): Optional<NewSubscriptionBulkPrice> =
-                Optional.ofNullable(newSubscriptionBulkPrice)
+            fun newSubscriptionBulk(): Optional<NewSubscriptionBulkPrice> =
+                Optional.ofNullable(newSubscriptionBulk)
 
-            fun newSubscriptionThresholdTotalAmountPrice():
+            fun newSubscriptionThresholdTotalAmount():
                 Optional<NewSubscriptionThresholdTotalAmountPrice> =
-                Optional.ofNullable(newSubscriptionThresholdTotalAmountPrice)
+                Optional.ofNullable(newSubscriptionThresholdTotalAmount)
 
-            fun newSubscriptionTieredPackagePrice(): Optional<NewSubscriptionTieredPackagePrice> =
-                Optional.ofNullable(newSubscriptionTieredPackagePrice)
+            fun newSubscriptionTieredPackage(): Optional<NewSubscriptionTieredPackagePrice> =
+                Optional.ofNullable(newSubscriptionTieredPackage)
 
-            fun newSubscriptionTieredWithMinimumPrice():
+            fun newSubscriptionTieredWithMinimum():
                 Optional<NewSubscriptionTieredWithMinimumPrice> =
-                Optional.ofNullable(newSubscriptionTieredWithMinimumPrice)
+                Optional.ofNullable(newSubscriptionTieredWithMinimum)
 
-            fun newSubscriptionUnitWithPercentPrice():
-                Optional<NewSubscriptionUnitWithPercentPrice> =
-                Optional.ofNullable(newSubscriptionUnitWithPercentPrice)
+            fun newSubscriptionUnitWithPercent(): Optional<NewSubscriptionUnitWithPercentPrice> =
+                Optional.ofNullable(newSubscriptionUnitWithPercent)
 
-            fun newSubscriptionPackageWithAllocationPrice():
+            fun newSubscriptionPackageWithAllocation():
                 Optional<NewSubscriptionPackageWithAllocationPrice> =
-                Optional.ofNullable(newSubscriptionPackageWithAllocationPrice)
+                Optional.ofNullable(newSubscriptionPackageWithAllocation)
 
-            fun newSubscriptionTierWithProrationPrice():
+            fun newSubscriptionTierWithProration():
                 Optional<NewSubscriptionTierWithProrationPrice> =
-                Optional.ofNullable(newSubscriptionTierWithProrationPrice)
+                Optional.ofNullable(newSubscriptionTierWithProration)
 
-            fun newSubscriptionUnitWithProrationPrice():
+            fun newSubscriptionUnitWithProration():
                 Optional<NewSubscriptionUnitWithProrationPrice> =
-                Optional.ofNullable(newSubscriptionUnitWithProrationPrice)
+                Optional.ofNullable(newSubscriptionUnitWithProration)
 
-            fun newSubscriptionGroupedAllocationPrice():
+            fun newSubscriptionGroupedAllocation():
                 Optional<NewSubscriptionGroupedAllocationPrice> =
-                Optional.ofNullable(newSubscriptionGroupedAllocationPrice)
+                Optional.ofNullable(newSubscriptionGroupedAllocation)
 
-            fun newSubscriptionGroupedWithProratedMinimumPrice():
+            fun newSubscriptionGroupedWithProratedMinimum():
                 Optional<NewSubscriptionGroupedWithProratedMinimumPrice> =
-                Optional.ofNullable(newSubscriptionGroupedWithProratedMinimumPrice)
+                Optional.ofNullable(newSubscriptionGroupedWithProratedMinimum)
 
-            fun newSubscriptionBulkWithProrationPrice():
+            fun newSubscriptionBulkWithProration():
                 Optional<NewSubscriptionBulkWithProrationPrice> =
-                Optional.ofNullable(newSubscriptionBulkWithProrationPrice)
+                Optional.ofNullable(newSubscriptionBulkWithProration)
 
-            fun isNewSubscriptionUnitPrice(): Boolean = newSubscriptionUnitPrice != null
+            fun isNewSubscriptionUnit(): Boolean = newSubscriptionUnit != null
 
-            fun isNewSubscriptionPackagePrice(): Boolean = newSubscriptionPackagePrice != null
+            fun isNewSubscriptionPackage(): Boolean = newSubscriptionPackage != null
 
-            fun isNewSubscriptionMatrixPrice(): Boolean = newSubscriptionMatrixPrice != null
+            fun isNewSubscriptionMatrix(): Boolean = newSubscriptionMatrix != null
 
-            fun isNewSubscriptionTieredPrice(): Boolean = newSubscriptionTieredPrice != null
+            fun isNewSubscriptionTiered(): Boolean = newSubscriptionTiered != null
 
-            fun isNewSubscriptionTieredBpsPrice(): Boolean = newSubscriptionTieredBpsPrice != null
+            fun isNewSubscriptionTieredBps(): Boolean = newSubscriptionTieredBps != null
 
-            fun isNewSubscriptionBpsPrice(): Boolean = newSubscriptionBpsPrice != null
+            fun isNewSubscriptionBps(): Boolean = newSubscriptionBps != null
 
-            fun isNewSubscriptionBulkBpsPrice(): Boolean = newSubscriptionBulkBpsPrice != null
+            fun isNewSubscriptionBulkBps(): Boolean = newSubscriptionBulkBps != null
 
-            fun isNewSubscriptionBulkPrice(): Boolean = newSubscriptionBulkPrice != null
+            fun isNewSubscriptionBulk(): Boolean = newSubscriptionBulk != null
 
-            fun isNewSubscriptionThresholdTotalAmountPrice(): Boolean =
-                newSubscriptionThresholdTotalAmountPrice != null
+            fun isNewSubscriptionThresholdTotalAmount(): Boolean =
+                newSubscriptionThresholdTotalAmount != null
 
-            fun isNewSubscriptionTieredPackagePrice(): Boolean =
-                newSubscriptionTieredPackagePrice != null
+            fun isNewSubscriptionTieredPackage(): Boolean = newSubscriptionTieredPackage != null
 
-            fun isNewSubscriptionTieredWithMinimumPrice(): Boolean =
-                newSubscriptionTieredWithMinimumPrice != null
+            fun isNewSubscriptionTieredWithMinimum(): Boolean =
+                newSubscriptionTieredWithMinimum != null
 
-            fun isNewSubscriptionUnitWithPercentPrice(): Boolean =
-                newSubscriptionUnitWithPercentPrice != null
+            fun isNewSubscriptionUnitWithPercent(): Boolean = newSubscriptionUnitWithPercent != null
 
-            fun isNewSubscriptionPackageWithAllocationPrice(): Boolean =
-                newSubscriptionPackageWithAllocationPrice != null
+            fun isNewSubscriptionPackageWithAllocation(): Boolean =
+                newSubscriptionPackageWithAllocation != null
 
-            fun isNewSubscriptionTierWithProrationPrice(): Boolean =
-                newSubscriptionTierWithProrationPrice != null
+            fun isNewSubscriptionTierWithProration(): Boolean =
+                newSubscriptionTierWithProration != null
 
-            fun isNewSubscriptionUnitWithProrationPrice(): Boolean =
-                newSubscriptionUnitWithProrationPrice != null
+            fun isNewSubscriptionUnitWithProration(): Boolean =
+                newSubscriptionUnitWithProration != null
 
-            fun isNewSubscriptionGroupedAllocationPrice(): Boolean =
-                newSubscriptionGroupedAllocationPrice != null
+            fun isNewSubscriptionGroupedAllocation(): Boolean =
+                newSubscriptionGroupedAllocation != null
 
-            fun isNewSubscriptionGroupedWithProratedMinimumPrice(): Boolean =
-                newSubscriptionGroupedWithProratedMinimumPrice != null
+            fun isNewSubscriptionGroupedWithProratedMinimum(): Boolean =
+                newSubscriptionGroupedWithProratedMinimum != null
 
-            fun isNewSubscriptionBulkWithProrationPrice(): Boolean =
-                newSubscriptionBulkWithProrationPrice != null
+            fun isNewSubscriptionBulkWithProration(): Boolean =
+                newSubscriptionBulkWithProration != null
 
-            fun asNewSubscriptionUnitPrice(): NewSubscriptionUnitPrice =
-                newSubscriptionUnitPrice.getOrThrow("newSubscriptionUnitPrice")
+            fun asNewSubscriptionUnit(): NewSubscriptionUnitPrice =
+                newSubscriptionUnit.getOrThrow("newSubscriptionUnit")
 
-            fun asNewSubscriptionPackagePrice(): NewSubscriptionPackagePrice =
-                newSubscriptionPackagePrice.getOrThrow("newSubscriptionPackagePrice")
+            fun asNewSubscriptionPackage(): NewSubscriptionPackagePrice =
+                newSubscriptionPackage.getOrThrow("newSubscriptionPackage")
 
-            fun asNewSubscriptionMatrixPrice(): NewSubscriptionMatrixPrice =
-                newSubscriptionMatrixPrice.getOrThrow("newSubscriptionMatrixPrice")
+            fun asNewSubscriptionMatrix(): NewSubscriptionMatrixPrice =
+                newSubscriptionMatrix.getOrThrow("newSubscriptionMatrix")
 
-            fun asNewSubscriptionTieredPrice(): NewSubscriptionTieredPrice =
-                newSubscriptionTieredPrice.getOrThrow("newSubscriptionTieredPrice")
+            fun asNewSubscriptionTiered(): NewSubscriptionTieredPrice =
+                newSubscriptionTiered.getOrThrow("newSubscriptionTiered")
 
-            fun asNewSubscriptionTieredBpsPrice(): NewSubscriptionTieredBpsPrice =
-                newSubscriptionTieredBpsPrice.getOrThrow("newSubscriptionTieredBpsPrice")
+            fun asNewSubscriptionTieredBps(): NewSubscriptionTieredBpsPrice =
+                newSubscriptionTieredBps.getOrThrow("newSubscriptionTieredBps")
 
-            fun asNewSubscriptionBpsPrice(): NewSubscriptionBpsPrice =
-                newSubscriptionBpsPrice.getOrThrow("newSubscriptionBpsPrice")
+            fun asNewSubscriptionBps(): NewSubscriptionBpsPrice =
+                newSubscriptionBps.getOrThrow("newSubscriptionBps")
 
-            fun asNewSubscriptionBulkBpsPrice(): NewSubscriptionBulkBpsPrice =
-                newSubscriptionBulkBpsPrice.getOrThrow("newSubscriptionBulkBpsPrice")
+            fun asNewSubscriptionBulkBps(): NewSubscriptionBulkBpsPrice =
+                newSubscriptionBulkBps.getOrThrow("newSubscriptionBulkBps")
 
-            fun asNewSubscriptionBulkPrice(): NewSubscriptionBulkPrice =
-                newSubscriptionBulkPrice.getOrThrow("newSubscriptionBulkPrice")
+            fun asNewSubscriptionBulk(): NewSubscriptionBulkPrice =
+                newSubscriptionBulk.getOrThrow("newSubscriptionBulk")
 
-            fun asNewSubscriptionThresholdTotalAmountPrice():
-                NewSubscriptionThresholdTotalAmountPrice =
-                newSubscriptionThresholdTotalAmountPrice.getOrThrow(
-                    "newSubscriptionThresholdTotalAmountPrice"
+            fun asNewSubscriptionThresholdTotalAmount(): NewSubscriptionThresholdTotalAmountPrice =
+                newSubscriptionThresholdTotalAmount.getOrThrow(
+                    "newSubscriptionThresholdTotalAmount"
                 )
 
-            fun asNewSubscriptionTieredPackagePrice(): NewSubscriptionTieredPackagePrice =
-                newSubscriptionTieredPackagePrice.getOrThrow("newSubscriptionTieredPackagePrice")
+            fun asNewSubscriptionTieredPackage(): NewSubscriptionTieredPackagePrice =
+                newSubscriptionTieredPackage.getOrThrow("newSubscriptionTieredPackage")
 
-            fun asNewSubscriptionTieredWithMinimumPrice(): NewSubscriptionTieredWithMinimumPrice =
-                newSubscriptionTieredWithMinimumPrice.getOrThrow(
-                    "newSubscriptionTieredWithMinimumPrice"
-                )
+            fun asNewSubscriptionTieredWithMinimum(): NewSubscriptionTieredWithMinimumPrice =
+                newSubscriptionTieredWithMinimum.getOrThrow("newSubscriptionTieredWithMinimum")
 
-            fun asNewSubscriptionUnitWithPercentPrice(): NewSubscriptionUnitWithPercentPrice =
-                newSubscriptionUnitWithPercentPrice.getOrThrow(
-                    "newSubscriptionUnitWithPercentPrice"
-                )
+            fun asNewSubscriptionUnitWithPercent(): NewSubscriptionUnitWithPercentPrice =
+                newSubscriptionUnitWithPercent.getOrThrow("newSubscriptionUnitWithPercent")
 
-            fun asNewSubscriptionPackageWithAllocationPrice():
+            fun asNewSubscriptionPackageWithAllocation():
                 NewSubscriptionPackageWithAllocationPrice =
-                newSubscriptionPackageWithAllocationPrice.getOrThrow(
-                    "newSubscriptionPackageWithAllocationPrice"
+                newSubscriptionPackageWithAllocation.getOrThrow(
+                    "newSubscriptionPackageWithAllocation"
                 )
 
-            fun asNewSubscriptionTierWithProrationPrice(): NewSubscriptionTierWithProrationPrice =
-                newSubscriptionTierWithProrationPrice.getOrThrow(
-                    "newSubscriptionTierWithProrationPrice"
-                )
+            fun asNewSubscriptionTierWithProration(): NewSubscriptionTierWithProrationPrice =
+                newSubscriptionTierWithProration.getOrThrow("newSubscriptionTierWithProration")
 
-            fun asNewSubscriptionUnitWithProrationPrice(): NewSubscriptionUnitWithProrationPrice =
-                newSubscriptionUnitWithProrationPrice.getOrThrow(
-                    "newSubscriptionUnitWithProrationPrice"
-                )
+            fun asNewSubscriptionUnitWithProration(): NewSubscriptionUnitWithProrationPrice =
+                newSubscriptionUnitWithProration.getOrThrow("newSubscriptionUnitWithProration")
 
-            fun asNewSubscriptionGroupedAllocationPrice(): NewSubscriptionGroupedAllocationPrice =
-                newSubscriptionGroupedAllocationPrice.getOrThrow(
-                    "newSubscriptionGroupedAllocationPrice"
-                )
+            fun asNewSubscriptionGroupedAllocation(): NewSubscriptionGroupedAllocationPrice =
+                newSubscriptionGroupedAllocation.getOrThrow("newSubscriptionGroupedAllocation")
 
-            fun asNewSubscriptionGroupedWithProratedMinimumPrice():
+            fun asNewSubscriptionGroupedWithProratedMinimum():
                 NewSubscriptionGroupedWithProratedMinimumPrice =
-                newSubscriptionGroupedWithProratedMinimumPrice.getOrThrow(
-                    "newSubscriptionGroupedWithProratedMinimumPrice"
+                newSubscriptionGroupedWithProratedMinimum.getOrThrow(
+                    "newSubscriptionGroupedWithProratedMinimum"
                 )
 
-            fun asNewSubscriptionBulkWithProrationPrice(): NewSubscriptionBulkWithProrationPrice =
-                newSubscriptionBulkWithProrationPrice.getOrThrow(
-                    "newSubscriptionBulkWithProrationPrice"
-                )
+            fun asNewSubscriptionBulkWithProration(): NewSubscriptionBulkWithProrationPrice =
+                newSubscriptionBulkWithProration.getOrThrow("newSubscriptionBulkWithProration")
 
             fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
             fun <T> accept(visitor: Visitor<T>): T {
                 return when {
-                    newSubscriptionUnitPrice != null ->
-                        visitor.visitNewSubscriptionUnitPrice(newSubscriptionUnitPrice)
-                    newSubscriptionPackagePrice != null ->
-                        visitor.visitNewSubscriptionPackagePrice(newSubscriptionPackagePrice)
-                    newSubscriptionMatrixPrice != null ->
-                        visitor.visitNewSubscriptionMatrixPrice(newSubscriptionMatrixPrice)
-                    newSubscriptionTieredPrice != null ->
-                        visitor.visitNewSubscriptionTieredPrice(newSubscriptionTieredPrice)
-                    newSubscriptionTieredBpsPrice != null ->
-                        visitor.visitNewSubscriptionTieredBpsPrice(newSubscriptionTieredBpsPrice)
-                    newSubscriptionBpsPrice != null ->
-                        visitor.visitNewSubscriptionBpsPrice(newSubscriptionBpsPrice)
-                    newSubscriptionBulkBpsPrice != null ->
-                        visitor.visitNewSubscriptionBulkBpsPrice(newSubscriptionBulkBpsPrice)
-                    newSubscriptionBulkPrice != null ->
-                        visitor.visitNewSubscriptionBulkPrice(newSubscriptionBulkPrice)
-                    newSubscriptionThresholdTotalAmountPrice != null ->
-                        visitor.visitNewSubscriptionThresholdTotalAmountPrice(
-                            newSubscriptionThresholdTotalAmountPrice
+                    newSubscriptionUnit != null ->
+                        visitor.visitNewSubscriptionUnit(newSubscriptionUnit)
+                    newSubscriptionPackage != null ->
+                        visitor.visitNewSubscriptionPackage(newSubscriptionPackage)
+                    newSubscriptionMatrix != null ->
+                        visitor.visitNewSubscriptionMatrix(newSubscriptionMatrix)
+                    newSubscriptionTiered != null ->
+                        visitor.visitNewSubscriptionTiered(newSubscriptionTiered)
+                    newSubscriptionTieredBps != null ->
+                        visitor.visitNewSubscriptionTieredBps(newSubscriptionTieredBps)
+                    newSubscriptionBps != null ->
+                        visitor.visitNewSubscriptionBps(newSubscriptionBps)
+                    newSubscriptionBulkBps != null ->
+                        visitor.visitNewSubscriptionBulkBps(newSubscriptionBulkBps)
+                    newSubscriptionBulk != null ->
+                        visitor.visitNewSubscriptionBulk(newSubscriptionBulk)
+                    newSubscriptionThresholdTotalAmount != null ->
+                        visitor.visitNewSubscriptionThresholdTotalAmount(
+                            newSubscriptionThresholdTotalAmount
                         )
-                    newSubscriptionTieredPackagePrice != null ->
-                        visitor.visitNewSubscriptionTieredPackagePrice(
-                            newSubscriptionTieredPackagePrice
+                    newSubscriptionTieredPackage != null ->
+                        visitor.visitNewSubscriptionTieredPackage(newSubscriptionTieredPackage)
+                    newSubscriptionTieredWithMinimum != null ->
+                        visitor.visitNewSubscriptionTieredWithMinimum(
+                            newSubscriptionTieredWithMinimum
                         )
-                    newSubscriptionTieredWithMinimumPrice != null ->
-                        visitor.visitNewSubscriptionTieredWithMinimumPrice(
-                            newSubscriptionTieredWithMinimumPrice
+                    newSubscriptionUnitWithPercent != null ->
+                        visitor.visitNewSubscriptionUnitWithPercent(newSubscriptionUnitWithPercent)
+                    newSubscriptionPackageWithAllocation != null ->
+                        visitor.visitNewSubscriptionPackageWithAllocation(
+                            newSubscriptionPackageWithAllocation
                         )
-                    newSubscriptionUnitWithPercentPrice != null ->
-                        visitor.visitNewSubscriptionUnitWithPercentPrice(
-                            newSubscriptionUnitWithPercentPrice
+                    newSubscriptionTierWithProration != null ->
+                        visitor.visitNewSubscriptionTierWithProration(
+                            newSubscriptionTierWithProration
                         )
-                    newSubscriptionPackageWithAllocationPrice != null ->
-                        visitor.visitNewSubscriptionPackageWithAllocationPrice(
-                            newSubscriptionPackageWithAllocationPrice
+                    newSubscriptionUnitWithProration != null ->
+                        visitor.visitNewSubscriptionUnitWithProration(
+                            newSubscriptionUnitWithProration
                         )
-                    newSubscriptionTierWithProrationPrice != null ->
-                        visitor.visitNewSubscriptionTierWithProrationPrice(
-                            newSubscriptionTierWithProrationPrice
+                    newSubscriptionGroupedAllocation != null ->
+                        visitor.visitNewSubscriptionGroupedAllocation(
+                            newSubscriptionGroupedAllocation
                         )
-                    newSubscriptionUnitWithProrationPrice != null ->
-                        visitor.visitNewSubscriptionUnitWithProrationPrice(
-                            newSubscriptionUnitWithProrationPrice
+                    newSubscriptionGroupedWithProratedMinimum != null ->
+                        visitor.visitNewSubscriptionGroupedWithProratedMinimum(
+                            newSubscriptionGroupedWithProratedMinimum
                         )
-                    newSubscriptionGroupedAllocationPrice != null ->
-                        visitor.visitNewSubscriptionGroupedAllocationPrice(
-                            newSubscriptionGroupedAllocationPrice
-                        )
-                    newSubscriptionGroupedWithProratedMinimumPrice != null ->
-                        visitor.visitNewSubscriptionGroupedWithProratedMinimumPrice(
-                            newSubscriptionGroupedWithProratedMinimumPrice
-                        )
-                    newSubscriptionBulkWithProrationPrice != null ->
-                        visitor.visitNewSubscriptionBulkWithProrationPrice(
-                            newSubscriptionBulkWithProrationPrice
+                    newSubscriptionBulkWithProration != null ->
+                        visitor.visitNewSubscriptionBulkWithProration(
+                            newSubscriptionBulkWithProration
                         )
                     else -> visitor.unknown(_json)
                 }
@@ -5535,120 +5476,115 @@ constructor(
 
                 accept(
                     object : Visitor<Unit> {
-                        override fun visitNewSubscriptionUnitPrice(
-                            newSubscriptionUnitPrice: NewSubscriptionUnitPrice
+                        override fun visitNewSubscriptionUnit(
+                            newSubscriptionUnit: NewSubscriptionUnitPrice
                         ) {
-                            newSubscriptionUnitPrice.validate()
+                            newSubscriptionUnit.validate()
                         }
 
-                        override fun visitNewSubscriptionPackagePrice(
-                            newSubscriptionPackagePrice: NewSubscriptionPackagePrice
+                        override fun visitNewSubscriptionPackage(
+                            newSubscriptionPackage: NewSubscriptionPackagePrice
                         ) {
-                            newSubscriptionPackagePrice.validate()
+                            newSubscriptionPackage.validate()
                         }
 
-                        override fun visitNewSubscriptionMatrixPrice(
-                            newSubscriptionMatrixPrice: NewSubscriptionMatrixPrice
+                        override fun visitNewSubscriptionMatrix(
+                            newSubscriptionMatrix: NewSubscriptionMatrixPrice
                         ) {
-                            newSubscriptionMatrixPrice.validate()
+                            newSubscriptionMatrix.validate()
                         }
 
-                        override fun visitNewSubscriptionTieredPrice(
-                            newSubscriptionTieredPrice: NewSubscriptionTieredPrice
+                        override fun visitNewSubscriptionTiered(
+                            newSubscriptionTiered: NewSubscriptionTieredPrice
                         ) {
-                            newSubscriptionTieredPrice.validate()
+                            newSubscriptionTiered.validate()
                         }
 
-                        override fun visitNewSubscriptionTieredBpsPrice(
-                            newSubscriptionTieredBpsPrice: NewSubscriptionTieredBpsPrice
+                        override fun visitNewSubscriptionTieredBps(
+                            newSubscriptionTieredBps: NewSubscriptionTieredBpsPrice
                         ) {
-                            newSubscriptionTieredBpsPrice.validate()
+                            newSubscriptionTieredBps.validate()
                         }
 
-                        override fun visitNewSubscriptionBpsPrice(
-                            newSubscriptionBpsPrice: NewSubscriptionBpsPrice
+                        override fun visitNewSubscriptionBps(
+                            newSubscriptionBps: NewSubscriptionBpsPrice
                         ) {
-                            newSubscriptionBpsPrice.validate()
+                            newSubscriptionBps.validate()
                         }
 
-                        override fun visitNewSubscriptionBulkBpsPrice(
-                            newSubscriptionBulkBpsPrice: NewSubscriptionBulkBpsPrice
+                        override fun visitNewSubscriptionBulkBps(
+                            newSubscriptionBulkBps: NewSubscriptionBulkBpsPrice
                         ) {
-                            newSubscriptionBulkBpsPrice.validate()
+                            newSubscriptionBulkBps.validate()
                         }
 
-                        override fun visitNewSubscriptionBulkPrice(
-                            newSubscriptionBulkPrice: NewSubscriptionBulkPrice
+                        override fun visitNewSubscriptionBulk(
+                            newSubscriptionBulk: NewSubscriptionBulkPrice
                         ) {
-                            newSubscriptionBulkPrice.validate()
+                            newSubscriptionBulk.validate()
                         }
 
-                        override fun visitNewSubscriptionThresholdTotalAmountPrice(
-                            newSubscriptionThresholdTotalAmountPrice:
+                        override fun visitNewSubscriptionThresholdTotalAmount(
+                            newSubscriptionThresholdTotalAmount:
                                 NewSubscriptionThresholdTotalAmountPrice
                         ) {
-                            newSubscriptionThresholdTotalAmountPrice.validate()
+                            newSubscriptionThresholdTotalAmount.validate()
                         }
 
-                        override fun visitNewSubscriptionTieredPackagePrice(
-                            newSubscriptionTieredPackagePrice: NewSubscriptionTieredPackagePrice
+                        override fun visitNewSubscriptionTieredPackage(
+                            newSubscriptionTieredPackage: NewSubscriptionTieredPackagePrice
                         ) {
-                            newSubscriptionTieredPackagePrice.validate()
+                            newSubscriptionTieredPackage.validate()
                         }
 
-                        override fun visitNewSubscriptionTieredWithMinimumPrice(
-                            newSubscriptionTieredWithMinimumPrice:
-                                NewSubscriptionTieredWithMinimumPrice
+                        override fun visitNewSubscriptionTieredWithMinimum(
+                            newSubscriptionTieredWithMinimum: NewSubscriptionTieredWithMinimumPrice
                         ) {
-                            newSubscriptionTieredWithMinimumPrice.validate()
+                            newSubscriptionTieredWithMinimum.validate()
                         }
 
-                        override fun visitNewSubscriptionUnitWithPercentPrice(
-                            newSubscriptionUnitWithPercentPrice: NewSubscriptionUnitWithPercentPrice
+                        override fun visitNewSubscriptionUnitWithPercent(
+                            newSubscriptionUnitWithPercent: NewSubscriptionUnitWithPercentPrice
                         ) {
-                            newSubscriptionUnitWithPercentPrice.validate()
+                            newSubscriptionUnitWithPercent.validate()
                         }
 
-                        override fun visitNewSubscriptionPackageWithAllocationPrice(
-                            newSubscriptionPackageWithAllocationPrice:
+                        override fun visitNewSubscriptionPackageWithAllocation(
+                            newSubscriptionPackageWithAllocation:
                                 NewSubscriptionPackageWithAllocationPrice
                         ) {
-                            newSubscriptionPackageWithAllocationPrice.validate()
+                            newSubscriptionPackageWithAllocation.validate()
                         }
 
-                        override fun visitNewSubscriptionTierWithProrationPrice(
-                            newSubscriptionTierWithProrationPrice:
-                                NewSubscriptionTierWithProrationPrice
+                        override fun visitNewSubscriptionTierWithProration(
+                            newSubscriptionTierWithProration: NewSubscriptionTierWithProrationPrice
                         ) {
-                            newSubscriptionTierWithProrationPrice.validate()
+                            newSubscriptionTierWithProration.validate()
                         }
 
-                        override fun visitNewSubscriptionUnitWithProrationPrice(
-                            newSubscriptionUnitWithProrationPrice:
-                                NewSubscriptionUnitWithProrationPrice
+                        override fun visitNewSubscriptionUnitWithProration(
+                            newSubscriptionUnitWithProration: NewSubscriptionUnitWithProrationPrice
                         ) {
-                            newSubscriptionUnitWithProrationPrice.validate()
+                            newSubscriptionUnitWithProration.validate()
                         }
 
-                        override fun visitNewSubscriptionGroupedAllocationPrice(
-                            newSubscriptionGroupedAllocationPrice:
-                                NewSubscriptionGroupedAllocationPrice
+                        override fun visitNewSubscriptionGroupedAllocation(
+                            newSubscriptionGroupedAllocation: NewSubscriptionGroupedAllocationPrice
                         ) {
-                            newSubscriptionGroupedAllocationPrice.validate()
+                            newSubscriptionGroupedAllocation.validate()
                         }
 
-                        override fun visitNewSubscriptionGroupedWithProratedMinimumPrice(
-                            newSubscriptionGroupedWithProratedMinimumPrice:
+                        override fun visitNewSubscriptionGroupedWithProratedMinimum(
+                            newSubscriptionGroupedWithProratedMinimum:
                                 NewSubscriptionGroupedWithProratedMinimumPrice
                         ) {
-                            newSubscriptionGroupedWithProratedMinimumPrice.validate()
+                            newSubscriptionGroupedWithProratedMinimum.validate()
                         }
 
-                        override fun visitNewSubscriptionBulkWithProrationPrice(
-                            newSubscriptionBulkWithProrationPrice:
-                                NewSubscriptionBulkWithProrationPrice
+                        override fun visitNewSubscriptionBulkWithProration(
+                            newSubscriptionBulkWithProration: NewSubscriptionBulkWithProrationPrice
                         ) {
-                            newSubscriptionBulkWithProrationPrice.validate()
+                            newSubscriptionBulkWithProration.validate()
                         }
                     }
                 )
@@ -5660,49 +5596,46 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Price && newSubscriptionUnitPrice == other.newSubscriptionUnitPrice && newSubscriptionPackagePrice == other.newSubscriptionPackagePrice && newSubscriptionMatrixPrice == other.newSubscriptionMatrixPrice && newSubscriptionTieredPrice == other.newSubscriptionTieredPrice && newSubscriptionTieredBpsPrice == other.newSubscriptionTieredBpsPrice && newSubscriptionBpsPrice == other.newSubscriptionBpsPrice && newSubscriptionBulkBpsPrice == other.newSubscriptionBulkBpsPrice && newSubscriptionBulkPrice == other.newSubscriptionBulkPrice && newSubscriptionThresholdTotalAmountPrice == other.newSubscriptionThresholdTotalAmountPrice && newSubscriptionTieredPackagePrice == other.newSubscriptionTieredPackagePrice && newSubscriptionTieredWithMinimumPrice == other.newSubscriptionTieredWithMinimumPrice && newSubscriptionUnitWithPercentPrice == other.newSubscriptionUnitWithPercentPrice && newSubscriptionPackageWithAllocationPrice == other.newSubscriptionPackageWithAllocationPrice && newSubscriptionTierWithProrationPrice == other.newSubscriptionTierWithProrationPrice && newSubscriptionUnitWithProrationPrice == other.newSubscriptionUnitWithProrationPrice && newSubscriptionGroupedAllocationPrice == other.newSubscriptionGroupedAllocationPrice && newSubscriptionGroupedWithProratedMinimumPrice == other.newSubscriptionGroupedWithProratedMinimumPrice && newSubscriptionBulkWithProrationPrice == other.newSubscriptionBulkWithProrationPrice /* spotless:on */
+                return /* spotless:off */ other is Price && newSubscriptionUnit == other.newSubscriptionUnit && newSubscriptionPackage == other.newSubscriptionPackage && newSubscriptionMatrix == other.newSubscriptionMatrix && newSubscriptionTiered == other.newSubscriptionTiered && newSubscriptionTieredBps == other.newSubscriptionTieredBps && newSubscriptionBps == other.newSubscriptionBps && newSubscriptionBulkBps == other.newSubscriptionBulkBps && newSubscriptionBulk == other.newSubscriptionBulk && newSubscriptionThresholdTotalAmount == other.newSubscriptionThresholdTotalAmount && newSubscriptionTieredPackage == other.newSubscriptionTieredPackage && newSubscriptionTieredWithMinimum == other.newSubscriptionTieredWithMinimum && newSubscriptionUnitWithPercent == other.newSubscriptionUnitWithPercent && newSubscriptionPackageWithAllocation == other.newSubscriptionPackageWithAllocation && newSubscriptionTierWithProration == other.newSubscriptionTierWithProration && newSubscriptionUnitWithProration == other.newSubscriptionUnitWithProration && newSubscriptionGroupedAllocation == other.newSubscriptionGroupedAllocation && newSubscriptionGroupedWithProratedMinimum == other.newSubscriptionGroupedWithProratedMinimum && newSubscriptionBulkWithProration == other.newSubscriptionBulkWithProration /* spotless:on */
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(newSubscriptionUnitPrice, newSubscriptionPackagePrice, newSubscriptionMatrixPrice, newSubscriptionTieredPrice, newSubscriptionTieredBpsPrice, newSubscriptionBpsPrice, newSubscriptionBulkBpsPrice, newSubscriptionBulkPrice, newSubscriptionThresholdTotalAmountPrice, newSubscriptionTieredPackagePrice, newSubscriptionTieredWithMinimumPrice, newSubscriptionUnitWithPercentPrice, newSubscriptionPackageWithAllocationPrice, newSubscriptionTierWithProrationPrice, newSubscriptionUnitWithProrationPrice, newSubscriptionGroupedAllocationPrice, newSubscriptionGroupedWithProratedMinimumPrice, newSubscriptionBulkWithProrationPrice) /* spotless:on */
+            override fun hashCode(): Int = /* spotless:off */ Objects.hash(newSubscriptionUnit, newSubscriptionPackage, newSubscriptionMatrix, newSubscriptionTiered, newSubscriptionTieredBps, newSubscriptionBps, newSubscriptionBulkBps, newSubscriptionBulk, newSubscriptionThresholdTotalAmount, newSubscriptionTieredPackage, newSubscriptionTieredWithMinimum, newSubscriptionUnitWithPercent, newSubscriptionPackageWithAllocation, newSubscriptionTierWithProration, newSubscriptionUnitWithProration, newSubscriptionGroupedAllocation, newSubscriptionGroupedWithProratedMinimum, newSubscriptionBulkWithProration) /* spotless:on */
 
             override fun toString(): String =
                 when {
-                    newSubscriptionUnitPrice != null ->
-                        "Price{newSubscriptionUnitPrice=$newSubscriptionUnitPrice}"
-                    newSubscriptionPackagePrice != null ->
-                        "Price{newSubscriptionPackagePrice=$newSubscriptionPackagePrice}"
-                    newSubscriptionMatrixPrice != null ->
-                        "Price{newSubscriptionMatrixPrice=$newSubscriptionMatrixPrice}"
-                    newSubscriptionTieredPrice != null ->
-                        "Price{newSubscriptionTieredPrice=$newSubscriptionTieredPrice}"
-                    newSubscriptionTieredBpsPrice != null ->
-                        "Price{newSubscriptionTieredBpsPrice=$newSubscriptionTieredBpsPrice}"
-                    newSubscriptionBpsPrice != null ->
-                        "Price{newSubscriptionBpsPrice=$newSubscriptionBpsPrice}"
-                    newSubscriptionBulkBpsPrice != null ->
-                        "Price{newSubscriptionBulkBpsPrice=$newSubscriptionBulkBpsPrice}"
-                    newSubscriptionBulkPrice != null ->
-                        "Price{newSubscriptionBulkPrice=$newSubscriptionBulkPrice}"
-                    newSubscriptionThresholdTotalAmountPrice != null ->
-                        "Price{newSubscriptionThresholdTotalAmountPrice=$newSubscriptionThresholdTotalAmountPrice}"
-                    newSubscriptionTieredPackagePrice != null ->
-                        "Price{newSubscriptionTieredPackagePrice=$newSubscriptionTieredPackagePrice}"
-                    newSubscriptionTieredWithMinimumPrice != null ->
-                        "Price{newSubscriptionTieredWithMinimumPrice=$newSubscriptionTieredWithMinimumPrice}"
-                    newSubscriptionUnitWithPercentPrice != null ->
-                        "Price{newSubscriptionUnitWithPercentPrice=$newSubscriptionUnitWithPercentPrice}"
-                    newSubscriptionPackageWithAllocationPrice != null ->
-                        "Price{newSubscriptionPackageWithAllocationPrice=$newSubscriptionPackageWithAllocationPrice}"
-                    newSubscriptionTierWithProrationPrice != null ->
-                        "Price{newSubscriptionTierWithProrationPrice=$newSubscriptionTierWithProrationPrice}"
-                    newSubscriptionUnitWithProrationPrice != null ->
-                        "Price{newSubscriptionUnitWithProrationPrice=$newSubscriptionUnitWithProrationPrice}"
-                    newSubscriptionGroupedAllocationPrice != null ->
-                        "Price{newSubscriptionGroupedAllocationPrice=$newSubscriptionGroupedAllocationPrice}"
-                    newSubscriptionGroupedWithProratedMinimumPrice != null ->
-                        "Price{newSubscriptionGroupedWithProratedMinimumPrice=$newSubscriptionGroupedWithProratedMinimumPrice}"
-                    newSubscriptionBulkWithProrationPrice != null ->
-                        "Price{newSubscriptionBulkWithProrationPrice=$newSubscriptionBulkWithProrationPrice}"
+                    newSubscriptionUnit != null -> "Price{newSubscriptionUnit=$newSubscriptionUnit}"
+                    newSubscriptionPackage != null ->
+                        "Price{newSubscriptionPackage=$newSubscriptionPackage}"
+                    newSubscriptionMatrix != null ->
+                        "Price{newSubscriptionMatrix=$newSubscriptionMatrix}"
+                    newSubscriptionTiered != null ->
+                        "Price{newSubscriptionTiered=$newSubscriptionTiered}"
+                    newSubscriptionTieredBps != null ->
+                        "Price{newSubscriptionTieredBps=$newSubscriptionTieredBps}"
+                    newSubscriptionBps != null -> "Price{newSubscriptionBps=$newSubscriptionBps}"
+                    newSubscriptionBulkBps != null ->
+                        "Price{newSubscriptionBulkBps=$newSubscriptionBulkBps}"
+                    newSubscriptionBulk != null -> "Price{newSubscriptionBulk=$newSubscriptionBulk}"
+                    newSubscriptionThresholdTotalAmount != null ->
+                        "Price{newSubscriptionThresholdTotalAmount=$newSubscriptionThresholdTotalAmount}"
+                    newSubscriptionTieredPackage != null ->
+                        "Price{newSubscriptionTieredPackage=$newSubscriptionTieredPackage}"
+                    newSubscriptionTieredWithMinimum != null ->
+                        "Price{newSubscriptionTieredWithMinimum=$newSubscriptionTieredWithMinimum}"
+                    newSubscriptionUnitWithPercent != null ->
+                        "Price{newSubscriptionUnitWithPercent=$newSubscriptionUnitWithPercent}"
+                    newSubscriptionPackageWithAllocation != null ->
+                        "Price{newSubscriptionPackageWithAllocation=$newSubscriptionPackageWithAllocation}"
+                    newSubscriptionTierWithProration != null ->
+                        "Price{newSubscriptionTierWithProration=$newSubscriptionTierWithProration}"
+                    newSubscriptionUnitWithProration != null ->
+                        "Price{newSubscriptionUnitWithProration=$newSubscriptionUnitWithProration}"
+                    newSubscriptionGroupedAllocation != null ->
+                        "Price{newSubscriptionGroupedAllocation=$newSubscriptionGroupedAllocation}"
+                    newSubscriptionGroupedWithProratedMinimum != null ->
+                        "Price{newSubscriptionGroupedWithProratedMinimum=$newSubscriptionGroupedWithProratedMinimum}"
+                    newSubscriptionBulkWithProration != null ->
+                        "Price{newSubscriptionBulkWithProration=$newSubscriptionBulkWithProration}"
                     _json != null -> "Price{_unknown=$_json}"
                     else -> throw IllegalStateException("Invalid Price")
                 }
@@ -5710,203 +5643,160 @@ constructor(
             companion object {
 
                 @JvmStatic
-                fun ofNewSubscriptionUnitPrice(newSubscriptionUnitPrice: NewSubscriptionUnitPrice) =
-                    Price(newSubscriptionUnitPrice = newSubscriptionUnitPrice)
+                fun ofNewSubscriptionUnit(newSubscriptionUnit: NewSubscriptionUnitPrice) =
+                    Price(newSubscriptionUnit = newSubscriptionUnit)
 
                 @JvmStatic
-                fun ofNewSubscriptionPackagePrice(
-                    newSubscriptionPackagePrice: NewSubscriptionPackagePrice
-                ) = Price(newSubscriptionPackagePrice = newSubscriptionPackagePrice)
+                fun ofNewSubscriptionPackage(newSubscriptionPackage: NewSubscriptionPackagePrice) =
+                    Price(newSubscriptionPackage = newSubscriptionPackage)
 
                 @JvmStatic
-                fun ofNewSubscriptionMatrixPrice(
-                    newSubscriptionMatrixPrice: NewSubscriptionMatrixPrice
-                ) = Price(newSubscriptionMatrixPrice = newSubscriptionMatrixPrice)
+                fun ofNewSubscriptionMatrix(newSubscriptionMatrix: NewSubscriptionMatrixPrice) =
+                    Price(newSubscriptionMatrix = newSubscriptionMatrix)
 
                 @JvmStatic
-                fun ofNewSubscriptionTieredPrice(
-                    newSubscriptionTieredPrice: NewSubscriptionTieredPrice
-                ) = Price(newSubscriptionTieredPrice = newSubscriptionTieredPrice)
+                fun ofNewSubscriptionTiered(newSubscriptionTiered: NewSubscriptionTieredPrice) =
+                    Price(newSubscriptionTiered = newSubscriptionTiered)
 
                 @JvmStatic
-                fun ofNewSubscriptionTieredBpsPrice(
-                    newSubscriptionTieredBpsPrice: NewSubscriptionTieredBpsPrice
-                ) = Price(newSubscriptionTieredBpsPrice = newSubscriptionTieredBpsPrice)
+                fun ofNewSubscriptionTieredBps(
+                    newSubscriptionTieredBps: NewSubscriptionTieredBpsPrice
+                ) = Price(newSubscriptionTieredBps = newSubscriptionTieredBps)
 
                 @JvmStatic
-                fun ofNewSubscriptionBpsPrice(newSubscriptionBpsPrice: NewSubscriptionBpsPrice) =
-                    Price(newSubscriptionBpsPrice = newSubscriptionBpsPrice)
+                fun ofNewSubscriptionBps(newSubscriptionBps: NewSubscriptionBpsPrice) =
+                    Price(newSubscriptionBps = newSubscriptionBps)
 
                 @JvmStatic
-                fun ofNewSubscriptionBulkBpsPrice(
-                    newSubscriptionBulkBpsPrice: NewSubscriptionBulkBpsPrice
-                ) = Price(newSubscriptionBulkBpsPrice = newSubscriptionBulkBpsPrice)
+                fun ofNewSubscriptionBulkBps(newSubscriptionBulkBps: NewSubscriptionBulkBpsPrice) =
+                    Price(newSubscriptionBulkBps = newSubscriptionBulkBps)
 
                 @JvmStatic
-                fun ofNewSubscriptionBulkPrice(newSubscriptionBulkPrice: NewSubscriptionBulkPrice) =
-                    Price(newSubscriptionBulkPrice = newSubscriptionBulkPrice)
+                fun ofNewSubscriptionBulk(newSubscriptionBulk: NewSubscriptionBulkPrice) =
+                    Price(newSubscriptionBulk = newSubscriptionBulk)
 
                 @JvmStatic
-                fun ofNewSubscriptionThresholdTotalAmountPrice(
-                    newSubscriptionThresholdTotalAmountPrice:
-                        NewSubscriptionThresholdTotalAmountPrice
+                fun ofNewSubscriptionThresholdTotalAmount(
+                    newSubscriptionThresholdTotalAmount: NewSubscriptionThresholdTotalAmountPrice
+                ) = Price(newSubscriptionThresholdTotalAmount = newSubscriptionThresholdTotalAmount)
+
+                @JvmStatic
+                fun ofNewSubscriptionTieredPackage(
+                    newSubscriptionTieredPackage: NewSubscriptionTieredPackagePrice
+                ) = Price(newSubscriptionTieredPackage = newSubscriptionTieredPackage)
+
+                @JvmStatic
+                fun ofNewSubscriptionTieredWithMinimum(
+                    newSubscriptionTieredWithMinimum: NewSubscriptionTieredWithMinimumPrice
+                ) = Price(newSubscriptionTieredWithMinimum = newSubscriptionTieredWithMinimum)
+
+                @JvmStatic
+                fun ofNewSubscriptionUnitWithPercent(
+                    newSubscriptionUnitWithPercent: NewSubscriptionUnitWithPercentPrice
+                ) = Price(newSubscriptionUnitWithPercent = newSubscriptionUnitWithPercent)
+
+                @JvmStatic
+                fun ofNewSubscriptionPackageWithAllocation(
+                    newSubscriptionPackageWithAllocation: NewSubscriptionPackageWithAllocationPrice
                 ) =
                     Price(
-                        newSubscriptionThresholdTotalAmountPrice =
-                            newSubscriptionThresholdTotalAmountPrice
+                        newSubscriptionPackageWithAllocation = newSubscriptionPackageWithAllocation
                     )
 
                 @JvmStatic
-                fun ofNewSubscriptionTieredPackagePrice(
-                    newSubscriptionTieredPackagePrice: NewSubscriptionTieredPackagePrice
-                ) = Price(newSubscriptionTieredPackagePrice = newSubscriptionTieredPackagePrice)
+                fun ofNewSubscriptionTierWithProration(
+                    newSubscriptionTierWithProration: NewSubscriptionTierWithProrationPrice
+                ) = Price(newSubscriptionTierWithProration = newSubscriptionTierWithProration)
 
                 @JvmStatic
-                fun ofNewSubscriptionTieredWithMinimumPrice(
-                    newSubscriptionTieredWithMinimumPrice: NewSubscriptionTieredWithMinimumPrice
-                ) =
-                    Price(
-                        newSubscriptionTieredWithMinimumPrice =
-                            newSubscriptionTieredWithMinimumPrice
-                    )
+                fun ofNewSubscriptionUnitWithProration(
+                    newSubscriptionUnitWithProration: NewSubscriptionUnitWithProrationPrice
+                ) = Price(newSubscriptionUnitWithProration = newSubscriptionUnitWithProration)
 
                 @JvmStatic
-                fun ofNewSubscriptionUnitWithPercentPrice(
-                    newSubscriptionUnitWithPercentPrice: NewSubscriptionUnitWithPercentPrice
-                ) = Price(newSubscriptionUnitWithPercentPrice = newSubscriptionUnitWithPercentPrice)
+                fun ofNewSubscriptionGroupedAllocation(
+                    newSubscriptionGroupedAllocation: NewSubscriptionGroupedAllocationPrice
+                ) = Price(newSubscriptionGroupedAllocation = newSubscriptionGroupedAllocation)
 
                 @JvmStatic
-                fun ofNewSubscriptionPackageWithAllocationPrice(
-                    newSubscriptionPackageWithAllocationPrice:
-                        NewSubscriptionPackageWithAllocationPrice
-                ) =
-                    Price(
-                        newSubscriptionPackageWithAllocationPrice =
-                            newSubscriptionPackageWithAllocationPrice
-                    )
-
-                @JvmStatic
-                fun ofNewSubscriptionTierWithProrationPrice(
-                    newSubscriptionTierWithProrationPrice: NewSubscriptionTierWithProrationPrice
-                ) =
-                    Price(
-                        newSubscriptionTierWithProrationPrice =
-                            newSubscriptionTierWithProrationPrice
-                    )
-
-                @JvmStatic
-                fun ofNewSubscriptionUnitWithProrationPrice(
-                    newSubscriptionUnitWithProrationPrice: NewSubscriptionUnitWithProrationPrice
-                ) =
-                    Price(
-                        newSubscriptionUnitWithProrationPrice =
-                            newSubscriptionUnitWithProrationPrice
-                    )
-
-                @JvmStatic
-                fun ofNewSubscriptionGroupedAllocationPrice(
-                    newSubscriptionGroupedAllocationPrice: NewSubscriptionGroupedAllocationPrice
-                ) =
-                    Price(
-                        newSubscriptionGroupedAllocationPrice =
-                            newSubscriptionGroupedAllocationPrice
-                    )
-
-                @JvmStatic
-                fun ofNewSubscriptionGroupedWithProratedMinimumPrice(
-                    newSubscriptionGroupedWithProratedMinimumPrice:
+                fun ofNewSubscriptionGroupedWithProratedMinimum(
+                    newSubscriptionGroupedWithProratedMinimum:
                         NewSubscriptionGroupedWithProratedMinimumPrice
                 ) =
                     Price(
-                        newSubscriptionGroupedWithProratedMinimumPrice =
-                            newSubscriptionGroupedWithProratedMinimumPrice
+                        newSubscriptionGroupedWithProratedMinimum =
+                            newSubscriptionGroupedWithProratedMinimum
                     )
 
                 @JvmStatic
-                fun ofNewSubscriptionBulkWithProrationPrice(
-                    newSubscriptionBulkWithProrationPrice: NewSubscriptionBulkWithProrationPrice
-                ) =
-                    Price(
-                        newSubscriptionBulkWithProrationPrice =
-                            newSubscriptionBulkWithProrationPrice
-                    )
+                fun ofNewSubscriptionBulkWithProration(
+                    newSubscriptionBulkWithProration: NewSubscriptionBulkWithProrationPrice
+                ) = Price(newSubscriptionBulkWithProration = newSubscriptionBulkWithProration)
             }
 
             interface Visitor<out T> {
 
-                fun visitNewSubscriptionUnitPrice(
-                    newSubscriptionUnitPrice: NewSubscriptionUnitPrice
+                fun visitNewSubscriptionUnit(newSubscriptionUnit: NewSubscriptionUnitPrice): T
+
+                fun visitNewSubscriptionPackage(
+                    newSubscriptionPackage: NewSubscriptionPackagePrice
                 ): T
 
-                fun visitNewSubscriptionPackagePrice(
-                    newSubscriptionPackagePrice: NewSubscriptionPackagePrice
+                fun visitNewSubscriptionMatrix(newSubscriptionMatrix: NewSubscriptionMatrixPrice): T
+
+                fun visitNewSubscriptionTiered(newSubscriptionTiered: NewSubscriptionTieredPrice): T
+
+                fun visitNewSubscriptionTieredBps(
+                    newSubscriptionTieredBps: NewSubscriptionTieredBpsPrice
                 ): T
 
-                fun visitNewSubscriptionMatrixPrice(
-                    newSubscriptionMatrixPrice: NewSubscriptionMatrixPrice
+                fun visitNewSubscriptionBps(newSubscriptionBps: NewSubscriptionBpsPrice): T
+
+                fun visitNewSubscriptionBulkBps(
+                    newSubscriptionBulkBps: NewSubscriptionBulkBpsPrice
                 ): T
 
-                fun visitNewSubscriptionTieredPrice(
-                    newSubscriptionTieredPrice: NewSubscriptionTieredPrice
+                fun visitNewSubscriptionBulk(newSubscriptionBulk: NewSubscriptionBulkPrice): T
+
+                fun visitNewSubscriptionThresholdTotalAmount(
+                    newSubscriptionThresholdTotalAmount: NewSubscriptionThresholdTotalAmountPrice
                 ): T
 
-                fun visitNewSubscriptionTieredBpsPrice(
-                    newSubscriptionTieredBpsPrice: NewSubscriptionTieredBpsPrice
+                fun visitNewSubscriptionTieredPackage(
+                    newSubscriptionTieredPackage: NewSubscriptionTieredPackagePrice
                 ): T
 
-                fun visitNewSubscriptionBpsPrice(
-                    newSubscriptionBpsPrice: NewSubscriptionBpsPrice
+                fun visitNewSubscriptionTieredWithMinimum(
+                    newSubscriptionTieredWithMinimum: NewSubscriptionTieredWithMinimumPrice
                 ): T
 
-                fun visitNewSubscriptionBulkBpsPrice(
-                    newSubscriptionBulkBpsPrice: NewSubscriptionBulkBpsPrice
+                fun visitNewSubscriptionUnitWithPercent(
+                    newSubscriptionUnitWithPercent: NewSubscriptionUnitWithPercentPrice
                 ): T
 
-                fun visitNewSubscriptionBulkPrice(
-                    newSubscriptionBulkPrice: NewSubscriptionBulkPrice
+                fun visitNewSubscriptionPackageWithAllocation(
+                    newSubscriptionPackageWithAllocation: NewSubscriptionPackageWithAllocationPrice
                 ): T
 
-                fun visitNewSubscriptionThresholdTotalAmountPrice(
-                    newSubscriptionThresholdTotalAmountPrice:
-                        NewSubscriptionThresholdTotalAmountPrice
+                fun visitNewSubscriptionTierWithProration(
+                    newSubscriptionTierWithProration: NewSubscriptionTierWithProrationPrice
                 ): T
 
-                fun visitNewSubscriptionTieredPackagePrice(
-                    newSubscriptionTieredPackagePrice: NewSubscriptionTieredPackagePrice
+                fun visitNewSubscriptionUnitWithProration(
+                    newSubscriptionUnitWithProration: NewSubscriptionUnitWithProrationPrice
                 ): T
 
-                fun visitNewSubscriptionTieredWithMinimumPrice(
-                    newSubscriptionTieredWithMinimumPrice: NewSubscriptionTieredWithMinimumPrice
+                fun visitNewSubscriptionGroupedAllocation(
+                    newSubscriptionGroupedAllocation: NewSubscriptionGroupedAllocationPrice
                 ): T
 
-                fun visitNewSubscriptionUnitWithPercentPrice(
-                    newSubscriptionUnitWithPercentPrice: NewSubscriptionUnitWithPercentPrice
-                ): T
-
-                fun visitNewSubscriptionPackageWithAllocationPrice(
-                    newSubscriptionPackageWithAllocationPrice:
-                        NewSubscriptionPackageWithAllocationPrice
-                ): T
-
-                fun visitNewSubscriptionTierWithProrationPrice(
-                    newSubscriptionTierWithProrationPrice: NewSubscriptionTierWithProrationPrice
-                ): T
-
-                fun visitNewSubscriptionUnitWithProrationPrice(
-                    newSubscriptionUnitWithProrationPrice: NewSubscriptionUnitWithProrationPrice
-                ): T
-
-                fun visitNewSubscriptionGroupedAllocationPrice(
-                    newSubscriptionGroupedAllocationPrice: NewSubscriptionGroupedAllocationPrice
-                ): T
-
-                fun visitNewSubscriptionGroupedWithProratedMinimumPrice(
-                    newSubscriptionGroupedWithProratedMinimumPrice:
+                fun visitNewSubscriptionGroupedWithProratedMinimum(
+                    newSubscriptionGroupedWithProratedMinimum:
                         NewSubscriptionGroupedWithProratedMinimumPrice
                 ): T
 
-                fun visitNewSubscriptionBulkWithProrationPrice(
-                    newSubscriptionBulkWithProrationPrice: NewSubscriptionBulkWithProrationPrice
+                fun visitNewSubscriptionBulkWithProration(
+                    newSubscriptionBulkWithProration: NewSubscriptionBulkWithProrationPrice
                 ): T
 
                 fun unknown(json: JsonValue?): T {
@@ -5927,7 +5817,7 @@ constructor(
                                     it.validate()
                                 }
                                 ?.let {
-                                    return Price(newSubscriptionUnitPrice = it, _json = json)
+                                    return Price(newSubscriptionUnit = it, _json = json)
                                 }
                         }
                         "package" -> {
@@ -5935,7 +5825,7 @@ constructor(
                                     it.validate()
                                 }
                                 ?.let {
-                                    return Price(newSubscriptionPackagePrice = it, _json = json)
+                                    return Price(newSubscriptionPackage = it, _json = json)
                                 }
                         }
                         "matrix" -> {
@@ -5943,7 +5833,7 @@ constructor(
                                     it.validate()
                                 }
                                 ?.let {
-                                    return Price(newSubscriptionMatrixPrice = it, _json = json)
+                                    return Price(newSubscriptionMatrix = it, _json = json)
                                 }
                         }
                         "tiered" -> {
@@ -5951,7 +5841,7 @@ constructor(
                                     it.validate()
                                 }
                                 ?.let {
-                                    return Price(newSubscriptionTieredPrice = it, _json = json)
+                                    return Price(newSubscriptionTiered = it, _json = json)
                                 }
                         }
                         "tiered_bps" -> {
@@ -5959,7 +5849,7 @@ constructor(
                                     it.validate()
                                 }
                                 ?.let {
-                                    return Price(newSubscriptionTieredBpsPrice = it, _json = json)
+                                    return Price(newSubscriptionTieredBps = it, _json = json)
                                 }
                         }
                         "bps" -> {
@@ -5967,7 +5857,7 @@ constructor(
                                     it.validate()
                                 }
                                 ?.let {
-                                    return Price(newSubscriptionBpsPrice = it, _json = json)
+                                    return Price(newSubscriptionBps = it, _json = json)
                                 }
                         }
                         "bulk_bps" -> {
@@ -5975,7 +5865,7 @@ constructor(
                                     it.validate()
                                 }
                                 ?.let {
-                                    return Price(newSubscriptionBulkBpsPrice = it, _json = json)
+                                    return Price(newSubscriptionBulkBps = it, _json = json)
                                 }
                         }
                         "bulk" -> {
@@ -5983,7 +5873,7 @@ constructor(
                                     it.validate()
                                 }
                                 ?.let {
-                                    return Price(newSubscriptionBulkPrice = it, _json = json)
+                                    return Price(newSubscriptionBulk = it, _json = json)
                                 }
                         }
                         "threshold_total_amount" -> {
@@ -5995,7 +5885,7 @@ constructor(
                                 }
                                 ?.let {
                                     return Price(
-                                        newSubscriptionThresholdTotalAmountPrice = it,
+                                        newSubscriptionThresholdTotalAmount = it,
                                         _json = json
                                     )
                                 }
@@ -6008,10 +5898,7 @@ constructor(
                                     it.validate()
                                 }
                                 ?.let {
-                                    return Price(
-                                        newSubscriptionTieredPackagePrice = it,
-                                        _json = json
-                                    )
+                                    return Price(newSubscriptionTieredPackage = it, _json = json)
                                 }
                         }
                         "tiered_with_minimum" -> {
@@ -6023,7 +5910,7 @@ constructor(
                                 }
                                 ?.let {
                                     return Price(
-                                        newSubscriptionTieredWithMinimumPrice = it,
+                                        newSubscriptionTieredWithMinimum = it,
                                         _json = json
                                     )
                                 }
@@ -6036,10 +5923,7 @@ constructor(
                                     it.validate()
                                 }
                                 ?.let {
-                                    return Price(
-                                        newSubscriptionUnitWithPercentPrice = it,
-                                        _json = json
-                                    )
+                                    return Price(newSubscriptionUnitWithPercent = it, _json = json)
                                 }
                         }
                         "package_with_allocation" -> {
@@ -6051,7 +5935,7 @@ constructor(
                                 }
                                 ?.let {
                                     return Price(
-                                        newSubscriptionPackageWithAllocationPrice = it,
+                                        newSubscriptionPackageWithAllocation = it,
                                         _json = json
                                     )
                                 }
@@ -6065,7 +5949,7 @@ constructor(
                                 }
                                 ?.let {
                                     return Price(
-                                        newSubscriptionTierWithProrationPrice = it,
+                                        newSubscriptionTierWithProration = it,
                                         _json = json
                                     )
                                 }
@@ -6079,7 +5963,7 @@ constructor(
                                 }
                                 ?.let {
                                     return Price(
-                                        newSubscriptionUnitWithProrationPrice = it,
+                                        newSubscriptionUnitWithProration = it,
                                         _json = json
                                     )
                                 }
@@ -6093,7 +5977,7 @@ constructor(
                                 }
                                 ?.let {
                                     return Price(
-                                        newSubscriptionGroupedAllocationPrice = it,
+                                        newSubscriptionGroupedAllocation = it,
                                         _json = json
                                     )
                                 }
@@ -6107,7 +5991,7 @@ constructor(
                                 }
                                 ?.let {
                                     return Price(
-                                        newSubscriptionGroupedWithProratedMinimumPrice = it,
+                                        newSubscriptionGroupedWithProratedMinimum = it,
                                         _json = json
                                     )
                                 }
@@ -6121,7 +6005,7 @@ constructor(
                                 }
                                 ?.let {
                                     return Price(
-                                        newSubscriptionBulkWithProrationPrice = it,
+                                        newSubscriptionBulkWithProration = it,
                                         _json = json
                                     )
                                 }
@@ -6140,44 +6024,42 @@ constructor(
                     provider: SerializerProvider
                 ) {
                     when {
-                        value.newSubscriptionUnitPrice != null ->
-                            generator.writeObject(value.newSubscriptionUnitPrice)
-                        value.newSubscriptionPackagePrice != null ->
-                            generator.writeObject(value.newSubscriptionPackagePrice)
-                        value.newSubscriptionMatrixPrice != null ->
-                            generator.writeObject(value.newSubscriptionMatrixPrice)
-                        value.newSubscriptionTieredPrice != null ->
-                            generator.writeObject(value.newSubscriptionTieredPrice)
-                        value.newSubscriptionTieredBpsPrice != null ->
-                            generator.writeObject(value.newSubscriptionTieredBpsPrice)
-                        value.newSubscriptionBpsPrice != null ->
-                            generator.writeObject(value.newSubscriptionBpsPrice)
-                        value.newSubscriptionBulkBpsPrice != null ->
-                            generator.writeObject(value.newSubscriptionBulkBpsPrice)
-                        value.newSubscriptionBulkPrice != null ->
-                            generator.writeObject(value.newSubscriptionBulkPrice)
-                        value.newSubscriptionThresholdTotalAmountPrice != null ->
-                            generator.writeObject(value.newSubscriptionThresholdTotalAmountPrice)
-                        value.newSubscriptionTieredPackagePrice != null ->
-                            generator.writeObject(value.newSubscriptionTieredPackagePrice)
-                        value.newSubscriptionTieredWithMinimumPrice != null ->
-                            generator.writeObject(value.newSubscriptionTieredWithMinimumPrice)
-                        value.newSubscriptionUnitWithPercentPrice != null ->
-                            generator.writeObject(value.newSubscriptionUnitWithPercentPrice)
-                        value.newSubscriptionPackageWithAllocationPrice != null ->
-                            generator.writeObject(value.newSubscriptionPackageWithAllocationPrice)
-                        value.newSubscriptionTierWithProrationPrice != null ->
-                            generator.writeObject(value.newSubscriptionTierWithProrationPrice)
-                        value.newSubscriptionUnitWithProrationPrice != null ->
-                            generator.writeObject(value.newSubscriptionUnitWithProrationPrice)
-                        value.newSubscriptionGroupedAllocationPrice != null ->
-                            generator.writeObject(value.newSubscriptionGroupedAllocationPrice)
-                        value.newSubscriptionGroupedWithProratedMinimumPrice != null ->
-                            generator.writeObject(
-                                value.newSubscriptionGroupedWithProratedMinimumPrice
-                            )
-                        value.newSubscriptionBulkWithProrationPrice != null ->
-                            generator.writeObject(value.newSubscriptionBulkWithProrationPrice)
+                        value.newSubscriptionUnit != null ->
+                            generator.writeObject(value.newSubscriptionUnit)
+                        value.newSubscriptionPackage != null ->
+                            generator.writeObject(value.newSubscriptionPackage)
+                        value.newSubscriptionMatrix != null ->
+                            generator.writeObject(value.newSubscriptionMatrix)
+                        value.newSubscriptionTiered != null ->
+                            generator.writeObject(value.newSubscriptionTiered)
+                        value.newSubscriptionTieredBps != null ->
+                            generator.writeObject(value.newSubscriptionTieredBps)
+                        value.newSubscriptionBps != null ->
+                            generator.writeObject(value.newSubscriptionBps)
+                        value.newSubscriptionBulkBps != null ->
+                            generator.writeObject(value.newSubscriptionBulkBps)
+                        value.newSubscriptionBulk != null ->
+                            generator.writeObject(value.newSubscriptionBulk)
+                        value.newSubscriptionThresholdTotalAmount != null ->
+                            generator.writeObject(value.newSubscriptionThresholdTotalAmount)
+                        value.newSubscriptionTieredPackage != null ->
+                            generator.writeObject(value.newSubscriptionTieredPackage)
+                        value.newSubscriptionTieredWithMinimum != null ->
+                            generator.writeObject(value.newSubscriptionTieredWithMinimum)
+                        value.newSubscriptionUnitWithPercent != null ->
+                            generator.writeObject(value.newSubscriptionUnitWithPercent)
+                        value.newSubscriptionPackageWithAllocation != null ->
+                            generator.writeObject(value.newSubscriptionPackageWithAllocation)
+                        value.newSubscriptionTierWithProration != null ->
+                            generator.writeObject(value.newSubscriptionTierWithProration)
+                        value.newSubscriptionUnitWithProration != null ->
+                            generator.writeObject(value.newSubscriptionUnitWithProration)
+                        value.newSubscriptionGroupedAllocation != null ->
+                            generator.writeObject(value.newSubscriptionGroupedAllocation)
+                        value.newSubscriptionGroupedWithProratedMinimum != null ->
+                            generator.writeObject(value.newSubscriptionGroupedWithProratedMinimum)
+                        value.newSubscriptionBulkWithProration != null ->
+                            generator.writeObject(value.newSubscriptionBulkWithProration)
                         value._json != null -> generator.writeObject(value._json)
                         else -> throw IllegalStateException("Invalid Price")
                     }
@@ -34714,131 +34596,99 @@ constructor(
             fun price(price: JsonField<Price>) = apply { this.price = price }
 
             /** The definition of a new price to create and add to the subscription. */
-            fun price(newSubscriptionUnitPrice: Price.NewSubscriptionUnitPrice) =
-                price(Price.ofNewSubscriptionUnitPrice(newSubscriptionUnitPrice))
+            fun price(newSubscriptionUnit: Price.NewSubscriptionUnitPrice) =
+                price(Price.ofNewSubscriptionUnit(newSubscriptionUnit))
 
             /** The definition of a new price to create and add to the subscription. */
-            fun price(newSubscriptionPackagePrice: Price.NewSubscriptionPackagePrice) =
-                price(Price.ofNewSubscriptionPackagePrice(newSubscriptionPackagePrice))
+            fun price(newSubscriptionPackage: Price.NewSubscriptionPackagePrice) =
+                price(Price.ofNewSubscriptionPackage(newSubscriptionPackage))
 
             /** The definition of a new price to create and add to the subscription. */
-            fun price(newSubscriptionMatrixPrice: Price.NewSubscriptionMatrixPrice) =
-                price(Price.ofNewSubscriptionMatrixPrice(newSubscriptionMatrixPrice))
+            fun price(newSubscriptionMatrix: Price.NewSubscriptionMatrixPrice) =
+                price(Price.ofNewSubscriptionMatrix(newSubscriptionMatrix))
 
             /** The definition of a new price to create and add to the subscription. */
-            fun price(newSubscriptionTieredPrice: Price.NewSubscriptionTieredPrice) =
-                price(Price.ofNewSubscriptionTieredPrice(newSubscriptionTieredPrice))
+            fun price(newSubscriptionTiered: Price.NewSubscriptionTieredPrice) =
+                price(Price.ofNewSubscriptionTiered(newSubscriptionTiered))
 
             /** The definition of a new price to create and add to the subscription. */
-            fun price(newSubscriptionTieredBpsPrice: Price.NewSubscriptionTieredBpsPrice) =
-                price(Price.ofNewSubscriptionTieredBpsPrice(newSubscriptionTieredBpsPrice))
+            fun price(newSubscriptionTieredBps: Price.NewSubscriptionTieredBpsPrice) =
+                price(Price.ofNewSubscriptionTieredBps(newSubscriptionTieredBps))
 
             /** The definition of a new price to create and add to the subscription. */
-            fun price(newSubscriptionBpsPrice: Price.NewSubscriptionBpsPrice) =
-                price(Price.ofNewSubscriptionBpsPrice(newSubscriptionBpsPrice))
+            fun price(newSubscriptionBps: Price.NewSubscriptionBpsPrice) =
+                price(Price.ofNewSubscriptionBps(newSubscriptionBps))
 
             /** The definition of a new price to create and add to the subscription. */
-            fun price(newSubscriptionBulkBpsPrice: Price.NewSubscriptionBulkBpsPrice) =
-                price(Price.ofNewSubscriptionBulkBpsPrice(newSubscriptionBulkBpsPrice))
+            fun price(newSubscriptionBulkBps: Price.NewSubscriptionBulkBpsPrice) =
+                price(Price.ofNewSubscriptionBulkBps(newSubscriptionBulkBps))
 
             /** The definition of a new price to create and add to the subscription. */
-            fun price(newSubscriptionBulkPrice: Price.NewSubscriptionBulkPrice) =
-                price(Price.ofNewSubscriptionBulkPrice(newSubscriptionBulkPrice))
+            fun price(newSubscriptionBulk: Price.NewSubscriptionBulkPrice) =
+                price(Price.ofNewSubscriptionBulk(newSubscriptionBulk))
 
             /** The definition of a new price to create and add to the subscription. */
             fun price(
-                newSubscriptionThresholdTotalAmountPrice:
-                    Price.NewSubscriptionThresholdTotalAmountPrice
+                newSubscriptionThresholdTotalAmount: Price.NewSubscriptionThresholdTotalAmountPrice
             ) =
                 price(
-                    Price.ofNewSubscriptionThresholdTotalAmountPrice(
-                        newSubscriptionThresholdTotalAmountPrice
-                    )
+                    Price.ofNewSubscriptionThresholdTotalAmount(newSubscriptionThresholdTotalAmount)
                 )
 
             /** The definition of a new price to create and add to the subscription. */
-            fun price(newSubscriptionTieredPackagePrice: Price.NewSubscriptionTieredPackagePrice) =
-                price(Price.ofNewSubscriptionTieredPackagePrice(newSubscriptionTieredPackagePrice))
+            fun price(newSubscriptionTieredPackage: Price.NewSubscriptionTieredPackagePrice) =
+                price(Price.ofNewSubscriptionTieredPackage(newSubscriptionTieredPackage))
 
             /** The definition of a new price to create and add to the subscription. */
             fun price(
-                newSubscriptionTieredWithMinimumPrice: Price.NewSubscriptionTieredWithMinimumPrice
-            ) =
-                price(
-                    Price.ofNewSubscriptionTieredWithMinimumPrice(
-                        newSubscriptionTieredWithMinimumPrice
-                    )
-                )
+                newSubscriptionTieredWithMinimum: Price.NewSubscriptionTieredWithMinimumPrice
+            ) = price(Price.ofNewSubscriptionTieredWithMinimum(newSubscriptionTieredWithMinimum))
+
+            /** The definition of a new price to create and add to the subscription. */
+            fun price(newSubscriptionUnitWithPercent: Price.NewSubscriptionUnitWithPercentPrice) =
+                price(Price.ofNewSubscriptionUnitWithPercent(newSubscriptionUnitWithPercent))
 
             /** The definition of a new price to create and add to the subscription. */
             fun price(
-                newSubscriptionUnitWithPercentPrice: Price.NewSubscriptionUnitWithPercentPrice
-            ) =
-                price(
-                    Price.ofNewSubscriptionUnitWithPercentPrice(newSubscriptionUnitWithPercentPrice)
-                )
-
-            /** The definition of a new price to create and add to the subscription. */
-            fun price(
-                newSubscriptionPackageWithAllocationPrice:
+                newSubscriptionPackageWithAllocation:
                     Price.NewSubscriptionPackageWithAllocationPrice
             ) =
                 price(
-                    Price.ofNewSubscriptionPackageWithAllocationPrice(
-                        newSubscriptionPackageWithAllocationPrice
+                    Price.ofNewSubscriptionPackageWithAllocation(
+                        newSubscriptionPackageWithAllocation
                     )
                 )
 
             /** The definition of a new price to create and add to the subscription. */
             fun price(
-                newSubscriptionTierWithProrationPrice: Price.NewSubscriptionTierWithProrationPrice
-            ) =
-                price(
-                    Price.ofNewSubscriptionTierWithProrationPrice(
-                        newSubscriptionTierWithProrationPrice
-                    )
-                )
+                newSubscriptionTierWithProration: Price.NewSubscriptionTierWithProrationPrice
+            ) = price(Price.ofNewSubscriptionTierWithProration(newSubscriptionTierWithProration))
 
             /** The definition of a new price to create and add to the subscription. */
             fun price(
-                newSubscriptionUnitWithProrationPrice: Price.NewSubscriptionUnitWithProrationPrice
-            ) =
-                price(
-                    Price.ofNewSubscriptionUnitWithProrationPrice(
-                        newSubscriptionUnitWithProrationPrice
-                    )
-                )
+                newSubscriptionUnitWithProration: Price.NewSubscriptionUnitWithProrationPrice
+            ) = price(Price.ofNewSubscriptionUnitWithProration(newSubscriptionUnitWithProration))
 
             /** The definition of a new price to create and add to the subscription. */
             fun price(
-                newSubscriptionGroupedAllocationPrice: Price.NewSubscriptionGroupedAllocationPrice
-            ) =
-                price(
-                    Price.ofNewSubscriptionGroupedAllocationPrice(
-                        newSubscriptionGroupedAllocationPrice
-                    )
-                )
+                newSubscriptionGroupedAllocation: Price.NewSubscriptionGroupedAllocationPrice
+            ) = price(Price.ofNewSubscriptionGroupedAllocation(newSubscriptionGroupedAllocation))
 
             /** The definition of a new price to create and add to the subscription. */
             fun price(
-                newSubscriptionGroupedWithProratedMinimumPrice:
+                newSubscriptionGroupedWithProratedMinimum:
                     Price.NewSubscriptionGroupedWithProratedMinimumPrice
             ) =
                 price(
-                    Price.ofNewSubscriptionGroupedWithProratedMinimumPrice(
-                        newSubscriptionGroupedWithProratedMinimumPrice
+                    Price.ofNewSubscriptionGroupedWithProratedMinimum(
+                        newSubscriptionGroupedWithProratedMinimum
                     )
                 )
 
             /** The definition of a new price to create and add to the subscription. */
             fun price(
-                newSubscriptionBulkWithProrationPrice: Price.NewSubscriptionBulkWithProrationPrice
-            ) =
-                price(
-                    Price.ofNewSubscriptionBulkWithProrationPrice(
-                        newSubscriptionBulkWithProrationPrice
-                    )
-                )
+                newSubscriptionBulkWithProration: Price.NewSubscriptionBulkWithProrationPrice
+            ) = price(Price.ofNewSubscriptionBulkWithProration(newSubscriptionBulkWithProration))
 
             /** The id of the price to add to the subscription. */
             fun priceId(priceId: String?) = priceId(JsonField.ofNullable(priceId))
@@ -35184,288 +35034,261 @@ constructor(
         @JsonSerialize(using = Price.Serializer::class)
         class Price
         private constructor(
-            private val newSubscriptionUnitPrice: NewSubscriptionUnitPrice? = null,
-            private val newSubscriptionPackagePrice: NewSubscriptionPackagePrice? = null,
-            private val newSubscriptionMatrixPrice: NewSubscriptionMatrixPrice? = null,
-            private val newSubscriptionTieredPrice: NewSubscriptionTieredPrice? = null,
-            private val newSubscriptionTieredBpsPrice: NewSubscriptionTieredBpsPrice? = null,
-            private val newSubscriptionBpsPrice: NewSubscriptionBpsPrice? = null,
-            private val newSubscriptionBulkBpsPrice: NewSubscriptionBulkBpsPrice? = null,
-            private val newSubscriptionBulkPrice: NewSubscriptionBulkPrice? = null,
-            private val newSubscriptionThresholdTotalAmountPrice:
+            private val newSubscriptionUnit: NewSubscriptionUnitPrice? = null,
+            private val newSubscriptionPackage: NewSubscriptionPackagePrice? = null,
+            private val newSubscriptionMatrix: NewSubscriptionMatrixPrice? = null,
+            private val newSubscriptionTiered: NewSubscriptionTieredPrice? = null,
+            private val newSubscriptionTieredBps: NewSubscriptionTieredBpsPrice? = null,
+            private val newSubscriptionBps: NewSubscriptionBpsPrice? = null,
+            private val newSubscriptionBulkBps: NewSubscriptionBulkBpsPrice? = null,
+            private val newSubscriptionBulk: NewSubscriptionBulkPrice? = null,
+            private val newSubscriptionThresholdTotalAmount:
                 NewSubscriptionThresholdTotalAmountPrice? =
                 null,
-            private val newSubscriptionTieredPackagePrice: NewSubscriptionTieredPackagePrice? =
+            private val newSubscriptionTieredPackage: NewSubscriptionTieredPackagePrice? = null,
+            private val newSubscriptionTieredWithMinimum: NewSubscriptionTieredWithMinimumPrice? =
                 null,
-            private val newSubscriptionTieredWithMinimumPrice:
-                NewSubscriptionTieredWithMinimumPrice? =
-                null,
-            private val newSubscriptionUnitWithPercentPrice: NewSubscriptionUnitWithPercentPrice? =
-                null,
-            private val newSubscriptionPackageWithAllocationPrice:
+            private val newSubscriptionUnitWithPercent: NewSubscriptionUnitWithPercentPrice? = null,
+            private val newSubscriptionPackageWithAllocation:
                 NewSubscriptionPackageWithAllocationPrice? =
                 null,
-            private val newSubscriptionTierWithProrationPrice:
-                NewSubscriptionTierWithProrationPrice? =
+            private val newSubscriptionTierWithProration: NewSubscriptionTierWithProrationPrice? =
                 null,
-            private val newSubscriptionUnitWithProrationPrice:
-                NewSubscriptionUnitWithProrationPrice? =
+            private val newSubscriptionUnitWithProration: NewSubscriptionUnitWithProrationPrice? =
                 null,
-            private val newSubscriptionGroupedAllocationPrice:
-                NewSubscriptionGroupedAllocationPrice? =
+            private val newSubscriptionGroupedAllocation: NewSubscriptionGroupedAllocationPrice? =
                 null,
-            private val newSubscriptionGroupedWithProratedMinimumPrice:
+            private val newSubscriptionGroupedWithProratedMinimum:
                 NewSubscriptionGroupedWithProratedMinimumPrice? =
                 null,
-            private val newSubscriptionBulkWithProrationPrice:
-                NewSubscriptionBulkWithProrationPrice? =
+            private val newSubscriptionBulkWithProration: NewSubscriptionBulkWithProrationPrice? =
                 null,
             private val _json: JsonValue? = null,
         ) {
 
-            fun newSubscriptionUnitPrice(): Optional<NewSubscriptionUnitPrice> =
-                Optional.ofNullable(newSubscriptionUnitPrice)
+            fun newSubscriptionUnit(): Optional<NewSubscriptionUnitPrice> =
+                Optional.ofNullable(newSubscriptionUnit)
 
-            fun newSubscriptionPackagePrice(): Optional<NewSubscriptionPackagePrice> =
-                Optional.ofNullable(newSubscriptionPackagePrice)
+            fun newSubscriptionPackage(): Optional<NewSubscriptionPackagePrice> =
+                Optional.ofNullable(newSubscriptionPackage)
 
-            fun newSubscriptionMatrixPrice(): Optional<NewSubscriptionMatrixPrice> =
-                Optional.ofNullable(newSubscriptionMatrixPrice)
+            fun newSubscriptionMatrix(): Optional<NewSubscriptionMatrixPrice> =
+                Optional.ofNullable(newSubscriptionMatrix)
 
-            fun newSubscriptionTieredPrice(): Optional<NewSubscriptionTieredPrice> =
-                Optional.ofNullable(newSubscriptionTieredPrice)
+            fun newSubscriptionTiered(): Optional<NewSubscriptionTieredPrice> =
+                Optional.ofNullable(newSubscriptionTiered)
 
-            fun newSubscriptionTieredBpsPrice(): Optional<NewSubscriptionTieredBpsPrice> =
-                Optional.ofNullable(newSubscriptionTieredBpsPrice)
+            fun newSubscriptionTieredBps(): Optional<NewSubscriptionTieredBpsPrice> =
+                Optional.ofNullable(newSubscriptionTieredBps)
 
-            fun newSubscriptionBpsPrice(): Optional<NewSubscriptionBpsPrice> =
-                Optional.ofNullable(newSubscriptionBpsPrice)
+            fun newSubscriptionBps(): Optional<NewSubscriptionBpsPrice> =
+                Optional.ofNullable(newSubscriptionBps)
 
-            fun newSubscriptionBulkBpsPrice(): Optional<NewSubscriptionBulkBpsPrice> =
-                Optional.ofNullable(newSubscriptionBulkBpsPrice)
+            fun newSubscriptionBulkBps(): Optional<NewSubscriptionBulkBpsPrice> =
+                Optional.ofNullable(newSubscriptionBulkBps)
 
-            fun newSubscriptionBulkPrice(): Optional<NewSubscriptionBulkPrice> =
-                Optional.ofNullable(newSubscriptionBulkPrice)
+            fun newSubscriptionBulk(): Optional<NewSubscriptionBulkPrice> =
+                Optional.ofNullable(newSubscriptionBulk)
 
-            fun newSubscriptionThresholdTotalAmountPrice():
+            fun newSubscriptionThresholdTotalAmount():
                 Optional<NewSubscriptionThresholdTotalAmountPrice> =
-                Optional.ofNullable(newSubscriptionThresholdTotalAmountPrice)
+                Optional.ofNullable(newSubscriptionThresholdTotalAmount)
 
-            fun newSubscriptionTieredPackagePrice(): Optional<NewSubscriptionTieredPackagePrice> =
-                Optional.ofNullable(newSubscriptionTieredPackagePrice)
+            fun newSubscriptionTieredPackage(): Optional<NewSubscriptionTieredPackagePrice> =
+                Optional.ofNullable(newSubscriptionTieredPackage)
 
-            fun newSubscriptionTieredWithMinimumPrice():
+            fun newSubscriptionTieredWithMinimum():
                 Optional<NewSubscriptionTieredWithMinimumPrice> =
-                Optional.ofNullable(newSubscriptionTieredWithMinimumPrice)
+                Optional.ofNullable(newSubscriptionTieredWithMinimum)
 
-            fun newSubscriptionUnitWithPercentPrice():
-                Optional<NewSubscriptionUnitWithPercentPrice> =
-                Optional.ofNullable(newSubscriptionUnitWithPercentPrice)
+            fun newSubscriptionUnitWithPercent(): Optional<NewSubscriptionUnitWithPercentPrice> =
+                Optional.ofNullable(newSubscriptionUnitWithPercent)
 
-            fun newSubscriptionPackageWithAllocationPrice():
+            fun newSubscriptionPackageWithAllocation():
                 Optional<NewSubscriptionPackageWithAllocationPrice> =
-                Optional.ofNullable(newSubscriptionPackageWithAllocationPrice)
+                Optional.ofNullable(newSubscriptionPackageWithAllocation)
 
-            fun newSubscriptionTierWithProrationPrice():
+            fun newSubscriptionTierWithProration():
                 Optional<NewSubscriptionTierWithProrationPrice> =
-                Optional.ofNullable(newSubscriptionTierWithProrationPrice)
+                Optional.ofNullable(newSubscriptionTierWithProration)
 
-            fun newSubscriptionUnitWithProrationPrice():
+            fun newSubscriptionUnitWithProration():
                 Optional<NewSubscriptionUnitWithProrationPrice> =
-                Optional.ofNullable(newSubscriptionUnitWithProrationPrice)
+                Optional.ofNullable(newSubscriptionUnitWithProration)
 
-            fun newSubscriptionGroupedAllocationPrice():
+            fun newSubscriptionGroupedAllocation():
                 Optional<NewSubscriptionGroupedAllocationPrice> =
-                Optional.ofNullable(newSubscriptionGroupedAllocationPrice)
+                Optional.ofNullable(newSubscriptionGroupedAllocation)
 
-            fun newSubscriptionGroupedWithProratedMinimumPrice():
+            fun newSubscriptionGroupedWithProratedMinimum():
                 Optional<NewSubscriptionGroupedWithProratedMinimumPrice> =
-                Optional.ofNullable(newSubscriptionGroupedWithProratedMinimumPrice)
+                Optional.ofNullable(newSubscriptionGroupedWithProratedMinimum)
 
-            fun newSubscriptionBulkWithProrationPrice():
+            fun newSubscriptionBulkWithProration():
                 Optional<NewSubscriptionBulkWithProrationPrice> =
-                Optional.ofNullable(newSubscriptionBulkWithProrationPrice)
+                Optional.ofNullable(newSubscriptionBulkWithProration)
 
-            fun isNewSubscriptionUnitPrice(): Boolean = newSubscriptionUnitPrice != null
+            fun isNewSubscriptionUnit(): Boolean = newSubscriptionUnit != null
 
-            fun isNewSubscriptionPackagePrice(): Boolean = newSubscriptionPackagePrice != null
+            fun isNewSubscriptionPackage(): Boolean = newSubscriptionPackage != null
 
-            fun isNewSubscriptionMatrixPrice(): Boolean = newSubscriptionMatrixPrice != null
+            fun isNewSubscriptionMatrix(): Boolean = newSubscriptionMatrix != null
 
-            fun isNewSubscriptionTieredPrice(): Boolean = newSubscriptionTieredPrice != null
+            fun isNewSubscriptionTiered(): Boolean = newSubscriptionTiered != null
 
-            fun isNewSubscriptionTieredBpsPrice(): Boolean = newSubscriptionTieredBpsPrice != null
+            fun isNewSubscriptionTieredBps(): Boolean = newSubscriptionTieredBps != null
 
-            fun isNewSubscriptionBpsPrice(): Boolean = newSubscriptionBpsPrice != null
+            fun isNewSubscriptionBps(): Boolean = newSubscriptionBps != null
 
-            fun isNewSubscriptionBulkBpsPrice(): Boolean = newSubscriptionBulkBpsPrice != null
+            fun isNewSubscriptionBulkBps(): Boolean = newSubscriptionBulkBps != null
 
-            fun isNewSubscriptionBulkPrice(): Boolean = newSubscriptionBulkPrice != null
+            fun isNewSubscriptionBulk(): Boolean = newSubscriptionBulk != null
 
-            fun isNewSubscriptionThresholdTotalAmountPrice(): Boolean =
-                newSubscriptionThresholdTotalAmountPrice != null
+            fun isNewSubscriptionThresholdTotalAmount(): Boolean =
+                newSubscriptionThresholdTotalAmount != null
 
-            fun isNewSubscriptionTieredPackagePrice(): Boolean =
-                newSubscriptionTieredPackagePrice != null
+            fun isNewSubscriptionTieredPackage(): Boolean = newSubscriptionTieredPackage != null
 
-            fun isNewSubscriptionTieredWithMinimumPrice(): Boolean =
-                newSubscriptionTieredWithMinimumPrice != null
+            fun isNewSubscriptionTieredWithMinimum(): Boolean =
+                newSubscriptionTieredWithMinimum != null
 
-            fun isNewSubscriptionUnitWithPercentPrice(): Boolean =
-                newSubscriptionUnitWithPercentPrice != null
+            fun isNewSubscriptionUnitWithPercent(): Boolean = newSubscriptionUnitWithPercent != null
 
-            fun isNewSubscriptionPackageWithAllocationPrice(): Boolean =
-                newSubscriptionPackageWithAllocationPrice != null
+            fun isNewSubscriptionPackageWithAllocation(): Boolean =
+                newSubscriptionPackageWithAllocation != null
 
-            fun isNewSubscriptionTierWithProrationPrice(): Boolean =
-                newSubscriptionTierWithProrationPrice != null
+            fun isNewSubscriptionTierWithProration(): Boolean =
+                newSubscriptionTierWithProration != null
 
-            fun isNewSubscriptionUnitWithProrationPrice(): Boolean =
-                newSubscriptionUnitWithProrationPrice != null
+            fun isNewSubscriptionUnitWithProration(): Boolean =
+                newSubscriptionUnitWithProration != null
 
-            fun isNewSubscriptionGroupedAllocationPrice(): Boolean =
-                newSubscriptionGroupedAllocationPrice != null
+            fun isNewSubscriptionGroupedAllocation(): Boolean =
+                newSubscriptionGroupedAllocation != null
 
-            fun isNewSubscriptionGroupedWithProratedMinimumPrice(): Boolean =
-                newSubscriptionGroupedWithProratedMinimumPrice != null
+            fun isNewSubscriptionGroupedWithProratedMinimum(): Boolean =
+                newSubscriptionGroupedWithProratedMinimum != null
 
-            fun isNewSubscriptionBulkWithProrationPrice(): Boolean =
-                newSubscriptionBulkWithProrationPrice != null
+            fun isNewSubscriptionBulkWithProration(): Boolean =
+                newSubscriptionBulkWithProration != null
 
-            fun asNewSubscriptionUnitPrice(): NewSubscriptionUnitPrice =
-                newSubscriptionUnitPrice.getOrThrow("newSubscriptionUnitPrice")
+            fun asNewSubscriptionUnit(): NewSubscriptionUnitPrice =
+                newSubscriptionUnit.getOrThrow("newSubscriptionUnit")
 
-            fun asNewSubscriptionPackagePrice(): NewSubscriptionPackagePrice =
-                newSubscriptionPackagePrice.getOrThrow("newSubscriptionPackagePrice")
+            fun asNewSubscriptionPackage(): NewSubscriptionPackagePrice =
+                newSubscriptionPackage.getOrThrow("newSubscriptionPackage")
 
-            fun asNewSubscriptionMatrixPrice(): NewSubscriptionMatrixPrice =
-                newSubscriptionMatrixPrice.getOrThrow("newSubscriptionMatrixPrice")
+            fun asNewSubscriptionMatrix(): NewSubscriptionMatrixPrice =
+                newSubscriptionMatrix.getOrThrow("newSubscriptionMatrix")
 
-            fun asNewSubscriptionTieredPrice(): NewSubscriptionTieredPrice =
-                newSubscriptionTieredPrice.getOrThrow("newSubscriptionTieredPrice")
+            fun asNewSubscriptionTiered(): NewSubscriptionTieredPrice =
+                newSubscriptionTiered.getOrThrow("newSubscriptionTiered")
 
-            fun asNewSubscriptionTieredBpsPrice(): NewSubscriptionTieredBpsPrice =
-                newSubscriptionTieredBpsPrice.getOrThrow("newSubscriptionTieredBpsPrice")
+            fun asNewSubscriptionTieredBps(): NewSubscriptionTieredBpsPrice =
+                newSubscriptionTieredBps.getOrThrow("newSubscriptionTieredBps")
 
-            fun asNewSubscriptionBpsPrice(): NewSubscriptionBpsPrice =
-                newSubscriptionBpsPrice.getOrThrow("newSubscriptionBpsPrice")
+            fun asNewSubscriptionBps(): NewSubscriptionBpsPrice =
+                newSubscriptionBps.getOrThrow("newSubscriptionBps")
 
-            fun asNewSubscriptionBulkBpsPrice(): NewSubscriptionBulkBpsPrice =
-                newSubscriptionBulkBpsPrice.getOrThrow("newSubscriptionBulkBpsPrice")
+            fun asNewSubscriptionBulkBps(): NewSubscriptionBulkBpsPrice =
+                newSubscriptionBulkBps.getOrThrow("newSubscriptionBulkBps")
 
-            fun asNewSubscriptionBulkPrice(): NewSubscriptionBulkPrice =
-                newSubscriptionBulkPrice.getOrThrow("newSubscriptionBulkPrice")
+            fun asNewSubscriptionBulk(): NewSubscriptionBulkPrice =
+                newSubscriptionBulk.getOrThrow("newSubscriptionBulk")
 
-            fun asNewSubscriptionThresholdTotalAmountPrice():
-                NewSubscriptionThresholdTotalAmountPrice =
-                newSubscriptionThresholdTotalAmountPrice.getOrThrow(
-                    "newSubscriptionThresholdTotalAmountPrice"
+            fun asNewSubscriptionThresholdTotalAmount(): NewSubscriptionThresholdTotalAmountPrice =
+                newSubscriptionThresholdTotalAmount.getOrThrow(
+                    "newSubscriptionThresholdTotalAmount"
                 )
 
-            fun asNewSubscriptionTieredPackagePrice(): NewSubscriptionTieredPackagePrice =
-                newSubscriptionTieredPackagePrice.getOrThrow("newSubscriptionTieredPackagePrice")
+            fun asNewSubscriptionTieredPackage(): NewSubscriptionTieredPackagePrice =
+                newSubscriptionTieredPackage.getOrThrow("newSubscriptionTieredPackage")
 
-            fun asNewSubscriptionTieredWithMinimumPrice(): NewSubscriptionTieredWithMinimumPrice =
-                newSubscriptionTieredWithMinimumPrice.getOrThrow(
-                    "newSubscriptionTieredWithMinimumPrice"
-                )
+            fun asNewSubscriptionTieredWithMinimum(): NewSubscriptionTieredWithMinimumPrice =
+                newSubscriptionTieredWithMinimum.getOrThrow("newSubscriptionTieredWithMinimum")
 
-            fun asNewSubscriptionUnitWithPercentPrice(): NewSubscriptionUnitWithPercentPrice =
-                newSubscriptionUnitWithPercentPrice.getOrThrow(
-                    "newSubscriptionUnitWithPercentPrice"
-                )
+            fun asNewSubscriptionUnitWithPercent(): NewSubscriptionUnitWithPercentPrice =
+                newSubscriptionUnitWithPercent.getOrThrow("newSubscriptionUnitWithPercent")
 
-            fun asNewSubscriptionPackageWithAllocationPrice():
+            fun asNewSubscriptionPackageWithAllocation():
                 NewSubscriptionPackageWithAllocationPrice =
-                newSubscriptionPackageWithAllocationPrice.getOrThrow(
-                    "newSubscriptionPackageWithAllocationPrice"
+                newSubscriptionPackageWithAllocation.getOrThrow(
+                    "newSubscriptionPackageWithAllocation"
                 )
 
-            fun asNewSubscriptionTierWithProrationPrice(): NewSubscriptionTierWithProrationPrice =
-                newSubscriptionTierWithProrationPrice.getOrThrow(
-                    "newSubscriptionTierWithProrationPrice"
-                )
+            fun asNewSubscriptionTierWithProration(): NewSubscriptionTierWithProrationPrice =
+                newSubscriptionTierWithProration.getOrThrow("newSubscriptionTierWithProration")
 
-            fun asNewSubscriptionUnitWithProrationPrice(): NewSubscriptionUnitWithProrationPrice =
-                newSubscriptionUnitWithProrationPrice.getOrThrow(
-                    "newSubscriptionUnitWithProrationPrice"
-                )
+            fun asNewSubscriptionUnitWithProration(): NewSubscriptionUnitWithProrationPrice =
+                newSubscriptionUnitWithProration.getOrThrow("newSubscriptionUnitWithProration")
 
-            fun asNewSubscriptionGroupedAllocationPrice(): NewSubscriptionGroupedAllocationPrice =
-                newSubscriptionGroupedAllocationPrice.getOrThrow(
-                    "newSubscriptionGroupedAllocationPrice"
-                )
+            fun asNewSubscriptionGroupedAllocation(): NewSubscriptionGroupedAllocationPrice =
+                newSubscriptionGroupedAllocation.getOrThrow("newSubscriptionGroupedAllocation")
 
-            fun asNewSubscriptionGroupedWithProratedMinimumPrice():
+            fun asNewSubscriptionGroupedWithProratedMinimum():
                 NewSubscriptionGroupedWithProratedMinimumPrice =
-                newSubscriptionGroupedWithProratedMinimumPrice.getOrThrow(
-                    "newSubscriptionGroupedWithProratedMinimumPrice"
+                newSubscriptionGroupedWithProratedMinimum.getOrThrow(
+                    "newSubscriptionGroupedWithProratedMinimum"
                 )
 
-            fun asNewSubscriptionBulkWithProrationPrice(): NewSubscriptionBulkWithProrationPrice =
-                newSubscriptionBulkWithProrationPrice.getOrThrow(
-                    "newSubscriptionBulkWithProrationPrice"
-                )
+            fun asNewSubscriptionBulkWithProration(): NewSubscriptionBulkWithProrationPrice =
+                newSubscriptionBulkWithProration.getOrThrow("newSubscriptionBulkWithProration")
 
             fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
             fun <T> accept(visitor: Visitor<T>): T {
                 return when {
-                    newSubscriptionUnitPrice != null ->
-                        visitor.visitNewSubscriptionUnitPrice(newSubscriptionUnitPrice)
-                    newSubscriptionPackagePrice != null ->
-                        visitor.visitNewSubscriptionPackagePrice(newSubscriptionPackagePrice)
-                    newSubscriptionMatrixPrice != null ->
-                        visitor.visitNewSubscriptionMatrixPrice(newSubscriptionMatrixPrice)
-                    newSubscriptionTieredPrice != null ->
-                        visitor.visitNewSubscriptionTieredPrice(newSubscriptionTieredPrice)
-                    newSubscriptionTieredBpsPrice != null ->
-                        visitor.visitNewSubscriptionTieredBpsPrice(newSubscriptionTieredBpsPrice)
-                    newSubscriptionBpsPrice != null ->
-                        visitor.visitNewSubscriptionBpsPrice(newSubscriptionBpsPrice)
-                    newSubscriptionBulkBpsPrice != null ->
-                        visitor.visitNewSubscriptionBulkBpsPrice(newSubscriptionBulkBpsPrice)
-                    newSubscriptionBulkPrice != null ->
-                        visitor.visitNewSubscriptionBulkPrice(newSubscriptionBulkPrice)
-                    newSubscriptionThresholdTotalAmountPrice != null ->
-                        visitor.visitNewSubscriptionThresholdTotalAmountPrice(
-                            newSubscriptionThresholdTotalAmountPrice
+                    newSubscriptionUnit != null ->
+                        visitor.visitNewSubscriptionUnit(newSubscriptionUnit)
+                    newSubscriptionPackage != null ->
+                        visitor.visitNewSubscriptionPackage(newSubscriptionPackage)
+                    newSubscriptionMatrix != null ->
+                        visitor.visitNewSubscriptionMatrix(newSubscriptionMatrix)
+                    newSubscriptionTiered != null ->
+                        visitor.visitNewSubscriptionTiered(newSubscriptionTiered)
+                    newSubscriptionTieredBps != null ->
+                        visitor.visitNewSubscriptionTieredBps(newSubscriptionTieredBps)
+                    newSubscriptionBps != null ->
+                        visitor.visitNewSubscriptionBps(newSubscriptionBps)
+                    newSubscriptionBulkBps != null ->
+                        visitor.visitNewSubscriptionBulkBps(newSubscriptionBulkBps)
+                    newSubscriptionBulk != null ->
+                        visitor.visitNewSubscriptionBulk(newSubscriptionBulk)
+                    newSubscriptionThresholdTotalAmount != null ->
+                        visitor.visitNewSubscriptionThresholdTotalAmount(
+                            newSubscriptionThresholdTotalAmount
                         )
-                    newSubscriptionTieredPackagePrice != null ->
-                        visitor.visitNewSubscriptionTieredPackagePrice(
-                            newSubscriptionTieredPackagePrice
+                    newSubscriptionTieredPackage != null ->
+                        visitor.visitNewSubscriptionTieredPackage(newSubscriptionTieredPackage)
+                    newSubscriptionTieredWithMinimum != null ->
+                        visitor.visitNewSubscriptionTieredWithMinimum(
+                            newSubscriptionTieredWithMinimum
                         )
-                    newSubscriptionTieredWithMinimumPrice != null ->
-                        visitor.visitNewSubscriptionTieredWithMinimumPrice(
-                            newSubscriptionTieredWithMinimumPrice
+                    newSubscriptionUnitWithPercent != null ->
+                        visitor.visitNewSubscriptionUnitWithPercent(newSubscriptionUnitWithPercent)
+                    newSubscriptionPackageWithAllocation != null ->
+                        visitor.visitNewSubscriptionPackageWithAllocation(
+                            newSubscriptionPackageWithAllocation
                         )
-                    newSubscriptionUnitWithPercentPrice != null ->
-                        visitor.visitNewSubscriptionUnitWithPercentPrice(
-                            newSubscriptionUnitWithPercentPrice
+                    newSubscriptionTierWithProration != null ->
+                        visitor.visitNewSubscriptionTierWithProration(
+                            newSubscriptionTierWithProration
                         )
-                    newSubscriptionPackageWithAllocationPrice != null ->
-                        visitor.visitNewSubscriptionPackageWithAllocationPrice(
-                            newSubscriptionPackageWithAllocationPrice
+                    newSubscriptionUnitWithProration != null ->
+                        visitor.visitNewSubscriptionUnitWithProration(
+                            newSubscriptionUnitWithProration
                         )
-                    newSubscriptionTierWithProrationPrice != null ->
-                        visitor.visitNewSubscriptionTierWithProrationPrice(
-                            newSubscriptionTierWithProrationPrice
+                    newSubscriptionGroupedAllocation != null ->
+                        visitor.visitNewSubscriptionGroupedAllocation(
+                            newSubscriptionGroupedAllocation
                         )
-                    newSubscriptionUnitWithProrationPrice != null ->
-                        visitor.visitNewSubscriptionUnitWithProrationPrice(
-                            newSubscriptionUnitWithProrationPrice
+                    newSubscriptionGroupedWithProratedMinimum != null ->
+                        visitor.visitNewSubscriptionGroupedWithProratedMinimum(
+                            newSubscriptionGroupedWithProratedMinimum
                         )
-                    newSubscriptionGroupedAllocationPrice != null ->
-                        visitor.visitNewSubscriptionGroupedAllocationPrice(
-                            newSubscriptionGroupedAllocationPrice
-                        )
-                    newSubscriptionGroupedWithProratedMinimumPrice != null ->
-                        visitor.visitNewSubscriptionGroupedWithProratedMinimumPrice(
-                            newSubscriptionGroupedWithProratedMinimumPrice
-                        )
-                    newSubscriptionBulkWithProrationPrice != null ->
-                        visitor.visitNewSubscriptionBulkWithProrationPrice(
-                            newSubscriptionBulkWithProrationPrice
+                    newSubscriptionBulkWithProration != null ->
+                        visitor.visitNewSubscriptionBulkWithProration(
+                            newSubscriptionBulkWithProration
                         )
                     else -> visitor.unknown(_json)
                 }
@@ -35480,120 +35303,115 @@ constructor(
 
                 accept(
                     object : Visitor<Unit> {
-                        override fun visitNewSubscriptionUnitPrice(
-                            newSubscriptionUnitPrice: NewSubscriptionUnitPrice
+                        override fun visitNewSubscriptionUnit(
+                            newSubscriptionUnit: NewSubscriptionUnitPrice
                         ) {
-                            newSubscriptionUnitPrice.validate()
+                            newSubscriptionUnit.validate()
                         }
 
-                        override fun visitNewSubscriptionPackagePrice(
-                            newSubscriptionPackagePrice: NewSubscriptionPackagePrice
+                        override fun visitNewSubscriptionPackage(
+                            newSubscriptionPackage: NewSubscriptionPackagePrice
                         ) {
-                            newSubscriptionPackagePrice.validate()
+                            newSubscriptionPackage.validate()
                         }
 
-                        override fun visitNewSubscriptionMatrixPrice(
-                            newSubscriptionMatrixPrice: NewSubscriptionMatrixPrice
+                        override fun visitNewSubscriptionMatrix(
+                            newSubscriptionMatrix: NewSubscriptionMatrixPrice
                         ) {
-                            newSubscriptionMatrixPrice.validate()
+                            newSubscriptionMatrix.validate()
                         }
 
-                        override fun visitNewSubscriptionTieredPrice(
-                            newSubscriptionTieredPrice: NewSubscriptionTieredPrice
+                        override fun visitNewSubscriptionTiered(
+                            newSubscriptionTiered: NewSubscriptionTieredPrice
                         ) {
-                            newSubscriptionTieredPrice.validate()
+                            newSubscriptionTiered.validate()
                         }
 
-                        override fun visitNewSubscriptionTieredBpsPrice(
-                            newSubscriptionTieredBpsPrice: NewSubscriptionTieredBpsPrice
+                        override fun visitNewSubscriptionTieredBps(
+                            newSubscriptionTieredBps: NewSubscriptionTieredBpsPrice
                         ) {
-                            newSubscriptionTieredBpsPrice.validate()
+                            newSubscriptionTieredBps.validate()
                         }
 
-                        override fun visitNewSubscriptionBpsPrice(
-                            newSubscriptionBpsPrice: NewSubscriptionBpsPrice
+                        override fun visitNewSubscriptionBps(
+                            newSubscriptionBps: NewSubscriptionBpsPrice
                         ) {
-                            newSubscriptionBpsPrice.validate()
+                            newSubscriptionBps.validate()
                         }
 
-                        override fun visitNewSubscriptionBulkBpsPrice(
-                            newSubscriptionBulkBpsPrice: NewSubscriptionBulkBpsPrice
+                        override fun visitNewSubscriptionBulkBps(
+                            newSubscriptionBulkBps: NewSubscriptionBulkBpsPrice
                         ) {
-                            newSubscriptionBulkBpsPrice.validate()
+                            newSubscriptionBulkBps.validate()
                         }
 
-                        override fun visitNewSubscriptionBulkPrice(
-                            newSubscriptionBulkPrice: NewSubscriptionBulkPrice
+                        override fun visitNewSubscriptionBulk(
+                            newSubscriptionBulk: NewSubscriptionBulkPrice
                         ) {
-                            newSubscriptionBulkPrice.validate()
+                            newSubscriptionBulk.validate()
                         }
 
-                        override fun visitNewSubscriptionThresholdTotalAmountPrice(
-                            newSubscriptionThresholdTotalAmountPrice:
+                        override fun visitNewSubscriptionThresholdTotalAmount(
+                            newSubscriptionThresholdTotalAmount:
                                 NewSubscriptionThresholdTotalAmountPrice
                         ) {
-                            newSubscriptionThresholdTotalAmountPrice.validate()
+                            newSubscriptionThresholdTotalAmount.validate()
                         }
 
-                        override fun visitNewSubscriptionTieredPackagePrice(
-                            newSubscriptionTieredPackagePrice: NewSubscriptionTieredPackagePrice
+                        override fun visitNewSubscriptionTieredPackage(
+                            newSubscriptionTieredPackage: NewSubscriptionTieredPackagePrice
                         ) {
-                            newSubscriptionTieredPackagePrice.validate()
+                            newSubscriptionTieredPackage.validate()
                         }
 
-                        override fun visitNewSubscriptionTieredWithMinimumPrice(
-                            newSubscriptionTieredWithMinimumPrice:
-                                NewSubscriptionTieredWithMinimumPrice
+                        override fun visitNewSubscriptionTieredWithMinimum(
+                            newSubscriptionTieredWithMinimum: NewSubscriptionTieredWithMinimumPrice
                         ) {
-                            newSubscriptionTieredWithMinimumPrice.validate()
+                            newSubscriptionTieredWithMinimum.validate()
                         }
 
-                        override fun visitNewSubscriptionUnitWithPercentPrice(
-                            newSubscriptionUnitWithPercentPrice: NewSubscriptionUnitWithPercentPrice
+                        override fun visitNewSubscriptionUnitWithPercent(
+                            newSubscriptionUnitWithPercent: NewSubscriptionUnitWithPercentPrice
                         ) {
-                            newSubscriptionUnitWithPercentPrice.validate()
+                            newSubscriptionUnitWithPercent.validate()
                         }
 
-                        override fun visitNewSubscriptionPackageWithAllocationPrice(
-                            newSubscriptionPackageWithAllocationPrice:
+                        override fun visitNewSubscriptionPackageWithAllocation(
+                            newSubscriptionPackageWithAllocation:
                                 NewSubscriptionPackageWithAllocationPrice
                         ) {
-                            newSubscriptionPackageWithAllocationPrice.validate()
+                            newSubscriptionPackageWithAllocation.validate()
                         }
 
-                        override fun visitNewSubscriptionTierWithProrationPrice(
-                            newSubscriptionTierWithProrationPrice:
-                                NewSubscriptionTierWithProrationPrice
+                        override fun visitNewSubscriptionTierWithProration(
+                            newSubscriptionTierWithProration: NewSubscriptionTierWithProrationPrice
                         ) {
-                            newSubscriptionTierWithProrationPrice.validate()
+                            newSubscriptionTierWithProration.validate()
                         }
 
-                        override fun visitNewSubscriptionUnitWithProrationPrice(
-                            newSubscriptionUnitWithProrationPrice:
-                                NewSubscriptionUnitWithProrationPrice
+                        override fun visitNewSubscriptionUnitWithProration(
+                            newSubscriptionUnitWithProration: NewSubscriptionUnitWithProrationPrice
                         ) {
-                            newSubscriptionUnitWithProrationPrice.validate()
+                            newSubscriptionUnitWithProration.validate()
                         }
 
-                        override fun visitNewSubscriptionGroupedAllocationPrice(
-                            newSubscriptionGroupedAllocationPrice:
-                                NewSubscriptionGroupedAllocationPrice
+                        override fun visitNewSubscriptionGroupedAllocation(
+                            newSubscriptionGroupedAllocation: NewSubscriptionGroupedAllocationPrice
                         ) {
-                            newSubscriptionGroupedAllocationPrice.validate()
+                            newSubscriptionGroupedAllocation.validate()
                         }
 
-                        override fun visitNewSubscriptionGroupedWithProratedMinimumPrice(
-                            newSubscriptionGroupedWithProratedMinimumPrice:
+                        override fun visitNewSubscriptionGroupedWithProratedMinimum(
+                            newSubscriptionGroupedWithProratedMinimum:
                                 NewSubscriptionGroupedWithProratedMinimumPrice
                         ) {
-                            newSubscriptionGroupedWithProratedMinimumPrice.validate()
+                            newSubscriptionGroupedWithProratedMinimum.validate()
                         }
 
-                        override fun visitNewSubscriptionBulkWithProrationPrice(
-                            newSubscriptionBulkWithProrationPrice:
-                                NewSubscriptionBulkWithProrationPrice
+                        override fun visitNewSubscriptionBulkWithProration(
+                            newSubscriptionBulkWithProration: NewSubscriptionBulkWithProrationPrice
                         ) {
-                            newSubscriptionBulkWithProrationPrice.validate()
+                            newSubscriptionBulkWithProration.validate()
                         }
                     }
                 )
@@ -35605,49 +35423,46 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Price && newSubscriptionUnitPrice == other.newSubscriptionUnitPrice && newSubscriptionPackagePrice == other.newSubscriptionPackagePrice && newSubscriptionMatrixPrice == other.newSubscriptionMatrixPrice && newSubscriptionTieredPrice == other.newSubscriptionTieredPrice && newSubscriptionTieredBpsPrice == other.newSubscriptionTieredBpsPrice && newSubscriptionBpsPrice == other.newSubscriptionBpsPrice && newSubscriptionBulkBpsPrice == other.newSubscriptionBulkBpsPrice && newSubscriptionBulkPrice == other.newSubscriptionBulkPrice && newSubscriptionThresholdTotalAmountPrice == other.newSubscriptionThresholdTotalAmountPrice && newSubscriptionTieredPackagePrice == other.newSubscriptionTieredPackagePrice && newSubscriptionTieredWithMinimumPrice == other.newSubscriptionTieredWithMinimumPrice && newSubscriptionUnitWithPercentPrice == other.newSubscriptionUnitWithPercentPrice && newSubscriptionPackageWithAllocationPrice == other.newSubscriptionPackageWithAllocationPrice && newSubscriptionTierWithProrationPrice == other.newSubscriptionTierWithProrationPrice && newSubscriptionUnitWithProrationPrice == other.newSubscriptionUnitWithProrationPrice && newSubscriptionGroupedAllocationPrice == other.newSubscriptionGroupedAllocationPrice && newSubscriptionGroupedWithProratedMinimumPrice == other.newSubscriptionGroupedWithProratedMinimumPrice && newSubscriptionBulkWithProrationPrice == other.newSubscriptionBulkWithProrationPrice /* spotless:on */
+                return /* spotless:off */ other is Price && newSubscriptionUnit == other.newSubscriptionUnit && newSubscriptionPackage == other.newSubscriptionPackage && newSubscriptionMatrix == other.newSubscriptionMatrix && newSubscriptionTiered == other.newSubscriptionTiered && newSubscriptionTieredBps == other.newSubscriptionTieredBps && newSubscriptionBps == other.newSubscriptionBps && newSubscriptionBulkBps == other.newSubscriptionBulkBps && newSubscriptionBulk == other.newSubscriptionBulk && newSubscriptionThresholdTotalAmount == other.newSubscriptionThresholdTotalAmount && newSubscriptionTieredPackage == other.newSubscriptionTieredPackage && newSubscriptionTieredWithMinimum == other.newSubscriptionTieredWithMinimum && newSubscriptionUnitWithPercent == other.newSubscriptionUnitWithPercent && newSubscriptionPackageWithAllocation == other.newSubscriptionPackageWithAllocation && newSubscriptionTierWithProration == other.newSubscriptionTierWithProration && newSubscriptionUnitWithProration == other.newSubscriptionUnitWithProration && newSubscriptionGroupedAllocation == other.newSubscriptionGroupedAllocation && newSubscriptionGroupedWithProratedMinimum == other.newSubscriptionGroupedWithProratedMinimum && newSubscriptionBulkWithProration == other.newSubscriptionBulkWithProration /* spotless:on */
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(newSubscriptionUnitPrice, newSubscriptionPackagePrice, newSubscriptionMatrixPrice, newSubscriptionTieredPrice, newSubscriptionTieredBpsPrice, newSubscriptionBpsPrice, newSubscriptionBulkBpsPrice, newSubscriptionBulkPrice, newSubscriptionThresholdTotalAmountPrice, newSubscriptionTieredPackagePrice, newSubscriptionTieredWithMinimumPrice, newSubscriptionUnitWithPercentPrice, newSubscriptionPackageWithAllocationPrice, newSubscriptionTierWithProrationPrice, newSubscriptionUnitWithProrationPrice, newSubscriptionGroupedAllocationPrice, newSubscriptionGroupedWithProratedMinimumPrice, newSubscriptionBulkWithProrationPrice) /* spotless:on */
+            override fun hashCode(): Int = /* spotless:off */ Objects.hash(newSubscriptionUnit, newSubscriptionPackage, newSubscriptionMatrix, newSubscriptionTiered, newSubscriptionTieredBps, newSubscriptionBps, newSubscriptionBulkBps, newSubscriptionBulk, newSubscriptionThresholdTotalAmount, newSubscriptionTieredPackage, newSubscriptionTieredWithMinimum, newSubscriptionUnitWithPercent, newSubscriptionPackageWithAllocation, newSubscriptionTierWithProration, newSubscriptionUnitWithProration, newSubscriptionGroupedAllocation, newSubscriptionGroupedWithProratedMinimum, newSubscriptionBulkWithProration) /* spotless:on */
 
             override fun toString(): String =
                 when {
-                    newSubscriptionUnitPrice != null ->
-                        "Price{newSubscriptionUnitPrice=$newSubscriptionUnitPrice}"
-                    newSubscriptionPackagePrice != null ->
-                        "Price{newSubscriptionPackagePrice=$newSubscriptionPackagePrice}"
-                    newSubscriptionMatrixPrice != null ->
-                        "Price{newSubscriptionMatrixPrice=$newSubscriptionMatrixPrice}"
-                    newSubscriptionTieredPrice != null ->
-                        "Price{newSubscriptionTieredPrice=$newSubscriptionTieredPrice}"
-                    newSubscriptionTieredBpsPrice != null ->
-                        "Price{newSubscriptionTieredBpsPrice=$newSubscriptionTieredBpsPrice}"
-                    newSubscriptionBpsPrice != null ->
-                        "Price{newSubscriptionBpsPrice=$newSubscriptionBpsPrice}"
-                    newSubscriptionBulkBpsPrice != null ->
-                        "Price{newSubscriptionBulkBpsPrice=$newSubscriptionBulkBpsPrice}"
-                    newSubscriptionBulkPrice != null ->
-                        "Price{newSubscriptionBulkPrice=$newSubscriptionBulkPrice}"
-                    newSubscriptionThresholdTotalAmountPrice != null ->
-                        "Price{newSubscriptionThresholdTotalAmountPrice=$newSubscriptionThresholdTotalAmountPrice}"
-                    newSubscriptionTieredPackagePrice != null ->
-                        "Price{newSubscriptionTieredPackagePrice=$newSubscriptionTieredPackagePrice}"
-                    newSubscriptionTieredWithMinimumPrice != null ->
-                        "Price{newSubscriptionTieredWithMinimumPrice=$newSubscriptionTieredWithMinimumPrice}"
-                    newSubscriptionUnitWithPercentPrice != null ->
-                        "Price{newSubscriptionUnitWithPercentPrice=$newSubscriptionUnitWithPercentPrice}"
-                    newSubscriptionPackageWithAllocationPrice != null ->
-                        "Price{newSubscriptionPackageWithAllocationPrice=$newSubscriptionPackageWithAllocationPrice}"
-                    newSubscriptionTierWithProrationPrice != null ->
-                        "Price{newSubscriptionTierWithProrationPrice=$newSubscriptionTierWithProrationPrice}"
-                    newSubscriptionUnitWithProrationPrice != null ->
-                        "Price{newSubscriptionUnitWithProrationPrice=$newSubscriptionUnitWithProrationPrice}"
-                    newSubscriptionGroupedAllocationPrice != null ->
-                        "Price{newSubscriptionGroupedAllocationPrice=$newSubscriptionGroupedAllocationPrice}"
-                    newSubscriptionGroupedWithProratedMinimumPrice != null ->
-                        "Price{newSubscriptionGroupedWithProratedMinimumPrice=$newSubscriptionGroupedWithProratedMinimumPrice}"
-                    newSubscriptionBulkWithProrationPrice != null ->
-                        "Price{newSubscriptionBulkWithProrationPrice=$newSubscriptionBulkWithProrationPrice}"
+                    newSubscriptionUnit != null -> "Price{newSubscriptionUnit=$newSubscriptionUnit}"
+                    newSubscriptionPackage != null ->
+                        "Price{newSubscriptionPackage=$newSubscriptionPackage}"
+                    newSubscriptionMatrix != null ->
+                        "Price{newSubscriptionMatrix=$newSubscriptionMatrix}"
+                    newSubscriptionTiered != null ->
+                        "Price{newSubscriptionTiered=$newSubscriptionTiered}"
+                    newSubscriptionTieredBps != null ->
+                        "Price{newSubscriptionTieredBps=$newSubscriptionTieredBps}"
+                    newSubscriptionBps != null -> "Price{newSubscriptionBps=$newSubscriptionBps}"
+                    newSubscriptionBulkBps != null ->
+                        "Price{newSubscriptionBulkBps=$newSubscriptionBulkBps}"
+                    newSubscriptionBulk != null -> "Price{newSubscriptionBulk=$newSubscriptionBulk}"
+                    newSubscriptionThresholdTotalAmount != null ->
+                        "Price{newSubscriptionThresholdTotalAmount=$newSubscriptionThresholdTotalAmount}"
+                    newSubscriptionTieredPackage != null ->
+                        "Price{newSubscriptionTieredPackage=$newSubscriptionTieredPackage}"
+                    newSubscriptionTieredWithMinimum != null ->
+                        "Price{newSubscriptionTieredWithMinimum=$newSubscriptionTieredWithMinimum}"
+                    newSubscriptionUnitWithPercent != null ->
+                        "Price{newSubscriptionUnitWithPercent=$newSubscriptionUnitWithPercent}"
+                    newSubscriptionPackageWithAllocation != null ->
+                        "Price{newSubscriptionPackageWithAllocation=$newSubscriptionPackageWithAllocation}"
+                    newSubscriptionTierWithProration != null ->
+                        "Price{newSubscriptionTierWithProration=$newSubscriptionTierWithProration}"
+                    newSubscriptionUnitWithProration != null ->
+                        "Price{newSubscriptionUnitWithProration=$newSubscriptionUnitWithProration}"
+                    newSubscriptionGroupedAllocation != null ->
+                        "Price{newSubscriptionGroupedAllocation=$newSubscriptionGroupedAllocation}"
+                    newSubscriptionGroupedWithProratedMinimum != null ->
+                        "Price{newSubscriptionGroupedWithProratedMinimum=$newSubscriptionGroupedWithProratedMinimum}"
+                    newSubscriptionBulkWithProration != null ->
+                        "Price{newSubscriptionBulkWithProration=$newSubscriptionBulkWithProration}"
                     _json != null -> "Price{_unknown=$_json}"
                     else -> throw IllegalStateException("Invalid Price")
                 }
@@ -35655,203 +35470,160 @@ constructor(
             companion object {
 
                 @JvmStatic
-                fun ofNewSubscriptionUnitPrice(newSubscriptionUnitPrice: NewSubscriptionUnitPrice) =
-                    Price(newSubscriptionUnitPrice = newSubscriptionUnitPrice)
+                fun ofNewSubscriptionUnit(newSubscriptionUnit: NewSubscriptionUnitPrice) =
+                    Price(newSubscriptionUnit = newSubscriptionUnit)
 
                 @JvmStatic
-                fun ofNewSubscriptionPackagePrice(
-                    newSubscriptionPackagePrice: NewSubscriptionPackagePrice
-                ) = Price(newSubscriptionPackagePrice = newSubscriptionPackagePrice)
+                fun ofNewSubscriptionPackage(newSubscriptionPackage: NewSubscriptionPackagePrice) =
+                    Price(newSubscriptionPackage = newSubscriptionPackage)
 
                 @JvmStatic
-                fun ofNewSubscriptionMatrixPrice(
-                    newSubscriptionMatrixPrice: NewSubscriptionMatrixPrice
-                ) = Price(newSubscriptionMatrixPrice = newSubscriptionMatrixPrice)
+                fun ofNewSubscriptionMatrix(newSubscriptionMatrix: NewSubscriptionMatrixPrice) =
+                    Price(newSubscriptionMatrix = newSubscriptionMatrix)
 
                 @JvmStatic
-                fun ofNewSubscriptionTieredPrice(
-                    newSubscriptionTieredPrice: NewSubscriptionTieredPrice
-                ) = Price(newSubscriptionTieredPrice = newSubscriptionTieredPrice)
+                fun ofNewSubscriptionTiered(newSubscriptionTiered: NewSubscriptionTieredPrice) =
+                    Price(newSubscriptionTiered = newSubscriptionTiered)
 
                 @JvmStatic
-                fun ofNewSubscriptionTieredBpsPrice(
-                    newSubscriptionTieredBpsPrice: NewSubscriptionTieredBpsPrice
-                ) = Price(newSubscriptionTieredBpsPrice = newSubscriptionTieredBpsPrice)
+                fun ofNewSubscriptionTieredBps(
+                    newSubscriptionTieredBps: NewSubscriptionTieredBpsPrice
+                ) = Price(newSubscriptionTieredBps = newSubscriptionTieredBps)
 
                 @JvmStatic
-                fun ofNewSubscriptionBpsPrice(newSubscriptionBpsPrice: NewSubscriptionBpsPrice) =
-                    Price(newSubscriptionBpsPrice = newSubscriptionBpsPrice)
+                fun ofNewSubscriptionBps(newSubscriptionBps: NewSubscriptionBpsPrice) =
+                    Price(newSubscriptionBps = newSubscriptionBps)
 
                 @JvmStatic
-                fun ofNewSubscriptionBulkBpsPrice(
-                    newSubscriptionBulkBpsPrice: NewSubscriptionBulkBpsPrice
-                ) = Price(newSubscriptionBulkBpsPrice = newSubscriptionBulkBpsPrice)
+                fun ofNewSubscriptionBulkBps(newSubscriptionBulkBps: NewSubscriptionBulkBpsPrice) =
+                    Price(newSubscriptionBulkBps = newSubscriptionBulkBps)
 
                 @JvmStatic
-                fun ofNewSubscriptionBulkPrice(newSubscriptionBulkPrice: NewSubscriptionBulkPrice) =
-                    Price(newSubscriptionBulkPrice = newSubscriptionBulkPrice)
+                fun ofNewSubscriptionBulk(newSubscriptionBulk: NewSubscriptionBulkPrice) =
+                    Price(newSubscriptionBulk = newSubscriptionBulk)
 
                 @JvmStatic
-                fun ofNewSubscriptionThresholdTotalAmountPrice(
-                    newSubscriptionThresholdTotalAmountPrice:
-                        NewSubscriptionThresholdTotalAmountPrice
+                fun ofNewSubscriptionThresholdTotalAmount(
+                    newSubscriptionThresholdTotalAmount: NewSubscriptionThresholdTotalAmountPrice
+                ) = Price(newSubscriptionThresholdTotalAmount = newSubscriptionThresholdTotalAmount)
+
+                @JvmStatic
+                fun ofNewSubscriptionTieredPackage(
+                    newSubscriptionTieredPackage: NewSubscriptionTieredPackagePrice
+                ) = Price(newSubscriptionTieredPackage = newSubscriptionTieredPackage)
+
+                @JvmStatic
+                fun ofNewSubscriptionTieredWithMinimum(
+                    newSubscriptionTieredWithMinimum: NewSubscriptionTieredWithMinimumPrice
+                ) = Price(newSubscriptionTieredWithMinimum = newSubscriptionTieredWithMinimum)
+
+                @JvmStatic
+                fun ofNewSubscriptionUnitWithPercent(
+                    newSubscriptionUnitWithPercent: NewSubscriptionUnitWithPercentPrice
+                ) = Price(newSubscriptionUnitWithPercent = newSubscriptionUnitWithPercent)
+
+                @JvmStatic
+                fun ofNewSubscriptionPackageWithAllocation(
+                    newSubscriptionPackageWithAllocation: NewSubscriptionPackageWithAllocationPrice
                 ) =
                     Price(
-                        newSubscriptionThresholdTotalAmountPrice =
-                            newSubscriptionThresholdTotalAmountPrice
+                        newSubscriptionPackageWithAllocation = newSubscriptionPackageWithAllocation
                     )
 
                 @JvmStatic
-                fun ofNewSubscriptionTieredPackagePrice(
-                    newSubscriptionTieredPackagePrice: NewSubscriptionTieredPackagePrice
-                ) = Price(newSubscriptionTieredPackagePrice = newSubscriptionTieredPackagePrice)
+                fun ofNewSubscriptionTierWithProration(
+                    newSubscriptionTierWithProration: NewSubscriptionTierWithProrationPrice
+                ) = Price(newSubscriptionTierWithProration = newSubscriptionTierWithProration)
 
                 @JvmStatic
-                fun ofNewSubscriptionTieredWithMinimumPrice(
-                    newSubscriptionTieredWithMinimumPrice: NewSubscriptionTieredWithMinimumPrice
-                ) =
-                    Price(
-                        newSubscriptionTieredWithMinimumPrice =
-                            newSubscriptionTieredWithMinimumPrice
-                    )
+                fun ofNewSubscriptionUnitWithProration(
+                    newSubscriptionUnitWithProration: NewSubscriptionUnitWithProrationPrice
+                ) = Price(newSubscriptionUnitWithProration = newSubscriptionUnitWithProration)
 
                 @JvmStatic
-                fun ofNewSubscriptionUnitWithPercentPrice(
-                    newSubscriptionUnitWithPercentPrice: NewSubscriptionUnitWithPercentPrice
-                ) = Price(newSubscriptionUnitWithPercentPrice = newSubscriptionUnitWithPercentPrice)
+                fun ofNewSubscriptionGroupedAllocation(
+                    newSubscriptionGroupedAllocation: NewSubscriptionGroupedAllocationPrice
+                ) = Price(newSubscriptionGroupedAllocation = newSubscriptionGroupedAllocation)
 
                 @JvmStatic
-                fun ofNewSubscriptionPackageWithAllocationPrice(
-                    newSubscriptionPackageWithAllocationPrice:
-                        NewSubscriptionPackageWithAllocationPrice
-                ) =
-                    Price(
-                        newSubscriptionPackageWithAllocationPrice =
-                            newSubscriptionPackageWithAllocationPrice
-                    )
-
-                @JvmStatic
-                fun ofNewSubscriptionTierWithProrationPrice(
-                    newSubscriptionTierWithProrationPrice: NewSubscriptionTierWithProrationPrice
-                ) =
-                    Price(
-                        newSubscriptionTierWithProrationPrice =
-                            newSubscriptionTierWithProrationPrice
-                    )
-
-                @JvmStatic
-                fun ofNewSubscriptionUnitWithProrationPrice(
-                    newSubscriptionUnitWithProrationPrice: NewSubscriptionUnitWithProrationPrice
-                ) =
-                    Price(
-                        newSubscriptionUnitWithProrationPrice =
-                            newSubscriptionUnitWithProrationPrice
-                    )
-
-                @JvmStatic
-                fun ofNewSubscriptionGroupedAllocationPrice(
-                    newSubscriptionGroupedAllocationPrice: NewSubscriptionGroupedAllocationPrice
-                ) =
-                    Price(
-                        newSubscriptionGroupedAllocationPrice =
-                            newSubscriptionGroupedAllocationPrice
-                    )
-
-                @JvmStatic
-                fun ofNewSubscriptionGroupedWithProratedMinimumPrice(
-                    newSubscriptionGroupedWithProratedMinimumPrice:
+                fun ofNewSubscriptionGroupedWithProratedMinimum(
+                    newSubscriptionGroupedWithProratedMinimum:
                         NewSubscriptionGroupedWithProratedMinimumPrice
                 ) =
                     Price(
-                        newSubscriptionGroupedWithProratedMinimumPrice =
-                            newSubscriptionGroupedWithProratedMinimumPrice
+                        newSubscriptionGroupedWithProratedMinimum =
+                            newSubscriptionGroupedWithProratedMinimum
                     )
 
                 @JvmStatic
-                fun ofNewSubscriptionBulkWithProrationPrice(
-                    newSubscriptionBulkWithProrationPrice: NewSubscriptionBulkWithProrationPrice
-                ) =
-                    Price(
-                        newSubscriptionBulkWithProrationPrice =
-                            newSubscriptionBulkWithProrationPrice
-                    )
+                fun ofNewSubscriptionBulkWithProration(
+                    newSubscriptionBulkWithProration: NewSubscriptionBulkWithProrationPrice
+                ) = Price(newSubscriptionBulkWithProration = newSubscriptionBulkWithProration)
             }
 
             interface Visitor<out T> {
 
-                fun visitNewSubscriptionUnitPrice(
-                    newSubscriptionUnitPrice: NewSubscriptionUnitPrice
+                fun visitNewSubscriptionUnit(newSubscriptionUnit: NewSubscriptionUnitPrice): T
+
+                fun visitNewSubscriptionPackage(
+                    newSubscriptionPackage: NewSubscriptionPackagePrice
                 ): T
 
-                fun visitNewSubscriptionPackagePrice(
-                    newSubscriptionPackagePrice: NewSubscriptionPackagePrice
+                fun visitNewSubscriptionMatrix(newSubscriptionMatrix: NewSubscriptionMatrixPrice): T
+
+                fun visitNewSubscriptionTiered(newSubscriptionTiered: NewSubscriptionTieredPrice): T
+
+                fun visitNewSubscriptionTieredBps(
+                    newSubscriptionTieredBps: NewSubscriptionTieredBpsPrice
                 ): T
 
-                fun visitNewSubscriptionMatrixPrice(
-                    newSubscriptionMatrixPrice: NewSubscriptionMatrixPrice
+                fun visitNewSubscriptionBps(newSubscriptionBps: NewSubscriptionBpsPrice): T
+
+                fun visitNewSubscriptionBulkBps(
+                    newSubscriptionBulkBps: NewSubscriptionBulkBpsPrice
                 ): T
 
-                fun visitNewSubscriptionTieredPrice(
-                    newSubscriptionTieredPrice: NewSubscriptionTieredPrice
+                fun visitNewSubscriptionBulk(newSubscriptionBulk: NewSubscriptionBulkPrice): T
+
+                fun visitNewSubscriptionThresholdTotalAmount(
+                    newSubscriptionThresholdTotalAmount: NewSubscriptionThresholdTotalAmountPrice
                 ): T
 
-                fun visitNewSubscriptionTieredBpsPrice(
-                    newSubscriptionTieredBpsPrice: NewSubscriptionTieredBpsPrice
+                fun visitNewSubscriptionTieredPackage(
+                    newSubscriptionTieredPackage: NewSubscriptionTieredPackagePrice
                 ): T
 
-                fun visitNewSubscriptionBpsPrice(
-                    newSubscriptionBpsPrice: NewSubscriptionBpsPrice
+                fun visitNewSubscriptionTieredWithMinimum(
+                    newSubscriptionTieredWithMinimum: NewSubscriptionTieredWithMinimumPrice
                 ): T
 
-                fun visitNewSubscriptionBulkBpsPrice(
-                    newSubscriptionBulkBpsPrice: NewSubscriptionBulkBpsPrice
+                fun visitNewSubscriptionUnitWithPercent(
+                    newSubscriptionUnitWithPercent: NewSubscriptionUnitWithPercentPrice
                 ): T
 
-                fun visitNewSubscriptionBulkPrice(
-                    newSubscriptionBulkPrice: NewSubscriptionBulkPrice
+                fun visitNewSubscriptionPackageWithAllocation(
+                    newSubscriptionPackageWithAllocation: NewSubscriptionPackageWithAllocationPrice
                 ): T
 
-                fun visitNewSubscriptionThresholdTotalAmountPrice(
-                    newSubscriptionThresholdTotalAmountPrice:
-                        NewSubscriptionThresholdTotalAmountPrice
+                fun visitNewSubscriptionTierWithProration(
+                    newSubscriptionTierWithProration: NewSubscriptionTierWithProrationPrice
                 ): T
 
-                fun visitNewSubscriptionTieredPackagePrice(
-                    newSubscriptionTieredPackagePrice: NewSubscriptionTieredPackagePrice
+                fun visitNewSubscriptionUnitWithProration(
+                    newSubscriptionUnitWithProration: NewSubscriptionUnitWithProrationPrice
                 ): T
 
-                fun visitNewSubscriptionTieredWithMinimumPrice(
-                    newSubscriptionTieredWithMinimumPrice: NewSubscriptionTieredWithMinimumPrice
+                fun visitNewSubscriptionGroupedAllocation(
+                    newSubscriptionGroupedAllocation: NewSubscriptionGroupedAllocationPrice
                 ): T
 
-                fun visitNewSubscriptionUnitWithPercentPrice(
-                    newSubscriptionUnitWithPercentPrice: NewSubscriptionUnitWithPercentPrice
-                ): T
-
-                fun visitNewSubscriptionPackageWithAllocationPrice(
-                    newSubscriptionPackageWithAllocationPrice:
-                        NewSubscriptionPackageWithAllocationPrice
-                ): T
-
-                fun visitNewSubscriptionTierWithProrationPrice(
-                    newSubscriptionTierWithProrationPrice: NewSubscriptionTierWithProrationPrice
-                ): T
-
-                fun visitNewSubscriptionUnitWithProrationPrice(
-                    newSubscriptionUnitWithProrationPrice: NewSubscriptionUnitWithProrationPrice
-                ): T
-
-                fun visitNewSubscriptionGroupedAllocationPrice(
-                    newSubscriptionGroupedAllocationPrice: NewSubscriptionGroupedAllocationPrice
-                ): T
-
-                fun visitNewSubscriptionGroupedWithProratedMinimumPrice(
-                    newSubscriptionGroupedWithProratedMinimumPrice:
+                fun visitNewSubscriptionGroupedWithProratedMinimum(
+                    newSubscriptionGroupedWithProratedMinimum:
                         NewSubscriptionGroupedWithProratedMinimumPrice
                 ): T
 
-                fun visitNewSubscriptionBulkWithProrationPrice(
-                    newSubscriptionBulkWithProrationPrice: NewSubscriptionBulkWithProrationPrice
+                fun visitNewSubscriptionBulkWithProration(
+                    newSubscriptionBulkWithProration: NewSubscriptionBulkWithProrationPrice
                 ): T
 
                 fun unknown(json: JsonValue?): T {
@@ -35872,7 +35644,7 @@ constructor(
                                     it.validate()
                                 }
                                 ?.let {
-                                    return Price(newSubscriptionUnitPrice = it, _json = json)
+                                    return Price(newSubscriptionUnit = it, _json = json)
                                 }
                         }
                         "package" -> {
@@ -35880,7 +35652,7 @@ constructor(
                                     it.validate()
                                 }
                                 ?.let {
-                                    return Price(newSubscriptionPackagePrice = it, _json = json)
+                                    return Price(newSubscriptionPackage = it, _json = json)
                                 }
                         }
                         "matrix" -> {
@@ -35888,7 +35660,7 @@ constructor(
                                     it.validate()
                                 }
                                 ?.let {
-                                    return Price(newSubscriptionMatrixPrice = it, _json = json)
+                                    return Price(newSubscriptionMatrix = it, _json = json)
                                 }
                         }
                         "tiered" -> {
@@ -35896,7 +35668,7 @@ constructor(
                                     it.validate()
                                 }
                                 ?.let {
-                                    return Price(newSubscriptionTieredPrice = it, _json = json)
+                                    return Price(newSubscriptionTiered = it, _json = json)
                                 }
                         }
                         "tiered_bps" -> {
@@ -35904,7 +35676,7 @@ constructor(
                                     it.validate()
                                 }
                                 ?.let {
-                                    return Price(newSubscriptionTieredBpsPrice = it, _json = json)
+                                    return Price(newSubscriptionTieredBps = it, _json = json)
                                 }
                         }
                         "bps" -> {
@@ -35912,7 +35684,7 @@ constructor(
                                     it.validate()
                                 }
                                 ?.let {
-                                    return Price(newSubscriptionBpsPrice = it, _json = json)
+                                    return Price(newSubscriptionBps = it, _json = json)
                                 }
                         }
                         "bulk_bps" -> {
@@ -35920,7 +35692,7 @@ constructor(
                                     it.validate()
                                 }
                                 ?.let {
-                                    return Price(newSubscriptionBulkBpsPrice = it, _json = json)
+                                    return Price(newSubscriptionBulkBps = it, _json = json)
                                 }
                         }
                         "bulk" -> {
@@ -35928,7 +35700,7 @@ constructor(
                                     it.validate()
                                 }
                                 ?.let {
-                                    return Price(newSubscriptionBulkPrice = it, _json = json)
+                                    return Price(newSubscriptionBulk = it, _json = json)
                                 }
                         }
                         "threshold_total_amount" -> {
@@ -35940,7 +35712,7 @@ constructor(
                                 }
                                 ?.let {
                                     return Price(
-                                        newSubscriptionThresholdTotalAmountPrice = it,
+                                        newSubscriptionThresholdTotalAmount = it,
                                         _json = json
                                     )
                                 }
@@ -35953,10 +35725,7 @@ constructor(
                                     it.validate()
                                 }
                                 ?.let {
-                                    return Price(
-                                        newSubscriptionTieredPackagePrice = it,
-                                        _json = json
-                                    )
+                                    return Price(newSubscriptionTieredPackage = it, _json = json)
                                 }
                         }
                         "tiered_with_minimum" -> {
@@ -35968,7 +35737,7 @@ constructor(
                                 }
                                 ?.let {
                                     return Price(
-                                        newSubscriptionTieredWithMinimumPrice = it,
+                                        newSubscriptionTieredWithMinimum = it,
                                         _json = json
                                     )
                                 }
@@ -35981,10 +35750,7 @@ constructor(
                                     it.validate()
                                 }
                                 ?.let {
-                                    return Price(
-                                        newSubscriptionUnitWithPercentPrice = it,
-                                        _json = json
-                                    )
+                                    return Price(newSubscriptionUnitWithPercent = it, _json = json)
                                 }
                         }
                         "package_with_allocation" -> {
@@ -35996,7 +35762,7 @@ constructor(
                                 }
                                 ?.let {
                                     return Price(
-                                        newSubscriptionPackageWithAllocationPrice = it,
+                                        newSubscriptionPackageWithAllocation = it,
                                         _json = json
                                     )
                                 }
@@ -36010,7 +35776,7 @@ constructor(
                                 }
                                 ?.let {
                                     return Price(
-                                        newSubscriptionTierWithProrationPrice = it,
+                                        newSubscriptionTierWithProration = it,
                                         _json = json
                                     )
                                 }
@@ -36024,7 +35790,7 @@ constructor(
                                 }
                                 ?.let {
                                     return Price(
-                                        newSubscriptionUnitWithProrationPrice = it,
+                                        newSubscriptionUnitWithProration = it,
                                         _json = json
                                     )
                                 }
@@ -36038,7 +35804,7 @@ constructor(
                                 }
                                 ?.let {
                                     return Price(
-                                        newSubscriptionGroupedAllocationPrice = it,
+                                        newSubscriptionGroupedAllocation = it,
                                         _json = json
                                     )
                                 }
@@ -36052,7 +35818,7 @@ constructor(
                                 }
                                 ?.let {
                                     return Price(
-                                        newSubscriptionGroupedWithProratedMinimumPrice = it,
+                                        newSubscriptionGroupedWithProratedMinimum = it,
                                         _json = json
                                     )
                                 }
@@ -36066,7 +35832,7 @@ constructor(
                                 }
                                 ?.let {
                                     return Price(
-                                        newSubscriptionBulkWithProrationPrice = it,
+                                        newSubscriptionBulkWithProration = it,
                                         _json = json
                                     )
                                 }
@@ -36085,44 +35851,42 @@ constructor(
                     provider: SerializerProvider
                 ) {
                     when {
-                        value.newSubscriptionUnitPrice != null ->
-                            generator.writeObject(value.newSubscriptionUnitPrice)
-                        value.newSubscriptionPackagePrice != null ->
-                            generator.writeObject(value.newSubscriptionPackagePrice)
-                        value.newSubscriptionMatrixPrice != null ->
-                            generator.writeObject(value.newSubscriptionMatrixPrice)
-                        value.newSubscriptionTieredPrice != null ->
-                            generator.writeObject(value.newSubscriptionTieredPrice)
-                        value.newSubscriptionTieredBpsPrice != null ->
-                            generator.writeObject(value.newSubscriptionTieredBpsPrice)
-                        value.newSubscriptionBpsPrice != null ->
-                            generator.writeObject(value.newSubscriptionBpsPrice)
-                        value.newSubscriptionBulkBpsPrice != null ->
-                            generator.writeObject(value.newSubscriptionBulkBpsPrice)
-                        value.newSubscriptionBulkPrice != null ->
-                            generator.writeObject(value.newSubscriptionBulkPrice)
-                        value.newSubscriptionThresholdTotalAmountPrice != null ->
-                            generator.writeObject(value.newSubscriptionThresholdTotalAmountPrice)
-                        value.newSubscriptionTieredPackagePrice != null ->
-                            generator.writeObject(value.newSubscriptionTieredPackagePrice)
-                        value.newSubscriptionTieredWithMinimumPrice != null ->
-                            generator.writeObject(value.newSubscriptionTieredWithMinimumPrice)
-                        value.newSubscriptionUnitWithPercentPrice != null ->
-                            generator.writeObject(value.newSubscriptionUnitWithPercentPrice)
-                        value.newSubscriptionPackageWithAllocationPrice != null ->
-                            generator.writeObject(value.newSubscriptionPackageWithAllocationPrice)
-                        value.newSubscriptionTierWithProrationPrice != null ->
-                            generator.writeObject(value.newSubscriptionTierWithProrationPrice)
-                        value.newSubscriptionUnitWithProrationPrice != null ->
-                            generator.writeObject(value.newSubscriptionUnitWithProrationPrice)
-                        value.newSubscriptionGroupedAllocationPrice != null ->
-                            generator.writeObject(value.newSubscriptionGroupedAllocationPrice)
-                        value.newSubscriptionGroupedWithProratedMinimumPrice != null ->
-                            generator.writeObject(
-                                value.newSubscriptionGroupedWithProratedMinimumPrice
-                            )
-                        value.newSubscriptionBulkWithProrationPrice != null ->
-                            generator.writeObject(value.newSubscriptionBulkWithProrationPrice)
+                        value.newSubscriptionUnit != null ->
+                            generator.writeObject(value.newSubscriptionUnit)
+                        value.newSubscriptionPackage != null ->
+                            generator.writeObject(value.newSubscriptionPackage)
+                        value.newSubscriptionMatrix != null ->
+                            generator.writeObject(value.newSubscriptionMatrix)
+                        value.newSubscriptionTiered != null ->
+                            generator.writeObject(value.newSubscriptionTiered)
+                        value.newSubscriptionTieredBps != null ->
+                            generator.writeObject(value.newSubscriptionTieredBps)
+                        value.newSubscriptionBps != null ->
+                            generator.writeObject(value.newSubscriptionBps)
+                        value.newSubscriptionBulkBps != null ->
+                            generator.writeObject(value.newSubscriptionBulkBps)
+                        value.newSubscriptionBulk != null ->
+                            generator.writeObject(value.newSubscriptionBulk)
+                        value.newSubscriptionThresholdTotalAmount != null ->
+                            generator.writeObject(value.newSubscriptionThresholdTotalAmount)
+                        value.newSubscriptionTieredPackage != null ->
+                            generator.writeObject(value.newSubscriptionTieredPackage)
+                        value.newSubscriptionTieredWithMinimum != null ->
+                            generator.writeObject(value.newSubscriptionTieredWithMinimum)
+                        value.newSubscriptionUnitWithPercent != null ->
+                            generator.writeObject(value.newSubscriptionUnitWithPercent)
+                        value.newSubscriptionPackageWithAllocation != null ->
+                            generator.writeObject(value.newSubscriptionPackageWithAllocation)
+                        value.newSubscriptionTierWithProration != null ->
+                            generator.writeObject(value.newSubscriptionTierWithProration)
+                        value.newSubscriptionUnitWithProration != null ->
+                            generator.writeObject(value.newSubscriptionUnitWithProration)
+                        value.newSubscriptionGroupedAllocation != null ->
+                            generator.writeObject(value.newSubscriptionGroupedAllocation)
+                        value.newSubscriptionGroupedWithProratedMinimum != null ->
+                            generator.writeObject(value.newSubscriptionGroupedWithProratedMinimum)
+                        value.newSubscriptionBulkWithProration != null ->
+                            generator.writeObject(value.newSubscriptionBulkWithProration)
                         value._json != null -> generator.writeObject(value._json)
                         else -> throw IllegalStateException("Invalid Price")
                     }

@@ -593,7 +593,7 @@ class SubscriptionUpdateTrialResponseTest {
             .contains("default_invoice_memo")
         assertThat(subscriptionUpdateTrialResponse.discountIntervals())
             .containsExactly(
-                SubscriptionUpdateTrialResponse.DiscountInterval.ofAmountDiscountInterval(
+                SubscriptionUpdateTrialResponse.DiscountInterval.ofAmount(
                     SubscriptionUpdateTrialResponse.DiscountInterval.AmountDiscountInterval
                         .builder()
                         .amountDiscount("amount_discount")

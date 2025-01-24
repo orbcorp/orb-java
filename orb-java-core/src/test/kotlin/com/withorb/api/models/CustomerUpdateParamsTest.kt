@@ -210,7 +210,7 @@ class CustomerUpdateParamsTest {
             )
         assertThat(body.taxConfiguration())
             .contains(
-                CustomerUpdateParams.TaxConfiguration.ofNewAvalaraTaxConfiguration(
+                CustomerUpdateParams.TaxConfiguration.ofNewAvalara(
                     CustomerUpdateParams.TaxConfiguration.NewAvalaraTaxConfiguration.builder()
                         .taxExempt(true)
                         .taxProvider(
