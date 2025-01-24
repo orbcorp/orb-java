@@ -197,11 +197,11 @@ constructor(
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
-            fun discount(newCouponPercentageDiscount: Discount.NewCouponPercentageDiscount) =
-                discount(Discount.ofNewCouponPercentageDiscount(newCouponPercentageDiscount))
+            fun discount(newCouponPercentage: Discount.NewCouponPercentageDiscount) =
+                discount(Discount.ofNewCouponPercentage(newCouponPercentage))
 
-            fun discount(newCouponAmountDiscount: Discount.NewCouponAmountDiscount) =
-                discount(Discount.ofNewCouponAmountDiscount(newCouponAmountDiscount))
+            fun discount(newCouponAmount: Discount.NewCouponAmountDiscount) =
+                discount(Discount.ofNewCouponAmount(newCouponAmount))
 
             /** This string can be used to redeem this coupon for a given subscription. */
             fun redemptionCode(redemptionCode: String) =
@@ -343,12 +343,12 @@ constructor(
 
         fun discount(discount: JsonField<Discount>) = apply { body.discount(discount) }
 
-        fun discount(newCouponPercentageDiscount: Discount.NewCouponPercentageDiscount) = apply {
-            body.discount(newCouponPercentageDiscount)
+        fun discount(newCouponPercentage: Discount.NewCouponPercentageDiscount) = apply {
+            body.discount(newCouponPercentage)
         }
 
-        fun discount(newCouponAmountDiscount: Discount.NewCouponAmountDiscount) = apply {
-            body.discount(newCouponAmountDiscount)
+        fun discount(newCouponAmount: Discount.NewCouponAmountDiscount) = apply {
+            body.discount(newCouponAmount)
         }
 
         /** This string can be used to redeem this coupon for a given subscription. */
@@ -546,35 +546,33 @@ constructor(
     @JsonSerialize(using = Discount.Serializer::class)
     class Discount
     private constructor(
-        private val newCouponPercentageDiscount: NewCouponPercentageDiscount? = null,
-        private val newCouponAmountDiscount: NewCouponAmountDiscount? = null,
+        private val newCouponPercentage: NewCouponPercentageDiscount? = null,
+        private val newCouponAmount: NewCouponAmountDiscount? = null,
         private val _json: JsonValue? = null,
     ) {
 
-        fun newCouponPercentageDiscount(): Optional<NewCouponPercentageDiscount> =
-            Optional.ofNullable(newCouponPercentageDiscount)
+        fun newCouponPercentage(): Optional<NewCouponPercentageDiscount> =
+            Optional.ofNullable(newCouponPercentage)
 
-        fun newCouponAmountDiscount(): Optional<NewCouponAmountDiscount> =
-            Optional.ofNullable(newCouponAmountDiscount)
+        fun newCouponAmount(): Optional<NewCouponAmountDiscount> =
+            Optional.ofNullable(newCouponAmount)
 
-        fun isNewCouponPercentageDiscount(): Boolean = newCouponPercentageDiscount != null
+        fun isNewCouponPercentage(): Boolean = newCouponPercentage != null
 
-        fun isNewCouponAmountDiscount(): Boolean = newCouponAmountDiscount != null
+        fun isNewCouponAmount(): Boolean = newCouponAmount != null
 
-        fun asNewCouponPercentageDiscount(): NewCouponPercentageDiscount =
-            newCouponPercentageDiscount.getOrThrow("newCouponPercentageDiscount")
+        fun asNewCouponPercentage(): NewCouponPercentageDiscount =
+            newCouponPercentage.getOrThrow("newCouponPercentage")
 
-        fun asNewCouponAmountDiscount(): NewCouponAmountDiscount =
-            newCouponAmountDiscount.getOrThrow("newCouponAmountDiscount")
+        fun asNewCouponAmount(): NewCouponAmountDiscount =
+            newCouponAmount.getOrThrow("newCouponAmount")
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
         fun <T> accept(visitor: Visitor<T>): T {
             return when {
-                newCouponPercentageDiscount != null ->
-                    visitor.visitNewCouponPercentageDiscount(newCouponPercentageDiscount)
-                newCouponAmountDiscount != null ->
-                    visitor.visitNewCouponAmountDiscount(newCouponAmountDiscount)
+                newCouponPercentage != null -> visitor.visitNewCouponPercentage(newCouponPercentage)
+                newCouponAmount != null -> visitor.visitNewCouponAmount(newCouponAmount)
                 else -> visitor.unknown(_json)
             }
         }
@@ -588,16 +586,14 @@ constructor(
 
             accept(
                 object : Visitor<Unit> {
-                    override fun visitNewCouponPercentageDiscount(
-                        newCouponPercentageDiscount: NewCouponPercentageDiscount
+                    override fun visitNewCouponPercentage(
+                        newCouponPercentage: NewCouponPercentageDiscount
                     ) {
-                        newCouponPercentageDiscount.validate()
+                        newCouponPercentage.validate()
                     }
 
-                    override fun visitNewCouponAmountDiscount(
-                        newCouponAmountDiscount: NewCouponAmountDiscount
-                    ) {
-                        newCouponAmountDiscount.validate()
+                    override fun visitNewCouponAmount(newCouponAmount: NewCouponAmountDiscount) {
+                        newCouponAmount.validate()
                     }
                 }
             )
@@ -609,17 +605,15 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Discount && newCouponPercentageDiscount == other.newCouponPercentageDiscount && newCouponAmountDiscount == other.newCouponAmountDiscount /* spotless:on */
+            return /* spotless:off */ other is Discount && newCouponPercentage == other.newCouponPercentage && newCouponAmount == other.newCouponAmount /* spotless:on */
         }
 
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(newCouponPercentageDiscount, newCouponAmountDiscount) /* spotless:on */
+        override fun hashCode(): Int = /* spotless:off */ Objects.hash(newCouponPercentage, newCouponAmount) /* spotless:on */
 
         override fun toString(): String =
             when {
-                newCouponPercentageDiscount != null ->
-                    "Discount{newCouponPercentageDiscount=$newCouponPercentageDiscount}"
-                newCouponAmountDiscount != null ->
-                    "Discount{newCouponAmountDiscount=$newCouponAmountDiscount}"
+                newCouponPercentage != null -> "Discount{newCouponPercentage=$newCouponPercentage}"
+                newCouponAmount != null -> "Discount{newCouponAmount=$newCouponAmount}"
                 _json != null -> "Discount{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid Discount")
             }
@@ -627,22 +621,19 @@ constructor(
         companion object {
 
             @JvmStatic
-            fun ofNewCouponPercentageDiscount(
-                newCouponPercentageDiscount: NewCouponPercentageDiscount
-            ) = Discount(newCouponPercentageDiscount = newCouponPercentageDiscount)
+            fun ofNewCouponPercentage(newCouponPercentage: NewCouponPercentageDiscount) =
+                Discount(newCouponPercentage = newCouponPercentage)
 
             @JvmStatic
-            fun ofNewCouponAmountDiscount(newCouponAmountDiscount: NewCouponAmountDiscount) =
-                Discount(newCouponAmountDiscount = newCouponAmountDiscount)
+            fun ofNewCouponAmount(newCouponAmount: NewCouponAmountDiscount) =
+                Discount(newCouponAmount = newCouponAmount)
         }
 
         interface Visitor<out T> {
 
-            fun visitNewCouponPercentageDiscount(
-                newCouponPercentageDiscount: NewCouponPercentageDiscount
-            ): T
+            fun visitNewCouponPercentage(newCouponPercentage: NewCouponPercentageDiscount): T
 
-            fun visitNewCouponAmountDiscount(newCouponAmountDiscount: NewCouponAmountDiscount): T
+            fun visitNewCouponAmount(newCouponAmount: NewCouponAmountDiscount): T
 
             fun unknown(json: JsonValue?): T {
                 throw OrbInvalidDataException("Unknown Discount: $json")
@@ -662,7 +653,7 @@ constructor(
                                 it.validate()
                             }
                             ?.let {
-                                return Discount(newCouponPercentageDiscount = it, _json = json)
+                                return Discount(newCouponPercentage = it, _json = json)
                             }
                     }
                     "amount" -> {
@@ -670,7 +661,7 @@ constructor(
                                 it.validate()
                             }
                             ?.let {
-                                return Discount(newCouponAmountDiscount = it, _json = json)
+                                return Discount(newCouponAmount = it, _json = json)
                             }
                     }
                 }
@@ -687,10 +678,9 @@ constructor(
                 provider: SerializerProvider
             ) {
                 when {
-                    value.newCouponPercentageDiscount != null ->
-                        generator.writeObject(value.newCouponPercentageDiscount)
-                    value.newCouponAmountDiscount != null ->
-                        generator.writeObject(value.newCouponAmountDiscount)
+                    value.newCouponPercentage != null ->
+                        generator.writeObject(value.newCouponPercentage)
+                    value.newCouponAmount != null -> generator.writeObject(value.newCouponAmount)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid Discount")
                 }
