@@ -119,7 +119,7 @@ class InvoiceCreateParamsTest {
         assertThat(body.customerId()).contains("4khy3nwzktxv7")
         assertThat(body.discount())
             .contains(
-                Discount.ofPercentageDiscount(
+                Discount.ofPercentage(
                     PercentageDiscount.builder()
                         .addAppliesToPriceId("h74gfhdjvn7ujokd")
                         .addAppliesToPriceId("7hfgtgjnbvc3ujkl")

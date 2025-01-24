@@ -47,258 +47,244 @@ import kotlin.jvm.optionals.getOrNull
 @JsonSerialize(using = Price.Serializer::class)
 class Price
 private constructor(
-    private val unitPrice: UnitPrice? = null,
+    private val unit: UnitPrice? = null,
     private val packagePrice: PackagePrice? = null,
-    private val matrixPrice: MatrixPrice? = null,
-    private val tieredPrice: TieredPrice? = null,
-    private val tieredBpsPrice: TieredBpsPrice? = null,
-    private val bpsPrice: BpsPrice? = null,
-    private val bulkBpsPrice: BulkBpsPrice? = null,
-    private val bulkPrice: BulkPrice? = null,
-    private val thresholdTotalAmountPrice: ThresholdTotalAmountPrice? = null,
-    private val tieredPackagePrice: TieredPackagePrice? = null,
-    private val groupedTieredPrice: GroupedTieredPrice? = null,
-    private val tieredWithMinimumPrice: TieredWithMinimumPrice? = null,
-    private val tieredPackageWithMinimumPrice: TieredPackageWithMinimumPrice? = null,
-    private val packageWithAllocationPrice: PackageWithAllocationPrice? = null,
-    private val unitWithPercentPrice: UnitWithPercentPrice? = null,
-    private val matrixWithAllocationPrice: MatrixWithAllocationPrice? = null,
-    private val tieredWithProrationPrice: TieredWithProrationPrice? = null,
-    private val unitWithProrationPrice: UnitWithProrationPrice? = null,
-    private val groupedAllocationPrice: GroupedAllocationPrice? = null,
-    private val groupedWithProratedMinimumPrice: GroupedWithProratedMinimumPrice? = null,
-    private val groupedWithMeteredMinimumPrice: GroupedWithMeteredMinimumPrice? = null,
-    private val matrixWithDisplayNamePrice: MatrixWithDisplayNamePrice? = null,
-    private val bulkWithProrationPrice: BulkWithProrationPrice? = null,
-    private val groupedTieredPackagePrice: GroupedTieredPackagePrice? = null,
-    private val maxGroupTieredPrice: MaxGroupTieredPrice? = null,
+    private val matrix: MatrixPrice? = null,
+    private val tiered: TieredPrice? = null,
+    private val tieredBps: TieredBpsPrice? = null,
+    private val bps: BpsPrice? = null,
+    private val bulkBps: BulkBpsPrice? = null,
+    private val bulk: BulkPrice? = null,
+    private val thresholdTotalAmount: ThresholdTotalAmountPrice? = null,
+    private val tieredPackage: TieredPackagePrice? = null,
+    private val groupedTiered: GroupedTieredPrice? = null,
+    private val tieredWithMinimum: TieredWithMinimumPrice? = null,
+    private val tieredPackageWithMinimum: TieredPackageWithMinimumPrice? = null,
+    private val packageWithAllocation: PackageWithAllocationPrice? = null,
+    private val unitWithPercent: UnitWithPercentPrice? = null,
+    private val matrixWithAllocation: MatrixWithAllocationPrice? = null,
+    private val tieredWithProration: TieredWithProrationPrice? = null,
+    private val unitWithProration: UnitWithProrationPrice? = null,
+    private val groupedAllocation: GroupedAllocationPrice? = null,
+    private val groupedWithProratedMinimum: GroupedWithProratedMinimumPrice? = null,
+    private val groupedWithMeteredMinimum: GroupedWithMeteredMinimumPrice? = null,
+    private val matrixWithDisplayName: MatrixWithDisplayNamePrice? = null,
+    private val bulkWithProration: BulkWithProrationPrice? = null,
+    private val groupedTieredPackage: GroupedTieredPackagePrice? = null,
+    private val maxGroupTiered: MaxGroupTieredPrice? = null,
     private val _json: JsonValue? = null,
 ) {
 
-    fun unitPrice(): Optional<UnitPrice> = Optional.ofNullable(unitPrice)
+    fun unit(): Optional<UnitPrice> = Optional.ofNullable(unit)
 
     fun packagePrice(): Optional<PackagePrice> = Optional.ofNullable(packagePrice)
 
-    fun matrixPrice(): Optional<MatrixPrice> = Optional.ofNullable(matrixPrice)
+    fun matrix(): Optional<MatrixPrice> = Optional.ofNullable(matrix)
 
-    fun tieredPrice(): Optional<TieredPrice> = Optional.ofNullable(tieredPrice)
+    fun tiered(): Optional<TieredPrice> = Optional.ofNullable(tiered)
 
-    fun tieredBpsPrice(): Optional<TieredBpsPrice> = Optional.ofNullable(tieredBpsPrice)
+    fun tieredBps(): Optional<TieredBpsPrice> = Optional.ofNullable(tieredBps)
 
-    fun bpsPrice(): Optional<BpsPrice> = Optional.ofNullable(bpsPrice)
+    fun bps(): Optional<BpsPrice> = Optional.ofNullable(bps)
 
-    fun bulkBpsPrice(): Optional<BulkBpsPrice> = Optional.ofNullable(bulkBpsPrice)
+    fun bulkBps(): Optional<BulkBpsPrice> = Optional.ofNullable(bulkBps)
 
-    fun bulkPrice(): Optional<BulkPrice> = Optional.ofNullable(bulkPrice)
+    fun bulk(): Optional<BulkPrice> = Optional.ofNullable(bulk)
 
-    fun thresholdTotalAmountPrice(): Optional<ThresholdTotalAmountPrice> =
-        Optional.ofNullable(thresholdTotalAmountPrice)
+    fun thresholdTotalAmount(): Optional<ThresholdTotalAmountPrice> =
+        Optional.ofNullable(thresholdTotalAmount)
 
-    fun tieredPackagePrice(): Optional<TieredPackagePrice> = Optional.ofNullable(tieredPackagePrice)
+    fun tieredPackage(): Optional<TieredPackagePrice> = Optional.ofNullable(tieredPackage)
 
-    fun groupedTieredPrice(): Optional<GroupedTieredPrice> = Optional.ofNullable(groupedTieredPrice)
+    fun groupedTiered(): Optional<GroupedTieredPrice> = Optional.ofNullable(groupedTiered)
 
-    fun tieredWithMinimumPrice(): Optional<TieredWithMinimumPrice> =
-        Optional.ofNullable(tieredWithMinimumPrice)
+    fun tieredWithMinimum(): Optional<TieredWithMinimumPrice> =
+        Optional.ofNullable(tieredWithMinimum)
 
-    fun tieredPackageWithMinimumPrice(): Optional<TieredPackageWithMinimumPrice> =
-        Optional.ofNullable(tieredPackageWithMinimumPrice)
+    fun tieredPackageWithMinimum(): Optional<TieredPackageWithMinimumPrice> =
+        Optional.ofNullable(tieredPackageWithMinimum)
 
-    fun packageWithAllocationPrice(): Optional<PackageWithAllocationPrice> =
-        Optional.ofNullable(packageWithAllocationPrice)
+    fun packageWithAllocation(): Optional<PackageWithAllocationPrice> =
+        Optional.ofNullable(packageWithAllocation)
 
-    fun unitWithPercentPrice(): Optional<UnitWithPercentPrice> =
-        Optional.ofNullable(unitWithPercentPrice)
+    fun unitWithPercent(): Optional<UnitWithPercentPrice> = Optional.ofNullable(unitWithPercent)
 
-    fun matrixWithAllocationPrice(): Optional<MatrixWithAllocationPrice> =
-        Optional.ofNullable(matrixWithAllocationPrice)
+    fun matrixWithAllocation(): Optional<MatrixWithAllocationPrice> =
+        Optional.ofNullable(matrixWithAllocation)
 
-    fun tieredWithProrationPrice(): Optional<TieredWithProrationPrice> =
-        Optional.ofNullable(tieredWithProrationPrice)
+    fun tieredWithProration(): Optional<TieredWithProrationPrice> =
+        Optional.ofNullable(tieredWithProration)
 
-    fun unitWithProrationPrice(): Optional<UnitWithProrationPrice> =
-        Optional.ofNullable(unitWithProrationPrice)
+    fun unitWithProration(): Optional<UnitWithProrationPrice> =
+        Optional.ofNullable(unitWithProration)
 
-    fun groupedAllocationPrice(): Optional<GroupedAllocationPrice> =
-        Optional.ofNullable(groupedAllocationPrice)
+    fun groupedAllocation(): Optional<GroupedAllocationPrice> =
+        Optional.ofNullable(groupedAllocation)
 
-    fun groupedWithProratedMinimumPrice(): Optional<GroupedWithProratedMinimumPrice> =
-        Optional.ofNullable(groupedWithProratedMinimumPrice)
+    fun groupedWithProratedMinimum(): Optional<GroupedWithProratedMinimumPrice> =
+        Optional.ofNullable(groupedWithProratedMinimum)
 
-    fun groupedWithMeteredMinimumPrice(): Optional<GroupedWithMeteredMinimumPrice> =
-        Optional.ofNullable(groupedWithMeteredMinimumPrice)
+    fun groupedWithMeteredMinimum(): Optional<GroupedWithMeteredMinimumPrice> =
+        Optional.ofNullable(groupedWithMeteredMinimum)
 
-    fun matrixWithDisplayNamePrice(): Optional<MatrixWithDisplayNamePrice> =
-        Optional.ofNullable(matrixWithDisplayNamePrice)
+    fun matrixWithDisplayName(): Optional<MatrixWithDisplayNamePrice> =
+        Optional.ofNullable(matrixWithDisplayName)
 
-    fun bulkWithProrationPrice(): Optional<BulkWithProrationPrice> =
-        Optional.ofNullable(bulkWithProrationPrice)
+    fun bulkWithProration(): Optional<BulkWithProrationPrice> =
+        Optional.ofNullable(bulkWithProration)
 
-    fun groupedTieredPackagePrice(): Optional<GroupedTieredPackagePrice> =
-        Optional.ofNullable(groupedTieredPackagePrice)
+    fun groupedTieredPackage(): Optional<GroupedTieredPackagePrice> =
+        Optional.ofNullable(groupedTieredPackage)
 
-    fun maxGroupTieredPrice(): Optional<MaxGroupTieredPrice> =
-        Optional.ofNullable(maxGroupTieredPrice)
+    fun maxGroupTiered(): Optional<MaxGroupTieredPrice> = Optional.ofNullable(maxGroupTiered)
 
-    fun isUnitPrice(): Boolean = unitPrice != null
+    fun isUnit(): Boolean = unit != null
 
     fun isPackagePrice(): Boolean = packagePrice != null
 
-    fun isMatrixPrice(): Boolean = matrixPrice != null
+    fun isMatrix(): Boolean = matrix != null
 
-    fun isTieredPrice(): Boolean = tieredPrice != null
+    fun isTiered(): Boolean = tiered != null
 
-    fun isTieredBpsPrice(): Boolean = tieredBpsPrice != null
+    fun isTieredBps(): Boolean = tieredBps != null
 
-    fun isBpsPrice(): Boolean = bpsPrice != null
+    fun isBps(): Boolean = bps != null
 
-    fun isBulkBpsPrice(): Boolean = bulkBpsPrice != null
+    fun isBulkBps(): Boolean = bulkBps != null
 
-    fun isBulkPrice(): Boolean = bulkPrice != null
+    fun isBulk(): Boolean = bulk != null
 
-    fun isThresholdTotalAmountPrice(): Boolean = thresholdTotalAmountPrice != null
+    fun isThresholdTotalAmount(): Boolean = thresholdTotalAmount != null
 
-    fun isTieredPackagePrice(): Boolean = tieredPackagePrice != null
+    fun isTieredPackage(): Boolean = tieredPackage != null
 
-    fun isGroupedTieredPrice(): Boolean = groupedTieredPrice != null
+    fun isGroupedTiered(): Boolean = groupedTiered != null
 
-    fun isTieredWithMinimumPrice(): Boolean = tieredWithMinimumPrice != null
+    fun isTieredWithMinimum(): Boolean = tieredWithMinimum != null
 
-    fun isTieredPackageWithMinimumPrice(): Boolean = tieredPackageWithMinimumPrice != null
+    fun isTieredPackageWithMinimum(): Boolean = tieredPackageWithMinimum != null
 
-    fun isPackageWithAllocationPrice(): Boolean = packageWithAllocationPrice != null
+    fun isPackageWithAllocation(): Boolean = packageWithAllocation != null
 
-    fun isUnitWithPercentPrice(): Boolean = unitWithPercentPrice != null
+    fun isUnitWithPercent(): Boolean = unitWithPercent != null
 
-    fun isMatrixWithAllocationPrice(): Boolean = matrixWithAllocationPrice != null
+    fun isMatrixWithAllocation(): Boolean = matrixWithAllocation != null
 
-    fun isTieredWithProrationPrice(): Boolean = tieredWithProrationPrice != null
+    fun isTieredWithProration(): Boolean = tieredWithProration != null
 
-    fun isUnitWithProrationPrice(): Boolean = unitWithProrationPrice != null
+    fun isUnitWithProration(): Boolean = unitWithProration != null
 
-    fun isGroupedAllocationPrice(): Boolean = groupedAllocationPrice != null
+    fun isGroupedAllocation(): Boolean = groupedAllocation != null
 
-    fun isGroupedWithProratedMinimumPrice(): Boolean = groupedWithProratedMinimumPrice != null
+    fun isGroupedWithProratedMinimum(): Boolean = groupedWithProratedMinimum != null
 
-    fun isGroupedWithMeteredMinimumPrice(): Boolean = groupedWithMeteredMinimumPrice != null
+    fun isGroupedWithMeteredMinimum(): Boolean = groupedWithMeteredMinimum != null
 
-    fun isMatrixWithDisplayNamePrice(): Boolean = matrixWithDisplayNamePrice != null
+    fun isMatrixWithDisplayName(): Boolean = matrixWithDisplayName != null
 
-    fun isBulkWithProrationPrice(): Boolean = bulkWithProrationPrice != null
+    fun isBulkWithProration(): Boolean = bulkWithProration != null
 
-    fun isGroupedTieredPackagePrice(): Boolean = groupedTieredPackagePrice != null
+    fun isGroupedTieredPackage(): Boolean = groupedTieredPackage != null
 
-    fun isMaxGroupTieredPrice(): Boolean = maxGroupTieredPrice != null
+    fun isMaxGroupTiered(): Boolean = maxGroupTiered != null
 
-    fun asUnitPrice(): UnitPrice = unitPrice.getOrThrow("unitPrice")
+    fun asUnit(): UnitPrice = unit.getOrThrow("unit")
 
     fun asPackagePrice(): PackagePrice = packagePrice.getOrThrow("packagePrice")
 
-    fun asMatrixPrice(): MatrixPrice = matrixPrice.getOrThrow("matrixPrice")
+    fun asMatrix(): MatrixPrice = matrix.getOrThrow("matrix")
 
-    fun asTieredPrice(): TieredPrice = tieredPrice.getOrThrow("tieredPrice")
+    fun asTiered(): TieredPrice = tiered.getOrThrow("tiered")
 
-    fun asTieredBpsPrice(): TieredBpsPrice = tieredBpsPrice.getOrThrow("tieredBpsPrice")
+    fun asTieredBps(): TieredBpsPrice = tieredBps.getOrThrow("tieredBps")
 
-    fun asBpsPrice(): BpsPrice = bpsPrice.getOrThrow("bpsPrice")
+    fun asBps(): BpsPrice = bps.getOrThrow("bps")
 
-    fun asBulkBpsPrice(): BulkBpsPrice = bulkBpsPrice.getOrThrow("bulkBpsPrice")
+    fun asBulkBps(): BulkBpsPrice = bulkBps.getOrThrow("bulkBps")
 
-    fun asBulkPrice(): BulkPrice = bulkPrice.getOrThrow("bulkPrice")
+    fun asBulk(): BulkPrice = bulk.getOrThrow("bulk")
 
-    fun asThresholdTotalAmountPrice(): ThresholdTotalAmountPrice =
-        thresholdTotalAmountPrice.getOrThrow("thresholdTotalAmountPrice")
+    fun asThresholdTotalAmount(): ThresholdTotalAmountPrice =
+        thresholdTotalAmount.getOrThrow("thresholdTotalAmount")
 
-    fun asTieredPackagePrice(): TieredPackagePrice =
-        tieredPackagePrice.getOrThrow("tieredPackagePrice")
+    fun asTieredPackage(): TieredPackagePrice = tieredPackage.getOrThrow("tieredPackage")
 
-    fun asGroupedTieredPrice(): GroupedTieredPrice =
-        groupedTieredPrice.getOrThrow("groupedTieredPrice")
+    fun asGroupedTiered(): GroupedTieredPrice = groupedTiered.getOrThrow("groupedTiered")
 
-    fun asTieredWithMinimumPrice(): TieredWithMinimumPrice =
-        tieredWithMinimumPrice.getOrThrow("tieredWithMinimumPrice")
+    fun asTieredWithMinimum(): TieredWithMinimumPrice =
+        tieredWithMinimum.getOrThrow("tieredWithMinimum")
 
-    fun asTieredPackageWithMinimumPrice(): TieredPackageWithMinimumPrice =
-        tieredPackageWithMinimumPrice.getOrThrow("tieredPackageWithMinimumPrice")
+    fun asTieredPackageWithMinimum(): TieredPackageWithMinimumPrice =
+        tieredPackageWithMinimum.getOrThrow("tieredPackageWithMinimum")
 
-    fun asPackageWithAllocationPrice(): PackageWithAllocationPrice =
-        packageWithAllocationPrice.getOrThrow("packageWithAllocationPrice")
+    fun asPackageWithAllocation(): PackageWithAllocationPrice =
+        packageWithAllocation.getOrThrow("packageWithAllocation")
 
-    fun asUnitWithPercentPrice(): UnitWithPercentPrice =
-        unitWithPercentPrice.getOrThrow("unitWithPercentPrice")
+    fun asUnitWithPercent(): UnitWithPercentPrice = unitWithPercent.getOrThrow("unitWithPercent")
 
-    fun asMatrixWithAllocationPrice(): MatrixWithAllocationPrice =
-        matrixWithAllocationPrice.getOrThrow("matrixWithAllocationPrice")
+    fun asMatrixWithAllocation(): MatrixWithAllocationPrice =
+        matrixWithAllocation.getOrThrow("matrixWithAllocation")
 
-    fun asTieredWithProrationPrice(): TieredWithProrationPrice =
-        tieredWithProrationPrice.getOrThrow("tieredWithProrationPrice")
+    fun asTieredWithProration(): TieredWithProrationPrice =
+        tieredWithProration.getOrThrow("tieredWithProration")
 
-    fun asUnitWithProrationPrice(): UnitWithProrationPrice =
-        unitWithProrationPrice.getOrThrow("unitWithProrationPrice")
+    fun asUnitWithProration(): UnitWithProrationPrice =
+        unitWithProration.getOrThrow("unitWithProration")
 
-    fun asGroupedAllocationPrice(): GroupedAllocationPrice =
-        groupedAllocationPrice.getOrThrow("groupedAllocationPrice")
+    fun asGroupedAllocation(): GroupedAllocationPrice =
+        groupedAllocation.getOrThrow("groupedAllocation")
 
-    fun asGroupedWithProratedMinimumPrice(): GroupedWithProratedMinimumPrice =
-        groupedWithProratedMinimumPrice.getOrThrow("groupedWithProratedMinimumPrice")
+    fun asGroupedWithProratedMinimum(): GroupedWithProratedMinimumPrice =
+        groupedWithProratedMinimum.getOrThrow("groupedWithProratedMinimum")
 
-    fun asGroupedWithMeteredMinimumPrice(): GroupedWithMeteredMinimumPrice =
-        groupedWithMeteredMinimumPrice.getOrThrow("groupedWithMeteredMinimumPrice")
+    fun asGroupedWithMeteredMinimum(): GroupedWithMeteredMinimumPrice =
+        groupedWithMeteredMinimum.getOrThrow("groupedWithMeteredMinimum")
 
-    fun asMatrixWithDisplayNamePrice(): MatrixWithDisplayNamePrice =
-        matrixWithDisplayNamePrice.getOrThrow("matrixWithDisplayNamePrice")
+    fun asMatrixWithDisplayName(): MatrixWithDisplayNamePrice =
+        matrixWithDisplayName.getOrThrow("matrixWithDisplayName")
 
-    fun asBulkWithProrationPrice(): BulkWithProrationPrice =
-        bulkWithProrationPrice.getOrThrow("bulkWithProrationPrice")
+    fun asBulkWithProration(): BulkWithProrationPrice =
+        bulkWithProration.getOrThrow("bulkWithProration")
 
-    fun asGroupedTieredPackagePrice(): GroupedTieredPackagePrice =
-        groupedTieredPackagePrice.getOrThrow("groupedTieredPackagePrice")
+    fun asGroupedTieredPackage(): GroupedTieredPackagePrice =
+        groupedTieredPackage.getOrThrow("groupedTieredPackage")
 
-    fun asMaxGroupTieredPrice(): MaxGroupTieredPrice =
-        maxGroupTieredPrice.getOrThrow("maxGroupTieredPrice")
+    fun asMaxGroupTiered(): MaxGroupTieredPrice = maxGroupTiered.getOrThrow("maxGroupTiered")
 
     fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
     fun <T> accept(visitor: Visitor<T>): T {
         return when {
-            unitPrice != null -> visitor.visitUnitPrice(unitPrice)
+            unit != null -> visitor.visitUnit(unit)
             packagePrice != null -> visitor.visitPackagePrice(packagePrice)
-            matrixPrice != null -> visitor.visitMatrixPrice(matrixPrice)
-            tieredPrice != null -> visitor.visitTieredPrice(tieredPrice)
-            tieredBpsPrice != null -> visitor.visitTieredBpsPrice(tieredBpsPrice)
-            bpsPrice != null -> visitor.visitBpsPrice(bpsPrice)
-            bulkBpsPrice != null -> visitor.visitBulkBpsPrice(bulkBpsPrice)
-            bulkPrice != null -> visitor.visitBulkPrice(bulkPrice)
-            thresholdTotalAmountPrice != null ->
-                visitor.visitThresholdTotalAmountPrice(thresholdTotalAmountPrice)
-            tieredPackagePrice != null -> visitor.visitTieredPackagePrice(tieredPackagePrice)
-            groupedTieredPrice != null -> visitor.visitGroupedTieredPrice(groupedTieredPrice)
-            tieredWithMinimumPrice != null ->
-                visitor.visitTieredWithMinimumPrice(tieredWithMinimumPrice)
-            tieredPackageWithMinimumPrice != null ->
-                visitor.visitTieredPackageWithMinimumPrice(tieredPackageWithMinimumPrice)
-            packageWithAllocationPrice != null ->
-                visitor.visitPackageWithAllocationPrice(packageWithAllocationPrice)
-            unitWithPercentPrice != null -> visitor.visitUnitWithPercentPrice(unitWithPercentPrice)
-            matrixWithAllocationPrice != null ->
-                visitor.visitMatrixWithAllocationPrice(matrixWithAllocationPrice)
-            tieredWithProrationPrice != null ->
-                visitor.visitTieredWithProrationPrice(tieredWithProrationPrice)
-            unitWithProrationPrice != null ->
-                visitor.visitUnitWithProrationPrice(unitWithProrationPrice)
-            groupedAllocationPrice != null ->
-                visitor.visitGroupedAllocationPrice(groupedAllocationPrice)
-            groupedWithProratedMinimumPrice != null ->
-                visitor.visitGroupedWithProratedMinimumPrice(groupedWithProratedMinimumPrice)
-            groupedWithMeteredMinimumPrice != null ->
-                visitor.visitGroupedWithMeteredMinimumPrice(groupedWithMeteredMinimumPrice)
-            matrixWithDisplayNamePrice != null ->
-                visitor.visitMatrixWithDisplayNamePrice(matrixWithDisplayNamePrice)
-            bulkWithProrationPrice != null ->
-                visitor.visitBulkWithProrationPrice(bulkWithProrationPrice)
-            groupedTieredPackagePrice != null ->
-                visitor.visitGroupedTieredPackagePrice(groupedTieredPackagePrice)
-            maxGroupTieredPrice != null -> visitor.visitMaxGroupTieredPrice(maxGroupTieredPrice)
+            matrix != null -> visitor.visitMatrix(matrix)
+            tiered != null -> visitor.visitTiered(tiered)
+            tieredBps != null -> visitor.visitTieredBps(tieredBps)
+            bps != null -> visitor.visitBps(bps)
+            bulkBps != null -> visitor.visitBulkBps(bulkBps)
+            bulk != null -> visitor.visitBulk(bulk)
+            thresholdTotalAmount != null -> visitor.visitThresholdTotalAmount(thresholdTotalAmount)
+            tieredPackage != null -> visitor.visitTieredPackage(tieredPackage)
+            groupedTiered != null -> visitor.visitGroupedTiered(groupedTiered)
+            tieredWithMinimum != null -> visitor.visitTieredWithMinimum(tieredWithMinimum)
+            tieredPackageWithMinimum != null ->
+                visitor.visitTieredPackageWithMinimum(tieredPackageWithMinimum)
+            packageWithAllocation != null ->
+                visitor.visitPackageWithAllocation(packageWithAllocation)
+            unitWithPercent != null -> visitor.visitUnitWithPercent(unitWithPercent)
+            matrixWithAllocation != null -> visitor.visitMatrixWithAllocation(matrixWithAllocation)
+            tieredWithProration != null -> visitor.visitTieredWithProration(tieredWithProration)
+            unitWithProration != null -> visitor.visitUnitWithProration(unitWithProration)
+            groupedAllocation != null -> visitor.visitGroupedAllocation(groupedAllocation)
+            groupedWithProratedMinimum != null ->
+                visitor.visitGroupedWithProratedMinimum(groupedWithProratedMinimum)
+            groupedWithMeteredMinimum != null ->
+                visitor.visitGroupedWithMeteredMinimum(groupedWithMeteredMinimum)
+            matrixWithDisplayName != null ->
+                visitor.visitMatrixWithDisplayName(matrixWithDisplayName)
+            bulkWithProration != null -> visitor.visitBulkWithProration(bulkWithProration)
+            groupedTieredPackage != null -> visitor.visitGroupedTieredPackage(groupedTieredPackage)
+            maxGroupTiered != null -> visitor.visitMaxGroupTiered(maxGroupTiered)
             else -> visitor.unknown(_json)
         }
     }
@@ -312,130 +298,122 @@ private constructor(
 
         accept(
             object : Visitor<Unit> {
-                override fun visitUnitPrice(unitPrice: UnitPrice) {
-                    unitPrice.validate()
+                override fun visitUnit(unit: UnitPrice) {
+                    unit.validate()
                 }
 
                 override fun visitPackagePrice(packagePrice: PackagePrice) {
                     packagePrice.validate()
                 }
 
-                override fun visitMatrixPrice(matrixPrice: MatrixPrice) {
-                    matrixPrice.validate()
+                override fun visitMatrix(matrix: MatrixPrice) {
+                    matrix.validate()
                 }
 
-                override fun visitTieredPrice(tieredPrice: TieredPrice) {
-                    tieredPrice.validate()
+                override fun visitTiered(tiered: TieredPrice) {
+                    tiered.validate()
                 }
 
-                override fun visitTieredBpsPrice(tieredBpsPrice: TieredBpsPrice) {
-                    tieredBpsPrice.validate()
+                override fun visitTieredBps(tieredBps: TieredBpsPrice) {
+                    tieredBps.validate()
                 }
 
-                override fun visitBpsPrice(bpsPrice: BpsPrice) {
-                    bpsPrice.validate()
+                override fun visitBps(bps: BpsPrice) {
+                    bps.validate()
                 }
 
-                override fun visitBulkBpsPrice(bulkBpsPrice: BulkBpsPrice) {
-                    bulkBpsPrice.validate()
+                override fun visitBulkBps(bulkBps: BulkBpsPrice) {
+                    bulkBps.validate()
                 }
 
-                override fun visitBulkPrice(bulkPrice: BulkPrice) {
-                    bulkPrice.validate()
+                override fun visitBulk(bulk: BulkPrice) {
+                    bulk.validate()
                 }
 
-                override fun visitThresholdTotalAmountPrice(
-                    thresholdTotalAmountPrice: ThresholdTotalAmountPrice
+                override fun visitThresholdTotalAmount(
+                    thresholdTotalAmount: ThresholdTotalAmountPrice
                 ) {
-                    thresholdTotalAmountPrice.validate()
+                    thresholdTotalAmount.validate()
                 }
 
-                override fun visitTieredPackagePrice(tieredPackagePrice: TieredPackagePrice) {
-                    tieredPackagePrice.validate()
+                override fun visitTieredPackage(tieredPackage: TieredPackagePrice) {
+                    tieredPackage.validate()
                 }
 
-                override fun visitGroupedTieredPrice(groupedTieredPrice: GroupedTieredPrice) {
-                    groupedTieredPrice.validate()
+                override fun visitGroupedTiered(groupedTiered: GroupedTieredPrice) {
+                    groupedTiered.validate()
                 }
 
-                override fun visitTieredWithMinimumPrice(
-                    tieredWithMinimumPrice: TieredWithMinimumPrice
+                override fun visitTieredWithMinimum(tieredWithMinimum: TieredWithMinimumPrice) {
+                    tieredWithMinimum.validate()
+                }
+
+                override fun visitTieredPackageWithMinimum(
+                    tieredPackageWithMinimum: TieredPackageWithMinimumPrice
                 ) {
-                    tieredWithMinimumPrice.validate()
+                    tieredPackageWithMinimum.validate()
                 }
 
-                override fun visitTieredPackageWithMinimumPrice(
-                    tieredPackageWithMinimumPrice: TieredPackageWithMinimumPrice
+                override fun visitPackageWithAllocation(
+                    packageWithAllocation: PackageWithAllocationPrice
                 ) {
-                    tieredPackageWithMinimumPrice.validate()
+                    packageWithAllocation.validate()
                 }
 
-                override fun visitPackageWithAllocationPrice(
-                    packageWithAllocationPrice: PackageWithAllocationPrice
+                override fun visitUnitWithPercent(unitWithPercent: UnitWithPercentPrice) {
+                    unitWithPercent.validate()
+                }
+
+                override fun visitMatrixWithAllocation(
+                    matrixWithAllocation: MatrixWithAllocationPrice
                 ) {
-                    packageWithAllocationPrice.validate()
+                    matrixWithAllocation.validate()
                 }
 
-                override fun visitUnitWithPercentPrice(unitWithPercentPrice: UnitWithPercentPrice) {
-                    unitWithPercentPrice.validate()
-                }
-
-                override fun visitMatrixWithAllocationPrice(
-                    matrixWithAllocationPrice: MatrixWithAllocationPrice
+                override fun visitTieredWithProration(
+                    tieredWithProration: TieredWithProrationPrice
                 ) {
-                    matrixWithAllocationPrice.validate()
+                    tieredWithProration.validate()
                 }
 
-                override fun visitTieredWithProrationPrice(
-                    tieredWithProrationPrice: TieredWithProrationPrice
+                override fun visitUnitWithProration(unitWithProration: UnitWithProrationPrice) {
+                    unitWithProration.validate()
+                }
+
+                override fun visitGroupedAllocation(groupedAllocation: GroupedAllocationPrice) {
+                    groupedAllocation.validate()
+                }
+
+                override fun visitGroupedWithProratedMinimum(
+                    groupedWithProratedMinimum: GroupedWithProratedMinimumPrice
                 ) {
-                    tieredWithProrationPrice.validate()
+                    groupedWithProratedMinimum.validate()
                 }
 
-                override fun visitUnitWithProrationPrice(
-                    unitWithProrationPrice: UnitWithProrationPrice
+                override fun visitGroupedWithMeteredMinimum(
+                    groupedWithMeteredMinimum: GroupedWithMeteredMinimumPrice
                 ) {
-                    unitWithProrationPrice.validate()
+                    groupedWithMeteredMinimum.validate()
                 }
 
-                override fun visitGroupedAllocationPrice(
-                    groupedAllocationPrice: GroupedAllocationPrice
+                override fun visitMatrixWithDisplayName(
+                    matrixWithDisplayName: MatrixWithDisplayNamePrice
                 ) {
-                    groupedAllocationPrice.validate()
+                    matrixWithDisplayName.validate()
                 }
 
-                override fun visitGroupedWithProratedMinimumPrice(
-                    groupedWithProratedMinimumPrice: GroupedWithProratedMinimumPrice
+                override fun visitBulkWithProration(bulkWithProration: BulkWithProrationPrice) {
+                    bulkWithProration.validate()
+                }
+
+                override fun visitGroupedTieredPackage(
+                    groupedTieredPackage: GroupedTieredPackagePrice
                 ) {
-                    groupedWithProratedMinimumPrice.validate()
+                    groupedTieredPackage.validate()
                 }
 
-                override fun visitGroupedWithMeteredMinimumPrice(
-                    groupedWithMeteredMinimumPrice: GroupedWithMeteredMinimumPrice
-                ) {
-                    groupedWithMeteredMinimumPrice.validate()
-                }
-
-                override fun visitMatrixWithDisplayNamePrice(
-                    matrixWithDisplayNamePrice: MatrixWithDisplayNamePrice
-                ) {
-                    matrixWithDisplayNamePrice.validate()
-                }
-
-                override fun visitBulkWithProrationPrice(
-                    bulkWithProrationPrice: BulkWithProrationPrice
-                ) {
-                    bulkWithProrationPrice.validate()
-                }
-
-                override fun visitGroupedTieredPackagePrice(
-                    groupedTieredPackagePrice: GroupedTieredPackagePrice
-                ) {
-                    groupedTieredPackagePrice.validate()
-                }
-
-                override fun visitMaxGroupTieredPrice(maxGroupTieredPrice: MaxGroupTieredPrice) {
-                    maxGroupTieredPrice.validate()
+                override fun visitMaxGroupTiered(maxGroupTiered: MaxGroupTieredPrice) {
+                    maxGroupTiered.validate()
                 }
             }
         )
@@ -447,210 +425,191 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Price && unitPrice == other.unitPrice && packagePrice == other.packagePrice && matrixPrice == other.matrixPrice && tieredPrice == other.tieredPrice && tieredBpsPrice == other.tieredBpsPrice && bpsPrice == other.bpsPrice && bulkBpsPrice == other.bulkBpsPrice && bulkPrice == other.bulkPrice && thresholdTotalAmountPrice == other.thresholdTotalAmountPrice && tieredPackagePrice == other.tieredPackagePrice && groupedTieredPrice == other.groupedTieredPrice && tieredWithMinimumPrice == other.tieredWithMinimumPrice && tieredPackageWithMinimumPrice == other.tieredPackageWithMinimumPrice && packageWithAllocationPrice == other.packageWithAllocationPrice && unitWithPercentPrice == other.unitWithPercentPrice && matrixWithAllocationPrice == other.matrixWithAllocationPrice && tieredWithProrationPrice == other.tieredWithProrationPrice && unitWithProrationPrice == other.unitWithProrationPrice && groupedAllocationPrice == other.groupedAllocationPrice && groupedWithProratedMinimumPrice == other.groupedWithProratedMinimumPrice && groupedWithMeteredMinimumPrice == other.groupedWithMeteredMinimumPrice && matrixWithDisplayNamePrice == other.matrixWithDisplayNamePrice && bulkWithProrationPrice == other.bulkWithProrationPrice && groupedTieredPackagePrice == other.groupedTieredPackagePrice && maxGroupTieredPrice == other.maxGroupTieredPrice /* spotless:on */
+        return /* spotless:off */ other is Price && unit == other.unit && packagePrice == other.packagePrice && matrix == other.matrix && tiered == other.tiered && tieredBps == other.tieredBps && bps == other.bps && bulkBps == other.bulkBps && bulk == other.bulk && thresholdTotalAmount == other.thresholdTotalAmount && tieredPackage == other.tieredPackage && groupedTiered == other.groupedTiered && tieredWithMinimum == other.tieredWithMinimum && tieredPackageWithMinimum == other.tieredPackageWithMinimum && packageWithAllocation == other.packageWithAllocation && unitWithPercent == other.unitWithPercent && matrixWithAllocation == other.matrixWithAllocation && tieredWithProration == other.tieredWithProration && unitWithProration == other.unitWithProration && groupedAllocation == other.groupedAllocation && groupedWithProratedMinimum == other.groupedWithProratedMinimum && groupedWithMeteredMinimum == other.groupedWithMeteredMinimum && matrixWithDisplayName == other.matrixWithDisplayName && bulkWithProration == other.bulkWithProration && groupedTieredPackage == other.groupedTieredPackage && maxGroupTiered == other.maxGroupTiered /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(unitPrice, packagePrice, matrixPrice, tieredPrice, tieredBpsPrice, bpsPrice, bulkBpsPrice, bulkPrice, thresholdTotalAmountPrice, tieredPackagePrice, groupedTieredPrice, tieredWithMinimumPrice, tieredPackageWithMinimumPrice, packageWithAllocationPrice, unitWithPercentPrice, matrixWithAllocationPrice, tieredWithProrationPrice, unitWithProrationPrice, groupedAllocationPrice, groupedWithProratedMinimumPrice, groupedWithMeteredMinimumPrice, matrixWithDisplayNamePrice, bulkWithProrationPrice, groupedTieredPackagePrice, maxGroupTieredPrice) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, packagePrice, matrix, tiered, tieredBps, bps, bulkBps, bulk, thresholdTotalAmount, tieredPackage, groupedTiered, tieredWithMinimum, tieredPackageWithMinimum, packageWithAllocation, unitWithPercent, matrixWithAllocation, tieredWithProration, unitWithProration, groupedAllocation, groupedWithProratedMinimum, groupedWithMeteredMinimum, matrixWithDisplayName, bulkWithProration, groupedTieredPackage, maxGroupTiered) /* spotless:on */
 
     override fun toString(): String =
         when {
-            unitPrice != null -> "Price{unitPrice=$unitPrice}"
+            unit != null -> "Price{unit=$unit}"
             packagePrice != null -> "Price{packagePrice=$packagePrice}"
-            matrixPrice != null -> "Price{matrixPrice=$matrixPrice}"
-            tieredPrice != null -> "Price{tieredPrice=$tieredPrice}"
-            tieredBpsPrice != null -> "Price{tieredBpsPrice=$tieredBpsPrice}"
-            bpsPrice != null -> "Price{bpsPrice=$bpsPrice}"
-            bulkBpsPrice != null -> "Price{bulkBpsPrice=$bulkBpsPrice}"
-            bulkPrice != null -> "Price{bulkPrice=$bulkPrice}"
-            thresholdTotalAmountPrice != null ->
-                "Price{thresholdTotalAmountPrice=$thresholdTotalAmountPrice}"
-            tieredPackagePrice != null -> "Price{tieredPackagePrice=$tieredPackagePrice}"
-            groupedTieredPrice != null -> "Price{groupedTieredPrice=$groupedTieredPrice}"
-            tieredWithMinimumPrice != null ->
-                "Price{tieredWithMinimumPrice=$tieredWithMinimumPrice}"
-            tieredPackageWithMinimumPrice != null ->
-                "Price{tieredPackageWithMinimumPrice=$tieredPackageWithMinimumPrice}"
-            packageWithAllocationPrice != null ->
-                "Price{packageWithAllocationPrice=$packageWithAllocationPrice}"
-            unitWithPercentPrice != null -> "Price{unitWithPercentPrice=$unitWithPercentPrice}"
-            matrixWithAllocationPrice != null ->
-                "Price{matrixWithAllocationPrice=$matrixWithAllocationPrice}"
-            tieredWithProrationPrice != null ->
-                "Price{tieredWithProrationPrice=$tieredWithProrationPrice}"
-            unitWithProrationPrice != null ->
-                "Price{unitWithProrationPrice=$unitWithProrationPrice}"
-            groupedAllocationPrice != null ->
-                "Price{groupedAllocationPrice=$groupedAllocationPrice}"
-            groupedWithProratedMinimumPrice != null ->
-                "Price{groupedWithProratedMinimumPrice=$groupedWithProratedMinimumPrice}"
-            groupedWithMeteredMinimumPrice != null ->
-                "Price{groupedWithMeteredMinimumPrice=$groupedWithMeteredMinimumPrice}"
-            matrixWithDisplayNamePrice != null ->
-                "Price{matrixWithDisplayNamePrice=$matrixWithDisplayNamePrice}"
-            bulkWithProrationPrice != null ->
-                "Price{bulkWithProrationPrice=$bulkWithProrationPrice}"
-            groupedTieredPackagePrice != null ->
-                "Price{groupedTieredPackagePrice=$groupedTieredPackagePrice}"
-            maxGroupTieredPrice != null -> "Price{maxGroupTieredPrice=$maxGroupTieredPrice}"
+            matrix != null -> "Price{matrix=$matrix}"
+            tiered != null -> "Price{tiered=$tiered}"
+            tieredBps != null -> "Price{tieredBps=$tieredBps}"
+            bps != null -> "Price{bps=$bps}"
+            bulkBps != null -> "Price{bulkBps=$bulkBps}"
+            bulk != null -> "Price{bulk=$bulk}"
+            thresholdTotalAmount != null -> "Price{thresholdTotalAmount=$thresholdTotalAmount}"
+            tieredPackage != null -> "Price{tieredPackage=$tieredPackage}"
+            groupedTiered != null -> "Price{groupedTiered=$groupedTiered}"
+            tieredWithMinimum != null -> "Price{tieredWithMinimum=$tieredWithMinimum}"
+            tieredPackageWithMinimum != null ->
+                "Price{tieredPackageWithMinimum=$tieredPackageWithMinimum}"
+            packageWithAllocation != null -> "Price{packageWithAllocation=$packageWithAllocation}"
+            unitWithPercent != null -> "Price{unitWithPercent=$unitWithPercent}"
+            matrixWithAllocation != null -> "Price{matrixWithAllocation=$matrixWithAllocation}"
+            tieredWithProration != null -> "Price{tieredWithProration=$tieredWithProration}"
+            unitWithProration != null -> "Price{unitWithProration=$unitWithProration}"
+            groupedAllocation != null -> "Price{groupedAllocation=$groupedAllocation}"
+            groupedWithProratedMinimum != null ->
+                "Price{groupedWithProratedMinimum=$groupedWithProratedMinimum}"
+            groupedWithMeteredMinimum != null ->
+                "Price{groupedWithMeteredMinimum=$groupedWithMeteredMinimum}"
+            matrixWithDisplayName != null -> "Price{matrixWithDisplayName=$matrixWithDisplayName}"
+            bulkWithProration != null -> "Price{bulkWithProration=$bulkWithProration}"
+            groupedTieredPackage != null -> "Price{groupedTieredPackage=$groupedTieredPackage}"
+            maxGroupTiered != null -> "Price{maxGroupTiered=$maxGroupTiered}"
             _json != null -> "Price{_unknown=$_json}"
             else -> throw IllegalStateException("Invalid Price")
         }
 
     companion object {
 
-        @JvmStatic fun ofUnitPrice(unitPrice: UnitPrice) = Price(unitPrice = unitPrice)
+        @JvmStatic fun ofUnit(unit: UnitPrice) = Price(unit = unit)
 
         @JvmStatic
         fun ofPackagePrice(packagePrice: PackagePrice) = Price(packagePrice = packagePrice)
 
-        @JvmStatic fun ofMatrixPrice(matrixPrice: MatrixPrice) = Price(matrixPrice = matrixPrice)
+        @JvmStatic fun ofMatrix(matrix: MatrixPrice) = Price(matrix = matrix)
 
-        @JvmStatic fun ofTieredPrice(tieredPrice: TieredPrice) = Price(tieredPrice = tieredPrice)
+        @JvmStatic fun ofTiered(tiered: TieredPrice) = Price(tiered = tiered)
 
-        @JvmStatic
-        fun ofTieredBpsPrice(tieredBpsPrice: TieredBpsPrice) =
-            Price(tieredBpsPrice = tieredBpsPrice)
+        @JvmStatic fun ofTieredBps(tieredBps: TieredBpsPrice) = Price(tieredBps = tieredBps)
 
-        @JvmStatic fun ofBpsPrice(bpsPrice: BpsPrice) = Price(bpsPrice = bpsPrice)
+        @JvmStatic fun ofBps(bps: BpsPrice) = Price(bps = bps)
 
-        @JvmStatic
-        fun ofBulkBpsPrice(bulkBpsPrice: BulkBpsPrice) = Price(bulkBpsPrice = bulkBpsPrice)
+        @JvmStatic fun ofBulkBps(bulkBps: BulkBpsPrice) = Price(bulkBps = bulkBps)
 
-        @JvmStatic fun ofBulkPrice(bulkPrice: BulkPrice) = Price(bulkPrice = bulkPrice)
+        @JvmStatic fun ofBulk(bulk: BulkPrice) = Price(bulk = bulk)
 
         @JvmStatic
-        fun ofThresholdTotalAmountPrice(thresholdTotalAmountPrice: ThresholdTotalAmountPrice) =
-            Price(thresholdTotalAmountPrice = thresholdTotalAmountPrice)
+        fun ofThresholdTotalAmount(thresholdTotalAmount: ThresholdTotalAmountPrice) =
+            Price(thresholdTotalAmount = thresholdTotalAmount)
 
         @JvmStatic
-        fun ofTieredPackagePrice(tieredPackagePrice: TieredPackagePrice) =
-            Price(tieredPackagePrice = tieredPackagePrice)
+        fun ofTieredPackage(tieredPackage: TieredPackagePrice) =
+            Price(tieredPackage = tieredPackage)
 
         @JvmStatic
-        fun ofGroupedTieredPrice(groupedTieredPrice: GroupedTieredPrice) =
-            Price(groupedTieredPrice = groupedTieredPrice)
+        fun ofGroupedTiered(groupedTiered: GroupedTieredPrice) =
+            Price(groupedTiered = groupedTiered)
 
         @JvmStatic
-        fun ofTieredWithMinimumPrice(tieredWithMinimumPrice: TieredWithMinimumPrice) =
-            Price(tieredWithMinimumPrice = tieredWithMinimumPrice)
+        fun ofTieredWithMinimum(tieredWithMinimum: TieredWithMinimumPrice) =
+            Price(tieredWithMinimum = tieredWithMinimum)
 
         @JvmStatic
-        fun ofTieredPackageWithMinimumPrice(
-            tieredPackageWithMinimumPrice: TieredPackageWithMinimumPrice
-        ) = Price(tieredPackageWithMinimumPrice = tieredPackageWithMinimumPrice)
+        fun ofTieredPackageWithMinimum(tieredPackageWithMinimum: TieredPackageWithMinimumPrice) =
+            Price(tieredPackageWithMinimum = tieredPackageWithMinimum)
 
         @JvmStatic
-        fun ofPackageWithAllocationPrice(packageWithAllocationPrice: PackageWithAllocationPrice) =
-            Price(packageWithAllocationPrice = packageWithAllocationPrice)
+        fun ofPackageWithAllocation(packageWithAllocation: PackageWithAllocationPrice) =
+            Price(packageWithAllocation = packageWithAllocation)
 
         @JvmStatic
-        fun ofUnitWithPercentPrice(unitWithPercentPrice: UnitWithPercentPrice) =
-            Price(unitWithPercentPrice = unitWithPercentPrice)
+        fun ofUnitWithPercent(unitWithPercent: UnitWithPercentPrice) =
+            Price(unitWithPercent = unitWithPercent)
 
         @JvmStatic
-        fun ofMatrixWithAllocationPrice(matrixWithAllocationPrice: MatrixWithAllocationPrice) =
-            Price(matrixWithAllocationPrice = matrixWithAllocationPrice)
+        fun ofMatrixWithAllocation(matrixWithAllocation: MatrixWithAllocationPrice) =
+            Price(matrixWithAllocation = matrixWithAllocation)
 
         @JvmStatic
-        fun ofTieredWithProrationPrice(tieredWithProrationPrice: TieredWithProrationPrice) =
-            Price(tieredWithProrationPrice = tieredWithProrationPrice)
+        fun ofTieredWithProration(tieredWithProration: TieredWithProrationPrice) =
+            Price(tieredWithProration = tieredWithProration)
 
         @JvmStatic
-        fun ofUnitWithProrationPrice(unitWithProrationPrice: UnitWithProrationPrice) =
-            Price(unitWithProrationPrice = unitWithProrationPrice)
+        fun ofUnitWithProration(unitWithProration: UnitWithProrationPrice) =
+            Price(unitWithProration = unitWithProration)
 
         @JvmStatic
-        fun ofGroupedAllocationPrice(groupedAllocationPrice: GroupedAllocationPrice) =
-            Price(groupedAllocationPrice = groupedAllocationPrice)
+        fun ofGroupedAllocation(groupedAllocation: GroupedAllocationPrice) =
+            Price(groupedAllocation = groupedAllocation)
 
         @JvmStatic
-        fun ofGroupedWithProratedMinimumPrice(
-            groupedWithProratedMinimumPrice: GroupedWithProratedMinimumPrice
-        ) = Price(groupedWithProratedMinimumPrice = groupedWithProratedMinimumPrice)
+        fun ofGroupedWithProratedMinimum(
+            groupedWithProratedMinimum: GroupedWithProratedMinimumPrice
+        ) = Price(groupedWithProratedMinimum = groupedWithProratedMinimum)
 
         @JvmStatic
-        fun ofGroupedWithMeteredMinimumPrice(
-            groupedWithMeteredMinimumPrice: GroupedWithMeteredMinimumPrice
-        ) = Price(groupedWithMeteredMinimumPrice = groupedWithMeteredMinimumPrice)
+        fun ofGroupedWithMeteredMinimum(groupedWithMeteredMinimum: GroupedWithMeteredMinimumPrice) =
+            Price(groupedWithMeteredMinimum = groupedWithMeteredMinimum)
 
         @JvmStatic
-        fun ofMatrixWithDisplayNamePrice(matrixWithDisplayNamePrice: MatrixWithDisplayNamePrice) =
-            Price(matrixWithDisplayNamePrice = matrixWithDisplayNamePrice)
+        fun ofMatrixWithDisplayName(matrixWithDisplayName: MatrixWithDisplayNamePrice) =
+            Price(matrixWithDisplayName = matrixWithDisplayName)
 
         @JvmStatic
-        fun ofBulkWithProrationPrice(bulkWithProrationPrice: BulkWithProrationPrice) =
-            Price(bulkWithProrationPrice = bulkWithProrationPrice)
+        fun ofBulkWithProration(bulkWithProration: BulkWithProrationPrice) =
+            Price(bulkWithProration = bulkWithProration)
 
         @JvmStatic
-        fun ofGroupedTieredPackagePrice(groupedTieredPackagePrice: GroupedTieredPackagePrice) =
-            Price(groupedTieredPackagePrice = groupedTieredPackagePrice)
+        fun ofGroupedTieredPackage(groupedTieredPackage: GroupedTieredPackagePrice) =
+            Price(groupedTieredPackage = groupedTieredPackage)
 
         @JvmStatic
-        fun ofMaxGroupTieredPrice(maxGroupTieredPrice: MaxGroupTieredPrice) =
-            Price(maxGroupTieredPrice = maxGroupTieredPrice)
+        fun ofMaxGroupTiered(maxGroupTiered: MaxGroupTieredPrice) =
+            Price(maxGroupTiered = maxGroupTiered)
     }
 
     interface Visitor<out T> {
 
-        fun visitUnitPrice(unitPrice: UnitPrice): T
+        fun visitUnit(unit: UnitPrice): T
 
         fun visitPackagePrice(packagePrice: PackagePrice): T
 
-        fun visitMatrixPrice(matrixPrice: MatrixPrice): T
+        fun visitMatrix(matrix: MatrixPrice): T
 
-        fun visitTieredPrice(tieredPrice: TieredPrice): T
+        fun visitTiered(tiered: TieredPrice): T
 
-        fun visitTieredBpsPrice(tieredBpsPrice: TieredBpsPrice): T
+        fun visitTieredBps(tieredBps: TieredBpsPrice): T
 
-        fun visitBpsPrice(bpsPrice: BpsPrice): T
+        fun visitBps(bps: BpsPrice): T
 
-        fun visitBulkBpsPrice(bulkBpsPrice: BulkBpsPrice): T
+        fun visitBulkBps(bulkBps: BulkBpsPrice): T
 
-        fun visitBulkPrice(bulkPrice: BulkPrice): T
+        fun visitBulk(bulk: BulkPrice): T
 
-        fun visitThresholdTotalAmountPrice(thresholdTotalAmountPrice: ThresholdTotalAmountPrice): T
+        fun visitThresholdTotalAmount(thresholdTotalAmount: ThresholdTotalAmountPrice): T
 
-        fun visitTieredPackagePrice(tieredPackagePrice: TieredPackagePrice): T
+        fun visitTieredPackage(tieredPackage: TieredPackagePrice): T
 
-        fun visitGroupedTieredPrice(groupedTieredPrice: GroupedTieredPrice): T
+        fun visitGroupedTiered(groupedTiered: GroupedTieredPrice): T
 
-        fun visitTieredWithMinimumPrice(tieredWithMinimumPrice: TieredWithMinimumPrice): T
+        fun visitTieredWithMinimum(tieredWithMinimum: TieredWithMinimumPrice): T
 
-        fun visitTieredPackageWithMinimumPrice(
-            tieredPackageWithMinimumPrice: TieredPackageWithMinimumPrice
+        fun visitTieredPackageWithMinimum(
+            tieredPackageWithMinimum: TieredPackageWithMinimumPrice
         ): T
 
-        fun visitPackageWithAllocationPrice(
-            packageWithAllocationPrice: PackageWithAllocationPrice
+        fun visitPackageWithAllocation(packageWithAllocation: PackageWithAllocationPrice): T
+
+        fun visitUnitWithPercent(unitWithPercent: UnitWithPercentPrice): T
+
+        fun visitMatrixWithAllocation(matrixWithAllocation: MatrixWithAllocationPrice): T
+
+        fun visitTieredWithProration(tieredWithProration: TieredWithProrationPrice): T
+
+        fun visitUnitWithProration(unitWithProration: UnitWithProrationPrice): T
+
+        fun visitGroupedAllocation(groupedAllocation: GroupedAllocationPrice): T
+
+        fun visitGroupedWithProratedMinimum(
+            groupedWithProratedMinimum: GroupedWithProratedMinimumPrice
         ): T
 
-        fun visitUnitWithPercentPrice(unitWithPercentPrice: UnitWithPercentPrice): T
-
-        fun visitMatrixWithAllocationPrice(matrixWithAllocationPrice: MatrixWithAllocationPrice): T
-
-        fun visitTieredWithProrationPrice(tieredWithProrationPrice: TieredWithProrationPrice): T
-
-        fun visitUnitWithProrationPrice(unitWithProrationPrice: UnitWithProrationPrice): T
-
-        fun visitGroupedAllocationPrice(groupedAllocationPrice: GroupedAllocationPrice): T
-
-        fun visitGroupedWithProratedMinimumPrice(
-            groupedWithProratedMinimumPrice: GroupedWithProratedMinimumPrice
+        fun visitGroupedWithMeteredMinimum(
+            groupedWithMeteredMinimum: GroupedWithMeteredMinimumPrice
         ): T
 
-        fun visitGroupedWithMeteredMinimumPrice(
-            groupedWithMeteredMinimumPrice: GroupedWithMeteredMinimumPrice
-        ): T
+        fun visitMatrixWithDisplayName(matrixWithDisplayName: MatrixWithDisplayNamePrice): T
 
-        fun visitMatrixWithDisplayNamePrice(
-            matrixWithDisplayNamePrice: MatrixWithDisplayNamePrice
-        ): T
+        fun visitBulkWithProration(bulkWithProration: BulkWithProrationPrice): T
 
-        fun visitBulkWithProrationPrice(bulkWithProrationPrice: BulkWithProrationPrice): T
+        fun visitGroupedTieredPackage(groupedTieredPackage: GroupedTieredPackagePrice): T
 
-        fun visitGroupedTieredPackagePrice(groupedTieredPackagePrice: GroupedTieredPackagePrice): T
-
-        fun visitMaxGroupTieredPrice(maxGroupTieredPrice: MaxGroupTieredPrice): T
+        fun visitMaxGroupTiered(maxGroupTiered: MaxGroupTieredPrice): T
 
         fun unknown(json: JsonValue?): T {
             throw OrbInvalidDataException("Unknown Price: $json")
@@ -667,7 +626,7 @@ private constructor(
                 "unit" -> {
                     tryDeserialize(node, jacksonTypeRef<UnitPrice>()) { it.validate() }
                         ?.let {
-                            return Price(unitPrice = it, _json = json)
+                            return Price(unit = it, _json = json)
                         }
                 }
                 "package" -> {
@@ -679,37 +638,37 @@ private constructor(
                 "matrix" -> {
                     tryDeserialize(node, jacksonTypeRef<MatrixPrice>()) { it.validate() }
                         ?.let {
-                            return Price(matrixPrice = it, _json = json)
+                            return Price(matrix = it, _json = json)
                         }
                 }
                 "tiered" -> {
                     tryDeserialize(node, jacksonTypeRef<TieredPrice>()) { it.validate() }
                         ?.let {
-                            return Price(tieredPrice = it, _json = json)
+                            return Price(tiered = it, _json = json)
                         }
                 }
                 "tiered_bps" -> {
                     tryDeserialize(node, jacksonTypeRef<TieredBpsPrice>()) { it.validate() }
                         ?.let {
-                            return Price(tieredBpsPrice = it, _json = json)
+                            return Price(tieredBps = it, _json = json)
                         }
                 }
                 "bps" -> {
                     tryDeserialize(node, jacksonTypeRef<BpsPrice>()) { it.validate() }
                         ?.let {
-                            return Price(bpsPrice = it, _json = json)
+                            return Price(bps = it, _json = json)
                         }
                 }
                 "bulk_bps" -> {
                     tryDeserialize(node, jacksonTypeRef<BulkBpsPrice>()) { it.validate() }
                         ?.let {
-                            return Price(bulkBpsPrice = it, _json = json)
+                            return Price(bulkBps = it, _json = json)
                         }
                 }
                 "bulk" -> {
                     tryDeserialize(node, jacksonTypeRef<BulkPrice>()) { it.validate() }
                         ?.let {
-                            return Price(bulkPrice = it, _json = json)
+                            return Price(bulk = it, _json = json)
                         }
                 }
                 "threshold_total_amount" -> {
@@ -717,25 +676,25 @@ private constructor(
                             it.validate()
                         }
                         ?.let {
-                            return Price(thresholdTotalAmountPrice = it, _json = json)
+                            return Price(thresholdTotalAmount = it, _json = json)
                         }
                 }
                 "tiered_package" -> {
                     tryDeserialize(node, jacksonTypeRef<TieredPackagePrice>()) { it.validate() }
                         ?.let {
-                            return Price(tieredPackagePrice = it, _json = json)
+                            return Price(tieredPackage = it, _json = json)
                         }
                 }
                 "grouped_tiered" -> {
                     tryDeserialize(node, jacksonTypeRef<GroupedTieredPrice>()) { it.validate() }
                         ?.let {
-                            return Price(groupedTieredPrice = it, _json = json)
+                            return Price(groupedTiered = it, _json = json)
                         }
                 }
                 "tiered_with_minimum" -> {
                     tryDeserialize(node, jacksonTypeRef<TieredWithMinimumPrice>()) { it.validate() }
                         ?.let {
-                            return Price(tieredWithMinimumPrice = it, _json = json)
+                            return Price(tieredWithMinimum = it, _json = json)
                         }
                 }
                 "tiered_package_with_minimum" -> {
@@ -743,7 +702,7 @@ private constructor(
                             it.validate()
                         }
                         ?.let {
-                            return Price(tieredPackageWithMinimumPrice = it, _json = json)
+                            return Price(tieredPackageWithMinimum = it, _json = json)
                         }
                 }
                 "package_with_allocation" -> {
@@ -751,13 +710,13 @@ private constructor(
                             it.validate()
                         }
                         ?.let {
-                            return Price(packageWithAllocationPrice = it, _json = json)
+                            return Price(packageWithAllocation = it, _json = json)
                         }
                 }
                 "unit_with_percent" -> {
                     tryDeserialize(node, jacksonTypeRef<UnitWithPercentPrice>()) { it.validate() }
                         ?.let {
-                            return Price(unitWithPercentPrice = it, _json = json)
+                            return Price(unitWithPercent = it, _json = json)
                         }
                 }
                 "matrix_with_allocation" -> {
@@ -765,7 +724,7 @@ private constructor(
                             it.validate()
                         }
                         ?.let {
-                            return Price(matrixWithAllocationPrice = it, _json = json)
+                            return Price(matrixWithAllocation = it, _json = json)
                         }
                 }
                 "tiered_with_proration" -> {
@@ -773,19 +732,19 @@ private constructor(
                             it.validate()
                         }
                         ?.let {
-                            return Price(tieredWithProrationPrice = it, _json = json)
+                            return Price(tieredWithProration = it, _json = json)
                         }
                 }
                 "unit_with_proration" -> {
                     tryDeserialize(node, jacksonTypeRef<UnitWithProrationPrice>()) { it.validate() }
                         ?.let {
-                            return Price(unitWithProrationPrice = it, _json = json)
+                            return Price(unitWithProration = it, _json = json)
                         }
                 }
                 "grouped_allocation" -> {
                     tryDeserialize(node, jacksonTypeRef<GroupedAllocationPrice>()) { it.validate() }
                         ?.let {
-                            return Price(groupedAllocationPrice = it, _json = json)
+                            return Price(groupedAllocation = it, _json = json)
                         }
                 }
                 "grouped_with_prorated_minimum" -> {
@@ -793,7 +752,7 @@ private constructor(
                             it.validate()
                         }
                         ?.let {
-                            return Price(groupedWithProratedMinimumPrice = it, _json = json)
+                            return Price(groupedWithProratedMinimum = it, _json = json)
                         }
                 }
                 "grouped_with_metered_minimum" -> {
@@ -801,7 +760,7 @@ private constructor(
                             it.validate()
                         }
                         ?.let {
-                            return Price(groupedWithMeteredMinimumPrice = it, _json = json)
+                            return Price(groupedWithMeteredMinimum = it, _json = json)
                         }
                 }
                 "matrix_with_display_name" -> {
@@ -809,13 +768,13 @@ private constructor(
                             it.validate()
                         }
                         ?.let {
-                            return Price(matrixWithDisplayNamePrice = it, _json = json)
+                            return Price(matrixWithDisplayName = it, _json = json)
                         }
                 }
                 "bulk_with_proration" -> {
                     tryDeserialize(node, jacksonTypeRef<BulkWithProrationPrice>()) { it.validate() }
                         ?.let {
-                            return Price(bulkWithProrationPrice = it, _json = json)
+                            return Price(bulkWithProration = it, _json = json)
                         }
                 }
                 "grouped_tiered_package" -> {
@@ -823,13 +782,13 @@ private constructor(
                             it.validate()
                         }
                         ?.let {
-                            return Price(groupedTieredPackagePrice = it, _json = json)
+                            return Price(groupedTieredPackage = it, _json = json)
                         }
                 }
                 "max_group_tiered" -> {
                     tryDeserialize(node, jacksonTypeRef<MaxGroupTieredPrice>()) { it.validate() }
                         ?.let {
-                            return Price(maxGroupTieredPrice = it, _json = json)
+                            return Price(maxGroupTiered = it, _json = json)
                         }
                 }
             }
@@ -846,46 +805,40 @@ private constructor(
             provider: SerializerProvider
         ) {
             when {
-                value.unitPrice != null -> generator.writeObject(value.unitPrice)
+                value.unit != null -> generator.writeObject(value.unit)
                 value.packagePrice != null -> generator.writeObject(value.packagePrice)
-                value.matrixPrice != null -> generator.writeObject(value.matrixPrice)
-                value.tieredPrice != null -> generator.writeObject(value.tieredPrice)
-                value.tieredBpsPrice != null -> generator.writeObject(value.tieredBpsPrice)
-                value.bpsPrice != null -> generator.writeObject(value.bpsPrice)
-                value.bulkBpsPrice != null -> generator.writeObject(value.bulkBpsPrice)
-                value.bulkPrice != null -> generator.writeObject(value.bulkPrice)
-                value.thresholdTotalAmountPrice != null ->
-                    generator.writeObject(value.thresholdTotalAmountPrice)
-                value.tieredPackagePrice != null -> generator.writeObject(value.tieredPackagePrice)
-                value.groupedTieredPrice != null -> generator.writeObject(value.groupedTieredPrice)
-                value.tieredWithMinimumPrice != null ->
-                    generator.writeObject(value.tieredWithMinimumPrice)
-                value.tieredPackageWithMinimumPrice != null ->
-                    generator.writeObject(value.tieredPackageWithMinimumPrice)
-                value.packageWithAllocationPrice != null ->
-                    generator.writeObject(value.packageWithAllocationPrice)
-                value.unitWithPercentPrice != null ->
-                    generator.writeObject(value.unitWithPercentPrice)
-                value.matrixWithAllocationPrice != null ->
-                    generator.writeObject(value.matrixWithAllocationPrice)
-                value.tieredWithProrationPrice != null ->
-                    generator.writeObject(value.tieredWithProrationPrice)
-                value.unitWithProrationPrice != null ->
-                    generator.writeObject(value.unitWithProrationPrice)
-                value.groupedAllocationPrice != null ->
-                    generator.writeObject(value.groupedAllocationPrice)
-                value.groupedWithProratedMinimumPrice != null ->
-                    generator.writeObject(value.groupedWithProratedMinimumPrice)
-                value.groupedWithMeteredMinimumPrice != null ->
-                    generator.writeObject(value.groupedWithMeteredMinimumPrice)
-                value.matrixWithDisplayNamePrice != null ->
-                    generator.writeObject(value.matrixWithDisplayNamePrice)
-                value.bulkWithProrationPrice != null ->
-                    generator.writeObject(value.bulkWithProrationPrice)
-                value.groupedTieredPackagePrice != null ->
-                    generator.writeObject(value.groupedTieredPackagePrice)
-                value.maxGroupTieredPrice != null ->
-                    generator.writeObject(value.maxGroupTieredPrice)
+                value.matrix != null -> generator.writeObject(value.matrix)
+                value.tiered != null -> generator.writeObject(value.tiered)
+                value.tieredBps != null -> generator.writeObject(value.tieredBps)
+                value.bps != null -> generator.writeObject(value.bps)
+                value.bulkBps != null -> generator.writeObject(value.bulkBps)
+                value.bulk != null -> generator.writeObject(value.bulk)
+                value.thresholdTotalAmount != null ->
+                    generator.writeObject(value.thresholdTotalAmount)
+                value.tieredPackage != null -> generator.writeObject(value.tieredPackage)
+                value.groupedTiered != null -> generator.writeObject(value.groupedTiered)
+                value.tieredWithMinimum != null -> generator.writeObject(value.tieredWithMinimum)
+                value.tieredPackageWithMinimum != null ->
+                    generator.writeObject(value.tieredPackageWithMinimum)
+                value.packageWithAllocation != null ->
+                    generator.writeObject(value.packageWithAllocation)
+                value.unitWithPercent != null -> generator.writeObject(value.unitWithPercent)
+                value.matrixWithAllocation != null ->
+                    generator.writeObject(value.matrixWithAllocation)
+                value.tieredWithProration != null ->
+                    generator.writeObject(value.tieredWithProration)
+                value.unitWithProration != null -> generator.writeObject(value.unitWithProration)
+                value.groupedAllocation != null -> generator.writeObject(value.groupedAllocation)
+                value.groupedWithProratedMinimum != null ->
+                    generator.writeObject(value.groupedWithProratedMinimum)
+                value.groupedWithMeteredMinimum != null ->
+                    generator.writeObject(value.groupedWithMeteredMinimum)
+                value.matrixWithDisplayName != null ->
+                    generator.writeObject(value.matrixWithDisplayName)
+                value.bulkWithProration != null -> generator.writeObject(value.bulkWithProration)
+                value.groupedTieredPackage != null ->
+                    generator.writeObject(value.groupedTieredPackage)
+                value.maxGroupTiered != null -> generator.writeObject(value.maxGroupTiered)
                 value._json != null -> generator.writeObject(value._json)
                 else -> throw IllegalStateException("Invalid Price")
             }
@@ -1274,17 +1227,14 @@ private constructor(
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
-            fun discount(percentageDiscount: PercentageDiscount) =
-                discount(Discount.ofPercentageDiscount(percentageDiscount))
+            fun discount(percentage: PercentageDiscount) =
+                discount(Discount.ofPercentage(percentage))
 
-            fun discount(trialDiscount: TrialDiscount) =
-                discount(Discount.ofTrialDiscount(trialDiscount))
+            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
 
-            fun discount(usageDiscount: Discount.UsageDiscount) =
-                discount(Discount.ofUsageDiscount(usageDiscount))
+            fun discount(usage: Discount.UsageDiscount) = discount(Discount.ofUsage(usage))
 
-            fun discount(amountDiscount: AmountDiscount) =
-                discount(Discount.ofAmountDiscount(amountDiscount))
+            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
             fun externalPriceId(externalPriceId: String?) =
                 externalPriceId(JsonField.ofNullable(externalPriceId))
@@ -3244,17 +3194,14 @@ private constructor(
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
-            fun discount(percentageDiscount: PercentageDiscount) =
-                discount(Discount.ofPercentageDiscount(percentageDiscount))
+            fun discount(percentage: PercentageDiscount) =
+                discount(Discount.ofPercentage(percentage))
 
-            fun discount(trialDiscount: TrialDiscount) =
-                discount(Discount.ofTrialDiscount(trialDiscount))
+            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
 
-            fun discount(usageDiscount: Discount.UsageDiscount) =
-                discount(Discount.ofUsageDiscount(usageDiscount))
+            fun discount(usage: Discount.UsageDiscount) = discount(Discount.ofUsage(usage))
 
-            fun discount(amountDiscount: AmountDiscount) =
-                discount(Discount.ofAmountDiscount(amountDiscount))
+            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
             fun externalPriceId(externalPriceId: String?) =
                 externalPriceId(JsonField.ofNullable(externalPriceId))
@@ -5251,17 +5198,14 @@ private constructor(
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
-            fun discount(percentageDiscount: PercentageDiscount) =
-                discount(Discount.ofPercentageDiscount(percentageDiscount))
+            fun discount(percentage: PercentageDiscount) =
+                discount(Discount.ofPercentage(percentage))
 
-            fun discount(trialDiscount: TrialDiscount) =
-                discount(Discount.ofTrialDiscount(trialDiscount))
+            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
 
-            fun discount(usageDiscount: Discount.UsageDiscount) =
-                discount(Discount.ofUsageDiscount(usageDiscount))
+            fun discount(usage: Discount.UsageDiscount) = discount(Discount.ofUsage(usage))
 
-            fun discount(amountDiscount: AmountDiscount) =
-                discount(Discount.ofAmountDiscount(amountDiscount))
+            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
             fun externalPriceId(externalPriceId: String?) =
                 externalPriceId(JsonField.ofNullable(externalPriceId))
@@ -7469,17 +7413,14 @@ private constructor(
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
-            fun discount(percentageDiscount: PercentageDiscount) =
-                discount(Discount.ofPercentageDiscount(percentageDiscount))
+            fun discount(percentage: PercentageDiscount) =
+                discount(Discount.ofPercentage(percentage))
 
-            fun discount(trialDiscount: TrialDiscount) =
-                discount(Discount.ofTrialDiscount(trialDiscount))
+            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
 
-            fun discount(usageDiscount: Discount.UsageDiscount) =
-                discount(Discount.ofUsageDiscount(usageDiscount))
+            fun discount(usage: Discount.UsageDiscount) = discount(Discount.ofUsage(usage))
 
-            fun discount(amountDiscount: AmountDiscount) =
-                discount(Discount.ofAmountDiscount(amountDiscount))
+            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
             fun externalPriceId(externalPriceId: String?) =
                 externalPriceId(JsonField.ofNullable(externalPriceId))
@@ -9611,17 +9552,14 @@ private constructor(
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
-            fun discount(percentageDiscount: PercentageDiscount) =
-                discount(Discount.ofPercentageDiscount(percentageDiscount))
+            fun discount(percentage: PercentageDiscount) =
+                discount(Discount.ofPercentage(percentage))
 
-            fun discount(trialDiscount: TrialDiscount) =
-                discount(Discount.ofTrialDiscount(trialDiscount))
+            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
 
-            fun discount(usageDiscount: Discount.UsageDiscount) =
-                discount(Discount.ofUsageDiscount(usageDiscount))
+            fun discount(usage: Discount.UsageDiscount) = discount(Discount.ofUsage(usage))
 
-            fun discount(amountDiscount: AmountDiscount) =
-                discount(Discount.ofAmountDiscount(amountDiscount))
+            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
             fun externalPriceId(externalPriceId: String?) =
                 externalPriceId(JsonField.ofNullable(externalPriceId))
@@ -11796,17 +11734,14 @@ private constructor(
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
-            fun discount(percentageDiscount: PercentageDiscount) =
-                discount(Discount.ofPercentageDiscount(percentageDiscount))
+            fun discount(percentage: PercentageDiscount) =
+                discount(Discount.ofPercentage(percentage))
 
-            fun discount(trialDiscount: TrialDiscount) =
-                discount(Discount.ofTrialDiscount(trialDiscount))
+            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
 
-            fun discount(usageDiscount: Discount.UsageDiscount) =
-                discount(Discount.ofUsageDiscount(usageDiscount))
+            fun discount(usage: Discount.UsageDiscount) = discount(Discount.ofUsage(usage))
 
-            fun discount(amountDiscount: AmountDiscount) =
-                discount(Discount.ofAmountDiscount(amountDiscount))
+            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
             fun externalPriceId(externalPriceId: String?) =
                 externalPriceId(JsonField.ofNullable(externalPriceId))
@@ -13792,17 +13727,14 @@ private constructor(
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
-            fun discount(percentageDiscount: PercentageDiscount) =
-                discount(Discount.ofPercentageDiscount(percentageDiscount))
+            fun discount(percentage: PercentageDiscount) =
+                discount(Discount.ofPercentage(percentage))
 
-            fun discount(trialDiscount: TrialDiscount) =
-                discount(Discount.ofTrialDiscount(trialDiscount))
+            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
 
-            fun discount(usageDiscount: Discount.UsageDiscount) =
-                discount(Discount.ofUsageDiscount(usageDiscount))
+            fun discount(usage: Discount.UsageDiscount) = discount(Discount.ofUsage(usage))
 
-            fun discount(amountDiscount: AmountDiscount) =
-                discount(Discount.ofAmountDiscount(amountDiscount))
+            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
             fun externalPriceId(externalPriceId: String?) =
                 externalPriceId(JsonField.ofNullable(externalPriceId))
@@ -15950,17 +15882,14 @@ private constructor(
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
-            fun discount(percentageDiscount: PercentageDiscount) =
-                discount(Discount.ofPercentageDiscount(percentageDiscount))
+            fun discount(percentage: PercentageDiscount) =
+                discount(Discount.ofPercentage(percentage))
 
-            fun discount(trialDiscount: TrialDiscount) =
-                discount(Discount.ofTrialDiscount(trialDiscount))
+            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
 
-            fun discount(usageDiscount: Discount.UsageDiscount) =
-                discount(Discount.ofUsageDiscount(usageDiscount))
+            fun discount(usage: Discount.UsageDiscount) = discount(Discount.ofUsage(usage))
 
-            fun discount(amountDiscount: AmountDiscount) =
-                discount(Discount.ofAmountDiscount(amountDiscount))
+            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
             fun externalPriceId(externalPriceId: String?) =
                 externalPriceId(JsonField.ofNullable(externalPriceId))
@@ -18069,17 +17998,14 @@ private constructor(
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
-            fun discount(percentageDiscount: PercentageDiscount) =
-                discount(Discount.ofPercentageDiscount(percentageDiscount))
+            fun discount(percentage: PercentageDiscount) =
+                discount(Discount.ofPercentage(percentage))
 
-            fun discount(trialDiscount: TrialDiscount) =
-                discount(Discount.ofTrialDiscount(trialDiscount))
+            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
 
-            fun discount(usageDiscount: Discount.UsageDiscount) =
-                discount(Discount.ofUsageDiscount(usageDiscount))
+            fun discount(usage: Discount.UsageDiscount) = discount(Discount.ofUsage(usage))
 
-            fun discount(amountDiscount: AmountDiscount) =
-                discount(Discount.ofAmountDiscount(amountDiscount))
+            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
             fun externalPriceId(externalPriceId: String?) =
                 externalPriceId(JsonField.ofNullable(externalPriceId))
@@ -20017,17 +19943,14 @@ private constructor(
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
-            fun discount(percentageDiscount: PercentageDiscount) =
-                discount(Discount.ofPercentageDiscount(percentageDiscount))
+            fun discount(percentage: PercentageDiscount) =
+                discount(Discount.ofPercentage(percentage))
 
-            fun discount(trialDiscount: TrialDiscount) =
-                discount(Discount.ofTrialDiscount(trialDiscount))
+            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
 
-            fun discount(usageDiscount: Discount.UsageDiscount) =
-                discount(Discount.ofUsageDiscount(usageDiscount))
+            fun discount(usage: Discount.UsageDiscount) = discount(Discount.ofUsage(usage))
 
-            fun discount(amountDiscount: AmountDiscount) =
-                discount(Discount.ofAmountDiscount(amountDiscount))
+            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
             fun externalPriceId(externalPriceId: String?) =
                 externalPriceId(JsonField.ofNullable(externalPriceId))
@@ -21964,17 +21887,14 @@ private constructor(
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
-            fun discount(percentageDiscount: PercentageDiscount) =
-                discount(Discount.ofPercentageDiscount(percentageDiscount))
+            fun discount(percentage: PercentageDiscount) =
+                discount(Discount.ofPercentage(percentage))
 
-            fun discount(trialDiscount: TrialDiscount) =
-                discount(Discount.ofTrialDiscount(trialDiscount))
+            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
 
-            fun discount(usageDiscount: Discount.UsageDiscount) =
-                discount(Discount.ofUsageDiscount(usageDiscount))
+            fun discount(usage: Discount.UsageDiscount) = discount(Discount.ofUsage(usage))
 
-            fun discount(amountDiscount: AmountDiscount) =
-                discount(Discount.ofAmountDiscount(amountDiscount))
+            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
             fun externalPriceId(externalPriceId: String?) =
                 externalPriceId(JsonField.ofNullable(externalPriceId))
@@ -23911,17 +23831,14 @@ private constructor(
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
-            fun discount(percentageDiscount: PercentageDiscount) =
-                discount(Discount.ofPercentageDiscount(percentageDiscount))
+            fun discount(percentage: PercentageDiscount) =
+                discount(Discount.ofPercentage(percentage))
 
-            fun discount(trialDiscount: TrialDiscount) =
-                discount(Discount.ofTrialDiscount(trialDiscount))
+            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
 
-            fun discount(usageDiscount: Discount.UsageDiscount) =
-                discount(Discount.ofUsageDiscount(usageDiscount))
+            fun discount(usage: Discount.UsageDiscount) = discount(Discount.ofUsage(usage))
 
-            fun discount(amountDiscount: AmountDiscount) =
-                discount(Discount.ofAmountDiscount(amountDiscount))
+            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
             fun externalPriceId(externalPriceId: String?) =
                 externalPriceId(JsonField.ofNullable(externalPriceId))
@@ -25867,17 +25784,14 @@ private constructor(
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
-            fun discount(percentageDiscount: PercentageDiscount) =
-                discount(Discount.ofPercentageDiscount(percentageDiscount))
+            fun discount(percentage: PercentageDiscount) =
+                discount(Discount.ofPercentage(percentage))
 
-            fun discount(trialDiscount: TrialDiscount) =
-                discount(Discount.ofTrialDiscount(trialDiscount))
+            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
 
-            fun discount(usageDiscount: Discount.UsageDiscount) =
-                discount(Discount.ofUsageDiscount(usageDiscount))
+            fun discount(usage: Discount.UsageDiscount) = discount(Discount.ofUsage(usage))
 
-            fun discount(amountDiscount: AmountDiscount) =
-                discount(Discount.ofAmountDiscount(amountDiscount))
+            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
             fun externalPriceId(externalPriceId: String?) =
                 externalPriceId(JsonField.ofNullable(externalPriceId))
@@ -27820,17 +27734,14 @@ private constructor(
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
-            fun discount(percentageDiscount: PercentageDiscount) =
-                discount(Discount.ofPercentageDiscount(percentageDiscount))
+            fun discount(percentage: PercentageDiscount) =
+                discount(Discount.ofPercentage(percentage))
 
-            fun discount(trialDiscount: TrialDiscount) =
-                discount(Discount.ofTrialDiscount(trialDiscount))
+            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
 
-            fun discount(usageDiscount: Discount.UsageDiscount) =
-                discount(Discount.ofUsageDiscount(usageDiscount))
+            fun discount(usage: Discount.UsageDiscount) = discount(Discount.ofUsage(usage))
 
-            fun discount(amountDiscount: AmountDiscount) =
-                discount(Discount.ofAmountDiscount(amountDiscount))
+            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
             fun externalPriceId(externalPriceId: String?) =
                 externalPriceId(JsonField.ofNullable(externalPriceId))
@@ -29770,17 +29681,14 @@ private constructor(
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
-            fun discount(percentageDiscount: PercentageDiscount) =
-                discount(Discount.ofPercentageDiscount(percentageDiscount))
+            fun discount(percentage: PercentageDiscount) =
+                discount(Discount.ofPercentage(percentage))
 
-            fun discount(trialDiscount: TrialDiscount) =
-                discount(Discount.ofTrialDiscount(trialDiscount))
+            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
 
-            fun discount(usageDiscount: Discount.UsageDiscount) =
-                discount(Discount.ofUsageDiscount(usageDiscount))
+            fun discount(usage: Discount.UsageDiscount) = discount(Discount.ofUsage(usage))
 
-            fun discount(amountDiscount: AmountDiscount) =
-                discount(Discount.ofAmountDiscount(amountDiscount))
+            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
             fun externalPriceId(externalPriceId: String?) =
                 externalPriceId(JsonField.ofNullable(externalPriceId))
@@ -31720,17 +31628,14 @@ private constructor(
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
-            fun discount(percentageDiscount: PercentageDiscount) =
-                discount(Discount.ofPercentageDiscount(percentageDiscount))
+            fun discount(percentage: PercentageDiscount) =
+                discount(Discount.ofPercentage(percentage))
 
-            fun discount(trialDiscount: TrialDiscount) =
-                discount(Discount.ofTrialDiscount(trialDiscount))
+            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
 
-            fun discount(usageDiscount: Discount.UsageDiscount) =
-                discount(Discount.ofUsageDiscount(usageDiscount))
+            fun discount(usage: Discount.UsageDiscount) = discount(Discount.ofUsage(usage))
 
-            fun discount(amountDiscount: AmountDiscount) =
-                discount(Discount.ofAmountDiscount(amountDiscount))
+            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
             fun externalPriceId(externalPriceId: String?) =
                 externalPriceId(JsonField.ofNullable(externalPriceId))
@@ -33967,17 +33872,14 @@ private constructor(
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
-            fun discount(percentageDiscount: PercentageDiscount) =
-                discount(Discount.ofPercentageDiscount(percentageDiscount))
+            fun discount(percentage: PercentageDiscount) =
+                discount(Discount.ofPercentage(percentage))
 
-            fun discount(trialDiscount: TrialDiscount) =
-                discount(Discount.ofTrialDiscount(trialDiscount))
+            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
 
-            fun discount(usageDiscount: Discount.UsageDiscount) =
-                discount(Discount.ofUsageDiscount(usageDiscount))
+            fun discount(usage: Discount.UsageDiscount) = discount(Discount.ofUsage(usage))
 
-            fun discount(amountDiscount: AmountDiscount) =
-                discount(Discount.ofAmountDiscount(amountDiscount))
+            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
             fun externalPriceId(externalPriceId: String?) =
                 externalPriceId(JsonField.ofNullable(externalPriceId))
@@ -35915,17 +35817,14 @@ private constructor(
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
-            fun discount(percentageDiscount: PercentageDiscount) =
-                discount(Discount.ofPercentageDiscount(percentageDiscount))
+            fun discount(percentage: PercentageDiscount) =
+                discount(Discount.ofPercentage(percentage))
 
-            fun discount(trialDiscount: TrialDiscount) =
-                discount(Discount.ofTrialDiscount(trialDiscount))
+            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
 
-            fun discount(usageDiscount: Discount.UsageDiscount) =
-                discount(Discount.ofUsageDiscount(usageDiscount))
+            fun discount(usage: Discount.UsageDiscount) = discount(Discount.ofUsage(usage))
 
-            fun discount(amountDiscount: AmountDiscount) =
-                discount(Discount.ofAmountDiscount(amountDiscount))
+            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
             fun externalPriceId(externalPriceId: String?) =
                 externalPriceId(JsonField.ofNullable(externalPriceId))
@@ -37863,17 +37762,14 @@ private constructor(
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
-            fun discount(percentageDiscount: PercentageDiscount) =
-                discount(Discount.ofPercentageDiscount(percentageDiscount))
+            fun discount(percentage: PercentageDiscount) =
+                discount(Discount.ofPercentage(percentage))
 
-            fun discount(trialDiscount: TrialDiscount) =
-                discount(Discount.ofTrialDiscount(trialDiscount))
+            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
 
-            fun discount(usageDiscount: Discount.UsageDiscount) =
-                discount(Discount.ofUsageDiscount(usageDiscount))
+            fun discount(usage: Discount.UsageDiscount) = discount(Discount.ofUsage(usage))
 
-            fun discount(amountDiscount: AmountDiscount) =
-                discount(Discount.ofAmountDiscount(amountDiscount))
+            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
             fun externalPriceId(externalPriceId: String?) =
                 externalPriceId(JsonField.ofNullable(externalPriceId))
@@ -39820,17 +39716,14 @@ private constructor(
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
-            fun discount(percentageDiscount: PercentageDiscount) =
-                discount(Discount.ofPercentageDiscount(percentageDiscount))
+            fun discount(percentage: PercentageDiscount) =
+                discount(Discount.ofPercentage(percentage))
 
-            fun discount(trialDiscount: TrialDiscount) =
-                discount(Discount.ofTrialDiscount(trialDiscount))
+            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
 
-            fun discount(usageDiscount: Discount.UsageDiscount) =
-                discount(Discount.ofUsageDiscount(usageDiscount))
+            fun discount(usage: Discount.UsageDiscount) = discount(Discount.ofUsage(usage))
 
-            fun discount(amountDiscount: AmountDiscount) =
-                discount(Discount.ofAmountDiscount(amountDiscount))
+            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
             fun externalPriceId(externalPriceId: String?) =
                 externalPriceId(JsonField.ofNullable(externalPriceId))
@@ -41783,17 +41676,14 @@ private constructor(
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
-            fun discount(percentageDiscount: PercentageDiscount) =
-                discount(Discount.ofPercentageDiscount(percentageDiscount))
+            fun discount(percentage: PercentageDiscount) =
+                discount(Discount.ofPercentage(percentage))
 
-            fun discount(trialDiscount: TrialDiscount) =
-                discount(Discount.ofTrialDiscount(trialDiscount))
+            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
 
-            fun discount(usageDiscount: Discount.UsageDiscount) =
-                discount(Discount.ofUsageDiscount(usageDiscount))
+            fun discount(usage: Discount.UsageDiscount) = discount(Discount.ofUsage(usage))
 
-            fun discount(amountDiscount: AmountDiscount) =
-                discount(Discount.ofAmountDiscount(amountDiscount))
+            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
             fun externalPriceId(externalPriceId: String?) =
                 externalPriceId(JsonField.ofNullable(externalPriceId))
@@ -43740,17 +43630,14 @@ private constructor(
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
-            fun discount(percentageDiscount: PercentageDiscount) =
-                discount(Discount.ofPercentageDiscount(percentageDiscount))
+            fun discount(percentage: PercentageDiscount) =
+                discount(Discount.ofPercentage(percentage))
 
-            fun discount(trialDiscount: TrialDiscount) =
-                discount(Discount.ofTrialDiscount(trialDiscount))
+            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
 
-            fun discount(usageDiscount: Discount.UsageDiscount) =
-                discount(Discount.ofUsageDiscount(usageDiscount))
+            fun discount(usage: Discount.UsageDiscount) = discount(Discount.ofUsage(usage))
 
-            fun discount(amountDiscount: AmountDiscount) =
-                discount(Discount.ofAmountDiscount(amountDiscount))
+            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
             fun externalPriceId(externalPriceId: String?) =
                 externalPriceId(JsonField.ofNullable(externalPriceId))
@@ -45697,17 +45584,14 @@ private constructor(
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
-            fun discount(percentageDiscount: PercentageDiscount) =
-                discount(Discount.ofPercentageDiscount(percentageDiscount))
+            fun discount(percentage: PercentageDiscount) =
+                discount(Discount.ofPercentage(percentage))
 
-            fun discount(trialDiscount: TrialDiscount) =
-                discount(Discount.ofTrialDiscount(trialDiscount))
+            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
 
-            fun discount(usageDiscount: Discount.UsageDiscount) =
-                discount(Discount.ofUsageDiscount(usageDiscount))
+            fun discount(usage: Discount.UsageDiscount) = discount(Discount.ofUsage(usage))
 
-            fun discount(amountDiscount: AmountDiscount) =
-                discount(Discount.ofAmountDiscount(amountDiscount))
+            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
             fun externalPriceId(externalPriceId: String?) =
                 externalPriceId(JsonField.ofNullable(externalPriceId))
@@ -47640,17 +47524,14 @@ private constructor(
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
-            fun discount(percentageDiscount: PercentageDiscount) =
-                discount(Discount.ofPercentageDiscount(percentageDiscount))
+            fun discount(percentage: PercentageDiscount) =
+                discount(Discount.ofPercentage(percentage))
 
-            fun discount(trialDiscount: TrialDiscount) =
-                discount(Discount.ofTrialDiscount(trialDiscount))
+            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
 
-            fun discount(usageDiscount: Discount.UsageDiscount) =
-                discount(Discount.ofUsageDiscount(usageDiscount))
+            fun discount(usage: Discount.UsageDiscount) = discount(Discount.ofUsage(usage))
 
-            fun discount(amountDiscount: AmountDiscount) =
-                discount(Discount.ofAmountDiscount(amountDiscount))
+            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
             fun externalPriceId(externalPriceId: String?) =
                 externalPriceId(JsonField.ofNullable(externalPriceId))
@@ -49588,17 +49469,14 @@ private constructor(
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
-            fun discount(percentageDiscount: PercentageDiscount) =
-                discount(Discount.ofPercentageDiscount(percentageDiscount))
+            fun discount(percentage: PercentageDiscount) =
+                discount(Discount.ofPercentage(percentage))
 
-            fun discount(trialDiscount: TrialDiscount) =
-                discount(Discount.ofTrialDiscount(trialDiscount))
+            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
 
-            fun discount(usageDiscount: Discount.UsageDiscount) =
-                discount(Discount.ofUsageDiscount(usageDiscount))
+            fun discount(usage: Discount.UsageDiscount) = discount(Discount.ofUsage(usage))
 
-            fun discount(amountDiscount: AmountDiscount) =
-                discount(Discount.ofAmountDiscount(amountDiscount))
+            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
             fun externalPriceId(externalPriceId: String?) =
                 externalPriceId(JsonField.ofNullable(externalPriceId))
