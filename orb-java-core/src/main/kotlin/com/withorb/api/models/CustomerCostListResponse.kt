@@ -432,7 +432,7 @@ private constructor(
                  * For more on the types of prices, see
                  * [the core concepts documentation](/core-concepts#plan-and-price)
                  */
-                fun price(unitPrice: Price.UnitPrice) = price(Price.ofUnitPrice(unitPrice))
+                fun price(unit: Price.UnitPrice) = price(Price.ofUnit(unit))
 
                 /**
                  * The Price resource represents a price that can be billed on a subscription,
@@ -461,7 +461,7 @@ private constructor(
                  * For more on the types of prices, see
                  * [the core concepts documentation](/core-concepts#plan-and-price)
                  */
-                fun price(matrixPrice: Price.MatrixPrice) = price(Price.ofMatrixPrice(matrixPrice))
+                fun price(matrix: Price.MatrixPrice) = price(Price.ofMatrix(matrix))
 
                 /**
                  * The Price resource represents a price that can be billed on a subscription,
@@ -475,7 +475,7 @@ private constructor(
                  * For more on the types of prices, see
                  * [the core concepts documentation](/core-concepts#plan-and-price)
                  */
-                fun price(tieredPrice: Price.TieredPrice) = price(Price.ofTieredPrice(tieredPrice))
+                fun price(tiered: Price.TieredPrice) = price(Price.ofTiered(tiered))
 
                 /**
                  * The Price resource represents a price that can be billed on a subscription,
@@ -489,8 +489,7 @@ private constructor(
                  * For more on the types of prices, see
                  * [the core concepts documentation](/core-concepts#plan-and-price)
                  */
-                fun price(tieredBpsPrice: Price.TieredBpsPrice) =
-                    price(Price.ofTieredBpsPrice(tieredBpsPrice))
+                fun price(tieredBps: Price.TieredBpsPrice) = price(Price.ofTieredBps(tieredBps))
 
                 /**
                  * The Price resource represents a price that can be billed on a subscription,
@@ -504,7 +503,7 @@ private constructor(
                  * For more on the types of prices, see
                  * [the core concepts documentation](/core-concepts#plan-and-price)
                  */
-                fun price(bpsPrice: Price.BpsPrice) = price(Price.ofBpsPrice(bpsPrice))
+                fun price(bps: Price.BpsPrice) = price(Price.ofBps(bps))
 
                 /**
                  * The Price resource represents a price that can be billed on a subscription,
@@ -518,8 +517,7 @@ private constructor(
                  * For more on the types of prices, see
                  * [the core concepts documentation](/core-concepts#plan-and-price)
                  */
-                fun price(bulkBpsPrice: Price.BulkBpsPrice) =
-                    price(Price.ofBulkBpsPrice(bulkBpsPrice))
+                fun price(bulkBps: Price.BulkBpsPrice) = price(Price.ofBulkBps(bulkBps))
 
                 /**
                  * The Price resource represents a price that can be billed on a subscription,
@@ -533,7 +531,7 @@ private constructor(
                  * For more on the types of prices, see
                  * [the core concepts documentation](/core-concepts#plan-and-price)
                  */
-                fun price(bulkPrice: Price.BulkPrice) = price(Price.ofBulkPrice(bulkPrice))
+                fun price(bulk: Price.BulkPrice) = price(Price.ofBulk(bulk))
 
                 /**
                  * The Price resource represents a price that can be billed on a subscription,
@@ -547,8 +545,8 @@ private constructor(
                  * For more on the types of prices, see
                  * [the core concepts documentation](/core-concepts#plan-and-price)
                  */
-                fun price(thresholdTotalAmountPrice: Price.ThresholdTotalAmountPrice) =
-                    price(Price.ofThresholdTotalAmountPrice(thresholdTotalAmountPrice))
+                fun price(thresholdTotalAmount: Price.ThresholdTotalAmountPrice) =
+                    price(Price.ofThresholdTotalAmount(thresholdTotalAmount))
 
                 /**
                  * The Price resource represents a price that can be billed on a subscription,
@@ -562,8 +560,8 @@ private constructor(
                  * For more on the types of prices, see
                  * [the core concepts documentation](/core-concepts#plan-and-price)
                  */
-                fun price(tieredPackagePrice: Price.TieredPackagePrice) =
-                    price(Price.ofTieredPackagePrice(tieredPackagePrice))
+                fun price(tieredPackage: Price.TieredPackagePrice) =
+                    price(Price.ofTieredPackage(tieredPackage))
 
                 /**
                  * The Price resource represents a price that can be billed on a subscription,
@@ -577,8 +575,8 @@ private constructor(
                  * For more on the types of prices, see
                  * [the core concepts documentation](/core-concepts#plan-and-price)
                  */
-                fun price(groupedTieredPrice: Price.GroupedTieredPrice) =
-                    price(Price.ofGroupedTieredPrice(groupedTieredPrice))
+                fun price(groupedTiered: Price.GroupedTieredPrice) =
+                    price(Price.ofGroupedTiered(groupedTiered))
 
                 /**
                  * The Price resource represents a price that can be billed on a subscription,
@@ -592,8 +590,8 @@ private constructor(
                  * For more on the types of prices, see
                  * [the core concepts documentation](/core-concepts#plan-and-price)
                  */
-                fun price(tieredWithMinimumPrice: Price.TieredWithMinimumPrice) =
-                    price(Price.ofTieredWithMinimumPrice(tieredWithMinimumPrice))
+                fun price(tieredWithMinimum: Price.TieredWithMinimumPrice) =
+                    price(Price.ofTieredWithMinimum(tieredWithMinimum))
 
                 /**
                  * The Price resource represents a price that can be billed on a subscription,
@@ -607,8 +605,8 @@ private constructor(
                  * For more on the types of prices, see
                  * [the core concepts documentation](/core-concepts#plan-and-price)
                  */
-                fun price(tieredPackageWithMinimumPrice: Price.TieredPackageWithMinimumPrice) =
-                    price(Price.ofTieredPackageWithMinimumPrice(tieredPackageWithMinimumPrice))
+                fun price(tieredPackageWithMinimum: Price.TieredPackageWithMinimumPrice) =
+                    price(Price.ofTieredPackageWithMinimum(tieredPackageWithMinimum))
 
                 /**
                  * The Price resource represents a price that can be billed on a subscription,
@@ -622,8 +620,8 @@ private constructor(
                  * For more on the types of prices, see
                  * [the core concepts documentation](/core-concepts#plan-and-price)
                  */
-                fun price(packageWithAllocationPrice: Price.PackageWithAllocationPrice) =
-                    price(Price.ofPackageWithAllocationPrice(packageWithAllocationPrice))
+                fun price(packageWithAllocation: Price.PackageWithAllocationPrice) =
+                    price(Price.ofPackageWithAllocation(packageWithAllocation))
 
                 /**
                  * The Price resource represents a price that can be billed on a subscription,
@@ -637,8 +635,8 @@ private constructor(
                  * For more on the types of prices, see
                  * [the core concepts documentation](/core-concepts#plan-and-price)
                  */
-                fun price(unitWithPercentPrice: Price.UnitWithPercentPrice) =
-                    price(Price.ofUnitWithPercentPrice(unitWithPercentPrice))
+                fun price(unitWithPercent: Price.UnitWithPercentPrice) =
+                    price(Price.ofUnitWithPercent(unitWithPercent))
 
                 /**
                  * The Price resource represents a price that can be billed on a subscription,
@@ -652,8 +650,8 @@ private constructor(
                  * For more on the types of prices, see
                  * [the core concepts documentation](/core-concepts#plan-and-price)
                  */
-                fun price(matrixWithAllocationPrice: Price.MatrixWithAllocationPrice) =
-                    price(Price.ofMatrixWithAllocationPrice(matrixWithAllocationPrice))
+                fun price(matrixWithAllocation: Price.MatrixWithAllocationPrice) =
+                    price(Price.ofMatrixWithAllocation(matrixWithAllocation))
 
                 /**
                  * The Price resource represents a price that can be billed on a subscription,
@@ -667,8 +665,8 @@ private constructor(
                  * For more on the types of prices, see
                  * [the core concepts documentation](/core-concepts#plan-and-price)
                  */
-                fun price(tieredWithProrationPrice: Price.TieredWithProrationPrice) =
-                    price(Price.ofTieredWithProrationPrice(tieredWithProrationPrice))
+                fun price(tieredWithProration: Price.TieredWithProrationPrice) =
+                    price(Price.ofTieredWithProration(tieredWithProration))
 
                 /**
                  * The Price resource represents a price that can be billed on a subscription,
@@ -682,8 +680,8 @@ private constructor(
                  * For more on the types of prices, see
                  * [the core concepts documentation](/core-concepts#plan-and-price)
                  */
-                fun price(unitWithProrationPrice: Price.UnitWithProrationPrice) =
-                    price(Price.ofUnitWithProrationPrice(unitWithProrationPrice))
+                fun price(unitWithProration: Price.UnitWithProrationPrice) =
+                    price(Price.ofUnitWithProration(unitWithProration))
 
                 /**
                  * The Price resource represents a price that can be billed on a subscription,
@@ -697,8 +695,8 @@ private constructor(
                  * For more on the types of prices, see
                  * [the core concepts documentation](/core-concepts#plan-and-price)
                  */
-                fun price(groupedAllocationPrice: Price.GroupedAllocationPrice) =
-                    price(Price.ofGroupedAllocationPrice(groupedAllocationPrice))
+                fun price(groupedAllocation: Price.GroupedAllocationPrice) =
+                    price(Price.ofGroupedAllocation(groupedAllocation))
 
                 /**
                  * The Price resource represents a price that can be billed on a subscription,
@@ -712,8 +710,8 @@ private constructor(
                  * For more on the types of prices, see
                  * [the core concepts documentation](/core-concepts#plan-and-price)
                  */
-                fun price(groupedWithProratedMinimumPrice: Price.GroupedWithProratedMinimumPrice) =
-                    price(Price.ofGroupedWithProratedMinimumPrice(groupedWithProratedMinimumPrice))
+                fun price(groupedWithProratedMinimum: Price.GroupedWithProratedMinimumPrice) =
+                    price(Price.ofGroupedWithProratedMinimum(groupedWithProratedMinimum))
 
                 /**
                  * The Price resource represents a price that can be billed on a subscription,
@@ -727,8 +725,8 @@ private constructor(
                  * For more on the types of prices, see
                  * [the core concepts documentation](/core-concepts#plan-and-price)
                  */
-                fun price(groupedWithMeteredMinimumPrice: Price.GroupedWithMeteredMinimumPrice) =
-                    price(Price.ofGroupedWithMeteredMinimumPrice(groupedWithMeteredMinimumPrice))
+                fun price(groupedWithMeteredMinimum: Price.GroupedWithMeteredMinimumPrice) =
+                    price(Price.ofGroupedWithMeteredMinimum(groupedWithMeteredMinimum))
 
                 /**
                  * The Price resource represents a price that can be billed on a subscription,
@@ -742,8 +740,8 @@ private constructor(
                  * For more on the types of prices, see
                  * [the core concepts documentation](/core-concepts#plan-and-price)
                  */
-                fun price(matrixWithDisplayNamePrice: Price.MatrixWithDisplayNamePrice) =
-                    price(Price.ofMatrixWithDisplayNamePrice(matrixWithDisplayNamePrice))
+                fun price(matrixWithDisplayName: Price.MatrixWithDisplayNamePrice) =
+                    price(Price.ofMatrixWithDisplayName(matrixWithDisplayName))
 
                 /**
                  * The Price resource represents a price that can be billed on a subscription,
@@ -757,8 +755,8 @@ private constructor(
                  * For more on the types of prices, see
                  * [the core concepts documentation](/core-concepts#plan-and-price)
                  */
-                fun price(bulkWithProrationPrice: Price.BulkWithProrationPrice) =
-                    price(Price.ofBulkWithProrationPrice(bulkWithProrationPrice))
+                fun price(bulkWithProration: Price.BulkWithProrationPrice) =
+                    price(Price.ofBulkWithProration(bulkWithProration))
 
                 /**
                  * The Price resource represents a price that can be billed on a subscription,
@@ -772,8 +770,8 @@ private constructor(
                  * For more on the types of prices, see
                  * [the core concepts documentation](/core-concepts#plan-and-price)
                  */
-                fun price(groupedTieredPackagePrice: Price.GroupedTieredPackagePrice) =
-                    price(Price.ofGroupedTieredPackagePrice(groupedTieredPackagePrice))
+                fun price(groupedTieredPackage: Price.GroupedTieredPackagePrice) =
+                    price(Price.ofGroupedTieredPackage(groupedTieredPackage))
 
                 /**
                  * The Price resource represents a price that can be billed on a subscription,
@@ -787,8 +785,8 @@ private constructor(
                  * For more on the types of prices, see
                  * [the core concepts documentation](/core-concepts#plan-and-price)
                  */
-                fun price(maxGroupTieredPrice: Price.MaxGroupTieredPrice) =
-                    price(Price.ofMaxGroupTieredPrice(maxGroupTieredPrice))
+                fun price(maxGroupTiered: Price.MaxGroupTieredPrice) =
+                    price(Price.ofMaxGroupTiered(maxGroupTiered))
 
                 /**
                  * Price's contributions for the timeframe, excluding any minimums and discounts.
