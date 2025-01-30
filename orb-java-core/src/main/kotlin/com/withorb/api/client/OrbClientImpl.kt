@@ -35,8 +35,7 @@ import com.withorb.api.services.blocking.TopLevelServiceImpl
 import com.withorb.api.services.blocking.WebhookService
 import com.withorb.api.services.blocking.WebhookServiceImpl
 
-class OrbClientImpl
-constructor(
+class OrbClientImpl(
     private val clientOptions: ClientOptions,
 ) : OrbClient {
 
@@ -119,9 +118,11 @@ constructor(
 
     override fun subscriptions(): SubscriptionService = subscriptions
 
+    override fun webhooks(): WebhookService = webhooks
+
     override fun alerts(): AlertService = alerts
 
     override fun dimensionalPriceGroups(): DimensionalPriceGroupService = dimensionalPriceGroups
 
-    override fun webhooks(): WebhookService = webhooks
+    override fun close() = clientOptions.httpClient.close()
 }

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.withorb.api.core.Enum
 import com.withorb.api.core.JsonField
 import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
@@ -124,7 +125,7 @@ import java.util.Optional
  * available.
  */
 class CustomerCostListByExternalIdParams
-constructor(
+private constructor(
     private val externalCustomerId: String,
     private val currency: String?,
     private val timeframeEnd: OffsetDateTime?,
@@ -132,7 +133,7 @@ constructor(
     private val viewMode: ViewMode?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
     fun externalCustomerId(): String = externalCustomerId
 
@@ -156,10 +157,9 @@ constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
+    override fun _headers(): Headers = additionalHeaders
 
-    @JvmSynthetic
-    internal fun getQueryParams(): QueryParams {
+    override fun _queryParams(): QueryParams {
         val queryParams = QueryParams.builder()
         this.currency?.let { queryParams.put("currency", listOf(it.toString())) }
         this.timeframeEnd?.let {
@@ -193,8 +193,9 @@ constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CustomerCostListByExternalIdParams]. */
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var externalCustomerId: String? = null
         private var currency: String? = null
@@ -378,6 +379,14 @@ constructor(
         private val value: JsonField<String>,
     ) : Enum {
 
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
         @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
         companion object {
@@ -389,17 +398,35 @@ constructor(
             @JvmStatic fun of(value: String) = ViewMode(JsonField.of(value))
         }
 
+        /** An enum containing [ViewMode]'s known values. */
         enum class Known {
             PERIODIC,
             CUMULATIVE,
         }
 
+        /**
+         * An enum containing [ViewMode]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [ViewMode] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
         enum class Value {
             PERIODIC,
             CUMULATIVE,
+            /** An enum member indicating that [ViewMode] was instantiated with an unknown value. */
             _UNKNOWN,
         }
 
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
         fun value(): Value =
             when (this) {
                 PERIODIC -> Value.PERIODIC
@@ -407,6 +434,14 @@ constructor(
                 else -> Value._UNKNOWN
             }
 
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws OrbInvalidDataException if this class instance's value is a not a known member.
+         */
         fun known(): Known =
             when (this) {
                 PERIODIC -> Known.PERIODIC

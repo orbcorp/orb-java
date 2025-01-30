@@ -21,6 +21,7 @@ import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.checkRequired
 import com.withorb.api.core.getOrThrow
 import com.withorb.api.core.http.Headers
@@ -51,12 +52,12 @@ import java.util.Optional
  * extended).
  */
 class SubscriptionUpdateTrialParams
-constructor(
+private constructor(
     private val subscriptionId: String,
     private val body: SubscriptionUpdateTrialBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
     fun subscriptionId(): String = subscriptionId
 
@@ -90,11 +91,11 @@ constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun getBody(): SubscriptionUpdateTrialBody = body
+    @JvmSynthetic internal fun _body(): SubscriptionUpdateTrialBody = body
 
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
+    override fun _headers(): Headers = additionalHeaders
 
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     fun getPathParam(index: Int): String {
         return when (index) {
@@ -166,7 +167,8 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [SubscriptionUpdateTrialBody]. */
+        class Builder internal constructor() {
 
             private var trialEndDate: JsonField<TrialEndDate>? = null
             private var shift: JsonField<Boolean> = JsonMissing.of()
@@ -272,8 +274,9 @@ constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [SubscriptionUpdateTrialParams]. */
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var subscriptionId: String? = null
         private var body: SubscriptionUpdateTrialBody.Builder =
@@ -540,18 +543,32 @@ constructor(
                 TrialEndDate(unionMember1 = unionMember1)
         }
 
+        /**
+         * An interface that defines how to map each variant of [TrialEndDate] to a value of type
+         * [T].
+         */
         interface Visitor<out T> {
 
             fun visitOffsetDateTime(offsetDateTime: OffsetDateTime): T
 
             fun visitUnionMember1(unionMember1: UnionMember1): T
 
+            /**
+             * Maps an unknown variant of [TrialEndDate] to a value of type [T].
+             *
+             * An instance of [TrialEndDate] can contain an unknown variant if it was deserialized
+             * from data that doesn't match any known variant. For example, if the SDK is on an
+             * older version than the API, then the API may respond with new variants that the SDK
+             * is unaware of.
+             *
+             * @throws OrbInvalidDataException in the default implementation.
+             */
             fun unknown(json: JsonValue?): T {
                 throw OrbInvalidDataException("Unknown TrialEndDate: $json")
             }
         }
 
-        class Deserializer : BaseDeserializer<TrialEndDate>(TrialEndDate::class) {
+        internal class Deserializer : BaseDeserializer<TrialEndDate>(TrialEndDate::class) {
 
             override fun ObjectCodec.deserialize(node: JsonNode): TrialEndDate {
                 val json = JsonValue.fromJsonNode(node)
@@ -567,7 +584,7 @@ constructor(
             }
         }
 
-        class Serializer : BaseSerializer<TrialEndDate>(TrialEndDate::class) {
+        internal class Serializer : BaseSerializer<TrialEndDate>(TrialEndDate::class) {
 
             override fun serialize(
                 value: TrialEndDate,
@@ -589,6 +606,14 @@ constructor(
             private val value: JsonField<String>,
         ) : Enum {
 
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
             @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
             companion object {
@@ -598,21 +623,51 @@ constructor(
                 @JvmStatic fun of(value: String) = UnionMember1(JsonField.of(value))
             }
 
+            /** An enum containing [UnionMember1]'s known values. */
             enum class Known {
                 IMMEDIATE,
             }
 
+            /**
+             * An enum containing [UnionMember1]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [UnionMember1] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
             enum class Value {
                 IMMEDIATE,
+                /**
+                 * An enum member indicating that [UnionMember1] was instantiated with an unknown
+                 * value.
+                 */
                 _UNKNOWN,
             }
 
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
             fun value(): Value =
                 when (this) {
                     IMMEDIATE -> Value.IMMEDIATE
                     else -> Value._UNKNOWN
                 }
 
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws OrbInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
             fun known(): Known =
                 when (this) {
                     IMMEDIATE -> Known.IMMEDIATE

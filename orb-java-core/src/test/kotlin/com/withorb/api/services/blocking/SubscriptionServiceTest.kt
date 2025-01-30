@@ -318,7 +318,7 @@ class SubscriptionServiceTest {
                             .build()
                     )
                     .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .trialDurationDays(0L)
+                    .trialDurationDays(999999L)
                     .build()
             )
         println(subscriptionCreateResponse)
@@ -494,19 +494,7 @@ class SubscriptionServiceTest {
                                     .expiresAtEndOfCadence(true)
                                     .build()
                             )
-                            .addDiscount(
-                                SubscriptionPriceIntervalsParams.Add.Discount
-                                    .AmountDiscountCreationParams
-                                    .builder()
-                                    .amountDiscount(0.0)
-                                    .discountType(
-                                        SubscriptionPriceIntervalsParams.Add.Discount
-                                            .AmountDiscountCreationParams
-                                            .DiscountType
-                                            .AMOUNT
-                                    )
-                                    .build()
-                            )
+                            .addAmountDiscountCreationParamsDiscount(0.0)
                             .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .externalPriceId("external_price_id")
                             .addFixedFeeQuantityTransition(
@@ -934,7 +922,7 @@ class SubscriptionServiceTest {
                             .priceId("h74gfhdjvn7ujokd")
                             .build()
                     )
-                    .trialDurationDays(0L)
+                    .trialDurationDays(999999L)
                     .build()
             )
         println(subscriptionSchedulePlanChangeResponse)

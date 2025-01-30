@@ -78,7 +78,8 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    /** A builder for [EventIngestResponse]. */
+    class Builder internal constructor() {
 
         private var validationFailed: JsonField<MutableList<ValidationFailed>>? = null
         private var debug: JsonField<Debug> = JsonMissing.of()
@@ -221,7 +222,8 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [ValidationFailed]. */
+        class Builder internal constructor() {
 
             private var idempotencyKey: JsonField<String>? = null
             private var validationErrors: JsonField<MutableList<String>>? = null
@@ -370,7 +372,8 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [Debug]. */
+        class Builder internal constructor() {
 
             private var duplicate: JsonField<MutableList<String>>? = null
             private var ingested: JsonField<MutableList<String>>? = null

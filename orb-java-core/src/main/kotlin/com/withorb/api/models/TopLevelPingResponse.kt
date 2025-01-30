@@ -52,7 +52,8 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    /** A builder for [TopLevelPingResponse]. */
+    class Builder internal constructor() {
 
         private var response: JsonField<String>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()

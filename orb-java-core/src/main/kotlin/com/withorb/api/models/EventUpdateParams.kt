@@ -11,6 +11,7 @@ import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
@@ -60,12 +61,12 @@ import java.util.Optional
  *   For higher volume updates, consider using the [event backfill](create-backfill) endpoint.
  */
 class EventUpdateParams
-constructor(
+private constructor(
     private val eventId: String,
     private val body: EventUpdateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
     fun eventId(): String = eventId
 
@@ -113,11 +114,11 @@ constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun getBody(): EventUpdateBody = body
+    @JvmSynthetic internal fun _body(): EventUpdateBody = body
 
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
+    override fun _headers(): Headers = additionalHeaders
 
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     fun getPathParam(index: Int): String {
         return when (index) {
@@ -220,7 +221,8 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [EventUpdateBody]. */
+        class Builder internal constructor() {
 
             private var eventName: JsonField<String>? = null
             private var properties: JsonValue? = null
@@ -350,8 +352,9 @@ constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [EventUpdateParams]. */
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var eventId: String? = null
         private var body: EventUpdateBody.Builder = EventUpdateBody.builder()
