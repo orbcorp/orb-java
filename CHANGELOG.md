@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.26.0 (2025-01-30)
+
+Full Changelog: [v0.25.0...v0.26.0](https://github.com/orbcorp/orb-java/compare/v0.25.0...v0.26.0)
+
+### Features
+
+* **api:** api update ([#222](https://github.com/orbcorp/orb-java/issues/222)) ([91cf3b9](https://github.com/orbcorp/orb-java/commit/91cf3b98866b16ce93da2db1381631b01f8eb865))
+
+
+### Chores
+
+* **internal:** codegen related update ([#217](https://github.com/orbcorp/orb-java/issues/217)) ([648708a](https://github.com/orbcorp/orb-java/commit/648708a1c05f37147b1dfefcb1a9f9e6774296b6))
+* **internal:** codegen related update ([#220](https://github.com/orbcorp/orb-java/issues/220)) ([6975f2c](https://github.com/orbcorp/orb-java/commit/6975f2c9cfa3661ee487a8941d1fc22c0de7e5d7))
+* **internal:** codegen related update ([#221](https://github.com/orbcorp/orb-java/issues/221)) ([61fa6a7](https://github.com/orbcorp/orb-java/commit/61fa6a7956a5849b58d4210f73debcc823c9d43e))
+* **internal:** swap `checkNotNull` to `checkRequired` ([#219](https://github.com/orbcorp/orb-java/issues/219)) ([c77af54](https://github.com/orbcorp/orb-java/commit/c77af5465b01148fb1c84c0612e11fef5e0433c5))
+
 ## 0.25.0 (2025-01-23)
 
 Full Changelog: [v0.24.0...v0.25.0](https://github.com/orbcorp/orb-java/compare/v0.24.0...v0.25.0)
