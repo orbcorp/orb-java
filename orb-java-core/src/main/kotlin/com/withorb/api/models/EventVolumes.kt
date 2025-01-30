@@ -53,7 +53,8 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    /** A builder for [EventVolumes]. */
+    class Builder internal constructor() {
 
         private var data: JsonField<MutableList<Data>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -172,7 +173,8 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [Data]. */
+        class Builder internal constructor() {
 
             private var count: JsonField<Long>? = null
             private var timeframeEnd: JsonField<OffsetDateTime>? = null

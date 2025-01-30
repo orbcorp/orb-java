@@ -3,6 +3,7 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import java.time.OffsetDateTime
@@ -22,7 +23,7 @@ import java.util.Optional
  * follows Orb's [standardized pagination format](/api-reference/pagination).
  */
 class AlertListParams
-constructor(
+private constructor(
     private val createdAtGt: OffsetDateTime?,
     private val createdAtGte: OffsetDateTime?,
     private val createdAtLt: OffsetDateTime?,
@@ -34,7 +35,7 @@ constructor(
     private val subscriptionId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
     fun createdAtGt(): Optional<OffsetDateTime> = Optional.ofNullable(createdAtGt)
 
@@ -66,10 +67,9 @@ constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
+    override fun _headers(): Headers = additionalHeaders
 
-    @JvmSynthetic
-    internal fun getQueryParams(): QueryParams {
+    override fun _queryParams(): QueryParams {
         val queryParams = QueryParams.builder()
         this.createdAtGt?.let {
             queryParams.put(
@@ -113,8 +113,9 @@ constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [AlertListParams]. */
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var createdAtGt: OffsetDateTime? = null
         private var createdAtGte: OffsetDateTime? = null

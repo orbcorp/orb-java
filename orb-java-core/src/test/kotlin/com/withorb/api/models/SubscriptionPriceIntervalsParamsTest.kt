@@ -27,18 +27,7 @@ class SubscriptionPriceIntervalsParamsTest {
                             .expiresAtEndOfCadence(true)
                             .build()
                     )
-                    .addDiscount(
-                        SubscriptionPriceIntervalsParams.Add.Discount.AmountDiscountCreationParams
-                            .builder()
-                            .amountDiscount(0.0)
-                            .discountType(
-                                SubscriptionPriceIntervalsParams.Add.Discount
-                                    .AmountDiscountCreationParams
-                                    .DiscountType
-                                    .AMOUNT
-                            )
-                            .build()
-                    )
+                    .addAmountDiscountCreationParamsDiscount(0.0)
                     .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .externalPriceId("external_price_id")
                     .addFixedFeeQuantityTransition(
@@ -164,7 +153,7 @@ class SubscriptionPriceIntervalsParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             SubscriptionPriceIntervalsParams.builder()
                 .subscriptionId("subscription_id")
@@ -182,19 +171,7 @@ class SubscriptionPriceIntervalsParamsTest {
                                 .expiresAtEndOfCadence(true)
                                 .build()
                         )
-                        .addDiscount(
-                            SubscriptionPriceIntervalsParams.Add.Discount
-                                .AmountDiscountCreationParams
-                                .builder()
-                                .amountDiscount(0.0)
-                                .discountType(
-                                    SubscriptionPriceIntervalsParams.Add.Discount
-                                        .AmountDiscountCreationParams
-                                        .DiscountType
-                                        .AMOUNT
-                                )
-                                .build()
-                        )
+                        .addAmountDiscountCreationParamsDiscount(0.0)
                         .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .externalPriceId("external_price_id")
                         .addFixedFeeQuantityTransition(
@@ -320,7 +297,7 @@ class SubscriptionPriceIntervalsParamsTest {
                         .build()
                 )
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.add())
             .contains(
@@ -338,19 +315,7 @@ class SubscriptionPriceIntervalsParamsTest {
                                 .expiresAtEndOfCadence(true)
                                 .build()
                         )
-                        .addDiscount(
-                            SubscriptionPriceIntervalsParams.Add.Discount
-                                .AmountDiscountCreationParams
-                                .builder()
-                                .amountDiscount(0.0)
-                                .discountType(
-                                    SubscriptionPriceIntervalsParams.Add.Discount
-                                        .AmountDiscountCreationParams
-                                        .DiscountType
-                                        .AMOUNT
-                                )
-                                .build()
-                        )
+                        .addAmountDiscountCreationParamsDiscount(0.0)
                         .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .externalPriceId("external_price_id")
                         .addFixedFeeQuantityTransition(
@@ -488,10 +453,10 @@ class SubscriptionPriceIntervalsParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             SubscriptionPriceIntervalsParams.builder().subscriptionId("subscription_id").build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
     }
 

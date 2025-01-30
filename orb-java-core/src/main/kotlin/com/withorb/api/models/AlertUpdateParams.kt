@@ -11,6 +11,7 @@ import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
@@ -20,12 +21,12 @@ import java.util.Objects
 
 /** This endpoint updates the thresholds of an alert. */
 class AlertUpdateParams
-constructor(
+private constructor(
     private val alertConfigurationId: String,
     private val body: AlertUpdateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
     fun alertConfigurationId(): String = alertConfigurationId
 
@@ -41,11 +42,11 @@ constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun getBody(): AlertUpdateBody = body
+    @JvmSynthetic internal fun _body(): AlertUpdateBody = body
 
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
+    override fun _headers(): Headers = additionalHeaders
 
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     fun getPathParam(index: Int): String {
         return when (index) {
@@ -95,7 +96,8 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [AlertUpdateBody]. */
+        class Builder internal constructor() {
 
             private var thresholds: JsonField<MutableList<Threshold>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -179,8 +181,9 @@ constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [AlertUpdateParams]. */
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var alertConfigurationId: String? = null
         private var body: AlertUpdateBody.Builder = AlertUpdateBody.builder()
@@ -384,7 +387,8 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [Threshold]. */
+        class Builder internal constructor() {
 
             private var value: JsonField<Double>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()

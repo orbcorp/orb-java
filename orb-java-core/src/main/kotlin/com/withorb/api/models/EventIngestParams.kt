@@ -11,6 +11,7 @@ import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
@@ -207,13 +208,13 @@ import java.util.Optional
  * ```
  */
 class EventIngestParams
-constructor(
+private constructor(
     private val backfillId: String?,
     private val debug: Boolean?,
     private val body: EventIngestBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
     /**
      * If this ingestion request is part of a backfill, this parameter ties the ingested events to
@@ -234,12 +235,11 @@ constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun getBody(): EventIngestBody = body
+    @JvmSynthetic internal fun _body(): EventIngestBody = body
 
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
+    override fun _headers(): Headers = additionalHeaders
 
-    @JvmSynthetic
-    internal fun getQueryParams(): QueryParams {
+    override fun _queryParams(): QueryParams {
         val queryParams = QueryParams.builder()
         this.backfillId?.let { queryParams.put("backfill_id", listOf(it.toString())) }
         this.debug?.let { queryParams.put("debug", listOf(it.toString())) }
@@ -284,7 +284,8 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [EventIngestBody]. */
+        class Builder internal constructor() {
 
             private var events: JsonField<MutableList<Event>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -365,8 +366,9 @@ constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [EventIngestParams]. */
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var backfillId: String? = null
         private var debug: Boolean? = null
@@ -652,7 +654,8 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [Event]. */
+        class Builder internal constructor() {
 
             private var eventName: JsonField<String>? = null
             private var idempotencyKey: JsonField<String>? = null

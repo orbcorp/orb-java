@@ -21,6 +21,7 @@ import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.checkRequired
 import com.withorb.api.core.getOrThrow
 import com.withorb.api.core.http.Headers
@@ -39,12 +40,12 @@ import kotlin.jvm.optionals.getOrNull
  * are currently immutable.
  */
 class CustomerUpdateParams
-constructor(
+private constructor(
     private val customerId: String,
     private val body: CustomerUpdateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
     fun customerId(): String = customerId
 
@@ -403,11 +404,11 @@ constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun getBody(): CustomerUpdateBody = body
+    @JvmSynthetic internal fun _body(): CustomerUpdateBody = body
 
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
+    override fun _headers(): Headers = additionalHeaders
 
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     fun getPathParam(index: Int): String {
         return when (index) {
@@ -892,7 +893,8 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [CustomerUpdateBody]. */
+        class Builder internal constructor() {
 
             private var accountingSyncConfiguration: JsonField<AccountingSyncConfiguration> =
                 JsonMissing.of()
@@ -1210,8 +1212,31 @@ constructor(
             fun taxConfiguration(newAvalara: TaxConfiguration.NewAvalaraTaxConfiguration) =
                 taxConfiguration(TaxConfiguration.ofNewAvalara(newAvalara))
 
+            fun newAvalaraTaxConfiguration(taxExempt: Boolean) =
+                taxConfiguration(
+                    TaxConfiguration.NewAvalaraTaxConfiguration.builder()
+                        .taxProvider(
+                            CustomerUpdateParams.TaxConfiguration.NewAvalaraTaxConfiguration
+                                .TaxProvider
+                                .AVALARA
+                        )
+                        .taxExempt(taxExempt)
+                        .build()
+                )
+
             fun taxConfiguration(newTaxJar: TaxConfiguration.NewTaxJarConfiguration) =
                 taxConfiguration(TaxConfiguration.ofNewTaxJar(newTaxJar))
+
+            fun newTaxJarTaxConfiguration(taxExempt: Boolean) =
+                taxConfiguration(
+                    TaxConfiguration.NewTaxJarConfiguration.builder()
+                        .taxProvider(
+                            CustomerUpdateParams.TaxConfiguration.NewTaxJarConfiguration.TaxProvider
+                                .TAXJAR
+                        )
+                        .taxExempt(taxExempt)
+                        .build()
+                )
 
             /**
              * Tax IDs are commonly required to be displayed on customer invoices, which are added
@@ -1603,8 +1628,9 @@ constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CustomerUpdateParams]. */
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var customerId: String? = null
         private var body: CustomerUpdateBody.Builder = CustomerUpdateBody.builder()
@@ -1893,8 +1919,16 @@ constructor(
             body.taxConfiguration(newAvalara)
         }
 
+        fun newAvalaraTaxConfiguration(taxExempt: Boolean) = apply {
+            body.newAvalaraTaxConfiguration(taxExempt)
+        }
+
         fun taxConfiguration(newTaxJar: TaxConfiguration.NewTaxJarConfiguration) = apply {
             body.taxConfiguration(newTaxJar)
+        }
+
+        fun newTaxJarTaxConfiguration(taxExempt: Boolean) = apply {
+            body.newTaxJarTaxConfiguration(taxExempt)
         }
 
         /**
@@ -2395,7 +2429,8 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [AccountingSyncConfiguration]. */
+        class Builder internal constructor() {
 
             private var accountingProviders: JsonField<MutableList<AccountingProvider>>? = null
             private var excluded: JsonField<Boolean> = JsonMissing.of()
@@ -2520,7 +2555,8 @@ constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [AccountingProvider]. */
+            class Builder internal constructor() {
 
                 private var externalProviderId: JsonField<String>? = null
                 private var providerType: JsonField<String>? = null
@@ -2692,7 +2728,8 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [BillingAddress]. */
+        class Builder internal constructor() {
 
             private var city: JsonField<String> = JsonMissing.of()
             private var country: JsonField<String> = JsonMissing.of()
@@ -2832,7 +2869,8 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [Metadata]. */
+        class Builder internal constructor() {
 
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -2893,6 +2931,14 @@ constructor(
         private val value: JsonField<String>,
     ) : Enum {
 
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
         @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
         companion object {
@@ -2910,6 +2956,7 @@ constructor(
             @JvmStatic fun of(value: String) = PaymentProvider(JsonField.of(value))
         }
 
+        /** An enum containing [PaymentProvider]'s known values. */
         enum class Known {
             QUICKBOOKS,
             BILL_COM,
@@ -2918,15 +2965,35 @@ constructor(
             NETSUITE,
         }
 
+        /**
+         * An enum containing [PaymentProvider]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [PaymentProvider] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
         enum class Value {
             QUICKBOOKS,
             BILL_COM,
             STRIPE_CHARGE,
             STRIPE_INVOICE,
             NETSUITE,
+            /**
+             * An enum member indicating that [PaymentProvider] was instantiated with an unknown
+             * value.
+             */
             _UNKNOWN,
         }
 
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
         fun value(): Value =
             when (this) {
                 QUICKBOOKS -> Value.QUICKBOOKS
@@ -2937,6 +3004,14 @@ constructor(
                 else -> Value._UNKNOWN
             }
 
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws OrbInvalidDataException if this class instance's value is a not a known member.
+         */
         fun known(): Known =
             when (this) {
                 QUICKBOOKS -> Known.QUICKBOOKS
@@ -2999,7 +3074,8 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [ReportingConfiguration]. */
+        class Builder internal constructor() {
 
             private var exempt: JsonField<Boolean>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -3138,7 +3214,8 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [ShippingAddress]. */
+        class Builder internal constructor() {
 
             private var city: JsonField<String> = JsonMissing.of()
             private var country: JsonField<String> = JsonMissing.of()
@@ -3325,18 +3402,32 @@ constructor(
                 TaxConfiguration(newTaxJar = newTaxJar)
         }
 
+        /**
+         * An interface that defines how to map each variant of [TaxConfiguration] to a value of
+         * type [T].
+         */
         interface Visitor<out T> {
 
             fun visitNewAvalara(newAvalara: NewAvalaraTaxConfiguration): T
 
             fun visitNewTaxJar(newTaxJar: NewTaxJarConfiguration): T
 
+            /**
+             * Maps an unknown variant of [TaxConfiguration] to a value of type [T].
+             *
+             * An instance of [TaxConfiguration] can contain an unknown variant if it was
+             * deserialized from data that doesn't match any known variant. For example, if the SDK
+             * is on an older version than the API, then the API may respond with new variants that
+             * the SDK is unaware of.
+             *
+             * @throws OrbInvalidDataException in the default implementation.
+             */
             fun unknown(json: JsonValue?): T {
                 throw OrbInvalidDataException("Unknown TaxConfiguration: $json")
             }
         }
 
-        class Deserializer : BaseDeserializer<TaxConfiguration>(TaxConfiguration::class) {
+        internal class Deserializer : BaseDeserializer<TaxConfiguration>(TaxConfiguration::class) {
 
             override fun ObjectCodec.deserialize(node: JsonNode): TaxConfiguration {
                 val json = JsonValue.fromJsonNode(node)
@@ -3366,7 +3457,7 @@ constructor(
             }
         }
 
-        class Serializer : BaseSerializer<TaxConfiguration>(TaxConfiguration::class) {
+        internal class Serializer : BaseSerializer<TaxConfiguration>(TaxConfiguration::class) {
 
             override fun serialize(
                 value: TaxConfiguration,
@@ -3442,7 +3533,8 @@ constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [NewAvalaraTaxConfiguration]. */
+            class Builder internal constructor() {
 
                 private var taxExempt: JsonField<Boolean>? = null
                 private var taxProvider: JsonField<TaxProvider>? = null
@@ -3515,6 +3607,14 @@ constructor(
                 private val value: JsonField<String>,
             ) : Enum {
 
+                /**
+                 * Returns this class instance's raw value.
+                 *
+                 * This is usually only useful if this instance was deserialized from data that
+                 * doesn't match any known member, and you want to know that value. For example, if
+                 * the SDK is on an older version than the API, then the API may respond with new
+                 * members that the SDK is unaware of.
+                 */
                 @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 companion object {
@@ -3524,21 +3624,51 @@ constructor(
                     @JvmStatic fun of(value: String) = TaxProvider(JsonField.of(value))
                 }
 
+                /** An enum containing [TaxProvider]'s known values. */
                 enum class Known {
                     AVALARA,
                 }
 
+                /**
+                 * An enum containing [TaxProvider]'s known values, as well as an [_UNKNOWN] member.
+                 *
+                 * An instance of [TaxProvider] can contain an unknown value in a couple of cases:
+                 * - It was deserialized from data that doesn't match any known member. For example,
+                 *   if the SDK is on an older version than the API, then the API may respond with
+                 *   new members that the SDK is unaware of.
+                 * - It was constructed with an arbitrary value using the [of] method.
+                 */
                 enum class Value {
                     AVALARA,
+                    /**
+                     * An enum member indicating that [TaxProvider] was instantiated with an unknown
+                     * value.
+                     */
                     _UNKNOWN,
                 }
 
+                /**
+                 * Returns an enum member corresponding to this class instance's value, or
+                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 *
+                 * Use the [known] method instead if you're certain the value is always known or if
+                 * you want to throw for the unknown case.
+                 */
                 fun value(): Value =
                     when (this) {
                         AVALARA -> Value.AVALARA
                         else -> Value._UNKNOWN
                     }
 
+                /**
+                 * Returns an enum member corresponding to this class instance's value.
+                 *
+                 * Use the [value] method instead if you're uncertain the value is always known and
+                 * don't want to throw for the unknown case.
+                 *
+                 * @throws OrbInvalidDataException if this class instance's value is a not a known
+                 *   member.
+                 */
                 fun known(): Known =
                     when (this) {
                         AVALARA -> Known.AVALARA
@@ -3627,7 +3757,8 @@ constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [NewTaxJarConfiguration]. */
+            class Builder internal constructor() {
 
                 private var taxExempt: JsonField<Boolean>? = null
                 private var taxProvider: JsonField<TaxProvider>? = null
@@ -3687,6 +3818,14 @@ constructor(
                 private val value: JsonField<String>,
             ) : Enum {
 
+                /**
+                 * Returns this class instance's raw value.
+                 *
+                 * This is usually only useful if this instance was deserialized from data that
+                 * doesn't match any known member, and you want to know that value. For example, if
+                 * the SDK is on an older version than the API, then the API may respond with new
+                 * members that the SDK is unaware of.
+                 */
                 @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 companion object {
@@ -3696,21 +3835,51 @@ constructor(
                     @JvmStatic fun of(value: String) = TaxProvider(JsonField.of(value))
                 }
 
+                /** An enum containing [TaxProvider]'s known values. */
                 enum class Known {
                     TAXJAR,
                 }
 
+                /**
+                 * An enum containing [TaxProvider]'s known values, as well as an [_UNKNOWN] member.
+                 *
+                 * An instance of [TaxProvider] can contain an unknown value in a couple of cases:
+                 * - It was deserialized from data that doesn't match any known member. For example,
+                 *   if the SDK is on an older version than the API, then the API may respond with
+                 *   new members that the SDK is unaware of.
+                 * - It was constructed with an arbitrary value using the [of] method.
+                 */
                 enum class Value {
                     TAXJAR,
+                    /**
+                     * An enum member indicating that [TaxProvider] was instantiated with an unknown
+                     * value.
+                     */
                     _UNKNOWN,
                 }
 
+                /**
+                 * Returns an enum member corresponding to this class instance's value, or
+                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 *
+                 * Use the [known] method instead if you're certain the value is always known or if
+                 * you want to throw for the unknown case.
+                 */
                 fun value(): Value =
                     when (this) {
                         TAXJAR -> Value.TAXJAR
                         else -> Value._UNKNOWN
                     }
 
+                /**
+                 * Returns an enum member corresponding to this class instance's value.
+                 *
+                 * Use the [value] method instead if you're uncertain the value is always known and
+                 * don't want to throw for the unknown case.
+                 *
+                 * @throws OrbInvalidDataException if this class instance's value is a not a known
+                 *   member.
+                 */
                 fun known(): Known =
                     when (this) {
                         TAXJAR -> Known.TAXJAR
@@ -3908,7 +4077,8 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [TaxId]. */
+        class Builder internal constructor() {
 
             private var country: JsonField<Country>? = null
             private var type: JsonField<Type>? = null
@@ -3969,6 +4139,14 @@ constructor(
             private val value: JsonField<String>,
         ) : Enum {
 
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
             @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
             companion object {
@@ -4132,6 +4310,7 @@ constructor(
                 @JvmStatic fun of(value: String) = Country(JsonField.of(value))
             }
 
+            /** An enum containing [Country]'s known values. */
             enum class Known {
                 AD,
                 AE,
@@ -4213,6 +4392,15 @@ constructor(
                 ZA,
             }
 
+            /**
+             * An enum containing [Country]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [Country] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
             enum class Value {
                 AD,
                 AE,
@@ -4292,9 +4480,19 @@ constructor(
                 VE,
                 VN,
                 ZA,
+                /**
+                 * An enum member indicating that [Country] was instantiated with an unknown value.
+                 */
                 _UNKNOWN,
             }
 
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
             fun value(): Value =
                 when (this) {
                     AD -> Value.AD
@@ -4378,6 +4576,15 @@ constructor(
                     else -> Value._UNKNOWN
                 }
 
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws OrbInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
             fun known(): Known =
                 when (this) {
                     AD -> Known.AD
@@ -4482,6 +4689,14 @@ constructor(
             private val value: JsonField<String>,
         ) : Enum {
 
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
             @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
             companion object {
@@ -4631,6 +4846,7 @@ constructor(
                 @JvmStatic fun of(value: String) = Type(JsonField.of(value))
             }
 
+            /** An enum containing [Type]'s known values. */
             enum class Known {
                 AD_NRT,
                 AE_TRN,
@@ -4705,6 +4921,15 @@ constructor(
                 ZA_VAT,
             }
 
+            /**
+             * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [Type] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
             enum class Value {
                 AD_NRT,
                 AE_TRN,
@@ -4777,9 +5002,17 @@ constructor(
                 VE_RIF,
                 VN_TIN,
                 ZA_VAT,
+                /** An enum member indicating that [Type] was instantiated with an unknown value. */
                 _UNKNOWN,
             }
 
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
             fun value(): Value =
                 when (this) {
                     AD_NRT -> Value.AD_NRT
@@ -4856,6 +5089,15 @@ constructor(
                     else -> Value._UNKNOWN
                 }
 
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws OrbInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
             fun known(): Known =
                 when (this) {
                     AD_NRT -> Known.AD_NRT

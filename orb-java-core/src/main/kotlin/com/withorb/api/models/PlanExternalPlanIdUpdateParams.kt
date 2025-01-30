@@ -11,6 +11,7 @@ import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
@@ -25,12 +26,12 @@ import java.util.Optional
  * Other fields on a customer are currently immutable.
  */
 class PlanExternalPlanIdUpdateParams
-constructor(
+private constructor(
     private val otherExternalPlanId: String,
     private val body: PlanExternalPlanIdUpdateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
     fun otherExternalPlanId(): String = otherExternalPlanId
 
@@ -66,11 +67,11 @@ constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun getBody(): PlanExternalPlanIdUpdateBody = body
+    @JvmSynthetic internal fun _body(): PlanExternalPlanIdUpdateBody = body
 
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
+    override fun _headers(): Headers = additionalHeaders
 
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     fun getPathParam(index: Int): String {
         return when (index) {
@@ -147,7 +148,8 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [PlanExternalPlanIdUpdateBody]. */
+        class Builder internal constructor() {
 
             private var externalPlanId: JsonField<String> = JsonMissing.of()
             private var metadata: JsonField<Metadata> = JsonMissing.of()
@@ -259,8 +261,9 @@ constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [PlanExternalPlanIdUpdateParams]. */
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var otherExternalPlanId: String? = null
         private var body: PlanExternalPlanIdUpdateBody.Builder =
@@ -485,7 +488,8 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [Metadata]. */
+        class Builder internal constructor() {
 
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 

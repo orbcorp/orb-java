@@ -273,12 +273,12 @@ class SubscriptionCreateParamsTest {
                     .build()
             )
             .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-            .trialDurationDays(0L)
+            .trialDurationDays(999999L)
             .build()
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             SubscriptionCreateParams.builder()
                 .addAddAdjustment(
@@ -551,9 +551,9 @@ class SubscriptionCreateParamsTest {
                         .build()
                 )
                 .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .trialDurationDays(0L)
+                .trialDurationDays(999999L)
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.addAdjustments())
             .contains(
@@ -847,13 +847,13 @@ class SubscriptionCreateParamsTest {
                 )
             )
         assertThat(body.startDate()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(body.trialDurationDays()).contains(0L)
+        assertThat(body.trialDurationDays()).contains(999999L)
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params = SubscriptionCreateParams.builder().build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
     }
 }

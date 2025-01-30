@@ -11,6 +11,7 @@ import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
@@ -25,12 +26,12 @@ import java.util.Optional
  * invoices that are in the `issued` status.
  */
 class InvoiceMarkPaidParams
-constructor(
+private constructor(
     private val invoiceId: String,
     private val body: InvoiceMarkPaidBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
     fun invoiceId(): String = invoiceId
 
@@ -58,11 +59,11 @@ constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun getBody(): InvoiceMarkPaidBody = body
+    @JvmSynthetic internal fun _body(): InvoiceMarkPaidBody = body
 
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
+    override fun _headers(): Headers = additionalHeaders
 
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     fun getPathParam(index: Int): String {
         return when (index) {
@@ -136,7 +137,8 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [InvoiceMarkPaidBody]. */
+        class Builder internal constructor() {
 
             private var paymentReceivedDate: JsonField<LocalDate>? = null
             private var externalId: JsonField<String> = JsonMissing.of()
@@ -231,8 +233,9 @@ constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [InvoiceMarkPaidParams]. */
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var invoiceId: String? = null
         private var body: InvoiceMarkPaidBody.Builder = InvoiceMarkPaidBody.builder()

@@ -11,6 +11,7 @@ import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
@@ -24,11 +25,11 @@ import java.util.Objects
  * invoices that are in a `draft` status.
  */
 class InvoiceLineItemCreateParams
-constructor(
+private constructor(
     private val body: InvoiceLineItemCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
     /** The total amount in the invoice's currency to add to the line item. */
     fun amount(): String = body.amount()
@@ -78,11 +79,11 @@ constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun getBody(): InvoiceLineItemCreateBody = body
+    @JvmSynthetic internal fun _body(): InvoiceLineItemCreateBody = body
 
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
+    override fun _headers(): Headers = additionalHeaders
 
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
     class InvoiceLineItemCreateBody
@@ -181,7 +182,8 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [InvoiceLineItemCreateBody]. */
+        class Builder internal constructor() {
 
             private var amount: JsonField<String>? = null
             private var endDate: JsonField<LocalDate>? = null
@@ -300,8 +302,9 @@ constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [InvoiceLineItemCreateParams]. */
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: InvoiceLineItemCreateBody.Builder = InvoiceLineItemCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()

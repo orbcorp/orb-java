@@ -33,8 +33,7 @@ import com.withorb.api.services.async.SubscriptionServiceAsyncImpl
 import com.withorb.api.services.async.TopLevelServiceAsync
 import com.withorb.api.services.async.TopLevelServiceAsyncImpl
 
-class OrbClientAsyncImpl
-constructor(
+class OrbClientAsyncImpl(
     private val clientOptions: ClientOptions,
 ) : OrbClientAsync {
 
@@ -131,4 +130,6 @@ constructor(
 
     override fun dimensionalPriceGroups(): DimensionalPriceGroupServiceAsync =
         dimensionalPriceGroups
+
+    override fun close() = clientOptions.httpClient.close()
 }

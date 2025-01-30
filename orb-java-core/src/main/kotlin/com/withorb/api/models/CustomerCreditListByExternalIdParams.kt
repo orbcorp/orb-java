@@ -3,6 +3,7 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
@@ -19,7 +20,7 @@ import java.util.Optional
  * `currency` to an ISO 4217 string.
  */
 class CustomerCreditListByExternalIdParams
-constructor(
+private constructor(
     private val externalCustomerId: String,
     private val currency: String?,
     private val cursor: String?,
@@ -27,7 +28,7 @@ constructor(
     private val limit: Long?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
     fun externalCustomerId(): String = externalCustomerId
 
@@ -52,10 +53,9 @@ constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
+    override fun _headers(): Headers = additionalHeaders
 
-    @JvmSynthetic
-    internal fun getQueryParams(): QueryParams {
+    override fun _queryParams(): QueryParams {
         val queryParams = QueryParams.builder()
         this.currency?.let { queryParams.put("currency", listOf(it.toString())) }
         this.cursor?.let { queryParams.put("cursor", listOf(it.toString())) }
@@ -79,8 +79,9 @@ constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [CustomerCreditListByExternalIdParams]. */
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var externalCustomerId: String? = null
         private var currency: String? = null
