@@ -4,6 +4,7 @@ package com.withorb.api.models
 
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
@@ -17,13 +18,13 @@ import java.util.Optional
  * customer or subscription level alerts.
  */
 class AlertEnableParams
-constructor(
+private constructor(
     private val alertConfigurationId: String,
     private val subscriptionId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
-) {
+) : Params {
 
     fun alertConfigurationId(): String = alertConfigurationId
 
@@ -37,13 +38,12 @@ constructor(
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     @JvmSynthetic
-    internal fun getBody(): Optional<Map<String, JsonValue>> =
+    internal fun _body(): Optional<Map<String, JsonValue>> =
         Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
 
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
+    override fun _headers(): Headers = additionalHeaders
 
-    @JvmSynthetic
-    internal fun getQueryParams(): QueryParams {
+    override fun _queryParams(): QueryParams {
         val queryParams = QueryParams.builder()
         this.subscriptionId?.let { queryParams.put("subscription_id", listOf(it.toString())) }
         queryParams.putAll(additionalQueryParams)
@@ -64,8 +64,9 @@ constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [AlertEnableParams]. */
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var alertConfigurationId: String? = null
         private var subscriptionId: String? = null

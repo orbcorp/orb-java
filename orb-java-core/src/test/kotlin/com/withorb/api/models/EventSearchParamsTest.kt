@@ -18,14 +18,14 @@ class EventSearchParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             EventSearchParams.builder()
                 .addEventId("string")
                 .timeframeEnd(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .timeframeStart(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.eventIds()).isEqualTo(listOf("string"))
         assertThat(body.timeframeEnd()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -33,9 +33,9 @@ class EventSearchParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params = EventSearchParams.builder().addEventId("string").build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.eventIds()).isEqualTo(listOf("string"))
     }

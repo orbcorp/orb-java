@@ -11,6 +11,7 @@ import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
@@ -35,11 +36,11 @@ import java.util.Optional
  * `data` instead.
  */
 class EventSearchParams
-constructor(
+private constructor(
     private val body: EventSearchBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
     /**
      * This is an explicit array of IDs to filter by. Note that an event's ID is the idempotency_key
@@ -85,11 +86,11 @@ constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun getBody(): EventSearchBody = body
+    @JvmSynthetic internal fun _body(): EventSearchBody = body
 
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
+    override fun _headers(): Headers = additionalHeaders
 
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
     class EventSearchBody
@@ -178,7 +179,8 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [EventSearchBody]. */
+        class Builder internal constructor() {
 
             private var eventIds: JsonField<MutableList<String>>? = null
             private var timeframeEnd: JsonField<OffsetDateTime> = JsonMissing.of()
@@ -324,8 +326,9 @@ constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [EventSearchParams]. */
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: EventSearchBody.Builder = EventSearchBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()

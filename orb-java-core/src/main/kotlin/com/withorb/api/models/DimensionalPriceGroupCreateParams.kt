@@ -11,6 +11,7 @@ import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
@@ -29,11 +30,11 @@ import java.util.Optional
  * per blue widget.
  */
 class DimensionalPriceGroupCreateParams
-constructor(
+private constructor(
     private val body: DimensionalPriceGroupCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
     fun billableMetricId(): String = body.billableMetricId()
 
@@ -74,11 +75,11 @@ constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun getBody(): DimensionalPriceGroupCreateBody = body
+    @JvmSynthetic internal fun _body(): DimensionalPriceGroupCreateBody = body
 
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
+    override fun _headers(): Headers = additionalHeaders
 
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
     class DimensionalPriceGroupCreateBody
@@ -170,7 +171,8 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [DimensionalPriceGroupCreateBody]. */
+        class Builder internal constructor() {
 
             private var billableMetricId: JsonField<String>? = null
             private var dimensions: JsonField<MutableList<String>>? = null
@@ -314,8 +316,9 @@ constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [DimensionalPriceGroupCreateParams]. */
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: DimensionalPriceGroupCreateBody.Builder =
             DimensionalPriceGroupCreateBody.builder()
@@ -544,7 +547,8 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [Metadata]. */
+        class Builder internal constructor() {
 
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 

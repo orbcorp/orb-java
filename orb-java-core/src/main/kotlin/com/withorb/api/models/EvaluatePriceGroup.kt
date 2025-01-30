@@ -88,7 +88,8 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    /** A builder for [EvaluatePriceGroup]. */
+    class Builder internal constructor() {
 
         private var amount: JsonField<String>? = null
         private var groupingValues: JsonField<MutableList<GroupingValue>>? = null
@@ -261,6 +262,10 @@ private constructor(
             @JvmStatic fun ofBool(bool: Boolean) = GroupingValue(bool = bool)
         }
 
+        /**
+         * An interface that defines how to map each variant of [GroupingValue] to a value of type
+         * [T].
+         */
         interface Visitor<out T> {
 
             fun visitString(string: String): T
@@ -269,12 +274,22 @@ private constructor(
 
             fun visitBool(bool: Boolean): T
 
+            /**
+             * Maps an unknown variant of [GroupingValue] to a value of type [T].
+             *
+             * An instance of [GroupingValue] can contain an unknown variant if it was deserialized
+             * from data that doesn't match any known variant. For example, if the SDK is on an
+             * older version than the API, then the API may respond with new variants that the SDK
+             * is unaware of.
+             *
+             * @throws OrbInvalidDataException in the default implementation.
+             */
             fun unknown(json: JsonValue?): T {
                 throw OrbInvalidDataException("Unknown GroupingValue: $json")
             }
         }
 
-        class Deserializer : BaseDeserializer<GroupingValue>(GroupingValue::class) {
+        internal class Deserializer : BaseDeserializer<GroupingValue>(GroupingValue::class) {
 
             override fun ObjectCodec.deserialize(node: JsonNode): GroupingValue {
                 val json = JsonValue.fromJsonNode(node)
@@ -293,7 +308,7 @@ private constructor(
             }
         }
 
-        class Serializer : BaseSerializer<GroupingValue>(GroupingValue::class) {
+        internal class Serializer : BaseSerializer<GroupingValue>(GroupingValue::class) {
 
             override fun serialize(
                 value: GroupingValue,

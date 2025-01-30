@@ -33,8 +33,7 @@ import com.withorb.api.services.blocking.SubscriptionServiceImpl
 import com.withorb.api.services.blocking.TopLevelService
 import com.withorb.api.services.blocking.TopLevelServiceImpl
 
-class OrbClientImpl
-constructor(
+class OrbClientImpl(
     private val clientOptions: ClientOptions,
 ) : OrbClient {
 
@@ -118,4 +117,6 @@ constructor(
     override fun alerts(): AlertService = alerts
 
     override fun dimensionalPriceGroups(): DimensionalPriceGroupService = dimensionalPriceGroups
+
+    override fun close() = clientOptions.httpClient.close()
 }

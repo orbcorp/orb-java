@@ -11,6 +11,7 @@ import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
@@ -51,11 +52,11 @@ import java.util.Optional
  * specific property values.
  */
 class EventBackfillCreateParams
-constructor(
+private constructor(
     private val body: EventBackfillCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
     /** The (exclusive) end of the usage timeframe affected by this backfill. */
     fun timeframeEnd(): OffsetDateTime = body.timeframeEnd()
@@ -137,11 +138,11 @@ constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun getBody(): EventBackfillCreateBody = body
+    @JvmSynthetic internal fun _body(): EventBackfillCreateBody = body
 
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
+    override fun _headers(): Headers = additionalHeaders
 
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
     class EventBackfillCreateBody
@@ -293,7 +294,8 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [EventBackfillCreateBody]. */
+        class Builder internal constructor() {
 
             private var timeframeEnd: JsonField<OffsetDateTime>? = null
             private var timeframeStart: JsonField<OffsetDateTime>? = null
@@ -491,8 +493,9 @@ constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [EventBackfillCreateParams]. */
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: EventBackfillCreateBody.Builder = EventBackfillCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()

@@ -11,6 +11,7 @@ import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
@@ -27,12 +28,12 @@ import java.util.Optional
  * providers, etc).
  */
 class InvoiceIssueParams
-constructor(
+private constructor(
     private val invoiceId: String,
     private val body: InvoiceIssueBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
     fun invoiceId(): String = invoiceId
 
@@ -58,11 +59,11 @@ constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun getBody(): InvoiceIssueBody = body
+    @JvmSynthetic internal fun _body(): InvoiceIssueBody = body
 
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
+    override fun _headers(): Headers = additionalHeaders
 
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     fun getPathParam(index: Int): String {
         return when (index) {
@@ -123,7 +124,8 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [InvoiceIssueBody]. */
+        class Builder internal constructor() {
 
             private var synchronous: JsonField<Boolean> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -202,8 +204,9 @@ constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [InvoiceIssueParams]. */
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var invoiceId: String? = null
         private var body: InvoiceIssueBody.Builder = InvoiceIssueBody.builder()
