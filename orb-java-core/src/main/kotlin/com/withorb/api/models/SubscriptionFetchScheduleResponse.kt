@@ -80,7 +80,8 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    /** A builder for [SubscriptionFetchScheduleResponse]. */
+    class Builder internal constructor() {
 
         private var createdAt: JsonField<OffsetDateTime>? = null
         private var endDate: JsonField<OffsetDateTime>? = null
@@ -210,7 +211,8 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [Plan]. */
+        class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
             private var externalPlanId: JsonField<String>? = null

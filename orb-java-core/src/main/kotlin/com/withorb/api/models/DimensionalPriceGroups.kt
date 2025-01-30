@@ -63,7 +63,8 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    /** A builder for [DimensionalPriceGroups]. */
+    class Builder internal constructor() {
 
         private var data: JsonField<MutableList<DimensionalPriceGroup>>? = null
         private var paginationMetadata: JsonField<PaginationMetadata>? = null

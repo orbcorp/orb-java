@@ -52,7 +52,8 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    /** A builder for [PriceEvaluateResponse]. */
+    class Builder internal constructor() {
 
         private var data: JsonField<MutableList<EvaluatePriceGroup>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()

@@ -11,6 +11,7 @@ import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
@@ -24,12 +25,12 @@ import java.util.Optional
  * `invoicing_threshold`, and `default_invoice_memo` properties on a subscription.
  */
 class SubscriptionUpdateParams
-constructor(
+private constructor(
     private val subscriptionId: String,
     private val body: SubscriptionUpdateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
     fun subscriptionId(): String = subscriptionId
 
@@ -105,11 +106,11 @@ constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun getBody(): SubscriptionUpdateBody = body
+    @JvmSynthetic internal fun _body(): SubscriptionUpdateBody = body
 
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
+    override fun _headers(): Headers = additionalHeaders
 
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     fun getPathParam(index: Int): String {
         return when (index) {
@@ -244,7 +245,8 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [SubscriptionUpdateBody]. */
+        class Builder internal constructor() {
 
             private var autoCollection: JsonField<Boolean> = JsonMissing.of()
             private var defaultInvoiceMemo: JsonField<String> = JsonMissing.of()
@@ -452,8 +454,9 @@ constructor(
         @JvmStatic fun builder() = Builder()
     }
 
+    /** A builder for [SubscriptionUpdateParams]. */
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var subscriptionId: String? = null
         private var body: SubscriptionUpdateBody.Builder = SubscriptionUpdateBody.builder()
@@ -761,7 +764,8 @@ constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [Metadata]. */
+        class Builder internal constructor() {
 
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
