@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.27.0 (2025-02-04)
+
+Full Changelog: [v0.26.0...v0.27.0](https://github.com/orbcorp/orb-java/compare/v0.26.0...v0.27.0)
+
+### Features
+
+* **api:** api update ([#229](https://github.com/orbcorp/orb-java/issues/229)) ([a0b4d91](https://github.com/orbcorp/orb-java/commit/a0b4d9178723acb177202d88d4355ae8d4dd3196))
+* **client:** send client-side timeout headers ([#228](https://github.com/orbcorp/orb-java/issues/228)) ([720ac83](https://github.com/orbcorp/orb-java/commit/720ac83e1167d1c24dd71e2d2b7b98b0390c0f17))
+
+
+### Chores
+
+* **internal:** codegen related update ([#224](https://github.com/orbcorp/orb-java/issues/224)) ([ba91826](https://github.com/orbcorp/orb-java/commit/ba91826dde6c642771682ce5b56f61638bcab7a5))
+
+
+### Documentation
+
+* fix incorrect additional properties info ([#227](https://github.com/orbcorp/orb-java/issues/227)) ([8fe2133](https://github.com/orbcorp/orb-java/commit/8fe2133556f1cd283180a045f47a084b40664502))
+
 ## 0.26.0 (2025-01-30)
 
 Full Changelog: [v0.25.0...v0.26.0](https://github.com/orbcorp/orb-java/compare/v0.25.0...v0.26.0)
