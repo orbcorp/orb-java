@@ -311,9 +311,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { createHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
             }
@@ -342,9 +342,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { updateHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
             }
@@ -379,9 +379,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { listHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
                     .let { SubscriptionListPageAsync.of(this, params, it) }
@@ -461,9 +461,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { cancelHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
             }
@@ -491,9 +491,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { fetchHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
             }
@@ -529,9 +529,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { fetchCostsHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
             }
@@ -561,9 +561,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { fetchScheduleHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
                     .let { SubscriptionFetchSchedulePageAsync.of(this, params, it) }
@@ -765,9 +765,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { fetchUsageHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
             }
@@ -860,9 +860,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { priceIntervalsHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
             }
@@ -1054,9 +1054,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { schedulePlanChangeHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
             }
@@ -1085,9 +1085,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { triggerPhaseHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
             }
@@ -1120,9 +1120,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { unscheduleCancellationHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
             }
@@ -1159,9 +1159,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { unscheduleFixedFeeQuantityUpdatesHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
             }
@@ -1195,9 +1195,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { unschedulePendingPlanChangesHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
             }
@@ -1241,9 +1241,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { updateFixedFeeQuantityHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
             }
@@ -1287,9 +1287,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { updateTrialHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
             }

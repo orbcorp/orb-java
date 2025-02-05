@@ -56,9 +56,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { createHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
             }
@@ -89,9 +89,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { updateHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
             }
@@ -122,9 +122,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { listHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
                     .let { PlanListPageAsync.of(this, params, it) }
@@ -167,9 +167,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { fetchHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
             }

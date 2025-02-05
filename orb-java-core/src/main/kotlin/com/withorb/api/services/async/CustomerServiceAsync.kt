@@ -92,7 +92,7 @@ interface CustomerServiceAsync {
     fun delete(
         params: CustomerDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<Void>
+    ): CompletableFuture<Void?>
 
     /**
      * This endpoint is used to fetch customer details given an identifier. If the `Customer` is in
@@ -132,7 +132,7 @@ interface CustomerServiceAsync {
     fun syncPaymentMethodsFromGateway(
         params: CustomerSyncPaymentMethodsFromGatewayParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<Void>
+    ): CompletableFuture<Void?>
 
     /**
      * Sync Orb's payment methods for the customer with their gateway.
@@ -146,7 +146,7 @@ interface CustomerServiceAsync {
     fun syncPaymentMethodsFromGatewayByExternalCustomerId(
         params: CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<Void>
+    ): CompletableFuture<Void?>
 
     /**
      * This endpoint is used to update customer details given an `external_customer_id` (see
