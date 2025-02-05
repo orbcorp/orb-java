@@ -61,9 +61,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { createHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
             }
@@ -89,9 +89,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { listHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
                     .let { CustomerCreditTopUpListPageAsync.of(this, params, it) }
@@ -104,7 +104,7 @@ internal constructor(
     override fun delete(
         params: CustomerCreditTopUpDeleteParams,
         requestOptions: RequestOptions
-    ): CompletableFuture<Void> {
+    ): CompletableFuture<Void?> {
         val request =
             HttpRequest.builder()
                 .method(HttpMethod.DELETE)
@@ -157,9 +157,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { createByExternalIdHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
             }
@@ -172,7 +172,7 @@ internal constructor(
     override fun deleteByExternalId(
         params: CustomerCreditTopUpDeleteByExternalIdParams,
         requestOptions: RequestOptions
-    ): CompletableFuture<Void> {
+    ): CompletableFuture<Void?> {
         val request =
             HttpRequest.builder()
                 .method(HttpMethod.DELETE)
@@ -219,9 +219,9 @@ internal constructor(
             .thenApply { response ->
                 response
                     .use { listByExternalIdHandler.handle(it) }
-                    .apply {
+                    .also {
                         if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            validate()
+                            it.validate()
                         }
                     }
                     .let { CustomerCreditTopUpListByExternalIdPageAsync.of(this, params, it) }
