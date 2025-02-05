@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.27.1 (2025-02-05)
+
+Full Changelog: [v0.27.0...v0.27.1](https://github.com/orbcorp/orb-java/compare/v0.27.0...v0.27.1)
+
+### Bug Fixes
+
+* **api:** add missing `@MustBeClosed` annotations ([#231](https://github.com/orbcorp/orb-java/issues/231)) ([bc11828](https://github.com/orbcorp/orb-java/commit/bc11828c79268b321e6940c2f894af5a7c306cc4))
+* **api:** switch `CompletableFuture&lt;Void&gt;` to `CompletableFuture<Void?>` ([bc11828](https://github.com/orbcorp/orb-java/commit/bc11828c79268b321e6940c2f894af5a7c306cc4))
+* **client:** add missing validation calls on response ([bc11828](https://github.com/orbcorp/orb-java/commit/bc11828c79268b321e6940c2f894af5a7c306cc4))
+* **client:** always provide a body for `PATCH` methods ([bc11828](https://github.com/orbcorp/orb-java/commit/bc11828c79268b321e6940c2f894af5a7c306cc4))
+
+
+### Chores
+
+* **internal:** minor formatting/style changes ([bc11828](https://github.com/orbcorp/orb-java/commit/bc11828c79268b321e6940c2f894af5a7c306cc4))
+* **internal:** rename some tests ([bc11828](https://github.com/orbcorp/orb-java/commit/bc11828c79268b321e6940c2f894af5a7c306cc4))
+
 ## 0.27.0 (2025-02-04)
 
 Full Changelog: [v0.26.0...v0.27.0](https://github.com/orbcorp/orb-java/compare/v0.26.0...v0.27.0)
