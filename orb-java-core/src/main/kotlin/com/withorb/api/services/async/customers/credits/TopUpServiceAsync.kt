@@ -45,7 +45,7 @@ interface TopUpServiceAsync {
     fun delete(
         params: CustomerCreditTopUpDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<Void>
+    ): CompletableFuture<Void?>
 
     /**
      * This endpoint allows you to create a new top-up for a specified customer's balance. While
@@ -66,7 +66,7 @@ interface TopUpServiceAsync {
     fun deleteByExternalId(
         params: CustomerCreditTopUpDeleteByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CompletableFuture<Void>
+    ): CompletableFuture<Void?>
 
     /** List top-ups by external ID */
     @JvmOverloads
