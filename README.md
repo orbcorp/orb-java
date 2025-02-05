@@ -2,7 +2,7 @@
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.withorb.api/orb-java)](https://central.sonatype.com/artifact/com.withorb.api/orb-java/0.27.0)
+[![Maven Central](https://img.shields.io/maven-central/v/com.withorb.api/orb-java)](https://central.sonatype.com/artifact/com.withorb.api/orb-java/0.27.1)
 
 <!-- x-release-please-end -->
 
@@ -19,7 +19,7 @@ The REST API documentation can be found on [docs.withorb.com](https://docs.witho
 ### Gradle
 
 ```kotlin
-implementation("com.withorb.api:orb-java:0.27.0")
+implementation("com.withorb.api:orb-java:0.27.1")
 ```
 
 ### Maven
@@ -28,7 +28,7 @@ implementation("com.withorb.api:orb-java:0.27.0")
 <dependency>
     <groupId>com.withorb.api</groupId>
     <artifactId>orb-java</artifactId>
-    <version>0.27.0</version>
+    <version>0.27.1</version>
 </dependency>
 ```
 
