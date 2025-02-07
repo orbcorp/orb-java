@@ -2685,8 +2685,7 @@ private constructor(
 
         /**
          * The end date of the adjustment interval. This is the date that the adjustment will stop
-         * affecting prices on the subscription. If null, the adjustment will start when the phase
-         * or subscription starts.
+         * affecting prices on the subscription.
          */
         fun endDate(): Optional<OffsetDateTime> =
             Optional.ofNullable(endDate.getNullable("end_date"))
@@ -2710,8 +2709,7 @@ private constructor(
 
         /**
          * The end date of the adjustment interval. This is the date that the adjustment will stop
-         * affecting prices on the subscription. If null, the adjustment will start when the phase
-         * or subscription starts.
+         * affecting prices on the subscription.
          */
         @JsonProperty("end_date")
         @ExcludeMissing
@@ -2804,22 +2802,19 @@ private constructor(
 
             /**
              * The end date of the adjustment interval. This is the date that the adjustment will
-             * stop affecting prices on the subscription. If null, the adjustment will start when
-             * the phase or subscription starts.
+             * stop affecting prices on the subscription.
              */
             fun endDate(endDate: OffsetDateTime?) = endDate(JsonField.ofNullable(endDate))
 
             /**
              * The end date of the adjustment interval. This is the date that the adjustment will
-             * stop affecting prices on the subscription. If null, the adjustment will start when
-             * the phase or subscription starts.
+             * stop affecting prices on the subscription.
              */
             fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.orElse(null))
 
             /**
              * The end date of the adjustment interval. This is the date that the adjustment will
-             * stop affecting prices on the subscription. If null, the adjustment will start when
-             * the phase or subscription starts.
+             * stop affecting prices on the subscription.
              */
             fun endDate(endDate: JsonField<OffsetDateTime>) = apply { this.endDate = endDate }
 
