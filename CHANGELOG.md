@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.30.0 (2025-02-13)
+
+Full Changelog: [v0.29.0...v0.30.0](https://github.com/orbcorp/orb-java/compare/v0.29.0...v0.30.0)
+
+### Features
+
+* **api:** api update ([#242](https://github.com/orbcorp/orb-java/issues/242)) ([afd09a2](https://github.com/orbcorp/orb-java/commit/afd09a2df799a43abd800dd5f8010a6de74cf444))
+
+
+### Chores
+
+* **internal:** refactor `PhantomReachableClosingAsyncStreamResponse` impl ([#240](https://github.com/orbcorp/orb-java/issues/240)) ([fbf592c](https://github.com/orbcorp/orb-java/commit/fbf592c2a7e0cec9b94c85a3cfd91db996f23d06))
+
+
+### Documentation
+
+* add more phantom reachability docs ([fbf592c](https://github.com/orbcorp/orb-java/commit/fbf592c2a7e0cec9b94c85a3cfd91db996f23d06))
+
 ## 0.29.0 (2025-02-11)
 
 Full Changelog: [v0.28.0...v0.29.0](https://github.com/orbcorp/orb-java/compare/v0.28.0...v0.29.0)
