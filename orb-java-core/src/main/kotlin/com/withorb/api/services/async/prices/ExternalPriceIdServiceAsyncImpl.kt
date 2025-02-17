@@ -19,9 +19,7 @@ import com.withorb.api.models.PriceExternalPriceIdUpdateParams
 import java.util.concurrent.CompletableFuture
 
 class ExternalPriceIdServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : ExternalPriceIdServiceAsync {
+internal constructor(private val clientOptions: ClientOptions) : ExternalPriceIdServiceAsync {
 
     private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
@@ -34,7 +32,7 @@ internal constructor(
      */
     override fun update(
         params: PriceExternalPriceIdUpdateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Price> {
         val request =
             HttpRequest.builder()
@@ -66,7 +64,7 @@ internal constructor(
      */
     override fun fetch(
         params: PriceExternalPriceIdFetchParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Price> {
         val request =
             HttpRequest.builder()

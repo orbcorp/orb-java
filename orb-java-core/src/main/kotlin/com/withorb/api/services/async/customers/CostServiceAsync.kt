@@ -126,7 +126,7 @@ interface CostServiceAsync {
     @JvmOverloads
     fun list(
         params: CustomerCostListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCostListResponse>
 
     /**
@@ -242,6 +242,6 @@ interface CostServiceAsync {
     @JvmOverloads
     fun listByExternalId(
         params: CustomerCostListByExternalIdParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCostListByExternalIdResponse>
 }

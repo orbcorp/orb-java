@@ -27,6 +27,6 @@ interface VolumeServiceAsync {
     @JvmOverloads
     fun list(
         params: EventVolumeListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<EventVolumes>
 }

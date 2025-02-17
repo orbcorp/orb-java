@@ -66,7 +66,7 @@ interface EventService {
     @JvmOverloads
     fun update(
         params: EventUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): EventUpdateResponse
 
     /**
@@ -108,7 +108,7 @@ interface EventService {
     @JvmOverloads
     fun deprecate(
         params: EventDeprecateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): EventDeprecateResponse
 
     /**
@@ -303,7 +303,7 @@ interface EventService {
     @JvmOverloads
     fun ingest(
         params: EventIngestParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): EventIngestResponse
 
     /**
@@ -325,6 +325,6 @@ interface EventService {
     @JvmOverloads
     fun search(
         params: EventSearchParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): EventSearchResponse
 }

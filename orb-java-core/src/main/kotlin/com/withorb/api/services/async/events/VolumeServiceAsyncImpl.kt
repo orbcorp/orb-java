@@ -16,10 +16,8 @@ import com.withorb.api.models.EventVolumeListParams
 import com.withorb.api.models.EventVolumes
 import java.util.concurrent.CompletableFuture
 
-class VolumeServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : VolumeServiceAsync {
+class VolumeServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    VolumeServiceAsync {
 
     private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
@@ -41,7 +39,7 @@ internal constructor(
      */
     override fun list(
         params: EventVolumeListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<EventVolumes> {
         val request =
             HttpRequest.builder()

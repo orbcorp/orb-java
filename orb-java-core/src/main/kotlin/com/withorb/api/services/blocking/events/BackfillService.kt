@@ -51,7 +51,7 @@ interface BackfillService {
     @JvmOverloads
     fun create(
         params: EventBackfillCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): EventBackfillCreateResponse
 
     /**
@@ -65,7 +65,7 @@ interface BackfillService {
     @JvmOverloads
     fun list(
         params: EventBackfillListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): EventBackfillListPage
 
     /**
@@ -76,14 +76,14 @@ interface BackfillService {
     @JvmOverloads
     fun close(
         params: EventBackfillCloseParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): EventBackfillCloseResponse
 
     /** This endpoint is used to fetch a backfill given an identifier. */
     @JvmOverloads
     fun fetch(
         params: EventBackfillFetchParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): EventBackfillFetchResponse
 
     /**
@@ -97,6 +97,6 @@ interface BackfillService {
     @JvmOverloads
     fun revert(
         params: EventBackfillRevertParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): EventBackfillRevertResponse
 }

@@ -22,10 +22,8 @@ import com.withorb.api.services.async.customers.credits.TopUpServiceAsync
 import com.withorb.api.services.async.customers.credits.TopUpServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 
-class CreditServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : CreditServiceAsync {
+class CreditServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    CreditServiceAsync {
 
     private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
@@ -52,7 +50,7 @@ internal constructor(
      */
     override fun list(
         params: CustomerCreditListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CustomerCreditListPageAsync> {
         val request =
             HttpRequest.builder()
@@ -89,7 +87,7 @@ internal constructor(
      */
     override fun listByExternalId(
         params: CustomerCreditListByExternalIdParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CustomerCreditListByExternalIdPageAsync> {
         val request =
             HttpRequest.builder()
@@ -98,7 +96,7 @@ internal constructor(
                     "customers",
                     "external_customer_id",
                     params.getPathParam(0),
-                    "credits"
+                    "credits",
                 )
                 .build()
                 .prepareAsync(clientOptions, params)

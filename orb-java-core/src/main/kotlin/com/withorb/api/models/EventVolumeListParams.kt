@@ -70,7 +70,7 @@ private constructor(
         this.timeframeStart.let {
             queryParams.put(
                 "timeframe_start",
-                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it)),
             )
         }
         this.cursor?.let { queryParams.put("cursor", listOf(it.toString())) }
@@ -78,7 +78,7 @@ private constructor(
         this.timeframeEnd?.let {
             queryParams.put(
                 "timeframe_end",
-                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it)),
             )
         }
         queryParams.putAll(additionalQueryParams)

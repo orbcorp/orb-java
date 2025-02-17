@@ -104,13 +104,8 @@ private constructor(
         fun of(
             balanceTransactionsService: BalanceTransactionService,
             params: CustomerBalanceTransactionListParams,
-            response: Response
-        ) =
-            CustomerBalanceTransactionListPage(
-                balanceTransactionsService,
-                params,
-                response,
-            )
+            response: Response,
+        ) = CustomerBalanceTransactionListPage(balanceTransactionsService, params, response)
     }
 
     @NoAutoDetect
@@ -207,18 +202,12 @@ private constructor(
                 this.additionalProperties.put(key, value)
             }
 
-            fun build() =
-                Response(
-                    data,
-                    paginationMetadata,
-                    additionalProperties.toImmutable(),
-                )
+            fun build() = Response(data, paginationMetadata, additionalProperties.toImmutable())
         }
     }
 
-    class AutoPager(
-        private val firstPage: CustomerBalanceTransactionListPage,
-    ) : Iterable<CustomerBalanceTransactionListResponse> {
+    class AutoPager(private val firstPage: CustomerBalanceTransactionListPage) :
+        Iterable<CustomerBalanceTransactionListResponse> {
 
         override fun iterator(): Iterator<CustomerBalanceTransactionListResponse> = iterator {
             var page = firstPage

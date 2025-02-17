@@ -21,10 +21,8 @@ import com.withorb.api.models.ItemListParams
 import com.withorb.api.models.ItemUpdateParams
 import java.util.concurrent.CompletableFuture
 
-class ItemServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : ItemServiceAsync {
+class ItemServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    ItemServiceAsync {
 
     private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
@@ -34,7 +32,7 @@ internal constructor(
     /** This endpoint is used to create an [Item](/core-concepts#item). */
     override fun create(
         params: ItemCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Item> {
         val request =
             HttpRequest.builder()
@@ -62,7 +60,7 @@ internal constructor(
     /** This endpoint can be used to update properties on the Item. */
     override fun update(
         params: ItemUpdateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Item> {
         val request =
             HttpRequest.builder()
@@ -91,7 +89,7 @@ internal constructor(
     /** This endpoint returns a list of all Items, ordered in descending order by creation time. */
     override fun list(
         params: ItemListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<ItemListPageAsync> {
         val request =
             HttpRequest.builder()
@@ -119,7 +117,7 @@ internal constructor(
     /** This endpoint returns an item identified by its item_id. */
     override fun fetch(
         params: ItemFetchParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Item> {
         val request =
             HttpRequest.builder()

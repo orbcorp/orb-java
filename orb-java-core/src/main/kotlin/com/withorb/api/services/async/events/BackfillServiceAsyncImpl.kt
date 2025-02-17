@@ -25,10 +25,8 @@ import com.withorb.api.models.EventBackfillRevertParams
 import com.withorb.api.models.EventBackfillRevertResponse
 import java.util.concurrent.CompletableFuture
 
-class BackfillServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : BackfillServiceAsync {
+class BackfillServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    BackfillServiceAsync {
 
     private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
@@ -68,7 +66,7 @@ internal constructor(
      */
     override fun create(
         params: EventBackfillCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<EventBackfillCreateResponse> {
         val request =
             HttpRequest.builder()
@@ -104,7 +102,7 @@ internal constructor(
      */
     override fun list(
         params: EventBackfillListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<EventBackfillListPageAsync> {
         val request =
             HttpRequest.builder()
@@ -137,7 +135,7 @@ internal constructor(
      */
     override fun close(
         params: EventBackfillCloseParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<EventBackfillCloseResponse> {
         val request =
             HttpRequest.builder()
@@ -166,7 +164,7 @@ internal constructor(
     /** This endpoint is used to fetch a backfill given an identifier. */
     override fun fetch(
         params: EventBackfillFetchParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<EventBackfillFetchResponse> {
         val request =
             HttpRequest.builder()
@@ -201,7 +199,7 @@ internal constructor(
      */
     override fun revert(
         params: EventBackfillRevertParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<EventBackfillRevertResponse> {
         val request =
             HttpRequest.builder()

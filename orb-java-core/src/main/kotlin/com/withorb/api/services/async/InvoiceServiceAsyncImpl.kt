@@ -27,10 +27,8 @@ import com.withorb.api.models.InvoiceUpdateParams
 import com.withorb.api.models.InvoiceVoidInvoiceParams
 import java.util.concurrent.CompletableFuture
 
-class InvoiceServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : InvoiceServiceAsync {
+class InvoiceServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    InvoiceServiceAsync {
 
     private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
@@ -40,7 +38,7 @@ internal constructor(
     /** This endpoint is used to create a one-off invoice for a customer. */
     override fun create(
         params: InvoiceCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Invoice> {
         val request =
             HttpRequest.builder()
@@ -73,7 +71,7 @@ internal constructor(
      */
     override fun update(
         params: InvoiceUpdateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Invoice> {
         val request =
             HttpRequest.builder()
@@ -115,7 +113,7 @@ internal constructor(
      */
     override fun list(
         params: InvoiceListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<InvoiceListPageAsync> {
         val request =
             HttpRequest.builder()
@@ -145,7 +143,7 @@ internal constructor(
      */
     override fun fetch(
         params: InvoiceFetchParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Invoice> {
         val request =
             HttpRequest.builder()
@@ -176,7 +174,7 @@ internal constructor(
      */
     override fun fetchUpcoming(
         params: InvoiceFetchUpcomingParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<InvoiceFetchUpcomingResponse> {
         val request =
             HttpRequest.builder()
@@ -209,7 +207,7 @@ internal constructor(
      */
     override fun issue(
         params: InvoiceIssueParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Invoice> {
         val request =
             HttpRequest.builder()
@@ -240,7 +238,7 @@ internal constructor(
      */
     override fun markPaid(
         params: InvoiceMarkPaidParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Invoice> {
         val request =
             HttpRequest.builder()
@@ -271,7 +269,7 @@ internal constructor(
      */
     override fun pay(
         params: InvoicePayParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Invoice> {
         val request =
             HttpRequest.builder()
@@ -306,7 +304,7 @@ internal constructor(
      */
     override fun voidInvoice(
         params: InvoiceVoidInvoiceParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Invoice> {
         val request =
             HttpRequest.builder()

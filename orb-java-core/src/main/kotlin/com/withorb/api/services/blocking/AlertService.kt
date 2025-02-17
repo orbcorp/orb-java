@@ -22,14 +22,14 @@ interface AlertService {
     @JvmOverloads
     fun retrieve(
         params: AlertRetrieveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Alert
 
     /** This endpoint updates the thresholds of an alert. */
     @JvmOverloads
     fun update(
         params: AlertUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Alert
 
     /**
@@ -46,7 +46,7 @@ interface AlertService {
     @JvmOverloads
     fun list(
         params: AlertListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): AlertListPage
 
     /**
@@ -60,7 +60,7 @@ interface AlertService {
     @JvmOverloads
     fun createForCustomer(
         params: AlertCreateForCustomerParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Alert
 
     /**
@@ -74,7 +74,7 @@ interface AlertService {
     @JvmOverloads
     fun createForExternalCustomer(
         params: AlertCreateForExternalCustomerParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Alert
 
     /**
@@ -92,7 +92,7 @@ interface AlertService {
     @JvmOverloads
     fun createForSubscription(
         params: AlertCreateForSubscriptionParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Alert
 
     /**
@@ -103,7 +103,7 @@ interface AlertService {
     @JvmOverloads
     fun disable(
         params: AlertDisableParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Alert
 
     /**
@@ -114,6 +114,6 @@ interface AlertService {
     @JvmOverloads
     fun enable(
         params: AlertEnableParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Alert
 }

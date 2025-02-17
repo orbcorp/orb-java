@@ -21,7 +21,7 @@ interface ExternalPlanIdServiceAsync {
     @JvmOverloads
     fun update(
         params: PlanExternalPlanIdUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Plan>
 
     /**
@@ -44,6 +44,6 @@ interface ExternalPlanIdServiceAsync {
     @JvmOverloads
     fun fetch(
         params: PlanExternalPlanIdFetchParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Plan>
 }

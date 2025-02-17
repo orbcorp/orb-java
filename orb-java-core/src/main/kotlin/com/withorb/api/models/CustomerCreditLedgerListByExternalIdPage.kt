@@ -155,13 +155,8 @@ private constructor(
         fun of(
             ledgerService: LedgerService,
             params: CustomerCreditLedgerListByExternalIdParams,
-            response: Response
-        ) =
-            CustomerCreditLedgerListByExternalIdPage(
-                ledgerService,
-                params,
-                response,
-            )
+            response: Response,
+        ) = CustomerCreditLedgerListByExternalIdPage(ledgerService, params, response)
     }
 
     @NoAutoDetect
@@ -259,18 +254,12 @@ private constructor(
                 this.additionalProperties.put(key, value)
             }
 
-            fun build() =
-                Response(
-                    data,
-                    paginationMetadata,
-                    additionalProperties.toImmutable(),
-                )
+            fun build() = Response(data, paginationMetadata, additionalProperties.toImmutable())
         }
     }
 
-    class AutoPager(
-        private val firstPage: CustomerCreditLedgerListByExternalIdPage,
-    ) : Iterable<CustomerCreditLedgerListByExternalIdResponse> {
+    class AutoPager(private val firstPage: CustomerCreditLedgerListByExternalIdPage) :
+        Iterable<CustomerCreditLedgerListByExternalIdResponse> {
 
         override fun iterator(): Iterator<CustomerCreditLedgerListByExternalIdResponse> = iterator {
             var page = firstPage

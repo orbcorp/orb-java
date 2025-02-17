@@ -105,7 +105,7 @@ private constructor(
         fun build(): PriceEvaluateResponse =
             PriceEvaluateResponse(
                 checkRequired("data", data).map { it.toImmutable() },
-                additionalProperties.toImmutable()
+                additionalProperties.toImmutable(),
             )
     }
 

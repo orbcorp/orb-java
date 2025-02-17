@@ -52,7 +52,7 @@ interface BackfillServiceAsync {
     @JvmOverloads
     fun create(
         params: EventBackfillCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<EventBackfillCreateResponse>
 
     /**
@@ -66,7 +66,7 @@ interface BackfillServiceAsync {
     @JvmOverloads
     fun list(
         params: EventBackfillListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<EventBackfillListPageAsync>
 
     /**
@@ -77,14 +77,14 @@ interface BackfillServiceAsync {
     @JvmOverloads
     fun close(
         params: EventBackfillCloseParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<EventBackfillCloseResponse>
 
     /** This endpoint is used to fetch a backfill given an identifier. */
     @JvmOverloads
     fun fetch(
         params: EventBackfillFetchParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<EventBackfillFetchResponse>
 
     /**
@@ -98,6 +98,6 @@ interface BackfillServiceAsync {
     @JvmOverloads
     fun revert(
         params: EventBackfillRevertParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<EventBackfillRevertResponse>
 }

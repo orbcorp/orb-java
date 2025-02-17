@@ -82,13 +82,8 @@ private constructor(
         fun of(
             dimensionalPriceGroupsService: DimensionalPriceGroupServiceAsync,
             params: DimensionalPriceGroupListParams,
-            response: Response
-        ) =
-            DimensionalPriceGroupListPageAsync(
-                dimensionalPriceGroupsService,
-                params,
-                response,
-            )
+            response: Response,
+        ) = DimensionalPriceGroupListPageAsync(dimensionalPriceGroupsService, params, response)
     }
 
     @NoAutoDetect
@@ -179,26 +174,19 @@ private constructor(
                 this.additionalProperties.put(key, value)
             }
 
-            fun build() =
-                Response(
-                    data,
-                    paginationMetadata,
-                    additionalProperties.toImmutable(),
-                )
+            fun build() = Response(data, paginationMetadata, additionalProperties.toImmutable())
         }
     }
 
-    class AutoPager(
-        private val firstPage: DimensionalPriceGroupListPageAsync,
-    ) {
+    class AutoPager(private val firstPage: DimensionalPriceGroupListPageAsync) {
 
         fun forEach(
             action: Predicate<DimensionalPriceGroup>,
-            executor: Executor
+            executor: Executor,
         ): CompletableFuture<Void> {
             fun CompletableFuture<Optional<DimensionalPriceGroupListPageAsync>>.forEach(
                 action: (DimensionalPriceGroup) -> Boolean,
-                executor: Executor
+                executor: Executor,
             ): CompletableFuture<Void> =
                 thenComposeAsync(
                     { page ->
@@ -207,7 +195,7 @@ private constructor(
                             .map { it.getNextPage().forEach(action, executor) }
                             .orElseGet { CompletableFuture.completedFuture(null) }
                     },
-                    executor
+                    executor,
                 )
             return CompletableFuture.completedFuture(Optional.of(firstPage))
                 .forEach(action::test, executor)
