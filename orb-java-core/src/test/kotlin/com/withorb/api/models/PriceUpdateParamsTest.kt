@@ -31,7 +31,9 @@ class PriceUpdateParamsTest {
                         .build()
                 )
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.metadata())
             .contains(
@@ -44,7 +46,9 @@ class PriceUpdateParamsTest {
     @Test
     fun bodyWithoutOptionalFields() {
         val params = PriceUpdateParams.builder().priceId("price_id").build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
     }
 
