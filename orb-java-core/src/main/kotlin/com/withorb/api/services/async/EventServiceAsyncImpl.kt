@@ -27,10 +27,8 @@ import com.withorb.api.services.async.events.VolumeServiceAsync
 import com.withorb.api.services.async.events.VolumeServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 
-class EventServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : EventServiceAsync {
+class EventServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    EventServiceAsync {
 
     private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
@@ -88,7 +86,7 @@ internal constructor(
      */
     override fun update(
         params: EventUpdateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<EventUpdateResponse> {
         val request =
             HttpRequest.builder()
@@ -151,7 +149,7 @@ internal constructor(
      */
     override fun deprecate(
         params: EventDeprecateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<EventDeprecateResponse> {
         val request =
             HttpRequest.builder()
@@ -367,7 +365,7 @@ internal constructor(
      */
     override fun ingest(
         params: EventIngestParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<EventIngestResponse> {
         val request =
             HttpRequest.builder()
@@ -410,7 +408,7 @@ internal constructor(
      */
     override fun search(
         params: EventSearchParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<EventSearchResponse> {
         val request =
             HttpRequest.builder()

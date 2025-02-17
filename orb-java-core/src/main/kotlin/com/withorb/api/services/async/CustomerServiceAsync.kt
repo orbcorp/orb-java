@@ -45,7 +45,7 @@ interface CustomerServiceAsync {
     @JvmOverloads
     fun create(
         params: CustomerCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Customer>
 
     /**
@@ -57,7 +57,7 @@ interface CustomerServiceAsync {
     @JvmOverloads
     fun update(
         params: CustomerUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Customer>
 
     /**
@@ -70,7 +70,7 @@ interface CustomerServiceAsync {
     @JvmOverloads
     fun list(
         params: CustomerListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerListPageAsync>
 
     /**
@@ -91,7 +91,7 @@ interface CustomerServiceAsync {
     @JvmOverloads
     fun delete(
         params: CustomerDeleteParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Void?>
 
     /**
@@ -104,7 +104,7 @@ interface CustomerServiceAsync {
     @JvmOverloads
     fun fetch(
         params: CustomerFetchParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Customer>
 
     /**
@@ -117,7 +117,7 @@ interface CustomerServiceAsync {
     @JvmOverloads
     fun fetchByExternalId(
         params: CustomerFetchByExternalIdParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Customer>
 
     /**
@@ -131,7 +131,7 @@ interface CustomerServiceAsync {
     @JvmOverloads
     fun syncPaymentMethodsFromGateway(
         params: CustomerSyncPaymentMethodsFromGatewayParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Void?>
 
     /**
@@ -145,7 +145,7 @@ interface CustomerServiceAsync {
     @JvmOverloads
     fun syncPaymentMethodsFromGatewayByExternalCustomerId(
         params: CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Void?>
 
     /**
@@ -156,6 +156,6 @@ interface CustomerServiceAsync {
     @JvmOverloads
     fun updateByExternalId(
         params: CustomerUpdateByExternalIdParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Customer>
 }

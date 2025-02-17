@@ -23,10 +23,8 @@ import com.withorb.api.services.async.plans.ExternalPlanIdServiceAsync
 import com.withorb.api.services.async.plans.ExternalPlanIdServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 
-class PlanServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : PlanServiceAsync {
+class PlanServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    PlanServiceAsync {
 
     private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
@@ -42,7 +40,7 @@ internal constructor(
     /** This endpoint allows creation of plans including their prices. */
     override fun create(
         params: PlanCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Plan> {
         val request =
             HttpRequest.builder()
@@ -75,7 +73,7 @@ internal constructor(
      */
     override fun update(
         params: PlanUpdateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Plan> {
         val request =
             HttpRequest.builder()
@@ -109,7 +107,7 @@ internal constructor(
      */
     override fun list(
         params: PlanListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<PlanListPageAsync> {
         val request =
             HttpRequest.builder()
@@ -154,7 +152,7 @@ internal constructor(
      */
     override fun fetch(
         params: PlanFetchParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Plan> {
         val request =
             HttpRequest.builder()

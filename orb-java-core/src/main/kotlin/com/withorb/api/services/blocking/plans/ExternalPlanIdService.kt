@@ -20,7 +20,7 @@ interface ExternalPlanIdService {
     @JvmOverloads
     fun update(
         params: PlanExternalPlanIdUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Plan
 
     /**
@@ -43,6 +43,6 @@ interface ExternalPlanIdService {
     @JvmOverloads
     fun fetch(
         params: PlanExternalPlanIdFetchParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Plan
 }

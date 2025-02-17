@@ -206,7 +206,7 @@ private constructor(
         override fun serialize(
             value: Discount,
             generator: JsonGenerator,
-            provider: SerializerProvider
+            provider: SerializerProvider,
         ) {
             when {
                 value.percentage != null -> generator.writeObject(value.percentage)
@@ -408,11 +408,8 @@ private constructor(
                 )
         }
 
-        class DiscountType
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class DiscountType @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
 
             /**
              * Returns this class instance's raw value.
@@ -433,7 +430,7 @@ private constructor(
 
             /** An enum containing [DiscountType]'s known values. */
             enum class Known {
-                USAGE,
+                USAGE
             }
 
             /**

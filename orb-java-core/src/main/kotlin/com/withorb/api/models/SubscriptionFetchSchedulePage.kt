@@ -83,13 +83,8 @@ private constructor(
         fun of(
             subscriptionsService: SubscriptionService,
             params: SubscriptionFetchScheduleParams,
-            response: Response
-        ) =
-            SubscriptionFetchSchedulePage(
-                subscriptionsService,
-                params,
-                response,
-            )
+            response: Response,
+        ) = SubscriptionFetchSchedulePage(subscriptionsService, params, response)
     }
 
     @NoAutoDetect
@@ -183,18 +178,12 @@ private constructor(
                 this.additionalProperties.put(key, value)
             }
 
-            fun build() =
-                Response(
-                    data,
-                    paginationMetadata,
-                    additionalProperties.toImmutable(),
-                )
+            fun build() = Response(data, paginationMetadata, additionalProperties.toImmutable())
         }
     }
 
-    class AutoPager(
-        private val firstPage: SubscriptionFetchSchedulePage,
-    ) : Iterable<SubscriptionFetchScheduleResponse> {
+    class AutoPager(private val firstPage: SubscriptionFetchSchedulePage) :
+        Iterable<SubscriptionFetchScheduleResponse> {
 
         override fun iterator(): Iterator<SubscriptionFetchScheduleResponse> = iterator {
             var page = firstPage

@@ -20,10 +20,8 @@ import com.withorb.api.models.CreditNoteListPageAsync
 import com.withorb.api.models.CreditNoteListParams
 import java.util.concurrent.CompletableFuture
 
-class CreditNoteServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : CreditNoteServiceAsync {
+class CreditNoteServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    CreditNoteServiceAsync {
 
     private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
@@ -33,7 +31,7 @@ internal constructor(
     /** This endpoint is used to create a single [`Credit Note`](/invoicing/credit-notes). */
     override fun create(
         params: CreditNoteCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CreditNote> {
         val request =
             HttpRequest.builder()
@@ -66,7 +64,7 @@ internal constructor(
      */
     override fun list(
         params: CreditNoteListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CreditNoteListPageAsync> {
         val request =
             HttpRequest.builder()
@@ -97,7 +95,7 @@ internal constructor(
      */
     override fun fetch(
         params: CreditNoteFetchParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CreditNote> {
         val request =
             HttpRequest.builder()

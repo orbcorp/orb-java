@@ -89,13 +89,8 @@ private constructor(
         fun of(
             backfillsService: BackfillServiceAsync,
             params: EventBackfillListParams,
-            response: Response
-        ) =
-            EventBackfillListPageAsync(
-                backfillsService,
-                params,
-                response,
-            )
+            response: Response,
+        ) = EventBackfillListPageAsync(backfillsService, params, response)
     }
 
     @NoAutoDetect
@@ -187,26 +182,19 @@ private constructor(
                 this.additionalProperties.put(key, value)
             }
 
-            fun build() =
-                Response(
-                    data,
-                    paginationMetadata,
-                    additionalProperties.toImmutable(),
-                )
+            fun build() = Response(data, paginationMetadata, additionalProperties.toImmutable())
         }
     }
 
-    class AutoPager(
-        private val firstPage: EventBackfillListPageAsync,
-    ) {
+    class AutoPager(private val firstPage: EventBackfillListPageAsync) {
 
         fun forEach(
             action: Predicate<EventBackfillListResponse>,
-            executor: Executor
+            executor: Executor,
         ): CompletableFuture<Void> {
             fun CompletableFuture<Optional<EventBackfillListPageAsync>>.forEach(
                 action: (EventBackfillListResponse) -> Boolean,
-                executor: Executor
+                executor: Executor,
             ): CompletableFuture<Void> =
                 thenComposeAsync(
                     { page ->
@@ -215,7 +203,7 @@ private constructor(
                             .map { it.getNextPage().forEach(action, executor) }
                             .orElseGet { CompletableFuture.completedFuture(null) }
                     },
-                    executor
+                    executor,
                 )
             return CompletableFuture.completedFuture(Optional.of(firstPage))
                 .forEach(action::test, executor)

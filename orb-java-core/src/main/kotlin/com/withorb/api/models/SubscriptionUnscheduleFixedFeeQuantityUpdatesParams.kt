@@ -144,7 +144,7 @@ private constructor(
             fun build(): SubscriptionUnscheduleFixedFeeQuantityUpdatesBody =
                 SubscriptionUnscheduleFixedFeeQuantityUpdatesBody(
                     checkRequired("priceId", priceId),
-                    additionalProperties.toImmutable()
+                    additionalProperties.toImmutable(),
                 )
         }
 

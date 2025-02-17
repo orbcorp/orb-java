@@ -589,7 +589,7 @@ private constructor(
             override fun serialize(
                 value: TrialEndDate,
                 generator: JsonGenerator,
-                provider: SerializerProvider
+                provider: SerializerProvider,
             ) {
                 when {
                     value.offsetDateTime != null -> generator.writeObject(value.offsetDateTime)
@@ -600,11 +600,8 @@ private constructor(
             }
         }
 
-        class UnionMember1
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class UnionMember1 @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
 
             /**
              * Returns this class instance's raw value.
@@ -625,7 +622,7 @@ private constructor(
 
             /** An enum containing [UnionMember1]'s known values. */
             enum class Known {
-                IMMEDIATE,
+                IMMEDIATE
             }
 
             /**

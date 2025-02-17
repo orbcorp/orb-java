@@ -18,10 +18,8 @@ import com.withorb.api.models.CustomerCostListParams
 import com.withorb.api.models.CustomerCostListResponse
 import java.util.concurrent.CompletableFuture
 
-class CostServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : CostServiceAsync {
+class CostServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    CostServiceAsync {
 
     private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
@@ -141,7 +139,7 @@ internal constructor(
      */
     override fun list(
         params: CustomerCostListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CustomerCostListResponse> {
         val request =
             HttpRequest.builder()
@@ -278,7 +276,7 @@ internal constructor(
      */
     override fun listByExternalId(
         params: CustomerCostListByExternalIdParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CustomerCostListByExternalIdResponse> {
         val request =
             HttpRequest.builder()
@@ -287,7 +285,7 @@ internal constructor(
                     "customers",
                     "external_customer_id",
                     params.getPathParam(0),
-                    "costs"
+                    "costs",
                 )
                 .build()
                 .prepareAsync(clientOptions, params)

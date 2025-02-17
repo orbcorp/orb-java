@@ -280,7 +280,7 @@ interface SubscriptionService {
     @JvmOverloads
     fun create(
         params: SubscriptionCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionCreateResponse
 
     /**
@@ -290,7 +290,7 @@ interface SubscriptionService {
     @JvmOverloads
     fun update(
         params: SubscriptionUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Subscription
 
     /**
@@ -306,7 +306,7 @@ interface SubscriptionService {
     @JvmOverloads
     fun list(
         params: SubscriptionListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionListPage
 
     /**
@@ -365,7 +365,7 @@ interface SubscriptionService {
     @JvmOverloads
     fun cancel(
         params: SubscriptionCancelParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionCancelResponse
 
     /**
@@ -375,7 +375,7 @@ interface SubscriptionService {
     @JvmOverloads
     fun fetch(
         params: SubscriptionFetchParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Subscription
 
     /**
@@ -392,7 +392,7 @@ interface SubscriptionService {
     @JvmOverloads
     fun fetchCosts(
         params: SubscriptionFetchCostsParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionFetchCostsResponse
 
     /**
@@ -403,7 +403,7 @@ interface SubscriptionService {
     @JvmOverloads
     fun fetchSchedule(
         params: SubscriptionFetchScheduleParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionFetchSchedulePage
 
     /**
@@ -586,7 +586,7 @@ interface SubscriptionService {
     @JvmOverloads
     fun fetchUsage(
         params: SubscriptionFetchUsageParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionUsage
 
     /**
@@ -659,7 +659,7 @@ interface SubscriptionService {
     @JvmOverloads
     fun priceIntervals(
         params: SubscriptionPriceIntervalsParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionPriceIntervalsResponse
 
     /**
@@ -831,7 +831,7 @@ interface SubscriptionService {
     @JvmOverloads
     fun schedulePlanChange(
         params: SubscriptionSchedulePlanChangeParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionSchedulePlanChangeResponse
 
     /**
@@ -840,7 +840,7 @@ interface SubscriptionService {
     @JvmOverloads
     fun triggerPhase(
         params: SubscriptionTriggerPhaseParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionTriggerPhaseResponse
 
     /**
@@ -853,7 +853,7 @@ interface SubscriptionService {
     @JvmOverloads
     fun unscheduleCancellation(
         params: SubscriptionUnscheduleCancellationParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionUnscheduleCancellationResponse
 
     /**
@@ -865,7 +865,7 @@ interface SubscriptionService {
     @JvmOverloads
     fun unscheduleFixedFeeQuantityUpdates(
         params: SubscriptionUnscheduleFixedFeeQuantityUpdatesParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionUnscheduleFixedFeeQuantityUpdatesResponse
 
     /**
@@ -874,7 +874,7 @@ interface SubscriptionService {
     @JvmOverloads
     fun unschedulePendingPlanChanges(
         params: SubscriptionUnschedulePendingPlanChangesParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionUnschedulePendingPlanChangesResponse
 
     /**
@@ -894,7 +894,7 @@ interface SubscriptionService {
     @JvmOverloads
     fun updateFixedFeeQuantity(
         params: SubscriptionUpdateFixedFeeQuantityParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionUpdateFixedFeeQuantityResponse
 
     /**
@@ -918,6 +918,6 @@ interface SubscriptionService {
     @JvmOverloads
     fun updateTrial(
         params: SubscriptionUpdateTrialParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionUpdateTrialResponse
 }

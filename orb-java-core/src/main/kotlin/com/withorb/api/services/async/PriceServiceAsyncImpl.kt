@@ -25,10 +25,8 @@ import com.withorb.api.services.async.prices.ExternalPriceIdServiceAsync
 import com.withorb.api.services.async.prices.ExternalPriceIdServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 
-class PriceServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : PriceServiceAsync {
+class PriceServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    PriceServiceAsync {
 
     private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
@@ -55,7 +53,7 @@ internal constructor(
      */
     override fun create(
         params: PriceCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Price> {
         val request =
             HttpRequest.builder()
@@ -86,7 +84,7 @@ internal constructor(
      */
     override fun update(
         params: PriceUpdateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Price> {
         val request =
             HttpRequest.builder()
@@ -118,7 +116,7 @@ internal constructor(
      */
     override fun list(
         params: PriceListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<PriceListPageAsync> {
         val request =
             HttpRequest.builder()
@@ -164,7 +162,7 @@ internal constructor(
      */
     override fun evaluate(
         params: PriceEvaluateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<PriceEvaluateResponse> {
         val request =
             HttpRequest.builder()
@@ -192,7 +190,7 @@ internal constructor(
     /** This endpoint returns a price given an identifier. */
     override fun fetch(
         params: PriceFetchParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Price> {
         val request =
             HttpRequest.builder()

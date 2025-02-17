@@ -22,7 +22,7 @@ interface PlanServiceAsync {
     @JvmOverloads
     fun create(
         params: PlanCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Plan>
 
     /**
@@ -34,7 +34,7 @@ interface PlanServiceAsync {
     @JvmOverloads
     fun update(
         params: PlanUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Plan>
 
     /**
@@ -46,7 +46,7 @@ interface PlanServiceAsync {
     @JvmOverloads
     fun list(
         params: PlanListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<PlanListPageAsync>
 
     /**
@@ -70,6 +70,6 @@ interface PlanServiceAsync {
     @JvmOverloads
     fun fetch(
         params: PlanFetchParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Plan>
 }

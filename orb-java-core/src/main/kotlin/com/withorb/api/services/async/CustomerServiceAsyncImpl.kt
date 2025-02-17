@@ -33,10 +33,8 @@ import com.withorb.api.services.async.customers.CreditServiceAsync
 import com.withorb.api.services.async.customers.CreditServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 
-class CustomerServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : CustomerServiceAsync {
+class CustomerServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    CustomerServiceAsync {
 
     private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
@@ -72,7 +70,7 @@ internal constructor(
      */
     override fun create(
         params: CustomerCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Customer> {
         val request =
             HttpRequest.builder()
@@ -105,7 +103,7 @@ internal constructor(
      */
     override fun update(
         params: CustomerUpdateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Customer> {
         val request =
             HttpRequest.builder()
@@ -140,7 +138,7 @@ internal constructor(
      */
     override fun list(
         params: CustomerListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CustomerListPageAsync> {
         val request =
             HttpRequest.builder()
@@ -181,7 +179,7 @@ internal constructor(
      */
     override fun delete(
         params: CustomerDeleteParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Void?> {
         val request =
             HttpRequest.builder()
@@ -207,7 +205,7 @@ internal constructor(
      */
     override fun fetch(
         params: CustomerFetchParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Customer> {
         val request =
             HttpRequest.builder()
@@ -240,7 +238,7 @@ internal constructor(
      */
     override fun fetchByExternalId(
         params: CustomerFetchByExternalIdParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Customer> {
         val request =
             HttpRequest.builder()
@@ -274,7 +272,7 @@ internal constructor(
      */
     override fun syncPaymentMethodsFromGateway(
         params: CustomerSyncPaymentMethodsFromGatewayParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Void?> {
         val request =
             HttpRequest.builder()
@@ -283,7 +281,7 @@ internal constructor(
                     "customers",
                     "external_customer_id",
                     params.getPathParam(0),
-                    "sync_payment_methods_from_gateway"
+                    "sync_payment_methods_from_gateway",
                 )
                 .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                 .build()
@@ -308,7 +306,7 @@ internal constructor(
      */
     override fun syncPaymentMethodsFromGatewayByExternalCustomerId(
         params: CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Void?> {
         val request =
             HttpRequest.builder()
@@ -316,7 +314,7 @@ internal constructor(
                 .addPathSegments(
                     "customers",
                     params.getPathParam(0),
-                    "sync_payment_methods_from_gateway"
+                    "sync_payment_methods_from_gateway",
                 )
                 .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                 .build()
@@ -338,7 +336,7 @@ internal constructor(
      */
     override fun updateByExternalId(
         params: CustomerUpdateByExternalIdParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Customer> {
         val request =
             HttpRequest.builder()

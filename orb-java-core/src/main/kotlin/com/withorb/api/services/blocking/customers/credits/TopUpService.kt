@@ -29,21 +29,21 @@ interface TopUpService {
     @JvmOverloads
     fun create(
         params: CustomerCreditTopUpCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCreditTopUpCreateResponse
 
     /** List top-ups */
     @JvmOverloads
     fun list(
         params: CustomerCreditTopUpListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCreditTopUpListPage
 
     /** Delete top-up */
     @JvmOverloads
     fun delete(
         params: CustomerCreditTopUpDeleteParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     )
 
     /**
@@ -57,20 +57,20 @@ interface TopUpService {
     @JvmOverloads
     fun createByExternalId(
         params: CustomerCreditTopUpCreateByExternalIdParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCreditTopUpCreateByExternalIdResponse
 
     /** Delete top-up by external ID */
     @JvmOverloads
     fun deleteByExternalId(
         params: CustomerCreditTopUpDeleteByExternalIdParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     )
 
     /** List top-ups by external ID */
     @JvmOverloads
     fun listByExternalId(
         params: CustomerCreditTopUpListByExternalIdParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCreditTopUpListByExternalIdPage
 }

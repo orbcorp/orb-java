@@ -186,12 +186,7 @@ private constructor(
         }
 
         fun build(): ItemListParams =
-            ItemListParams(
-                cursor,
-                limit,
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
-            )
+            ItemListParams(cursor, limit, additionalHeaders.build(), additionalQueryParams.build())
     }
 
     override fun equals(other: Any?): Boolean {

@@ -98,7 +98,7 @@ interface LedgerService {
     @JvmOverloads
     fun list(
         params: CustomerCreditLedgerListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCreditLedgerListPage
 
     /**
@@ -207,7 +207,7 @@ interface LedgerService {
     @JvmOverloads
     fun createEntry(
         params: CustomerCreditLedgerCreateEntryParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCreditLedgerCreateEntryResponse
 
     /**
@@ -316,7 +316,7 @@ interface LedgerService {
     @JvmOverloads
     fun createEntryByExternalId(
         params: CustomerCreditLedgerCreateEntryByExternalIdParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCreditLedgerCreateEntryByExternalIdResponse
 
     /**
@@ -401,6 +401,6 @@ interface LedgerService {
     @JvmOverloads
     fun listByExternalId(
         params: CustomerCreditLedgerListByExternalIdParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCreditLedgerListByExternalIdPage
 }

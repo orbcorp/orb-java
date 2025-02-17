@@ -18,7 +18,7 @@ interface ExternalPriceIdService {
     @JvmOverloads
     fun update(
         params: PriceExternalPriceIdUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Price
 
     /**
@@ -29,6 +29,6 @@ interface ExternalPriceIdService {
     @JvmOverloads
     fun fetch(
         params: PriceExternalPriceIdFetchParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Price
 }

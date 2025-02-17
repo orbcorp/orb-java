@@ -1080,11 +1080,8 @@ private constructor(
                 )
         }
 
-        class ModelType
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class ModelType @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
 
             /**
              * Returns this class instance's raw value.
@@ -1105,7 +1102,7 @@ private constructor(
 
             /** An enum containing [ModelType]'s known values. */
             enum class Known {
-                UNIT,
+                UNIT
             }
 
             /**
@@ -1255,7 +1252,7 @@ private constructor(
                 fun build(): UnitConfig =
                     UnitConfig(
                         checkRequired("unitAmount", unitAmount),
-                        additionalProperties.toImmutable()
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -1305,7 +1302,7 @@ private constructor(
     @JsonCreator
     private constructor(
         @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
     ) {
 
         @JsonAnyGetter

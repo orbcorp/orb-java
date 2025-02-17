@@ -21,10 +21,8 @@ import com.withorb.api.models.MetricListParams
 import com.withorb.api.models.MetricUpdateParams
 import java.util.concurrent.CompletableFuture
 
-class MetricServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : MetricServiceAsync {
+class MetricServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    MetricServiceAsync {
 
     private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
@@ -38,7 +36,7 @@ internal constructor(
      */
     override fun create(
         params: MetricCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<BillableMetric> {
         val request =
             HttpRequest.builder()
@@ -69,7 +67,7 @@ internal constructor(
      */
     override fun update(
         params: MetricUpdateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<BillableMetric> {
         val request =
             HttpRequest.builder()
@@ -102,7 +100,7 @@ internal constructor(
      */
     override fun list(
         params: MetricListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<MetricListPageAsync> {
         val request =
             HttpRequest.builder()
@@ -133,7 +131,7 @@ internal constructor(
      */
     override fun fetch(
         params: MetricFetchParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<BillableMetric> {
         val request =
             HttpRequest.builder()
