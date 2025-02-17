@@ -28,7 +28,7 @@ import java.util.Optional
 class PlanUpdateParams
 private constructor(
     private val planId: String,
-    private val body: PlanUpdateBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -67,7 +67,7 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): PlanUpdateBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -81,9 +81,9 @@ private constructor(
     }
 
     @NoAutoDetect
-    class PlanUpdateBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("external_plan_id")
         @ExcludeMissing
         private val externalPlanId: JsonField<String> = JsonMissing.of(),
@@ -131,7 +131,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): PlanUpdateBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -148,7 +148,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [PlanUpdateBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var externalPlanId: JsonField<String> = JsonMissing.of()
@@ -156,10 +156,10 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(planUpdateBody: PlanUpdateBody) = apply {
-                externalPlanId = planUpdateBody.externalPlanId
-                metadata = planUpdateBody.metadata
-                additionalProperties = planUpdateBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                externalPlanId = body.externalPlanId
+                metadata = body.metadata
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /**
@@ -227,8 +227,7 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): PlanUpdateBody =
-                PlanUpdateBody(externalPlanId, metadata, additionalProperties.toImmutable())
+            fun build(): Body = Body(externalPlanId, metadata, additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -236,7 +235,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is PlanUpdateBody && externalPlanId == other.externalPlanId && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && externalPlanId == other.externalPlanId && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -246,7 +245,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "PlanUpdateBody{externalPlanId=$externalPlanId, metadata=$metadata, additionalProperties=$additionalProperties}"
+            "Body{externalPlanId=$externalPlanId, metadata=$metadata, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -261,7 +260,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var planId: String? = null
-        private var body: PlanUpdateBody.Builder = PlanUpdateBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

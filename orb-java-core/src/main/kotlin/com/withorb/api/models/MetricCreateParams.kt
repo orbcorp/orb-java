@@ -27,7 +27,7 @@ import java.util.Optional
  */
 class MetricCreateParams
 private constructor(
-    private val body: MetricCreateBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -76,16 +76,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): MetricCreateBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class MetricCreateBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("description")
         @ExcludeMissing
         private val description: JsonField<String> = JsonMissing.of(),
@@ -150,7 +150,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): MetricCreateBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -170,7 +170,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [MetricCreateBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var description: JsonField<String>? = null
@@ -181,13 +181,13 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(metricCreateBody: MetricCreateBody) = apply {
-                description = metricCreateBody.description
-                itemId = metricCreateBody.itemId
-                name = metricCreateBody.name
-                sql = metricCreateBody.sql
-                metadata = metricCreateBody.metadata
-                additionalProperties = metricCreateBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                description = body.description
+                itemId = body.itemId
+                name = body.name
+                sql = body.sql
+                metadata = body.metadata
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /** A description of the metric. */
@@ -259,8 +259,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): MetricCreateBody =
-                MetricCreateBody(
+            fun build(): Body =
+                Body(
                     checkRequired("description", description),
                     checkRequired("itemId", itemId),
                     checkRequired("name", name),
@@ -275,7 +275,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is MetricCreateBody && description == other.description && itemId == other.itemId && name == other.name && sql == other.sql && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && description == other.description && itemId == other.itemId && name == other.name && sql == other.sql && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -285,7 +285,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "MetricCreateBody{description=$description, itemId=$itemId, name=$name, sql=$sql, metadata=$metadata, additionalProperties=$additionalProperties}"
+            "Body{description=$description, itemId=$itemId, name=$name, sql=$sql, metadata=$metadata, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -299,7 +299,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: MetricCreateBody.Builder = MetricCreateBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

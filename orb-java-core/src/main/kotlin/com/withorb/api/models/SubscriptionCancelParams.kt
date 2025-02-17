@@ -77,7 +77,7 @@ import java.util.Optional
 class SubscriptionCancelParams
 private constructor(
     private val subscriptionId: String,
-    private val body: SubscriptionCancelBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -122,7 +122,7 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): SubscriptionCancelBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -136,9 +136,9 @@ private constructor(
     }
 
     @NoAutoDetect
-    class SubscriptionCancelBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("cancel_option")
         @ExcludeMissing
         private val cancelOption: JsonField<CancelOption> = JsonMissing.of(),
@@ -200,7 +200,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): SubscriptionCancelBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -218,7 +218,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [SubscriptionCancelBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var cancelOption: JsonField<CancelOption>? = null
@@ -227,11 +227,11 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(subscriptionCancelBody: SubscriptionCancelBody) = apply {
-                cancelOption = subscriptionCancelBody.cancelOption
-                allowInvoiceCreditOrVoid = subscriptionCancelBody.allowInvoiceCreditOrVoid
-                cancellationDate = subscriptionCancelBody.cancellationDate
-                additionalProperties = subscriptionCancelBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                cancelOption = body.cancelOption
+                allowInvoiceCreditOrVoid = body.allowInvoiceCreditOrVoid
+                cancellationDate = body.cancellationDate
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /** Determines the timing of subscription cancellation */
@@ -317,8 +317,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): SubscriptionCancelBody =
-                SubscriptionCancelBody(
+            fun build(): Body =
+                Body(
                     checkRequired("cancelOption", cancelOption),
                     allowInvoiceCreditOrVoid,
                     cancellationDate,
@@ -331,7 +331,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is SubscriptionCancelBody && cancelOption == other.cancelOption && allowInvoiceCreditOrVoid == other.allowInvoiceCreditOrVoid && cancellationDate == other.cancellationDate && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && cancelOption == other.cancelOption && allowInvoiceCreditOrVoid == other.allowInvoiceCreditOrVoid && cancellationDate == other.cancellationDate && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -341,7 +341,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "SubscriptionCancelBody{cancelOption=$cancelOption, allowInvoiceCreditOrVoid=$allowInvoiceCreditOrVoid, cancellationDate=$cancellationDate, additionalProperties=$additionalProperties}"
+            "Body{cancelOption=$cancelOption, allowInvoiceCreditOrVoid=$allowInvoiceCreditOrVoid, cancellationDate=$cancellationDate, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -356,7 +356,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var subscriptionId: String? = null
-        private var body: SubscriptionCancelBody.Builder = SubscriptionCancelBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
