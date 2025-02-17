@@ -25,10 +25,7 @@ private const val SIGNATURE_VERSION = "v1"
 private const val SIGNATURE_DELIMITER = " "
 private const val SIGNATURE_KEY_VALUE_DELIMITER = "="
 
-class WebhookServiceImpl
-constructor(
-    private val clientOptions: ClientOptions,
-) : WebhookService {
+class WebhookServiceImpl constructor(private val clientOptions: ClientOptions) : WebhookService {
     @kotlin.ExperimentalStdlibApi
     override fun unwrap(payload: String, headers: Headers, secret: String?): JsonValue {
         verifySignature(payload, headers, secret)
@@ -86,7 +83,7 @@ constructor(
             if (
                 MessageDigest.isEqual(
                     actualSignature,
-                    expectedSignature.toByteArray(Charsets.UTF_8)
+                    expectedSignature.toByteArray(Charsets.UTF_8),
                 )
             ) {
                 return
