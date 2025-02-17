@@ -39,7 +39,9 @@ class SubscriptionUpdateParamsTest {
                 )
                 .netTerms(0L)
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.autoCollection()).contains(true)
         assertThat(body.defaultInvoiceMemo()).contains("default_invoice_memo")
@@ -56,7 +58,9 @@ class SubscriptionUpdateParamsTest {
     @Test
     fun bodyWithoutOptionalFields() {
         val params = SubscriptionUpdateParams.builder().subscriptionId("subscription_id").build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
     }
 

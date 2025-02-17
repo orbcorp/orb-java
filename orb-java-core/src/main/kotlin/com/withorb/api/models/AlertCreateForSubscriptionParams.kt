@@ -37,7 +37,7 @@ import java.util.Optional
 class AlertCreateForSubscriptionParams
 private constructor(
     private val subscriptionId: String,
-    private val body: AlertCreateForSubscriptionBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -68,7 +68,7 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): AlertCreateForSubscriptionBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -82,9 +82,9 @@ private constructor(
     }
 
     @NoAutoDetect
-    class AlertCreateForSubscriptionBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("thresholds")
         @ExcludeMissing
         private val thresholds: JsonField<List<Threshold>> = JsonMissing.of(),
@@ -122,7 +122,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): AlertCreateForSubscriptionBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -140,7 +140,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [AlertCreateForSubscriptionBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var thresholds: JsonField<MutableList<Threshold>>? = null
@@ -149,15 +149,12 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(alertCreateForSubscriptionBody: AlertCreateForSubscriptionBody) =
-                apply {
-                    thresholds =
-                        alertCreateForSubscriptionBody.thresholds.map { it.toMutableList() }
-                    type = alertCreateForSubscriptionBody.type
-                    metricId = alertCreateForSubscriptionBody.metricId
-                    additionalProperties =
-                        alertCreateForSubscriptionBody.additionalProperties.toMutableMap()
-                }
+            internal fun from(body: Body) = apply {
+                thresholds = body.thresholds.map { it.toMutableList() }
+                type = body.type
+                metricId = body.metricId
+                additionalProperties = body.additionalProperties.toMutableMap()
+            }
 
             /** The thresholds that define the values at which the alert will be triggered. */
             fun thresholds(thresholds: List<Threshold>) = thresholds(JsonField.of(thresholds))
@@ -215,8 +212,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): AlertCreateForSubscriptionBody =
-                AlertCreateForSubscriptionBody(
+            fun build(): Body =
+                Body(
                     checkRequired("thresholds", thresholds).map { it.toImmutable() },
                     checkRequired("type", type),
                     metricId,
@@ -229,7 +226,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is AlertCreateForSubscriptionBody && thresholds == other.thresholds && type == other.type && metricId == other.metricId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && thresholds == other.thresholds && type == other.type && metricId == other.metricId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -239,7 +236,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "AlertCreateForSubscriptionBody{thresholds=$thresholds, type=$type, metricId=$metricId, additionalProperties=$additionalProperties}"
+            "Body{thresholds=$thresholds, type=$type, metricId=$metricId, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -254,8 +251,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var subscriptionId: String? = null
-        private var body: AlertCreateForSubscriptionBody.Builder =
-            AlertCreateForSubscriptionBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

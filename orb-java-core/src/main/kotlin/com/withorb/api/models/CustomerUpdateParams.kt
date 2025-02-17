@@ -42,7 +42,7 @@ import kotlin.jvm.optionals.getOrNull
 class CustomerUpdateParams
 private constructor(
     private val customerId: String,
-    private val body: CustomerUpdateBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -404,7 +404,7 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): CustomerUpdateBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -418,9 +418,9 @@ private constructor(
     }
 
     @NoAutoDetect
-    class CustomerUpdateBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("accounting_sync_configuration")
         @ExcludeMissing
         private val accountingSyncConfiguration: JsonField<AccountingSyncConfiguration> =
@@ -862,7 +862,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): CustomerUpdateBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -893,7 +893,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [CustomerUpdateBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var accountingSyncConfiguration: JsonField<AccountingSyncConfiguration> =
@@ -916,24 +916,24 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(customerUpdateBody: CustomerUpdateBody) = apply {
-                accountingSyncConfiguration = customerUpdateBody.accountingSyncConfiguration
-                additionalEmails = customerUpdateBody.additionalEmails.map { it.toMutableList() }
-                autoCollection = customerUpdateBody.autoCollection
-                billingAddress = customerUpdateBody.billingAddress
-                currency = customerUpdateBody.currency
-                email = customerUpdateBody.email
-                emailDelivery = customerUpdateBody.emailDelivery
-                externalCustomerId = customerUpdateBody.externalCustomerId
-                metadata = customerUpdateBody.metadata
-                name = customerUpdateBody.name
-                paymentProvider = customerUpdateBody.paymentProvider
-                paymentProviderId = customerUpdateBody.paymentProviderId
-                reportingConfiguration = customerUpdateBody.reportingConfiguration
-                shippingAddress = customerUpdateBody.shippingAddress
-                taxConfiguration = customerUpdateBody.taxConfiguration
-                taxId = customerUpdateBody.taxId
-                additionalProperties = customerUpdateBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                accountingSyncConfiguration = body.accountingSyncConfiguration
+                additionalEmails = body.additionalEmails.map { it.toMutableList() }
+                autoCollection = body.autoCollection
+                billingAddress = body.billingAddress
+                currency = body.currency
+                email = body.email
+                emailDelivery = body.emailDelivery
+                externalCustomerId = body.externalCustomerId
+                metadata = body.metadata
+                name = body.name
+                paymentProvider = body.paymentProvider
+                paymentProviderId = body.paymentProviderId
+                reportingConfiguration = body.reportingConfiguration
+                shippingAddress = body.shippingAddress
+                taxConfiguration = body.taxConfiguration
+                taxId = body.taxId
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             fun accountingSyncConfiguration(
@@ -1581,8 +1581,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): CustomerUpdateBody =
-                CustomerUpdateBody(
+            fun build(): Body =
+                Body(
                     accountingSyncConfiguration,
                     (additionalEmails ?: JsonMissing.of()).map { it.toImmutable() },
                     autoCollection,
@@ -1608,7 +1608,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerUpdateBody && accountingSyncConfiguration == other.accountingSyncConfiguration && additionalEmails == other.additionalEmails && autoCollection == other.autoCollection && billingAddress == other.billingAddress && currency == other.currency && email == other.email && emailDelivery == other.emailDelivery && externalCustomerId == other.externalCustomerId && metadata == other.metadata && name == other.name && paymentProvider == other.paymentProvider && paymentProviderId == other.paymentProviderId && reportingConfiguration == other.reportingConfiguration && shippingAddress == other.shippingAddress && taxConfiguration == other.taxConfiguration && taxId == other.taxId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && accountingSyncConfiguration == other.accountingSyncConfiguration && additionalEmails == other.additionalEmails && autoCollection == other.autoCollection && billingAddress == other.billingAddress && currency == other.currency && email == other.email && emailDelivery == other.emailDelivery && externalCustomerId == other.externalCustomerId && metadata == other.metadata && name == other.name && paymentProvider == other.paymentProvider && paymentProviderId == other.paymentProviderId && reportingConfiguration == other.reportingConfiguration && shippingAddress == other.shippingAddress && taxConfiguration == other.taxConfiguration && taxId == other.taxId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -1618,7 +1618,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CustomerUpdateBody{accountingSyncConfiguration=$accountingSyncConfiguration, additionalEmails=$additionalEmails, autoCollection=$autoCollection, billingAddress=$billingAddress, currency=$currency, email=$email, emailDelivery=$emailDelivery, externalCustomerId=$externalCustomerId, metadata=$metadata, name=$name, paymentProvider=$paymentProvider, paymentProviderId=$paymentProviderId, reportingConfiguration=$reportingConfiguration, shippingAddress=$shippingAddress, taxConfiguration=$taxConfiguration, taxId=$taxId, additionalProperties=$additionalProperties}"
+            "Body{accountingSyncConfiguration=$accountingSyncConfiguration, additionalEmails=$additionalEmails, autoCollection=$autoCollection, billingAddress=$billingAddress, currency=$currency, email=$email, emailDelivery=$emailDelivery, externalCustomerId=$externalCustomerId, metadata=$metadata, name=$name, paymentProvider=$paymentProvider, paymentProviderId=$paymentProviderId, reportingConfiguration=$reportingConfiguration, shippingAddress=$shippingAddress, taxConfiguration=$taxConfiguration, taxId=$taxId, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -1633,7 +1633,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var customerId: String? = null
-        private var body: CustomerUpdateBody.Builder = CustomerUpdateBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
