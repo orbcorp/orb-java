@@ -53,7 +53,7 @@ import java.util.Optional
  */
 class EventBackfillCreateParams
 private constructor(
-    private val body: EventBackfillCreateBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -138,16 +138,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): EventBackfillCreateBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class EventBackfillCreateBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("timeframe_end")
         @ExcludeMissing
         private val timeframeEnd: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -272,7 +272,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): EventBackfillCreateBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -294,7 +294,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [EventBackfillCreateBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var timeframeEnd: JsonField<OffsetDateTime>? = null
@@ -307,15 +307,15 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(eventBackfillCreateBody: EventBackfillCreateBody) = apply {
-                timeframeEnd = eventBackfillCreateBody.timeframeEnd
-                timeframeStart = eventBackfillCreateBody.timeframeStart
-                closeTime = eventBackfillCreateBody.closeTime
-                customerId = eventBackfillCreateBody.customerId
-                deprecationFilter = eventBackfillCreateBody.deprecationFilter
-                externalCustomerId = eventBackfillCreateBody.externalCustomerId
-                replaceExistingEvents = eventBackfillCreateBody.replaceExistingEvents
-                additionalProperties = eventBackfillCreateBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                timeframeEnd = body.timeframeEnd
+                timeframeStart = body.timeframeStart
+                closeTime = body.closeTime
+                customerId = body.customerId
+                deprecationFilter = body.deprecationFilter
+                externalCustomerId = body.externalCustomerId
+                replaceExistingEvents = body.replaceExistingEvents
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /** The (exclusive) end of the usage timeframe affected by this backfill. */
@@ -455,8 +455,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): EventBackfillCreateBody =
-                EventBackfillCreateBody(
+            fun build(): Body =
+                Body(
                     checkRequired("timeframeEnd", timeframeEnd),
                     checkRequired("timeframeStart", timeframeStart),
                     closeTime,
@@ -473,7 +473,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is EventBackfillCreateBody && timeframeEnd == other.timeframeEnd && timeframeStart == other.timeframeStart && closeTime == other.closeTime && customerId == other.customerId && deprecationFilter == other.deprecationFilter && externalCustomerId == other.externalCustomerId && replaceExistingEvents == other.replaceExistingEvents && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && timeframeEnd == other.timeframeEnd && timeframeStart == other.timeframeStart && closeTime == other.closeTime && customerId == other.customerId && deprecationFilter == other.deprecationFilter && externalCustomerId == other.externalCustomerId && replaceExistingEvents == other.replaceExistingEvents && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -483,7 +483,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "EventBackfillCreateBody{timeframeEnd=$timeframeEnd, timeframeStart=$timeframeStart, closeTime=$closeTime, customerId=$customerId, deprecationFilter=$deprecationFilter, externalCustomerId=$externalCustomerId, replaceExistingEvents=$replaceExistingEvents, additionalProperties=$additionalProperties}"
+            "Body{timeframeEnd=$timeframeEnd, timeframeStart=$timeframeStart, closeTime=$closeTime, customerId=$customerId, deprecationFilter=$deprecationFilter, externalCustomerId=$externalCustomerId, replaceExistingEvents=$replaceExistingEvents, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -497,7 +497,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: EventBackfillCreateBody.Builder = EventBackfillCreateBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

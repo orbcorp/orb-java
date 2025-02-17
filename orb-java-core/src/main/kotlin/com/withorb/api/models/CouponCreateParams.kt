@@ -39,7 +39,7 @@ import kotlin.jvm.optionals.getOrNull
  */
 class CouponCreateParams
 private constructor(
-    private val body: CouponCreateBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -84,16 +84,16 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): CouponCreateBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class CouponCreateBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("discount")
         @ExcludeMissing
         private val discount: JsonField<Discount> = JsonMissing.of(),
@@ -158,7 +158,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): CouponCreateBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -177,7 +177,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [CouponCreateBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var discount: JsonField<Discount>? = null
@@ -187,12 +187,12 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(couponCreateBody: CouponCreateBody) = apply {
-                discount = couponCreateBody.discount
-                redemptionCode = couponCreateBody.redemptionCode
-                durationInMonths = couponCreateBody.durationInMonths
-                maxRedemptions = couponCreateBody.maxRedemptions
-                additionalProperties = couponCreateBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                discount = body.discount
+                redemptionCode = body.redemptionCode
+                durationInMonths = body.durationInMonths
+                maxRedemptions = body.maxRedemptions
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             fun discount(discount: Discount) = discount(JsonField.of(discount))
@@ -313,8 +313,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): CouponCreateBody =
-                CouponCreateBody(
+            fun build(): Body =
+                Body(
                     checkRequired("discount", discount),
                     checkRequired("redemptionCode", redemptionCode),
                     durationInMonths,
@@ -328,7 +328,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CouponCreateBody && discount == other.discount && redemptionCode == other.redemptionCode && durationInMonths == other.durationInMonths && maxRedemptions == other.maxRedemptions && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && discount == other.discount && redemptionCode == other.redemptionCode && durationInMonths == other.durationInMonths && maxRedemptions == other.maxRedemptions && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -338,7 +338,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CouponCreateBody{discount=$discount, redemptionCode=$redemptionCode, durationInMonths=$durationInMonths, maxRedemptions=$maxRedemptions, additionalProperties=$additionalProperties}"
+            "Body{discount=$discount, redemptionCode=$redemptionCode, durationInMonths=$durationInMonths, maxRedemptions=$maxRedemptions, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -352,7 +352,7 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var body: CouponCreateBody.Builder = CouponCreateBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 

@@ -54,7 +54,7 @@ import java.util.Optional
 class SubscriptionUpdateTrialParams
 private constructor(
     private val subscriptionId: String,
-    private val body: SubscriptionUpdateTrialBody,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -91,7 +91,7 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): SubscriptionUpdateTrialBody = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -105,9 +105,9 @@ private constructor(
     }
 
     @NoAutoDetect
-    class SubscriptionUpdateTrialBody
+    class Body
     @JsonCreator
-    internal constructor(
+    private constructor(
         @JsonProperty("trial_end_date")
         @ExcludeMissing
         private val trialEndDate: JsonField<TrialEndDate> = JsonMissing.of(),
@@ -150,7 +150,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): SubscriptionUpdateTrialBody = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
@@ -167,7 +167,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [SubscriptionUpdateTrialBody]. */
+        /** A builder for [Body]. */
         class Builder internal constructor() {
 
             private var trialEndDate: JsonField<TrialEndDate>? = null
@@ -175,11 +175,10 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(subscriptionUpdateTrialBody: SubscriptionUpdateTrialBody) = apply {
-                trialEndDate = subscriptionUpdateTrialBody.trialEndDate
-                shift = subscriptionUpdateTrialBody.shift
-                additionalProperties =
-                    subscriptionUpdateTrialBody.additionalProperties.toMutableMap()
+            internal fun from(body: Body) = apply {
+                trialEndDate = body.trialEndDate
+                shift = body.shift
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /**
@@ -241,8 +240,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): SubscriptionUpdateTrialBody =
-                SubscriptionUpdateTrialBody(
+            fun build(): Body =
+                Body(
                     checkRequired("trialEndDate", trialEndDate),
                     shift,
                     additionalProperties.toImmutable(),
@@ -254,7 +253,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is SubscriptionUpdateTrialBody && trialEndDate == other.trialEndDate && shift == other.shift && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && trialEndDate == other.trialEndDate && shift == other.shift && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -264,7 +263,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "SubscriptionUpdateTrialBody{trialEndDate=$trialEndDate, shift=$shift, additionalProperties=$additionalProperties}"
+            "Body{trialEndDate=$trialEndDate, shift=$shift, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -279,8 +278,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var subscriptionId: String? = null
-        private var body: SubscriptionUpdateTrialBody.Builder =
-            SubscriptionUpdateTrialBody.builder()
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
