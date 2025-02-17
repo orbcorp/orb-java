@@ -99,7 +99,7 @@ interface LedgerServiceAsync {
     @JvmOverloads
     fun list(
         params: CustomerCreditLedgerListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCreditLedgerListPageAsync>
 
     /**
@@ -208,7 +208,7 @@ interface LedgerServiceAsync {
     @JvmOverloads
     fun createEntry(
         params: CustomerCreditLedgerCreateEntryParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCreditLedgerCreateEntryResponse>
 
     /**
@@ -317,7 +317,7 @@ interface LedgerServiceAsync {
     @JvmOverloads
     fun createEntryByExternalId(
         params: CustomerCreditLedgerCreateEntryByExternalIdParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCreditLedgerCreateEntryByExternalIdResponse>
 
     /**
@@ -402,6 +402,6 @@ interface LedgerServiceAsync {
     @JvmOverloads
     fun listByExternalId(
         params: CustomerCreditLedgerListByExternalIdParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCreditLedgerListByExternalIdPageAsync>
 }

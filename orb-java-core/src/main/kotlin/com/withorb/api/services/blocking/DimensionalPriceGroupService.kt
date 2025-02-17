@@ -28,20 +28,20 @@ interface DimensionalPriceGroupService {
     @JvmOverloads
     fun create(
         params: DimensionalPriceGroupCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): DimensionalPriceGroup
 
     /** Fetch dimensional price group */
     @JvmOverloads
     fun retrieve(
         params: DimensionalPriceGroupRetrieveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): DimensionalPriceGroup
 
     /** List dimensional price groups */
     @JvmOverloads
     fun list(
         params: DimensionalPriceGroupListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): DimensionalPriceGroupListPage
 }

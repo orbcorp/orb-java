@@ -82,13 +82,8 @@ private constructor(
         fun of(
             topUpsService: TopUpServiceAsync,
             params: CustomerCreditTopUpListParams,
-            response: Response
-        ) =
-            CustomerCreditTopUpListPageAsync(
-                topUpsService,
-                params,
-                response,
-            )
+            response: Response,
+        ) = CustomerCreditTopUpListPageAsync(topUpsService, params, response)
     }
 
     @NoAutoDetect
@@ -182,26 +177,19 @@ private constructor(
                 this.additionalProperties.put(key, value)
             }
 
-            fun build() =
-                Response(
-                    data,
-                    paginationMetadata,
-                    additionalProperties.toImmutable(),
-                )
+            fun build() = Response(data, paginationMetadata, additionalProperties.toImmutable())
         }
     }
 
-    class AutoPager(
-        private val firstPage: CustomerCreditTopUpListPageAsync,
-    ) {
+    class AutoPager(private val firstPage: CustomerCreditTopUpListPageAsync) {
 
         fun forEach(
             action: Predicate<CustomerCreditTopUpListResponse>,
-            executor: Executor
+            executor: Executor,
         ): CompletableFuture<Void> {
             fun CompletableFuture<Optional<CustomerCreditTopUpListPageAsync>>.forEach(
                 action: (CustomerCreditTopUpListResponse) -> Boolean,
-                executor: Executor
+                executor: Executor,
             ): CompletableFuture<Void> =
                 thenComposeAsync(
                     { page ->
@@ -210,7 +198,7 @@ private constructor(
                             .map { it.getNextPage().forEach(action, executor) }
                             .orElseGet { CompletableFuture.completedFuture(null) }
                     },
-                    executor
+                    executor,
                 )
             return CompletableFuture.completedFuture(Optional.of(firstPage))
                 .forEach(action::test, executor)

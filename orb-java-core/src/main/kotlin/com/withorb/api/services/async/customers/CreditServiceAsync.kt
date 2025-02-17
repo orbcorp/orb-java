@@ -31,7 +31,7 @@ interface CreditServiceAsync {
     @JvmOverloads
     fun list(
         params: CustomerCreditListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCreditListPageAsync>
 
     /**
@@ -46,6 +46,6 @@ interface CreditServiceAsync {
     @JvmOverloads
     fun listByExternalId(
         params: CustomerCreditListByExternalIdParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCreditListByExternalIdPageAsync>
 }

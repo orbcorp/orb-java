@@ -20,6 +20,6 @@ interface SubscriptionServiceAsync {
     @JvmOverloads
     fun list(
         params: CouponSubscriptionListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CouponSubscriptionListPageAsync>
 }

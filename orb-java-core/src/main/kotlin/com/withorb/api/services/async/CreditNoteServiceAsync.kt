@@ -18,7 +18,7 @@ interface CreditNoteServiceAsync {
     @JvmOverloads
     fun create(
         params: CreditNoteCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CreditNote>
 
     /**
@@ -29,7 +29,7 @@ interface CreditNoteServiceAsync {
     @JvmOverloads
     fun list(
         params: CreditNoteListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CreditNoteListPageAsync>
 
     /**
@@ -39,6 +39,6 @@ interface CreditNoteServiceAsync {
     @JvmOverloads
     fun fetch(
         params: CreditNoteFetchParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CreditNote>
 }

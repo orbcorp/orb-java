@@ -19,7 +19,7 @@ interface ExternalPriceIdServiceAsync {
     @JvmOverloads
     fun update(
         params: PriceExternalPriceIdUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Price>
 
     /**
@@ -30,6 +30,6 @@ interface ExternalPriceIdServiceAsync {
     @JvmOverloads
     fun fetch(
         params: PriceExternalPriceIdFetchParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Price>
 }

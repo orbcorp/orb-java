@@ -26,10 +26,8 @@ import com.withorb.api.models.InvoicePayParams
 import com.withorb.api.models.InvoiceUpdateParams
 import com.withorb.api.models.InvoiceVoidInvoiceParams
 
-class InvoiceServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : InvoiceService {
+class InvoiceServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    InvoiceService {
 
     private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
@@ -151,7 +149,7 @@ internal constructor(
      */
     override fun fetchUpcoming(
         params: InvoiceFetchUpcomingParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): InvoiceFetchUpcomingResponse {
         val request =
             HttpRequest.builder()
@@ -260,7 +258,7 @@ internal constructor(
      */
     override fun voidInvoice(
         params: InvoiceVoidInvoiceParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): Invoice {
         val request =
             HttpRequest.builder()

@@ -82,13 +82,8 @@ private constructor(
         fun of(
             topUpsService: TopUpServiceAsync,
             params: CustomerCreditTopUpListByExternalIdParams,
-            response: Response
-        ) =
-            CustomerCreditTopUpListByExternalIdPageAsync(
-                topUpsService,
-                params,
-                response,
-            )
+            response: Response,
+        ) = CustomerCreditTopUpListByExternalIdPageAsync(topUpsService, params, response)
     }
 
     @NoAutoDetect
@@ -186,26 +181,19 @@ private constructor(
                 this.additionalProperties.put(key, value)
             }
 
-            fun build() =
-                Response(
-                    data,
-                    paginationMetadata,
-                    additionalProperties.toImmutable(),
-                )
+            fun build() = Response(data, paginationMetadata, additionalProperties.toImmutable())
         }
     }
 
-    class AutoPager(
-        private val firstPage: CustomerCreditTopUpListByExternalIdPageAsync,
-    ) {
+    class AutoPager(private val firstPage: CustomerCreditTopUpListByExternalIdPageAsync) {
 
         fun forEach(
             action: Predicate<CustomerCreditTopUpListByExternalIdResponse>,
-            executor: Executor
+            executor: Executor,
         ): CompletableFuture<Void> {
             fun CompletableFuture<Optional<CustomerCreditTopUpListByExternalIdPageAsync>>.forEach(
                 action: (CustomerCreditTopUpListByExternalIdResponse) -> Boolean,
-                executor: Executor
+                executor: Executor,
             ): CompletableFuture<Void> =
                 thenComposeAsync(
                     { page ->
@@ -214,7 +202,7 @@ private constructor(
                             .map { it.getNextPage().forEach(action, executor) }
                             .orElseGet { CompletableFuture.completedFuture(null) }
                     },
-                    executor
+                    executor,
                 )
             return CompletableFuture.completedFuture(Optional.of(firstPage))
                 .forEach(action::test, executor)

@@ -79,13 +79,8 @@ private constructor(
         fun of(
             dimensionalPriceGroupsService: DimensionalPriceGroupService,
             params: DimensionalPriceGroupListParams,
-            response: Response
-        ) =
-            DimensionalPriceGroupListPage(
-                dimensionalPriceGroupsService,
-                params,
-                response,
-            )
+            response: Response,
+        ) = DimensionalPriceGroupListPage(dimensionalPriceGroupsService, params, response)
     }
 
     @NoAutoDetect
@@ -176,18 +171,12 @@ private constructor(
                 this.additionalProperties.put(key, value)
             }
 
-            fun build() =
-                Response(
-                    data,
-                    paginationMetadata,
-                    additionalProperties.toImmutable(),
-                )
+            fun build() = Response(data, paginationMetadata, additionalProperties.toImmutable())
         }
     }
 
-    class AutoPager(
-        private val firstPage: DimensionalPriceGroupListPage,
-    ) : Iterable<DimensionalPriceGroup> {
+    class AutoPager(private val firstPage: DimensionalPriceGroupListPage) :
+        Iterable<DimensionalPriceGroup> {
 
         override fun iterator(): Iterator<DimensionalPriceGroup> = iterator {
             var page = firstPage

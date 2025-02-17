@@ -35,7 +35,7 @@ interface PriceServiceAsync {
     @JvmOverloads
     fun create(
         params: PriceCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Price>
 
     /**
@@ -45,7 +45,7 @@ interface PriceServiceAsync {
     @JvmOverloads
     fun update(
         params: PriceUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Price>
 
     /**
@@ -55,7 +55,7 @@ interface PriceServiceAsync {
     @JvmOverloads
     fun list(
         params: PriceListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<PriceListPageAsync>
 
     /**
@@ -80,13 +80,13 @@ interface PriceServiceAsync {
     @JvmOverloads
     fun evaluate(
         params: PriceEvaluateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<PriceEvaluateResponse>
 
     /** This endpoint returns a price given an identifier. */
     @JvmOverloads
     fun fetch(
         params: PriceFetchParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Price>
 }

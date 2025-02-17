@@ -25,7 +25,7 @@ interface InvoiceServiceAsync {
     @JvmOverloads
     fun create(
         params: InvoiceCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Invoice>
 
     /**
@@ -37,7 +37,7 @@ interface InvoiceServiceAsync {
     @JvmOverloads
     fun update(
         params: InvoiceUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Invoice>
 
     /**
@@ -57,7 +57,7 @@ interface InvoiceServiceAsync {
     @JvmOverloads
     fun list(
         params: InvoiceListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<InvoiceListPageAsync>
 
     /**
@@ -66,7 +66,7 @@ interface InvoiceServiceAsync {
     @JvmOverloads
     fun fetch(
         params: InvoiceFetchParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Invoice>
 
     /**
@@ -76,7 +76,7 @@ interface InvoiceServiceAsync {
     @JvmOverloads
     fun fetchUpcoming(
         params: InvoiceFetchUpcomingParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<InvoiceFetchUpcomingResponse>
 
     /**
@@ -89,7 +89,7 @@ interface InvoiceServiceAsync {
     @JvmOverloads
     fun issue(
         params: InvoiceIssueParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Invoice>
 
     /**
@@ -99,7 +99,7 @@ interface InvoiceServiceAsync {
     @JvmOverloads
     fun markPaid(
         params: InvoiceMarkPaidParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Invoice>
 
     /**
@@ -109,7 +109,7 @@ interface InvoiceServiceAsync {
     @JvmOverloads
     fun pay(
         params: InvoicePayParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Invoice>
 
     /**
@@ -123,6 +123,6 @@ interface InvoiceServiceAsync {
     @JvmOverloads
     fun voidInvoice(
         params: InvoiceVoidInvoiceParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Invoice>
 }

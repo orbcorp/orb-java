@@ -19,6 +19,6 @@ interface SubscriptionService {
     @JvmOverloads
     fun list(
         params: CouponSubscriptionListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CouponSubscriptionListPage
 }

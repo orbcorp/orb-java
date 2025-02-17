@@ -18,9 +18,7 @@ import com.withorb.api.models.InvoiceLineItemCreateResponse
 import java.util.concurrent.CompletableFuture
 
 class InvoiceLineItemServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : InvoiceLineItemServiceAsync {
+internal constructor(private val clientOptions: ClientOptions) : InvoiceLineItemServiceAsync {
 
     private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
@@ -34,7 +32,7 @@ internal constructor(
      */
     override fun create(
         params: InvoiceLineItemCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<InvoiceLineItemCreateResponse> {
         val request =
             HttpRequest.builder()

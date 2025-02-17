@@ -25,10 +25,8 @@ import com.withorb.api.models.AlertRetrieveParams
 import com.withorb.api.models.AlertUpdateParams
 import java.util.concurrent.CompletableFuture
 
-class AlertServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : AlertServiceAsync {
+class AlertServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    AlertServiceAsync {
 
     private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
@@ -38,7 +36,7 @@ internal constructor(
     /** This endpoint retrieves an alert by its ID. */
     override fun retrieve(
         params: AlertRetrieveParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Alert> {
         val request =
             HttpRequest.builder()
@@ -65,7 +63,7 @@ internal constructor(
     /** This endpoint updates the thresholds of an alert. */
     override fun update(
         params: AlertUpdateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Alert> {
         val request =
             HttpRequest.builder()
@@ -104,7 +102,7 @@ internal constructor(
      */
     override fun list(
         params: AlertListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<AlertListPageAsync> {
         val request =
             HttpRequest.builder()
@@ -139,7 +137,7 @@ internal constructor(
      */
     override fun createForCustomer(
         params: AlertCreateForCustomerParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Alert> {
         val request =
             HttpRequest.builder()
@@ -174,7 +172,7 @@ internal constructor(
      */
     override fun createForExternalCustomer(
         params: AlertCreateForExternalCustomerParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Alert> {
         val request =
             HttpRequest.builder()
@@ -213,7 +211,7 @@ internal constructor(
      */
     override fun createForSubscription(
         params: AlertCreateForSubscriptionParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Alert> {
         val request =
             HttpRequest.builder()
@@ -245,7 +243,7 @@ internal constructor(
      */
     override fun disable(
         params: AlertDisableParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Alert> {
         val request =
             HttpRequest.builder()
@@ -277,7 +275,7 @@ internal constructor(
      */
     override fun enable(
         params: AlertEnableParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Alert> {
         val request =
             HttpRequest.builder()

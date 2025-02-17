@@ -22,7 +22,7 @@ interface MetricService {
     @JvmOverloads
     fun create(
         params: MetricCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): BillableMetric
 
     /**
@@ -32,7 +32,7 @@ interface MetricService {
     @JvmOverloads
     fun update(
         params: MetricUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): BillableMetric
 
     /**
@@ -43,7 +43,7 @@ interface MetricService {
     @JvmOverloads
     fun list(
         params: MetricListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): MetricListPage
 
     /**
@@ -53,6 +53,6 @@ interface MetricService {
     @JvmOverloads
     fun fetch(
         params: MetricFetchParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): BillableMetric
 }

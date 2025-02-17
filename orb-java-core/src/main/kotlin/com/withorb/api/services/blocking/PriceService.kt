@@ -34,7 +34,7 @@ interface PriceService {
     @JvmOverloads
     fun create(
         params: PriceCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Price
 
     /**
@@ -44,7 +44,7 @@ interface PriceService {
     @JvmOverloads
     fun update(
         params: PriceUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Price
 
     /**
@@ -54,7 +54,7 @@ interface PriceService {
     @JvmOverloads
     fun list(
         params: PriceListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): PriceListPage
 
     /**
@@ -79,13 +79,13 @@ interface PriceService {
     @JvmOverloads
     fun evaluate(
         params: PriceEvaluateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): PriceEvaluateResponse
 
     /** This endpoint returns a price given an identifier. */
     @JvmOverloads
     fun fetch(
         params: PriceFetchParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Price
 }
