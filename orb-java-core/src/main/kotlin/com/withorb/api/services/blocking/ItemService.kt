@@ -18,21 +18,21 @@ interface ItemService {
     @JvmOverloads
     fun create(
         params: ItemCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Item
 
     /** This endpoint can be used to update properties on the Item. */
     @JvmOverloads
     fun update(
         params: ItemUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Item
 
     /** This endpoint returns a list of all Items, ordered in descending order by creation time. */
     @JvmOverloads
     fun list(
         params: ItemListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): ItemListPage
 
     /** This endpoint returns an item identified by its item_id. */

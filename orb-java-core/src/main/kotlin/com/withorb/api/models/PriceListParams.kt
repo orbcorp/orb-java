@@ -189,12 +189,7 @@ private constructor(
         }
 
         fun build(): PriceListParams =
-            PriceListParams(
-                cursor,
-                limit,
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
-            )
+            PriceListParams(cursor, limit, additionalHeaders.build(), additionalQueryParams.build())
     }
 
     override fun equals(other: Any?): Boolean {

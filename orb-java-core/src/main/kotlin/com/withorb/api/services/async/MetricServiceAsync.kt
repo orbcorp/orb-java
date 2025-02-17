@@ -23,7 +23,7 @@ interface MetricServiceAsync {
     @JvmOverloads
     fun create(
         params: MetricCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BillableMetric>
 
     /**
@@ -33,7 +33,7 @@ interface MetricServiceAsync {
     @JvmOverloads
     fun update(
         params: MetricUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BillableMetric>
 
     /**
@@ -44,7 +44,7 @@ interface MetricServiceAsync {
     @JvmOverloads
     fun list(
         params: MetricListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<MetricListPageAsync>
 
     /**
@@ -54,6 +54,6 @@ interface MetricServiceAsync {
     @JvmOverloads
     fun fetch(
         params: MetricFetchParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BillableMetric>
 }

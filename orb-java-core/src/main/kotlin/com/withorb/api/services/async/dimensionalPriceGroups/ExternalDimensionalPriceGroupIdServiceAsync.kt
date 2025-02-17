@@ -15,6 +15,6 @@ interface ExternalDimensionalPriceGroupIdServiceAsync {
     @JvmOverloads
     fun retrieve(
         params: DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<DimensionalPriceGroup>
 }

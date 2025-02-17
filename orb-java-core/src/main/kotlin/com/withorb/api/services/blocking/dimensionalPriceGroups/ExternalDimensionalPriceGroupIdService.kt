@@ -14,6 +14,6 @@ interface ExternalDimensionalPriceGroupIdService {
     @JvmOverloads
     fun retrieve(
         params: DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): DimensionalPriceGroup
 }

@@ -67,7 +67,7 @@ interface EventServiceAsync {
     @JvmOverloads
     fun update(
         params: EventUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<EventUpdateResponse>
 
     /**
@@ -109,7 +109,7 @@ interface EventServiceAsync {
     @JvmOverloads
     fun deprecate(
         params: EventDeprecateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<EventDeprecateResponse>
 
     /**
@@ -304,7 +304,7 @@ interface EventServiceAsync {
     @JvmOverloads
     fun ingest(
         params: EventIngestParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<EventIngestResponse>
 
     /**
@@ -326,6 +326,6 @@ interface EventServiceAsync {
     @JvmOverloads
     fun search(
         params: EventSearchParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<EventSearchResponse>
 }

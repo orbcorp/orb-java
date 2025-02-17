@@ -24,7 +24,7 @@ interface InvoiceService {
     @JvmOverloads
     fun create(
         params: InvoiceCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Invoice
 
     /**
@@ -36,7 +36,7 @@ interface InvoiceService {
     @JvmOverloads
     fun update(
         params: InvoiceUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Invoice
 
     /**
@@ -56,7 +56,7 @@ interface InvoiceService {
     @JvmOverloads
     fun list(
         params: InvoiceListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): InvoiceListPage
 
     /**
@@ -65,7 +65,7 @@ interface InvoiceService {
     @JvmOverloads
     fun fetch(
         params: InvoiceFetchParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Invoice
 
     /**
@@ -75,7 +75,7 @@ interface InvoiceService {
     @JvmOverloads
     fun fetchUpcoming(
         params: InvoiceFetchUpcomingParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): InvoiceFetchUpcomingResponse
 
     /**
@@ -88,7 +88,7 @@ interface InvoiceService {
     @JvmOverloads
     fun issue(
         params: InvoiceIssueParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Invoice
 
     /**
@@ -98,7 +98,7 @@ interface InvoiceService {
     @JvmOverloads
     fun markPaid(
         params: InvoiceMarkPaidParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Invoice
 
     /**
@@ -108,7 +108,7 @@ interface InvoiceService {
     @JvmOverloads
     fun pay(
         params: InvoicePayParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Invoice
 
     /**
@@ -122,6 +122,6 @@ interface InvoiceService {
     @JvmOverloads
     fun voidInvoice(
         params: InvoiceVoidInvoiceParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Invoice
 }

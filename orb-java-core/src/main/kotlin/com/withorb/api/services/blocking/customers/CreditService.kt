@@ -30,7 +30,7 @@ interface CreditService {
     @JvmOverloads
     fun list(
         params: CustomerCreditListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCreditListPage
 
     /**
@@ -45,6 +45,6 @@ interface CreditService {
     @JvmOverloads
     fun listByExternalId(
         params: CustomerCreditListByExternalIdParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCreditListByExternalIdPage
 }

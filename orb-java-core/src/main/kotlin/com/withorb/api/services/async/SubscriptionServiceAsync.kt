@@ -281,7 +281,7 @@ interface SubscriptionServiceAsync {
     @JvmOverloads
     fun create(
         params: SubscriptionCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<SubscriptionCreateResponse>
 
     /**
@@ -291,7 +291,7 @@ interface SubscriptionServiceAsync {
     @JvmOverloads
     fun update(
         params: SubscriptionUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Subscription>
 
     /**
@@ -307,7 +307,7 @@ interface SubscriptionServiceAsync {
     @JvmOverloads
     fun list(
         params: SubscriptionListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<SubscriptionListPageAsync>
 
     /**
@@ -366,7 +366,7 @@ interface SubscriptionServiceAsync {
     @JvmOverloads
     fun cancel(
         params: SubscriptionCancelParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<SubscriptionCancelResponse>
 
     /**
@@ -376,7 +376,7 @@ interface SubscriptionServiceAsync {
     @JvmOverloads
     fun fetch(
         params: SubscriptionFetchParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Subscription>
 
     /**
@@ -393,7 +393,7 @@ interface SubscriptionServiceAsync {
     @JvmOverloads
     fun fetchCosts(
         params: SubscriptionFetchCostsParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<SubscriptionFetchCostsResponse>
 
     /**
@@ -404,7 +404,7 @@ interface SubscriptionServiceAsync {
     @JvmOverloads
     fun fetchSchedule(
         params: SubscriptionFetchScheduleParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<SubscriptionFetchSchedulePageAsync>
 
     /**
@@ -587,7 +587,7 @@ interface SubscriptionServiceAsync {
     @JvmOverloads
     fun fetchUsage(
         params: SubscriptionFetchUsageParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<SubscriptionUsage>
 
     /**
@@ -660,7 +660,7 @@ interface SubscriptionServiceAsync {
     @JvmOverloads
     fun priceIntervals(
         params: SubscriptionPriceIntervalsParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<SubscriptionPriceIntervalsResponse>
 
     /**
@@ -832,7 +832,7 @@ interface SubscriptionServiceAsync {
     @JvmOverloads
     fun schedulePlanChange(
         params: SubscriptionSchedulePlanChangeParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<SubscriptionSchedulePlanChangeResponse>
 
     /**
@@ -841,7 +841,7 @@ interface SubscriptionServiceAsync {
     @JvmOverloads
     fun triggerPhase(
         params: SubscriptionTriggerPhaseParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<SubscriptionTriggerPhaseResponse>
 
     /**
@@ -854,7 +854,7 @@ interface SubscriptionServiceAsync {
     @JvmOverloads
     fun unscheduleCancellation(
         params: SubscriptionUnscheduleCancellationParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<SubscriptionUnscheduleCancellationResponse>
 
     /**
@@ -866,7 +866,7 @@ interface SubscriptionServiceAsync {
     @JvmOverloads
     fun unscheduleFixedFeeQuantityUpdates(
         params: SubscriptionUnscheduleFixedFeeQuantityUpdatesParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<SubscriptionUnscheduleFixedFeeQuantityUpdatesResponse>
 
     /**
@@ -875,7 +875,7 @@ interface SubscriptionServiceAsync {
     @JvmOverloads
     fun unschedulePendingPlanChanges(
         params: SubscriptionUnschedulePendingPlanChangesParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<SubscriptionUnschedulePendingPlanChangesResponse>
 
     /**
@@ -895,7 +895,7 @@ interface SubscriptionServiceAsync {
     @JvmOverloads
     fun updateFixedFeeQuantity(
         params: SubscriptionUpdateFixedFeeQuantityParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<SubscriptionUpdateFixedFeeQuantityResponse>
 
     /**
@@ -919,6 +919,6 @@ interface SubscriptionServiceAsync {
     @JvmOverloads
     fun updateTrial(
         params: SubscriptionUpdateTrialParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<SubscriptionUpdateTrialResponse>
 }

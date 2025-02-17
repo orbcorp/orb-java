@@ -19,9 +19,7 @@ import com.withorb.api.models.PlanExternalPlanIdUpdateParams
 import java.util.concurrent.CompletableFuture
 
 class ExternalPlanIdServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : ExternalPlanIdServiceAsync {
+internal constructor(private val clientOptions: ClientOptions) : ExternalPlanIdServiceAsync {
 
     private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
@@ -36,7 +34,7 @@ internal constructor(
      */
     override fun update(
         params: PlanExternalPlanIdUpdateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Plan> {
         val request =
             HttpRequest.builder()
@@ -80,7 +78,7 @@ internal constructor(
      */
     override fun fetch(
         params: PlanExternalPlanIdFetchParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Plan> {
         val request =
             HttpRequest.builder()

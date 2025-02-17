@@ -23,10 +23,8 @@ import com.withorb.api.services.async.coupons.SubscriptionServiceAsync
 import com.withorb.api.services.async.coupons.SubscriptionServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 
-class CouponServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : CouponServiceAsync {
+class CouponServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    CouponServiceAsync {
 
     private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
@@ -45,7 +43,7 @@ internal constructor(
      */
     override fun create(
         params: CouponCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Coupon> {
         val request =
             HttpRequest.builder()
@@ -81,7 +79,7 @@ internal constructor(
      */
     override fun list(
         params: CouponListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<CouponListPageAsync> {
         val request =
             HttpRequest.builder()
@@ -113,7 +111,7 @@ internal constructor(
      */
     override fun archive(
         params: CouponArchiveParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Coupon> {
         val request =
             HttpRequest.builder()
@@ -144,7 +142,7 @@ internal constructor(
      */
     override fun fetch(
         params: CouponFetchParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CompletableFuture<Coupon> {
         val request =
             HttpRequest.builder()

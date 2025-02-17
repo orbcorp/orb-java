@@ -86,13 +86,8 @@ private constructor(
         fun of(
             backfillsService: BackfillService,
             params: EventBackfillListParams,
-            response: Response
-        ) =
-            EventBackfillListPage(
-                backfillsService,
-                params,
-                response,
-            )
+            response: Response,
+        ) = EventBackfillListPage(backfillsService, params, response)
     }
 
     @NoAutoDetect
@@ -184,18 +179,12 @@ private constructor(
                 this.additionalProperties.put(key, value)
             }
 
-            fun build() =
-                Response(
-                    data,
-                    paginationMetadata,
-                    additionalProperties.toImmutable(),
-                )
+            fun build() = Response(data, paginationMetadata, additionalProperties.toImmutable())
         }
     }
 
-    class AutoPager(
-        private val firstPage: EventBackfillListPage,
-    ) : Iterable<EventBackfillListResponse> {
+    class AutoPager(private val firstPage: EventBackfillListPage) :
+        Iterable<EventBackfillListResponse> {
 
         override fun iterator(): Iterator<EventBackfillListResponse> = iterator {
             var page = firstPage

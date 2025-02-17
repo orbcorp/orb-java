@@ -44,7 +44,7 @@ interface CustomerService {
     @JvmOverloads
     fun create(
         params: CustomerCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Customer
 
     /**
@@ -56,7 +56,7 @@ interface CustomerService {
     @JvmOverloads
     fun update(
         params: CustomerUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Customer
 
     /**
@@ -69,7 +69,7 @@ interface CustomerService {
     @JvmOverloads
     fun list(
         params: CustomerListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerListPage
 
     /**
@@ -100,7 +100,7 @@ interface CustomerService {
     @JvmOverloads
     fun fetch(
         params: CustomerFetchParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Customer
 
     /**
@@ -113,7 +113,7 @@ interface CustomerService {
     @JvmOverloads
     fun fetchByExternalId(
         params: CustomerFetchByExternalIdParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Customer
 
     /**
@@ -127,7 +127,7 @@ interface CustomerService {
     @JvmOverloads
     fun syncPaymentMethodsFromGateway(
         params: CustomerSyncPaymentMethodsFromGatewayParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     )
 
     /**
@@ -141,7 +141,7 @@ interface CustomerService {
     @JvmOverloads
     fun syncPaymentMethodsFromGatewayByExternalCustomerId(
         params: CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     )
 
     /**
@@ -152,6 +152,6 @@ interface CustomerService {
     @JvmOverloads
     fun updateByExternalId(
         params: CustomerUpdateByExternalIdParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Customer
 }

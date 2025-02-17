@@ -90,11 +90,7 @@ private constructor(
 
         @JvmStatic
         fun of(alertsService: AlertServiceAsync, params: AlertListParams, response: Response) =
-            AlertListPageAsync(
-                alertsService,
-                params,
-                response,
-            )
+            AlertListPageAsync(alertsService, params, response)
     }
 
     @NoAutoDetect
@@ -184,23 +180,16 @@ private constructor(
                 this.additionalProperties.put(key, value)
             }
 
-            fun build() =
-                Response(
-                    data,
-                    paginationMetadata,
-                    additionalProperties.toImmutable(),
-                )
+            fun build() = Response(data, paginationMetadata, additionalProperties.toImmutable())
         }
     }
 
-    class AutoPager(
-        private val firstPage: AlertListPageAsync,
-    ) {
+    class AutoPager(private val firstPage: AlertListPageAsync) {
 
         fun forEach(action: Predicate<Alert>, executor: Executor): CompletableFuture<Void> {
             fun CompletableFuture<Optional<AlertListPageAsync>>.forEach(
                 action: (Alert) -> Boolean,
-                executor: Executor
+                executor: Executor,
             ): CompletableFuture<Void> =
                 thenComposeAsync(
                     { page ->
@@ -209,7 +198,7 @@ private constructor(
                             .map { it.getNextPage().forEach(action, executor) }
                             .orElseGet { CompletableFuture.completedFuture(null) }
                     },
-                    executor
+                    executor,
                 )
             return CompletableFuture.completedFuture(Optional.of(firstPage))
                 .forEach(action::test, executor)

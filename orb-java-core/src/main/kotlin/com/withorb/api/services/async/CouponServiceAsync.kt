@@ -25,7 +25,7 @@ interface CouponServiceAsync {
     @JvmOverloads
     fun create(
         params: CouponCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Coupon>
 
     /**
@@ -39,7 +39,7 @@ interface CouponServiceAsync {
     @JvmOverloads
     fun list(
         params: CouponListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CouponListPageAsync>
 
     /**
@@ -50,7 +50,7 @@ interface CouponServiceAsync {
     @JvmOverloads
     fun archive(
         params: CouponArchiveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Coupon>
 
     /**
@@ -60,6 +60,6 @@ interface CouponServiceAsync {
     @JvmOverloads
     fun fetch(
         params: CouponFetchParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Coupon>
 }

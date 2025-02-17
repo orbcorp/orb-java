@@ -83,13 +83,8 @@ private constructor(
         fun of(
             creditNotesService: CreditNoteService,
             params: CreditNoteListParams,
-            response: Response
-        ) =
-            CreditNoteListPage(
-                creditNotesService,
-                params,
-                response,
-            )
+            response: Response,
+        ) = CreditNoteListPage(creditNotesService, params, response)
     }
 
     @NoAutoDetect
@@ -179,18 +174,11 @@ private constructor(
                 this.additionalProperties.put(key, value)
             }
 
-            fun build() =
-                Response(
-                    data,
-                    paginationMetadata,
-                    additionalProperties.toImmutable(),
-                )
+            fun build() = Response(data, paginationMetadata, additionalProperties.toImmutable())
         }
     }
 
-    class AutoPager(
-        private val firstPage: CreditNoteListPage,
-    ) : Iterable<CreditNote> {
+    class AutoPager(private val firstPage: CreditNoteListPage) : Iterable<CreditNote> {
 
         override fun iterator(): Iterator<CreditNote> = iterator {
             var page = firstPage

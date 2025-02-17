@@ -30,21 +30,21 @@ interface TopUpServiceAsync {
     @JvmOverloads
     fun create(
         params: CustomerCreditTopUpCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCreditTopUpCreateResponse>
 
     /** List top-ups */
     @JvmOverloads
     fun list(
         params: CustomerCreditTopUpListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCreditTopUpListPageAsync>
 
     /** Delete top-up */
     @JvmOverloads
     fun delete(
         params: CustomerCreditTopUpDeleteParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Void?>
 
     /**
@@ -58,20 +58,20 @@ interface TopUpServiceAsync {
     @JvmOverloads
     fun createByExternalId(
         params: CustomerCreditTopUpCreateByExternalIdParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCreditTopUpCreateByExternalIdResponse>
 
     /** Delete top-up by external ID */
     @JvmOverloads
     fun deleteByExternalId(
         params: CustomerCreditTopUpDeleteByExternalIdParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Void?>
 
     /** List top-ups by external ID */
     @JvmOverloads
     fun listByExternalId(
         params: CustomerCreditTopUpListByExternalIdParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCreditTopUpListByExternalIdPageAsync>
 }

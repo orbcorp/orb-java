@@ -17,6 +17,6 @@ interface InvoiceLineItemService {
     @JvmOverloads
     fun create(
         params: InvoiceLineItemCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): InvoiceLineItemCreateResponse
 }

@@ -17,7 +17,7 @@ interface CreditNoteService {
     @JvmOverloads
     fun create(
         params: CreditNoteCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CreditNote
 
     /**
@@ -28,7 +28,7 @@ interface CreditNoteService {
     @JvmOverloads
     fun list(
         params: CreditNoteListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CreditNoteListPage
 
     /**
@@ -38,6 +38,6 @@ interface CreditNoteService {
     @JvmOverloads
     fun fetch(
         params: CreditNoteFetchParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CreditNote
 }

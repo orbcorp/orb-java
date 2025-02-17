@@ -22,6 +22,6 @@ interface TopLevelServiceAsync {
     @JvmOverloads
     fun ping(
         params: TopLevelPingParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<TopLevelPingResponse>
 }

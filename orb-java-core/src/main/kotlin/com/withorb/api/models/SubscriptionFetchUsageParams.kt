@@ -271,13 +271,13 @@ private constructor(
         this.timeframeEnd?.let {
             queryParams.put(
                 "timeframe_end",
-                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it)),
             )
         }
         this.timeframeStart?.let {
             queryParams.put(
                 "timeframe_start",
-                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it)),
             )
         }
         this.viewMode?.let { queryParams.put("view_mode", listOf(it.toString())) }
@@ -540,11 +540,8 @@ private constructor(
     }
 
     /** This determines the windowing of usage reporting. */
-    class Granularity
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class Granularity @JsonCreator private constructor(private val value: JsonField<String>) :
+        Enum {
 
         /**
          * Returns this class instance's raw value.
@@ -565,7 +562,7 @@ private constructor(
 
         /** An enum containing [Granularity]'s known values. */
         enum class Known {
-            DAY,
+            DAY
         }
 
         /**
@@ -632,11 +629,7 @@ private constructor(
      * incremental day-by-day usage. If your customer has minimums or discounts, it's strongly
      * recommended that you use the default cumulative behavior.
      */
-    class ViewMode
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class ViewMode @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
          * Returns this class instance's raw value.
