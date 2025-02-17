@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.31.1 (2025-02-17)
+
+Full Changelog: [v0.31.0...v0.31.1](https://github.com/orbcorp/orb-java/compare/v0.31.0...v0.31.1)
+
+### Bug Fixes
+
+* format webhooks ([143457b](https://github.com/orbcorp/orb-java/commit/143457bb6f9d9953def62bddc78e09ad6f42c158))
+
+
+### Chores
+
+* **internal:** make body class constructors private ([3a15ffd](https://github.com/orbcorp/orb-java/commit/3a15ffd13a547878c837c9ef6dbf4b555c9e1255))
+* **internal:** make body classes for multipart requests ([3a15ffd](https://github.com/orbcorp/orb-java/commit/3a15ffd13a547878c837c9ef6dbf4b555c9e1255))
+* **internal:** misc formatting changes ([3a15ffd](https://github.com/orbcorp/orb-java/commit/3a15ffd13a547878c837c9ef6dbf4b555c9e1255))
+* **internal:** optimize build and test perf ([be128e3](https://github.com/orbcorp/orb-java/commit/be128e35f2113a4e96a1c52171cc83cfe66bce74))
+* **internal:** rename internal body classes ([3a15ffd](https://github.com/orbcorp/orb-java/commit/3a15ffd13a547878c837c9ef6dbf4b555c9e1255))
+* **internal:** update formatter ([#247](https://github.com/orbcorp/orb-java/issues/247)) ([be128e3](https://github.com/orbcorp/orb-java/commit/be128e35f2113a4e96a1c52171cc83cfe66bce74))
+* **internal:** use better test example values ([#249](https://github.com/orbcorp/orb-java/issues/249)) ([3a15ffd](https://github.com/orbcorp/orb-java/commit/3a15ffd13a547878c837c9ef6dbf4b555c9e1255))
+
 ## 0.31.0 (2025-02-14)
 
 Full Changelog: [v0.30.0...v0.31.0](https://github.com/orbcorp/orb-java/compare/v0.30.0...v0.31.0)
