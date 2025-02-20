@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.32.0 (2025-02-20)
+
+Full Changelog: [v0.31.1...v0.32.0](https://github.com/orbcorp/orb-java/compare/v0.31.1...v0.32.0)
+
+### Features
+
+* **api:** api update ([#258](https://github.com/orbcorp/orb-java/issues/258)) ([859dff9](https://github.com/orbcorp/orb-java/commit/859dff93cc6853596d6cdbf9965f4a652b0c8512))
+* **client:** support `JsonField#asX()` for known values ([#253](https://github.com/orbcorp/orb-java/issues/253)) ([95dc5c6](https://github.com/orbcorp/orb-java/commit/95dc5c66f67fc8e4203ee1c4e09e6754abe1ba5d))
+* **client:** update enum `asX` methods ([#251](https://github.com/orbcorp/orb-java/issues/251)) ([87ebe15](https://github.com/orbcorp/orb-java/commit/87ebe150ac6bc0f41a39547a74643f9d8dd874fb))
+
+
+### Chores
+
+* **ci:** update gradle actions to v4 ([#257](https://github.com/orbcorp/orb-java/issues/257)) ([b11b2bc](https://github.com/orbcorp/orb-java/commit/b11b2bc74f2299c6750aac8c530102083b6d0baf))
+* **docs:** reorganize readme ([#254](https://github.com/orbcorp/orb-java/issues/254)) ([7c807a4](https://github.com/orbcorp/orb-java/commit/7c807a48721deda21de639d4da5f6759d23a4ddd))
+* **internal:** get rid of configuration cache ([#256](https://github.com/orbcorp/orb-java/issues/256)) ([2315c82](https://github.com/orbcorp/orb-java/commit/2315c827bbf423eb0d4df9b28b71e318634dc1b9))
+* **internal:** update some formatting in `Values.kt` ([95dc5c6](https://github.com/orbcorp/orb-java/commit/95dc5c66f67fc8e4203ee1c4e09e6754abe1ba5d))
+
 ## 0.31.1 (2025-02-17)
 
 Full Changelog: [v0.31.0...v0.31.1](https://github.com/orbcorp/orb-java/compare/v0.31.0...v0.31.1)
