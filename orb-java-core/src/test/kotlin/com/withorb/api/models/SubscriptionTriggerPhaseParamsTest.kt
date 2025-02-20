@@ -3,6 +3,7 @@
 package com.withorb.api.models
 
 import java.time.LocalDate
+import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -28,7 +29,7 @@ class SubscriptionTriggerPhaseParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.allowInvoiceCreditOrVoid()).contains(true)
         assertThat(body.effectiveDate()).contains(LocalDate.parse("2019-12-27"))
     }
@@ -40,7 +41,7 @@ class SubscriptionTriggerPhaseParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
     }
 
     @Test
