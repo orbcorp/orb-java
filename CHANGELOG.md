@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.33.0 (2025-02-20)
+
+Full Changelog: [v0.32.0...v0.33.0](https://github.com/orbcorp/orb-java/compare/v0.32.0...v0.33.0)
+
+### Features
+
+* **api:** api update ([#264](https://github.com/orbcorp/orb-java/issues/264)) ([49f679f](https://github.com/orbcorp/orb-java/commit/49f679f62e3fa725e68c45d6c43a3ec9021deb8d))
+* **client:** get rid of annoying checked exceptions ([#260](https://github.com/orbcorp/orb-java/issues/260)) ([ffc9682](https://github.com/orbcorp/orb-java/commit/ffc968253c1b7ea7d8694edadddd0d9bfc0a267d))
+
+
+### Bug Fixes
+
+* **client:** mark some request bodies as optional ([#263](https://github.com/orbcorp/orb-java/issues/263)) ([c6f1170](https://github.com/orbcorp/orb-java/commit/c6f11707fd576970378f6d24e41829cb6dcbce36))
+
+
+### Chores
+
+* **docs:** add faq to readme ([#262](https://github.com/orbcorp/orb-java/issues/262)) ([67226ff](https://github.com/orbcorp/orb-java/commit/67226ffb755caaa59df0771cfb3443a31dc7d16f))
+* **internal:** remove unnecessary non-null asserts in tests ([c6f1170](https://github.com/orbcorp/orb-java/commit/c6f11707fd576970378f6d24e41829cb6dcbce36))
+* **internal:** use `assertNotNull` in tests for type narrowing ([c6f1170](https://github.com/orbcorp/orb-java/commit/c6f11707fd576970378f6d24e41829cb6dcbce36))
+
+
+### Documentation
+
+* add immutability explanation to readme ([#265](https://github.com/orbcorp/orb-java/issues/265)) ([2fee757](https://github.com/orbcorp/orb-java/commit/2fee7570279fb4b446d159b272f056b9fa33c8b6))
+
 ## 0.32.0 (2025-02-20)
 
 Full Changelog: [v0.31.1...v0.32.0](https://github.com/orbcorp/orb-java/compare/v0.31.1...v0.32.0)
