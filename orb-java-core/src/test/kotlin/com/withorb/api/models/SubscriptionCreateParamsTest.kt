@@ -296,6 +296,7 @@ class SubscriptionCreateParamsTest {
             )
             .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .trialDurationDays(999999L)
+            .addUsageCustomerId("string")
             .build()
     }
 
@@ -596,6 +597,7 @@ class SubscriptionCreateParamsTest {
                 )
                 .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .trialDurationDays(999999L)
+                .addUsageCustomerId("string")
                 .build()
 
         val body = params._body()
@@ -916,6 +918,7 @@ class SubscriptionCreateParamsTest {
             )
         assertThat(body.startDate()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(body.trialDurationDays()).contains(999999L)
+        assertThat(body.usageCustomerIds()).contains(listOf("string"))
     }
 
     @Test
