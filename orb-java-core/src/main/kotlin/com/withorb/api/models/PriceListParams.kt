@@ -48,6 +48,8 @@ private constructor(
 
     companion object {
 
+        fun none(): PriceListParams = builder().build()
+
         @JvmStatic fun builder() = Builder()
     }
 

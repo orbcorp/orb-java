@@ -42,7 +42,13 @@ interface DimensionalPriceGroupServiceAsync {
     /** List dimensional price groups */
     @JvmOverloads
     fun list(
-        params: DimensionalPriceGroupListParams,
+        params: DimensionalPriceGroupListParams = DimensionalPriceGroupListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<DimensionalPriceGroupListPageAsync>
+
+    /** List dimensional price groups */
+    fun list(
+        requestOptions: RequestOptions
+    ): CompletableFuture<DimensionalPriceGroupListPageAsync> =
+        list(DimensionalPriceGroupListParams.none(), requestOptions)
 }

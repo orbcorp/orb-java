@@ -45,9 +45,18 @@ interface PlanServiceAsync {
      */
     @JvmOverloads
     fun list(
-        params: PlanListParams,
+        params: PlanListParams = PlanListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<PlanListPageAsync>
+
+    /**
+     * This endpoint returns a list of all [plans](/core-concepts#plan-and-price) for an account in
+     * a list format. The list of plans is ordered starting from the most recently created plan. The
+     * response also includes [`pagination_metadata`](/api-reference/pagination), which lets the
+     * caller retrieve the next page of results if they exist.
+     */
+    fun list(requestOptions: RequestOptions): CompletableFuture<PlanListPageAsync> =
+        list(PlanListParams.none(), requestOptions)
 
     /**
      * This endpoint is used to fetch [plan](/core-concepts#plan-and-price) details given a plan

@@ -52,6 +52,8 @@ private constructor(
 
     companion object {
 
+        fun none(): EventBackfillListParams = builder().build()
+
         @JvmStatic fun builder() = Builder()
     }
 
