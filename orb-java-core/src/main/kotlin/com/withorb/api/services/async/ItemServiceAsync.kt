@@ -32,9 +32,13 @@ interface ItemServiceAsync {
     /** This endpoint returns a list of all Items, ordered in descending order by creation time. */
     @JvmOverloads
     fun list(
-        params: ItemListParams,
+        params: ItemListParams = ItemListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ItemListPageAsync>
+
+    /** This endpoint returns a list of all Items, ordered in descending order by creation time. */
+    fun list(requestOptions: RequestOptions): CompletableFuture<ItemListPageAsync> =
+        list(ItemListParams.none(), requestOptions)
 
     /** This endpoint returns an item identified by its item_id. */
     @JvmOverloads
