@@ -306,9 +306,22 @@ interface SubscriptionServiceAsync {
      */
     @JvmOverloads
     fun list(
-        params: SubscriptionListParams,
+        params: SubscriptionListParams = SubscriptionListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<SubscriptionListPageAsync>
+
+    /**
+     * This endpoint returns a list of all subscriptions for an account as a
+     * [paginated](/api-reference/pagination) list, ordered starting from the most recently created
+     * subscription. For a full discussion of the subscription resource, see
+     * [Subscription](/core-concepts##subscription).
+     *
+     * Subscriptions can be filtered for a specific customer by using either the customer_id or
+     * external_customer_id query parameters. To filter subscriptions for multiple customers, use
+     * the customer_id[] or external_customer_id[] query parameters.
+     */
+    fun list(requestOptions: RequestOptions): CompletableFuture<SubscriptionListPageAsync> =
+        list(SubscriptionListParams.none(), requestOptions)
 
     /**
      * This endpoint can be used to cancel an existing subscription. It returns the serialized

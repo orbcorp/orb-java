@@ -45,6 +45,8 @@ private constructor(
 
     companion object {
 
+        fun none(): DimensionalPriceGroupListParams = builder().build()
+
         @JvmStatic fun builder() = Builder()
     }
 

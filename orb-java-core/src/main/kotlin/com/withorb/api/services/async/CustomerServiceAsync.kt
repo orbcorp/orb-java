@@ -69,9 +69,19 @@ interface CustomerServiceAsync {
      */
     @JvmOverloads
     fun list(
-        params: CustomerListParams,
+        params: CustomerListParams = CustomerListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerListPageAsync>
+
+    /**
+     * This endpoint returns a list of all customers for an account. The list of customers is
+     * ordered starting from the most recently created customer. This endpoint follows Orb's
+     * [standardized pagination format](/api-reference/pagination).
+     *
+     * See [Customer](/core-concepts##customer) for an overview of the customer model.
+     */
+    fun list(requestOptions: RequestOptions): CompletableFuture<CustomerListPageAsync> =
+        list(CustomerListParams.none(), requestOptions)
 
     /**
      * This performs a deletion of this customer, its subscriptions, and its invoices, provided the
