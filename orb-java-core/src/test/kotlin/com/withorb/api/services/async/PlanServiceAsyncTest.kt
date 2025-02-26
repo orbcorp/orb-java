@@ -1,54 +1,52 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.withorb.api.services.blocking
+package com.withorb.api.services.async
 
 import com.withorb.api.TestServerExtension
-import com.withorb.api.client.okhttp.OrbOkHttpClient
+import com.withorb.api.client.okhttp.OrbOkHttpClientAsync
 import com.withorb.api.core.JsonValue
-import com.withorb.api.models.PriceCreateParams
-import com.withorb.api.models.PriceEvaluateParams
-import com.withorb.api.models.PriceFetchParams
-import com.withorb.api.models.PriceUpdateParams
-import java.time.OffsetDateTime
+import com.withorb.api.models.PlanCreateParams
+import com.withorb.api.models.PlanFetchParams
+import com.withorb.api.models.PlanUpdateParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class PriceServiceTest {
+class PlanServiceAsyncTest {
 
     @Test
     fun create() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val priceService = client.prices()
+        val planServiceAsync = client.plans()
 
-        val price =
-            priceService.create(
-                PriceCreateParams.builder()
-                    .body(
-                        PriceCreateParams.Body.NewFloatingUnitPrice.builder()
-                            .cadence(PriceCreateParams.Body.NewFloatingUnitPrice.Cadence.ANNUAL)
-                            .currency("currency")
+        val planFuture =
+            planServiceAsync.create(
+                PlanCreateParams.builder()
+                    .currency("currency")
+                    .name("name")
+                    .addPrice(
+                        PlanCreateParams.Price.NewPlanUnitPrice.builder()
+                            .cadence(PlanCreateParams.Price.NewPlanUnitPrice.Cadence.ANNUAL)
                             .itemId("item_id")
-                            .modelType(PriceCreateParams.Body.NewFloatingUnitPrice.ModelType.UNIT)
+                            .modelType(PlanCreateParams.Price.NewPlanUnitPrice.ModelType.UNIT)
                             .name("Annual fee")
                             .unitConfig(
-                                PriceCreateParams.Body.NewFloatingUnitPrice.UnitConfig.builder()
+                                PlanCreateParams.Price.NewPlanUnitPrice.UnitConfig.builder()
                                     .unitAmount("unit_amount")
                                     .build()
                             )
                             .billableMetricId("billable_metric_id")
                             .billedInAdvance(true)
                             .billingCycleConfiguration(
-                                PriceCreateParams.Body.NewFloatingUnitPrice
-                                    .BillingCycleConfiguration
+                                PlanCreateParams.Price.NewPlanUnitPrice.BillingCycleConfiguration
                                     .builder()
                                     .duration(0L)
                                     .durationUnit(
-                                        PriceCreateParams.Body.NewFloatingUnitPrice
+                                        PlanCreateParams.Price.NewPlanUnitPrice
                                             .BillingCycleConfiguration
                                             .DurationUnit
                                             .DAY
@@ -56,16 +54,16 @@ class PriceServiceTest {
                                     .build()
                             )
                             .conversionRate(0.0)
+                            .currency("currency")
                             .externalPriceId("external_price_id")
                             .fixedPriceQuantity(0.0)
                             .invoiceGroupingKey("invoice_grouping_key")
                             .invoicingCycleConfiguration(
-                                PriceCreateParams.Body.NewFloatingUnitPrice
-                                    .InvoicingCycleConfiguration
+                                PlanCreateParams.Price.NewPlanUnitPrice.InvoicingCycleConfiguration
                                     .builder()
                                     .duration(0L)
                                     .durationUnit(
-                                        PriceCreateParams.Body.NewFloatingUnitPrice
+                                        PlanCreateParams.Price.NewPlanUnitPrice
                                             .InvoicingCycleConfiguration
                                             .DurationUnit
                                             .DAY
@@ -73,92 +71,81 @@ class PriceServiceTest {
                                     .build()
                             )
                             .metadata(
-                                PriceCreateParams.Body.NewFloatingUnitPrice.Metadata.builder()
+                                PlanCreateParams.Price.NewPlanUnitPrice.Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .build()
                     )
+                    .defaultInvoiceMemo("default_invoice_memo")
+                    .externalPlanId("external_plan_id")
+                    .metadata(
+                        PlanCreateParams.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
+                    .netTerms(0L)
+                    .status(PlanCreateParams.Status.ACTIVE)
                     .build()
             )
 
-        price.validate()
+        val plan = planFuture.get()
+        plan.validate()
     }
 
     @Test
     fun update() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val priceService = client.prices()
+        val planServiceAsync = client.plans()
 
-        val price =
-            priceService.update(
-                PriceUpdateParams.builder()
-                    .priceId("price_id")
+        val planFuture =
+            planServiceAsync.update(
+                PlanUpdateParams.builder()
+                    .planId("plan_id")
+                    .externalPlanId("external_plan_id")
                     .metadata(
-                        PriceUpdateParams.Metadata.builder()
+                        PlanUpdateParams.Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
                     .build()
             )
 
-        price.validate()
+        val plan = planFuture.get()
+        plan.validate()
     }
 
     @Test
     fun list() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val priceService = client.prices()
+        val planServiceAsync = client.plans()
 
-        val page = priceService.list()
+        val pageFuture = planServiceAsync.list()
 
+        val page = pageFuture.get()
         page.response().validate()
-    }
-
-    @Test
-    fun evaluate() {
-        val client =
-            OrbOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
-        val priceService = client.prices()
-
-        val response =
-            priceService.evaluate(
-                PriceEvaluateParams.builder()
-                    .priceId("price_id")
-                    .timeframeEnd(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .timeframeStart(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .customerId("customer_id")
-                    .externalCustomerId("external_customer_id")
-                    .filter("my_numeric_property > 100 AND my_other_property = 'bar'")
-                    .addGroupingKey("case when my_event_type = 'foo' then true else false end")
-                    .build()
-            )
-
-        response.validate()
     }
 
     @Test
     fun fetch() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val priceService = client.prices()
+        val planServiceAsync = client.plans()
 
-        val price = priceService.fetch(PriceFetchParams.builder().priceId("price_id").build())
+        val planFuture = planServiceAsync.fetch(PlanFetchParams.builder().planId("plan_id").build())
 
-        price.validate()
+        val plan = planFuture.get()
+        plan.validate()
     }
 }

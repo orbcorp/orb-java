@@ -1,9 +1,9 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.withorb.api.services.blocking
+package com.withorb.api.services.async
 
 import com.withorb.api.TestServerExtension
-import com.withorb.api.client.okhttp.OrbOkHttpClient
+import com.withorb.api.client.okhttp.OrbOkHttpClientAsync
 import com.withorb.api.core.JsonValue
 import com.withorb.api.models.SubscriptionCancelParams
 import com.withorb.api.models.SubscriptionCreateParams
@@ -27,19 +27,19 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class SubscriptionServiceTest {
+class SubscriptionServiceAsyncTest {
 
     @Test
     fun create() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val subscriptionService = client.subscriptions()
+        val subscriptionServiceAsync = client.subscriptions()
 
-        val subscription =
-            subscriptionService.create(
+        val subscriptionFuture =
+            subscriptionServiceAsync.create(
                 SubscriptionCreateParams.builder()
                     .addAddAdjustment(
                         SubscriptionCreateParams.AddAdjustment.builder()
@@ -346,20 +346,21 @@ class SubscriptionServiceTest {
                     .build()
             )
 
+        val subscription = subscriptionFuture.get()
         subscription.validate()
     }
 
     @Test
     fun update() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val subscriptionService = client.subscriptions()
+        val subscriptionServiceAsync = client.subscriptions()
 
-        val subscription =
-            subscriptionService.update(
+        val subscriptionFuture =
+            subscriptionServiceAsync.update(
                 SubscriptionUpdateParams.builder()
                     .subscriptionId("subscription_id")
                     .autoCollection(true)
@@ -374,34 +375,36 @@ class SubscriptionServiceTest {
                     .build()
             )
 
+        val subscription = subscriptionFuture.get()
         subscription.validate()
     }
 
     @Test
     fun list() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val subscriptionService = client.subscriptions()
+        val subscriptionServiceAsync = client.subscriptions()
 
-        val page = subscriptionService.list()
+        val pageFuture = subscriptionServiceAsync.list()
 
+        val page = pageFuture.get()
         page.response().validate()
     }
 
     @Test
     fun cancel() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val subscriptionService = client.subscriptions()
+        val subscriptionServiceAsync = client.subscriptions()
 
-        val response =
-            subscriptionService.cancel(
+        val responseFuture =
+            subscriptionServiceAsync.cancel(
                 SubscriptionCancelParams.builder()
                     .subscriptionId("subscription_id")
                     .cancelOption(SubscriptionCancelParams.CancelOption.END_OF_SUBSCRIPTION_TERM)
@@ -410,37 +413,39 @@ class SubscriptionServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 
     @Test
     fun fetch() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val subscriptionService = client.subscriptions()
+        val subscriptionServiceAsync = client.subscriptions()
 
-        val subscription =
-            subscriptionService.fetch(
+        val subscriptionFuture =
+            subscriptionServiceAsync.fetch(
                 SubscriptionFetchParams.builder().subscriptionId("subscription_id").build()
             )
 
+        val subscription = subscriptionFuture.get()
         subscription.validate()
     }
 
     @Test
     fun fetchCosts() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val subscriptionService = client.subscriptions()
+        val subscriptionServiceAsync = client.subscriptions()
 
-        val response =
-            subscriptionService.fetchCosts(
+        val responseFuture =
+            subscriptionServiceAsync.fetchCosts(
                 SubscriptionFetchCostsParams.builder()
                     .subscriptionId("subscription_id")
                     .currency("currency")
@@ -450,23 +455,25 @@ class SubscriptionServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 
     @Test
     fun fetchSchedule() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val subscriptionService = client.subscriptions()
+        val subscriptionServiceAsync = client.subscriptions()
 
-        val page =
-            subscriptionService.fetchSchedule(
+        val pageFuture =
+            subscriptionServiceAsync.fetchSchedule(
                 SubscriptionFetchScheduleParams.builder().subscriptionId("subscription_id").build()
             )
 
+        val page = pageFuture.get()
         page.response().validate()
     }
 
@@ -474,14 +481,14 @@ class SubscriptionServiceTest {
     @Test
     fun fetchUsage() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val subscriptionService = client.subscriptions()
+        val subscriptionServiceAsync = client.subscriptions()
 
-        val subscriptionUsage =
-            subscriptionService.fetchUsage(
+        val subscriptionUsageFuture =
+            subscriptionServiceAsync.fetchUsage(
                 SubscriptionFetchUsageParams.builder()
                     .subscriptionId("subscription_id")
                     .billableMetricId("billable_metric_id")
@@ -497,6 +504,7 @@ class SubscriptionServiceTest {
                     .build()
             )
 
+        val subscriptionUsage = subscriptionUsageFuture.get()
         subscriptionUsage.validate()
     }
 
@@ -504,14 +512,14 @@ class SubscriptionServiceTest {
     @Test
     fun priceIntervals() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val subscriptionService = client.subscriptions()
+        val subscriptionServiceAsync = client.subscriptions()
 
-        val response =
-            subscriptionService.priceIntervals(
+        val responseFuture =
+            subscriptionServiceAsync.priceIntervals(
                 SubscriptionPriceIntervalsParams.builder()
                     .subscriptionId("subscription_id")
                     .addAdd(
@@ -663,20 +671,21 @@ class SubscriptionServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 
     @Test
     fun schedulePlanChange() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val subscriptionService = client.subscriptions()
+        val subscriptionServiceAsync = client.subscriptions()
 
-        val response =
-            subscriptionService.schedulePlanChange(
+        val responseFuture =
+            subscriptionServiceAsync.schedulePlanChange(
                 SubscriptionSchedulePlanChangeParams.builder()
                     .subscriptionId("subscription_id")
                     .changeOption(SubscriptionSchedulePlanChangeParams.ChangeOption.REQUESTED_DATE)
@@ -991,20 +1000,21 @@ class SubscriptionServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 
     @Test
     fun triggerPhase() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val subscriptionService = client.subscriptions()
+        val subscriptionServiceAsync = client.subscriptions()
 
-        val response =
-            subscriptionService.triggerPhase(
+        val responseFuture =
+            subscriptionServiceAsync.triggerPhase(
                 SubscriptionTriggerPhaseParams.builder()
                     .subscriptionId("subscription_id")
                     .allowInvoiceCreditOrVoid(true)
@@ -1012,78 +1022,82 @@ class SubscriptionServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 
     @Test
     fun unscheduleCancellation() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val subscriptionService = client.subscriptions()
+        val subscriptionServiceAsync = client.subscriptions()
 
-        val response =
-            subscriptionService.unscheduleCancellation(
+        val responseFuture =
+            subscriptionServiceAsync.unscheduleCancellation(
                 SubscriptionUnscheduleCancellationParams.builder()
                     .subscriptionId("subscription_id")
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 
     @Test
     fun unscheduleFixedFeeQuantityUpdates() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val subscriptionService = client.subscriptions()
+        val subscriptionServiceAsync = client.subscriptions()
 
-        val response =
-            subscriptionService.unscheduleFixedFeeQuantityUpdates(
+        val responseFuture =
+            subscriptionServiceAsync.unscheduleFixedFeeQuantityUpdates(
                 SubscriptionUnscheduleFixedFeeQuantityUpdatesParams.builder()
                     .subscriptionId("subscription_id")
                     .priceId("price_id")
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 
     @Test
     fun unschedulePendingPlanChanges() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val subscriptionService = client.subscriptions()
+        val subscriptionServiceAsync = client.subscriptions()
 
-        val response =
-            subscriptionService.unschedulePendingPlanChanges(
+        val responseFuture =
+            subscriptionServiceAsync.unschedulePendingPlanChanges(
                 SubscriptionUnschedulePendingPlanChangesParams.builder()
                     .subscriptionId("subscription_id")
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 
     @Test
     fun updateFixedFeeQuantity() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val subscriptionService = client.subscriptions()
+        val subscriptionServiceAsync = client.subscriptions()
 
-        val response =
-            subscriptionService.updateFixedFeeQuantity(
+        val responseFuture =
+            subscriptionServiceAsync.updateFixedFeeQuantity(
                 SubscriptionUpdateFixedFeeQuantityParams.builder()
                     .subscriptionId("subscription_id")
                     .priceId("price_id")
@@ -1094,20 +1108,21 @@ class SubscriptionServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 
     @Test
     fun updateTrial() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val subscriptionService = client.subscriptions()
+        val subscriptionServiceAsync = client.subscriptions()
 
-        val response =
-            subscriptionService.updateTrial(
+        val responseFuture =
+            subscriptionServiceAsync.updateTrial(
                 SubscriptionUpdateTrialParams.builder()
                     .subscriptionId("subscription_id")
                     .trialEndDate(OffsetDateTime.parse("2017-07-21T17:32:28Z"))
@@ -1115,6 +1130,7 @@ class SubscriptionServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 }

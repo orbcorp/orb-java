@@ -1,26 +1,27 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.withorb.api.services.blocking
+package com.withorb.api.services.async
 
 import com.withorb.api.TestServerExtension
-import com.withorb.api.client.okhttp.OrbOkHttpClient
+import com.withorb.api.client.okhttp.OrbOkHttpClientAsync
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class TopLevelServiceTest {
+class TopLevelServiceAsyncTest {
 
     @Test
     fun ping() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val topLevelService = client.topLevel()
+        val topLevelServiceAsync = client.topLevel()
 
-        val response = topLevelService.ping()
+        val responseFuture = topLevelServiceAsync.ping()
 
+        val response = responseFuture.get()
         response.validate()
     }
 }
