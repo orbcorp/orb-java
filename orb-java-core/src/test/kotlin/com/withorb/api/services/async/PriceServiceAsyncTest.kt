@@ -1,9 +1,9 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.withorb.api.services.blocking
+package com.withorb.api.services.async
 
 import com.withorb.api.TestServerExtension
-import com.withorb.api.client.okhttp.OrbOkHttpClient
+import com.withorb.api.client.okhttp.OrbOkHttpClientAsync
 import com.withorb.api.core.JsonValue
 import com.withorb.api.models.PriceCreateParams
 import com.withorb.api.models.PriceEvaluateParams
@@ -14,19 +14,19 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class PriceServiceTest {
+class PriceServiceAsyncTest {
 
     @Test
     fun create() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val priceService = client.prices()
+        val priceServiceAsync = client.prices()
 
-        val price =
-            priceService.create(
+        val priceFuture =
+            priceServiceAsync.create(
                 PriceCreateParams.builder()
                     .body(
                         PriceCreateParams.Body.NewFloatingUnitPrice.builder()
@@ -82,20 +82,21 @@ class PriceServiceTest {
                     .build()
             )
 
+        val price = priceFuture.get()
         price.validate()
     }
 
     @Test
     fun update() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val priceService = client.prices()
+        val priceServiceAsync = client.prices()
 
-        val price =
-            priceService.update(
+        val priceFuture =
+            priceServiceAsync.update(
                 PriceUpdateParams.builder()
                     .priceId("price_id")
                     .metadata(
@@ -106,34 +107,36 @@ class PriceServiceTest {
                     .build()
             )
 
+        val price = priceFuture.get()
         price.validate()
     }
 
     @Test
     fun list() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val priceService = client.prices()
+        val priceServiceAsync = client.prices()
 
-        val page = priceService.list()
+        val pageFuture = priceServiceAsync.list()
 
+        val page = pageFuture.get()
         page.response().validate()
     }
 
     @Test
     fun evaluate() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val priceService = client.prices()
+        val priceServiceAsync = client.prices()
 
-        val response =
-            priceService.evaluate(
+        val responseFuture =
+            priceServiceAsync.evaluate(
                 PriceEvaluateParams.builder()
                     .priceId("price_id")
                     .timeframeEnd(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -145,20 +148,23 @@ class PriceServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 
     @Test
     fun fetch() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val priceService = client.prices()
+        val priceServiceAsync = client.prices()
 
-        val price = priceService.fetch(PriceFetchParams.builder().priceId("price_id").build())
+        val priceFuture =
+            priceServiceAsync.fetch(PriceFetchParams.builder().priceId("price_id").build())
 
+        val price = priceFuture.get()
         price.validate()
     }
 }

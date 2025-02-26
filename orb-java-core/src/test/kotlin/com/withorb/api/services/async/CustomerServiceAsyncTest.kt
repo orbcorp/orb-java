@@ -1,9 +1,9 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.withorb.api.services.blocking
+package com.withorb.api.services.async
 
 import com.withorb.api.TestServerExtension
-import com.withorb.api.client.okhttp.OrbOkHttpClient
+import com.withorb.api.client.okhttp.OrbOkHttpClientAsync
 import com.withorb.api.core.JsonValue
 import com.withorb.api.models.CustomerCreateParams
 import com.withorb.api.models.CustomerDeleteParams
@@ -17,19 +17,19 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class CustomerServiceTest {
+class CustomerServiceAsyncTest {
 
     @Test
     fun create() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val customerService = client.customers()
+        val customerServiceAsync = client.customers()
 
-        val customer =
-            customerService.create(
+        val customerFuture =
+            customerServiceAsync.create(
                 CustomerCreateParams.builder()
                     .email("dev@stainlessapi.com")
                     .name("x")
@@ -108,20 +108,21 @@ class CustomerServiceTest {
                     .build()
             )
 
+        val customer = customerFuture.get()
         customer.validate()
     }
 
     @Test
     fun update() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val customerService = client.customers()
+        val customerServiceAsync = client.customers()
 
-        val customer =
-            customerService.update(
+        val customerFuture =
+            customerServiceAsync.update(
                 CustomerUpdateParams.builder()
                     .customerId("customer_id")
                     .accountingSyncConfiguration(
@@ -200,112 +201,129 @@ class CustomerServiceTest {
                     .build()
             )
 
+        val customer = customerFuture.get()
         customer.validate()
     }
 
     @Test
     fun list() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val customerService = client.customers()
+        val customerServiceAsync = client.customers()
 
-        val page = customerService.list()
+        val pageFuture = customerServiceAsync.list()
 
+        val page = pageFuture.get()
         page.response().validate()
     }
 
     @Test
     fun delete() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val customerService = client.customers()
+        val customerServiceAsync = client.customers()
 
-        customerService.delete(CustomerDeleteParams.builder().customerId("customer_id").build())
+        val future =
+            customerServiceAsync.delete(
+                CustomerDeleteParams.builder().customerId("customer_id").build()
+            )
+
+        val response = future.get()
     }
 
     @Test
     fun fetch() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val customerService = client.customers()
+        val customerServiceAsync = client.customers()
 
-        val customer =
-            customerService.fetch(CustomerFetchParams.builder().customerId("customer_id").build())
+        val customerFuture =
+            customerServiceAsync.fetch(
+                CustomerFetchParams.builder().customerId("customer_id").build()
+            )
 
+        val customer = customerFuture.get()
         customer.validate()
     }
 
     @Test
     fun fetchByExternalId() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val customerService = client.customers()
+        val customerServiceAsync = client.customers()
 
-        val customer =
-            customerService.fetchByExternalId(
+        val customerFuture =
+            customerServiceAsync.fetchByExternalId(
                 CustomerFetchByExternalIdParams.builder()
                     .externalCustomerId("external_customer_id")
                     .build()
             )
 
+        val customer = customerFuture.get()
         customer.validate()
     }
 
     @Test
     fun syncPaymentMethodsFromGateway() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val customerService = client.customers()
+        val customerServiceAsync = client.customers()
 
-        customerService.syncPaymentMethodsFromGateway(
-            CustomerSyncPaymentMethodsFromGatewayParams.builder()
-                .externalCustomerId("external_customer_id")
-                .build()
-        )
+        val future =
+            customerServiceAsync.syncPaymentMethodsFromGateway(
+                CustomerSyncPaymentMethodsFromGatewayParams.builder()
+                    .externalCustomerId("external_customer_id")
+                    .build()
+            )
+
+        val response = future.get()
     }
 
     @Test
     fun syncPaymentMethodsFromGatewayByExternalCustomerId() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val customerService = client.customers()
+        val customerServiceAsync = client.customers()
 
-        customerService.syncPaymentMethodsFromGatewayByExternalCustomerId(
-            CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams.builder()
-                .customerId("customer_id")
-                .build()
-        )
+        val future =
+            customerServiceAsync.syncPaymentMethodsFromGatewayByExternalCustomerId(
+                CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams.builder()
+                    .customerId("customer_id")
+                    .build()
+            )
+
+        val response = future.get()
     }
 
     @Test
     fun updateByExternalId() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val customerService = client.customers()
+        val customerServiceAsync = client.customers()
 
-        val customer =
-            customerService.updateByExternalId(
+        val customerFuture =
+            customerServiceAsync.updateByExternalId(
                 CustomerUpdateByExternalIdParams.builder()
                     .id("external_customer_id")
                     .accountingSyncConfiguration(
@@ -389,6 +407,7 @@ class CustomerServiceTest {
                     .build()
             )
 
+        val customer = customerFuture.get()
         customer.validate()
     }
 }

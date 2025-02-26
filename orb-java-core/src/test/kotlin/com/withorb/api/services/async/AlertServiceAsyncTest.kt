@@ -1,9 +1,9 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.withorb.api.services.blocking
+package com.withorb.api.services.async
 
 import com.withorb.api.TestServerExtension
-import com.withorb.api.client.okhttp.OrbOkHttpClient
+import com.withorb.api.client.okhttp.OrbOkHttpClientAsync
 import com.withorb.api.models.AlertCreateForCustomerParams
 import com.withorb.api.models.AlertCreateForExternalCustomerParams
 import com.withorb.api.models.AlertCreateForSubscriptionParams
@@ -16,39 +16,42 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class AlertServiceTest {
+class AlertServiceAsyncTest {
 
     @Test
     fun retrieve() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val alertService = client.alerts()
+        val alertServiceAsync = client.alerts()
 
-        val alert = alertService.retrieve(AlertRetrieveParams.builder().alertId("alert_id").build())
+        val alertFuture =
+            alertServiceAsync.retrieve(AlertRetrieveParams.builder().alertId("alert_id").build())
 
+        val alert = alertFuture.get()
         alert.validate()
     }
 
     @Test
     fun update() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val alertService = client.alerts()
+        val alertServiceAsync = client.alerts()
 
-        val alert =
-            alertService.update(
+        val alertFuture =
+            alertServiceAsync.update(
                 AlertUpdateParams.builder()
                     .alertConfigurationId("alert_configuration_id")
                     .addThreshold(AlertUpdateParams.Threshold.builder().value(0.0).build())
                     .build()
             )
 
+        val alert = alertFuture.get()
         alert.validate()
     }
 
@@ -56,28 +59,29 @@ class AlertServiceTest {
     @Test
     fun list() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val alertService = client.alerts()
+        val alertServiceAsync = client.alerts()
 
-        val page = alertService.list()
+        val pageFuture = alertServiceAsync.list()
 
+        val page = pageFuture.get()
         page.response().validate()
     }
 
     @Test
     fun createForCustomer() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val alertService = client.alerts()
+        val alertServiceAsync = client.alerts()
 
-        val alert =
-            alertService.createForCustomer(
+        val alertFuture =
+            alertServiceAsync.createForCustomer(
                 AlertCreateForCustomerParams.builder()
                     .customerId("customer_id")
                     .currency("currency")
@@ -88,20 +92,21 @@ class AlertServiceTest {
                     .build()
             )
 
+        val alert = alertFuture.get()
         alert.validate()
     }
 
     @Test
     fun createForExternalCustomer() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val alertService = client.alerts()
+        val alertServiceAsync = client.alerts()
 
-        val alert =
-            alertService.createForExternalCustomer(
+        val alertFuture =
+            alertServiceAsync.createForExternalCustomer(
                 AlertCreateForExternalCustomerParams.builder()
                     .externalCustomerId("external_customer_id")
                     .currency("currency")
@@ -112,20 +117,21 @@ class AlertServiceTest {
                     .build()
             )
 
+        val alert = alertFuture.get()
         alert.validate()
     }
 
     @Test
     fun createForSubscription() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val alertService = client.alerts()
+        val alertServiceAsync = client.alerts()
 
-        val alert =
-            alertService.createForSubscription(
+        val alertFuture =
+            alertServiceAsync.createForSubscription(
                 AlertCreateForSubscriptionParams.builder()
                     .subscriptionId("subscription_id")
                     .addThreshold(
@@ -136,46 +142,49 @@ class AlertServiceTest {
                     .build()
             )
 
+        val alert = alertFuture.get()
         alert.validate()
     }
 
     @Test
     fun disable() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val alertService = client.alerts()
+        val alertServiceAsync = client.alerts()
 
-        val alert =
-            alertService.disable(
+        val alertFuture =
+            alertServiceAsync.disable(
                 AlertDisableParams.builder()
                     .alertConfigurationId("alert_configuration_id")
                     .subscriptionId("subscription_id")
                     .build()
             )
 
+        val alert = alertFuture.get()
         alert.validate()
     }
 
     @Test
     fun enable() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val alertService = client.alerts()
+        val alertServiceAsync = client.alerts()
 
-        val alert =
-            alertService.enable(
+        val alertFuture =
+            alertServiceAsync.enable(
                 AlertEnableParams.builder()
                     .alertConfigurationId("alert_configuration_id")
                     .subscriptionId("subscription_id")
                     .build()
             )
 
+        val alert = alertFuture.get()
         alert.validate()
     }
 }
