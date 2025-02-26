@@ -1,9 +1,9 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.withorb.api.services.blocking.customers.credits
+package com.withorb.api.services.async.customers.credits
 
 import com.withorb.api.TestServerExtension
-import com.withorb.api.client.okhttp.OrbOkHttpClient
+import com.withorb.api.client.okhttp.OrbOkHttpClientAsync
 import com.withorb.api.models.CustomerCreditTopUpCreateByExternalIdParams
 import com.withorb.api.models.CustomerCreditTopUpCreateParams
 import com.withorb.api.models.CustomerCreditTopUpDeleteByExternalIdParams
@@ -15,19 +15,19 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class TopUpServiceTest {
+class TopUpServiceAsyncTest {
 
     @Test
     fun create() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val topUpService = client.customers().credits().topUps()
+        val topUpServiceAsync = client.customers().credits().topUps()
 
-        val topUp =
-            topUpService.create(
+        val topUpFuture =
+            topUpServiceAsync.create(
                 CustomerCreditTopUpCreateParams.builder()
                     .customerId("customer_id")
                     .amount("amount")
@@ -48,54 +48,59 @@ class TopUpServiceTest {
                     .build()
             )
 
+        val topUp = topUpFuture.get()
         topUp.validate()
     }
 
     @Test
     fun list() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val topUpService = client.customers().credits().topUps()
+        val topUpServiceAsync = client.customers().credits().topUps()
 
-        val page =
-            topUpService.list(
+        val pageFuture =
+            topUpServiceAsync.list(
                 CustomerCreditTopUpListParams.builder().customerId("customer_id").build()
             )
 
+        val page = pageFuture.get()
         page.response().validate()
     }
 
     @Test
     fun delete() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val topUpService = client.customers().credits().topUps()
+        val topUpServiceAsync = client.customers().credits().topUps()
 
-        topUpService.delete(
-            CustomerCreditTopUpDeleteParams.builder()
-                .customerId("customer_id")
-                .topUpId("top_up_id")
-                .build()
-        )
+        val future =
+            topUpServiceAsync.delete(
+                CustomerCreditTopUpDeleteParams.builder()
+                    .customerId("customer_id")
+                    .topUpId("top_up_id")
+                    .build()
+            )
+
+        val response = future.get()
     }
 
     @Test
     fun createByExternalId() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val topUpService = client.customers().credits().topUps()
+        val topUpServiceAsync = client.customers().credits().topUps()
 
-        val response =
-            topUpService.createByExternalId(
+        val responseFuture =
+            topUpServiceAsync.createByExternalId(
                 CustomerCreditTopUpCreateByExternalIdParams.builder()
                     .externalCustomerId("external_customer_id")
                     .amount("amount")
@@ -118,42 +123,47 @@ class TopUpServiceTest {
                     .build()
             )
 
+        val response = responseFuture.get()
         response.validate()
     }
 
     @Test
     fun deleteByExternalId() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val topUpService = client.customers().credits().topUps()
+        val topUpServiceAsync = client.customers().credits().topUps()
 
-        topUpService.deleteByExternalId(
-            CustomerCreditTopUpDeleteByExternalIdParams.builder()
-                .externalCustomerId("external_customer_id")
-                .topUpId("top_up_id")
-                .build()
-        )
+        val future =
+            topUpServiceAsync.deleteByExternalId(
+                CustomerCreditTopUpDeleteByExternalIdParams.builder()
+                    .externalCustomerId("external_customer_id")
+                    .topUpId("top_up_id")
+                    .build()
+            )
+
+        val response = future.get()
     }
 
     @Test
     fun listByExternalId() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val topUpService = client.customers().credits().topUps()
+        val topUpServiceAsync = client.customers().credits().topUps()
 
-        val page =
-            topUpService.listByExternalId(
+        val pageFuture =
+            topUpServiceAsync.listByExternalId(
                 CustomerCreditTopUpListByExternalIdParams.builder()
                     .externalCustomerId("external_customer_id")
                     .build()
             )
 
+        val page = pageFuture.get()
         page.response().validate()
     }
 }

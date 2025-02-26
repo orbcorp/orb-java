@@ -1,28 +1,28 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.withorb.api.services.blocking.customers
+package com.withorb.api.services.async.customers
 
 import com.withorb.api.TestServerExtension
-import com.withorb.api.client.okhttp.OrbOkHttpClient
+import com.withorb.api.client.okhttp.OrbOkHttpClientAsync
 import com.withorb.api.models.CustomerBalanceTransactionCreateParams
 import com.withorb.api.models.CustomerBalanceTransactionListParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class BalanceTransactionServiceTest {
+class BalanceTransactionServiceAsyncTest {
 
     @Test
     fun create() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val balanceTransactionService = client.customers().balanceTransactions()
+        val balanceTransactionServiceAsync = client.customers().balanceTransactions()
 
-        val balanceTransaction =
-            balanceTransactionService.create(
+        val balanceTransactionFuture =
+            balanceTransactionServiceAsync.create(
                 CustomerBalanceTransactionCreateParams.builder()
                     .customerId("customer_id")
                     .amount("amount")
@@ -31,23 +31,25 @@ class BalanceTransactionServiceTest {
                     .build()
             )
 
+        val balanceTransaction = balanceTransactionFuture.get()
         balanceTransaction.validate()
     }
 
     @Test
     fun list() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val balanceTransactionService = client.customers().balanceTransactions()
+        val balanceTransactionServiceAsync = client.customers().balanceTransactions()
 
-        val page =
-            balanceTransactionService.list(
+        val pageFuture =
+            balanceTransactionServiceAsync.list(
                 CustomerBalanceTransactionListParams.builder().customerId("customer_id").build()
             )
 
+        val page = pageFuture.get()
         page.response().validate()
     }
 }
