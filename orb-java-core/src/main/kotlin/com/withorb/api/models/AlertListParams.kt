@@ -110,7 +110,7 @@ private constructor(
 
     companion object {
 
-        fun none(): AlertListParams = builder().build()
+        @JvmStatic fun none(): AlertListParams = builder().build()
 
         @JvmStatic fun builder() = Builder()
     }

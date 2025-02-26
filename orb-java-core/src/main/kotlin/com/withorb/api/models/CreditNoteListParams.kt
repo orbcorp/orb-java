@@ -49,7 +49,7 @@ private constructor(
 
     companion object {
 
-        fun none(): CreditNoteListParams = builder().build()
+        @JvmStatic fun none(): CreditNoteListParams = builder().build()
 
         @JvmStatic fun builder() = Builder()
     }

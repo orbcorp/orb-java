@@ -61,7 +61,7 @@ private constructor(
 
     companion object {
 
-        fun none(): CouponListParams = builder().build()
+        @JvmStatic fun none(): CouponListParams = builder().build()
 
         @JvmStatic fun builder() = Builder()
     }

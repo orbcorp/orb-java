@@ -86,7 +86,7 @@ private constructor(
 
     companion object {
 
-        fun none(): MetricListParams = builder().build()
+        @JvmStatic fun none(): MetricListParams = builder().build()
 
         @JvmStatic fun builder() = Builder()
     }
