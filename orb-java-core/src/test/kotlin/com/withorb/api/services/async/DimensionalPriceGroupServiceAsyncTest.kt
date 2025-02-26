@@ -1,9 +1,9 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.withorb.api.services.blocking
+package com.withorb.api.services.async
 
 import com.withorb.api.TestServerExtension
-import com.withorb.api.client.okhttp.OrbOkHttpClient
+import com.withorb.api.client.okhttp.OrbOkHttpClientAsync
 import com.withorb.api.core.JsonValue
 import com.withorb.api.models.DimensionalPriceGroupCreateParams
 import com.withorb.api.models.DimensionalPriceGroupRetrieveParams
@@ -11,19 +11,19 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class DimensionalPriceGroupServiceTest {
+class DimensionalPriceGroupServiceAsyncTest {
 
     @Test
     fun create() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val dimensionalPriceGroupService = client.dimensionalPriceGroups()
+        val dimensionalPriceGroupServiceAsync = client.dimensionalPriceGroups()
 
-        val dimensionalPriceGroup =
-            dimensionalPriceGroupService.create(
+        val dimensionalPriceGroupFuture =
+            dimensionalPriceGroupServiceAsync.create(
                 DimensionalPriceGroupCreateParams.builder()
                     .billableMetricId("billable_metric_id")
                     .addDimension("region")
@@ -38,39 +38,42 @@ class DimensionalPriceGroupServiceTest {
                     .build()
             )
 
+        val dimensionalPriceGroup = dimensionalPriceGroupFuture.get()
         dimensionalPriceGroup.validate()
     }
 
     @Test
     fun retrieve() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val dimensionalPriceGroupService = client.dimensionalPriceGroups()
+        val dimensionalPriceGroupServiceAsync = client.dimensionalPriceGroups()
 
-        val dimensionalPriceGroup =
-            dimensionalPriceGroupService.retrieve(
+        val dimensionalPriceGroupFuture =
+            dimensionalPriceGroupServiceAsync.retrieve(
                 DimensionalPriceGroupRetrieveParams.builder()
                     .dimensionalPriceGroupId("dimensional_price_group_id")
                     .build()
             )
 
+        val dimensionalPriceGroup = dimensionalPriceGroupFuture.get()
         dimensionalPriceGroup.validate()
     }
 
     @Test
     fun list() {
         val client =
-            OrbOkHttpClient.builder()
+            OrbOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val dimensionalPriceGroupService = client.dimensionalPriceGroups()
+        val dimensionalPriceGroupServiceAsync = client.dimensionalPriceGroups()
 
-        val page = dimensionalPriceGroupService.list()
+        val pageFuture = dimensionalPriceGroupServiceAsync.list()
 
+        val page = pageFuture.get()
         page.response().validate()
     }
 }
