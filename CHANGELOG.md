@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.37.0 (2025-02-26)
+
+Full Changelog: [v0.36.0...v0.37.0](https://github.com/orbcorp/orb-java/compare/v0.36.0...v0.37.0)
+
+### Features
+
+* **client:** allow omitting params object when none required ([#277](https://github.com/orbcorp/orb-java/issues/277)) ([7966838](https://github.com/orbcorp/orb-java/commit/7966838abd9d39b9cdcb3d5411880641f164b98c))
+
+
+### Bug Fixes
+
+* **client:** add missing `@JvmStatic` ([#279](https://github.com/orbcorp/orb-java/issues/279)) ([6563ba6](https://github.com/orbcorp/orb-java/commit/6563ba61a5a4a68e4f193dd678fec79c0c1e6170))
+
 ## 0.36.0 (2025-02-25)
 
 Full Changelog: [v0.35.0...v0.36.0](https://github.com/orbcorp/orb-java/compare/v0.35.0...v0.36.0)
