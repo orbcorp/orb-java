@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.38.1 (2025-02-27)
+
+Full Changelog: [v0.38.0...v0.38.1](https://github.com/orbcorp/orb-java/compare/v0.38.0...v0.38.1)
+
+### Documentation
+
+* update URLs from stainlessapi.com to stainless.com ([#288](https://github.com/orbcorp/orb-java/issues/288)) ([c69a113](https://github.com/orbcorp/orb-java/commit/c69a11395282576f531395c7ec26a04d789a03d9))
+
 ## 0.38.0 (2025-02-27)
 
 Full Changelog: [v0.37.0...v0.38.0](https://github.com/orbcorp/orb-java/compare/v0.37.0...v0.38.0)
