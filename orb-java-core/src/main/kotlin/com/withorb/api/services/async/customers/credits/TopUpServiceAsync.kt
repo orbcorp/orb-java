@@ -40,7 +40,10 @@ interface TopUpServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCreditTopUpListPageAsync>
 
-    /** Delete top-up */
+    /**
+     * This deactivates the top-up and voids any invoices associated with pending credit blocks
+     * purchased through the top-up.
+     */
     @JvmOverloads
     fun delete(
         params: CustomerCreditTopUpDeleteParams,
@@ -61,7 +64,10 @@ interface TopUpServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCreditTopUpCreateByExternalIdResponse>
 
-    /** Delete top-up by external ID */
+    /**
+     * This deactivates the top-up and voids any invoices associated with pending credit blocks
+     * purchased through the top-up.
+     */
     @JvmOverloads
     fun deleteByExternalId(
         params: CustomerCreditTopUpDeleteByExternalIdParams,

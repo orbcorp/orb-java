@@ -5766,6 +5766,9 @@ private constructor(
         @JsonProperty("end_date")
         @ExcludeMissing
         private val endDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("filter")
+        @ExcludeMissing
+        private val filter: JsonField<String> = JsonMissing.of(),
         @JsonProperty("fixed_fee_quantity_transitions")
         @ExcludeMissing
         private val fixedFeeQuantityTransitions: JsonField<List<FixedFeeQuantityTransition>> =
@@ -5776,6 +5779,9 @@ private constructor(
         @JsonProperty("start_date")
         @ExcludeMissing
         private val startDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("usage_customer_ids")
+        @ExcludeMissing
+        private val usageCustomerIds: JsonField<List<String>> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
@@ -5812,6 +5818,9 @@ private constructor(
         fun endDate(): Optional<OffsetDateTime> =
             Optional.ofNullable(endDate.getNullable("end_date"))
 
+        /** An additional filter to apply to usage queries. */
+        fun filter(): Optional<String> = Optional.ofNullable(filter.getNullable("filter"))
+
         /**
          * The fixed fee quantity transitions for this price interval. This is only relevant for
          * fixed fees.
@@ -5840,6 +5849,13 @@ private constructor(
          * price.
          */
         fun startDate(): OffsetDateTime = startDate.getRequired("start_date")
+
+        /**
+         * A list of customer IDs whose usage events will be aggregated and billed under this price
+         * interval.
+         */
+        fun usageCustomerIds(): Optional<List<String>> =
+            Optional.ofNullable(usageCustomerIds.getNullable("usage_customer_ids"))
 
         @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
@@ -5875,6 +5891,9 @@ private constructor(
         @ExcludeMissing
         fun _endDate(): JsonField<OffsetDateTime> = endDate
 
+        /** An additional filter to apply to usage queries. */
+        @JsonProperty("filter") @ExcludeMissing fun _filter(): JsonField<String> = filter
+
         /**
          * The fixed fee quantity transitions for this price interval. This is only relevant for
          * fixed fees.
@@ -5906,6 +5925,14 @@ private constructor(
         @ExcludeMissing
         fun _startDate(): JsonField<OffsetDateTime> = startDate
 
+        /**
+         * A list of customer IDs whose usage events will be aggregated and billed under this price
+         * interval.
+         */
+        @JsonProperty("usage_customer_ids")
+        @ExcludeMissing
+        fun _usageCustomerIds(): JsonField<List<String>> = usageCustomerIds
+
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -5922,9 +5949,11 @@ private constructor(
             currentBillingPeriodEndDate()
             currentBillingPeriodStartDate()
             endDate()
+            filter()
             fixedFeeQuantityTransitions().ifPresent { it.forEach { it.validate() } }
             price().validate()
             startDate()
+            usageCustomerIds()
             validated = true
         }
 
@@ -5943,11 +5972,13 @@ private constructor(
             private var currentBillingPeriodEndDate: JsonField<OffsetDateTime>? = null
             private var currentBillingPeriodStartDate: JsonField<OffsetDateTime>? = null
             private var endDate: JsonField<OffsetDateTime>? = null
+            private var filter: JsonField<String>? = null
             private var fixedFeeQuantityTransitions:
                 JsonField<MutableList<FixedFeeQuantityTransition>>? =
                 null
             private var price: JsonField<Price>? = null
             private var startDate: JsonField<OffsetDateTime>? = null
+            private var usageCustomerIds: JsonField<MutableList<String>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -5957,10 +5988,12 @@ private constructor(
                 currentBillingPeriodEndDate = priceInterval.currentBillingPeriodEndDate
                 currentBillingPeriodStartDate = priceInterval.currentBillingPeriodStartDate
                 endDate = priceInterval.endDate
+                filter = priceInterval.filter
                 fixedFeeQuantityTransitions =
                     priceInterval.fixedFeeQuantityTransitions.map { it.toMutableList() }
                 price = priceInterval.price
                 startDate = priceInterval.startDate
+                usageCustomerIds = priceInterval.usageCustomerIds.map { it.toMutableList() }
                 additionalProperties = priceInterval.additionalProperties.toMutableMap()
             }
 
@@ -6045,6 +6078,15 @@ private constructor(
              * price.
              */
             fun endDate(endDate: JsonField<OffsetDateTime>) = apply { this.endDate = endDate }
+
+            /** An additional filter to apply to usage queries. */
+            fun filter(filter: String?) = filter(JsonField.ofNullable(filter))
+
+            /** An additional filter to apply to usage queries. */
+            fun filter(filter: Optional<String>) = filter(filter.orElse(null))
+
+            /** An additional filter to apply to usage queries. */
+            fun filter(filter: JsonField<String>) = apply { this.filter = filter }
 
             /**
              * The fixed fee quantity transitions for this price interval. This is only relevant for
@@ -6546,6 +6588,45 @@ private constructor(
                 this.startDate = startDate
             }
 
+            /**
+             * A list of customer IDs whose usage events will be aggregated and billed under this
+             * price interval.
+             */
+            fun usageCustomerIds(usageCustomerIds: List<String>?) =
+                usageCustomerIds(JsonField.ofNullable(usageCustomerIds))
+
+            /**
+             * A list of customer IDs whose usage events will be aggregated and billed under this
+             * price interval.
+             */
+            fun usageCustomerIds(usageCustomerIds: Optional<List<String>>) =
+                usageCustomerIds(usageCustomerIds.orElse(null))
+
+            /**
+             * A list of customer IDs whose usage events will be aggregated and billed under this
+             * price interval.
+             */
+            fun usageCustomerIds(usageCustomerIds: JsonField<List<String>>) = apply {
+                this.usageCustomerIds = usageCustomerIds.map { it.toMutableList() }
+            }
+
+            /**
+             * A list of customer IDs whose usage events will be aggregated and billed under this
+             * price interval.
+             */
+            fun addUsageCustomerId(usageCustomerId: String) = apply {
+                usageCustomerIds =
+                    (usageCustomerIds ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(usageCustomerId)
+                    }
+            }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -6572,11 +6653,13 @@ private constructor(
                     checkRequired("currentBillingPeriodEndDate", currentBillingPeriodEndDate),
                     checkRequired("currentBillingPeriodStartDate", currentBillingPeriodStartDate),
                     checkRequired("endDate", endDate),
+                    checkRequired("filter", filter),
                     checkRequired("fixedFeeQuantityTransitions", fixedFeeQuantityTransitions).map {
                         it.toImmutable()
                     },
                     checkRequired("price", price),
                     checkRequired("startDate", startDate),
+                    checkRequired("usageCustomerIds", usageCustomerIds).map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -6722,17 +6805,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is PriceInterval && id == other.id && billingCycleDay == other.billingCycleDay && currentBillingPeriodEndDate == other.currentBillingPeriodEndDate && currentBillingPeriodStartDate == other.currentBillingPeriodStartDate && endDate == other.endDate && fixedFeeQuantityTransitions == other.fixedFeeQuantityTransitions && price == other.price && startDate == other.startDate && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is PriceInterval && id == other.id && billingCycleDay == other.billingCycleDay && currentBillingPeriodEndDate == other.currentBillingPeriodEndDate && currentBillingPeriodStartDate == other.currentBillingPeriodStartDate && endDate == other.endDate && filter == other.filter && fixedFeeQuantityTransitions == other.fixedFeeQuantityTransitions && price == other.price && startDate == other.startDate && usageCustomerIds == other.usageCustomerIds && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billingCycleDay, currentBillingPeriodEndDate, currentBillingPeriodStartDate, endDate, fixedFeeQuantityTransitions, price, startDate, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billingCycleDay, currentBillingPeriodEndDate, currentBillingPeriodStartDate, endDate, filter, fixedFeeQuantityTransitions, price, startDate, usageCustomerIds, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "PriceInterval{id=$id, billingCycleDay=$billingCycleDay, currentBillingPeriodEndDate=$currentBillingPeriodEndDate, currentBillingPeriodStartDate=$currentBillingPeriodStartDate, endDate=$endDate, fixedFeeQuantityTransitions=$fixedFeeQuantityTransitions, price=$price, startDate=$startDate, additionalProperties=$additionalProperties}"
+            "PriceInterval{id=$id, billingCycleDay=$billingCycleDay, currentBillingPeriodEndDate=$currentBillingPeriodEndDate, currentBillingPeriodStartDate=$currentBillingPeriodStartDate, endDate=$endDate, filter=$filter, fixedFeeQuantityTransitions=$fixedFeeQuantityTransitions, price=$price, startDate=$startDate, usageCustomerIds=$usageCustomerIds, additionalProperties=$additionalProperties}"
     }
 
     @NoAutoDetect
