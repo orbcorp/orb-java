@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.38.0 (2025-02-27)
+
+Full Changelog: [v0.37.0...v0.38.0](https://github.com/orbcorp/orb-java/compare/v0.37.0...v0.38.0)
+
+### Features
+
+* **api:** api update ([#286](https://github.com/orbcorp/orb-java/issues/286)) ([a0ba171](https://github.com/orbcorp/orb-java/commit/a0ba171d068ac12040aa4081a3985db0e2f0f4e3))
+
+
+### Chores
+
+* **client:** use deep identity methods for primitive array types ([#283](https://github.com/orbcorp/orb-java/issues/283)) ([6e2862d](https://github.com/orbcorp/orb-java/commit/6e2862d364872246891f5b1f37a137f27edd3c39))
+* **internal:** add async service tests ([#281](https://github.com/orbcorp/orb-java/issues/281)) ([8171ba6](https://github.com/orbcorp/orb-java/commit/8171ba671b8a5fb9d55477984a765f7235d50c53))
+* **internal:** improve sync service tests ([8171ba6](https://github.com/orbcorp/orb-java/commit/8171ba671b8a5fb9d55477984a765f7235d50c53))
+* **internal:** refactor `ServiceParamsTest` ([#285](https://github.com/orbcorp/orb-java/issues/285)) ([7894edb](https://github.com/orbcorp/orb-java/commit/7894edb4bd1b2a0780d839c23e08861e10aa080e))
+
+
+### Documentation
+
+* readme parameter tweaks ([8171ba6](https://github.com/orbcorp/orb-java/commit/8171ba671b8a5fb9d55477984a765f7235d50c53))
+
 ## 0.37.0 (2025-02-26)
 
 Full Changelog: [v0.36.0...v0.37.0](https://github.com/orbcorp/orb-java/compare/v0.36.0...v0.37.0)
