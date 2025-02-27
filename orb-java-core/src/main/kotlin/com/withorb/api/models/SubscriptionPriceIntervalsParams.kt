@@ -710,6 +710,9 @@ private constructor(
         @JsonProperty("external_price_id")
         @ExcludeMissing
         private val externalPriceId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("filter")
+        @ExcludeMissing
+        private val filter: JsonField<String> = JsonMissing.of(),
         @JsonProperty("fixed_fee_quantity_transitions")
         @ExcludeMissing
         private val fixedFeeQuantityTransitions: JsonField<List<FixedFeeQuantityTransition>> =
@@ -726,6 +729,9 @@ private constructor(
         @JsonProperty("price_id")
         @ExcludeMissing
         private val priceId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("usage_customer_ids")
+        @ExcludeMissing
+        private val usageCustomerIds: JsonField<List<String>> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
@@ -754,6 +760,13 @@ private constructor(
         fun externalPriceId(): Optional<String> =
             Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
 
+        /**
+         * An additional filter to apply to usage queries. This filter must be expressed as a
+         * boolean [computed property](/extensibility/advanced-metrics#computed-properties). If
+         * null, usage queries will not include any additional filter.
+         */
+        fun filter(): Optional<String> = Optional.ofNullable(filter.getNullable("filter"))
+
         /** A list of fixed fee quantity transitions to initialize on the price interval. */
         fun fixedFeeQuantityTransitions(): Optional<List<FixedFeeQuantityTransition>> =
             Optional.ofNullable(
@@ -779,6 +792,16 @@ private constructor(
 
         /** The id of the price to add to the subscription. */
         fun priceId(): Optional<String> = Optional.ofNullable(priceId.getNullable("price_id"))
+
+        /**
+         * A list of customer IDs whose usage events will be aggregated and billed under this
+         * subscription. By default, a subscription only considers usage events associated with its
+         * attached customer's customer_id. When usage_customer_ids is provided, the subscription
+         * includes usage events from the specified customers only. Provided usage_customer_ids must
+         * be either the customer for this subscription itself, or any of that customer's children.
+         */
+        fun usageCustomerIds(): Optional<List<String>> =
+            Optional.ofNullable(usageCustomerIds.getNullable("usage_customer_ids"))
 
         /**
          * The start date of the price interval. This is the date that the price will start billing
@@ -809,6 +832,13 @@ private constructor(
         @ExcludeMissing
         fun _externalPriceId(): JsonField<String> = externalPriceId
 
+        /**
+         * An additional filter to apply to usage queries. This filter must be expressed as a
+         * boolean [computed property](/extensibility/advanced-metrics#computed-properties). If
+         * null, usage queries will not include any additional filter.
+         */
+        @JsonProperty("filter") @ExcludeMissing fun _filter(): JsonField<String> = filter
+
         /** A list of fixed fee quantity transitions to initialize on the price interval. */
         @JsonProperty("fixed_fee_quantity_transitions")
         @ExcludeMissing
@@ -837,6 +867,17 @@ private constructor(
         /** The id of the price to add to the subscription. */
         @JsonProperty("price_id") @ExcludeMissing fun _priceId(): JsonField<String> = priceId
 
+        /**
+         * A list of customer IDs whose usage events will be aggregated and billed under this
+         * subscription. By default, a subscription only considers usage events associated with its
+         * attached customer's customer_id. When usage_customer_ids is provided, the subscription
+         * includes usage events from the specified customers only. Provided usage_customer_ids must
+         * be either the customer for this subscription itself, or any of that customer's children.
+         */
+        @JsonProperty("usage_customer_ids")
+        @ExcludeMissing
+        fun _usageCustomerIds(): JsonField<List<String>> = usageCustomerIds
+
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -853,11 +894,13 @@ private constructor(
             discounts().ifPresent { it.forEach { it.validate() } }
             endDate().ifPresent { it.validate() }
             externalPriceId()
+            filter()
             fixedFeeQuantityTransitions().ifPresent { it.forEach { it.validate() } }
             maximumAmount()
             minimumAmount()
             price().ifPresent { it.validate() }
             priceId()
+            usageCustomerIds()
             validated = true
         }
 
@@ -876,6 +919,7 @@ private constructor(
             private var discounts: JsonField<MutableList<Discount>>? = null
             private var endDate: JsonField<EndDate> = JsonMissing.of()
             private var externalPriceId: JsonField<String> = JsonMissing.of()
+            private var filter: JsonField<String> = JsonMissing.of()
             private var fixedFeeQuantityTransitions:
                 JsonField<MutableList<FixedFeeQuantityTransition>>? =
                 null
@@ -883,6 +927,7 @@ private constructor(
             private var minimumAmount: JsonField<Double> = JsonMissing.of()
             private var price: JsonField<Price> = JsonMissing.of()
             private var priceId: JsonField<String> = JsonMissing.of()
+            private var usageCustomerIds: JsonField<MutableList<String>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -892,12 +937,14 @@ private constructor(
                 discounts = add.discounts.map { it.toMutableList() }
                 endDate = add.endDate
                 externalPriceId = add.externalPriceId
+                filter = add.filter
                 fixedFeeQuantityTransitions =
                     add.fixedFeeQuantityTransitions.map { it.toMutableList() }
                 maximumAmount = add.maximumAmount
                 minimumAmount = add.minimumAmount
                 price = add.price
                 priceId = add.priceId
+                usageCustomerIds = add.usageCustomerIds.map { it.toMutableList() }
                 additionalProperties = add.additionalProperties.toMutableMap()
             }
 
@@ -1065,6 +1112,27 @@ private constructor(
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
             }
+
+            /**
+             * An additional filter to apply to usage queries. This filter must be expressed as a
+             * boolean [computed property](/extensibility/advanced-metrics#computed-properties). If
+             * null, usage queries will not include any additional filter.
+             */
+            fun filter(filter: String?) = filter(JsonField.ofNullable(filter))
+
+            /**
+             * An additional filter to apply to usage queries. This filter must be expressed as a
+             * boolean [computed property](/extensibility/advanced-metrics#computed-properties). If
+             * null, usage queries will not include any additional filter.
+             */
+            fun filter(filter: Optional<String>) = filter(filter.orElse(null))
+
+            /**
+             * An additional filter to apply to usage queries. This filter must be expressed as a
+             * boolean [computed property](/extensibility/advanced-metrics#computed-properties). If
+             * null, usage queries will not include any additional filter.
+             */
+            fun filter(filter: JsonField<String>) = apply { this.filter = filter }
 
             /** A list of fixed fee quantity transitions to initialize on the price interval. */
             fun fixedFeeQuantityTransitions(
@@ -1324,6 +1392,61 @@ private constructor(
             /** The id of the price to add to the subscription. */
             fun priceId(priceId: JsonField<String>) = apply { this.priceId = priceId }
 
+            /**
+             * A list of customer IDs whose usage events will be aggregated and billed under this
+             * subscription. By default, a subscription only considers usage events associated with
+             * its attached customer's customer_id. When usage_customer_ids is provided, the
+             * subscription includes usage events from the specified customers only. Provided
+             * usage_customer_ids must be either the customer for this subscription itself, or any
+             * of that customer's children.
+             */
+            fun usageCustomerIds(usageCustomerIds: List<String>?) =
+                usageCustomerIds(JsonField.ofNullable(usageCustomerIds))
+
+            /**
+             * A list of customer IDs whose usage events will be aggregated and billed under this
+             * subscription. By default, a subscription only considers usage events associated with
+             * its attached customer's customer_id. When usage_customer_ids is provided, the
+             * subscription includes usage events from the specified customers only. Provided
+             * usage_customer_ids must be either the customer for this subscription itself, or any
+             * of that customer's children.
+             */
+            fun usageCustomerIds(usageCustomerIds: Optional<List<String>>) =
+                usageCustomerIds(usageCustomerIds.orElse(null))
+
+            /**
+             * A list of customer IDs whose usage events will be aggregated and billed under this
+             * subscription. By default, a subscription only considers usage events associated with
+             * its attached customer's customer_id. When usage_customer_ids is provided, the
+             * subscription includes usage events from the specified customers only. Provided
+             * usage_customer_ids must be either the customer for this subscription itself, or any
+             * of that customer's children.
+             */
+            fun usageCustomerIds(usageCustomerIds: JsonField<List<String>>) = apply {
+                this.usageCustomerIds = usageCustomerIds.map { it.toMutableList() }
+            }
+
+            /**
+             * A list of customer IDs whose usage events will be aggregated and billed under this
+             * subscription. By default, a subscription only considers usage events associated with
+             * its attached customer's customer_id. When usage_customer_ids is provided, the
+             * subscription includes usage events from the specified customers only. Provided
+             * usage_customer_ids must be either the customer for this subscription itself, or any
+             * of that customer's children.
+             */
+            fun addUsageCustomerId(usageCustomerId: String) = apply {
+                usageCustomerIds =
+                    (usageCustomerIds ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(usageCustomerId)
+                    }
+            }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -1350,11 +1473,13 @@ private constructor(
                     (discounts ?: JsonMissing.of()).map { it.toImmutable() },
                     endDate,
                     externalPriceId,
+                    filter,
                     (fixedFeeQuantityTransitions ?: JsonMissing.of()).map { it.toImmutable() },
                     maximumAmount,
                     minimumAmount,
                     price,
                     priceId,
+                    (usageCustomerIds ?: JsonMissing.of()).map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -48415,17 +48540,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Add && startDate == other.startDate && allocationPrice == other.allocationPrice && discounts == other.discounts && endDate == other.endDate && externalPriceId == other.externalPriceId && fixedFeeQuantityTransitions == other.fixedFeeQuantityTransitions && maximumAmount == other.maximumAmount && minimumAmount == other.minimumAmount && price == other.price && priceId == other.priceId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Add && startDate == other.startDate && allocationPrice == other.allocationPrice && discounts == other.discounts && endDate == other.endDate && externalPriceId == other.externalPriceId && filter == other.filter && fixedFeeQuantityTransitions == other.fixedFeeQuantityTransitions && maximumAmount == other.maximumAmount && minimumAmount == other.minimumAmount && price == other.price && priceId == other.priceId && usageCustomerIds == other.usageCustomerIds && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(startDate, allocationPrice, discounts, endDate, externalPriceId, fixedFeeQuantityTransitions, maximumAmount, minimumAmount, price, priceId, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(startDate, allocationPrice, discounts, endDate, externalPriceId, filter, fixedFeeQuantityTransitions, maximumAmount, minimumAmount, price, priceId, usageCustomerIds, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Add{startDate=$startDate, allocationPrice=$allocationPrice, discounts=$discounts, endDate=$endDate, externalPriceId=$externalPriceId, fixedFeeQuantityTransitions=$fixedFeeQuantityTransitions, maximumAmount=$maximumAmount, minimumAmount=$minimumAmount, price=$price, priceId=$priceId, additionalProperties=$additionalProperties}"
+            "Add{startDate=$startDate, allocationPrice=$allocationPrice, discounts=$discounts, endDate=$endDate, externalPriceId=$externalPriceId, filter=$filter, fixedFeeQuantityTransitions=$fixedFeeQuantityTransitions, maximumAmount=$maximumAmount, minimumAmount=$minimumAmount, price=$price, priceId=$priceId, usageCustomerIds=$usageCustomerIds, additionalProperties=$additionalProperties}"
     }
 
     @NoAutoDetect
@@ -50744,6 +50869,9 @@ private constructor(
         @JsonProperty("end_date")
         @ExcludeMissing
         private val endDate: JsonField<EndDate> = JsonMissing.of(),
+        @JsonProperty("filter")
+        @ExcludeMissing
+        private val filter: JsonField<String> = JsonMissing.of(),
         @JsonProperty("fixed_fee_quantity_transitions")
         @ExcludeMissing
         private val fixedFeeQuantityTransitions: JsonField<List<FixedFeeQuantityTransition>> =
@@ -50751,6 +50879,9 @@ private constructor(
         @JsonProperty("start_date")
         @ExcludeMissing
         private val startDate: JsonField<StartDate> = JsonMissing.of(),
+        @JsonProperty("usage_customer_ids")
+        @ExcludeMissing
+        private val usageCustomerIds: JsonField<List<String>> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
@@ -50773,6 +50904,13 @@ private constructor(
         fun endDate(): Optional<EndDate> = Optional.ofNullable(endDate.getNullable("end_date"))
 
         /**
+         * An additional filter to apply to usage queries. This filter must be expressed as a
+         * boolean [computed property](/extensibility/advanced-metrics#computed-properties). If
+         * null, usage queries will not include any additional filter.
+         */
+        fun filter(): Optional<String> = Optional.ofNullable(filter.getNullable("filter"))
+
+        /**
          * A list of fixed fee quantity transitions to use for this price interval. Note that this
          * list will overwrite all existing fixed fee quantity transitions on the price interval.
          */
@@ -50787,6 +50925,16 @@ private constructor(
          */
         fun startDate(): Optional<StartDate> =
             Optional.ofNullable(startDate.getNullable("start_date"))
+
+        /**
+         * A list of customer IDs whose usage events will be aggregated and billed under this
+         * subscription. By default, a subscription only considers usage events associated with its
+         * attached customer's customer_id. When usage_customer_ids is provided, the subscription
+         * includes usage events from the specified customers only. Provided usage_customer_ids must
+         * be either the customer for this subscription itself, or any of that customer's children.
+         */
+        fun usageCustomerIds(): Optional<List<String>> =
+            Optional.ofNullable(usageCustomerIds.getNullable("usage_customer_ids"))
 
         /** The id of the price interval to edit. */
         @JsonProperty("price_interval_id")
@@ -50809,6 +50957,13 @@ private constructor(
         @JsonProperty("end_date") @ExcludeMissing fun _endDate(): JsonField<EndDate> = endDate
 
         /**
+         * An additional filter to apply to usage queries. This filter must be expressed as a
+         * boolean [computed property](/extensibility/advanced-metrics#computed-properties). If
+         * null, usage queries will not include any additional filter.
+         */
+        @JsonProperty("filter") @ExcludeMissing fun _filter(): JsonField<String> = filter
+
+        /**
          * A list of fixed fee quantity transitions to use for this price interval. Note that this
          * list will overwrite all existing fixed fee quantity transitions on the price interval.
          */
@@ -50825,6 +50980,17 @@ private constructor(
         @ExcludeMissing
         fun _startDate(): JsonField<StartDate> = startDate
 
+        /**
+         * A list of customer IDs whose usage events will be aggregated and billed under this
+         * subscription. By default, a subscription only considers usage events associated with its
+         * attached customer's customer_id. When usage_customer_ids is provided, the subscription
+         * includes usage events from the specified customers only. Provided usage_customer_ids must
+         * be either the customer for this subscription itself, or any of that customer's children.
+         */
+        @JsonProperty("usage_customer_ids")
+        @ExcludeMissing
+        fun _usageCustomerIds(): JsonField<List<String>> = usageCustomerIds
+
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -50839,8 +51005,10 @@ private constructor(
             priceIntervalId()
             billingCycleDay()
             endDate().ifPresent { it.validate() }
+            filter()
             fixedFeeQuantityTransitions().ifPresent { it.forEach { it.validate() } }
             startDate().ifPresent { it.validate() }
+            usageCustomerIds()
             validated = true
         }
 
@@ -50857,10 +51025,12 @@ private constructor(
             private var priceIntervalId: JsonField<String>? = null
             private var billingCycleDay: JsonField<Long> = JsonMissing.of()
             private var endDate: JsonField<EndDate> = JsonMissing.of()
+            private var filter: JsonField<String> = JsonMissing.of()
             private var fixedFeeQuantityTransitions:
                 JsonField<MutableList<FixedFeeQuantityTransition>>? =
                 null
             private var startDate: JsonField<StartDate> = JsonMissing.of()
+            private var usageCustomerIds: JsonField<MutableList<String>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -50868,9 +51038,11 @@ private constructor(
                 priceIntervalId = edit.priceIntervalId
                 billingCycleDay = edit.billingCycleDay
                 endDate = edit.endDate
+                filter = edit.filter
                 fixedFeeQuantityTransitions =
                     edit.fixedFeeQuantityTransitions.map { it.toMutableList() }
                 startDate = edit.startDate
+                usageCustomerIds = edit.usageCustomerIds.map { it.toMutableList() }
                 additionalProperties = edit.additionalProperties.toMutableMap()
             }
 
@@ -50948,6 +51120,27 @@ private constructor(
                 endDate(EndDate.ofBillingCycleRelative(billingCycleRelative))
 
             /**
+             * An additional filter to apply to usage queries. This filter must be expressed as a
+             * boolean [computed property](/extensibility/advanced-metrics#computed-properties). If
+             * null, usage queries will not include any additional filter.
+             */
+            fun filter(filter: String?) = filter(JsonField.ofNullable(filter))
+
+            /**
+             * An additional filter to apply to usage queries. This filter must be expressed as a
+             * boolean [computed property](/extensibility/advanced-metrics#computed-properties). If
+             * null, usage queries will not include any additional filter.
+             */
+            fun filter(filter: Optional<String>) = filter(filter.orElse(null))
+
+            /**
+             * An additional filter to apply to usage queries. This filter must be expressed as a
+             * boolean [computed property](/extensibility/advanced-metrics#computed-properties). If
+             * null, usage queries will not include any additional filter.
+             */
+            fun filter(filter: JsonField<String>) = apply { this.filter = filter }
+
+            /**
              * A list of fixed fee quantity transitions to use for this price interval. Note that
              * this list will overwrite all existing fixed fee quantity transitions on the price
              * interval.
@@ -51022,6 +51215,61 @@ private constructor(
             fun startDate(billingCycleRelative: BillingCycleRelativeDate) =
                 startDate(StartDate.ofBillingCycleRelative(billingCycleRelative))
 
+            /**
+             * A list of customer IDs whose usage events will be aggregated and billed under this
+             * subscription. By default, a subscription only considers usage events associated with
+             * its attached customer's customer_id. When usage_customer_ids is provided, the
+             * subscription includes usage events from the specified customers only. Provided
+             * usage_customer_ids must be either the customer for this subscription itself, or any
+             * of that customer's children.
+             */
+            fun usageCustomerIds(usageCustomerIds: List<String>?) =
+                usageCustomerIds(JsonField.ofNullable(usageCustomerIds))
+
+            /**
+             * A list of customer IDs whose usage events will be aggregated and billed under this
+             * subscription. By default, a subscription only considers usage events associated with
+             * its attached customer's customer_id. When usage_customer_ids is provided, the
+             * subscription includes usage events from the specified customers only. Provided
+             * usage_customer_ids must be either the customer for this subscription itself, or any
+             * of that customer's children.
+             */
+            fun usageCustomerIds(usageCustomerIds: Optional<List<String>>) =
+                usageCustomerIds(usageCustomerIds.orElse(null))
+
+            /**
+             * A list of customer IDs whose usage events will be aggregated and billed under this
+             * subscription. By default, a subscription only considers usage events associated with
+             * its attached customer's customer_id. When usage_customer_ids is provided, the
+             * subscription includes usage events from the specified customers only. Provided
+             * usage_customer_ids must be either the customer for this subscription itself, or any
+             * of that customer's children.
+             */
+            fun usageCustomerIds(usageCustomerIds: JsonField<List<String>>) = apply {
+                this.usageCustomerIds = usageCustomerIds.map { it.toMutableList() }
+            }
+
+            /**
+             * A list of customer IDs whose usage events will be aggregated and billed under this
+             * subscription. By default, a subscription only considers usage events associated with
+             * its attached customer's customer_id. When usage_customer_ids is provided, the
+             * subscription includes usage events from the specified customers only. Provided
+             * usage_customer_ids must be either the customer for this subscription itself, or any
+             * of that customer's children.
+             */
+            fun addUsageCustomerId(usageCustomerId: String) = apply {
+                usageCustomerIds =
+                    (usageCustomerIds ?: JsonField.of(mutableListOf())).apply {
+                        asKnown()
+                            .orElseThrow {
+                                IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                )
+                            }
+                            .add(usageCustomerId)
+                    }
+            }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -51046,8 +51294,10 @@ private constructor(
                     checkRequired("priceIntervalId", priceIntervalId),
                     billingCycleDay,
                     endDate,
+                    filter,
                     (fixedFeeQuantityTransitions ?: JsonMissing.of()).map { it.toImmutable() },
                     startDate,
+                    (usageCustomerIds ?: JsonMissing.of()).map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -51474,17 +51724,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Edit && priceIntervalId == other.priceIntervalId && billingCycleDay == other.billingCycleDay && endDate == other.endDate && fixedFeeQuantityTransitions == other.fixedFeeQuantityTransitions && startDate == other.startDate && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Edit && priceIntervalId == other.priceIntervalId && billingCycleDay == other.billingCycleDay && endDate == other.endDate && filter == other.filter && fixedFeeQuantityTransitions == other.fixedFeeQuantityTransitions && startDate == other.startDate && usageCustomerIds == other.usageCustomerIds && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(priceIntervalId, billingCycleDay, endDate, fixedFeeQuantityTransitions, startDate, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(priceIntervalId, billingCycleDay, endDate, filter, fixedFeeQuantityTransitions, startDate, usageCustomerIds, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Edit{priceIntervalId=$priceIntervalId, billingCycleDay=$billingCycleDay, endDate=$endDate, fixedFeeQuantityTransitions=$fixedFeeQuantityTransitions, startDate=$startDate, additionalProperties=$additionalProperties}"
+            "Edit{priceIntervalId=$priceIntervalId, billingCycleDay=$billingCycleDay, endDate=$endDate, filter=$filter, fixedFeeQuantityTransitions=$fixedFeeQuantityTransitions, startDate=$startDate, usageCustomerIds=$usageCustomerIds, additionalProperties=$additionalProperties}"
     }
 
     @NoAutoDetect
