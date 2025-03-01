@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.39.0 (2025-03-01)
+
+Full Changelog: [v0.38.0...v0.39.0](https://github.com/orbcorp/orb-java/compare/v0.38.0...v0.39.0)
+
+### Features
+
+* **api:** api update ([#290](https://github.com/orbcorp/orb-java/issues/290)) ([e5a73e7](https://github.com/orbcorp/orb-java/commit/e5a73e781835f7d036324b85209f8386083f8d96))
+
+
+### Documentation
+
+* update URLs from stainlessapi.com to stainless.com ([#288](https://github.com/orbcorp/orb-java/issues/288)) ([c69a113](https://github.com/orbcorp/orb-java/commit/c69a11395282576f531395c7ec26a04d789a03d9))
+
 ## 0.38.0 (2025-02-27)
 
 Full Changelog: [v0.37.0...v0.38.0](https://github.com/orbcorp/orb-java/compare/v0.37.0...v0.38.0)
