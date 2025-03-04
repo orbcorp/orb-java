@@ -41,13 +41,14 @@ internal constructor(private val clientOptions: ClientOptions) : ExternalPriceId
                 .body(json(clientOptions.jsonMapper, params._body()))
                 .build()
                 .prepareAsync(clientOptions, params)
+        val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
         return request
             .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
             .thenApply { response ->
                 response
                     .use { updateHandler.handle(it) }
                     .also {
-                        if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
+                        if (requestOptions.responseValidation!!) {
                             it.validate()
                         }
                     }
@@ -72,13 +73,14 @@ internal constructor(private val clientOptions: ClientOptions) : ExternalPriceId
                 .addPathSegments("prices", "external_price_id", params.getPathParam(0))
                 .build()
                 .prepareAsync(clientOptions, params)
+        val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
         return request
             .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
             .thenApply { response ->
                 response
                     .use { fetchHandler.handle(it) }
                     .also {
-                        if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
+                        if (requestOptions.responseValidation!!) {
                             it.validate()
                         }
                     }

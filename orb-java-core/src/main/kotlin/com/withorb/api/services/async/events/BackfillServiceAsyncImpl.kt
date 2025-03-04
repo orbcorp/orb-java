@@ -75,13 +75,14 @@ class BackfillServiceAsyncImpl internal constructor(private val clientOptions: C
                 .body(json(clientOptions.jsonMapper, params._body()))
                 .build()
                 .prepareAsync(clientOptions, params)
+        val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
         return request
             .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
             .thenApply { response ->
                 response
                     .use { createHandler.handle(it) }
                     .also {
-                        if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
+                        if (requestOptions.responseValidation!!) {
                             it.validate()
                         }
                     }
@@ -110,13 +111,14 @@ class BackfillServiceAsyncImpl internal constructor(private val clientOptions: C
                 .addPathSegments("events", "backfills")
                 .build()
                 .prepareAsync(clientOptions, params)
+        val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
         return request
             .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
             .thenApply { response ->
                 response
                     .use { listHandler.handle(it) }
                     .also {
-                        if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
+                        if (requestOptions.responseValidation!!) {
                             it.validate()
                         }
                     }
@@ -144,13 +146,14 @@ class BackfillServiceAsyncImpl internal constructor(private val clientOptions: C
                 .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                 .build()
                 .prepareAsync(clientOptions, params)
+        val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
         return request
             .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
             .thenApply { response ->
                 response
                     .use { closeHandler.handle(it) }
                     .also {
-                        if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
+                        if (requestOptions.responseValidation!!) {
                             it.validate()
                         }
                     }
@@ -172,13 +175,14 @@ class BackfillServiceAsyncImpl internal constructor(private val clientOptions: C
                 .addPathSegments("events", "backfills", params.getPathParam(0))
                 .build()
                 .prepareAsync(clientOptions, params)
+        val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
         return request
             .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
             .thenApply { response ->
                 response
                     .use { fetchHandler.handle(it) }
                     .also {
-                        if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
+                        if (requestOptions.responseValidation!!) {
                             it.validate()
                         }
                     }
@@ -208,13 +212,14 @@ class BackfillServiceAsyncImpl internal constructor(private val clientOptions: C
                 .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                 .build()
                 .prepareAsync(clientOptions, params)
+        val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
         return request
             .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
             .thenApply { response ->
                 response
                     .use { revertHandler.handle(it) }
                     .also {
-                        if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
+                        if (requestOptions.responseValidation!!) {
                             it.validate()
                         }
                     }
