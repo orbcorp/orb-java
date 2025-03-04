@@ -4,7 +4,10 @@
 
 package com.withorb.api.services.blocking
 
+import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.http.HttpResponse
+import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Customer
 import com.withorb.api.models.CustomerCreateParams
 import com.withorb.api.models.CustomerDeleteParams
@@ -21,6 +24,11 @@ import com.withorb.api.services.blocking.customers.CostService
 import com.withorb.api.services.blocking.customers.CreditService
 
 interface CustomerService {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
 
     fun costs(): CostService
 
@@ -164,4 +172,125 @@ interface CustomerService {
         params: CustomerUpdateByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Customer
+
+    /** A view of [CustomerService] that provides access to raw HTTP responses for each method. */
+    interface WithRawResponse {
+
+        fun costs(): CostService.WithRawResponse
+
+        fun credits(): CreditService.WithRawResponse
+
+        fun balanceTransactions(): BalanceTransactionService.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `post /customers`, but is otherwise the same as
+         * [CustomerService.create].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun create(
+            params: CustomerCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Customer>
+
+        /**
+         * Returns a raw HTTP response for `put /customers/{customer_id}`, but is otherwise the same
+         * as [CustomerService.update].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun update(
+            params: CustomerUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Customer>
+
+        /**
+         * Returns a raw HTTP response for `get /customers`, but is otherwise the same as
+         * [CustomerService.list].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun list(
+            params: CustomerListParams = CustomerListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CustomerListPage>
+
+        /**
+         * Returns a raw HTTP response for `get /customers`, but is otherwise the same as
+         * [CustomerService.list].
+         */
+        @MustBeClosed
+        fun list(requestOptions: RequestOptions): HttpResponseFor<CustomerListPage> =
+            list(CustomerListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `delete /customers/{customer_id}`, but is otherwise the
+         * same as [CustomerService.delete].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun delete(
+            params: CustomerDeleteParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse
+
+        /**
+         * Returns a raw HTTP response for `get /customers/{customer_id}`, but is otherwise the same
+         * as [CustomerService.fetch].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun fetch(
+            params: CustomerFetchParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Customer>
+
+        /**
+         * Returns a raw HTTP response for `get
+         * /customers/external_customer_id/{external_customer_id}`, but is otherwise the same as
+         * [CustomerService.fetchByExternalId].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun fetchByExternalId(
+            params: CustomerFetchByExternalIdParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Customer>
+
+        /**
+         * Returns a raw HTTP response for `post
+         * /customers/external_customer_id/{external_customer_id}/sync_payment_methods_from_gateway`,
+         * but is otherwise the same as [CustomerService.syncPaymentMethodsFromGateway].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun syncPaymentMethodsFromGateway(
+            params: CustomerSyncPaymentMethodsFromGatewayParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse
+
+        /**
+         * Returns a raw HTTP response for `post
+         * /customers/{customer_id}/sync_payment_methods_from_gateway`, but is otherwise the same as
+         * [CustomerService.syncPaymentMethodsFromGatewayByExternalCustomerId].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun syncPaymentMethodsFromGatewayByExternalCustomerId(
+            params: CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse
+
+        /**
+         * Returns a raw HTTP response for `put
+         * /customers/external_customer_id/{external_customer_id}`, but is otherwise the same as
+         * [CustomerService.updateByExternalId].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun updateByExternalId(
+            params: CustomerUpdateByExternalIdParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Customer>
+    }
 }

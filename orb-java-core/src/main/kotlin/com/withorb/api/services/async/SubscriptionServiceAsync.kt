@@ -4,7 +4,9 @@
 
 package com.withorb.api.services.async
 
+import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Subscription
 import com.withorb.api.models.SubscriptionCancelParams
 import com.withorb.api.models.SubscriptionCancelResponse
@@ -39,6 +41,11 @@ import com.withorb.api.models.SubscriptionUsage
 import java.util.concurrent.CompletableFuture
 
 interface SubscriptionServiceAsync {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
 
     /**
      * A subscription represents the purchase of a plan by a customer. The customer is identified by
@@ -934,4 +941,202 @@ interface SubscriptionServiceAsync {
         params: SubscriptionUpdateTrialParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<SubscriptionUpdateTrialResponse>
+
+    /**
+     * A view of [SubscriptionServiceAsync] that provides access to raw HTTP responses for each
+     * method.
+     */
+    interface WithRawResponse {
+
+        /**
+         * Returns a raw HTTP response for `post /subscriptions`, but is otherwise the same as
+         * [SubscriptionServiceAsync.create].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun create(
+            params: SubscriptionCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<SubscriptionCreateResponse>>
+
+        /**
+         * Returns a raw HTTP response for `put /subscriptions/{subscription_id}`, but is otherwise
+         * the same as [SubscriptionServiceAsync.update].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun update(
+            params: SubscriptionUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Subscription>>
+
+        /**
+         * Returns a raw HTTP response for `get /subscriptions`, but is otherwise the same as
+         * [SubscriptionServiceAsync.list].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun list(
+            params: SubscriptionListParams = SubscriptionListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<SubscriptionListPageAsync>>
+
+        /**
+         * Returns a raw HTTP response for `get /subscriptions`, but is otherwise the same as
+         * [SubscriptionServiceAsync.list].
+         */
+        @MustBeClosed
+        fun list(
+            requestOptions: RequestOptions
+        ): CompletableFuture<HttpResponseFor<SubscriptionListPageAsync>> =
+            list(SubscriptionListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /subscriptions/{subscription_id}/cancel`, but is
+         * otherwise the same as [SubscriptionServiceAsync.cancel].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun cancel(
+            params: SubscriptionCancelParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<SubscriptionCancelResponse>>
+
+        /**
+         * Returns a raw HTTP response for `get /subscriptions/{subscription_id}`, but is otherwise
+         * the same as [SubscriptionServiceAsync.fetch].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun fetch(
+            params: SubscriptionFetchParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Subscription>>
+
+        /**
+         * Returns a raw HTTP response for `get /subscriptions/{subscription_id}/costs`, but is
+         * otherwise the same as [SubscriptionServiceAsync.fetchCosts].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun fetchCosts(
+            params: SubscriptionFetchCostsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<SubscriptionFetchCostsResponse>>
+
+        /**
+         * Returns a raw HTTP response for `get /subscriptions/{subscription_id}/schedule`, but is
+         * otherwise the same as [SubscriptionServiceAsync.fetchSchedule].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun fetchSchedule(
+            params: SubscriptionFetchScheduleParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<SubscriptionFetchSchedulePageAsync>>
+
+        /**
+         * Returns a raw HTTP response for `get /subscriptions/{subscription_id}/usage`, but is
+         * otherwise the same as [SubscriptionServiceAsync.fetchUsage].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun fetchUsage(
+            params: SubscriptionFetchUsageParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<SubscriptionUsage>>
+
+        /**
+         * Returns a raw HTTP response for `post /subscriptions/{subscription_id}/price_intervals`,
+         * but is otherwise the same as [SubscriptionServiceAsync.priceIntervals].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun priceIntervals(
+            params: SubscriptionPriceIntervalsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<SubscriptionPriceIntervalsResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post
+         * /subscriptions/{subscription_id}/schedule_plan_change`, but is otherwise the same as
+         * [SubscriptionServiceAsync.schedulePlanChange].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun schedulePlanChange(
+            params: SubscriptionSchedulePlanChangeParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<SubscriptionSchedulePlanChangeResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post /subscriptions/{subscription_id}/trigger_phase`,
+         * but is otherwise the same as [SubscriptionServiceAsync.triggerPhase].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun triggerPhase(
+            params: SubscriptionTriggerPhaseParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<SubscriptionTriggerPhaseResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post
+         * /subscriptions/{subscription_id}/unschedule_cancellation`, but is otherwise the same as
+         * [SubscriptionServiceAsync.unscheduleCancellation].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun unscheduleCancellation(
+            params: SubscriptionUnscheduleCancellationParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<SubscriptionUnscheduleCancellationResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post
+         * /subscriptions/{subscription_id}/unschedule_fixed_fee_quantity_updates`, but is otherwise
+         * the same as [SubscriptionServiceAsync.unscheduleFixedFeeQuantityUpdates].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun unscheduleFixedFeeQuantityUpdates(
+            params: SubscriptionUnscheduleFixedFeeQuantityUpdatesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<SubscriptionUnscheduleFixedFeeQuantityUpdatesResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post
+         * /subscriptions/{subscription_id}/unschedule_pending_plan_changes`, but is otherwise the
+         * same as [SubscriptionServiceAsync.unschedulePendingPlanChanges].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun unschedulePendingPlanChanges(
+            params: SubscriptionUnschedulePendingPlanChangesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<SubscriptionUnschedulePendingPlanChangesResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post
+         * /subscriptions/{subscription_id}/update_fixed_fee_quantity`, but is otherwise the same as
+         * [SubscriptionServiceAsync.updateFixedFeeQuantity].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun updateFixedFeeQuantity(
+            params: SubscriptionUpdateFixedFeeQuantityParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<SubscriptionUpdateFixedFeeQuantityResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post /subscriptions/{subscription_id}/update_trial`, but
+         * is otherwise the same as [SubscriptionServiceAsync.updateTrial].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun updateTrial(
+            params: SubscriptionUpdateTrialParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<SubscriptionUpdateTrialResponse>>
+    }
 }

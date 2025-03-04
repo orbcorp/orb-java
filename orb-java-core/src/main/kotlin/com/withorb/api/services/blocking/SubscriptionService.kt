@@ -4,7 +4,9 @@
 
 package com.withorb.api.services.blocking
 
+import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Subscription
 import com.withorb.api.models.SubscriptionCancelParams
 import com.withorb.api.models.SubscriptionCancelResponse
@@ -38,6 +40,11 @@ import com.withorb.api.models.SubscriptionUpdateTrialResponse
 import com.withorb.api.models.SubscriptionUsage
 
 interface SubscriptionService {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
 
     /**
      * A subscription represents the purchase of a plan by a customer. The customer is identified by
@@ -933,4 +940,199 @@ interface SubscriptionService {
         params: SubscriptionUpdateTrialParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionUpdateTrialResponse
+
+    /**
+     * A view of [SubscriptionService] that provides access to raw HTTP responses for each method.
+     */
+    interface WithRawResponse {
+
+        /**
+         * Returns a raw HTTP response for `post /subscriptions`, but is otherwise the same as
+         * [SubscriptionService.create].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun create(
+            params: SubscriptionCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionCreateResponse>
+
+        /**
+         * Returns a raw HTTP response for `put /subscriptions/{subscription_id}`, but is otherwise
+         * the same as [SubscriptionService.update].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun update(
+            params: SubscriptionUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Subscription>
+
+        /**
+         * Returns a raw HTTP response for `get /subscriptions`, but is otherwise the same as
+         * [SubscriptionService.list].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun list(
+            params: SubscriptionListParams = SubscriptionListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionListPage>
+
+        /**
+         * Returns a raw HTTP response for `get /subscriptions`, but is otherwise the same as
+         * [SubscriptionService.list].
+         */
+        @MustBeClosed
+        fun list(requestOptions: RequestOptions): HttpResponseFor<SubscriptionListPage> =
+            list(SubscriptionListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /subscriptions/{subscription_id}/cancel`, but is
+         * otherwise the same as [SubscriptionService.cancel].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun cancel(
+            params: SubscriptionCancelParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionCancelResponse>
+
+        /**
+         * Returns a raw HTTP response for `get /subscriptions/{subscription_id}`, but is otherwise
+         * the same as [SubscriptionService.fetch].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun fetch(
+            params: SubscriptionFetchParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Subscription>
+
+        /**
+         * Returns a raw HTTP response for `get /subscriptions/{subscription_id}/costs`, but is
+         * otherwise the same as [SubscriptionService.fetchCosts].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun fetchCosts(
+            params: SubscriptionFetchCostsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionFetchCostsResponse>
+
+        /**
+         * Returns a raw HTTP response for `get /subscriptions/{subscription_id}/schedule`, but is
+         * otherwise the same as [SubscriptionService.fetchSchedule].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun fetchSchedule(
+            params: SubscriptionFetchScheduleParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionFetchSchedulePage>
+
+        /**
+         * Returns a raw HTTP response for `get /subscriptions/{subscription_id}/usage`, but is
+         * otherwise the same as [SubscriptionService.fetchUsage].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun fetchUsage(
+            params: SubscriptionFetchUsageParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionUsage>
+
+        /**
+         * Returns a raw HTTP response for `post /subscriptions/{subscription_id}/price_intervals`,
+         * but is otherwise the same as [SubscriptionService.priceIntervals].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun priceIntervals(
+            params: SubscriptionPriceIntervalsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionPriceIntervalsResponse>
+
+        /**
+         * Returns a raw HTTP response for `post
+         * /subscriptions/{subscription_id}/schedule_plan_change`, but is otherwise the same as
+         * [SubscriptionService.schedulePlanChange].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun schedulePlanChange(
+            params: SubscriptionSchedulePlanChangeParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionSchedulePlanChangeResponse>
+
+        /**
+         * Returns a raw HTTP response for `post /subscriptions/{subscription_id}/trigger_phase`,
+         * but is otherwise the same as [SubscriptionService.triggerPhase].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun triggerPhase(
+            params: SubscriptionTriggerPhaseParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionTriggerPhaseResponse>
+
+        /**
+         * Returns a raw HTTP response for `post
+         * /subscriptions/{subscription_id}/unschedule_cancellation`, but is otherwise the same as
+         * [SubscriptionService.unscheduleCancellation].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun unscheduleCancellation(
+            params: SubscriptionUnscheduleCancellationParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionUnscheduleCancellationResponse>
+
+        /**
+         * Returns a raw HTTP response for `post
+         * /subscriptions/{subscription_id}/unschedule_fixed_fee_quantity_updates`, but is otherwise
+         * the same as [SubscriptionService.unscheduleFixedFeeQuantityUpdates].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun unscheduleFixedFeeQuantityUpdates(
+            params: SubscriptionUnscheduleFixedFeeQuantityUpdatesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionUnscheduleFixedFeeQuantityUpdatesResponse>
+
+        /**
+         * Returns a raw HTTP response for `post
+         * /subscriptions/{subscription_id}/unschedule_pending_plan_changes`, but is otherwise the
+         * same as [SubscriptionService.unschedulePendingPlanChanges].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun unschedulePendingPlanChanges(
+            params: SubscriptionUnschedulePendingPlanChangesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionUnschedulePendingPlanChangesResponse>
+
+        /**
+         * Returns a raw HTTP response for `post
+         * /subscriptions/{subscription_id}/update_fixed_fee_quantity`, but is otherwise the same as
+         * [SubscriptionService.updateFixedFeeQuantity].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun updateFixedFeeQuantity(
+            params: SubscriptionUpdateFixedFeeQuantityParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionUpdateFixedFeeQuantityResponse>
+
+        /**
+         * Returns a raw HTTP response for `post /subscriptions/{subscription_id}/update_trial`, but
+         * is otherwise the same as [SubscriptionService.updateTrial].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun updateTrial(
+            params: SubscriptionUpdateTrialParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionUpdateTrialResponse>
+    }
 }

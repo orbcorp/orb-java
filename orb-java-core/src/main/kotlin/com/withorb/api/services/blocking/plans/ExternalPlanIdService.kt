@@ -4,12 +4,19 @@
 
 package com.withorb.api.services.blocking.plans
 
+import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Plan
 import com.withorb.api.models.PlanExternalPlanIdFetchParams
 import com.withorb.api.models.PlanExternalPlanIdUpdateParams
 
 interface ExternalPlanIdService {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
 
     /**
      * This endpoint can be used to update the `external_plan_id`, and `metadata` of an existing
@@ -45,4 +52,32 @@ interface ExternalPlanIdService {
         params: PlanExternalPlanIdFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Plan
+
+    /**
+     * A view of [ExternalPlanIdService] that provides access to raw HTTP responses for each method.
+     */
+    interface WithRawResponse {
+
+        /**
+         * Returns a raw HTTP response for `put /plans/external_plan_id/{external_plan_id}`, but is
+         * otherwise the same as [ExternalPlanIdService.update].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun update(
+            params: PlanExternalPlanIdUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Plan>
+
+        /**
+         * Returns a raw HTTP response for `get /plans/external_plan_id/{external_plan_id}`, but is
+         * otherwise the same as [ExternalPlanIdService.fetch].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun fetch(
+            params: PlanExternalPlanIdFetchParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Plan>
+    }
 }
