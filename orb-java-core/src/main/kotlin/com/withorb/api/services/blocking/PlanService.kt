@@ -4,7 +4,9 @@
 
 package com.withorb.api.services.blocking
 
+import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Plan
 import com.withorb.api.models.PlanCreateParams
 import com.withorb.api.models.PlanFetchParams
@@ -14,6 +16,11 @@ import com.withorb.api.models.PlanUpdateParams
 import com.withorb.api.services.blocking.plans.ExternalPlanIdService
 
 interface PlanService {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
 
     fun externalPlanId(): ExternalPlanIdService
 
@@ -77,4 +84,62 @@ interface PlanService {
      */
     @JvmOverloads
     fun fetch(params: PlanFetchParams, requestOptions: RequestOptions = RequestOptions.none()): Plan
+
+    /** A view of [PlanService] that provides access to raw HTTP responses for each method. */
+    interface WithRawResponse {
+
+        fun externalPlanId(): ExternalPlanIdService.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `post /plans`, but is otherwise the same as
+         * [PlanService.create].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun create(
+            params: PlanCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Plan>
+
+        /**
+         * Returns a raw HTTP response for `put /plans/{plan_id}`, but is otherwise the same as
+         * [PlanService.update].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun update(
+            params: PlanUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Plan>
+
+        /**
+         * Returns a raw HTTP response for `get /plans`, but is otherwise the same as
+         * [PlanService.list].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun list(
+            params: PlanListParams = PlanListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<PlanListPage>
+
+        /**
+         * Returns a raw HTTP response for `get /plans`, but is otherwise the same as
+         * [PlanService.list].
+         */
+        @MustBeClosed
+        fun list(requestOptions: RequestOptions): HttpResponseFor<PlanListPage> =
+            list(PlanListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get /plans/{plan_id}`, but is otherwise the same as
+         * [PlanService.fetch].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun fetch(
+            params: PlanFetchParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Plan>
+    }
 }

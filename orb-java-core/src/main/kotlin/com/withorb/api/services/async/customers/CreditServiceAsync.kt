@@ -4,7 +4,9 @@
 
 package com.withorb.api.services.async.customers
 
+import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.CustomerCreditListByExternalIdPageAsync
 import com.withorb.api.models.CustomerCreditListByExternalIdParams
 import com.withorb.api.models.CustomerCreditListPageAsync
@@ -14,6 +16,11 @@ import com.withorb.api.services.async.customers.credits.TopUpServiceAsync
 import java.util.concurrent.CompletableFuture
 
 interface CreditServiceAsync {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
 
     fun ledger(): LedgerServiceAsync
 
@@ -48,4 +55,37 @@ interface CreditServiceAsync {
         params: CustomerCreditListByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCreditListByExternalIdPageAsync>
+
+    /**
+     * A view of [CreditServiceAsync] that provides access to raw HTTP responses for each method.
+     */
+    interface WithRawResponse {
+
+        fun ledger(): LedgerServiceAsync.WithRawResponse
+
+        fun topUps(): TopUpServiceAsync.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `get /customers/{customer_id}/credits`, but is otherwise
+         * the same as [CreditServiceAsync.list].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun list(
+            params: CustomerCreditListParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreditListPageAsync>>
+
+        /**
+         * Returns a raw HTTP response for `get
+         * /customers/external_customer_id/{external_customer_id}/credits`, but is otherwise the
+         * same as [CreditServiceAsync.listByExternalId].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun listByExternalId(
+            params: CustomerCreditListByExternalIdParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreditListByExternalIdPageAsync>>
+    }
 }

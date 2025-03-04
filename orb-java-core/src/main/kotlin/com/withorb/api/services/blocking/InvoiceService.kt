@@ -4,7 +4,9 @@
 
 package com.withorb.api.services.blocking
 
+import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Invoice
 import com.withorb.api.models.InvoiceCreateParams
 import com.withorb.api.models.InvoiceFetchParams
@@ -19,6 +21,11 @@ import com.withorb.api.models.InvoiceUpdateParams
 import com.withorb.api.models.InvoiceVoidInvoiceParams
 
 interface InvoiceService {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
 
     /** This endpoint is used to create a one-off invoice for a customer. */
     @JvmOverloads
@@ -145,4 +152,115 @@ interface InvoiceService {
         params: InvoiceVoidInvoiceParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Invoice
+
+    /** A view of [InvoiceService] that provides access to raw HTTP responses for each method. */
+    interface WithRawResponse {
+
+        /**
+         * Returns a raw HTTP response for `post /invoices`, but is otherwise the same as
+         * [InvoiceService.create].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun create(
+            params: InvoiceCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Invoice>
+
+        /**
+         * Returns a raw HTTP response for `put /invoices/{invoice_id}`, but is otherwise the same
+         * as [InvoiceService.update].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun update(
+            params: InvoiceUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Invoice>
+
+        /**
+         * Returns a raw HTTP response for `get /invoices`, but is otherwise the same as
+         * [InvoiceService.list].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun list(
+            params: InvoiceListParams = InvoiceListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<InvoiceListPage>
+
+        /**
+         * Returns a raw HTTP response for `get /invoices`, but is otherwise the same as
+         * [InvoiceService.list].
+         */
+        @MustBeClosed
+        fun list(requestOptions: RequestOptions): HttpResponseFor<InvoiceListPage> =
+            list(InvoiceListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get /invoices/{invoice_id}`, but is otherwise the same
+         * as [InvoiceService.fetch].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun fetch(
+            params: InvoiceFetchParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Invoice>
+
+        /**
+         * Returns a raw HTTP response for `get /invoices/upcoming`, but is otherwise the same as
+         * [InvoiceService.fetchUpcoming].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun fetchUpcoming(
+            params: InvoiceFetchUpcomingParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<InvoiceFetchUpcomingResponse>
+
+        /**
+         * Returns a raw HTTP response for `post /invoices/{invoice_id}/issue`, but is otherwise the
+         * same as [InvoiceService.issue].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun issue(
+            params: InvoiceIssueParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Invoice>
+
+        /**
+         * Returns a raw HTTP response for `post /invoices/{invoice_id}/mark_paid`, but is otherwise
+         * the same as [InvoiceService.markPaid].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun markPaid(
+            params: InvoiceMarkPaidParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Invoice>
+
+        /**
+         * Returns a raw HTTP response for `post /invoices/{invoice_id}/pay`, but is otherwise the
+         * same as [InvoiceService.pay].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun pay(
+            params: InvoicePayParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Invoice>
+
+        /**
+         * Returns a raw HTTP response for `post /invoices/{invoice_id}/void`, but is otherwise the
+         * same as [InvoiceService.voidInvoice].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun voidInvoice(
+            params: InvoiceVoidInvoiceParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Invoice>
+    }
 }

@@ -4,7 +4,9 @@
 
 package com.withorb.api.services.async
 
+import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Plan
 import com.withorb.api.models.PlanCreateParams
 import com.withorb.api.models.PlanFetchParams
@@ -15,6 +17,11 @@ import com.withorb.api.services.async.plans.ExternalPlanIdServiceAsync
 import java.util.concurrent.CompletableFuture
 
 interface PlanServiceAsync {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
 
     fun externalPlanId(): ExternalPlanIdServiceAsync
 
@@ -81,4 +88,64 @@ interface PlanServiceAsync {
         params: PlanFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Plan>
+
+    /** A view of [PlanServiceAsync] that provides access to raw HTTP responses for each method. */
+    interface WithRawResponse {
+
+        fun externalPlanId(): ExternalPlanIdServiceAsync.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `post /plans`, but is otherwise the same as
+         * [PlanServiceAsync.create].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun create(
+            params: PlanCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Plan>>
+
+        /**
+         * Returns a raw HTTP response for `put /plans/{plan_id}`, but is otherwise the same as
+         * [PlanServiceAsync.update].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun update(
+            params: PlanUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Plan>>
+
+        /**
+         * Returns a raw HTTP response for `get /plans`, but is otherwise the same as
+         * [PlanServiceAsync.list].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun list(
+            params: PlanListParams = PlanListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<PlanListPageAsync>>
+
+        /**
+         * Returns a raw HTTP response for `get /plans`, but is otherwise the same as
+         * [PlanServiceAsync.list].
+         */
+        @MustBeClosed
+        fun list(
+            requestOptions: RequestOptions
+        ): CompletableFuture<HttpResponseFor<PlanListPageAsync>> =
+            list(PlanListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get /plans/{plan_id}`, but is otherwise the same as
+         * [PlanServiceAsync.fetch].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun fetch(
+            params: PlanFetchParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Plan>>
+    }
 }
