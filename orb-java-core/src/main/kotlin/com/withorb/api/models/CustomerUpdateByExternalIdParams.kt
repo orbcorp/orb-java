@@ -909,6 +909,7 @@ private constructor(
 
         companion object {
 
+            /** Returns a mutable builder for constructing an instance of [Body]. */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -1652,6 +1653,15 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [CustomerUpdateByExternalIdParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -2464,6 +2474,10 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of
+             * [AccountingSyncConfiguration].
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -2584,6 +2598,15 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [AccountingProvider].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .externalProviderId()
+                 * .providerType()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -2757,6 +2780,7 @@ private constructor(
 
         companion object {
 
+            /** Returns a mutable builder for constructing an instance of [BillingAddress]. */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -2932,6 +2956,7 @@ private constructor(
 
         companion object {
 
+            /** Returns a mutable builder for constructing an instance of [Hierarchy]. */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -3073,6 +3098,7 @@ private constructor(
 
         companion object {
 
+            /** Returns a mutable builder for constructing an instance of [Metadata]. */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -3285,6 +3311,14 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [ReportingConfiguration].
+             *
+             * The following fields are required:
+             * ```java
+             * .exempt()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -3425,6 +3459,7 @@ private constructor(
 
         companion object {
 
+            /** Returns a mutable builder for constructing an instance of [ShippingAddress]. */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -3744,6 +3779,16 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [NewAvalaraTaxConfiguration].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .taxExempt()
+                 * .taxProvider()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -3978,6 +4023,16 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [NewTaxJarConfiguration].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .taxExempt()
+                 * .taxProvider()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -4308,6 +4363,16 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [TaxId].
+             *
+             * The following fields are required:
+             * ```java
+             * .country()
+             * .type()
+             * .value()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 

@@ -174,6 +174,15 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Body].
+             *
+             * The following fields are required:
+             * ```java
+             * .discount()
+             * .redemptionCode()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -345,6 +354,15 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [CouponCreateParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .discount()
+         * .redemptionCode()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -778,6 +796,16 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [NewCouponPercentageDiscount].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .discountType()
+                 * .percentageDiscount()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -1005,6 +1033,16 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [NewCouponAmountDiscount].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .amountDiscount()
+                 * .discountType()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
