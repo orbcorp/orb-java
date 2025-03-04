@@ -42,6 +42,15 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [PriceExternalPriceIdFetchParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .externalPriceId()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 

@@ -135,6 +135,15 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Body].
+             *
+             * The following fields are required:
+             * ```java
+             * .currency()
+             * .type()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -237,6 +246,17 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [AlertCreateForExternalCustomerParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .externalCustomerId()
+         * .currency()
+         * .type()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -577,6 +597,14 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Threshold].
+             *
+             * The following fields are required:
+             * ```java
+             * .value()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 

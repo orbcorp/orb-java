@@ -52,6 +52,14 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [EventBackfillCloseParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .backfillId()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 

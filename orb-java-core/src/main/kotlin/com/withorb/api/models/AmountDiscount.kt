@@ -93,6 +93,16 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [AmountDiscount].
+         *
+         * The following fields are required:
+         * ```java
+         * .amountDiscount()
+         * .appliesToPriceIds()
+         * .discountType()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 

@@ -88,6 +88,7 @@ private constructor(
 
         @JvmStatic fun none(): MetricListParams = builder().build()
 
+        /** Returns a mutable builder for constructing an instance of [MetricListParams]. */
         @JvmStatic fun builder() = Builder()
     }
 

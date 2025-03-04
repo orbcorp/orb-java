@@ -18,6 +18,7 @@ class OrbOkHttpClientAsync private constructor() {
 
     companion object {
 
+        /** Returns a mutable builder for constructing an instance of [OrbOkHttpClientAsync]. */
         @JvmStatic fun builder() = Builder()
 
         @JvmStatic fun fromEnv(): OrbClientAsync = builder().fromEnv().build()

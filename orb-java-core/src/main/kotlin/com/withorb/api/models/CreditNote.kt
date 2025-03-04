@@ -215,6 +215,28 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [CreditNote].
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * .createdAt()
+         * .creditNoteNumber()
+         * .creditNotePdf()
+         * .customer()
+         * .invoiceId()
+         * .lineItems()
+         * .maximumAmountAdjustment()
+         * .memo()
+         * .minimumAmountRefunded()
+         * .reason()
+         * .subtotal()
+         * .total()
+         * .type()
+         * .voidedAt()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -487,6 +509,15 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Customer].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .externalCustomerId()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -672,6 +703,20 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [LineItem].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .amount()
+             * .itemId()
+             * .name()
+             * .quantity()
+             * .subtotal()
+             * .taxAmounts()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -871,6 +916,16 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [TaxAmount].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .amount()
+                 * .taxRateDescription()
+                 * .taxRatePercentage()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -1061,6 +1116,18 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Discount].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .amountApplied()
+                 * .appliesToPriceIds()
+                 * .discountType()
+                 * .percentageDiscount()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -1398,6 +1465,16 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [MaximumAmountAdjustment].
+             *
+             * The following fields are required:
+             * ```java
+             * .amountApplied()
+             * .discountType()
+             * .percentageDiscount()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -1631,6 +1708,15 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [AppliesToPrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .name()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -2003,6 +2089,16 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Discount].
+             *
+             * The following fields are required:
+             * ```java
+             * .amountApplied()
+             * .discountType()
+             * .percentageDiscount()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -2236,6 +2332,15 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [AppliesToPrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .name()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 

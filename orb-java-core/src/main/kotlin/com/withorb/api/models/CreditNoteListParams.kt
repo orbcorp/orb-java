@@ -51,6 +51,7 @@ private constructor(
 
         @JvmStatic fun none(): CreditNoteListParams = builder().build()
 
+        /** Returns a mutable builder for constructing an instance of [CreditNoteListParams]. */
         @JvmStatic fun builder() = Builder()
     }
 

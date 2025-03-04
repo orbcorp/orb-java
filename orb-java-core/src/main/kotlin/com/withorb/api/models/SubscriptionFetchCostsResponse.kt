@@ -52,6 +52,15 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [SubscriptionFetchCostsResponse].
+         *
+         * The following fields are required:
+         * ```java
+         * .data()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -183,6 +192,18 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Data].
+             *
+             * The following fields are required:
+             * ```java
+             * .perPriceCosts()
+             * .subtotal()
+             * .timeframeEnd()
+             * .timeframeStart()
+             * .total()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -352,6 +373,17 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [PerPriceCost].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .price()
+                 * .priceId()
+                 * .subtotal()
+                 * .total()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 

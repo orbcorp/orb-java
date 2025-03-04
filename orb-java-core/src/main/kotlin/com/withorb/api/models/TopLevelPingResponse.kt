@@ -49,6 +49,14 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [TopLevelPingResponse].
+         *
+         * The following fields are required:
+         * ```java
+         * .response()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 

@@ -52,6 +52,14 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [CouponArchiveParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .couponId()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 

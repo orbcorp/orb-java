@@ -121,6 +121,7 @@ private constructor(
 
         companion object {
 
+            /** Returns a mutable builder for constructing an instance of [Body]. */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -200,6 +201,14 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [InvoiceIssueParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .invoiceId()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
