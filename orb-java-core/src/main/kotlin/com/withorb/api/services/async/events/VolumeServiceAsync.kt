@@ -4,12 +4,19 @@
 
 package com.withorb.api.services.async.events
 
+import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.EventVolumeListParams
 import com.withorb.api.models.EventVolumes
 import java.util.concurrent.CompletableFuture
 
 interface VolumeServiceAsync {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
 
     /**
      * This endpoint returns the event volume for an account in a
@@ -29,4 +36,21 @@ interface VolumeServiceAsync {
         params: EventVolumeListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<EventVolumes>
+
+    /**
+     * A view of [VolumeServiceAsync] that provides access to raw HTTP responses for each method.
+     */
+    interface WithRawResponse {
+
+        /**
+         * Returns a raw HTTP response for `get /events/volume`, but is otherwise the same as
+         * [VolumeServiceAsync.list].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun list(
+            params: EventVolumeListParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<EventVolumes>>
+    }
 }

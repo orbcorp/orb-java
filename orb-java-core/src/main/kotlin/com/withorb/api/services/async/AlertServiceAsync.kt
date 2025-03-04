@@ -4,7 +4,9 @@
 
 package com.withorb.api.services.async
 
+import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Alert
 import com.withorb.api.models.AlertCreateForCustomerParams
 import com.withorb.api.models.AlertCreateForExternalCustomerParams
@@ -18,6 +20,11 @@ import com.withorb.api.models.AlertUpdateParams
 import java.util.concurrent.CompletableFuture
 
 interface AlertServiceAsync {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
 
     /** This endpoint retrieves an alert by its ID. */
     @JvmOverloads
@@ -131,4 +138,107 @@ interface AlertServiceAsync {
         params: AlertEnableParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Alert>
+
+    /** A view of [AlertServiceAsync] that provides access to raw HTTP responses for each method. */
+    interface WithRawResponse {
+
+        /**
+         * Returns a raw HTTP response for `get /alerts/{alert_id}`, but is otherwise the same as
+         * [AlertServiceAsync.retrieve].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun retrieve(
+            params: AlertRetrieveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Alert>>
+
+        /**
+         * Returns a raw HTTP response for `put /alerts/{alert_configuration_id}`, but is otherwise
+         * the same as [AlertServiceAsync.update].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun update(
+            params: AlertUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Alert>>
+
+        /**
+         * Returns a raw HTTP response for `get /alerts`, but is otherwise the same as
+         * [AlertServiceAsync.list].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun list(
+            params: AlertListParams = AlertListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<AlertListPageAsync>>
+
+        /**
+         * Returns a raw HTTP response for `get /alerts`, but is otherwise the same as
+         * [AlertServiceAsync.list].
+         */
+        @MustBeClosed
+        fun list(
+            requestOptions: RequestOptions
+        ): CompletableFuture<HttpResponseFor<AlertListPageAsync>> =
+            list(AlertListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /alerts/customer_id/{customer_id}`, but is
+         * otherwise the same as [AlertServiceAsync.createForCustomer].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun createForCustomer(
+            params: AlertCreateForCustomerParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Alert>>
+
+        /**
+         * Returns a raw HTTP response for `post
+         * /alerts/external_customer_id/{external_customer_id}`, but is otherwise the same as
+         * [AlertServiceAsync.createForExternalCustomer].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun createForExternalCustomer(
+            params: AlertCreateForExternalCustomerParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Alert>>
+
+        /**
+         * Returns a raw HTTP response for `post /alerts/subscription_id/{subscription_id}`, but is
+         * otherwise the same as [AlertServiceAsync.createForSubscription].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun createForSubscription(
+            params: AlertCreateForSubscriptionParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Alert>>
+
+        /**
+         * Returns a raw HTTP response for `post /alerts/{alert_configuration_id}/disable`, but is
+         * otherwise the same as [AlertServiceAsync.disable].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun disable(
+            params: AlertDisableParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Alert>>
+
+        /**
+         * Returns a raw HTTP response for `post /alerts/{alert_configuration_id}/enable`, but is
+         * otherwise the same as [AlertServiceAsync.enable].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun enable(
+            params: AlertEnableParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Alert>>
+    }
 }

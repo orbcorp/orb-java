@@ -4,12 +4,19 @@
 
 package com.withorb.api.services.async
 
+import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.TopLevelPingParams
 import com.withorb.api.models.TopLevelPingResponse
 import java.util.concurrent.CompletableFuture
 
 interface TopLevelServiceAsync {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
 
     /**
      * This endpoint allows you to test your connection to the Orb API and check the validity of
@@ -35,4 +42,31 @@ interface TopLevelServiceAsync {
      */
     fun ping(requestOptions: RequestOptions): CompletableFuture<TopLevelPingResponse> =
         ping(TopLevelPingParams.none(), requestOptions)
+
+    /**
+     * A view of [TopLevelServiceAsync] that provides access to raw HTTP responses for each method.
+     */
+    interface WithRawResponse {
+
+        /**
+         * Returns a raw HTTP response for `get /ping`, but is otherwise the same as
+         * [TopLevelServiceAsync.ping].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun ping(
+            params: TopLevelPingParams = TopLevelPingParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<TopLevelPingResponse>>
+
+        /**
+         * Returns a raw HTTP response for `get /ping`, but is otherwise the same as
+         * [TopLevelServiceAsync.ping].
+         */
+        @MustBeClosed
+        fun ping(
+            requestOptions: RequestOptions
+        ): CompletableFuture<HttpResponseFor<TopLevelPingResponse>> =
+            ping(TopLevelPingParams.none(), requestOptions)
+    }
 }

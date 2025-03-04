@@ -4,7 +4,9 @@
 
 package com.withorb.api.services.async
 
+import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.EventDeprecateParams
 import com.withorb.api.models.EventDeprecateResponse
 import com.withorb.api.models.EventIngestParams
@@ -18,6 +20,11 @@ import com.withorb.api.services.async.events.VolumeServiceAsync
 import java.util.concurrent.CompletableFuture
 
 interface EventServiceAsync {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
 
     fun backfills(): BackfillServiceAsync
 
@@ -330,4 +337,56 @@ interface EventServiceAsync {
         params: EventSearchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<EventSearchResponse>
+
+    /** A view of [EventServiceAsync] that provides access to raw HTTP responses for each method. */
+    interface WithRawResponse {
+
+        fun backfills(): BackfillServiceAsync.WithRawResponse
+
+        fun volume(): VolumeServiceAsync.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `put /events/{event_id}`, but is otherwise the same as
+         * [EventServiceAsync.update].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun update(
+            params: EventUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<EventUpdateResponse>>
+
+        /**
+         * Returns a raw HTTP response for `put /events/{event_id}/deprecate`, but is otherwise the
+         * same as [EventServiceAsync.deprecate].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun deprecate(
+            params: EventDeprecateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<EventDeprecateResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post /ingest`, but is otherwise the same as
+         * [EventServiceAsync.ingest].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun ingest(
+            params: EventIngestParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<EventIngestResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post /events/search`, but is otherwise the same as
+         * [EventServiceAsync.search].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun search(
+            params: EventSearchParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<EventSearchResponse>>
+    }
 }

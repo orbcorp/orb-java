@@ -4,7 +4,9 @@
 
 package com.withorb.api.services.async.customers.credits
 
+import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.CustomerCreditLedgerCreateEntryByExternalIdParams
 import com.withorb.api.models.CustomerCreditLedgerCreateEntryByExternalIdResponse
 import com.withorb.api.models.CustomerCreditLedgerCreateEntryParams
@@ -16,6 +18,11 @@ import com.withorb.api.models.CustomerCreditLedgerListParams
 import java.util.concurrent.CompletableFuture
 
 interface LedgerServiceAsync {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
 
     /**
      * The credits ledger provides _auditing_ functionality over Orb's credits system with a list of
@@ -404,4 +411,56 @@ interface LedgerServiceAsync {
         params: CustomerCreditLedgerListByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCreditLedgerListByExternalIdPageAsync>
+
+    /**
+     * A view of [LedgerServiceAsync] that provides access to raw HTTP responses for each method.
+     */
+    interface WithRawResponse {
+
+        /**
+         * Returns a raw HTTP response for `get /customers/{customer_id}/credits/ledger`, but is
+         * otherwise the same as [LedgerServiceAsync.list].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun list(
+            params: CustomerCreditLedgerListParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerListPageAsync>>
+
+        /**
+         * Returns a raw HTTP response for `post /customers/{customer_id}/credits/ledger_entry`, but
+         * is otherwise the same as [LedgerServiceAsync.createEntry].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun createEntry(
+            params: CustomerCreditLedgerCreateEntryParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerCreateEntryResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post
+         * /customers/external_customer_id/{external_customer_id}/credits/ledger_entry`, but is
+         * otherwise the same as [LedgerServiceAsync.createEntryByExternalId].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun createEntryByExternalId(
+            params: CustomerCreditLedgerCreateEntryByExternalIdParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerCreateEntryByExternalIdResponse>>
+
+        /**
+         * Returns a raw HTTP response for `get
+         * /customers/external_customer_id/{external_customer_id}/credits/ledger`, but is otherwise
+         * the same as [LedgerServiceAsync.listByExternalId].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun listByExternalId(
+            params: CustomerCreditLedgerListByExternalIdParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerListByExternalIdPageAsync>>
+    }
 }
