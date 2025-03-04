@@ -21,6 +21,7 @@ import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.checkKnown
 import com.withorb.api.core.checkRequired
 import com.withorb.api.core.getOrThrow
 import com.withorb.api.core.immutableEmptyMap
@@ -227,14 +228,8 @@ private constructor(
 
             fun addData(data: Data) = apply {
                 this.data =
-                    (this.data ?: JsonField.of(mutableListOf())).apply {
-                        asKnown()
-                            .orElseThrow {
-                                IllegalStateException(
-                                    "Field was set to non-list type: ${javaClass.simpleName}"
-                                )
-                            }
-                            .add(data)
+                    (this.data ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("data", it).add(data)
                     }
             }
 
@@ -352,14 +347,8 @@ private constructor(
 
                 fun addUsage(usage: Usage) = apply {
                     this.usage =
-                        (this.usage ?: JsonField.of(mutableListOf())).apply {
-                            asKnown()
-                                .orElseThrow {
-                                    IllegalStateException(
-                                        "Field was set to non-list type: ${javaClass.simpleName}"
-                                    )
-                                }
-                                .add(usage)
+                        (this.usage ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("usage", it).add(usage)
                         }
                 }
 
@@ -865,14 +854,8 @@ private constructor(
 
             fun addData(data: Data) = apply {
                 this.data =
-                    (this.data ?: JsonField.of(mutableListOf())).apply {
-                        asKnown()
-                            .orElseThrow {
-                                IllegalStateException(
-                                    "Field was set to non-list type: ${javaClass.simpleName}"
-                                )
-                            }
-                            .add(data)
+                    (this.data ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("data", it).add(data)
                     }
             }
 
@@ -1019,14 +1002,8 @@ private constructor(
 
                 fun addUsage(usage: Usage) = apply {
                     this.usage =
-                        (this.usage ?: JsonField.of(mutableListOf())).apply {
-                            asKnown()
-                                .orElseThrow {
-                                    IllegalStateException(
-                                        "Field was set to non-list type: ${javaClass.simpleName}"
-                                    )
-                                }
-                                .add(usage)
+                        (this.usage ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("usage", it).add(usage)
                         }
                 }
 
