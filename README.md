@@ -159,6 +159,36 @@ CompletableFuture<Customer> customer = client.customers().create(params);
 
 The asynchronous client supports the same options as the synchronous one, except most methods return `CompletableFuture`s.
 
+## Raw responses
+
+The SDK defines methods that deserialize responses into instances of Java classes. However, these methods don't provide access to the response headers, status code, or the raw response body.
+
+To access this data, prefix any HTTP method call on a client or service with `withRawResponse()`:
+
+```java
+import com.withorb.api.core.http.Headers;
+import com.withorb.api.core.http.HttpResponseFor;
+import com.withorb.api.models.Customer;
+import com.withorb.api.models.CustomerCreateParams;
+
+CustomerCreateParams params = CustomerCreateParams.builder()
+    .email("example-customer@withorb.com")
+    .name("My Customer")
+    .build();
+HttpResponseFor<Customer> customer = client.customers().withRawResponse().create(params);
+
+int statusCode = customer.statusCode();
+Headers headers = customer.headers();
+```
+
+You can still deserialize the response into an instance of a Java class if needed:
+
+```java
+import com.withorb.api.models.Customer;
+
+Customer parsedCustomer = customer.parse();
+```
+
 ## Error handling
 
 The SDK throws custom unchecked exception types:
