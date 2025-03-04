@@ -540,6 +540,33 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [Customer].
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * .additionalEmails()
+         * .autoCollection()
+         * .balance()
+         * .billingAddress()
+         * .createdAt()
+         * .currency()
+         * .email()
+         * .emailDelivery()
+         * .exemptFromAutomatedTax()
+         * .externalCustomerId()
+         * .hierarchy()
+         * .metadata()
+         * .name()
+         * .paymentProvider()
+         * .paymentProviderId()
+         * .portalUrl()
+         * .shippingAddress()
+         * .taxId()
+         * .timezone()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -1275,6 +1302,19 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [BillingAddress].
+             *
+             * The following fields are required:
+             * ```java
+             * .city()
+             * .country()
+             * .line1()
+             * .line2()
+             * .postalCode()
+             * .state()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -1428,6 +1468,15 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Hierarchy].
+             *
+             * The following fields are required:
+             * ```java
+             * .children()
+             * .parent()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -1536,6 +1585,15 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Child].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .externalCustomerId()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -1660,6 +1718,15 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Parent].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .externalCustomerId()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -1788,6 +1855,7 @@ private constructor(
 
         companion object {
 
+            /** Returns a mutable builder for constructing an instance of [Metadata]. */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -2040,6 +2108,19 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [ShippingAddress].
+             *
+             * The following fields are required:
+             * ```java
+             * .city()
+             * .country()
+             * .line1()
+             * .line2()
+             * .postalCode()
+             * .state()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -2304,6 +2385,16 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [TaxId].
+             *
+             * The following fields are required:
+             * ```java
+             * .country()
+             * .type()
+             * .value()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -3495,6 +3586,16 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of
+             * [AccountingSyncConfiguration].
+             *
+             * The following fields are required:
+             * ```java
+             * .accountingProviders()
+             * .excluded()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -3609,6 +3710,15 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [AccountingProvider].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .externalProviderId()
+                 * .providerType()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -3849,6 +3959,14 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [ReportingConfiguration].
+             *
+             * The following fields are required:
+             * ```java
+             * .exempt()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 

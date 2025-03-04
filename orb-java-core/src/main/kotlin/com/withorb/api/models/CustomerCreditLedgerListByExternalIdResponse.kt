@@ -564,6 +564,26 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [IncrementLedgerEntry].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .amount()
+             * .createdAt()
+             * .creditBlock()
+             * .currency()
+             * .customer()
+             * .description()
+             * .endingBalance()
+             * .entryStatus()
+             * .entryType()
+             * .ledgerSequenceNumber()
+             * .metadata()
+             * .startingBalance()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -777,6 +797,16 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [CreditBlock].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .expiryDate()
+                 * .perUnitCostBasis()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -914,6 +944,15 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Customer].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .externalCustomerId()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -1222,6 +1261,7 @@ private constructor(
 
             companion object {
 
+                /** Returns a mutable builder for constructing an instance of [Metadata]. */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -1475,6 +1515,26 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [DecrementLedgerEntry].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .amount()
+             * .createdAt()
+             * .creditBlock()
+             * .currency()
+             * .customer()
+             * .description()
+             * .endingBalance()
+             * .entryStatus()
+             * .entryType()
+             * .ledgerSequenceNumber()
+             * .metadata()
+             * .startingBalance()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -1715,6 +1775,16 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [CreditBlock].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .expiryDate()
+                 * .perUnitCostBasis()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -1852,6 +1922,15 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Customer].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .externalCustomerId()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -2160,6 +2239,7 @@ private constructor(
 
             companion object {
 
+                /** Returns a mutable builder for constructing an instance of [Metadata]. */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -2400,6 +2480,28 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of
+             * [ExpirationChangeLedgerEntry].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .amount()
+             * .createdAt()
+             * .creditBlock()
+             * .currency()
+             * .customer()
+             * .description()
+             * .endingBalance()
+             * .entryStatus()
+             * .entryType()
+             * .ledgerSequenceNumber()
+             * .metadata()
+             * .newBlockExpiryDate()
+             * .startingBalance()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -2627,6 +2729,16 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [CreditBlock].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .expiryDate()
+                 * .perUnitCostBasis()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -2764,6 +2876,15 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Customer].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .externalCustomerId()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -3072,6 +3193,7 @@ private constructor(
 
             companion object {
 
+                /** Returns a mutable builder for constructing an instance of [Metadata]. */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -3301,6 +3423,27 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of
+             * [CreditBlockExpiryLedgerEntry].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .amount()
+             * .createdAt()
+             * .creditBlock()
+             * .currency()
+             * .customer()
+             * .description()
+             * .endingBalance()
+             * .entryStatus()
+             * .entryType()
+             * .ledgerSequenceNumber()
+             * .metadata()
+             * .startingBalance()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -3515,6 +3658,16 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [CreditBlock].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .expiryDate()
+                 * .perUnitCostBasis()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -3652,6 +3805,15 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Customer].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .externalCustomerId()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -3960,6 +4122,7 @@ private constructor(
 
             companion object {
 
+                /** Returns a mutable builder for constructing an instance of [Metadata]. */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -4210,6 +4373,28 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [VoidLedgerEntry].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .amount()
+             * .createdAt()
+             * .creditBlock()
+             * .currency()
+             * .customer()
+             * .description()
+             * .endingBalance()
+             * .entryStatus()
+             * .entryType()
+             * .ledgerSequenceNumber()
+             * .metadata()
+             * .startingBalance()
+             * .voidAmount()
+             * .voidReason()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -4439,6 +4624,16 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [CreditBlock].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .expiryDate()
+                 * .perUnitCostBasis()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -4576,6 +4771,15 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Customer].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .externalCustomerId()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -4884,6 +5088,7 @@ private constructor(
 
             companion object {
 
+                /** Returns a mutable builder for constructing an instance of [Metadata]. */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -5145,6 +5350,29 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [VoidInitiatedLedgerEntry].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .amount()
+             * .createdAt()
+             * .creditBlock()
+             * .currency()
+             * .customer()
+             * .description()
+             * .endingBalance()
+             * .entryStatus()
+             * .entryType()
+             * .ledgerSequenceNumber()
+             * .metadata()
+             * .newBlockExpiryDate()
+             * .startingBalance()
+             * .voidAmount()
+             * .voidReason()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -5384,6 +5612,16 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [CreditBlock].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .expiryDate()
+                 * .perUnitCostBasis()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -5521,6 +5759,15 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Customer].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .externalCustomerId()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -5829,6 +6076,7 @@ private constructor(
 
             companion object {
 
+                /** Returns a mutable builder for constructing an instance of [Metadata]. */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -6058,6 +6306,26 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [AmendmentLedgerEntry].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .amount()
+             * .createdAt()
+             * .creditBlock()
+             * .currency()
+             * .customer()
+             * .description()
+             * .endingBalance()
+             * .entryStatus()
+             * .entryType()
+             * .ledgerSequenceNumber()
+             * .metadata()
+             * .startingBalance()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -6271,6 +6539,16 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [CreditBlock].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .expiryDate()
+                 * .perUnitCostBasis()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -6408,6 +6686,15 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Customer].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .externalCustomerId()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -6716,6 +7003,7 @@ private constructor(
 
             companion object {
 
+                /** Returns a mutable builder for constructing an instance of [Metadata]. */
                 @JvmStatic fun builder() = Builder()
             }
 

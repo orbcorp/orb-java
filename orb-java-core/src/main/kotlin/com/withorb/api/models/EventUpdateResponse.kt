@@ -51,6 +51,14 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [EventUpdateResponse].
+         *
+         * The following fields are required:
+         * ```java
+         * .amended()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 

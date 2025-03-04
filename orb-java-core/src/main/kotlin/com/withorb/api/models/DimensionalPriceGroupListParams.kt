@@ -47,6 +47,10 @@ private constructor(
 
         @JvmStatic fun none(): DimensionalPriceGroupListParams = builder().build()
 
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [DimensionalPriceGroupListParams].
+         */
         @JvmStatic fun builder() = Builder()
     }
 

@@ -296,6 +296,14 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [SubscriptionFetchUsageParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .subscriptionId()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 

@@ -273,6 +273,18 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Body].
+             *
+             * The following fields are required:
+             * ```java
+             * .amount()
+             * .currency()
+             * .invoiceSettings()
+             * .perUnitCostBasis()
+             * .threshold()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -468,6 +480,20 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [CustomerCreditTopUpCreateParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .customerId()
+         * .amount()
+         * .currency()
+         * .invoiceSettings()
+         * .perUnitCostBasis()
+         * .threshold()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -818,6 +844,15 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [InvoiceSettings].
+             *
+             * The following fields are required:
+             * ```java
+             * .autoCollection()
+             * .netTerms()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 

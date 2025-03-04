@@ -167,6 +167,17 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Body].
+             *
+             * The following fields are required:
+             * ```java
+             * .description()
+             * .itemId()
+             * .name()
+             * .sql()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -292,6 +303,17 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [MetricCreateParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .description()
+         * .itemId()
+         * .name()
+         * .sql()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -514,6 +536,7 @@ private constructor(
 
         companion object {
 
+            /** Returns a mutable builder for constructing an instance of [Metadata]. */
             @JvmStatic fun builder() = Builder()
         }
 

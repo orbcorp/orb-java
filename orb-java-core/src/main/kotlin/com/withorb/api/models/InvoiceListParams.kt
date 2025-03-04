@@ -163,6 +163,7 @@ private constructor(
 
         @JvmStatic fun none(): InvoiceListParams = builder().build()
 
+        /** Returns a mutable builder for constructing an instance of [InvoiceListParams]. */
         @JvmStatic fun builder() = Builder()
     }
 

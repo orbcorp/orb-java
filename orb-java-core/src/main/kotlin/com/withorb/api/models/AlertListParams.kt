@@ -112,6 +112,7 @@ private constructor(
 
         @JvmStatic fun none(): AlertListParams = builder().build()
 
+        /** Returns a mutable builder for constructing an instance of [AlertListParams]. */
         @JvmStatic fun builder() = Builder()
     }
 

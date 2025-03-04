@@ -301,6 +301,16 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [UsageDiscount].
+             *
+             * The following fields are required:
+             * ```java
+             * .appliesToPriceIds()
+             * .discountType()
+             * .usageDiscount()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 

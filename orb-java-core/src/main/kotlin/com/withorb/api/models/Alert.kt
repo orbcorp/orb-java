@@ -154,6 +154,23 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [Alert].
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * .createdAt()
+         * .currency()
+         * .customer()
+         * .enabled()
+         * .metric()
+         * .plan()
+         * .subscription()
+         * .thresholds()
+         * .type()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -358,6 +375,15 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Customer].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .externalCustomerId()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -467,6 +493,14 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Metric].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -598,6 +632,17 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Plan].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .externalPlanId()
+             * .name()
+             * .planVersion()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -742,6 +787,14 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Subscription].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -846,6 +899,14 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Threshold].
+             *
+             * The following fields are required:
+             * ```java
+             * .value()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 

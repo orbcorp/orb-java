@@ -111,6 +111,21 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [CustomerCreditListByExternalIdResponse].
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * .balance()
+         * .effectiveDate()
+         * .expiryDate()
+         * .maximumInitialBalance()
+         * .perUnitCostBasis()
+         * .status()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 

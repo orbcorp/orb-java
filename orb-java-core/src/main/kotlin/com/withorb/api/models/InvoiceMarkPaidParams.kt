@@ -134,6 +134,14 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Body].
+             *
+             * The following fields are required:
+             * ```java
+             * .paymentReceivedDate()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -230,6 +238,15 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [InvoiceMarkPaidParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .invoiceId()
+         * .paymentReceivedDate()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 

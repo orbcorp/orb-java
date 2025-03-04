@@ -258,6 +258,16 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Body].
+             *
+             * The following fields are required:
+             * ```java
+             * .currency()
+             * .name()
+             * .prices()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -652,6 +662,16 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [PlanCreateParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .currency()
+         * .name()
+         * .prices()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -2335,6 +2355,18 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [NewPlanUnitPrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .cadence()
+                 * .itemId()
+                 * .modelType()
+                 * .name()
+                 * .unitConfig()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -2931,6 +2963,14 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of [UnitConfig].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .unitAmount()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -3054,6 +3094,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [BillingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -3299,6 +3349,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [InvoicingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -3521,6 +3581,7 @@ private constructor(
 
                 companion object {
 
+                    /** Returns a mutable builder for constructing an instance of [Metadata]. */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -3843,6 +3904,18 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [NewPlanPackagePrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .cadence()
+                 * .itemId()
+                 * .modelType()
+                 * .name()
+                 * .packageConfig()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -4458,6 +4531,15 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of [PackageConfig].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .packageAmount()
+                     * .packageSize()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -4599,6 +4681,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [BillingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -4844,6 +4936,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [InvoicingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -5066,6 +5168,7 @@ private constructor(
 
                 companion object {
 
+                    /** Returns a mutable builder for constructing an instance of [Metadata]. */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -5388,6 +5491,18 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [NewPlanMatrixPrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .cadence()
+                 * .itemId()
+                 * .matrixConfig()
+                 * .modelType()
+                 * .name()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -5916,6 +6031,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of [MatrixConfig].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .defaultUnitAmount()
+                     * .dimensions()
+                     * .matrixValues()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -6073,6 +6198,15 @@ private constructor(
 
                     companion object {
 
+                        /**
+                         * Returns a mutable builder for constructing an instance of [MatrixValue].
+                         *
+                         * The following fields are required:
+                         * ```java
+                         * .dimensionValues()
+                         * .unitAmount()
+                         * ```
+                         */
                         @JvmStatic fun builder() = Builder()
                     }
 
@@ -6347,6 +6481,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [BillingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -6592,6 +6736,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [InvoicingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -6814,6 +6968,7 @@ private constructor(
 
                 companion object {
 
+                    /** Returns a mutable builder for constructing an instance of [Metadata]. */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -7136,6 +7291,18 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [NewPlanTieredPrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .cadence()
+                 * .itemId()
+                 * .modelType()
+                 * .name()
+                 * .tieredConfig()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -7731,6 +7898,14 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of [TieredConfig].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .tiers()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -7854,6 +8029,15 @@ private constructor(
 
                     companion object {
 
+                        /**
+                         * Returns a mutable builder for constructing an instance of [Tier].
+                         *
+                         * The following fields are required:
+                         * ```java
+                         * .firstUnit()
+                         * .unitAmount()
+                         * ```
+                         */
                         @JvmStatic fun builder() = Builder()
                     }
 
@@ -8036,6 +8220,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [BillingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -8281,6 +8475,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [InvoicingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -8503,6 +8707,7 @@ private constructor(
 
                 companion object {
 
+                    /** Returns a mutable builder for constructing an instance of [Metadata]. */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -8826,6 +9031,19 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [NewPlanTieredBpsPrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .cadence()
+                 * .itemId()
+                 * .modelType()
+                 * .name()
+                 * .tieredBpsConfig()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -9427,6 +9645,14 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of [TieredBpsConfig].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .tiers()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -9570,6 +9796,15 @@ private constructor(
 
                     companion object {
 
+                        /**
+                         * Returns a mutable builder for constructing an instance of [Tier].
+                         *
+                         * The following fields are required:
+                         * ```java
+                         * .bps()
+                         * .minimumAmount()
+                         * ```
+                         */
                         @JvmStatic fun builder() = Builder()
                     }
 
@@ -9754,6 +9989,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [BillingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -9999,6 +10244,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [InvoicingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -10221,6 +10476,7 @@ private constructor(
 
                 companion object {
 
+                    /** Returns a mutable builder for constructing an instance of [Metadata]. */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -10543,6 +10799,18 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [NewPlanBpsPrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .bpsConfig()
+                 * .cadence()
+                 * .itemId()
+                 * .modelType()
+                 * .name()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -10923,6 +11191,14 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of [BpsConfig].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .bps()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -11287,6 +11563,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [BillingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -11532,6 +11818,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [InvoicingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -11754,6 +12050,7 @@ private constructor(
 
                 companion object {
 
+                    /** Returns a mutable builder for constructing an instance of [Metadata]. */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -12076,6 +12373,18 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [NewPlanBulkBpsPrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .bulkBpsConfig()
+                 * .cadence()
+                 * .itemId()
+                 * .modelType()
+                 * .name()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -12450,6 +12759,14 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of [BulkBpsConfig].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .tiers()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -12581,6 +12898,14 @@ private constructor(
 
                     companion object {
 
+                        /**
+                         * Returns a mutable builder for constructing an instance of [Tier].
+                         *
+                         * The following fields are required:
+                         * ```java
+                         * .bps()
+                         * ```
+                         */
                         @JvmStatic fun builder() = Builder()
                     }
 
@@ -12980,6 +13305,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [BillingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -13225,6 +13560,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [InvoicingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -13447,6 +13792,7 @@ private constructor(
 
                 companion object {
 
+                    /** Returns a mutable builder for constructing an instance of [Metadata]. */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -13769,6 +14115,18 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [NewPlanBulkPrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .bulkConfig()
+                 * .cadence()
+                 * .itemId()
+                 * .modelType()
+                 * .name()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -14136,6 +14494,14 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of [BulkConfig].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .tiers()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -14247,6 +14613,14 @@ private constructor(
 
                     companion object {
 
+                        /**
+                         * Returns a mutable builder for constructing an instance of [Tier].
+                         *
+                         * The following fields are required:
+                         * ```java
+                         * .unitAmount()
+                         * ```
+                         */
                         @JvmStatic fun builder() = Builder()
                     }
 
@@ -14639,6 +15013,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [BillingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -14884,6 +15268,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [InvoicingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -15106,6 +15500,7 @@ private constructor(
 
                 companion object {
 
+                    /** Returns a mutable builder for constructing an instance of [Metadata]. */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -15431,6 +15826,19 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [NewPlanThresholdTotalAmountPrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .cadence()
+                 * .itemId()
+                 * .modelType()
+                 * .name()
+                 * .thresholdTotalAmountConfig()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -16024,6 +16432,10 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [ThresholdTotalAmountConfig].
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -16136,6 +16548,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [BillingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -16381,6 +16803,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [InvoicingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -16603,6 +17035,7 @@ private constructor(
 
                 companion object {
 
+                    /** Returns a mutable builder for constructing an instance of [Metadata]. */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -16926,6 +17359,19 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [NewPlanTieredPackagePrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .cadence()
+                 * .itemId()
+                 * .modelType()
+                 * .name()
+                 * .tieredPackageConfig()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -17514,6 +17960,10 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [TieredPackageConfig].
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -17625,6 +18075,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [BillingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -17870,6 +18330,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [InvoicingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -18092,6 +18562,7 @@ private constructor(
 
                 companion object {
 
+                    /** Returns a mutable builder for constructing an instance of [Metadata]. */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -18417,6 +18888,19 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [NewPlanTieredWithMinimumPrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .cadence()
+                 * .itemId()
+                 * .modelType()
+                 * .name()
+                 * .tieredWithMinimumConfig()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -19007,6 +19491,10 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [TieredWithMinimumConfig].
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -19118,6 +19606,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [BillingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -19363,6 +19861,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [InvoicingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -19585,6 +20093,7 @@ private constructor(
 
                 companion object {
 
+                    /** Returns a mutable builder for constructing an instance of [Metadata]. */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -19908,6 +20417,19 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [NewPlanUnitWithPercentPrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .cadence()
+                 * .itemId()
+                 * .modelType()
+                 * .name()
+                 * .unitWithPercentConfig()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -20498,6 +21020,10 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [UnitWithPercentConfig].
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -20609,6 +21135,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [BillingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -20854,6 +21390,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [InvoicingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -21076,6 +21622,7 @@ private constructor(
 
                 companion object {
 
+                    /** Returns a mutable builder for constructing an instance of [Metadata]. */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -21401,6 +21948,19 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [NewPlanPackageWithAllocationPrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .cadence()
+                 * .itemId()
+                 * .modelType()
+                 * .name()
+                 * .packageWithAllocationConfig()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -21994,6 +22554,10 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [PackageWithAllocationConfig].
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -22106,6 +22670,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [BillingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -22351,6 +22925,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [InvoicingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -22573,6 +23157,7 @@ private constructor(
 
                 companion object {
 
+                    /** Returns a mutable builder for constructing an instance of [Metadata]. */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -22898,6 +23483,19 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [NewPlanTierWithProrationPrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .cadence()
+                 * .itemId()
+                 * .modelType()
+                 * .name()
+                 * .tieredWithProrationConfig()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -23489,6 +24087,10 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [TieredWithProrationConfig].
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -23601,6 +24203,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [BillingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -23846,6 +24458,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [InvoicingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -24068,6 +24690,7 @@ private constructor(
 
                 companion object {
 
+                    /** Returns a mutable builder for constructing an instance of [Metadata]. */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -24393,6 +25016,19 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [NewPlanUnitWithProrationPrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .cadence()
+                 * .itemId()
+                 * .modelType()
+                 * .name()
+                 * .unitWithProrationConfig()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -24983,6 +25619,10 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [UnitWithProrationConfig].
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -25094,6 +25734,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [BillingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -25339,6 +25989,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [InvoicingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -25561,6 +26221,7 @@ private constructor(
 
                 companion object {
 
+                    /** Returns a mutable builder for constructing an instance of [Metadata]. */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -25886,6 +26547,19 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [NewPlanGroupedAllocationPrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .cadence()
+                 * .groupedAllocationConfig()
+                 * .itemId()
+                 * .modelType()
+                 * .name()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -26378,6 +27052,10 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [GroupedAllocationConfig].
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -26587,6 +27265,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [BillingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -26832,6 +27520,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [InvoicingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -27054,6 +27752,7 @@ private constructor(
 
                 companion object {
 
+                    /** Returns a mutable builder for constructing an instance of [Metadata]. */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -27380,6 +28079,19 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [NewPlanGroupedWithProratedMinimumPrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .cadence()
+                 * .groupedWithProratedMinimumConfig()
+                 * .itemId()
+                 * .modelType()
+                 * .name()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -27881,6 +28593,10 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [GroupedWithProratedMinimumConfig].
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -28093,6 +28809,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [BillingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -28338,6 +29064,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [InvoicingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -28560,6 +29296,7 @@ private constructor(
 
                 companion object {
 
+                    /** Returns a mutable builder for constructing an instance of [Metadata]. */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -28886,6 +29623,19 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [NewPlanGroupedWithMeteredMinimumPrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .cadence()
+                 * .groupedWithMeteredMinimumConfig()
+                 * .itemId()
+                 * .modelType()
+                 * .name()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -29385,6 +30135,10 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [GroupedWithMeteredMinimumConfig].
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -29596,6 +30350,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [BillingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -29841,6 +30605,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [InvoicingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -30063,6 +30837,7 @@ private constructor(
 
                 companion object {
 
+                    /** Returns a mutable builder for constructing an instance of [Metadata]. */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -30388,6 +31163,19 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [NewPlanMatrixWithDisplayNamePrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .cadence()
+                 * .itemId()
+                 * .matrixWithDisplayNameConfig()
+                 * .modelType()
+                 * .name()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -30883,6 +31671,10 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [MatrixWithDisplayNameConfig].
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -31093,6 +31885,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [BillingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -31338,6 +32140,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [InvoicingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -31560,6 +32372,7 @@ private constructor(
 
                 companion object {
 
+                    /** Returns a mutable builder for constructing an instance of [Metadata]. */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -31885,6 +32698,19 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [NewPlanBulkWithProrationPrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .bulkWithProrationConfig()
+                 * .cadence()
+                 * .itemId()
+                 * .modelType()
+                 * .name()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -32248,6 +33074,10 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [BulkWithProrationConfig].
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -32586,6 +33416,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [BillingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -32831,6 +33671,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [InvoicingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -33053,6 +33903,7 @@ private constructor(
 
                 companion object {
 
+                    /** Returns a mutable builder for constructing an instance of [Metadata]. */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -33378,6 +34229,19 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [NewPlanGroupedTieredPackagePrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .cadence()
+                 * .groupedTieredPackageConfig()
+                 * .itemId()
+                 * .modelType()
+                 * .name()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -33873,6 +34737,10 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [GroupedTieredPackageConfig].
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -34083,6 +34951,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [BillingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -34328,6 +35206,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [InvoicingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -34550,6 +35438,7 @@ private constructor(
 
                 companion object {
 
+                    /** Returns a mutable builder for constructing an instance of [Metadata]. */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -34875,6 +35764,19 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [NewPlanMaxGroupTieredPackagePrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .cadence()
+                 * .itemId()
+                 * .maxGroupTieredPackageConfig()
+                 * .modelType()
+                 * .name()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -35370,6 +36272,10 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [MaxGroupTieredPackageConfig].
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -35580,6 +36486,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [BillingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -35825,6 +36741,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [InvoicingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -36047,6 +36973,7 @@ private constructor(
 
                 companion object {
 
+                    /** Returns a mutable builder for constructing an instance of [Metadata]. */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -36375,6 +37302,19 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [NewPlanScalableMatrixWithUnitPricingPrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .cadence()
+                 * .itemId()
+                 * .modelType()
+                 * .name()
+                 * .scalableMatrixWithUnitPricingConfig()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -36984,6 +37924,10 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [ScalableMatrixWithUnitPricingConfig].
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -37097,6 +38041,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [BillingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -37342,6 +38296,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [InvoicingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -37564,6 +38528,7 @@ private constructor(
 
                 companion object {
 
+                    /** Returns a mutable builder for constructing an instance of [Metadata]. */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -37893,6 +38858,19 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [NewPlanScalableMatrixWithTieredPricingPrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .cadence()
+                 * .itemId()
+                 * .modelType()
+                 * .name()
+                 * .scalableMatrixWithTieredPricingConfig()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -38506,6 +39484,10 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [ScalableMatrixWithTieredPricingConfig].
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -38620,6 +39602,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [BillingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -38865,6 +39857,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [InvoicingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -39087,6 +40089,7 @@ private constructor(
 
                 companion object {
 
+                    /** Returns a mutable builder for constructing an instance of [Metadata]. */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -39412,6 +40415,19 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [NewPlanCumulativeGroupedBulkPrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .cadence()
+                 * .cumulativeGroupedBulkConfig()
+                 * .itemId()
+                 * .modelType()
+                 * .name()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -39907,6 +40923,10 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [CumulativeGroupedBulkConfig].
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -40117,6 +41137,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [BillingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -40362,6 +41392,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [InvoicingCycleConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .duration()
+                     * .durationUnit()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -40584,6 +41624,7 @@ private constructor(
 
                 companion object {
 
+                    /** Returns a mutable builder for constructing an instance of [Metadata]. */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -40689,6 +41730,7 @@ private constructor(
 
         companion object {
 
+            /** Returns a mutable builder for constructing an instance of [Metadata]. */
             @JvmStatic fun builder() = Builder()
         }
 

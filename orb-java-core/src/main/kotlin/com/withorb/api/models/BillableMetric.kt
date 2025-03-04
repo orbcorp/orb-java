@@ -111,6 +111,19 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [BillableMetric].
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * .description()
+         * .item()
+         * .metadata()
+         * .name()
+         * .status()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -244,6 +257,7 @@ private constructor(
 
         companion object {
 
+            /** Returns a mutable builder for constructing an instance of [Metadata]. */
             @JvmStatic fun builder() = Builder()
         }
 

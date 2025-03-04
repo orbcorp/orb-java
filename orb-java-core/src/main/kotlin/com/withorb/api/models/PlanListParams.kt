@@ -99,6 +99,7 @@ private constructor(
 
         @JvmStatic fun none(): PlanListParams = builder().build()
 
+        /** Returns a mutable builder for constructing an instance of [PlanListParams]. */
         @JvmStatic fun builder() = Builder()
     }
 

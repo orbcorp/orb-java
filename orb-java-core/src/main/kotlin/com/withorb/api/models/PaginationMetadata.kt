@@ -58,6 +58,15 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [PaginationMetadata].
+         *
+         * The following fields are required:
+         * ```java
+         * .hasMore()
+         * .nextCursor()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 

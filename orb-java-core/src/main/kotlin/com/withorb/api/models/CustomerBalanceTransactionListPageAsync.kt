@@ -171,6 +171,10 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of
+             * [CustomerBalanceTransactionListPageAsync].
+             */
             @JvmStatic fun builder() = Builder()
         }
 

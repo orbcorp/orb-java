@@ -154,6 +154,10 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of
+             * [CustomerCreditListByExternalIdPageAsync].
+             */
             @JvmStatic fun builder() = Builder()
         }
 
