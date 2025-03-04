@@ -76,6 +76,14 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [EventIngestResponse].
+         *
+         * The following fields are required:
+         * ```java
+         * .validationFailed()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -214,6 +222,15 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [ValidationFailed].
+             *
+             * The following fields are required:
+             * ```java
+             * .idempotencyKey()
+             * .validationErrors()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -358,6 +375,15 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Debug].
+             *
+             * The following fields are required:
+             * ```java
+             * .duplicate()
+             * .ingested()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 

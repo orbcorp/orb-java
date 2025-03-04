@@ -438,6 +438,39 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [SubscriptionUnscheduleCancellationResponse].
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * .activePlanPhaseOrder()
+         * .adjustmentIntervals()
+         * .autoCollection()
+         * .billingCycleAnchorConfiguration()
+         * .billingCycleDay()
+         * .createdAt()
+         * .currentBillingPeriodEndDate()
+         * .currentBillingPeriodStartDate()
+         * .customer()
+         * .defaultInvoiceMemo()
+         * .discountIntervals()
+         * .endDate()
+         * .fixedFeeQuantitySchedule()
+         * .invoicingThreshold()
+         * .maximumIntervals()
+         * .metadata()
+         * .minimumIntervals()
+         * .netTerms()
+         * .plan()
+         * .priceIntervals()
+         * .redeemedCoupon()
+         * .startDate()
+         * .status()
+         * .trialInfo()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -1054,6 +1087,18 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [AdjustmentInterval].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .adjustment()
+             * .appliesToPriceIntervalIds()
+             * .endDate()
+             * .startDate()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -1576,6 +1621,21 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [PlanPhaseUsageDiscountAdjustment].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .id()
+                     * .adjustmentType()
+                     * .appliesToPriceIds()
+                     * .isInvoiceLevel()
+                     * .planPhaseOrder()
+                     * .reason()
+                     * .usageDiscount()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -1967,6 +2027,21 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [PlanPhaseAmountDiscountAdjustment].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .id()
+                     * .adjustmentType()
+                     * .amountDiscount()
+                     * .appliesToPriceIds()
+                     * .isInvoiceLevel()
+                     * .planPhaseOrder()
+                     * .reason()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -2359,6 +2434,21 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [PlanPhasePercentageDiscountAdjustment].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .id()
+                     * .adjustmentType()
+                     * .appliesToPriceIds()
+                     * .isInvoiceLevel()
+                     * .percentageDiscount()
+                     * .planPhaseOrder()
+                     * .reason()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -2762,6 +2852,22 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [PlanPhaseMinimumAdjustment].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .id()
+                     * .adjustmentType()
+                     * .appliesToPriceIds()
+                     * .isInvoiceLevel()
+                     * .itemId()
+                     * .minimumAmount()
+                     * .planPhaseOrder()
+                     * .reason()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -3161,6 +3267,21 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [PlanPhaseMaximumAdjustment].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .id()
+                     * .adjustmentType()
+                     * .appliesToPriceIds()
+                     * .isInvoiceLevel()
+                     * .maximumAmount()
+                     * .planPhaseOrder()
+                     * .reason()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -3528,6 +3649,15 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of
+             * [BillingCycleAnchorConfiguration].
+             *
+             * The following fields are required:
+             * ```java
+             * .day()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -3937,6 +4067,20 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [AmountDiscountInterval].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .amountDiscount()
+                 * .appliesToPriceIds()
+                 * .appliesToPriceIntervalIds()
+                 * .discountType()
+                 * .endDate()
+                 * .startDate()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -4290,6 +4434,20 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [PercentageDiscountInterval].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .appliesToPriceIds()
+                 * .appliesToPriceIntervalIds()
+                 * .discountType()
+                 * .endDate()
+                 * .percentageDiscount()
+                 * .startDate()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -4655,6 +4813,20 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [UsageDiscountInterval].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .appliesToPriceIds()
+                 * .appliesToPriceIntervalIds()
+                 * .discountType()
+                 * .endDate()
+                 * .startDate()
+                 * .usageDiscount()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -4978,6 +5150,17 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [FixedFeeQuantitySchedule].
+             *
+             * The following fields are required:
+             * ```java
+             * .endDate()
+             * .priceId()
+             * .quantity()
+             * .startDate()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -5161,6 +5344,18 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [MaximumInterval].
+             *
+             * The following fields are required:
+             * ```java
+             * .appliesToPriceIds()
+             * .appliesToPriceIntervalIds()
+             * .endDate()
+             * .maximumAmount()
+             * .startDate()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -5333,6 +5528,7 @@ private constructor(
 
         companion object {
 
+            /** Returns a mutable builder for constructing an instance of [Metadata]. */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -5480,6 +5676,18 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [MinimumInterval].
+             *
+             * The following fields are required:
+             * ```java
+             * .appliesToPriceIds()
+             * .appliesToPriceIntervalIds()
+             * .endDate()
+             * .minimumAmount()
+             * .startDate()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -5837,6 +6045,23 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [PriceInterval].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .billingCycleDay()
+             * .currentBillingPeriodEndDate()
+             * .currentBillingPeriodStartDate()
+             * .endDate()
+             * .filter()
+             * .fixedFeeQuantityTransitions()
+             * .price()
+             * .startDate()
+             * .usageCustomerIds()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -6581,6 +6806,17 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [FixedFeeQuantityTransition].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .effectiveDate()
+                 * .priceId()
+                 * .quantity()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -6738,6 +6974,16 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [RedeemedCoupon].
+             *
+             * The following fields are required:
+             * ```java
+             * .couponId()
+             * .endDate()
+             * .startDate()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -6959,6 +7205,14 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [TrialInfo].
+             *
+             * The following fields are required:
+             * ```java
+             * .endDate()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 

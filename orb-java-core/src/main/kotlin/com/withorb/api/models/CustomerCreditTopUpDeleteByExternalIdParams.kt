@@ -55,6 +55,16 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [CustomerCreditTopUpDeleteByExternalIdParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .externalCustomerId()
+         * .topUpId()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 

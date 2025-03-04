@@ -324,6 +324,17 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Body].
+             *
+             * The following fields are required:
+             * ```java
+             * .currency()
+             * .invoiceDate()
+             * .lineItems()
+             * .netTerms()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -584,6 +595,17 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [InvoiceCreateParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .currency()
+         * .invoiceDate()
+         * .lineItems()
+         * .netTerms()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -978,6 +1000,20 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [LineItem].
+             *
+             * The following fields are required:
+             * ```java
+             * .endDate()
+             * .itemId()
+             * .modelType()
+             * .name()
+             * .quantity()
+             * .startDate()
+             * .unitConfig()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -1209,6 +1245,14 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [UnitConfig].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .unitAmount()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -1328,6 +1372,7 @@ private constructor(
 
         companion object {
 
+            /** Returns a mutable builder for constructing an instance of [Metadata]. */
             @JvmStatic fun builder() = Builder()
         }
 

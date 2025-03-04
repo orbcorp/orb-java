@@ -204,6 +204,15 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of
+             * [UngroupedSubscriptionUsage].
+             *
+             * The following fields are required:
+             * ```java
+             * .data()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -313,6 +322,16 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Data].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .billableMetric()
+                 * .usage()
+                 * .viewMode()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -429,6 +448,15 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of [BillableMetric].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .id()
+                     * .name()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -558,6 +586,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of [Usage].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .quantity()
+                     * .timeframeEnd()
+                     * .timeframeStart()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -829,6 +867,14 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [GroupedSubscriptionUsage].
+             *
+             * The following fields are required:
+             * ```java
+             * .data()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -960,6 +1006,17 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Data].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .billableMetric()
+                 * .metricGroup()
+                 * .usage()
+                 * .viewMode()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -1085,6 +1142,15 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of [BillableMetric].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .id()
+                     * .name()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -1204,6 +1270,15 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of [MetricGroup].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .propertyKey()
+                     * .propertyValue()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
@@ -1338,6 +1413,16 @@ private constructor(
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of [Usage].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .quantity()
+                     * .timeframeEnd()
+                     * .timeframeStart()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 

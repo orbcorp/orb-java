@@ -54,6 +54,7 @@ private constructor(
 
         @JvmStatic fun none(): EventBackfillListParams = builder().build()
 
+        /** Returns a mutable builder for constructing an instance of [EventBackfillListParams]. */
         @JvmStatic fun builder() = Builder()
     }
 

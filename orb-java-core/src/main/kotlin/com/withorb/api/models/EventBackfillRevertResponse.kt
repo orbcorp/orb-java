@@ -195,6 +195,23 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [EventBackfillRevertResponse].
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * .closeTime()
+         * .createdAt()
+         * .customerId()
+         * .eventsIngested()
+         * .replaceExistingEvents()
+         * .revertedAt()
+         * .status()
+         * .timeframeEnd()
+         * .timeframeStart()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 

@@ -107,6 +107,15 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [TrialDiscount].
+         *
+         * The following fields are required:
+         * ```java
+         * .appliesToPriceIds()
+         * .discountType()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 

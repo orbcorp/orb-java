@@ -91,6 +91,7 @@ private constructor(
 
         @JvmStatic fun none(): CustomerListParams = builder().build()
 
+        /** Returns a mutable builder for constructing an instance of [CustomerListParams]. */
         @JvmStatic fun builder() = Builder()
     }
 

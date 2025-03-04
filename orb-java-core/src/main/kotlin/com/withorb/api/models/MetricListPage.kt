@@ -139,6 +139,7 @@ private constructor(
 
         companion object {
 
+            /** Returns a mutable builder for constructing an instance of [MetricListPage]. */
             @JvmStatic fun builder() = Builder()
         }
 

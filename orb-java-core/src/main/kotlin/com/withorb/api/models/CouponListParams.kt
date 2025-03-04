@@ -63,6 +63,7 @@ private constructor(
 
         @JvmStatic fun none(): CouponListParams = builder().build()
 
+        /** Returns a mutable builder for constructing an instance of [CouponListParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
