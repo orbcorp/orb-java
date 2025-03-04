@@ -4,7 +4,9 @@
 
 package com.withorb.api.services.async
 
+import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Price
 import com.withorb.api.models.PriceCreateParams
 import com.withorb.api.models.PriceEvaluateParams
@@ -17,6 +19,11 @@ import com.withorb.api.services.async.prices.ExternalPriceIdServiceAsync
 import java.util.concurrent.CompletableFuture
 
 interface PriceServiceAsync {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
 
     fun externalPriceId(): ExternalPriceIdServiceAsync
 
@@ -96,4 +103,75 @@ interface PriceServiceAsync {
         params: PriceFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Price>
+
+    /** A view of [PriceServiceAsync] that provides access to raw HTTP responses for each method. */
+    interface WithRawResponse {
+
+        fun externalPriceId(): ExternalPriceIdServiceAsync.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `post /prices`, but is otherwise the same as
+         * [PriceServiceAsync.create].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun create(
+            params: PriceCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>>
+
+        /**
+         * Returns a raw HTTP response for `put /prices/{price_id}`, but is otherwise the same as
+         * [PriceServiceAsync.update].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun update(
+            params: PriceUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>>
+
+        /**
+         * Returns a raw HTTP response for `get /prices`, but is otherwise the same as
+         * [PriceServiceAsync.list].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun list(
+            params: PriceListParams = PriceListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<PriceListPageAsync>>
+
+        /**
+         * Returns a raw HTTP response for `get /prices`, but is otherwise the same as
+         * [PriceServiceAsync.list].
+         */
+        @MustBeClosed
+        fun list(
+            requestOptions: RequestOptions
+        ): CompletableFuture<HttpResponseFor<PriceListPageAsync>> =
+            list(PriceListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /prices/{price_id}/evaluate`, but is otherwise the
+         * same as [PriceServiceAsync.evaluate].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun evaluate(
+            params: PriceEvaluateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<PriceEvaluateResponse>>
+
+        /**
+         * Returns a raw HTTP response for `get /prices/{price_id}`, but is otherwise the same as
+         * [PriceServiceAsync.fetch].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun fetch(
+            params: PriceFetchParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>>
+    }
 }

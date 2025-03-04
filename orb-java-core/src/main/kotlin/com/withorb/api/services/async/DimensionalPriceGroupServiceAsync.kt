@@ -4,7 +4,9 @@
 
 package com.withorb.api.services.async
 
+import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.DimensionalPriceGroup
 import com.withorb.api.models.DimensionalPriceGroupCreateParams
 import com.withorb.api.models.DimensionalPriceGroupListPageAsync
@@ -14,6 +16,11 @@ import com.withorb.api.services.async.dimensionalPriceGroups.ExternalDimensional
 import java.util.concurrent.CompletableFuture
 
 interface DimensionalPriceGroupServiceAsync {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
 
     fun externalDimensionalPriceGroupId(): ExternalDimensionalPriceGroupIdServiceAsync
 
@@ -51,4 +58,58 @@ interface DimensionalPriceGroupServiceAsync {
         requestOptions: RequestOptions
     ): CompletableFuture<DimensionalPriceGroupListPageAsync> =
         list(DimensionalPriceGroupListParams.none(), requestOptions)
+
+    /**
+     * A view of [DimensionalPriceGroupServiceAsync] that provides access to raw HTTP responses for
+     * each method.
+     */
+    interface WithRawResponse {
+
+        fun externalDimensionalPriceGroupId():
+            ExternalDimensionalPriceGroupIdServiceAsync.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `post /dimensional_price_groups`, but is otherwise the
+         * same as [DimensionalPriceGroupServiceAsync.create].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun create(
+            params: DimensionalPriceGroupCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>>
+
+        /**
+         * Returns a raw HTTP response for `get
+         * /dimensional_price_groups/{dimensional_price_group_id}`, but is otherwise the same as
+         * [DimensionalPriceGroupServiceAsync.retrieve].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun retrieve(
+            params: DimensionalPriceGroupRetrieveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>>
+
+        /**
+         * Returns a raw HTTP response for `get /dimensional_price_groups`, but is otherwise the
+         * same as [DimensionalPriceGroupServiceAsync.list].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun list(
+            params: DimensionalPriceGroupListParams = DimensionalPriceGroupListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroupListPageAsync>>
+
+        /**
+         * Returns a raw HTTP response for `get /dimensional_price_groups`, but is otherwise the
+         * same as [DimensionalPriceGroupServiceAsync.list].
+         */
+        @MustBeClosed
+        fun list(
+            requestOptions: RequestOptions
+        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroupListPageAsync>> =
+            list(DimensionalPriceGroupListParams.none(), requestOptions)
+    }
 }

@@ -4,7 +4,10 @@
 
 package com.withorb.api.services.async
 
+import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.http.HttpResponse
+import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Customer
 import com.withorb.api.models.CustomerCreateParams
 import com.withorb.api.models.CustomerDeleteParams
@@ -22,6 +25,11 @@ import com.withorb.api.services.async.customers.CreditServiceAsync
 import java.util.concurrent.CompletableFuture
 
 interface CustomerServiceAsync {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
 
     fun costs(): CostServiceAsync
 
@@ -168,4 +176,129 @@ interface CustomerServiceAsync {
         params: CustomerUpdateByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Customer>
+
+    /**
+     * A view of [CustomerServiceAsync] that provides access to raw HTTP responses for each method.
+     */
+    interface WithRawResponse {
+
+        fun costs(): CostServiceAsync.WithRawResponse
+
+        fun credits(): CreditServiceAsync.WithRawResponse
+
+        fun balanceTransactions(): BalanceTransactionServiceAsync.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `post /customers`, but is otherwise the same as
+         * [CustomerServiceAsync.create].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun create(
+            params: CustomerCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Customer>>
+
+        /**
+         * Returns a raw HTTP response for `put /customers/{customer_id}`, but is otherwise the same
+         * as [CustomerServiceAsync.update].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun update(
+            params: CustomerUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Customer>>
+
+        /**
+         * Returns a raw HTTP response for `get /customers`, but is otherwise the same as
+         * [CustomerServiceAsync.list].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun list(
+            params: CustomerListParams = CustomerListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerListPageAsync>>
+
+        /**
+         * Returns a raw HTTP response for `get /customers`, but is otherwise the same as
+         * [CustomerServiceAsync.list].
+         */
+        @MustBeClosed
+        fun list(
+            requestOptions: RequestOptions
+        ): CompletableFuture<HttpResponseFor<CustomerListPageAsync>> =
+            list(CustomerListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `delete /customers/{customer_id}`, but is otherwise the
+         * same as [CustomerServiceAsync.delete].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun delete(
+            params: CustomerDeleteParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponse>
+
+        /**
+         * Returns a raw HTTP response for `get /customers/{customer_id}`, but is otherwise the same
+         * as [CustomerServiceAsync.fetch].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun fetch(
+            params: CustomerFetchParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Customer>>
+
+        /**
+         * Returns a raw HTTP response for `get
+         * /customers/external_customer_id/{external_customer_id}`, but is otherwise the same as
+         * [CustomerServiceAsync.fetchByExternalId].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun fetchByExternalId(
+            params: CustomerFetchByExternalIdParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Customer>>
+
+        /**
+         * Returns a raw HTTP response for `post
+         * /customers/external_customer_id/{external_customer_id}/sync_payment_methods_from_gateway`,
+         * but is otherwise the same as [CustomerServiceAsync.syncPaymentMethodsFromGateway].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun syncPaymentMethodsFromGateway(
+            params: CustomerSyncPaymentMethodsFromGatewayParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponse>
+
+        /**
+         * Returns a raw HTTP response for `post
+         * /customers/{customer_id}/sync_payment_methods_from_gateway`, but is otherwise the same as
+         * [CustomerServiceAsync.syncPaymentMethodsFromGatewayByExternalCustomerId].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun syncPaymentMethodsFromGatewayByExternalCustomerId(
+            params: CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponse>
+
+        /**
+         * Returns a raw HTTP response for `put
+         * /customers/external_customer_id/{external_customer_id}`, but is otherwise the same as
+         * [CustomerServiceAsync.updateByExternalId].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun updateByExternalId(
+            params: CustomerUpdateByExternalIdParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Customer>>
+    }
 }

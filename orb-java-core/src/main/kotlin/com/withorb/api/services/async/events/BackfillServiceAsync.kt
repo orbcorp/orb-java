@@ -4,7 +4,9 @@
 
 package com.withorb.api.services.async.events
 
+import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.EventBackfillCloseParams
 import com.withorb.api.models.EventBackfillCloseResponse
 import com.withorb.api.models.EventBackfillCreateParams
@@ -18,6 +20,11 @@ import com.withorb.api.models.EventBackfillRevertResponse
 import java.util.concurrent.CompletableFuture
 
 interface BackfillServiceAsync {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
 
     /**
      * Creating the backfill enables adding or replacing past events, even those that are older than
@@ -111,4 +118,75 @@ interface BackfillServiceAsync {
         params: EventBackfillRevertParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<EventBackfillRevertResponse>
+
+    /**
+     * A view of [BackfillServiceAsync] that provides access to raw HTTP responses for each method.
+     */
+    interface WithRawResponse {
+
+        /**
+         * Returns a raw HTTP response for `post /events/backfills`, but is otherwise the same as
+         * [BackfillServiceAsync.create].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun create(
+            params: EventBackfillCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<EventBackfillCreateResponse>>
+
+        /**
+         * Returns a raw HTTP response for `get /events/backfills`, but is otherwise the same as
+         * [BackfillServiceAsync.list].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun list(
+            params: EventBackfillListParams = EventBackfillListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<EventBackfillListPageAsync>>
+
+        /**
+         * Returns a raw HTTP response for `get /events/backfills`, but is otherwise the same as
+         * [BackfillServiceAsync.list].
+         */
+        @MustBeClosed
+        fun list(
+            requestOptions: RequestOptions
+        ): CompletableFuture<HttpResponseFor<EventBackfillListPageAsync>> =
+            list(EventBackfillListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /events/backfills/{backfill_id}/close`, but is
+         * otherwise the same as [BackfillServiceAsync.close].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun close(
+            params: EventBackfillCloseParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<EventBackfillCloseResponse>>
+
+        /**
+         * Returns a raw HTTP response for `get /events/backfills/{backfill_id}`, but is otherwise
+         * the same as [BackfillServiceAsync.fetch].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun fetch(
+            params: EventBackfillFetchParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<EventBackfillFetchResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post /events/backfills/{backfill_id}/revert`, but is
+         * otherwise the same as [BackfillServiceAsync.revert].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun revert(
+            params: EventBackfillRevertParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<EventBackfillRevertResponse>>
+    }
 }
