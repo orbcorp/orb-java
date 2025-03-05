@@ -588,7 +588,7 @@ private constructor(
                     .build()
             )
 
-        fun discount(usage: Discount.UsageDiscount) = discount(Discount.ofUsage(usage))
+        fun discount(usage: UsageDiscount) = discount(Discount.ofUsage(usage))
 
         fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
@@ -4118,7 +4118,7 @@ private constructor(
                         .build()
                 )
 
-            fun discount(usage: Discount.UsageDiscount) = discount(Discount.ofUsage(usage))
+            fun discount(usage: UsageDiscount) = discount(Discount.ofUsage(usage))
 
             fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
