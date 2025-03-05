@@ -24,7 +24,7 @@ class BackfillServiceAsyncTest {
                 .build()
         val backfillServiceAsync = client.events().backfills()
 
-        val backfillModelFuture =
+        val backfillFuture =
             backfillServiceAsync.create(
                 EventBackfillCreateParams.builder()
                     .timeframeEnd(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -37,8 +37,8 @@ class BackfillServiceAsyncTest {
                     .build()
             )
 
-        val backfillModel = backfillModelFuture.get()
-        backfillModel.validate()
+        val backfill = backfillFuture.get()
+        backfill.validate()
     }
 
     @Test
@@ -65,13 +65,13 @@ class BackfillServiceAsyncTest {
                 .build()
         val backfillServiceAsync = client.events().backfills()
 
-        val backfillModelFuture =
+        val responseFuture =
             backfillServiceAsync.close(
                 EventBackfillCloseParams.builder().backfillId("backfill_id").build()
             )
 
-        val backfillModel = backfillModelFuture.get()
-        backfillModel.validate()
+        val response = responseFuture.get()
+        response.validate()
     }
 
     @Test
@@ -83,13 +83,13 @@ class BackfillServiceAsyncTest {
                 .build()
         val backfillServiceAsync = client.events().backfills()
 
-        val backfillModelFuture =
+        val responseFuture =
             backfillServiceAsync.fetch(
                 EventBackfillFetchParams.builder().backfillId("backfill_id").build()
             )
 
-        val backfillModel = backfillModelFuture.get()
-        backfillModel.validate()
+        val response = responseFuture.get()
+        response.validate()
     }
 
     @Test
@@ -101,12 +101,12 @@ class BackfillServiceAsyncTest {
                 .build()
         val backfillServiceAsync = client.events().backfills()
 
-        val backfillModelFuture =
+        val responseFuture =
             backfillServiceAsync.revert(
                 EventBackfillRevertParams.builder().backfillId("backfill_id").build()
             )
 
-        val backfillModel = backfillModelFuture.get()
-        backfillModel.validate()
+        val response = responseFuture.get()
+        response.validate()
     }
 }

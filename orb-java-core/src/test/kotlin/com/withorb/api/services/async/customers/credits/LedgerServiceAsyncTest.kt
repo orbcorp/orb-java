@@ -44,7 +44,7 @@ class LedgerServiceAsyncTest {
                 .build()
         val ledgerServiceAsync = client.customers().credits().ledger()
 
-        val creditLedgerEntryModelFuture =
+        val responseFuture =
             ledgerServiceAsync.createEntry(
                 CustomerCreditLedgerCreateEntryParams.builder()
                     .customerId("customer_id")
@@ -87,8 +87,8 @@ class LedgerServiceAsyncTest {
                     .build()
             )
 
-        val creditLedgerEntryModel = creditLedgerEntryModelFuture.get()
-        creditLedgerEntryModel.validate()
+        val response = responseFuture.get()
+        response.validate()
     }
 
     @Test
@@ -100,7 +100,7 @@ class LedgerServiceAsyncTest {
                 .build()
         val ledgerServiceAsync = client.customers().credits().ledger()
 
-        val creditLedgerEntryModelFuture =
+        val responseFuture =
             ledgerServiceAsync.createEntryByExternalId(
                 CustomerCreditLedgerCreateEntryByExternalIdParams.builder()
                     .externalCustomerId("external_customer_id")
@@ -143,8 +143,8 @@ class LedgerServiceAsyncTest {
                     .build()
             )
 
-        val creditLedgerEntryModel = creditLedgerEntryModelFuture.get()
-        creditLedgerEntryModel.validate()
+        val response = responseFuture.get()
+        response.validate()
     }
 
     @Test

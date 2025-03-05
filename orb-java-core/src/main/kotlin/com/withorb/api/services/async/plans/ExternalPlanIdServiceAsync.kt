@@ -7,9 +7,9 @@ package com.withorb.api.services.async.plans
 import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
+import com.withorb.api.models.Plan
 import com.withorb.api.models.PlanExternalPlanIdFetchParams
 import com.withorb.api.models.PlanExternalPlanIdUpdateParams
-import com.withorb.api.models.PlanModel
 import java.util.concurrent.CompletableFuture
 
 interface ExternalPlanIdServiceAsync {
@@ -29,7 +29,7 @@ interface ExternalPlanIdServiceAsync {
     fun update(
         params: PlanExternalPlanIdUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<PlanModel>
+    ): CompletableFuture<Plan>
 
     /**
      * This endpoint is used to fetch [plan](/core-concepts##plan-and-price) details given an
@@ -52,7 +52,7 @@ interface ExternalPlanIdServiceAsync {
     fun fetch(
         params: PlanExternalPlanIdFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<PlanModel>
+    ): CompletableFuture<Plan>
 
     /**
      * A view of [ExternalPlanIdServiceAsync] that provides access to raw HTTP responses for each
@@ -69,7 +69,7 @@ interface ExternalPlanIdServiceAsync {
         fun update(
             params: PlanExternalPlanIdUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<PlanModel>>
+        ): CompletableFuture<HttpResponseFor<Plan>>
 
         /**
          * Returns a raw HTTP response for `get /plans/external_plan_id/{external_plan_id}`, but is
@@ -80,6 +80,6 @@ interface ExternalPlanIdServiceAsync {
         fun fetch(
             params: PlanExternalPlanIdFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<PlanModel>>
+        ): CompletableFuture<HttpResponseFor<Plan>>
     }
 }

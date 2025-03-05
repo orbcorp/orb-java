@@ -7,9 +7,10 @@ package com.withorb.api.services.blocking.customers.credits
 import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
-import com.withorb.api.models.CreditLedgerEntryModel
 import com.withorb.api.models.CustomerCreditLedgerCreateEntryByExternalIdParams
+import com.withorb.api.models.CustomerCreditLedgerCreateEntryByExternalIdResponse
 import com.withorb.api.models.CustomerCreditLedgerCreateEntryParams
+import com.withorb.api.models.CustomerCreditLedgerCreateEntryResponse
 import com.withorb.api.models.CustomerCreditLedgerListByExternalIdPage
 import com.withorb.api.models.CustomerCreditLedgerListByExternalIdParams
 import com.withorb.api.models.CustomerCreditLedgerListPage
@@ -214,7 +215,7 @@ interface LedgerService {
     fun createEntry(
         params: CustomerCreditLedgerCreateEntryParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CreditLedgerEntryModel
+    ): CustomerCreditLedgerCreateEntryResponse
 
     /**
      * This endpoint allows you to create a new ledger entry for a specified customer's balance.
@@ -323,7 +324,7 @@ interface LedgerService {
     fun createEntryByExternalId(
         params: CustomerCreditLedgerCreateEntryByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CreditLedgerEntryModel
+    ): CustomerCreditLedgerCreateEntryByExternalIdResponse
 
     /**
      * The credits ledger provides _auditing_ functionality over Orb's credits system with a list of
@@ -433,7 +434,7 @@ interface LedgerService {
         fun createEntry(
             params: CustomerCreditLedgerCreateEntryParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<CreditLedgerEntryModel>
+        ): HttpResponseFor<CustomerCreditLedgerCreateEntryResponse>
 
         /**
          * Returns a raw HTTP response for `post
@@ -445,7 +446,7 @@ interface LedgerService {
         fun createEntryByExternalId(
             params: CustomerCreditLedgerCreateEntryByExternalIdParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<CreditLedgerEntryModel>
+        ): HttpResponseFor<CustomerCreditLedgerCreateEntryByExternalIdResponse>
 
         /**
          * Returns a raw HTTP response for `get

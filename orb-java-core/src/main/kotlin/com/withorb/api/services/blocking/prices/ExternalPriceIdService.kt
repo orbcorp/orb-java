@@ -7,9 +7,9 @@ package com.withorb.api.services.blocking.prices
 import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
+import com.withorb.api.models.Price
 import com.withorb.api.models.PriceExternalPriceIdFetchParams
 import com.withorb.api.models.PriceExternalPriceIdUpdateParams
-import com.withorb.api.models.PriceModel
 
 interface ExternalPriceIdService {
 
@@ -26,7 +26,7 @@ interface ExternalPriceIdService {
     fun update(
         params: PriceExternalPriceIdUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): PriceModel
+    ): Price
 
     /**
      * This endpoint returns a price given an external price id. See the
@@ -37,7 +37,7 @@ interface ExternalPriceIdService {
     fun fetch(
         params: PriceExternalPriceIdFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): PriceModel
+    ): Price
 
     /**
      * A view of [ExternalPriceIdService] that provides access to raw HTTP responses for each
@@ -54,7 +54,7 @@ interface ExternalPriceIdService {
         fun update(
             params: PriceExternalPriceIdUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<PriceModel>
+        ): HttpResponseFor<Price>
 
         /**
          * Returns a raw HTTP response for `get /prices/external_price_id/{external_price_id}`, but
@@ -65,6 +65,6 @@ interface ExternalPriceIdService {
         fun fetch(
             params: PriceExternalPriceIdFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<PriceModel>
+        ): HttpResponseFor<Price>
     }
 }

@@ -15,8 +15,9 @@ import com.withorb.api.core.http.parseable
 import com.withorb.api.core.prepareAsync
 import com.withorb.api.errors.OrbError
 import com.withorb.api.models.CustomerCostListByExternalIdParams
+import com.withorb.api.models.CustomerCostListByExternalIdResponse
 import com.withorb.api.models.CustomerCostListParams
-import com.withorb.api.models.CustomerCostsModel
+import com.withorb.api.models.CustomerCostListResponse
 import java.util.concurrent.CompletableFuture
 
 class CostServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -31,14 +32,14 @@ class CostServiceAsyncImpl internal constructor(private val clientOptions: Clien
     override fun list(
         params: CustomerCostListParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<CustomerCostsModel> =
+    ): CompletableFuture<CustomerCostListResponse> =
         // get /customers/{customer_id}/costs
         withRawResponse().list(params, requestOptions).thenApply { it.parse() }
 
     override fun listByExternalId(
         params: CustomerCostListByExternalIdParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<CustomerCostsModel> =
+    ): CompletableFuture<CustomerCostListByExternalIdResponse> =
         // get /customers/external_customer_id/{external_customer_id}/costs
         withRawResponse().listByExternalId(params, requestOptions).thenApply { it.parse() }
 
@@ -47,13 +48,14 @@ class CostServiceAsyncImpl internal constructor(private val clientOptions: Clien
 
         private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
-        private val listHandler: Handler<CustomerCostsModel> =
-            jsonHandler<CustomerCostsModel>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val listHandler: Handler<CustomerCostListResponse> =
+            jsonHandler<CustomerCostListResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
         override fun list(
             params: CustomerCostListParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<CustomerCostsModel>> {
+        ): CompletableFuture<HttpResponseFor<CustomerCostListResponse>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -76,13 +78,14 @@ class CostServiceAsyncImpl internal constructor(private val clientOptions: Clien
                 }
         }
 
-        private val listByExternalIdHandler: Handler<CustomerCostsModel> =
-            jsonHandler<CustomerCostsModel>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val listByExternalIdHandler: Handler<CustomerCostListByExternalIdResponse> =
+            jsonHandler<CustomerCostListByExternalIdResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
         override fun listByExternalId(
             params: CustomerCostListByExternalIdParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<CustomerCostsModel>> {
+        ): CompletableFuture<HttpResponseFor<CustomerCostListByExternalIdResponse>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
