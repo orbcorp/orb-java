@@ -7,9 +7,10 @@ package com.withorb.api.services.async.customers.credits
 import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
-import com.withorb.api.models.CreditLedgerEntryModel
 import com.withorb.api.models.CustomerCreditLedgerCreateEntryByExternalIdParams
+import com.withorb.api.models.CustomerCreditLedgerCreateEntryByExternalIdResponse
 import com.withorb.api.models.CustomerCreditLedgerCreateEntryParams
+import com.withorb.api.models.CustomerCreditLedgerCreateEntryResponse
 import com.withorb.api.models.CustomerCreditLedgerListByExternalIdPageAsync
 import com.withorb.api.models.CustomerCreditLedgerListByExternalIdParams
 import com.withorb.api.models.CustomerCreditLedgerListPageAsync
@@ -215,7 +216,7 @@ interface LedgerServiceAsync {
     fun createEntry(
         params: CustomerCreditLedgerCreateEntryParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<CreditLedgerEntryModel>
+    ): CompletableFuture<CustomerCreditLedgerCreateEntryResponse>
 
     /**
      * This endpoint allows you to create a new ledger entry for a specified customer's balance.
@@ -324,7 +325,7 @@ interface LedgerServiceAsync {
     fun createEntryByExternalId(
         params: CustomerCreditLedgerCreateEntryByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<CreditLedgerEntryModel>
+    ): CompletableFuture<CustomerCreditLedgerCreateEntryByExternalIdResponse>
 
     /**
      * The credits ledger provides _auditing_ functionality over Orb's credits system with a list of
@@ -436,7 +437,7 @@ interface LedgerServiceAsync {
         fun createEntry(
             params: CustomerCreditLedgerCreateEntryParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<CreditLedgerEntryModel>>
+        ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerCreateEntryResponse>>
 
         /**
          * Returns a raw HTTP response for `post
@@ -448,7 +449,7 @@ interface LedgerServiceAsync {
         fun createEntryByExternalId(
             params: CustomerCreditLedgerCreateEntryByExternalIdParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<CreditLedgerEntryModel>>
+        ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerCreateEntryByExternalIdResponse>>
 
         /**
          * Returns a raw HTTP response for `get

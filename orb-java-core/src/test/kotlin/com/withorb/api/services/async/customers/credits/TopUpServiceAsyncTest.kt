@@ -27,7 +27,7 @@ class TopUpServiceAsyncTest {
                 .build()
         val topUpServiceAsync = client.customers().credits().topUps()
 
-        val topUpModelFuture =
+        val topUpFuture =
             topUpServiceAsync.create(
                 CustomerCreditTopUpCreateParams.builder()
                     .customerId("customer_id")
@@ -53,8 +53,8 @@ class TopUpServiceAsyncTest {
                     .build()
             )
 
-        val topUpModel = topUpModelFuture.get()
-        topUpModel.validate()
+        val topUp = topUpFuture.get()
+        topUp.validate()
     }
 
     @Test
@@ -104,7 +104,7 @@ class TopUpServiceAsyncTest {
                 .build()
         val topUpServiceAsync = client.customers().credits().topUps()
 
-        val topUpModelFuture =
+        val responseFuture =
             topUpServiceAsync.createByExternalId(
                 CustomerCreditTopUpCreateByExternalIdParams.builder()
                     .externalCustomerId("external_customer_id")
@@ -130,8 +130,8 @@ class TopUpServiceAsyncTest {
                     .build()
             )
 
-        val topUpModel = topUpModelFuture.get()
-        topUpModel.validate()
+        val response = responseFuture.get()
+        response.validate()
     }
 
     @Test

@@ -14,7 +14,6 @@ import com.withorb.api.models.InvoicePayParams
 import com.withorb.api.models.InvoiceUpdateParams
 import com.withorb.api.models.InvoiceVoidInvoiceParams
 import com.withorb.api.models.PercentageDiscount
-import com.withorb.api.models.UnitConfigModel
 import java.time.LocalDate
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
@@ -32,7 +31,7 @@ class InvoiceServiceAsyncTest {
                 .build()
         val invoiceServiceAsync = client.invoices()
 
-        val invoiceModelFuture =
+        val invoiceFuture =
             invoiceServiceAsync.create(
                 InvoiceCreateParams.builder()
                     .currency("USD")
@@ -45,7 +44,11 @@ class InvoiceServiceAsyncTest {
                             .name("Line Item Name")
                             .quantity(1.0)
                             .startDate(LocalDate.parse("2023-09-22"))
-                            .unitConfig(UnitConfigModel.builder().unitAmount("unit_amount").build())
+                            .unitConfig(
+                                InvoiceCreateParams.LineItem.UnitConfig.builder()
+                                    .unitAmount("unit_amount")
+                                    .build()
+                            )
                             .build()
                     )
                     .netTerms(0L)
@@ -70,8 +73,8 @@ class InvoiceServiceAsyncTest {
                     .build()
             )
 
-        val invoiceModel = invoiceModelFuture.get()
-        invoiceModel.validate()
+        val invoice = invoiceFuture.get()
+        invoice.validate()
     }
 
     @Test
@@ -83,7 +86,7 @@ class InvoiceServiceAsyncTest {
                 .build()
         val invoiceServiceAsync = client.invoices()
 
-        val invoiceModelFuture =
+        val invoiceFuture =
             invoiceServiceAsync.update(
                 InvoiceUpdateParams.builder()
                     .invoiceId("invoice_id")
@@ -95,8 +98,8 @@ class InvoiceServiceAsyncTest {
                     .build()
             )
 
-        val invoiceModel = invoiceModelFuture.get()
-        invoiceModel.validate()
+        val invoice = invoiceFuture.get()
+        invoice.validate()
     }
 
     @Test
@@ -123,11 +126,11 @@ class InvoiceServiceAsyncTest {
                 .build()
         val invoiceServiceAsync = client.invoices()
 
-        val invoiceModelFuture =
+        val invoiceFuture =
             invoiceServiceAsync.fetch(InvoiceFetchParams.builder().invoiceId("invoice_id").build())
 
-        val invoiceModel = invoiceModelFuture.get()
-        invoiceModel.validate()
+        val invoice = invoiceFuture.get()
+        invoice.validate()
     }
 
     @Test
@@ -157,13 +160,13 @@ class InvoiceServiceAsyncTest {
                 .build()
         val invoiceServiceAsync = client.invoices()
 
-        val invoiceModelFuture =
+        val invoiceFuture =
             invoiceServiceAsync.issue(
                 InvoiceIssueParams.builder().invoiceId("invoice_id").synchronous(true).build()
             )
 
-        val invoiceModel = invoiceModelFuture.get()
-        invoiceModel.validate()
+        val invoice = invoiceFuture.get()
+        invoice.validate()
     }
 
     @Test
@@ -175,7 +178,7 @@ class InvoiceServiceAsyncTest {
                 .build()
         val invoiceServiceAsync = client.invoices()
 
-        val invoiceModelFuture =
+        val invoiceFuture =
             invoiceServiceAsync.markPaid(
                 InvoiceMarkPaidParams.builder()
                     .invoiceId("invoice_id")
@@ -185,8 +188,8 @@ class InvoiceServiceAsyncTest {
                     .build()
             )
 
-        val invoiceModel = invoiceModelFuture.get()
-        invoiceModel.validate()
+        val invoice = invoiceFuture.get()
+        invoice.validate()
     }
 
     @Test
@@ -198,11 +201,11 @@ class InvoiceServiceAsyncTest {
                 .build()
         val invoiceServiceAsync = client.invoices()
 
-        val invoiceModelFuture =
+        val invoiceFuture =
             invoiceServiceAsync.pay(InvoicePayParams.builder().invoiceId("invoice_id").build())
 
-        val invoiceModel = invoiceModelFuture.get()
-        invoiceModel.validate()
+        val invoice = invoiceFuture.get()
+        invoice.validate()
     }
 
     @Test
@@ -214,12 +217,12 @@ class InvoiceServiceAsyncTest {
                 .build()
         val invoiceServiceAsync = client.invoices()
 
-        val invoiceModelFuture =
+        val invoiceFuture =
             invoiceServiceAsync.voidInvoice(
                 InvoiceVoidInvoiceParams.builder().invoiceId("invoice_id").build()
             )
 
-        val invoiceModel = invoiceModelFuture.get()
-        invoiceModel.validate()
+        val invoice = invoiceFuture.get()
+        invoice.validate()
     }
 }

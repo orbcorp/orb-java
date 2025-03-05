@@ -39,7 +39,7 @@ private constructor(
 
     fun response(): Response = response
 
-    fun data(): List<AlertModel> = response().data()
+    fun data(): List<Alert> = response().data()
 
     fun paginationMetadata(): PaginationMetadata = response().paginationMetadata()
 
@@ -94,20 +94,20 @@ private constructor(
     class Response
     @JsonCreator
     constructor(
-        @JsonProperty("data") private val data: JsonField<List<AlertModel>> = JsonMissing.of(),
+        @JsonProperty("data") private val data: JsonField<List<Alert>> = JsonMissing.of(),
         @JsonProperty("pagination_metadata")
         private val paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        fun data(): List<AlertModel> = data.getNullable("data") ?: listOf()
+        fun data(): List<Alert> = data.getNullable("data") ?: listOf()
 
         fun paginationMetadata(): PaginationMetadata =
             paginationMetadata.getRequired("pagination_metadata")
 
         @JsonProperty("data")
-        fun _data(): Optional<JsonField<List<AlertModel>>> = Optional.ofNullable(data)
+        fun _data(): Optional<JsonField<List<Alert>>> = Optional.ofNullable(data)
 
         @JsonProperty("pagination_metadata")
         fun _paginationMetadata(): Optional<JsonField<PaginationMetadata>> =
@@ -152,7 +152,7 @@ private constructor(
 
         class Builder {
 
-            private var data: JsonField<List<AlertModel>> = JsonMissing.of()
+            private var data: JsonField<List<Alert>> = JsonMissing.of()
             private var paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -163,9 +163,9 @@ private constructor(
                 this.additionalProperties.putAll(page.additionalProperties)
             }
 
-            fun data(data: List<AlertModel>) = data(JsonField.of(data))
+            fun data(data: List<Alert>) = data(JsonField.of(data))
 
-            fun data(data: JsonField<List<AlertModel>>) = apply { this.data = data }
+            fun data(data: JsonField<List<Alert>>) = apply { this.data = data }
 
             fun paginationMetadata(paginationMetadata: PaginationMetadata) =
                 paginationMetadata(JsonField.of(paginationMetadata))
@@ -182,9 +182,9 @@ private constructor(
         }
     }
 
-    class AutoPager(private val firstPage: AlertListPage) : Iterable<AlertModel> {
+    class AutoPager(private val firstPage: AlertListPage) : Iterable<Alert> {
 
-        override fun iterator(): Iterator<AlertModel> = iterator {
+        override fun iterator(): Iterator<Alert> = iterator {
             var page = firstPage
             var index = 0
             while (true) {
@@ -196,7 +196,7 @@ private constructor(
             }
         }
 
-        fun stream(): Stream<AlertModel> {
+        fun stream(): Stream<Alert> {
             return StreamSupport.stream(spliterator(), false)
         }
     }

@@ -8,8 +8,9 @@ import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.CustomerCostListByExternalIdParams
+import com.withorb.api.models.CustomerCostListByExternalIdResponse
 import com.withorb.api.models.CustomerCostListParams
-import com.withorb.api.models.CustomerCostsModel
+import com.withorb.api.models.CustomerCostListResponse
 import java.util.concurrent.CompletableFuture
 
 interface CostServiceAsync {
@@ -133,7 +134,7 @@ interface CostServiceAsync {
     fun list(
         params: CustomerCostListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<CustomerCostsModel>
+    ): CompletableFuture<CustomerCostListResponse>
 
     /**
      * This endpoint is used to fetch a day-by-day snapshot of a customer's costs in Orb, calculated
@@ -249,7 +250,7 @@ interface CostServiceAsync {
     fun listByExternalId(
         params: CustomerCostListByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<CustomerCostsModel>
+    ): CompletableFuture<CustomerCostListByExternalIdResponse>
 
     /** A view of [CostServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -263,7 +264,7 @@ interface CostServiceAsync {
         fun list(
             params: CustomerCostListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<CustomerCostsModel>>
+        ): CompletableFuture<HttpResponseFor<CustomerCostListResponse>>
 
         /**
          * Returns a raw HTTP response for `get
@@ -275,6 +276,6 @@ interface CostServiceAsync {
         fun listByExternalId(
             params: CustomerCostListByExternalIdParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<CustomerCostsModel>>
+        ): CompletableFuture<HttpResponseFor<CustomerCostListByExternalIdResponse>>
     }
 }

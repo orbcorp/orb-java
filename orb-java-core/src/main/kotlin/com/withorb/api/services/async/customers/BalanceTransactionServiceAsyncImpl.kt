@@ -16,9 +16,9 @@ import com.withorb.api.core.http.parseable
 import com.withorb.api.core.prepareAsync
 import com.withorb.api.errors.OrbError
 import com.withorb.api.models.CustomerBalanceTransactionCreateParams
+import com.withorb.api.models.CustomerBalanceTransactionCreateResponse
 import com.withorb.api.models.CustomerBalanceTransactionListPageAsync
 import com.withorb.api.models.CustomerBalanceTransactionListParams
-import com.withorb.api.models.CustomerBalanceTransactionModel
 import java.util.concurrent.CompletableFuture
 
 class BalanceTransactionServiceAsyncImpl
@@ -33,7 +33,7 @@ internal constructor(private val clientOptions: ClientOptions) : BalanceTransact
     override fun create(
         params: CustomerBalanceTransactionCreateParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<CustomerBalanceTransactionModel> =
+    ): CompletableFuture<CustomerBalanceTransactionCreateResponse> =
         // post /customers/{customer_id}/balance_transactions
         withRawResponse().create(params, requestOptions).thenApply { it.parse() }
 
@@ -49,14 +49,14 @@ internal constructor(private val clientOptions: ClientOptions) : BalanceTransact
 
         private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
-        private val createHandler: Handler<CustomerBalanceTransactionModel> =
-            jsonHandler<CustomerBalanceTransactionModel>(clientOptions.jsonMapper)
+        private val createHandler: Handler<CustomerBalanceTransactionCreateResponse> =
+            jsonHandler<CustomerBalanceTransactionCreateResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun create(
             params: CustomerBalanceTransactionCreateParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionModel>> {
+        ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionCreateResponse>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)

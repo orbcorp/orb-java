@@ -21,7 +21,7 @@ class CreditNoteServiceAsyncTest {
                 .build()
         val creditNoteServiceAsync = client.creditNotes()
 
-        val creditNoteModelFuture =
+        val creditNoteFuture =
             creditNoteServiceAsync.create(
                 CreditNoteCreateParams.builder()
                     .addLineItem(
@@ -35,8 +35,8 @@ class CreditNoteServiceAsyncTest {
                     .build()
             )
 
-        val creditNoteModel = creditNoteModelFuture.get()
-        creditNoteModel.validate()
+        val creditNote = creditNoteFuture.get()
+        creditNote.validate()
     }
 
     @Test
@@ -63,12 +63,12 @@ class CreditNoteServiceAsyncTest {
                 .build()
         val creditNoteServiceAsync = client.creditNotes()
 
-        val creditNoteModelFuture =
+        val creditNoteFuture =
             creditNoteServiceAsync.fetch(
                 CreditNoteFetchParams.builder().creditNoteId("credit_note_id").build()
             )
 
-        val creditNoteModel = creditNoteModelFuture.get()
-        creditNoteModel.validate()
+        val creditNote = creditNoteFuture.get()
+        creditNote.validate()
     }
 }
