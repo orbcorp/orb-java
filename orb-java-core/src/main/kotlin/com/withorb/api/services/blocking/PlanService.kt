@@ -7,11 +7,11 @@ package com.withorb.api.services.blocking
 import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
-import com.withorb.api.models.Plan
 import com.withorb.api.models.PlanCreateParams
 import com.withorb.api.models.PlanFetchParams
 import com.withorb.api.models.PlanListPage
 import com.withorb.api.models.PlanListParams
+import com.withorb.api.models.PlanModel
 import com.withorb.api.models.PlanUpdateParams
 import com.withorb.api.services.blocking.plans.ExternalPlanIdService
 
@@ -29,7 +29,7 @@ interface PlanService {
     fun create(
         params: PlanCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): Plan
+    ): PlanModel
 
     /**
      * This endpoint can be used to update the `external_plan_id`, and `metadata` of an existing
@@ -41,7 +41,7 @@ interface PlanService {
     fun update(
         params: PlanUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): Plan
+    ): PlanModel
 
     /**
      * This endpoint returns a list of all [plans](/core-concepts#plan-and-price) for an account in
@@ -83,7 +83,10 @@ interface PlanService {
      * prices refer to all prices across all phases.
      */
     @JvmOverloads
-    fun fetch(params: PlanFetchParams, requestOptions: RequestOptions = RequestOptions.none()): Plan
+    fun fetch(
+        params: PlanFetchParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): PlanModel
 
     /** A view of [PlanService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -99,7 +102,7 @@ interface PlanService {
         fun create(
             params: PlanCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Plan>
+        ): HttpResponseFor<PlanModel>
 
         /**
          * Returns a raw HTTP response for `put /plans/{plan_id}`, but is otherwise the same as
@@ -110,7 +113,7 @@ interface PlanService {
         fun update(
             params: PlanUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Plan>
+        ): HttpResponseFor<PlanModel>
 
         /**
          * Returns a raw HTTP response for `get /plans`, but is otherwise the same as
@@ -140,6 +143,6 @@ interface PlanService {
         fun fetch(
             params: PlanFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Plan>
+        ): HttpResponseFor<PlanModel>
     }
 }

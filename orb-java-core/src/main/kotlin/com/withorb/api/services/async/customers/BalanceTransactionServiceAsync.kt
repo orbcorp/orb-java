@@ -8,9 +8,9 @@ import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.CustomerBalanceTransactionCreateParams
-import com.withorb.api.models.CustomerBalanceTransactionCreateResponse
 import com.withorb.api.models.CustomerBalanceTransactionListPageAsync
 import com.withorb.api.models.CustomerBalanceTransactionListParams
+import com.withorb.api.models.CustomerBalanceTransactionModel
 import java.util.concurrent.CompletableFuture
 
 interface BalanceTransactionServiceAsync {
@@ -28,7 +28,7 @@ interface BalanceTransactionServiceAsync {
     fun create(
         params: CustomerBalanceTransactionCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<CustomerBalanceTransactionCreateResponse>
+    ): CompletableFuture<CustomerBalanceTransactionModel>
 
     /**
      * ## The customer balance
@@ -78,7 +78,7 @@ interface BalanceTransactionServiceAsync {
         fun create(
             params: CustomerBalanceTransactionCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionCreateResponse>>
+        ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionModel>>
 
         /**
          * Returns a raw HTTP response for `get /customers/{customer_id}/balance_transactions`, but

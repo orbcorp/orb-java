@@ -11,6 +11,8 @@ import com.withorb.api.models.AlertDisableParams
 import com.withorb.api.models.AlertEnableParams
 import com.withorb.api.models.AlertRetrieveParams
 import com.withorb.api.models.AlertUpdateParams
+import com.withorb.api.models.CreateCustomerAlertRequest
+import com.withorb.api.models.ThresholdModel
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -27,11 +29,11 @@ class AlertServiceAsyncTest {
                 .build()
         val alertServiceAsync = client.alerts()
 
-        val alertFuture =
+        val alertModelFuture =
             alertServiceAsync.retrieve(AlertRetrieveParams.builder().alertId("alert_id").build())
 
-        val alert = alertFuture.get()
-        alert.validate()
+        val alertModel = alertModelFuture.get()
+        alertModel.validate()
     }
 
     @Test
@@ -43,16 +45,16 @@ class AlertServiceAsyncTest {
                 .build()
         val alertServiceAsync = client.alerts()
 
-        val alertFuture =
+        val alertModelFuture =
             alertServiceAsync.update(
                 AlertUpdateParams.builder()
                     .alertConfigurationId("alert_configuration_id")
-                    .addThreshold(AlertUpdateParams.Threshold.builder().value(0.0).build())
+                    .addThreshold(ThresholdModel.builder().value(0.0).build())
                     .build()
             )
 
-        val alert = alertFuture.get()
-        alert.validate()
+        val alertModel = alertModelFuture.get()
+        alertModel.validate()
     }
 
     @Disabled("plan_version=0 breaks Prism")
@@ -80,20 +82,22 @@ class AlertServiceAsyncTest {
                 .build()
         val alertServiceAsync = client.alerts()
 
-        val alertFuture =
+        val alertModelFuture =
             alertServiceAsync.createForCustomer(
                 AlertCreateForCustomerParams.builder()
                     .customerId("customer_id")
-                    .currency("currency")
-                    .type(AlertCreateForCustomerParams.Type.USAGE_EXCEEDED)
-                    .addThreshold(
-                        AlertCreateForCustomerParams.Threshold.builder().value(0.0).build()
+                    .createCustomerAlertRequest(
+                        CreateCustomerAlertRequest.builder()
+                            .currency("currency")
+                            .type(CreateCustomerAlertRequest.Type.USAGE_EXCEEDED)
+                            .addThreshold(ThresholdModel.builder().value(0.0).build())
+                            .build()
                     )
                     .build()
             )
 
-        val alert = alertFuture.get()
-        alert.validate()
+        val alertModel = alertModelFuture.get()
+        alertModel.validate()
     }
 
     @Test
@@ -105,20 +109,22 @@ class AlertServiceAsyncTest {
                 .build()
         val alertServiceAsync = client.alerts()
 
-        val alertFuture =
+        val alertModelFuture =
             alertServiceAsync.createForExternalCustomer(
                 AlertCreateForExternalCustomerParams.builder()
                     .externalCustomerId("external_customer_id")
-                    .currency("currency")
-                    .type(AlertCreateForExternalCustomerParams.Type.USAGE_EXCEEDED)
-                    .addThreshold(
-                        AlertCreateForExternalCustomerParams.Threshold.builder().value(0.0).build()
+                    .createCustomerAlertRequest(
+                        CreateCustomerAlertRequest.builder()
+                            .currency("currency")
+                            .type(CreateCustomerAlertRequest.Type.USAGE_EXCEEDED)
+                            .addThreshold(ThresholdModel.builder().value(0.0).build())
+                            .build()
                     )
                     .build()
             )
 
-        val alert = alertFuture.get()
-        alert.validate()
+        val alertModel = alertModelFuture.get()
+        alertModel.validate()
     }
 
     @Test
@@ -130,20 +136,18 @@ class AlertServiceAsyncTest {
                 .build()
         val alertServiceAsync = client.alerts()
 
-        val alertFuture =
+        val alertModelFuture =
             alertServiceAsync.createForSubscription(
                 AlertCreateForSubscriptionParams.builder()
                     .subscriptionId("subscription_id")
-                    .addThreshold(
-                        AlertCreateForSubscriptionParams.Threshold.builder().value(0.0).build()
-                    )
+                    .addThreshold(ThresholdModel.builder().value(0.0).build())
                     .type(AlertCreateForSubscriptionParams.Type.USAGE_EXCEEDED)
                     .metricId("metric_id")
                     .build()
             )
 
-        val alert = alertFuture.get()
-        alert.validate()
+        val alertModel = alertModelFuture.get()
+        alertModel.validate()
     }
 
     @Test
@@ -155,7 +159,7 @@ class AlertServiceAsyncTest {
                 .build()
         val alertServiceAsync = client.alerts()
 
-        val alertFuture =
+        val alertModelFuture =
             alertServiceAsync.disable(
                 AlertDisableParams.builder()
                     .alertConfigurationId("alert_configuration_id")
@@ -163,8 +167,8 @@ class AlertServiceAsyncTest {
                     .build()
             )
 
-        val alert = alertFuture.get()
-        alert.validate()
+        val alertModel = alertModelFuture.get()
+        alertModel.validate()
     }
 
     @Test
@@ -176,7 +180,7 @@ class AlertServiceAsyncTest {
                 .build()
         val alertServiceAsync = client.alerts()
 
-        val alertFuture =
+        val alertModelFuture =
             alertServiceAsync.enable(
                 AlertEnableParams.builder()
                     .alertConfigurationId("alert_configuration_id")
@@ -184,7 +188,7 @@ class AlertServiceAsyncTest {
                     .build()
             )
 
-        val alert = alertFuture.get()
-        alert.validate()
+        val alertModel = alertModelFuture.get()
+        alertModel.validate()
     }
 }

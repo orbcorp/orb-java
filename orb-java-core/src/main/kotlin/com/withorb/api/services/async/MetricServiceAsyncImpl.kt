@@ -15,7 +15,7 @@ import com.withorb.api.core.http.json
 import com.withorb.api.core.http.parseable
 import com.withorb.api.core.prepareAsync
 import com.withorb.api.errors.OrbError
-import com.withorb.api.models.BillableMetric
+import com.withorb.api.models.BillableMetricModel
 import com.withorb.api.models.MetricCreateParams
 import com.withorb.api.models.MetricFetchParams
 import com.withorb.api.models.MetricListPageAsync
@@ -35,14 +35,14 @@ class MetricServiceAsyncImpl internal constructor(private val clientOptions: Cli
     override fun create(
         params: MetricCreateParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<BillableMetric> =
+    ): CompletableFuture<BillableMetricModel> =
         // post /metrics
         withRawResponse().create(params, requestOptions).thenApply { it.parse() }
 
     override fun update(
         params: MetricUpdateParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<BillableMetric> =
+    ): CompletableFuture<BillableMetricModel> =
         // put /metrics/{metric_id}
         withRawResponse().update(params, requestOptions).thenApply { it.parse() }
 
@@ -56,7 +56,7 @@ class MetricServiceAsyncImpl internal constructor(private val clientOptions: Cli
     override fun fetch(
         params: MetricFetchParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<BillableMetric> =
+    ): CompletableFuture<BillableMetricModel> =
         // get /metrics/{metric_id}
         withRawResponse().fetch(params, requestOptions).thenApply { it.parse() }
 
@@ -65,13 +65,14 @@ class MetricServiceAsyncImpl internal constructor(private val clientOptions: Cli
 
         private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
-        private val createHandler: Handler<BillableMetric> =
-            jsonHandler<BillableMetric>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val createHandler: Handler<BillableMetricModel> =
+            jsonHandler<BillableMetricModel>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
         override fun create(
             params: MetricCreateParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<BillableMetric>> {
+        ): CompletableFuture<HttpResponseFor<BillableMetricModel>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -95,13 +96,14 @@ class MetricServiceAsyncImpl internal constructor(private val clientOptions: Cli
                 }
         }
 
-        private val updateHandler: Handler<BillableMetric> =
-            jsonHandler<BillableMetric>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val updateHandler: Handler<BillableMetricModel> =
+            jsonHandler<BillableMetricModel>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
         override fun update(
             params: MetricUpdateParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<BillableMetric>> {
+        ): CompletableFuture<HttpResponseFor<BillableMetricModel>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -162,13 +164,14 @@ class MetricServiceAsyncImpl internal constructor(private val clientOptions: Cli
                 }
         }
 
-        private val fetchHandler: Handler<BillableMetric> =
-            jsonHandler<BillableMetric>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val fetchHandler: Handler<BillableMetricModel> =
+            jsonHandler<BillableMetricModel>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
         override fun fetch(
             params: MetricFetchParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<BillableMetric>> {
+        ): CompletableFuture<HttpResponseFor<BillableMetricModel>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)

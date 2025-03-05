@@ -15,11 +15,11 @@ import com.withorb.api.core.http.json
 import com.withorb.api.core.http.parseable
 import com.withorb.api.core.prepareAsync
 import com.withorb.api.errors.OrbError
-import com.withorb.api.models.CreditNote
 import com.withorb.api.models.CreditNoteCreateParams
 import com.withorb.api.models.CreditNoteFetchParams
 import com.withorb.api.models.CreditNoteListPageAsync
 import com.withorb.api.models.CreditNoteListParams
+import com.withorb.api.models.CreditNoteModel
 import java.util.concurrent.CompletableFuture
 
 class CreditNoteServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -34,7 +34,7 @@ class CreditNoteServiceAsyncImpl internal constructor(private val clientOptions:
     override fun create(
         params: CreditNoteCreateParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<CreditNote> =
+    ): CompletableFuture<CreditNoteModel> =
         // post /credit_notes
         withRawResponse().create(params, requestOptions).thenApply { it.parse() }
 
@@ -48,7 +48,7 @@ class CreditNoteServiceAsyncImpl internal constructor(private val clientOptions:
     override fun fetch(
         params: CreditNoteFetchParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<CreditNote> =
+    ): CompletableFuture<CreditNoteModel> =
         // get /credit_notes/{credit_note_id}
         withRawResponse().fetch(params, requestOptions).thenApply { it.parse() }
 
@@ -57,13 +57,13 @@ class CreditNoteServiceAsyncImpl internal constructor(private val clientOptions:
 
         private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
-        private val createHandler: Handler<CreditNote> =
-            jsonHandler<CreditNote>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val createHandler: Handler<CreditNoteModel> =
+            jsonHandler<CreditNoteModel>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun create(
             params: CreditNoteCreateParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<CreditNote>> {
+        ): CompletableFuture<HttpResponseFor<CreditNoteModel>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -124,13 +124,13 @@ class CreditNoteServiceAsyncImpl internal constructor(private val clientOptions:
                 }
         }
 
-        private val fetchHandler: Handler<CreditNote> =
-            jsonHandler<CreditNote>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val fetchHandler: Handler<CreditNoteModel> =
+            jsonHandler<CreditNoteModel>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun fetch(
             params: CreditNoteFetchParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<CreditNote>> {
+        ): CompletableFuture<HttpResponseFor<CreditNoteModel>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)

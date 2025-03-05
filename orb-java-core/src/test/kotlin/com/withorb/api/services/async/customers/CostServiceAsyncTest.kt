@@ -22,7 +22,7 @@ class CostServiceAsyncTest {
                 .build()
         val costServiceAsync = client.customers().costs()
 
-        val costFuture =
+        val customerCostsModelFuture =
             costServiceAsync.list(
                 CustomerCostListParams.builder()
                     .customerId("customer_id")
@@ -33,8 +33,8 @@ class CostServiceAsyncTest {
                     .build()
             )
 
-        val cost = costFuture.get()
-        cost.validate()
+        val customerCostsModel = customerCostsModelFuture.get()
+        customerCostsModel.validate()
     }
 
     @Test
@@ -46,7 +46,7 @@ class CostServiceAsyncTest {
                 .build()
         val costServiceAsync = client.customers().costs()
 
-        val responseFuture =
+        val customerCostsModelFuture =
             costServiceAsync.listByExternalId(
                 CustomerCostListByExternalIdParams.builder()
                     .externalCustomerId("external_customer_id")
@@ -57,7 +57,7 @@ class CostServiceAsyncTest {
                     .build()
             )
 
-        val response = responseFuture.get()
-        response.validate()
+        val customerCostsModel = customerCostsModelFuture.get()
+        customerCostsModel.validate()
     }
 }

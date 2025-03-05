@@ -8,7 +8,7 @@ import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.InvoiceLineItemCreateParams
-import com.withorb.api.models.InvoiceLineItemCreateResponse
+import com.withorb.api.models.InvoiceLineItemModel
 import java.util.concurrent.CompletableFuture
 
 interface InvoiceLineItemServiceAsync {
@@ -26,7 +26,7 @@ interface InvoiceLineItemServiceAsync {
     fun create(
         params: InvoiceLineItemCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<InvoiceLineItemCreateResponse>
+    ): CompletableFuture<InvoiceLineItemModel>
 
     /**
      * A view of [InvoiceLineItemServiceAsync] that provides access to raw HTTP responses for each
@@ -43,6 +43,6 @@ interface InvoiceLineItemServiceAsync {
         fun create(
             params: InvoiceLineItemCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<InvoiceLineItemCreateResponse>>
+        ): CompletableFuture<HttpResponseFor<InvoiceLineItemModel>>
     }
 }
