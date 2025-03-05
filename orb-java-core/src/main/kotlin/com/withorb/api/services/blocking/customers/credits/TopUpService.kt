@@ -9,14 +9,15 @@ import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponse
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.CustomerCreditTopUpCreateByExternalIdParams
+import com.withorb.api.models.CustomerCreditTopUpCreateByExternalIdResponse
 import com.withorb.api.models.CustomerCreditTopUpCreateParams
+import com.withorb.api.models.CustomerCreditTopUpCreateResponse
 import com.withorb.api.models.CustomerCreditTopUpDeleteByExternalIdParams
 import com.withorb.api.models.CustomerCreditTopUpDeleteParams
 import com.withorb.api.models.CustomerCreditTopUpListByExternalIdPage
 import com.withorb.api.models.CustomerCreditTopUpListByExternalIdParams
 import com.withorb.api.models.CustomerCreditTopUpListPage
 import com.withorb.api.models.CustomerCreditTopUpListParams
-import com.withorb.api.models.TopUpModel
 
 interface TopUpService {
 
@@ -37,7 +38,7 @@ interface TopUpService {
     fun create(
         params: CustomerCreditTopUpCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): TopUpModel
+    ): CustomerCreditTopUpCreateResponse
 
     /** List top-ups */
     @JvmOverloads
@@ -68,7 +69,7 @@ interface TopUpService {
     fun createByExternalId(
         params: CustomerCreditTopUpCreateByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): TopUpModel
+    ): CustomerCreditTopUpCreateByExternalIdResponse
 
     /**
      * This deactivates the top-up and voids any invoices associated with pending credit blocks
@@ -99,7 +100,7 @@ interface TopUpService {
         fun create(
             params: CustomerCreditTopUpCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TopUpModel>
+        ): HttpResponseFor<CustomerCreditTopUpCreateResponse>
 
         /**
          * Returns a raw HTTP response for `get /customers/{customer_id}/credits/top_ups`, but is
@@ -134,7 +135,7 @@ interface TopUpService {
         fun createByExternalId(
             params: CustomerCreditTopUpCreateByExternalIdParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TopUpModel>
+        ): HttpResponseFor<CustomerCreditTopUpCreateByExternalIdResponse>
 
         /**
          * Returns a raw HTTP response for `delete

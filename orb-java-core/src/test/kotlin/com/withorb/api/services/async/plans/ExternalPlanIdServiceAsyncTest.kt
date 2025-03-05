@@ -5,7 +5,6 @@ package com.withorb.api.services.async.plans
 import com.withorb.api.TestServerExtension
 import com.withorb.api.client.okhttp.OrbOkHttpClientAsync
 import com.withorb.api.core.JsonValue
-import com.withorb.api.models.EditPlanModel
 import com.withorb.api.models.PlanExternalPlanIdFetchParams
 import com.withorb.api.models.PlanExternalPlanIdUpdateParams
 import org.junit.jupiter.api.Test
@@ -23,25 +22,21 @@ class ExternalPlanIdServiceAsyncTest {
                 .build()
         val externalPlanIdServiceAsync = client.plans().externalPlanId()
 
-        val planModelFuture =
+        val planFuture =
             externalPlanIdServiceAsync.update(
                 PlanExternalPlanIdUpdateParams.builder()
                     .otherExternalPlanId("external_plan_id")
-                    .editPlanModel(
-                        EditPlanModel.builder()
-                            .externalPlanId("external_plan_id")
-                            .metadata(
-                                EditPlanModel.Metadata.builder()
-                                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                                    .build()
-                            )
+                    .externalPlanId("external_plan_id")
+                    .metadata(
+                        PlanExternalPlanIdUpdateParams.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
                     .build()
             )
 
-        val planModel = planModelFuture.get()
-        planModel.validate()
+        val plan = planFuture.get()
+        plan.validate()
     }
 
     @Test
@@ -53,12 +48,12 @@ class ExternalPlanIdServiceAsyncTest {
                 .build()
         val externalPlanIdServiceAsync = client.plans().externalPlanId()
 
-        val planModelFuture =
+        val planFuture =
             externalPlanIdServiceAsync.fetch(
                 PlanExternalPlanIdFetchParams.builder().externalPlanId("external_plan_id").build()
             )
 
-        val planModel = planModelFuture.get()
-        planModel.validate()
+        val plan = planFuture.get()
+        plan.validate()
     }
 }

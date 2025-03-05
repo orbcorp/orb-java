@@ -21,7 +21,7 @@ class InvoiceLineItemServiceAsyncTest {
                 .build()
         val invoiceLineItemServiceAsync = client.invoiceLineItems()
 
-        val invoiceLineItemModelFuture =
+        val invoiceLineItemFuture =
             invoiceLineItemServiceAsync.create(
                 InvoiceLineItemCreateParams.builder()
                     .amount("12.00")
@@ -33,7 +33,7 @@ class InvoiceLineItemServiceAsyncTest {
                     .build()
             )
 
-        val invoiceLineItemModel = invoiceLineItemModelFuture.get()
-        invoiceLineItemModel.validate()
+        val invoiceLineItem = invoiceLineItemFuture.get()
+        invoiceLineItem.validate()
     }
 }

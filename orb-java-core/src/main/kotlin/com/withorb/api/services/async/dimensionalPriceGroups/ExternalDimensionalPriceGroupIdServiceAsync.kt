@@ -7,8 +7,8 @@ package com.withorb.api.services.async.dimensionalPriceGroups
 import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
+import com.withorb.api.models.DimensionalPriceGroup
 import com.withorb.api.models.DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams
-import com.withorb.api.models.DimensionalPriceGroupModel
 import java.util.concurrent.CompletableFuture
 
 interface ExternalDimensionalPriceGroupIdServiceAsync {
@@ -23,7 +23,7 @@ interface ExternalDimensionalPriceGroupIdServiceAsync {
     fun retrieve(
         params: DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<DimensionalPriceGroupModel>
+    ): CompletableFuture<DimensionalPriceGroup>
 
     /**
      * A view of [ExternalDimensionalPriceGroupIdServiceAsync] that provides access to raw HTTP
@@ -41,6 +41,6 @@ interface ExternalDimensionalPriceGroupIdServiceAsync {
         fun retrieve(
             params: DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroupModel>>
+        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>>
     }
 }

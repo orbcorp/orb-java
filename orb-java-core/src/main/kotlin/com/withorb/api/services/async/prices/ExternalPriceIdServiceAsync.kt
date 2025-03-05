@@ -7,9 +7,9 @@ package com.withorb.api.services.async.prices
 import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
+import com.withorb.api.models.Price
 import com.withorb.api.models.PriceExternalPriceIdFetchParams
 import com.withorb.api.models.PriceExternalPriceIdUpdateParams
-import com.withorb.api.models.PriceModel
 import java.util.concurrent.CompletableFuture
 
 interface ExternalPriceIdServiceAsync {
@@ -27,7 +27,7 @@ interface ExternalPriceIdServiceAsync {
     fun update(
         params: PriceExternalPriceIdUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<PriceModel>
+    ): CompletableFuture<Price>
 
     /**
      * This endpoint returns a price given an external price id. See the
@@ -38,7 +38,7 @@ interface ExternalPriceIdServiceAsync {
     fun fetch(
         params: PriceExternalPriceIdFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<PriceModel>
+    ): CompletableFuture<Price>
 
     /**
      * A view of [ExternalPriceIdServiceAsync] that provides access to raw HTTP responses for each
@@ -55,7 +55,7 @@ interface ExternalPriceIdServiceAsync {
         fun update(
             params: PriceExternalPriceIdUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<PriceModel>>
+        ): CompletableFuture<HttpResponseFor<Price>>
 
         /**
          * Returns a raw HTTP response for `get /prices/external_price_id/{external_price_id}`, but
@@ -66,6 +66,6 @@ interface ExternalPriceIdServiceAsync {
         fun fetch(
             params: PriceExternalPriceIdFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<PriceModel>>
+        ): CompletableFuture<HttpResponseFor<Price>>
     }
 }

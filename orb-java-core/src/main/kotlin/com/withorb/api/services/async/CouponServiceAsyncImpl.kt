@@ -15,12 +15,12 @@ import com.withorb.api.core.http.json
 import com.withorb.api.core.http.parseable
 import com.withorb.api.core.prepareAsync
 import com.withorb.api.errors.OrbError
+import com.withorb.api.models.Coupon
 import com.withorb.api.models.CouponArchiveParams
 import com.withorb.api.models.CouponCreateParams
 import com.withorb.api.models.CouponFetchParams
 import com.withorb.api.models.CouponListPageAsync
 import com.withorb.api.models.CouponListParams
-import com.withorb.api.models.CouponModel
 import com.withorb.api.services.async.coupons.SubscriptionServiceAsync
 import com.withorb.api.services.async.coupons.SubscriptionServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
@@ -43,7 +43,7 @@ class CouponServiceAsyncImpl internal constructor(private val clientOptions: Cli
     override fun create(
         params: CouponCreateParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<CouponModel> =
+    ): CompletableFuture<Coupon> =
         // post /coupons
         withRawResponse().create(params, requestOptions).thenApply { it.parse() }
 
@@ -57,14 +57,14 @@ class CouponServiceAsyncImpl internal constructor(private val clientOptions: Cli
     override fun archive(
         params: CouponArchiveParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<CouponModel> =
+    ): CompletableFuture<Coupon> =
         // post /coupons/{coupon_id}/archive
         withRawResponse().archive(params, requestOptions).thenApply { it.parse() }
 
     override fun fetch(
         params: CouponFetchParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<CouponModel> =
+    ): CompletableFuture<Coupon> =
         // get /coupons/{coupon_id}
         withRawResponse().fetch(params, requestOptions).thenApply { it.parse() }
 
@@ -79,13 +79,13 @@ class CouponServiceAsyncImpl internal constructor(private val clientOptions: Cli
 
         override fun subscriptions(): SubscriptionServiceAsync.WithRawResponse = subscriptions
 
-        private val createHandler: Handler<CouponModel> =
-            jsonHandler<CouponModel>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val createHandler: Handler<Coupon> =
+            jsonHandler<Coupon>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun create(
             params: CouponCreateParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<CouponModel>> {
+        ): CompletableFuture<HttpResponseFor<Coupon>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -146,13 +146,13 @@ class CouponServiceAsyncImpl internal constructor(private val clientOptions: Cli
                 }
         }
 
-        private val archiveHandler: Handler<CouponModel> =
-            jsonHandler<CouponModel>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val archiveHandler: Handler<Coupon> =
+            jsonHandler<Coupon>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun archive(
             params: CouponArchiveParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<CouponModel>> {
+        ): CompletableFuture<HttpResponseFor<Coupon>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -176,13 +176,13 @@ class CouponServiceAsyncImpl internal constructor(private val clientOptions: Cli
                 }
         }
 
-        private val fetchHandler: Handler<CouponModel> =
-            jsonHandler<CouponModel>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val fetchHandler: Handler<Coupon> =
+            jsonHandler<Coupon>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun fetch(
             params: CouponFetchParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<CouponModel>> {
+        ): CompletableFuture<HttpResponseFor<Coupon>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)

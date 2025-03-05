@@ -9,14 +9,15 @@ import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponse
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.CustomerCreditTopUpCreateByExternalIdParams
+import com.withorb.api.models.CustomerCreditTopUpCreateByExternalIdResponse
 import com.withorb.api.models.CustomerCreditTopUpCreateParams
+import com.withorb.api.models.CustomerCreditTopUpCreateResponse
 import com.withorb.api.models.CustomerCreditTopUpDeleteByExternalIdParams
 import com.withorb.api.models.CustomerCreditTopUpDeleteParams
 import com.withorb.api.models.CustomerCreditTopUpListByExternalIdPageAsync
 import com.withorb.api.models.CustomerCreditTopUpListByExternalIdParams
 import com.withorb.api.models.CustomerCreditTopUpListPageAsync
 import com.withorb.api.models.CustomerCreditTopUpListParams
-import com.withorb.api.models.TopUpModel
 import java.util.concurrent.CompletableFuture
 
 interface TopUpServiceAsync {
@@ -38,7 +39,7 @@ interface TopUpServiceAsync {
     fun create(
         params: CustomerCreditTopUpCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<TopUpModel>
+    ): CompletableFuture<CustomerCreditTopUpCreateResponse>
 
     /** List top-ups */
     @JvmOverloads
@@ -69,7 +70,7 @@ interface TopUpServiceAsync {
     fun createByExternalId(
         params: CustomerCreditTopUpCreateByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<TopUpModel>
+    ): CompletableFuture<CustomerCreditTopUpCreateByExternalIdResponse>
 
     /**
      * This deactivates the top-up and voids any invoices associated with pending credit blocks
@@ -100,7 +101,7 @@ interface TopUpServiceAsync {
         fun create(
             params: CustomerCreditTopUpCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<TopUpModel>>
+        ): CompletableFuture<HttpResponseFor<CustomerCreditTopUpCreateResponse>>
 
         /**
          * Returns a raw HTTP response for `get /customers/{customer_id}/credits/top_ups`, but is
@@ -135,7 +136,7 @@ interface TopUpServiceAsync {
         fun createByExternalId(
             params: CustomerCreditTopUpCreateByExternalIdParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<TopUpModel>>
+        ): CompletableFuture<HttpResponseFor<CustomerCreditTopUpCreateByExternalIdResponse>>
 
         /**
          * Returns a raw HTTP response for `delete
