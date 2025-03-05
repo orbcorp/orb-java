@@ -7,7 +7,6 @@ package com.withorb.api.services.async
 import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
-import com.withorb.api.models.Alert
 import com.withorb.api.models.AlertCreateForCustomerParams
 import com.withorb.api.models.AlertCreateForExternalCustomerParams
 import com.withorb.api.models.AlertCreateForSubscriptionParams
@@ -15,6 +14,7 @@ import com.withorb.api.models.AlertDisableParams
 import com.withorb.api.models.AlertEnableParams
 import com.withorb.api.models.AlertListPageAsync
 import com.withorb.api.models.AlertListParams
+import com.withorb.api.models.AlertModel
 import com.withorb.api.models.AlertRetrieveParams
 import com.withorb.api.models.AlertUpdateParams
 import java.util.concurrent.CompletableFuture
@@ -31,14 +31,14 @@ interface AlertServiceAsync {
     fun retrieve(
         params: AlertRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Alert>
+    ): CompletableFuture<AlertModel>
 
     /** This endpoint updates the thresholds of an alert. */
     @JvmOverloads
     fun update(
         params: AlertUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Alert>
+    ): CompletableFuture<AlertModel>
 
     /**
      * This endpoint returns a list of alerts within Orb.
@@ -83,7 +83,7 @@ interface AlertServiceAsync {
     fun createForCustomer(
         params: AlertCreateForCustomerParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Alert>
+    ): CompletableFuture<AlertModel>
 
     /**
      * This endpoint creates a new alert to monitor a customer's credit balance. There are three
@@ -97,7 +97,7 @@ interface AlertServiceAsync {
     fun createForExternalCustomer(
         params: AlertCreateForExternalCustomerParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Alert>
+    ): CompletableFuture<AlertModel>
 
     /**
      * This endpoint is used to create alerts at the subscription level.
@@ -115,7 +115,7 @@ interface AlertServiceAsync {
     fun createForSubscription(
         params: AlertCreateForSubscriptionParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Alert>
+    ): CompletableFuture<AlertModel>
 
     /**
      * This endpoint allows you to disable an alert. To disable a plan-level alert for a specific
@@ -126,7 +126,7 @@ interface AlertServiceAsync {
     fun disable(
         params: AlertDisableParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Alert>
+    ): CompletableFuture<AlertModel>
 
     /**
      * This endpoint allows you to enable an alert. To enable a plan-level alert for a specific
@@ -137,7 +137,7 @@ interface AlertServiceAsync {
     fun enable(
         params: AlertEnableParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Alert>
+    ): CompletableFuture<AlertModel>
 
     /** A view of [AlertServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -151,7 +151,7 @@ interface AlertServiceAsync {
         fun retrieve(
             params: AlertRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<Alert>>
+        ): CompletableFuture<HttpResponseFor<AlertModel>>
 
         /**
          * Returns a raw HTTP response for `put /alerts/{alert_configuration_id}`, but is otherwise
@@ -162,7 +162,7 @@ interface AlertServiceAsync {
         fun update(
             params: AlertUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<Alert>>
+        ): CompletableFuture<HttpResponseFor<AlertModel>>
 
         /**
          * Returns a raw HTTP response for `get /alerts`, but is otherwise the same as
@@ -194,7 +194,7 @@ interface AlertServiceAsync {
         fun createForCustomer(
             params: AlertCreateForCustomerParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<Alert>>
+        ): CompletableFuture<HttpResponseFor<AlertModel>>
 
         /**
          * Returns a raw HTTP response for `post
@@ -206,7 +206,7 @@ interface AlertServiceAsync {
         fun createForExternalCustomer(
             params: AlertCreateForExternalCustomerParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<Alert>>
+        ): CompletableFuture<HttpResponseFor<AlertModel>>
 
         /**
          * Returns a raw HTTP response for `post /alerts/subscription_id/{subscription_id}`, but is
@@ -217,7 +217,7 @@ interface AlertServiceAsync {
         fun createForSubscription(
             params: AlertCreateForSubscriptionParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<Alert>>
+        ): CompletableFuture<HttpResponseFor<AlertModel>>
 
         /**
          * Returns a raw HTTP response for `post /alerts/{alert_configuration_id}/disable`, but is
@@ -228,7 +228,7 @@ interface AlertServiceAsync {
         fun disable(
             params: AlertDisableParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<Alert>>
+        ): CompletableFuture<HttpResponseFor<AlertModel>>
 
         /**
          * Returns a raw HTTP response for `post /alerts/{alert_configuration_id}/enable`, but is
@@ -239,6 +239,6 @@ interface AlertServiceAsync {
         fun enable(
             params: AlertEnableParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<Alert>>
+        ): CompletableFuture<HttpResponseFor<AlertModel>>
     }
 }

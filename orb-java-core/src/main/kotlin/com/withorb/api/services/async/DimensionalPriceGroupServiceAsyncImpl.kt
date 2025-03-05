@@ -15,10 +15,10 @@ import com.withorb.api.core.http.json
 import com.withorb.api.core.http.parseable
 import com.withorb.api.core.prepareAsync
 import com.withorb.api.errors.OrbError
-import com.withorb.api.models.DimensionalPriceGroup
 import com.withorb.api.models.DimensionalPriceGroupCreateParams
 import com.withorb.api.models.DimensionalPriceGroupListPageAsync
 import com.withorb.api.models.DimensionalPriceGroupListParams
+import com.withorb.api.models.DimensionalPriceGroupModel
 import com.withorb.api.models.DimensionalPriceGroupRetrieveParams
 import com.withorb.api.services.async.dimensionalPriceGroups.ExternalDimensionalPriceGroupIdServiceAsync
 import com.withorb.api.services.async.dimensionalPriceGroups.ExternalDimensionalPriceGroupIdServiceAsyncImpl
@@ -45,14 +45,14 @@ internal constructor(private val clientOptions: ClientOptions) : DimensionalPric
     override fun create(
         params: DimensionalPriceGroupCreateParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<DimensionalPriceGroup> =
+    ): CompletableFuture<DimensionalPriceGroupModel> =
         // post /dimensional_price_groups
         withRawResponse().create(params, requestOptions).thenApply { it.parse() }
 
     override fun retrieve(
         params: DimensionalPriceGroupRetrieveParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<DimensionalPriceGroup> =
+    ): CompletableFuture<DimensionalPriceGroupModel> =
         // get /dimensional_price_groups/{dimensional_price_group_id}
         withRawResponse().retrieve(params, requestOptions).thenApply { it.parse() }
 
@@ -77,14 +77,14 @@ internal constructor(private val clientOptions: ClientOptions) : DimensionalPric
             ExternalDimensionalPriceGroupIdServiceAsync.WithRawResponse =
             externalDimensionalPriceGroupId
 
-        private val createHandler: Handler<DimensionalPriceGroup> =
-            jsonHandler<DimensionalPriceGroup>(clientOptions.jsonMapper)
+        private val createHandler: Handler<DimensionalPriceGroupModel> =
+            jsonHandler<DimensionalPriceGroupModel>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun create(
             params: DimensionalPriceGroupCreateParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> {
+        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroupModel>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -108,14 +108,14 @@ internal constructor(private val clientOptions: ClientOptions) : DimensionalPric
                 }
         }
 
-        private val retrieveHandler: Handler<DimensionalPriceGroup> =
-            jsonHandler<DimensionalPriceGroup>(clientOptions.jsonMapper)
+        private val retrieveHandler: Handler<DimensionalPriceGroupModel> =
+            jsonHandler<DimensionalPriceGroupModel>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun retrieve(
             params: DimensionalPriceGroupRetrieveParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> {
+        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroupModel>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)

@@ -4,6 +4,7 @@ package com.withorb.api.services.async.customers.credits
 
 import com.withorb.api.TestServerExtension
 import com.withorb.api.client.okhttp.OrbOkHttpClientAsync
+import com.withorb.api.models.AddCreditTopUpRequest
 import com.withorb.api.models.CustomerCreditTopUpCreateByExternalIdParams
 import com.withorb.api.models.CustomerCreditTopUpCreateParams
 import com.withorb.api.models.CustomerCreditTopUpDeleteByExternalIdParams
@@ -26,30 +27,34 @@ class TopUpServiceAsyncTest {
                 .build()
         val topUpServiceAsync = client.customers().credits().topUps()
 
-        val topUpFuture =
+        val topUpModelFuture =
             topUpServiceAsync.create(
                 CustomerCreditTopUpCreateParams.builder()
                     .customerId("customer_id")
-                    .amount("amount")
-                    .currency("currency")
-                    .invoiceSettings(
-                        CustomerCreditTopUpCreateParams.InvoiceSettings.builder()
-                            .autoCollection(true)
-                            .netTerms(0L)
-                            .memo("memo")
-                            .requireSuccessfulPayment(true)
+                    .addCreditTopUpRequest(
+                        AddCreditTopUpRequest.builder()
+                            .amount("amount")
+                            .currency("currency")
+                            .invoiceSettings(
+                                AddCreditTopUpRequest.InvoiceSettings.builder()
+                                    .autoCollection(true)
+                                    .netTerms(0L)
+                                    .memo("memo")
+                                    .requireSuccessfulPayment(true)
+                                    .build()
+                            )
+                            .perUnitCostBasis("per_unit_cost_basis")
+                            .threshold("threshold")
+                            .activeFrom(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .expiresAfter(0L)
+                            .expiresAfterUnit(AddCreditTopUpRequest.ExpiresAfterUnit.DAY)
                             .build()
                     )
-                    .perUnitCostBasis("per_unit_cost_basis")
-                    .threshold("threshold")
-                    .activeFrom(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .expiresAfter(0L)
-                    .expiresAfterUnit(CustomerCreditTopUpCreateParams.ExpiresAfterUnit.DAY)
                     .build()
             )
 
-        val topUp = topUpFuture.get()
-        topUp.validate()
+        val topUpModel = topUpModelFuture.get()
+        topUpModel.validate()
     }
 
     @Test
@@ -99,32 +104,34 @@ class TopUpServiceAsyncTest {
                 .build()
         val topUpServiceAsync = client.customers().credits().topUps()
 
-        val responseFuture =
+        val topUpModelFuture =
             topUpServiceAsync.createByExternalId(
                 CustomerCreditTopUpCreateByExternalIdParams.builder()
                     .externalCustomerId("external_customer_id")
-                    .amount("amount")
-                    .currency("currency")
-                    .invoiceSettings(
-                        CustomerCreditTopUpCreateByExternalIdParams.InvoiceSettings.builder()
-                            .autoCollection(true)
-                            .netTerms(0L)
-                            .memo("memo")
-                            .requireSuccessfulPayment(true)
+                    .addCreditTopUpRequest(
+                        AddCreditTopUpRequest.builder()
+                            .amount("amount")
+                            .currency("currency")
+                            .invoiceSettings(
+                                AddCreditTopUpRequest.InvoiceSettings.builder()
+                                    .autoCollection(true)
+                                    .netTerms(0L)
+                                    .memo("memo")
+                                    .requireSuccessfulPayment(true)
+                                    .build()
+                            )
+                            .perUnitCostBasis("per_unit_cost_basis")
+                            .threshold("threshold")
+                            .activeFrom(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .expiresAfter(0L)
+                            .expiresAfterUnit(AddCreditTopUpRequest.ExpiresAfterUnit.DAY)
                             .build()
-                    )
-                    .perUnitCostBasis("per_unit_cost_basis")
-                    .threshold("threshold")
-                    .activeFrom(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .expiresAfter(0L)
-                    .expiresAfterUnit(
-                        CustomerCreditTopUpCreateByExternalIdParams.ExpiresAfterUnit.DAY
                     )
                     .build()
             )
 
-        val response = responseFuture.get()
-        response.validate()
+        val topUpModel = topUpModelFuture.get()
+        topUpModel.validate()
     }
 
     @Test

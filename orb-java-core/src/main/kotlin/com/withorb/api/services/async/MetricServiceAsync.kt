@@ -7,7 +7,7 @@ package com.withorb.api.services.async
 import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
-import com.withorb.api.models.BillableMetric
+import com.withorb.api.models.BillableMetricModel
 import com.withorb.api.models.MetricCreateParams
 import com.withorb.api.models.MetricFetchParams
 import com.withorb.api.models.MetricListPageAsync
@@ -31,7 +31,7 @@ interface MetricServiceAsync {
     fun create(
         params: MetricCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<BillableMetric>
+    ): CompletableFuture<BillableMetricModel>
 
     /**
      * This endpoint allows you to update the `metadata` property on a metric. If you pass `null`
@@ -41,7 +41,7 @@ interface MetricServiceAsync {
     fun update(
         params: MetricUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<BillableMetric>
+    ): CompletableFuture<BillableMetricModel>
 
     /**
      * This endpoint is used to fetch [metric](/core-concepts##metric) details given a metric
@@ -70,7 +70,7 @@ interface MetricServiceAsync {
     fun fetch(
         params: MetricFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<BillableMetric>
+    ): CompletableFuture<BillableMetricModel>
 
     /**
      * A view of [MetricServiceAsync] that provides access to raw HTTP responses for each method.
@@ -86,7 +86,7 @@ interface MetricServiceAsync {
         fun create(
             params: MetricCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<BillableMetric>>
+        ): CompletableFuture<HttpResponseFor<BillableMetricModel>>
 
         /**
          * Returns a raw HTTP response for `put /metrics/{metric_id}`, but is otherwise the same as
@@ -97,7 +97,7 @@ interface MetricServiceAsync {
         fun update(
             params: MetricUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<BillableMetric>>
+        ): CompletableFuture<HttpResponseFor<BillableMetricModel>>
 
         /**
          * Returns a raw HTTP response for `get /metrics`, but is otherwise the same as
@@ -129,6 +129,6 @@ interface MetricServiceAsync {
         fun fetch(
             params: MetricFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<BillableMetric>>
+        ): CompletableFuture<HttpResponseFor<BillableMetricModel>>
     }
 }
