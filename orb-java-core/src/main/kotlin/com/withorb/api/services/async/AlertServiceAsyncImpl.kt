@@ -15,6 +15,7 @@ import com.withorb.api.core.http.json
 import com.withorb.api.core.http.parseable
 import com.withorb.api.core.prepareAsync
 import com.withorb.api.errors.OrbError
+import com.withorb.api.models.Alert
 import com.withorb.api.models.AlertCreateForCustomerParams
 import com.withorb.api.models.AlertCreateForExternalCustomerParams
 import com.withorb.api.models.AlertCreateForSubscriptionParams
@@ -22,7 +23,6 @@ import com.withorb.api.models.AlertDisableParams
 import com.withorb.api.models.AlertEnableParams
 import com.withorb.api.models.AlertListPageAsync
 import com.withorb.api.models.AlertListParams
-import com.withorb.api.models.AlertModel
 import com.withorb.api.models.AlertRetrieveParams
 import com.withorb.api.models.AlertUpdateParams
 import java.util.concurrent.CompletableFuture
@@ -39,14 +39,14 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
     override fun retrieve(
         params: AlertRetrieveParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<AlertModel> =
+    ): CompletableFuture<Alert> =
         // get /alerts/{alert_id}
         withRawResponse().retrieve(params, requestOptions).thenApply { it.parse() }
 
     override fun update(
         params: AlertUpdateParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<AlertModel> =
+    ): CompletableFuture<Alert> =
         // put /alerts/{alert_configuration_id}
         withRawResponse().update(params, requestOptions).thenApply { it.parse() }
 
@@ -60,35 +60,35 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
     override fun createForCustomer(
         params: AlertCreateForCustomerParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<AlertModel> =
+    ): CompletableFuture<Alert> =
         // post /alerts/customer_id/{customer_id}
         withRawResponse().createForCustomer(params, requestOptions).thenApply { it.parse() }
 
     override fun createForExternalCustomer(
         params: AlertCreateForExternalCustomerParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<AlertModel> =
+    ): CompletableFuture<Alert> =
         // post /alerts/external_customer_id/{external_customer_id}
         withRawResponse().createForExternalCustomer(params, requestOptions).thenApply { it.parse() }
 
     override fun createForSubscription(
         params: AlertCreateForSubscriptionParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<AlertModel> =
+    ): CompletableFuture<Alert> =
         // post /alerts/subscription_id/{subscription_id}
         withRawResponse().createForSubscription(params, requestOptions).thenApply { it.parse() }
 
     override fun disable(
         params: AlertDisableParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<AlertModel> =
+    ): CompletableFuture<Alert> =
         // post /alerts/{alert_configuration_id}/disable
         withRawResponse().disable(params, requestOptions).thenApply { it.parse() }
 
     override fun enable(
         params: AlertEnableParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<AlertModel> =
+    ): CompletableFuture<Alert> =
         // post /alerts/{alert_configuration_id}/enable
         withRawResponse().enable(params, requestOptions).thenApply { it.parse() }
 
@@ -97,13 +97,13 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
 
         private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
-        private val retrieveHandler: Handler<AlertModel> =
-            jsonHandler<AlertModel>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val retrieveHandler: Handler<Alert> =
+            jsonHandler<Alert>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun retrieve(
             params: AlertRetrieveParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<AlertModel>> {
+        ): CompletableFuture<HttpResponseFor<Alert>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -126,13 +126,13 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 }
         }
 
-        private val updateHandler: Handler<AlertModel> =
-            jsonHandler<AlertModel>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val updateHandler: Handler<Alert> =
+            jsonHandler<Alert>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun update(
             params: AlertUpdateParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<AlertModel>> {
+        ): CompletableFuture<HttpResponseFor<Alert>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -193,13 +193,13 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 }
         }
 
-        private val createForCustomerHandler: Handler<AlertModel> =
-            jsonHandler<AlertModel>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val createForCustomerHandler: Handler<Alert> =
+            jsonHandler<Alert>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun createForCustomer(
             params: AlertCreateForCustomerParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<AlertModel>> {
+        ): CompletableFuture<HttpResponseFor<Alert>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -223,13 +223,13 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 }
         }
 
-        private val createForExternalCustomerHandler: Handler<AlertModel> =
-            jsonHandler<AlertModel>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val createForExternalCustomerHandler: Handler<Alert> =
+            jsonHandler<Alert>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun createForExternalCustomer(
             params: AlertCreateForExternalCustomerParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<AlertModel>> {
+        ): CompletableFuture<HttpResponseFor<Alert>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -253,13 +253,13 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 }
         }
 
-        private val createForSubscriptionHandler: Handler<AlertModel> =
-            jsonHandler<AlertModel>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val createForSubscriptionHandler: Handler<Alert> =
+            jsonHandler<Alert>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun createForSubscription(
             params: AlertCreateForSubscriptionParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<AlertModel>> {
+        ): CompletableFuture<HttpResponseFor<Alert>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -283,13 +283,13 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 }
         }
 
-        private val disableHandler: Handler<AlertModel> =
-            jsonHandler<AlertModel>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val disableHandler: Handler<Alert> =
+            jsonHandler<Alert>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun disable(
             params: AlertDisableParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<AlertModel>> {
+        ): CompletableFuture<HttpResponseFor<Alert>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -313,13 +313,13 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 }
         }
 
-        private val enableHandler: Handler<AlertModel> =
-            jsonHandler<AlertModel>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val enableHandler: Handler<Alert> =
+            jsonHandler<Alert>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun enable(
             params: AlertEnableParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<AlertModel>> {
+        ): CompletableFuture<HttpResponseFor<Alert>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)

@@ -7,9 +7,9 @@ package com.withorb.api.services.blocking.plans
 import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
+import com.withorb.api.models.Plan
 import com.withorb.api.models.PlanExternalPlanIdFetchParams
 import com.withorb.api.models.PlanExternalPlanIdUpdateParams
-import com.withorb.api.models.PlanModel
 
 interface ExternalPlanIdService {
 
@@ -28,7 +28,7 @@ interface ExternalPlanIdService {
     fun update(
         params: PlanExternalPlanIdUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): PlanModel
+    ): Plan
 
     /**
      * This endpoint is used to fetch [plan](/core-concepts##plan-and-price) details given an
@@ -51,7 +51,7 @@ interface ExternalPlanIdService {
     fun fetch(
         params: PlanExternalPlanIdFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): PlanModel
+    ): Plan
 
     /**
      * A view of [ExternalPlanIdService] that provides access to raw HTTP responses for each method.
@@ -67,7 +67,7 @@ interface ExternalPlanIdService {
         fun update(
             params: PlanExternalPlanIdUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<PlanModel>
+        ): HttpResponseFor<Plan>
 
         /**
          * Returns a raw HTTP response for `get /plans/external_plan_id/{external_plan_id}`, but is
@@ -78,6 +78,6 @@ interface ExternalPlanIdService {
         fun fetch(
             params: PlanExternalPlanIdFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<PlanModel>
+        ): HttpResponseFor<Plan>
     }
 }

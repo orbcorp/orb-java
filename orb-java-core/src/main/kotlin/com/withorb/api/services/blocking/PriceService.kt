@@ -7,13 +7,13 @@ package com.withorb.api.services.blocking
 import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
+import com.withorb.api.models.Price
 import com.withorb.api.models.PriceCreateParams
 import com.withorb.api.models.PriceEvaluateParams
 import com.withorb.api.models.PriceEvaluateResponse
 import com.withorb.api.models.PriceFetchParams
 import com.withorb.api.models.PriceListPage
 import com.withorb.api.models.PriceListParams
-import com.withorb.api.models.PriceModel
 import com.withorb.api.models.PriceUpdateParams
 import com.withorb.api.services.blocking.prices.ExternalPriceIdService
 
@@ -42,7 +42,7 @@ interface PriceService {
     fun create(
         params: PriceCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): PriceModel
+    ): Price
 
     /**
      * This endpoint allows you to update the `metadata` property on a price. If you pass null for
@@ -52,7 +52,7 @@ interface PriceService {
     fun update(
         params: PriceUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): PriceModel
+    ): Price
 
     /**
      * This endpoint is used to list all add-on prices created using the
@@ -101,7 +101,7 @@ interface PriceService {
     fun fetch(
         params: PriceFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): PriceModel
+    ): Price
 
     /** A view of [PriceService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -117,7 +117,7 @@ interface PriceService {
         fun create(
             params: PriceCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<PriceModel>
+        ): HttpResponseFor<Price>
 
         /**
          * Returns a raw HTTP response for `put /prices/{price_id}`, but is otherwise the same as
@@ -128,7 +128,7 @@ interface PriceService {
         fun update(
             params: PriceUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<PriceModel>
+        ): HttpResponseFor<Price>
 
         /**
          * Returns a raw HTTP response for `get /prices`, but is otherwise the same as
@@ -169,6 +169,6 @@ interface PriceService {
         fun fetch(
             params: PriceFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<PriceModel>
+        ): HttpResponseFor<Price>
     }
 }

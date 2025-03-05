@@ -7,13 +7,16 @@ package com.withorb.api.services.blocking.events
 import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
-import com.withorb.api.models.BackfillModel
 import com.withorb.api.models.EventBackfillCloseParams
+import com.withorb.api.models.EventBackfillCloseResponse
 import com.withorb.api.models.EventBackfillCreateParams
+import com.withorb.api.models.EventBackfillCreateResponse
 import com.withorb.api.models.EventBackfillFetchParams
+import com.withorb.api.models.EventBackfillFetchResponse
 import com.withorb.api.models.EventBackfillListPage
 import com.withorb.api.models.EventBackfillListParams
 import com.withorb.api.models.EventBackfillRevertParams
+import com.withorb.api.models.EventBackfillRevertResponse
 
 interface BackfillService {
 
@@ -56,7 +59,7 @@ interface BackfillService {
     fun create(
         params: EventBackfillCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): BackfillModel
+    ): EventBackfillCreateResponse
 
     /**
      * This endpoint returns a list of all backfills in a list format.
@@ -92,14 +95,14 @@ interface BackfillService {
     fun close(
         params: EventBackfillCloseParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): BackfillModel
+    ): EventBackfillCloseResponse
 
     /** This endpoint is used to fetch a backfill given an identifier. */
     @JvmOverloads
     fun fetch(
         params: EventBackfillFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): BackfillModel
+    ): EventBackfillFetchResponse
 
     /**
      * Reverting a backfill undoes all the effects of closing the backfill. If the backfill is
@@ -113,7 +116,7 @@ interface BackfillService {
     fun revert(
         params: EventBackfillRevertParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): BackfillModel
+    ): EventBackfillRevertResponse
 
     /** A view of [BackfillService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -127,7 +130,7 @@ interface BackfillService {
         fun create(
             params: EventBackfillCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<BackfillModel>
+        ): HttpResponseFor<EventBackfillCreateResponse>
 
         /**
          * Returns a raw HTTP response for `get /events/backfills`, but is otherwise the same as
@@ -157,7 +160,7 @@ interface BackfillService {
         fun close(
             params: EventBackfillCloseParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<BackfillModel>
+        ): HttpResponseFor<EventBackfillCloseResponse>
 
         /**
          * Returns a raw HTTP response for `get /events/backfills/{backfill_id}`, but is otherwise
@@ -168,7 +171,7 @@ interface BackfillService {
         fun fetch(
             params: EventBackfillFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<BackfillModel>
+        ): HttpResponseFor<EventBackfillFetchResponse>
 
         /**
          * Returns a raw HTTP response for `post /events/backfills/{backfill_id}/revert`, but is
@@ -179,6 +182,6 @@ interface BackfillService {
         fun revert(
             params: EventBackfillRevertParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<BackfillModel>
+        ): HttpResponseFor<EventBackfillRevertResponse>
     }
 }

@@ -7,11 +7,11 @@ package com.withorb.api.services.async
 import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
+import com.withorb.api.models.Item
 import com.withorb.api.models.ItemCreateParams
 import com.withorb.api.models.ItemFetchParams
 import com.withorb.api.models.ItemListPageAsync
 import com.withorb.api.models.ItemListParams
-import com.withorb.api.models.ItemModel
 import com.withorb.api.models.ItemUpdateParams
 import java.util.concurrent.CompletableFuture
 
@@ -27,14 +27,14 @@ interface ItemServiceAsync {
     fun create(
         params: ItemCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<ItemModel>
+    ): CompletableFuture<Item>
 
     /** This endpoint can be used to update properties on the Item. */
     @JvmOverloads
     fun update(
         params: ItemUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<ItemModel>
+    ): CompletableFuture<Item>
 
     /** This endpoint returns a list of all Items, ordered in descending order by creation time. */
     @JvmOverloads
@@ -52,7 +52,7 @@ interface ItemServiceAsync {
     fun fetch(
         params: ItemFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<ItemModel>
+    ): CompletableFuture<Item>
 
     /** A view of [ItemServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -66,7 +66,7 @@ interface ItemServiceAsync {
         fun create(
             params: ItemCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<ItemModel>>
+        ): CompletableFuture<HttpResponseFor<Item>>
 
         /**
          * Returns a raw HTTP response for `put /items/{item_id}`, but is otherwise the same as
@@ -77,7 +77,7 @@ interface ItemServiceAsync {
         fun update(
             params: ItemUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<ItemModel>>
+        ): CompletableFuture<HttpResponseFor<Item>>
 
         /**
          * Returns a raw HTTP response for `get /items`, but is otherwise the same as
@@ -109,6 +109,6 @@ interface ItemServiceAsync {
         fun fetch(
             params: ItemFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<ItemModel>>
+        ): CompletableFuture<HttpResponseFor<Item>>
     }
 }

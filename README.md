@@ -43,8 +43,8 @@ This library requires Java 8 or later.
 ```java
 import com.withorb.api.client.OrbClient;
 import com.withorb.api.client.okhttp.OrbOkHttpClient;
+import com.withorb.api.models.Customer;
 import com.withorb.api.models.CustomerCreateParams;
-import com.withorb.api.models.CustomerModel;
 
 // Configures using the `ORB_API_KEY` and `ORB_WEBHOOK_SECRET` environment variables
 OrbClient client = OrbOkHttpClient.fromEnv();
@@ -53,7 +53,7 @@ CustomerCreateParams params = CustomerCreateParams.builder()
     .email("example-customer@withorb.com")
     .name("My Customer")
     .build();
-CustomerModel customerModel = client.customers().create(params);
+Customer customer = client.customers().create(params);
 ```
 
 ## Client configuration
@@ -107,7 +107,7 @@ See this table for the available options:
 
 To send a request to the Orb API, build an instance of some `Params` class and pass it to the corresponding client method. When the response is received, it will be deserialized into an instance of a Java class.
 
-For example, `client.customers().create(...)` should be called with an instance of `CustomerCreateParams`, and it will return an instance of `CustomerModel`.
+For example, `client.customers().create(...)` should be called with an instance of `CustomerCreateParams`, and it will return an instance of `Customer`.
 
 ## Immutability
 
@@ -124,8 +124,8 @@ The default client is synchronous. To switch to asynchronous execution, call the
 ```java
 import com.withorb.api.client.OrbClient;
 import com.withorb.api.client.okhttp.OrbOkHttpClient;
+import com.withorb.api.models.Customer;
 import com.withorb.api.models.CustomerCreateParams;
-import com.withorb.api.models.CustomerModel;
 import java.util.concurrent.CompletableFuture;
 
 // Configures using the `ORB_API_KEY` and `ORB_WEBHOOK_SECRET` environment variables
@@ -135,7 +135,7 @@ CustomerCreateParams params = CustomerCreateParams.builder()
     .email("example-customer@withorb.com")
     .name("My Customer")
     .build();
-CompletableFuture<CustomerModel> customerModel = client.async().customers().create(params);
+CompletableFuture<Customer> customer = client.async().customers().create(params);
 ```
 
 Or create an asynchronous client from the beginning:
@@ -143,8 +143,8 @@ Or create an asynchronous client from the beginning:
 ```java
 import com.withorb.api.client.OrbClientAsync;
 import com.withorb.api.client.okhttp.OrbOkHttpClientAsync;
+import com.withorb.api.models.Customer;
 import com.withorb.api.models.CustomerCreateParams;
-import com.withorb.api.models.CustomerModel;
 import java.util.concurrent.CompletableFuture;
 
 // Configures using the `ORB_API_KEY` and `ORB_WEBHOOK_SECRET` environment variables
@@ -154,7 +154,7 @@ CustomerCreateParams params = CustomerCreateParams.builder()
     .email("example-customer@withorb.com")
     .name("My Customer")
     .build();
-CompletableFuture<CustomerModel> customerModel = client.customers().create(params);
+CompletableFuture<Customer> customer = client.customers().create(params);
 ```
 
 The asynchronous client supports the same options as the synchronous one, except most methods return `CompletableFuture`s.
@@ -168,25 +168,25 @@ To access this data, prefix any HTTP method call on a client or service with `wi
 ```java
 import com.withorb.api.core.http.Headers;
 import com.withorb.api.core.http.HttpResponseFor;
+import com.withorb.api.models.Customer;
 import com.withorb.api.models.CustomerCreateParams;
-import com.withorb.api.models.CustomerModel;
 
 CustomerCreateParams params = CustomerCreateParams.builder()
     .email("example-customer@withorb.com")
     .name("My Customer")
     .build();
-HttpResponseFor<CustomerModel> customerModel = client.customers().withRawResponse().create(params);
+HttpResponseFor<Customer> customer = client.customers().withRawResponse().create(params);
 
-int statusCode = customerModel.statusCode();
-Headers headers = customerModel.headers();
+int statusCode = customer.statusCode();
+Headers headers = customer.headers();
 ```
 
 You can still deserialize the response into an instance of a Java class if needed:
 
 ```java
-import com.withorb.api.models.CustomerModel;
+import com.withorb.api.models.Customer;
 
-CustomerModel parsedCustomerModel = customerModel.parse();
+Customer parsedCustomer = customer.parse();
 ```
 
 ## Error handling
@@ -223,12 +223,12 @@ To iterate through all results across all pages, you can use `autoPager`, which 
 ### Synchronous
 
 ```java
+import com.withorb.api.models.Coupon;
 import com.withorb.api.models.CouponListPage;
-import com.withorb.api.models.CouponModel;
 
 // As an Iterable:
 CouponListPage page = client.coupons().list(params);
-for (CouponModel coupon : page.autoPager()) {
+for (Coupon coupon : page.autoPager()) {
     System.out.println(coupon);
 };
 
@@ -251,12 +251,12 @@ asyncClient.coupons().list(params).autoPager()
 If none of the above helpers meet your needs, you can also manually request pages one-by-one. A page of results has a `data()` method to fetch the list of objects, as well as top-level `response` and other methods to fetch top-level data about the page. It also has methods `hasNextPage`, `getNextPage`, and `getNextPageParams` methods to help with pagination.
 
 ```java
+import com.withorb.api.models.Coupon;
 import com.withorb.api.models.CouponListPage;
-import com.withorb.api.models.CouponModel;
 
 CouponListPage page = client.coupons().list(params);
 while (page != null) {
-    for (CouponModel coupon : page.data()) {
+    for (Coupon coupon : page.data()) {
         System.out.println(coupon);
     }
 
@@ -325,10 +325,10 @@ Requests time out after 1 minute by default.
 To set a custom timeout, configure the method call using the `timeout` method:
 
 ```java
+import com.withorb.api.models.Customer;
 import com.withorb.api.models.CustomerCreateParams;
-import com.withorb.api.models.CustomerModel;
 
-CustomerModel customerModel = client.customers().create(
+Customer customer = client.customers().create(
   params, RequestOptions.builder().timeout(Duration.ofSeconds(30)).build()
 );
 ```
@@ -462,18 +462,18 @@ By default, the SDK will not throw an exception in this case. It will throw [`Or
 If you would prefer to check that the response is completely well-typed upfront, then either call `validate()`:
 
 ```java
-import com.withorb.api.models.CustomerModel;
+import com.withorb.api.models.Customer;
 
-CustomerModel customerModel = client.customers().create(params).validate();
+Customer customer = client.customers().create(params).validate();
 ```
 
 Or configure the method call to validate the response using the `responseValidation` method:
 
 ```java
+import com.withorb.api.models.Customer;
 import com.withorb.api.models.CustomerCreateParams;
-import com.withorb.api.models.CustomerModel;
 
-CustomerModel customerModel = client.customers().create(
+Customer customer = client.customers().create(
   params, RequestOptions.builder().responseValidation(true).build()
 );
 ```

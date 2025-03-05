@@ -15,9 +15,9 @@ import com.withorb.api.core.http.json
 import com.withorb.api.core.http.parseable
 import com.withorb.api.core.prepareAsync
 import com.withorb.api.errors.OrbError
+import com.withorb.api.models.Price
 import com.withorb.api.models.PriceExternalPriceIdFetchParams
 import com.withorb.api.models.PriceExternalPriceIdUpdateParams
-import com.withorb.api.models.PriceModel
 import java.util.concurrent.CompletableFuture
 
 class ExternalPriceIdServiceAsyncImpl
@@ -32,14 +32,14 @@ internal constructor(private val clientOptions: ClientOptions) : ExternalPriceId
     override fun update(
         params: PriceExternalPriceIdUpdateParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<PriceModel> =
+    ): CompletableFuture<Price> =
         // put /prices/external_price_id/{external_price_id}
         withRawResponse().update(params, requestOptions).thenApply { it.parse() }
 
     override fun fetch(
         params: PriceExternalPriceIdFetchParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<PriceModel> =
+    ): CompletableFuture<Price> =
         // get /prices/external_price_id/{external_price_id}
         withRawResponse().fetch(params, requestOptions).thenApply { it.parse() }
 
@@ -48,13 +48,13 @@ internal constructor(private val clientOptions: ClientOptions) : ExternalPriceId
 
         private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
-        private val updateHandler: Handler<PriceModel> =
-            jsonHandler<PriceModel>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val updateHandler: Handler<Price> =
+            jsonHandler<Price>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun update(
             params: PriceExternalPriceIdUpdateParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<PriceModel>> {
+        ): CompletableFuture<HttpResponseFor<Price>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -78,13 +78,13 @@ internal constructor(private val clientOptions: ClientOptions) : ExternalPriceId
                 }
         }
 
-        private val fetchHandler: Handler<PriceModel> =
-            jsonHandler<PriceModel>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val fetchHandler: Handler<Price> =
+            jsonHandler<Price>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun fetch(
             params: PriceExternalPriceIdFetchParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<PriceModel>> {
+        ): CompletableFuture<HttpResponseFor<Price>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
