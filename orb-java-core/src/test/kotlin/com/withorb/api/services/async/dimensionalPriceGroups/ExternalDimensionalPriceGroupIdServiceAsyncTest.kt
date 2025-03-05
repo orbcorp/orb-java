@@ -21,14 +21,14 @@ class ExternalDimensionalPriceGroupIdServiceAsyncTest {
         val externalDimensionalPriceGroupIdServiceAsync =
             client.dimensionalPriceGroups().externalDimensionalPriceGroupId()
 
-        val dimensionalPriceGroupFuture =
+        val dimensionalPriceGroupModelFuture =
             externalDimensionalPriceGroupIdServiceAsync.retrieve(
                 DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams.builder()
                     .externalDimensionalPriceGroupId("external_dimensional_price_group_id")
                     .build()
             )
 
-        val dimensionalPriceGroup = dimensionalPriceGroupFuture.get()
-        dimensionalPriceGroup.validate()
+        val dimensionalPriceGroupModel = dimensionalPriceGroupModelFuture.get()
+        dimensionalPriceGroupModel.validate()
     }
 }

@@ -7,16 +7,13 @@ package com.withorb.api.services.async.events
 import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
+import com.withorb.api.models.BackfillModel
 import com.withorb.api.models.EventBackfillCloseParams
-import com.withorb.api.models.EventBackfillCloseResponse
 import com.withorb.api.models.EventBackfillCreateParams
-import com.withorb.api.models.EventBackfillCreateResponse
 import com.withorb.api.models.EventBackfillFetchParams
-import com.withorb.api.models.EventBackfillFetchResponse
 import com.withorb.api.models.EventBackfillListPageAsync
 import com.withorb.api.models.EventBackfillListParams
 import com.withorb.api.models.EventBackfillRevertParams
-import com.withorb.api.models.EventBackfillRevertResponse
 import java.util.concurrent.CompletableFuture
 
 interface BackfillServiceAsync {
@@ -60,7 +57,7 @@ interface BackfillServiceAsync {
     fun create(
         params: EventBackfillCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<EventBackfillCreateResponse>
+    ): CompletableFuture<BackfillModel>
 
     /**
      * This endpoint returns a list of all backfills in a list format.
@@ -96,14 +93,14 @@ interface BackfillServiceAsync {
     fun close(
         params: EventBackfillCloseParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<EventBackfillCloseResponse>
+    ): CompletableFuture<BackfillModel>
 
     /** This endpoint is used to fetch a backfill given an identifier. */
     @JvmOverloads
     fun fetch(
         params: EventBackfillFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<EventBackfillFetchResponse>
+    ): CompletableFuture<BackfillModel>
 
     /**
      * Reverting a backfill undoes all the effects of closing the backfill. If the backfill is
@@ -117,7 +114,7 @@ interface BackfillServiceAsync {
     fun revert(
         params: EventBackfillRevertParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<EventBackfillRevertResponse>
+    ): CompletableFuture<BackfillModel>
 
     /**
      * A view of [BackfillServiceAsync] that provides access to raw HTTP responses for each method.
@@ -133,7 +130,7 @@ interface BackfillServiceAsync {
         fun create(
             params: EventBackfillCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<EventBackfillCreateResponse>>
+        ): CompletableFuture<HttpResponseFor<BackfillModel>>
 
         /**
          * Returns a raw HTTP response for `get /events/backfills`, but is otherwise the same as
@@ -165,7 +162,7 @@ interface BackfillServiceAsync {
         fun close(
             params: EventBackfillCloseParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<EventBackfillCloseResponse>>
+        ): CompletableFuture<HttpResponseFor<BackfillModel>>
 
         /**
          * Returns a raw HTTP response for `get /events/backfills/{backfill_id}`, but is otherwise
@@ -176,7 +173,7 @@ interface BackfillServiceAsync {
         fun fetch(
             params: EventBackfillFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<EventBackfillFetchResponse>>
+        ): CompletableFuture<HttpResponseFor<BackfillModel>>
 
         /**
          * Returns a raw HTTP response for `post /events/backfills/{backfill_id}/revert`, but is
@@ -187,6 +184,6 @@ interface BackfillServiceAsync {
         fun revert(
             params: EventBackfillRevertParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<EventBackfillRevertResponse>>
+        ): CompletableFuture<HttpResponseFor<BackfillModel>>
     }
 }

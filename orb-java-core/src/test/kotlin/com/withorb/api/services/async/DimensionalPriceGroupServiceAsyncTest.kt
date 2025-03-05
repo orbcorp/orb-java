@@ -22,7 +22,7 @@ class DimensionalPriceGroupServiceAsyncTest {
                 .build()
         val dimensionalPriceGroupServiceAsync = client.dimensionalPriceGroups()
 
-        val dimensionalPriceGroupFuture =
+        val dimensionalPriceGroupModelFuture =
             dimensionalPriceGroupServiceAsync.create(
                 DimensionalPriceGroupCreateParams.builder()
                     .billableMetricId("billable_metric_id")
@@ -38,8 +38,8 @@ class DimensionalPriceGroupServiceAsyncTest {
                     .build()
             )
 
-        val dimensionalPriceGroup = dimensionalPriceGroupFuture.get()
-        dimensionalPriceGroup.validate()
+        val dimensionalPriceGroupModel = dimensionalPriceGroupModelFuture.get()
+        dimensionalPriceGroupModel.validate()
     }
 
     @Test
@@ -51,15 +51,15 @@ class DimensionalPriceGroupServiceAsyncTest {
                 .build()
         val dimensionalPriceGroupServiceAsync = client.dimensionalPriceGroups()
 
-        val dimensionalPriceGroupFuture =
+        val dimensionalPriceGroupModelFuture =
             dimensionalPriceGroupServiceAsync.retrieve(
                 DimensionalPriceGroupRetrieveParams.builder()
                     .dimensionalPriceGroupId("dimensional_price_group_id")
                     .build()
             )
 
-        val dimensionalPriceGroup = dimensionalPriceGroupFuture.get()
-        dimensionalPriceGroup.validate()
+        val dimensionalPriceGroupModel = dimensionalPriceGroupModelFuture.get()
+        dimensionalPriceGroupModel.validate()
     }
 
     @Test

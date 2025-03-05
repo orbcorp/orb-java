@@ -8,13 +8,13 @@ import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponse
 import com.withorb.api.core.http.HttpResponseFor
-import com.withorb.api.models.Customer
 import com.withorb.api.models.CustomerCreateParams
 import com.withorb.api.models.CustomerDeleteParams
 import com.withorb.api.models.CustomerFetchByExternalIdParams
 import com.withorb.api.models.CustomerFetchParams
 import com.withorb.api.models.CustomerListPage
 import com.withorb.api.models.CustomerListParams
+import com.withorb.api.models.CustomerModel
 import com.withorb.api.models.CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams
 import com.withorb.api.models.CustomerSyncPaymentMethodsFromGatewayParams
 import com.withorb.api.models.CustomerUpdateByExternalIdParams
@@ -53,7 +53,7 @@ interface CustomerService {
     fun create(
         params: CustomerCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): Customer
+    ): CustomerModel
 
     /**
      * This endpoint can be used to update the `payment_provider`, `payment_provider_id`, `name`,
@@ -65,7 +65,7 @@ interface CustomerService {
     fun update(
         params: CustomerUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): Customer
+    ): CustomerModel
 
     /**
      * This endpoint returns a list of all customers for an account. The list of customers is
@@ -119,7 +119,7 @@ interface CustomerService {
     fun fetch(
         params: CustomerFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): Customer
+    ): CustomerModel
 
     /**
      * This endpoint is used to fetch customer details given an `external_customer_id` (see
@@ -132,7 +132,7 @@ interface CustomerService {
     fun fetchByExternalId(
         params: CustomerFetchByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): Customer
+    ): CustomerModel
 
     /**
      * Sync Orb's payment methods for the customer with their gateway.
@@ -171,7 +171,7 @@ interface CustomerService {
     fun updateByExternalId(
         params: CustomerUpdateByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): Customer
+    ): CustomerModel
 
     /** A view of [CustomerService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -191,7 +191,7 @@ interface CustomerService {
         fun create(
             params: CustomerCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Customer>
+        ): HttpResponseFor<CustomerModel>
 
         /**
          * Returns a raw HTTP response for `put /customers/{customer_id}`, but is otherwise the same
@@ -202,7 +202,7 @@ interface CustomerService {
         fun update(
             params: CustomerUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Customer>
+        ): HttpResponseFor<CustomerModel>
 
         /**
          * Returns a raw HTTP response for `get /customers`, but is otherwise the same as
@@ -243,7 +243,7 @@ interface CustomerService {
         fun fetch(
             params: CustomerFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Customer>
+        ): HttpResponseFor<CustomerModel>
 
         /**
          * Returns a raw HTTP response for `get
@@ -255,7 +255,7 @@ interface CustomerService {
         fun fetchByExternalId(
             params: CustomerFetchByExternalIdParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Customer>
+        ): HttpResponseFor<CustomerModel>
 
         /**
          * Returns a raw HTTP response for `post
@@ -291,6 +291,6 @@ interface CustomerService {
         fun updateByExternalId(
             params: CustomerUpdateByExternalIdParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Customer>
+        ): HttpResponseFor<CustomerModel>
     }
 }

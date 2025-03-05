@@ -3,7 +3,6 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.JsonValue
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -13,76 +12,79 @@ class CustomerUpdateParamsTest {
     fun create() {
         CustomerUpdateParams.builder()
             .customerId("customer_id")
-            .accountingSyncConfiguration(
-                CustomerUpdateParams.AccountingSyncConfiguration.builder()
-                    .addAccountingProvider(
-                        CustomerUpdateParams.AccountingSyncConfiguration.AccountingProvider
-                            .builder()
-                            .externalProviderId("external_provider_id")
-                            .providerType("provider_type")
+            .editCustomerModel(
+                EditCustomerModel.builder()
+                    .accountingSyncConfiguration(
+                        NewAccountingSyncConfigurationModel.builder()
+                            .addAccountingProvider(
+                                NewAccountingSyncConfigurationModel.AccountingProvider.builder()
+                                    .externalProviderId("external_provider_id")
+                                    .providerType("provider_type")
+                                    .build()
+                            )
+                            .excluded(true)
                             .build()
                     )
-                    .excluded(true)
-                    .build()
-            )
-            .addAdditionalEmail("string")
-            .autoCollection(true)
-            .billingAddress(
-                CustomerUpdateParams.BillingAddress.builder()
-                    .city("city")
-                    .country("country")
-                    .line1("line1")
-                    .line2("line2")
-                    .postalCode("postal_code")
-                    .state("state")
-                    .build()
-            )
-            .currency("currency")
-            .email("dev@stainless.com")
-            .emailDelivery(true)
-            .externalCustomerId("external_customer_id")
-            .hierarchy(
-                CustomerUpdateParams.Hierarchy.builder()
-                    .addChildCustomerId("string")
-                    .parentCustomerId("parent_customer_id")
-                    .build()
-            )
-            .metadata(
-                CustomerUpdateParams.Metadata.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                    .build()
-            )
-            .name("name")
-            .paymentProvider(CustomerUpdateParams.PaymentProvider.QUICKBOOKS)
-            .paymentProviderId("payment_provider_id")
-            .reportingConfiguration(
-                CustomerUpdateParams.ReportingConfiguration.builder().exempt(true).build()
-            )
-            .shippingAddress(
-                CustomerUpdateParams.ShippingAddress.builder()
-                    .city("city")
-                    .country("country")
-                    .line1("line1")
-                    .line2("line2")
-                    .postalCode("postal_code")
-                    .state("state")
-                    .build()
-            )
-            .taxConfiguration(
-                CustomerUpdateParams.TaxConfiguration.NewAvalaraTaxConfiguration.builder()
-                    .taxExempt(true)
-                    .taxProvider(
-                        CustomerUpdateParams.TaxConfiguration.NewAvalaraTaxConfiguration.TaxProvider
-                            .AVALARA
+                    .addAdditionalEmail("string")
+                    .autoCollection(true)
+                    .billingAddress(
+                        AddressInputModel.builder()
+                            .city("city")
+                            .country("country")
+                            .line1("line1")
+                            .line2("line2")
+                            .postalCode("postal_code")
+                            .state("state")
+                            .build()
                     )
-                    .taxExemptionCode("tax_exemption_code")
-                    .build()
-            )
-            .taxId(
-                CustomerUpdateParams.TaxId.builder()
-                    .country(CustomerUpdateParams.TaxId.Country.AD)
-                    .type(CustomerUpdateParams.TaxId.Type.AD_NRT)
-                    .value("value")
+                    .currency("currency")
+                    .email("dev@stainless.com")
+                    .emailDelivery(true)
+                    .externalCustomerId("external_customer_id")
+                    .hierarchy(
+                        CustomerHierarchyConfigModel.builder()
+                            .addChildCustomerId("string")
+                            .parentCustomerId("parent_customer_id")
+                            .build()
+                    )
+                    .metadata(
+                        EditCustomerModel.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
+                    .name("name")
+                    .paymentProvider(EditCustomerModel.PaymentProvider.QUICKBOOKS)
+                    .paymentProviderId("payment_provider_id")
+                    .reportingConfiguration(
+                        NewReportingConfigurationModel.builder().exempt(true).build()
+                    )
+                    .shippingAddress(
+                        AddressInputModel.builder()
+                            .city("city")
+                            .country("country")
+                            .line1("line1")
+                            .line2("line2")
+                            .postalCode("postal_code")
+                            .state("state")
+                            .build()
+                    )
+                    .taxConfiguration(
+                        NewTaxConfigurationModel.NewAvalaraTaxConfiguration.builder()
+                            .taxExempt(true)
+                            .taxProvider(
+                                NewTaxConfigurationModel.NewAvalaraTaxConfiguration.TaxProvider
+                                    .AVALARA
+                            )
+                            .taxExemptionCode("tax_exemption_code")
+                            .build()
+                    )
+                    .taxId(
+                        CustomerTaxIdModel.builder()
+                            .country(CustomerTaxIdModel.Country.AD)
+                            .type(CustomerTaxIdModel.Type.AD_NRT)
+                            .value("value")
+                            .build()
+                    )
                     .build()
             )
             .build()
@@ -93,179 +95,183 @@ class CustomerUpdateParamsTest {
         val params =
             CustomerUpdateParams.builder()
                 .customerId("customer_id")
-                .accountingSyncConfiguration(
-                    CustomerUpdateParams.AccountingSyncConfiguration.builder()
-                        .addAccountingProvider(
-                            CustomerUpdateParams.AccountingSyncConfiguration.AccountingProvider
-                                .builder()
-                                .externalProviderId("external_provider_id")
-                                .providerType("provider_type")
+                .editCustomerModel(
+                    EditCustomerModel.builder()
+                        .accountingSyncConfiguration(
+                            NewAccountingSyncConfigurationModel.builder()
+                                .addAccountingProvider(
+                                    NewAccountingSyncConfigurationModel.AccountingProvider.builder()
+                                        .externalProviderId("external_provider_id")
+                                        .providerType("provider_type")
+                                        .build()
+                                )
+                                .excluded(true)
                                 .build()
                         )
-                        .excluded(true)
-                        .build()
-                )
-                .addAdditionalEmail("string")
-                .autoCollection(true)
-                .billingAddress(
-                    CustomerUpdateParams.BillingAddress.builder()
-                        .city("city")
-                        .country("country")
-                        .line1("line1")
-                        .line2("line2")
-                        .postalCode("postal_code")
-                        .state("state")
-                        .build()
-                )
-                .currency("currency")
-                .email("dev@stainless.com")
-                .emailDelivery(true)
-                .externalCustomerId("external_customer_id")
-                .hierarchy(
-                    CustomerUpdateParams.Hierarchy.builder()
-                        .addChildCustomerId("string")
-                        .parentCustomerId("parent_customer_id")
-                        .build()
-                )
-                .metadata(
-                    CustomerUpdateParams.Metadata.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("string"))
-                        .build()
-                )
-                .name("name")
-                .paymentProvider(CustomerUpdateParams.PaymentProvider.QUICKBOOKS)
-                .paymentProviderId("payment_provider_id")
-                .reportingConfiguration(
-                    CustomerUpdateParams.ReportingConfiguration.builder().exempt(true).build()
-                )
-                .shippingAddress(
-                    CustomerUpdateParams.ShippingAddress.builder()
-                        .city("city")
-                        .country("country")
-                        .line1("line1")
-                        .line2("line2")
-                        .postalCode("postal_code")
-                        .state("state")
-                        .build()
-                )
-                .taxConfiguration(
-                    CustomerUpdateParams.TaxConfiguration.NewAvalaraTaxConfiguration.builder()
-                        .taxExempt(true)
-                        .taxProvider(
-                            CustomerUpdateParams.TaxConfiguration.NewAvalaraTaxConfiguration
-                                .TaxProvider
-                                .AVALARA
+                        .addAdditionalEmail("string")
+                        .autoCollection(true)
+                        .billingAddress(
+                            AddressInputModel.builder()
+                                .city("city")
+                                .country("country")
+                                .line1("line1")
+                                .line2("line2")
+                                .postalCode("postal_code")
+                                .state("state")
+                                .build()
                         )
-                        .taxExemptionCode("tax_exemption_code")
-                        .build()
-                )
-                .taxId(
-                    CustomerUpdateParams.TaxId.builder()
-                        .country(CustomerUpdateParams.TaxId.Country.AD)
-                        .type(CustomerUpdateParams.TaxId.Type.AD_NRT)
-                        .value("value")
+                        .currency("currency")
+                        .email("dev@stainless.com")
+                        .emailDelivery(true)
+                        .externalCustomerId("external_customer_id")
+                        .hierarchy(
+                            CustomerHierarchyConfigModel.builder()
+                                .addChildCustomerId("string")
+                                .parentCustomerId("parent_customer_id")
+                                .build()
+                        )
+                        .metadata(
+                            EditCustomerModel.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .name("name")
+                        .paymentProvider(EditCustomerModel.PaymentProvider.QUICKBOOKS)
+                        .paymentProviderId("payment_provider_id")
+                        .reportingConfiguration(
+                            NewReportingConfigurationModel.builder().exempt(true).build()
+                        )
+                        .shippingAddress(
+                            AddressInputModel.builder()
+                                .city("city")
+                                .country("country")
+                                .line1("line1")
+                                .line2("line2")
+                                .postalCode("postal_code")
+                                .state("state")
+                                .build()
+                        )
+                        .taxConfiguration(
+                            NewTaxConfigurationModel.NewAvalaraTaxConfiguration.builder()
+                                .taxExempt(true)
+                                .taxProvider(
+                                    NewTaxConfigurationModel.NewAvalaraTaxConfiguration.TaxProvider
+                                        .AVALARA
+                                )
+                                .taxExemptionCode("tax_exemption_code")
+                                .build()
+                        )
+                        .taxId(
+                            CustomerTaxIdModel.builder()
+                                .country(CustomerTaxIdModel.Country.AD)
+                                .type(CustomerTaxIdModel.Type.AD_NRT)
+                                .value("value")
+                                .build()
+                        )
                         .build()
                 )
                 .build()
 
         val body = params._body()
 
-        assertNotNull(body)
-        assertThat(body.accountingSyncConfiguration())
-            .contains(
-                CustomerUpdateParams.AccountingSyncConfiguration.builder()
-                    .addAccountingProvider(
-                        CustomerUpdateParams.AccountingSyncConfiguration.AccountingProvider
-                            .builder()
-                            .externalProviderId("external_provider_id")
-                            .providerType("provider_type")
+        assertThat(body)
+            .isEqualTo(
+                EditCustomerModel.builder()
+                    .accountingSyncConfiguration(
+                        NewAccountingSyncConfigurationModel.builder()
+                            .addAccountingProvider(
+                                NewAccountingSyncConfigurationModel.AccountingProvider.builder()
+                                    .externalProviderId("external_provider_id")
+                                    .providerType("provider_type")
+                                    .build()
+                            )
+                            .excluded(true)
                             .build()
                     )
-                    .excluded(true)
-                    .build()
-            )
-        assertThat(body.additionalEmails()).contains(listOf("string"))
-        assertThat(body.autoCollection()).contains(true)
-        assertThat(body.billingAddress())
-            .contains(
-                CustomerUpdateParams.BillingAddress.builder()
-                    .city("city")
-                    .country("country")
-                    .line1("line1")
-                    .line2("line2")
-                    .postalCode("postal_code")
-                    .state("state")
-                    .build()
-            )
-        assertThat(body.currency()).contains("currency")
-        assertThat(body.email()).contains("dev@stainless.com")
-        assertThat(body.emailDelivery()).contains(true)
-        assertThat(body.externalCustomerId()).contains("external_customer_id")
-        assertThat(body.hierarchy())
-            .contains(
-                CustomerUpdateParams.Hierarchy.builder()
-                    .addChildCustomerId("string")
-                    .parentCustomerId("parent_customer_id")
-                    .build()
-            )
-        assertThat(body.metadata())
-            .contains(
-                CustomerUpdateParams.Metadata.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                    .build()
-            )
-        assertThat(body.name()).contains("name")
-        assertThat(body.paymentProvider()).contains(CustomerUpdateParams.PaymentProvider.QUICKBOOKS)
-        assertThat(body.paymentProviderId()).contains("payment_provider_id")
-        assertThat(body.reportingConfiguration())
-            .contains(CustomerUpdateParams.ReportingConfiguration.builder().exempt(true).build())
-        assertThat(body.shippingAddress())
-            .contains(
-                CustomerUpdateParams.ShippingAddress.builder()
-                    .city("city")
-                    .country("country")
-                    .line1("line1")
-                    .line2("line2")
-                    .postalCode("postal_code")
-                    .state("state")
-                    .build()
-            )
-        assertThat(body.taxConfiguration())
-            .contains(
-                CustomerUpdateParams.TaxConfiguration.ofNewAvalara(
-                    CustomerUpdateParams.TaxConfiguration.NewAvalaraTaxConfiguration.builder()
-                        .taxExempt(true)
-                        .taxProvider(
-                            CustomerUpdateParams.TaxConfiguration.NewAvalaraTaxConfiguration
-                                .TaxProvider
-                                .AVALARA
-                        )
-                        .taxExemptionCode("tax_exemption_code")
-                        .build()
-                )
-            )
-        assertThat(body.taxId())
-            .contains(
-                CustomerUpdateParams.TaxId.builder()
-                    .country(CustomerUpdateParams.TaxId.Country.AD)
-                    .type(CustomerUpdateParams.TaxId.Type.AD_NRT)
-                    .value("value")
+                    .addAdditionalEmail("string")
+                    .autoCollection(true)
+                    .billingAddress(
+                        AddressInputModel.builder()
+                            .city("city")
+                            .country("country")
+                            .line1("line1")
+                            .line2("line2")
+                            .postalCode("postal_code")
+                            .state("state")
+                            .build()
+                    )
+                    .currency("currency")
+                    .email("dev@stainless.com")
+                    .emailDelivery(true)
+                    .externalCustomerId("external_customer_id")
+                    .hierarchy(
+                        CustomerHierarchyConfigModel.builder()
+                            .addChildCustomerId("string")
+                            .parentCustomerId("parent_customer_id")
+                            .build()
+                    )
+                    .metadata(
+                        EditCustomerModel.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
+                    .name("name")
+                    .paymentProvider(EditCustomerModel.PaymentProvider.QUICKBOOKS)
+                    .paymentProviderId("payment_provider_id")
+                    .reportingConfiguration(
+                        NewReportingConfigurationModel.builder().exempt(true).build()
+                    )
+                    .shippingAddress(
+                        AddressInputModel.builder()
+                            .city("city")
+                            .country("country")
+                            .line1("line1")
+                            .line2("line2")
+                            .postalCode("postal_code")
+                            .state("state")
+                            .build()
+                    )
+                    .taxConfiguration(
+                        NewTaxConfigurationModel.NewAvalaraTaxConfiguration.builder()
+                            .taxExempt(true)
+                            .taxProvider(
+                                NewTaxConfigurationModel.NewAvalaraTaxConfiguration.TaxProvider
+                                    .AVALARA
+                            )
+                            .taxExemptionCode("tax_exemption_code")
+                            .build()
+                    )
+                    .taxId(
+                        CustomerTaxIdModel.builder()
+                            .country(CustomerTaxIdModel.Country.AD)
+                            .type(CustomerTaxIdModel.Type.AD_NRT)
+                            .value("value")
+                            .build()
+                    )
                     .build()
             )
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = CustomerUpdateParams.builder().customerId("customer_id").build()
+        val params =
+            CustomerUpdateParams.builder()
+                .customerId("customer_id")
+                .editCustomerModel(EditCustomerModel.builder().build())
+                .build()
 
         val body = params._body()
 
-        assertNotNull(body)
+        assertThat(body).isEqualTo(EditCustomerModel.builder().build())
     }
 
     @Test
     fun getPathParam() {
-        val params = CustomerUpdateParams.builder().customerId("customer_id").build()
+        val params =
+            CustomerUpdateParams.builder()
+                .customerId("customer_id")
+                .editCustomerModel(EditCustomerModel.builder().build())
+                .build()
         assertThat(params).isNotNull
         // path param "customerId"
         assertThat(params.getPathParam(0)).isEqualTo("customer_id")
