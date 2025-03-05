@@ -36,7 +36,7 @@ private constructor(
 
     fun response(): Response = response
 
-    fun data(): List<Customer> = response().data()
+    fun data(): List<CustomerModel> = response().data()
 
     fun paginationMetadata(): PaginationMetadata = response().paginationMetadata()
 
@@ -96,20 +96,20 @@ private constructor(
     class Response
     @JsonCreator
     constructor(
-        @JsonProperty("data") private val data: JsonField<List<Customer>> = JsonMissing.of(),
+        @JsonProperty("data") private val data: JsonField<List<CustomerModel>> = JsonMissing.of(),
         @JsonProperty("pagination_metadata")
         private val paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        fun data(): List<Customer> = data.getNullable("data") ?: listOf()
+        fun data(): List<CustomerModel> = data.getNullable("data") ?: listOf()
 
         fun paginationMetadata(): PaginationMetadata =
             paginationMetadata.getRequired("pagination_metadata")
 
         @JsonProperty("data")
-        fun _data(): Optional<JsonField<List<Customer>>> = Optional.ofNullable(data)
+        fun _data(): Optional<JsonField<List<CustomerModel>>> = Optional.ofNullable(data)
 
         @JsonProperty("pagination_metadata")
         fun _paginationMetadata(): Optional<JsonField<PaginationMetadata>> =
@@ -156,7 +156,7 @@ private constructor(
 
         class Builder {
 
-            private var data: JsonField<List<Customer>> = JsonMissing.of()
+            private var data: JsonField<List<CustomerModel>> = JsonMissing.of()
             private var paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -167,9 +167,9 @@ private constructor(
                 this.additionalProperties.putAll(page.additionalProperties)
             }
 
-            fun data(data: List<Customer>) = data(JsonField.of(data))
+            fun data(data: List<CustomerModel>) = data(JsonField.of(data))
 
-            fun data(data: JsonField<List<Customer>>) = apply { this.data = data }
+            fun data(data: JsonField<List<CustomerModel>>) = apply { this.data = data }
 
             fun paginationMetadata(paginationMetadata: PaginationMetadata) =
                 paginationMetadata(JsonField.of(paginationMetadata))
@@ -188,9 +188,9 @@ private constructor(
 
     class AutoPager(private val firstPage: CustomerListPageAsync) {
 
-        fun forEach(action: Predicate<Customer>, executor: Executor): CompletableFuture<Void> {
+        fun forEach(action: Predicate<CustomerModel>, executor: Executor): CompletableFuture<Void> {
             fun CompletableFuture<Optional<CustomerListPageAsync>>.forEach(
-                action: (Customer) -> Boolean,
+                action: (CustomerModel) -> Boolean,
                 executor: Executor,
             ): CompletableFuture<Void> =
                 thenComposeAsync(
@@ -206,8 +206,8 @@ private constructor(
                 .forEach(action::test, executor)
         }
 
-        fun toList(executor: Executor): CompletableFuture<List<Customer>> {
-            val values = mutableListOf<Customer>()
+        fun toList(executor: Executor): CompletableFuture<List<CustomerModel>> {
+            val values = mutableListOf<CustomerModel>()
             return forEach(values::add, executor).thenApply { values }
         }
     }

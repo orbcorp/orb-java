@@ -8,9 +8,9 @@ import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.CustomerBalanceTransactionCreateParams
-import com.withorb.api.models.CustomerBalanceTransactionCreateResponse
 import com.withorb.api.models.CustomerBalanceTransactionListPage
 import com.withorb.api.models.CustomerBalanceTransactionListParams
+import com.withorb.api.models.CustomerBalanceTransactionModel
 
 interface BalanceTransactionService {
 
@@ -27,7 +27,7 @@ interface BalanceTransactionService {
     fun create(
         params: CustomerBalanceTransactionCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CustomerBalanceTransactionCreateResponse
+    ): CustomerBalanceTransactionModel
 
     /**
      * ## The customer balance
@@ -77,7 +77,7 @@ interface BalanceTransactionService {
         fun create(
             params: CustomerBalanceTransactionCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<CustomerBalanceTransactionCreateResponse>
+        ): HttpResponseFor<CustomerBalanceTransactionModel>
 
         /**
          * Returns a raw HTTP response for `get /customers/{customer_id}/balance_transactions`, but

@@ -16,7 +16,7 @@ class AlertTest {
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .currency("currency")
                 .customer(
-                    Alert.Customer.builder()
+                    CustomerMinifiedModel.builder()
                         .id("id")
                         .externalCustomerId("external_customer_id")
                         .build()
@@ -31,8 +31,8 @@ class AlertTest {
                         .planVersion("plan_version")
                         .build()
                 )
-                .subscription(Alert.Subscription.builder().id("VDGsT23osdLb84KD").build())
-                .addThreshold(Alert.Threshold.builder().value(0.0).build())
+                .subscription(SubscriptionMinifiedModel.builder().id("VDGsT23osdLb84KD").build())
+                .addThreshold(ThresholdModel.builder().value(0.0).build())
                 .type(Alert.Type.USAGE_EXCEEDED)
                 .build()
         assertThat(alert).isNotNull
@@ -41,7 +41,10 @@ class AlertTest {
         assertThat(alert.currency()).contains("currency")
         assertThat(alert.customer())
             .contains(
-                Alert.Customer.builder().id("id").externalCustomerId("external_customer_id").build()
+                CustomerMinifiedModel.builder()
+                    .id("id")
+                    .externalCustomerId("external_customer_id")
+                    .build()
             )
         assertThat(alert.enabled()).isEqualTo(true)
         assertThat(alert.metric()).contains(Alert.Metric.builder().id("id").build())
@@ -55,9 +58,9 @@ class AlertTest {
                     .build()
             )
         assertThat(alert.subscription())
-            .contains(Alert.Subscription.builder().id("VDGsT23osdLb84KD").build())
+            .contains(SubscriptionMinifiedModel.builder().id("VDGsT23osdLb84KD").build())
         assertThat(alert.thresholds().get())
-            .containsExactly(Alert.Threshold.builder().value(0.0).build())
+            .containsExactly(ThresholdModel.builder().value(0.0).build())
         assertThat(alert.type()).isEqualTo(Alert.Type.USAGE_EXCEEDED)
     }
 }

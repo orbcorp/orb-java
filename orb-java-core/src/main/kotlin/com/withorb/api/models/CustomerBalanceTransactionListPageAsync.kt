@@ -55,7 +55,7 @@ private constructor(
 
     fun response(): Response = response
 
-    fun data(): List<CustomerBalanceTransactionListResponse> = response().data()
+    fun data(): List<CustomerBalanceTransactionModel> = response().data()
 
     fun paginationMetadata(): PaginationMetadata = response().paginationMetadata()
 
@@ -116,22 +116,20 @@ private constructor(
     @JsonCreator
     constructor(
         @JsonProperty("data")
-        private val data: JsonField<List<CustomerBalanceTransactionListResponse>> =
-            JsonMissing.of(),
+        private val data: JsonField<List<CustomerBalanceTransactionModel>> = JsonMissing.of(),
         @JsonProperty("pagination_metadata")
         private val paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        fun data(): List<CustomerBalanceTransactionListResponse> =
-            data.getNullable("data") ?: listOf()
+        fun data(): List<CustomerBalanceTransactionModel> = data.getNullable("data") ?: listOf()
 
         fun paginationMetadata(): PaginationMetadata =
             paginationMetadata.getRequired("pagination_metadata")
 
         @JsonProperty("data")
-        fun _data(): Optional<JsonField<List<CustomerBalanceTransactionListResponse>>> =
+        fun _data(): Optional<JsonField<List<CustomerBalanceTransactionModel>>> =
             Optional.ofNullable(data)
 
         @JsonProperty("pagination_metadata")
@@ -180,8 +178,7 @@ private constructor(
 
         class Builder {
 
-            private var data: JsonField<List<CustomerBalanceTransactionListResponse>> =
-                JsonMissing.of()
+            private var data: JsonField<List<CustomerBalanceTransactionModel>> = JsonMissing.of()
             private var paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -192,9 +189,9 @@ private constructor(
                 this.additionalProperties.putAll(page.additionalProperties)
             }
 
-            fun data(data: List<CustomerBalanceTransactionListResponse>) = data(JsonField.of(data))
+            fun data(data: List<CustomerBalanceTransactionModel>) = data(JsonField.of(data))
 
-            fun data(data: JsonField<List<CustomerBalanceTransactionListResponse>>) = apply {
+            fun data(data: JsonField<List<CustomerBalanceTransactionModel>>) = apply {
                 this.data = data
             }
 
@@ -216,11 +213,11 @@ private constructor(
     class AutoPager(private val firstPage: CustomerBalanceTransactionListPageAsync) {
 
         fun forEach(
-            action: Predicate<CustomerBalanceTransactionListResponse>,
+            action: Predicate<CustomerBalanceTransactionModel>,
             executor: Executor,
         ): CompletableFuture<Void> {
             fun CompletableFuture<Optional<CustomerBalanceTransactionListPageAsync>>.forEach(
-                action: (CustomerBalanceTransactionListResponse) -> Boolean,
+                action: (CustomerBalanceTransactionModel) -> Boolean,
                 executor: Executor,
             ): CompletableFuture<Void> =
                 thenComposeAsync(
@@ -236,10 +233,8 @@ private constructor(
                 .forEach(action::test, executor)
         }
 
-        fun toList(
-            executor: Executor
-        ): CompletableFuture<List<CustomerBalanceTransactionListResponse>> {
-            val values = mutableListOf<CustomerBalanceTransactionListResponse>()
+        fun toList(executor: Executor): CompletableFuture<List<CustomerBalanceTransactionModel>> {
+            val values = mutableListOf<CustomerBalanceTransactionModel>()
             return forEach(values::add, executor).thenApply { values }
         }
     }
