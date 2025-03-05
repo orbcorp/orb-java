@@ -1,5 +1,32 @@
 # Changelog
 
+## 0.40.0 (2025-03-05)
+
+Full Changelog: [v0.39.0...v0.40.0](https://github.com/orbcorp/orb-java/compare/v0.39.0...v0.40.0)
+
+### ⚠ BREAKING CHANGES
+
+* **client:** refactor multipart formdata impl ([#296](https://github.com/orbcorp/orb-java/issues/296))
+
+### Features
+
+* **api:** api update ([#300](https://github.com/orbcorp/orb-java/issues/300)) ([d5cb74a](https://github.com/orbcorp/orb-java/commit/d5cb74a47458809ba335447204b1b21166df0ede))
+* **client:** allow configuring timeouts granularly ([#294](https://github.com/orbcorp/orb-java/issues/294)) ([fd71049](https://github.com/orbcorp/orb-java/commit/fd7104918a50f62d44769d167cd3d0c665710c5e))
+* **client:** support raw response access ([#295](https://github.com/orbcorp/orb-java/issues/295)) ([70b0eb8](https://github.com/orbcorp/orb-java/commit/70b0eb8d409fdf3c4c1369d089c9c0f52f674268))
+
+
+### Chores
+
+* **client:** expose `Optional`, not nullable, from `ClientOptions` ([#299](https://github.com/orbcorp/orb-java/issues/299)) ([20f1914](https://github.com/orbcorp/orb-java/commit/20f191444e7d58a9ed38174f7a7f5ce027e39101))
+* **client:** refactor multipart formdata impl ([#296](https://github.com/orbcorp/orb-java/issues/296)) ([22e538b](https://github.com/orbcorp/orb-java/commit/22e538b1422b5bef07a22d0d84bf4a86dd77cea1))
+* **internal:** refactor `ErrorHandlingTest` ([#292](https://github.com/orbcorp/orb-java/issues/292)) ([d1ec6ff](https://github.com/orbcorp/orb-java/commit/d1ec6ff7570f4751c55862bd687009ff1f9e4b74))
+
+
+### Documentation
+
+* add raw response readme documentation ([#297](https://github.com/orbcorp/orb-java/issues/297)) ([648e2e6](https://github.com/orbcorp/orb-java/commit/648e2e6fe04d533a22fdbd730d84a39705f85561))
+* note required fields in `builder` javadoc ([#298](https://github.com/orbcorp/orb-java/issues/298)) ([1af73ac](https://github.com/orbcorp/orb-java/commit/1af73ac23511ae32f4c4c051c45e95384cbb7c25))
+
 ## 0.39.0 (2025-03-01)
 
 Full Changelog: [v0.38.0...v0.39.0](https://github.com/orbcorp/orb-java/compare/v0.38.0...v0.39.0)
