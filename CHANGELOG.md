@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.44.0 (2025-03-06)
+
+Full Changelog: [v0.43.0...v0.44.0](https://github.com/orbcorp/orb-java/compare/v0.43.0...v0.44.0)
+
+### Features
+
+* **api:** api update ([#313](https://github.com/orbcorp/orb-java/issues/313)) ([6121464](https://github.com/orbcorp/orb-java/commit/6121464c0d089981492bf90573d1c11590780def))
+* **client:** accept `InputStream` and `Path` for file params ([#311](https://github.com/orbcorp/orb-java/issues/311)) ([11ca664](https://github.com/orbcorp/orb-java/commit/11ca66491b29b9996bbffa2b599aed9c22d32ee8))
+
 ## 0.43.0 (2025-03-05)
 
 Full Changelog: [v0.42.0...v0.43.0](https://github.com/orbcorp/orb-java/compare/v0.42.0...v0.43.0)
