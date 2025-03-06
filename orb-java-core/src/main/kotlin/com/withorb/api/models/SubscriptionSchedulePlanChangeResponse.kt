@@ -118,7 +118,10 @@ private constructor(
     fun activePlanPhaseOrder(): Optional<Long> =
         Optional.ofNullable(activePlanPhaseOrder.getNullable("active_plan_phase_order"))
 
-    /** The adjustment intervals for this subscription. */
+    /**
+     * The adjustment intervals for this subscription sorted by the start_date of the adjustment
+     * interval.
+     */
     fun adjustmentIntervals(): List<AdjustmentInterval> =
         adjustmentIntervals.getRequired("adjustment_intervals")
 
@@ -189,7 +192,7 @@ private constructor(
     fun defaultInvoiceMemo(): Optional<String> =
         Optional.ofNullable(defaultInvoiceMemo.getNullable("default_invoice_memo"))
 
-    /** The discount intervals for this subscription. */
+    /** The discount intervals for this subscription sorted by the start_date. */
     fun discountIntervals(): List<DiscountInterval> =
         discountIntervals.getRequired("discount_intervals")
 
@@ -202,7 +205,7 @@ private constructor(
     fun invoicingThreshold(): Optional<String> =
         Optional.ofNullable(invoicingThreshold.getNullable("invoicing_threshold"))
 
-    /** The maximum intervals for this subscription. */
+    /** The maximum intervals for this subscription sorted by the start_date. */
     fun maximumIntervals(): List<MaximumInterval> =
         maximumIntervals.getRequired("maximum_intervals")
 
@@ -213,7 +216,7 @@ private constructor(
      */
     fun metadata(): Metadata = metadata.getRequired("metadata")
 
-    /** The minimum intervals for this subscription. */
+    /** The minimum intervals for this subscription sorted by the start_date. */
     fun minimumIntervals(): List<MinimumInterval> =
         minimumIntervals.getRequired("minimum_intervals")
 
@@ -251,7 +254,10 @@ private constructor(
     @ExcludeMissing
     fun _activePlanPhaseOrder(): JsonField<Long> = activePlanPhaseOrder
 
-    /** The adjustment intervals for this subscription. */
+    /**
+     * The adjustment intervals for this subscription sorted by the start_date of the adjustment
+     * interval.
+     */
     @JsonProperty("adjustment_intervals")
     @ExcludeMissing
     fun _adjustmentIntervals(): JsonField<List<AdjustmentInterval>> = adjustmentIntervals
@@ -329,7 +335,7 @@ private constructor(
     @ExcludeMissing
     fun _defaultInvoiceMemo(): JsonField<String> = defaultInvoiceMemo
 
-    /** The discount intervals for this subscription. */
+    /** The discount intervals for this subscription sorted by the start_date. */
     @JsonProperty("discount_intervals")
     @ExcludeMissing
     fun _discountIntervals(): JsonField<List<DiscountInterval>> = discountIntervals
@@ -346,7 +352,7 @@ private constructor(
     @ExcludeMissing
     fun _invoicingThreshold(): JsonField<String> = invoicingThreshold
 
-    /** The maximum intervals for this subscription. */
+    /** The maximum intervals for this subscription sorted by the start_date. */
     @JsonProperty("maximum_intervals")
     @ExcludeMissing
     fun _maximumIntervals(): JsonField<List<MaximumInterval>> = maximumIntervals
@@ -358,7 +364,7 @@ private constructor(
      */
     @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
 
-    /** The minimum intervals for this subscription. */
+    /** The minimum intervals for this subscription sorted by the start_date. */
     @JsonProperty("minimum_intervals")
     @ExcludeMissing
     fun _minimumIntervals(): JsonField<List<MinimumInterval>> = minimumIntervals
@@ -574,16 +580,25 @@ private constructor(
             this.activePlanPhaseOrder = activePlanPhaseOrder
         }
 
-        /** The adjustment intervals for this subscription. */
+        /**
+         * The adjustment intervals for this subscription sorted by the start_date of the adjustment
+         * interval.
+         */
         fun adjustmentIntervals(adjustmentIntervals: List<AdjustmentInterval>) =
             adjustmentIntervals(JsonField.of(adjustmentIntervals))
 
-        /** The adjustment intervals for this subscription. */
+        /**
+         * The adjustment intervals for this subscription sorted by the start_date of the adjustment
+         * interval.
+         */
         fun adjustmentIntervals(adjustmentIntervals: JsonField<List<AdjustmentInterval>>) = apply {
             this.adjustmentIntervals = adjustmentIntervals.map { it.toMutableList() }
         }
 
-        /** The adjustment intervals for this subscription. */
+        /**
+         * The adjustment intervals for this subscription sorted by the start_date of the adjustment
+         * interval.
+         */
         fun addAdjustmentInterval(adjustmentInterval: AdjustmentInterval) = apply {
             adjustmentIntervals =
                 (adjustmentIntervals ?: JsonField.of(mutableListOf())).also {
@@ -767,16 +782,16 @@ private constructor(
             this.defaultInvoiceMemo = defaultInvoiceMemo
         }
 
-        /** The discount intervals for this subscription. */
+        /** The discount intervals for this subscription sorted by the start_date. */
         fun discountIntervals(discountIntervals: List<DiscountInterval>) =
             discountIntervals(JsonField.of(discountIntervals))
 
-        /** The discount intervals for this subscription. */
+        /** The discount intervals for this subscription sorted by the start_date. */
         fun discountIntervals(discountIntervals: JsonField<List<DiscountInterval>>) = apply {
             this.discountIntervals = discountIntervals.map { it.toMutableList() }
         }
 
-        /** The discount intervals for this subscription. */
+        /** The discount intervals for this subscription sorted by the start_date. */
         fun addDiscountInterval(discountInterval: DiscountInterval) = apply {
             discountIntervals =
                 (discountIntervals ?: JsonField.of(mutableListOf())).also {
@@ -784,15 +799,15 @@ private constructor(
                 }
         }
 
-        /** The discount intervals for this subscription. */
+        /** The discount intervals for this subscription sorted by the start_date. */
         fun addDiscountInterval(amount: DiscountInterval.AmountDiscountInterval) =
             addDiscountInterval(DiscountInterval.ofAmount(amount))
 
-        /** The discount intervals for this subscription. */
+        /** The discount intervals for this subscription sorted by the start_date. */
         fun addDiscountInterval(percentage: DiscountInterval.PercentageDiscountInterval) =
             addDiscountInterval(DiscountInterval.ofPercentage(percentage))
 
-        /** The discount intervals for this subscription. */
+        /** The discount intervals for this subscription sorted by the start_date. */
         fun addDiscountInterval(usage: DiscountInterval.UsageDiscountInterval) =
             addDiscountInterval(DiscountInterval.ofUsage(usage))
 
@@ -832,16 +847,16 @@ private constructor(
             this.invoicingThreshold = invoicingThreshold
         }
 
-        /** The maximum intervals for this subscription. */
+        /** The maximum intervals for this subscription sorted by the start_date. */
         fun maximumIntervals(maximumIntervals: List<MaximumInterval>) =
             maximumIntervals(JsonField.of(maximumIntervals))
 
-        /** The maximum intervals for this subscription. */
+        /** The maximum intervals for this subscription sorted by the start_date. */
         fun maximumIntervals(maximumIntervals: JsonField<List<MaximumInterval>>) = apply {
             this.maximumIntervals = maximumIntervals.map { it.toMutableList() }
         }
 
-        /** The maximum intervals for this subscription. */
+        /** The maximum intervals for this subscription sorted by the start_date. */
         fun addMaximumInterval(maximumInterval: MaximumInterval) = apply {
             maximumIntervals =
                 (maximumIntervals ?: JsonField.of(mutableListOf())).also {
@@ -863,16 +878,16 @@ private constructor(
          */
         fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
-        /** The minimum intervals for this subscription. */
+        /** The minimum intervals for this subscription sorted by the start_date. */
         fun minimumIntervals(minimumIntervals: List<MinimumInterval>) =
             minimumIntervals(JsonField.of(minimumIntervals))
 
-        /** The minimum intervals for this subscription. */
+        /** The minimum intervals for this subscription sorted by the start_date. */
         fun minimumIntervals(minimumIntervals: JsonField<List<MinimumInterval>>) = apply {
             this.minimumIntervals = minimumIntervals.map { it.toMutableList() }
         }
 
-        /** The minimum intervals for this subscription. */
+        /** The minimum intervals for this subscription sorted by the start_date. */
         fun addMinimumInterval(minimumInterval: MinimumInterval) = apply {
             minimumIntervals =
                 (minimumIntervals ?: JsonField.of(mutableListOf())).also {
