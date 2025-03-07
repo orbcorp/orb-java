@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.46.1 (2025-03-07)
+
+Full Changelog: [v0.46.0...v0.46.1](https://github.com/orbcorp/orb-java/compare/v0.46.0...v0.46.1)
+
+### Chores
+
+* **internal:** add `.kotlin` to `.gitignore` ([#323](https://github.com/orbcorp/orb-java/issues/323)) ([8c1f105](https://github.com/orbcorp/orb-java/commit/8c1f105f073072041491eeffed999a31957c4c5e))
+* **internal:** codegen related update ([#321](https://github.com/orbcorp/orb-java/issues/321)) ([a45ffe2](https://github.com/orbcorp/orb-java/commit/a45ffe29a6f89939a7c624efac74e5ce890ca7d9))
+* **internal:** don't generate docs ([#325](https://github.com/orbcorp/orb-java/issues/325)) ([dccfa35](https://github.com/orbcorp/orb-java/commit/dccfa351f867c99eddac02c5603ac59cf892a7ef))
+* **internal:** use `getOrNull` instead of `orElse(null)` ([#324](https://github.com/orbcorp/orb-java/issues/324)) ([02fd429](https://github.com/orbcorp/orb-java/commit/02fd429784de8fe4a0ae0d4eee9fbe1544080c92))
+
 ## 0.46.0 (2025-03-07)
 
 Full Changelog: [v0.45.0...v0.46.0](https://github.com/orbcorp/orb-java/compare/v0.45.0...v0.46.0)
