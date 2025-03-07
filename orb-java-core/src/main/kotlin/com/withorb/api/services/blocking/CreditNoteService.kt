@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -21,7 +19,9 @@ interface CreditNoteService {
     fun withRawResponse(): WithRawResponse
 
     /** This endpoint is used to create a single [`Credit Note`](/invoicing/credit-notes). */
-    @JvmOverloads
+    fun create(params: CreditNoteCreateParams): CreditNote = create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
         params: CreditNoteCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -32,17 +32,19 @@ interface CreditNoteService {
      * or external_customer_id. The credit notes will be returned in reverse chronological order by
      * `creation_time`.
      */
-    @JvmOverloads
+    fun list(): CreditNoteListPage = list(CreditNoteListParams.none())
+
+    /** @see [list] */
     fun list(
         params: CreditNoteListParams = CreditNoteListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CreditNoteListPage
 
-    /**
-     * Get a paginated list of CreditNotes. Users can also filter by customer_id, subscription_id,
-     * or external_customer_id. The credit notes will be returned in reverse chronological order by
-     * `creation_time`.
-     */
+    /** @see [list] */
+    fun list(params: CreditNoteListParams = CreditNoteListParams.none()): CreditNoteListPage =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(requestOptions: RequestOptions): CreditNoteListPage =
         list(CreditNoteListParams.none(), requestOptions)
 
@@ -50,7 +52,9 @@ interface CreditNoteService {
      * This endpoint is used to fetch a single [`Credit Note`](/invoicing/credit-notes) given an
      * identifier.
      */
-    @JvmOverloads
+    fun fetch(params: CreditNoteFetchParams): CreditNote = fetch(params, RequestOptions.none())
+
+    /** @see [fetch] */
     fun fetch(
         params: CreditNoteFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -63,7 +67,11 @@ interface CreditNoteService {
          * Returns a raw HTTP response for `post /credit_notes`, but is otherwise the same as
          * [CreditNoteService.create].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun create(params: CreditNoteCreateParams): HttpResponseFor<CreditNote> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
         @MustBeClosed
         fun create(
             params: CreditNoteCreateParams,
@@ -74,17 +82,23 @@ interface CreditNoteService {
          * Returns a raw HTTP response for `get /credit_notes`, but is otherwise the same as
          * [CreditNoteService.list].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun list(): HttpResponseFor<CreditNoteListPage> = list(CreditNoteListParams.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: CreditNoteListParams = CreditNoteListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CreditNoteListPage>
 
-        /**
-         * Returns a raw HTTP response for `get /credit_notes`, but is otherwise the same as
-         * [CreditNoteService.list].
-         */
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            params: CreditNoteListParams = CreditNoteListParams.none()
+        ): HttpResponseFor<CreditNoteListPage> = list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<CreditNoteListPage> =
             list(CreditNoteListParams.none(), requestOptions)
@@ -93,7 +107,11 @@ interface CreditNoteService {
          * Returns a raw HTTP response for `get /credit_notes/{credit_note_id}`, but is otherwise
          * the same as [CreditNoteService.fetch].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun fetch(params: CreditNoteFetchParams): HttpResponseFor<CreditNote> =
+            fetch(params, RequestOptions.none())
+
+        /** @see [fetch] */
         @MustBeClosed
         fun fetch(
             params: CreditNoteFetchParams,

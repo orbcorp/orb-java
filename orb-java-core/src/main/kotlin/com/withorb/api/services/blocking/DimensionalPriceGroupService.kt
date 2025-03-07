@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -32,27 +30,40 @@ interface DimensionalPriceGroupService {
      * group with a dimension "color" and two prices: one that charges $10 per red widget and one
      * that charges $20 per blue widget.
      */
-    @JvmOverloads
+    fun create(params: DimensionalPriceGroupCreateParams): DimensionalPriceGroup =
+        create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
         params: DimensionalPriceGroupCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): DimensionalPriceGroup
 
     /** Fetch dimensional price group */
-    @JvmOverloads
+    fun retrieve(params: DimensionalPriceGroupRetrieveParams): DimensionalPriceGroup =
+        retrieve(params, RequestOptions.none())
+
+    /** @see [retrieve] */
     fun retrieve(
         params: DimensionalPriceGroupRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): DimensionalPriceGroup
 
     /** List dimensional price groups */
-    @JvmOverloads
+    fun list(): DimensionalPriceGroupListPage = list(DimensionalPriceGroupListParams.none())
+
+    /** @see [list] */
     fun list(
         params: DimensionalPriceGroupListParams = DimensionalPriceGroupListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): DimensionalPriceGroupListPage
 
-    /** List dimensional price groups */
+    /** @see [list] */
+    fun list(
+        params: DimensionalPriceGroupListParams = DimensionalPriceGroupListParams.none()
+    ): DimensionalPriceGroupListPage = list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(requestOptions: RequestOptions): DimensionalPriceGroupListPage =
         list(DimensionalPriceGroupListParams.none(), requestOptions)
 
@@ -69,7 +80,12 @@ interface DimensionalPriceGroupService {
          * Returns a raw HTTP response for `post /dimensional_price_groups`, but is otherwise the
          * same as [DimensionalPriceGroupService.create].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun create(
+            params: DimensionalPriceGroupCreateParams
+        ): HttpResponseFor<DimensionalPriceGroup> = create(params, RequestOptions.none())
+
+        /** @see [create] */
         @MustBeClosed
         fun create(
             params: DimensionalPriceGroupCreateParams,
@@ -81,7 +97,12 @@ interface DimensionalPriceGroupService {
          * /dimensional_price_groups/{dimensional_price_group_id}`, but is otherwise the same as
          * [DimensionalPriceGroupService.retrieve].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun retrieve(
+            params: DimensionalPriceGroupRetrieveParams
+        ): HttpResponseFor<DimensionalPriceGroup> = retrieve(params, RequestOptions.none())
+
+        /** @see [retrieve] */
         @MustBeClosed
         fun retrieve(
             params: DimensionalPriceGroupRetrieveParams,
@@ -92,17 +113,24 @@ interface DimensionalPriceGroupService {
          * Returns a raw HTTP response for `get /dimensional_price_groups`, but is otherwise the
          * same as [DimensionalPriceGroupService.list].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun list(): HttpResponseFor<DimensionalPriceGroupListPage> =
+            list(DimensionalPriceGroupListParams.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: DimensionalPriceGroupListParams = DimensionalPriceGroupListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<DimensionalPriceGroupListPage>
 
-        /**
-         * Returns a raw HTTP response for `get /dimensional_price_groups`, but is otherwise the
-         * same as [DimensionalPriceGroupService.list].
-         */
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            params: DimensionalPriceGroupListParams = DimensionalPriceGroupListParams.none()
+        ): HttpResponseFor<DimensionalPriceGroupListPage> = list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<DimensionalPriceGroupListPage> =
             list(DimensionalPriceGroupListParams.none(), requestOptions)

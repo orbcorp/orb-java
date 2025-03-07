@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.async
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -23,32 +21,47 @@ interface ItemServiceAsync {
     fun withRawResponse(): WithRawResponse
 
     /** This endpoint is used to create an [Item](/core-concepts#item). */
-    @JvmOverloads
+    fun create(params: ItemCreateParams): CompletableFuture<Item> =
+        create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
         params: ItemCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Item>
 
     /** This endpoint can be used to update properties on the Item. */
-    @JvmOverloads
+    fun update(params: ItemUpdateParams): CompletableFuture<Item> =
+        update(params, RequestOptions.none())
+
+    /** @see [update] */
     fun update(
         params: ItemUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Item>
 
     /** This endpoint returns a list of all Items, ordered in descending order by creation time. */
-    @JvmOverloads
+    fun list(): CompletableFuture<ItemListPageAsync> = list(ItemListParams.none())
+
+    /** @see [list] */
     fun list(
         params: ItemListParams = ItemListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ItemListPageAsync>
 
-    /** This endpoint returns a list of all Items, ordered in descending order by creation time. */
+    /** @see [list] */
+    fun list(params: ItemListParams = ItemListParams.none()): CompletableFuture<ItemListPageAsync> =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(requestOptions: RequestOptions): CompletableFuture<ItemListPageAsync> =
         list(ItemListParams.none(), requestOptions)
 
     /** This endpoint returns an item identified by its item_id. */
-    @JvmOverloads
+    fun fetch(params: ItemFetchParams): CompletableFuture<Item> =
+        fetch(params, RequestOptions.none())
+
+    /** @see [fetch] */
     fun fetch(
         params: ItemFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -61,7 +74,11 @@ interface ItemServiceAsync {
          * Returns a raw HTTP response for `post /items`, but is otherwise the same as
          * [ItemServiceAsync.create].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun create(params: ItemCreateParams): CompletableFuture<HttpResponseFor<Item>> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
         @MustBeClosed
         fun create(
             params: ItemCreateParams,
@@ -72,7 +89,11 @@ interface ItemServiceAsync {
          * Returns a raw HTTP response for `put /items/{item_id}`, but is otherwise the same as
          * [ItemServiceAsync.update].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun update(params: ItemUpdateParams): CompletableFuture<HttpResponseFor<Item>> =
+            update(params, RequestOptions.none())
+
+        /** @see [update] */
         @MustBeClosed
         fun update(
             params: ItemUpdateParams,
@@ -83,17 +104,25 @@ interface ItemServiceAsync {
          * Returns a raw HTTP response for `get /items`, but is otherwise the same as
          * [ItemServiceAsync.list].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun list(): CompletableFuture<HttpResponseFor<ItemListPageAsync>> =
+            list(ItemListParams.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: ItemListParams = ItemListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<ItemListPageAsync>>
 
-        /**
-         * Returns a raw HTTP response for `get /items`, but is otherwise the same as
-         * [ItemServiceAsync.list].
-         */
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            params: ItemListParams = ItemListParams.none()
+        ): CompletableFuture<HttpResponseFor<ItemListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             requestOptions: RequestOptions
@@ -104,7 +133,11 @@ interface ItemServiceAsync {
          * Returns a raw HTTP response for `get /items/{item_id}`, but is otherwise the same as
          * [ItemServiceAsync.fetch].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun fetch(params: ItemFetchParams): CompletableFuture<HttpResponseFor<Item>> =
+            fetch(params, RequestOptions.none())
+
+        /** @see [fetch] */
         @MustBeClosed
         fun fetch(
             params: ItemFetchParams,
