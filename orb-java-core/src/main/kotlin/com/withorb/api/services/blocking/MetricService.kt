@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -26,7 +24,9 @@ interface MetricService {
      * [SQL support](/extensibility/advanced-metrics#sql-support) for a description of constructing
      * SQL queries with examples.
      */
-    @JvmOverloads
+    fun create(params: MetricCreateParams): BillableMetric = create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
         params: MetricCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -36,7 +36,9 @@ interface MetricService {
      * This endpoint allows you to update the `metadata` property on a metric. If you pass `null`
      * for the metadata value, it will clear any existing metadata for that invoice.
      */
-    @JvmOverloads
+    fun update(params: MetricUpdateParams): BillableMetric = update(params, RequestOptions.none())
+
+    /** @see [update] */
     fun update(
         params: MetricUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -47,17 +49,19 @@ interface MetricService {
      * identifier. It returns information about the metrics including its name, description, and
      * item.
      */
-    @JvmOverloads
+    fun list(): MetricListPage = list(MetricListParams.none())
+
+    /** @see [list] */
     fun list(
         params: MetricListParams = MetricListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): MetricListPage
 
-    /**
-     * This endpoint is used to fetch [metric](/core-concepts##metric) details given a metric
-     * identifier. It returns information about the metrics including its name, description, and
-     * item.
-     */
+    /** @see [list] */
+    fun list(params: MetricListParams = MetricListParams.none()): MetricListPage =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(requestOptions: RequestOptions): MetricListPage =
         list(MetricListParams.none(), requestOptions)
 
@@ -65,7 +69,9 @@ interface MetricService {
      * This endpoint is used to list [metrics](/core-concepts#metric). It returns information about
      * the metrics including its name, description, and item.
      */
-    @JvmOverloads
+    fun fetch(params: MetricFetchParams): BillableMetric = fetch(params, RequestOptions.none())
+
+    /** @see [fetch] */
     fun fetch(
         params: MetricFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -78,7 +84,11 @@ interface MetricService {
          * Returns a raw HTTP response for `post /metrics`, but is otherwise the same as
          * [MetricService.create].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun create(params: MetricCreateParams): HttpResponseFor<BillableMetric> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
         @MustBeClosed
         fun create(
             params: MetricCreateParams,
@@ -89,7 +99,11 @@ interface MetricService {
          * Returns a raw HTTP response for `put /metrics/{metric_id}`, but is otherwise the same as
          * [MetricService.update].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun update(params: MetricUpdateParams): HttpResponseFor<BillableMetric> =
+            update(params, RequestOptions.none())
+
+        /** @see [update] */
         @MustBeClosed
         fun update(
             params: MetricUpdateParams,
@@ -100,17 +114,22 @@ interface MetricService {
          * Returns a raw HTTP response for `get /metrics`, but is otherwise the same as
          * [MetricService.list].
          */
-        @JvmOverloads
+        @MustBeClosed fun list(): HttpResponseFor<MetricListPage> = list(MetricListParams.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: MetricListParams = MetricListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<MetricListPage>
 
-        /**
-         * Returns a raw HTTP response for `get /metrics`, but is otherwise the same as
-         * [MetricService.list].
-         */
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            params: MetricListParams = MetricListParams.none()
+        ): HttpResponseFor<MetricListPage> = list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<MetricListPage> =
             list(MetricListParams.none(), requestOptions)
@@ -119,7 +138,11 @@ interface MetricService {
          * Returns a raw HTTP response for `get /metrics/{metric_id}`, but is otherwise the same as
          * [MetricService.fetch].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun fetch(params: MetricFetchParams): HttpResponseFor<BillableMetric> =
+            fetch(params, RequestOptions.none())
+
+        /** @see [fetch] */
         @MustBeClosed
         fun fetch(
             params: MetricFetchParams,

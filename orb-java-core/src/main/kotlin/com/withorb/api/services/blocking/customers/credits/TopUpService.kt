@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.blocking.customers.credits
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -34,14 +32,20 @@ interface TopUpService {
      * If a top-up already exists for this customer in the same currency, the existing top-up will
      * be replaced.
      */
-    @JvmOverloads
+    fun create(params: CustomerCreditTopUpCreateParams): CustomerCreditTopUpCreateResponse =
+        create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
         params: CustomerCreditTopUpCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCreditTopUpCreateResponse
 
     /** List top-ups */
-    @JvmOverloads
+    fun list(params: CustomerCreditTopUpListParams): CustomerCreditTopUpListPage =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(
         params: CustomerCreditTopUpListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -51,7 +55,9 @@ interface TopUpService {
      * This deactivates the top-up and voids any invoices associated with pending credit blocks
      * purchased through the top-up.
      */
-    @JvmOverloads
+    fun delete(params: CustomerCreditTopUpDeleteParams) = delete(params, RequestOptions.none())
+
+    /** @see [delete] */
     fun delete(
         params: CustomerCreditTopUpDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -65,7 +71,12 @@ interface TopUpService {
      * If a top-up already exists for this customer in the same currency, the existing top-up will
      * be replaced.
      */
-    @JvmOverloads
+    fun createByExternalId(
+        params: CustomerCreditTopUpCreateByExternalIdParams
+    ): CustomerCreditTopUpCreateByExternalIdResponse =
+        createByExternalId(params, RequestOptions.none())
+
+    /** @see [createByExternalId] */
     fun createByExternalId(
         params: CustomerCreditTopUpCreateByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -75,14 +86,21 @@ interface TopUpService {
      * This deactivates the top-up and voids any invoices associated with pending credit blocks
      * purchased through the top-up.
      */
-    @JvmOverloads
+    fun deleteByExternalId(params: CustomerCreditTopUpDeleteByExternalIdParams) =
+        deleteByExternalId(params, RequestOptions.none())
+
+    /** @see [deleteByExternalId] */
     fun deleteByExternalId(
         params: CustomerCreditTopUpDeleteByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     )
 
     /** List top-ups by external ID */
-    @JvmOverloads
+    fun listByExternalId(
+        params: CustomerCreditTopUpListByExternalIdParams
+    ): CustomerCreditTopUpListByExternalIdPage = listByExternalId(params, RequestOptions.none())
+
+    /** @see [listByExternalId] */
     fun listByExternalId(
         params: CustomerCreditTopUpListByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -95,7 +113,13 @@ interface TopUpService {
          * Returns a raw HTTP response for `post /customers/{customer_id}/credits/top_ups`, but is
          * otherwise the same as [TopUpService.create].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun create(
+            params: CustomerCreditTopUpCreateParams
+        ): HttpResponseFor<CustomerCreditTopUpCreateResponse> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
         @MustBeClosed
         fun create(
             params: CustomerCreditTopUpCreateParams,
@@ -106,7 +130,12 @@ interface TopUpService {
          * Returns a raw HTTP response for `get /customers/{customer_id}/credits/top_ups`, but is
          * otherwise the same as [TopUpService.list].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun list(
+            params: CustomerCreditTopUpListParams
+        ): HttpResponseFor<CustomerCreditTopUpListPage> = list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: CustomerCreditTopUpListParams,
@@ -118,7 +147,11 @@ interface TopUpService {
          * /customers/{customer_id}/credits/top_ups/{top_up_id}`, but is otherwise the same as
          * [TopUpService.delete].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun delete(params: CustomerCreditTopUpDeleteParams): HttpResponse =
+            delete(params, RequestOptions.none())
+
+        /** @see [delete] */
         @MustBeClosed
         fun delete(
             params: CustomerCreditTopUpDeleteParams,
@@ -130,7 +163,13 @@ interface TopUpService {
          * /customers/external_customer_id/{external_customer_id}/credits/top_ups`, but is otherwise
          * the same as [TopUpService.createByExternalId].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun createByExternalId(
+            params: CustomerCreditTopUpCreateByExternalIdParams
+        ): HttpResponseFor<CustomerCreditTopUpCreateByExternalIdResponse> =
+            createByExternalId(params, RequestOptions.none())
+
+        /** @see [createByExternalId] */
         @MustBeClosed
         fun createByExternalId(
             params: CustomerCreditTopUpCreateByExternalIdParams,
@@ -142,7 +181,11 @@ interface TopUpService {
          * /customers/external_customer_id/{external_customer_id}/credits/top_ups/{top_up_id}`, but
          * is otherwise the same as [TopUpService.deleteByExternalId].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun deleteByExternalId(params: CustomerCreditTopUpDeleteByExternalIdParams): HttpResponse =
+            deleteByExternalId(params, RequestOptions.none())
+
+        /** @see [deleteByExternalId] */
         @MustBeClosed
         fun deleteByExternalId(
             params: CustomerCreditTopUpDeleteByExternalIdParams,
@@ -154,7 +197,13 @@ interface TopUpService {
          * /customers/external_customer_id/{external_customer_id}/credits/top_ups`, but is otherwise
          * the same as [TopUpService.listByExternalId].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun listByExternalId(
+            params: CustomerCreditTopUpListByExternalIdParams
+        ): HttpResponseFor<CustomerCreditTopUpListByExternalIdPage> =
+            listByExternalId(params, RequestOptions.none())
+
+        /** @see [listByExternalId] */
         @MustBeClosed
         fun listByExternalId(
             params: CustomerCreditTopUpListByExternalIdParams,
