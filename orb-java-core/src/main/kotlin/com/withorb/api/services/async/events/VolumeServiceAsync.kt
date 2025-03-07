@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.async.events
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -31,7 +29,10 @@ interface VolumeServiceAsync {
      * and end time are hour-aligned and in UTC. When a specific timestamp is passed in for either
      * start or end time, the response includes the hours the timestamp falls in.
      */
-    @JvmOverloads
+    fun list(params: EventVolumeListParams): CompletableFuture<EventVolumes> =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(
         params: EventVolumeListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -46,7 +47,11 @@ interface VolumeServiceAsync {
          * Returns a raw HTTP response for `get /events/volume`, but is otherwise the same as
          * [VolumeServiceAsync.list].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun list(params: EventVolumeListParams): CompletableFuture<HttpResponseFor<EventVolumes>> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: EventVolumeListParams,

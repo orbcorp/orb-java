@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.blocking.plans
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -24,7 +22,9 @@ interface ExternalPlanIdService {
      *
      * Other fields on a customer are currently immutable.
      */
-    @JvmOverloads
+    fun update(params: PlanExternalPlanIdUpdateParams): Plan = update(params, RequestOptions.none())
+
+    /** @see [update] */
     fun update(
         params: PlanExternalPlanIdUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -47,7 +47,9 @@ interface ExternalPlanIdService {
      * detailed explanation of price types can be found in the
      * [Price schema](/core-concepts#plan-and-price). "
      */
-    @JvmOverloads
+    fun fetch(params: PlanExternalPlanIdFetchParams): Plan = fetch(params, RequestOptions.none())
+
+    /** @see [fetch] */
     fun fetch(
         params: PlanExternalPlanIdFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -62,7 +64,11 @@ interface ExternalPlanIdService {
          * Returns a raw HTTP response for `put /plans/external_plan_id/{external_plan_id}`, but is
          * otherwise the same as [ExternalPlanIdService.update].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun update(params: PlanExternalPlanIdUpdateParams): HttpResponseFor<Plan> =
+            update(params, RequestOptions.none())
+
+        /** @see [update] */
         @MustBeClosed
         fun update(
             params: PlanExternalPlanIdUpdateParams,
@@ -73,7 +79,11 @@ interface ExternalPlanIdService {
          * Returns a raw HTTP response for `get /plans/external_plan_id/{external_plan_id}`, but is
          * otherwise the same as [ExternalPlanIdService.fetch].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun fetch(params: PlanExternalPlanIdFetchParams): HttpResponseFor<Plan> =
+            fetch(params, RequestOptions.none())
+
+        /** @see [fetch] */
         @MustBeClosed
         fun fetch(
             params: PlanExternalPlanIdFetchParams,

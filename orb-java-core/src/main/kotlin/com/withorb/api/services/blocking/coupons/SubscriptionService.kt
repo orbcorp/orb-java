@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.blocking.coupons
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -23,7 +21,10 @@ interface SubscriptionService {
      * subscription. For a full discussion of the subscription resource, see
      * [Subscription](/core-concepts#subscription).
      */
-    @JvmOverloads
+    fun list(params: CouponSubscriptionListParams): CouponSubscriptionListPage =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(
         params: CouponSubscriptionListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -38,7 +39,12 @@ interface SubscriptionService {
          * Returns a raw HTTP response for `get /coupons/{coupon_id}/subscriptions`, but is
          * otherwise the same as [SubscriptionService.list].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun list(
+            params: CouponSubscriptionListParams
+        ): HttpResponseFor<CouponSubscriptionListPage> = list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: CouponSubscriptionListParams,

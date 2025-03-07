@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.async.customers.credits
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -35,14 +33,22 @@ interface TopUpServiceAsync {
      * If a top-up already exists for this customer in the same currency, the existing top-up will
      * be replaced.
      */
-    @JvmOverloads
+    fun create(
+        params: CustomerCreditTopUpCreateParams
+    ): CompletableFuture<CustomerCreditTopUpCreateResponse> = create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
         params: CustomerCreditTopUpCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCreditTopUpCreateResponse>
 
     /** List top-ups */
-    @JvmOverloads
+    fun list(
+        params: CustomerCreditTopUpListParams
+    ): CompletableFuture<CustomerCreditTopUpListPageAsync> = list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(
         params: CustomerCreditTopUpListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -52,7 +58,10 @@ interface TopUpServiceAsync {
      * This deactivates the top-up and voids any invoices associated with pending credit blocks
      * purchased through the top-up.
      */
-    @JvmOverloads
+    fun delete(params: CustomerCreditTopUpDeleteParams): CompletableFuture<Void?> =
+        delete(params, RequestOptions.none())
+
+    /** @see [delete] */
     fun delete(
         params: CustomerCreditTopUpDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -66,7 +75,12 @@ interface TopUpServiceAsync {
      * If a top-up already exists for this customer in the same currency, the existing top-up will
      * be replaced.
      */
-    @JvmOverloads
+    fun createByExternalId(
+        params: CustomerCreditTopUpCreateByExternalIdParams
+    ): CompletableFuture<CustomerCreditTopUpCreateByExternalIdResponse> =
+        createByExternalId(params, RequestOptions.none())
+
+    /** @see [createByExternalId] */
     fun createByExternalId(
         params: CustomerCreditTopUpCreateByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -76,14 +90,23 @@ interface TopUpServiceAsync {
      * This deactivates the top-up and voids any invoices associated with pending credit blocks
      * purchased through the top-up.
      */
-    @JvmOverloads
+    fun deleteByExternalId(
+        params: CustomerCreditTopUpDeleteByExternalIdParams
+    ): CompletableFuture<Void?> = deleteByExternalId(params, RequestOptions.none())
+
+    /** @see [deleteByExternalId] */
     fun deleteByExternalId(
         params: CustomerCreditTopUpDeleteByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Void?>
 
     /** List top-ups by external ID */
-    @JvmOverloads
+    fun listByExternalId(
+        params: CustomerCreditTopUpListByExternalIdParams
+    ): CompletableFuture<CustomerCreditTopUpListByExternalIdPageAsync> =
+        listByExternalId(params, RequestOptions.none())
+
+    /** @see [listByExternalId] */
     fun listByExternalId(
         params: CustomerCreditTopUpListByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -96,7 +119,13 @@ interface TopUpServiceAsync {
          * Returns a raw HTTP response for `post /customers/{customer_id}/credits/top_ups`, but is
          * otherwise the same as [TopUpServiceAsync.create].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun create(
+            params: CustomerCreditTopUpCreateParams
+        ): CompletableFuture<HttpResponseFor<CustomerCreditTopUpCreateResponse>> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
         @MustBeClosed
         fun create(
             params: CustomerCreditTopUpCreateParams,
@@ -107,7 +136,13 @@ interface TopUpServiceAsync {
          * Returns a raw HTTP response for `get /customers/{customer_id}/credits/top_ups`, but is
          * otherwise the same as [TopUpServiceAsync.list].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun list(
+            params: CustomerCreditTopUpListParams
+        ): CompletableFuture<HttpResponseFor<CustomerCreditTopUpListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: CustomerCreditTopUpListParams,
@@ -119,7 +154,11 @@ interface TopUpServiceAsync {
          * /customers/{customer_id}/credits/top_ups/{top_up_id}`, but is otherwise the same as
          * [TopUpServiceAsync.delete].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun delete(params: CustomerCreditTopUpDeleteParams): CompletableFuture<HttpResponse> =
+            delete(params, RequestOptions.none())
+
+        /** @see [delete] */
         @MustBeClosed
         fun delete(
             params: CustomerCreditTopUpDeleteParams,
@@ -131,7 +170,13 @@ interface TopUpServiceAsync {
          * /customers/external_customer_id/{external_customer_id}/credits/top_ups`, but is otherwise
          * the same as [TopUpServiceAsync.createByExternalId].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun createByExternalId(
+            params: CustomerCreditTopUpCreateByExternalIdParams
+        ): CompletableFuture<HttpResponseFor<CustomerCreditTopUpCreateByExternalIdResponse>> =
+            createByExternalId(params, RequestOptions.none())
+
+        /** @see [createByExternalId] */
         @MustBeClosed
         fun createByExternalId(
             params: CustomerCreditTopUpCreateByExternalIdParams,
@@ -143,7 +188,12 @@ interface TopUpServiceAsync {
          * /customers/external_customer_id/{external_customer_id}/credits/top_ups/{top_up_id}`, but
          * is otherwise the same as [TopUpServiceAsync.deleteByExternalId].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun deleteByExternalId(
+            params: CustomerCreditTopUpDeleteByExternalIdParams
+        ): CompletableFuture<HttpResponse> = deleteByExternalId(params, RequestOptions.none())
+
+        /** @see [deleteByExternalId] */
         @MustBeClosed
         fun deleteByExternalId(
             params: CustomerCreditTopUpDeleteByExternalIdParams,
@@ -155,7 +205,13 @@ interface TopUpServiceAsync {
          * /customers/external_customer_id/{external_customer_id}/credits/top_ups`, but is otherwise
          * the same as [TopUpServiceAsync.listByExternalId].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun listByExternalId(
+            params: CustomerCreditTopUpListByExternalIdParams
+        ): CompletableFuture<HttpResponseFor<CustomerCreditTopUpListByExternalIdPageAsync>> =
+            listByExternalId(params, RequestOptions.none())
+
+        /** @see [listByExternalId] */
         @MustBeClosed
         fun listByExternalId(
             params: CustomerCreditTopUpListByExternalIdParams,

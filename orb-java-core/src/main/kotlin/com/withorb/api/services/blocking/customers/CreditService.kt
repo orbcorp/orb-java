@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.blocking.customers
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -34,7 +32,10 @@ interface CreditService {
      * Note that `currency` defaults to credits if not specified. To use a real world currency, set
      * `currency` to an ISO 4217 string.
      */
-    @JvmOverloads
+    fun list(params: CustomerCreditListParams): CustomerCreditListPage =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(
         params: CustomerCreditListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -49,7 +50,11 @@ interface CreditService {
      * Note that `currency` defaults to credits if not specified. To use a real world currency, set
      * `currency` to an ISO 4217 string.
      */
-    @JvmOverloads
+    fun listByExternalId(
+        params: CustomerCreditListByExternalIdParams
+    ): CustomerCreditListByExternalIdPage = listByExternalId(params, RequestOptions.none())
+
+    /** @see [listByExternalId] */
     fun listByExternalId(
         params: CustomerCreditListByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -66,7 +71,11 @@ interface CreditService {
          * Returns a raw HTTP response for `get /customers/{customer_id}/credits`, but is otherwise
          * the same as [CreditService.list].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun list(params: CustomerCreditListParams): HttpResponseFor<CustomerCreditListPage> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: CustomerCreditListParams,
@@ -78,7 +87,13 @@ interface CreditService {
          * /customers/external_customer_id/{external_customer_id}/credits`, but is otherwise the
          * same as [CreditService.listByExternalId].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun listByExternalId(
+            params: CustomerCreditListByExternalIdParams
+        ): HttpResponseFor<CustomerCreditListByExternalIdPage> =
+            listByExternalId(params, RequestOptions.none())
+
+        /** @see [listByExternalId] */
         @MustBeClosed
         fun listByExternalId(
             params: CustomerCreditListByExternalIdParams,
