@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.46.0 (2025-03-07)
+
+Full Changelog: [v0.45.0...v0.46.0](https://github.com/orbcorp/orb-java/compare/v0.45.0...v0.46.0)
+
+### Features
+
+* generate and publish docs ([#320](https://github.com/orbcorp/orb-java/issues/320)) ([44c1bcd](https://github.com/orbcorp/orb-java/commit/44c1bcdd24a8a5500c32b4a21376a2a3a110555c))
+
+
+### Bug Fixes
+
+* compilation error ([a4cfad1](https://github.com/orbcorp/orb-java/commit/a4cfad1e038849dcf0c81888d1acd9401cc28073))
+
 ## 0.45.0 (2025-03-07)
 
 Full Changelog: [v0.44.0...v0.45.0](https://github.com/orbcorp/orb-java/compare/v0.44.0...v0.45.0)
