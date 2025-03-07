@@ -16,6 +16,7 @@ import java.time.ZoneOffset
 import java.util.*
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
+import kotlin.jvm.optionals.getOrNull
 
 private const val SIGNATURE_HEADER = "X-Orb-Signature"
 private const val TIMESTAMP_HEADER = "X-Orb-Timestamp"
@@ -40,7 +41,7 @@ class WebhookServiceImpl constructor(private val clientOptions: ClientOptions) :
     override fun verifySignature(payload: String, headers: Headers, secret: String?) {
         val webhookSecret =
             secret
-                ?: clientOptions.webhookSecret
+                ?: clientOptions.webhookSecret().getOrNull()
                 ?: throw OrbException(
                     "The webhook secret must either be set using the env var, ORB_WEBHOOK_SECRET, on the client class, or passed to this method"
                 )
