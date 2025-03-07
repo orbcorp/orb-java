@@ -451,10 +451,6 @@ private constructor(
 
         companion object {
 
-            @JvmField val USAGE_EXCEEDED = of("usage_exceeded")
-
-            @JvmField val COST_EXCEEDED = of("cost_exceeded")
-
             @JvmField val CREDIT_BALANCE_DEPLETED = of("credit_balance_depleted")
 
             @JvmField val CREDIT_BALANCE_DROPPED = of("credit_balance_dropped")
@@ -466,8 +462,6 @@ private constructor(
 
         /** An enum containing [Type]'s known values. */
         enum class Known {
-            USAGE_EXCEEDED,
-            COST_EXCEEDED,
             CREDIT_BALANCE_DEPLETED,
             CREDIT_BALANCE_DROPPED,
             CREDIT_BALANCE_RECOVERED,
@@ -483,8 +477,6 @@ private constructor(
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
-            USAGE_EXCEEDED,
-            COST_EXCEEDED,
             CREDIT_BALANCE_DEPLETED,
             CREDIT_BALANCE_DROPPED,
             CREDIT_BALANCE_RECOVERED,
@@ -501,8 +493,6 @@ private constructor(
          */
         fun value(): Value =
             when (this) {
-                USAGE_EXCEEDED -> Value.USAGE_EXCEEDED
-                COST_EXCEEDED -> Value.COST_EXCEEDED
                 CREDIT_BALANCE_DEPLETED -> Value.CREDIT_BALANCE_DEPLETED
                 CREDIT_BALANCE_DROPPED -> Value.CREDIT_BALANCE_DROPPED
                 CREDIT_BALANCE_RECOVERED -> Value.CREDIT_BALANCE_RECOVERED
@@ -519,8 +509,6 @@ private constructor(
          */
         fun known(): Known =
             when (this) {
-                USAGE_EXCEEDED -> Known.USAGE_EXCEEDED
-                COST_EXCEEDED -> Known.COST_EXCEEDED
                 CREDIT_BALANCE_DEPLETED -> Known.CREDIT_BALANCE_DEPLETED
                 CREDIT_BALANCE_DROPPED -> Known.CREDIT_BALANCE_DROPPED
                 CREDIT_BALANCE_RECOVERED -> Known.CREDIT_BALANCE_RECOVERED
