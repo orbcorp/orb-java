@@ -576,12 +576,6 @@ private constructor(
 
             @JvmField val COST_EXCEEDED = of("cost_exceeded")
 
-            @JvmField val CREDIT_BALANCE_DEPLETED = of("credit_balance_depleted")
-
-            @JvmField val CREDIT_BALANCE_DROPPED = of("credit_balance_dropped")
-
-            @JvmField val CREDIT_BALANCE_RECOVERED = of("credit_balance_recovered")
-
             @JvmStatic fun of(value: String) = Type(JsonField.of(value))
         }
 
@@ -589,9 +583,6 @@ private constructor(
         enum class Known {
             USAGE_EXCEEDED,
             COST_EXCEEDED,
-            CREDIT_BALANCE_DEPLETED,
-            CREDIT_BALANCE_DROPPED,
-            CREDIT_BALANCE_RECOVERED,
         }
 
         /**
@@ -606,9 +597,6 @@ private constructor(
         enum class Value {
             USAGE_EXCEEDED,
             COST_EXCEEDED,
-            CREDIT_BALANCE_DEPLETED,
-            CREDIT_BALANCE_DROPPED,
-            CREDIT_BALANCE_RECOVERED,
             /** An enum member indicating that [Type] was instantiated with an unknown value. */
             _UNKNOWN,
         }
@@ -624,9 +612,6 @@ private constructor(
             when (this) {
                 USAGE_EXCEEDED -> Value.USAGE_EXCEEDED
                 COST_EXCEEDED -> Value.COST_EXCEEDED
-                CREDIT_BALANCE_DEPLETED -> Value.CREDIT_BALANCE_DEPLETED
-                CREDIT_BALANCE_DROPPED -> Value.CREDIT_BALANCE_DROPPED
-                CREDIT_BALANCE_RECOVERED -> Value.CREDIT_BALANCE_RECOVERED
                 else -> Value._UNKNOWN
             }
 
@@ -642,9 +627,6 @@ private constructor(
             when (this) {
                 USAGE_EXCEEDED -> Known.USAGE_EXCEEDED
                 COST_EXCEEDED -> Known.COST_EXCEEDED
-                CREDIT_BALANCE_DEPLETED -> Known.CREDIT_BALANCE_DEPLETED
-                CREDIT_BALANCE_DROPPED -> Known.CREDIT_BALANCE_DROPPED
-                CREDIT_BALANCE_RECOVERED -> Known.CREDIT_BALANCE_RECOVERED
                 else -> throw OrbInvalidDataException("Unknown Type: $value")
             }
 
