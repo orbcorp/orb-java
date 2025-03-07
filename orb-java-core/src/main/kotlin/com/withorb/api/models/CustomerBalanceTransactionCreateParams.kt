@@ -21,6 +21,7 @@ import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Creates an immutable balance transaction that updates the customer's balance and returns back the
@@ -162,7 +163,7 @@ private constructor(
             fun description(description: String?) = description(JsonField.ofNullable(description))
 
             /** An optional description that can be specified around this entry. */
-            fun description(description: Optional<String>) = description(description.orElse(null))
+            fun description(description: Optional<String>) = description(description.getOrNull())
 
             /** An optional description that can be specified around this entry. */
             fun description(description: JsonField<String>) = apply {
@@ -267,7 +268,7 @@ private constructor(
         fun description(description: String?) = apply { body.description(description) }
 
         /** An optional description that can be specified around this entry. */
-        fun description(description: Optional<String>) = description(description.orElse(null))
+        fun description(description: Optional<String>) = description(description.getOrNull())
 
         /** An optional description that can be specified around this entry. */
         fun description(description: JsonField<String>) = apply { body.description(description) }

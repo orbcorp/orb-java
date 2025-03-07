@@ -973,7 +973,7 @@ private constructor(
             billingAddress(JsonField.ofNullable(billingAddress))
 
         fun billingAddress(billingAddress: Optional<BillingAddress>) =
-            billingAddress(billingAddress.orElse(null))
+            billingAddress(billingAddress.getOrNull())
 
         fun billingAddress(billingAddress: JsonField<BillingAddress>) = apply {
             this.billingAddress = billingAddress
@@ -1247,7 +1247,7 @@ private constructor(
          * |Vietnam             |`vn_tin`    |Vietnamese Tax ID Number                                                                               |
          */
         fun customerTaxId(customerTaxId: Optional<CustomerTaxId>) =
-            customerTaxId(customerTaxId.orElse(null))
+            customerTaxId(customerTaxId.getOrNull())
 
         /**
          * Tax IDs are commonly required to be displayed on customer invoices, which are added to
@@ -1405,7 +1405,7 @@ private constructor(
          * When the invoice payment is due. The due date is null if the invoice is not yet
          * finalized.
          */
-        fun dueDate(dueDate: Optional<OffsetDateTime>) = dueDate(dueDate.orElse(null))
+        fun dueDate(dueDate: Optional<OffsetDateTime>) = dueDate(dueDate.getOrNull())
 
         /**
          * When the invoice payment is due. The due date is null if the invoice is not yet
@@ -1427,7 +1427,7 @@ private constructor(
          * will automatically begin issuing at this time.
          */
         fun eligibleToIssueAt(eligibleToIssueAt: Optional<OffsetDateTime>) =
-            eligibleToIssueAt(eligibleToIssueAt.orElse(null))
+            eligibleToIssueAt(eligibleToIssueAt.getOrNull())
 
         /**
          * If the invoice has a status of `draft`, this will be the time that the invoice will be
@@ -1450,7 +1450,7 @@ private constructor(
          * invoice's due date, or 60 days after being re-generated through the UI.
          */
         fun hostedInvoiceUrl(hostedInvoiceUrl: Optional<String>) =
-            hostedInvoiceUrl(hostedInvoiceUrl.orElse(null))
+            hostedInvoiceUrl(hostedInvoiceUrl.getOrNull())
 
         /**
          * A URL for the customer-facing invoice portal. This URL expires 30 days after the
@@ -1486,7 +1486,7 @@ private constructor(
         fun invoicePdf(invoicePdf: String?) = invoicePdf(JsonField.ofNullable(invoicePdf))
 
         /** The link to download the PDF representation of the `Invoice`. */
-        fun invoicePdf(invoicePdf: Optional<String>) = invoicePdf(invoicePdf.orElse(null))
+        fun invoicePdf(invoicePdf: Optional<String>) = invoicePdf(invoicePdf.getOrNull())
 
         /** The link to download the PDF representation of the `Invoice`. */
         fun invoicePdf(invoicePdf: JsonField<String>) = apply { this.invoicePdf = invoicePdf }
@@ -1509,7 +1509,7 @@ private constructor(
          * is now in a different state.)
          */
         fun issueFailedAt(issueFailedAt: Optional<OffsetDateTime>) =
-            issueFailedAt(issueFailedAt.orElse(null))
+            issueFailedAt(issueFailedAt.getOrNull())
 
         /**
          * If the invoice failed to issue, this will be the last time it failed to issue (even if it
@@ -1529,7 +1529,7 @@ private constructor(
          * If the invoice has been issued, this will be the time it transitioned to `issued` (even
          * if it is now in a different state.)
          */
-        fun issuedAt(issuedAt: Optional<OffsetDateTime>) = issuedAt(issuedAt.orElse(null))
+        fun issuedAt(issuedAt: Optional<OffsetDateTime>) = issuedAt(issuedAt.getOrNull())
 
         /**
          * If the invoice has been issued, this will be the time it transitioned to `issued` (even
@@ -1555,7 +1555,7 @@ private constructor(
 
         fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-        fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+        fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
         fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -1563,7 +1563,7 @@ private constructor(
             maximumAmount(JsonField.ofNullable(maximumAmount))
 
         fun maximumAmount(maximumAmount: Optional<String>) =
-            maximumAmount(maximumAmount.orElse(null))
+            maximumAmount(maximumAmount.getOrNull())
 
         fun maximumAmount(maximumAmount: JsonField<String>) = apply {
             this.maximumAmount = maximumAmount
@@ -1573,7 +1573,7 @@ private constructor(
         fun memo(memo: String?) = memo(JsonField.ofNullable(memo))
 
         /** Free-form text which is available on the invoice PDF and the Orb invoice portal. */
-        fun memo(memo: Optional<String>) = memo(memo.orElse(null))
+        fun memo(memo: Optional<String>) = memo(memo.getOrNull())
 
         /** Free-form text which is available on the invoice PDF and the Orb invoice portal. */
         fun memo(memo: JsonField<String>) = apply { this.memo = memo }
@@ -1594,7 +1594,7 @@ private constructor(
 
         fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-        fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+        fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
         fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -1602,7 +1602,7 @@ private constructor(
             minimumAmount(JsonField.ofNullable(minimumAmount))
 
         fun minimumAmount(minimumAmount: Optional<String>) =
-            minimumAmount(minimumAmount.orElse(null))
+            minimumAmount(minimumAmount.getOrNull())
 
         fun minimumAmount(minimumAmount: JsonField<String>) = apply {
             this.minimumAmount = minimumAmount
@@ -1616,7 +1616,7 @@ private constructor(
         /**
          * If the invoice has a status of `paid`, this gives a timestamp when the invoice was paid.
          */
-        fun paidAt(paidAt: Optional<OffsetDateTime>) = paidAt(paidAt.orElse(null))
+        fun paidAt(paidAt: Optional<OffsetDateTime>) = paidAt(paidAt.getOrNull())
 
         /**
          * If the invoice has a status of `paid`, this gives a timestamp when the invoice was paid.
@@ -1652,7 +1652,7 @@ private constructor(
          * recent attempt.
          */
         fun paymentFailedAt(paymentFailedAt: Optional<OffsetDateTime>) =
-            paymentFailedAt(paymentFailedAt.orElse(null))
+            paymentFailedAt(paymentFailedAt.getOrNull())
 
         /**
          * If payment was attempted on this invoice but failed, this will be the time of the most
@@ -1676,7 +1676,7 @@ private constructor(
          * (like bank transfers), where payment can take 3 days or more.
          */
         fun paymentStartedAt(paymentStartedAt: Optional<OffsetDateTime>) =
-            paymentStartedAt(paymentStartedAt.orElse(null))
+            paymentStartedAt(paymentStartedAt.getOrNull())
 
         /**
          * If payment was attempted on this invoice, this will be the start time of the most recent
@@ -1699,7 +1699,7 @@ private constructor(
          * be issued.
          */
         fun scheduledIssueAt(scheduledIssueAt: Optional<OffsetDateTime>) =
-            scheduledIssueAt(scheduledIssueAt.orElse(null))
+            scheduledIssueAt(scheduledIssueAt.getOrNull())
 
         /**
          * If the invoice is in draft, this timestamp will reflect when the invoice is scheduled to
@@ -1713,7 +1713,7 @@ private constructor(
             shippingAddress(JsonField.ofNullable(shippingAddress))
 
         fun shippingAddress(shippingAddress: Optional<ShippingAddress>) =
-            shippingAddress(shippingAddress.orElse(null))
+            shippingAddress(shippingAddress.getOrNull())
 
         fun shippingAddress(shippingAddress: JsonField<ShippingAddress>) = apply {
             this.shippingAddress = shippingAddress
@@ -1727,7 +1727,7 @@ private constructor(
             subscription(JsonField.ofNullable(subscription))
 
         fun subscription(subscription: Optional<Subscription>) =
-            subscription(subscription.orElse(null))
+            subscription(subscription.getOrNull())
 
         fun subscription(subscription: JsonField<Subscription>) = apply {
             this.subscription = subscription
@@ -1751,7 +1751,7 @@ private constructor(
          * sync was attempted. This field will always be `null` for invoices using Orb Invoicing.
          */
         fun syncFailedAt(syncFailedAt: Optional<OffsetDateTime>) =
-            syncFailedAt(syncFailedAt.orElse(null))
+            syncFailedAt(syncFailedAt.getOrNull())
 
         /**
          * If the invoice failed to sync, this will be the last time an external invoicing provider
@@ -1777,7 +1777,7 @@ private constructor(
          * If the invoice has a status of `void`, this gives a timestamp when the invoice was
          * voided.
          */
-        fun voidedAt(voidedAt: Optional<OffsetDateTime>) = voidedAt(voidedAt.orElse(null))
+        fun voidedAt(voidedAt: Optional<OffsetDateTime>) = voidedAt(voidedAt.getOrNull())
 
         /**
          * If the invoice has a status of `void`, this gives a timestamp when the invoice was
@@ -2003,8 +2003,7 @@ private constructor(
             fun enabled(enabled: Boolean) = enabled(enabled as Boolean?)
 
             /** True only if auto-collection is enabled for this invoice. */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun enabled(enabled: Optional<Boolean>) = enabled(enabled.orElse(null) as Boolean?)
+            fun enabled(enabled: Optional<Boolean>) = enabled(enabled.getOrNull())
 
             /** True only if auto-collection is enabled for this invoice. */
             fun enabled(enabled: JsonField<Boolean>) = apply { this.enabled = enabled }
@@ -2023,7 +2022,7 @@ private constructor(
              * enabled for this invoice, this field will be `null`.
              */
             fun nextAttemptAt(nextAttemptAt: Optional<OffsetDateTime>) =
-                nextAttemptAt(nextAttemptAt.orElse(null))
+                nextAttemptAt(nextAttemptAt.getOrNull())
 
             /**
              * If the invoice is scheduled for auto-collection, this field will reflect when the
@@ -2041,9 +2040,7 @@ private constructor(
             fun numAttempts(numAttempts: Long) = numAttempts(numAttempts as Long?)
 
             /** Number of auto-collection payment attempts. */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun numAttempts(numAttempts: Optional<Long>) =
-                numAttempts(numAttempts.orElse(null) as Long?)
+            fun numAttempts(numAttempts: Optional<Long>) = numAttempts(numAttempts.getOrNull())
 
             /** Number of auto-collection payment attempts. */
             fun numAttempts(numAttempts: JsonField<Long>) = apply { this.numAttempts = numAttempts }
@@ -2068,7 +2065,7 @@ private constructor(
              * `next_attempt_time` is null).
              */
             fun previouslyAttemptedAt(previouslyAttemptedAt: Optional<OffsetDateTime>) =
-                previouslyAttemptedAt(previouslyAttemptedAt.orElse(null))
+                previouslyAttemptedAt(previouslyAttemptedAt.getOrNull())
 
             /**
              * If Orb has ever attempted payment auto-collection for this invoice, this field will
@@ -2246,37 +2243,37 @@ private constructor(
 
             fun city(city: String?) = city(JsonField.ofNullable(city))
 
-            fun city(city: Optional<String>) = city(city.orElse(null))
+            fun city(city: Optional<String>) = city(city.getOrNull())
 
             fun city(city: JsonField<String>) = apply { this.city = city }
 
             fun country(country: String?) = country(JsonField.ofNullable(country))
 
-            fun country(country: Optional<String>) = country(country.orElse(null))
+            fun country(country: Optional<String>) = country(country.getOrNull())
 
             fun country(country: JsonField<String>) = apply { this.country = country }
 
             fun line1(line1: String?) = line1(JsonField.ofNullable(line1))
 
-            fun line1(line1: Optional<String>) = line1(line1.orElse(null))
+            fun line1(line1: Optional<String>) = line1(line1.getOrNull())
 
             fun line1(line1: JsonField<String>) = apply { this.line1 = line1 }
 
             fun line2(line2: String?) = line2(JsonField.ofNullable(line2))
 
-            fun line2(line2: Optional<String>) = line2(line2.orElse(null))
+            fun line2(line2: Optional<String>) = line2(line2.getOrNull())
 
             fun line2(line2: JsonField<String>) = apply { this.line2 = line2 }
 
             fun postalCode(postalCode: String?) = postalCode(JsonField.ofNullable(postalCode))
 
-            fun postalCode(postalCode: Optional<String>) = postalCode(postalCode.orElse(null))
+            fun postalCode(postalCode: Optional<String>) = postalCode(postalCode.getOrNull())
 
             fun postalCode(postalCode: JsonField<String>) = apply { this.postalCode = postalCode }
 
             fun state(state: String?) = state(JsonField.ofNullable(state))
 
-            fun state(state: Optional<String>) = state(state.orElse(null))
+            fun state(state: Optional<String>) = state(state.getOrNull())
 
             fun state(state: JsonField<String>) = apply { this.state = state }
 
@@ -2480,7 +2477,7 @@ private constructor(
             fun memo(memo: String?) = memo(JsonField.ofNullable(memo))
 
             /** An optional memo supplied on the credit note. */
-            fun memo(memo: Optional<String>) = memo(memo.orElse(null))
+            fun memo(memo: Optional<String>) = memo(memo.getOrNull())
 
             /** An optional memo supplied on the credit note. */
             fun memo(memo: JsonField<String>) = apply { this.memo = memo }
@@ -2507,7 +2504,7 @@ private constructor(
              * If the credit note has a status of `void`, this gives a timestamp when the credit
              * note was voided.
              */
-            fun voidedAt(voidedAt: Optional<OffsetDateTime>) = voidedAt(voidedAt.orElse(null))
+            fun voidedAt(voidedAt: Optional<OffsetDateTime>) = voidedAt(voidedAt.getOrNull())
 
             /**
              * If the credit note has a status of `void`, this gives a timestamp when the credit
@@ -2642,7 +2639,7 @@ private constructor(
                 externalCustomerId(JsonField.ofNullable(externalCustomerId))
 
             fun externalCustomerId(externalCustomerId: Optional<String>) =
-                externalCustomerId(externalCustomerId.orElse(null))
+                externalCustomerId(externalCustomerId.getOrNull())
 
             fun externalCustomerId(externalCustomerId: JsonField<String>) = apply {
                 this.externalCustomerId = externalCustomerId
@@ -2909,7 +2906,7 @@ private constructor(
 
             fun creditNote(creditNote: CreditNote?) = creditNote(JsonField.ofNullable(creditNote))
 
-            fun creditNote(creditNote: Optional<CreditNote>) = creditNote(creditNote.orElse(null))
+            fun creditNote(creditNote: Optional<CreditNote>) = creditNote(creditNote.getOrNull())
 
             fun creditNote(creditNote: JsonField<CreditNote>) = apply {
                 this.creditNote = creditNote
@@ -2919,7 +2916,7 @@ private constructor(
             fun description(description: String?) = description(JsonField.ofNullable(description))
 
             /** An optional description provided for manual customer balance adjustments. */
-            fun description(description: Optional<String>) = description(description.orElse(null))
+            fun description(description: Optional<String>) = description(description.getOrNull())
 
             /** An optional description provided for manual customer balance adjustments. */
             fun description(description: JsonField<String>) = apply {
@@ -2942,7 +2939,7 @@ private constructor(
 
             fun invoice(invoice: InnerInvoice?) = invoice(JsonField.ofNullable(invoice))
 
-            fun invoice(invoice: Optional<InnerInvoice>) = invoice(invoice.orElse(null))
+            fun invoice(invoice: Optional<InnerInvoice>) = invoice(invoice.getOrNull())
 
             fun invoice(invoice: JsonField<InnerInvoice>) = apply { this.invoice = invoice }
 
@@ -5434,7 +5431,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -5465,7 +5462,7 @@ private constructor(
             fun filter(filter: String?) = filter(JsonField.ofNullable(filter))
 
             /** An additional filter that was used to calculate the usage for this line item. */
-            fun filter(filter: Optional<String>) = filter(filter.orElse(null))
+            fun filter(filter: Optional<String>) = filter(filter.getOrNull())
 
             /** An additional filter that was used to calculate the usage for this line item. */
             fun filter(filter: JsonField<String>) = apply { this.filter = filter }
@@ -5482,7 +5479,7 @@ private constructor(
              * populated with the key and a value. The `amount` and `subtotal` will be the values
              * for this particular grouping.
              */
-            fun grouping(grouping: Optional<String>) = grouping(grouping.orElse(null))
+            fun grouping(grouping: Optional<String>) = grouping(grouping.getOrNull())
 
             /**
              * [DEPRECATED] For configured prices that are split by a grouping key, this will be
@@ -5497,7 +5494,7 @@ private constructor(
 
             /** This field is deprecated in favor of `adjustments`. */
             @Deprecated("deprecated")
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             /** This field is deprecated in favor of `adjustments`. */
             @Deprecated("deprecated")
@@ -5511,7 +5508,7 @@ private constructor(
             /** This field is deprecated in favor of `adjustments`. */
             @Deprecated("deprecated")
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             /** This field is deprecated in favor of `adjustments`. */
             @Deprecated("deprecated")
@@ -5525,7 +5522,7 @@ private constructor(
 
             /** This field is deprecated in favor of `adjustments`. */
             @Deprecated("deprecated")
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             /** This field is deprecated in favor of `adjustments`. */
             @Deprecated("deprecated")
@@ -5539,7 +5536,7 @@ private constructor(
             /** This field is deprecated in favor of `adjustments`. */
             @Deprecated("deprecated")
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             /** This field is deprecated in favor of `adjustments`. */
             @Deprecated("deprecated")
@@ -5588,7 +5585,7 @@ private constructor(
              * For more on the types of prices, see
              * [the core concepts documentation](/core-concepts#plan-and-price)
              */
-            fun price(price: Optional<Price>) = price(price.orElse(null))
+            fun price(price: Optional<Price>) = price(price.getOrNull())
 
             /**
              * The Price resource represents a price that can be billed on a subscription, resulting
@@ -6114,7 +6111,7 @@ private constructor(
 
             /** A list of customer ids that were used to calculate the usage for this line item. */
             fun usageCustomerIds(usageCustomerIds: Optional<List<String>>) =
-                usageCustomerIds(usageCustomerIds.orElse(null))
+                usageCustomerIds(usageCustomerIds.getOrNull())
 
             /** A list of customer ids that were used to calculate the usage for this line item. */
             fun usageCustomerIds(usageCustomerIds: JsonField<List<String>>) = apply {
@@ -6675,7 +6672,7 @@ private constructor(
                     fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
                     /** The reason for the adjustment. */
-                    fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+                    fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
                     /** The reason for the adjustment. */
                     fun reason(reason: JsonField<String>) = apply { this.reason = reason }
@@ -7081,7 +7078,7 @@ private constructor(
                     fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
                     /** The reason for the adjustment. */
-                    fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+                    fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
                     /** The reason for the adjustment. */
                     fun reason(reason: JsonField<String>) = apply { this.reason = reason }
@@ -7473,7 +7470,7 @@ private constructor(
                     fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
                     /** The reason for the adjustment. */
-                    fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+                    fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
                     /** The reason for the adjustment. */
                     fun reason(reason: JsonField<String>) = apply { this.reason = reason }
@@ -7882,7 +7879,7 @@ private constructor(
                     fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
                     /** The reason for the adjustment. */
-                    fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+                    fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
                     /** The reason for the adjustment. */
                     fun reason(reason: JsonField<String>) = apply { this.reason = reason }
@@ -8273,7 +8270,7 @@ private constructor(
                     fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
                     /** The reason for the adjustment. */
-                    fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+                    fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
                     /** The reason for the adjustment. */
                     fun reason(reason: JsonField<String>) = apply { this.reason = reason }
@@ -9079,7 +9076,7 @@ private constructor(
 
                     fun grouping(grouping: Grouping?) = grouping(JsonField.ofNullable(grouping))
 
-                    fun grouping(grouping: Optional<Grouping>) = grouping(grouping.orElse(null))
+                    fun grouping(grouping: Optional<Grouping>) = grouping(grouping.getOrNull())
 
                     fun grouping(grouping: JsonField<Grouping>) = apply { this.grouping = grouping }
 
@@ -9215,7 +9212,7 @@ private constructor(
                         fun value(value: String?) = value(JsonField.ofNullable(value))
 
                         /** No value indicates the default group */
-                        fun value(value: Optional<String>) = value(value.orElse(null))
+                        fun value(value: Optional<String>) = value(value.getOrNull())
 
                         /** No value indicates the default group */
                         fun value(value: JsonField<String>) = apply { this.value = value }
@@ -9644,7 +9641,7 @@ private constructor(
 
                     fun grouping(grouping: Grouping?) = grouping(JsonField.ofNullable(grouping))
 
-                    fun grouping(grouping: Optional<Grouping>) = grouping(grouping.orElse(null))
+                    fun grouping(grouping: Optional<Grouping>) = grouping(grouping.getOrNull())
 
                     fun grouping(grouping: JsonField<Grouping>) = apply { this.grouping = grouping }
 
@@ -9779,7 +9776,7 @@ private constructor(
                         fun value(value: String?) = value(JsonField.ofNullable(value))
 
                         /** No value indicates the default group */
-                        fun value(value: Optional<String>) = value(value.orElse(null))
+                        fun value(value: Optional<String>) = value(value.getOrNull())
 
                         /** No value indicates the default group */
                         fun value(value: JsonField<String>) = apply { this.value = value }
@@ -9929,11 +9926,7 @@ private constructor(
 
                         fun lastUnit(lastUnit: Double) = lastUnit(lastUnit as Double?)
 
-                        @Suppress(
-                            "USELESS_CAST"
-                        ) // See https://youtrack.jetbrains.com/issue/KT-74228
-                        fun lastUnit(lastUnit: Optional<Double>) =
-                            lastUnit(lastUnit.orElse(null) as Double?)
+                        fun lastUnit(lastUnit: Optional<Double>) = lastUnit(lastUnit.getOrNull())
 
                         fun lastUnit(lastUnit: JsonField<Double>) = apply {
                             this.lastUnit = lastUnit
@@ -10227,7 +10220,7 @@ private constructor(
 
                     fun grouping(grouping: Grouping?) = grouping(JsonField.ofNullable(grouping))
 
-                    fun grouping(grouping: Optional<Grouping>) = grouping(grouping.orElse(null))
+                    fun grouping(grouping: Optional<Grouping>) = grouping(grouping.getOrNull())
 
                     fun grouping(grouping: JsonField<Grouping>) = apply { this.grouping = grouping }
 
@@ -10355,7 +10348,7 @@ private constructor(
                         fun value(value: String?) = value(JsonField.ofNullable(value))
 
                         /** No value indicates the default group */
-                        fun value(value: Optional<String>) = value(value.orElse(null))
+                        fun value(value: Optional<String>) = value(value.getOrNull())
 
                         /** No value indicates the default group */
                         fun value(value: JsonField<String>) = apply { this.value = value }
@@ -10638,7 +10631,7 @@ private constructor(
 
                 /** The tax rate percentage, out of 100. */
                 fun taxRatePercentage(taxRatePercentage: Optional<String>) =
-                    taxRatePercentage(taxRatePercentage.orElse(null))
+                    taxRatePercentage(taxRatePercentage.getOrNull())
 
                 /** The tax rate percentage, out of 100. */
                 fun taxRatePercentage(taxRatePercentage: JsonField<String>) = apply {
@@ -11276,7 +11269,7 @@ private constructor(
 
             /** The payment provider that attempted to collect the payment. */
             fun paymentProvider(paymentProvider: Optional<PaymentProvider>) =
-                paymentProvider(paymentProvider.orElse(null))
+                paymentProvider(paymentProvider.getOrNull())
 
             /** The payment provider that attempted to collect the payment. */
             fun paymentProvider(paymentProvider: JsonField<PaymentProvider>) = apply {
@@ -11289,7 +11282,7 @@ private constructor(
 
             /** The ID of the payment attempt in the payment provider. */
             fun paymentProviderId(paymentProviderId: Optional<String>) =
-                paymentProviderId(paymentProviderId.orElse(null))
+                paymentProviderId(paymentProviderId.getOrNull())
 
             /** The ID of the payment attempt in the payment provider. */
             fun paymentProviderId(paymentProviderId: JsonField<String>) = apply {
@@ -11566,37 +11559,37 @@ private constructor(
 
             fun city(city: String?) = city(JsonField.ofNullable(city))
 
-            fun city(city: Optional<String>) = city(city.orElse(null))
+            fun city(city: Optional<String>) = city(city.getOrNull())
 
             fun city(city: JsonField<String>) = apply { this.city = city }
 
             fun country(country: String?) = country(JsonField.ofNullable(country))
 
-            fun country(country: Optional<String>) = country(country.orElse(null))
+            fun country(country: Optional<String>) = country(country.getOrNull())
 
             fun country(country: JsonField<String>) = apply { this.country = country }
 
             fun line1(line1: String?) = line1(JsonField.ofNullable(line1))
 
-            fun line1(line1: Optional<String>) = line1(line1.orElse(null))
+            fun line1(line1: Optional<String>) = line1(line1.getOrNull())
 
             fun line1(line1: JsonField<String>) = apply { this.line1 = line1 }
 
             fun line2(line2: String?) = line2(JsonField.ofNullable(line2))
 
-            fun line2(line2: Optional<String>) = line2(line2.orElse(null))
+            fun line2(line2: Optional<String>) = line2(line2.getOrNull())
 
             fun line2(line2: JsonField<String>) = apply { this.line2 = line2 }
 
             fun postalCode(postalCode: String?) = postalCode(JsonField.ofNullable(postalCode))
 
-            fun postalCode(postalCode: Optional<String>) = postalCode(postalCode.orElse(null))
+            fun postalCode(postalCode: Optional<String>) = postalCode(postalCode.getOrNull())
 
             fun postalCode(postalCode: JsonField<String>) = apply { this.postalCode = postalCode }
 
             fun state(state: String?) = state(JsonField.ofNullable(state))
 
-            fun state(state: Optional<String>) = state(state.orElse(null))
+            fun state(state: Optional<String>) = state(state.getOrNull())
 
             fun state(state: JsonField<String>) = apply { this.state = state }
 

@@ -11,6 +11,7 @@ import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint returns the event volume for an account in a
@@ -140,7 +141,7 @@ private constructor(
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
          * initial request.
          */
-        fun cursor(cursor: Optional<String>) = cursor(cursor.orElse(null))
+        fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
         /** The number of items to fetch. Defaults to 20. */
         fun limit(limit: Long?) = apply { this.limit = limit }
@@ -149,8 +150,7 @@ private constructor(
         fun limit(limit: Long) = limit(limit as Long?)
 
         /** The number of items to fetch. Defaults to 20. */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun limit(limit: Optional<Long>) = limit(limit.orElse(null) as Long?)
+        fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         /**
          * The end of the timeframe, exclusive, in which to return event volume. If not specified,
@@ -167,7 +167,7 @@ private constructor(
          * time falls in.
          */
         fun timeframeEnd(timeframeEnd: Optional<OffsetDateTime>) =
-            timeframeEnd(timeframeEnd.orElse(null))
+            timeframeEnd(timeframeEnd.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

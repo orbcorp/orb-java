@@ -14,6 +14,7 @@ import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint returns a list of all [plans](/core-concepts#plan-and-price) for an account in a
@@ -133,22 +134,22 @@ private constructor(
         fun createdAtGt(createdAtGt: OffsetDateTime?) = apply { this.createdAtGt = createdAtGt }
 
         fun createdAtGt(createdAtGt: Optional<OffsetDateTime>) =
-            createdAtGt(createdAtGt.orElse(null))
+            createdAtGt(createdAtGt.getOrNull())
 
         fun createdAtGte(createdAtGte: OffsetDateTime?) = apply { this.createdAtGte = createdAtGte }
 
         fun createdAtGte(createdAtGte: Optional<OffsetDateTime>) =
-            createdAtGte(createdAtGte.orElse(null))
+            createdAtGte(createdAtGte.getOrNull())
 
         fun createdAtLt(createdAtLt: OffsetDateTime?) = apply { this.createdAtLt = createdAtLt }
 
         fun createdAtLt(createdAtLt: Optional<OffsetDateTime>) =
-            createdAtLt(createdAtLt.orElse(null))
+            createdAtLt(createdAtLt.getOrNull())
 
         fun createdAtLte(createdAtLte: OffsetDateTime?) = apply { this.createdAtLte = createdAtLte }
 
         fun createdAtLte(createdAtLte: Optional<OffsetDateTime>) =
-            createdAtLte(createdAtLte.orElse(null))
+            createdAtLte(createdAtLte.getOrNull())
 
         /**
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
@@ -160,7 +161,7 @@ private constructor(
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
          * initial request.
          */
-        fun cursor(cursor: Optional<String>) = cursor(cursor.orElse(null))
+        fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
         /** The number of items to fetch. Defaults to 20. */
         fun limit(limit: Long?) = apply { this.limit = limit }
@@ -169,14 +170,13 @@ private constructor(
         fun limit(limit: Long) = limit(limit as Long?)
 
         /** The number of items to fetch. Defaults to 20. */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun limit(limit: Optional<Long>) = limit(limit.orElse(null) as Long?)
+        fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         /** The plan status to filter to ('active', 'archived', or 'draft'). */
         fun status(status: Status?) = apply { this.status = status }
 
         /** The plan status to filter to ('active', 'archived', or 'draft'). */
-        fun status(status: Optional<Status>) = status(status.orElse(null))
+        fun status(status: Optional<Status>) = status(status.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

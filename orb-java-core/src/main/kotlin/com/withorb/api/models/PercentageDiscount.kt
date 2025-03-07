@@ -19,6 +19,7 @@ import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 @NoAutoDetect
 class PercentageDiscount
@@ -167,7 +168,7 @@ private constructor(
 
         fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
-        fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+        fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
         fun reason(reason: JsonField<String>) = apply { this.reason = reason }
 

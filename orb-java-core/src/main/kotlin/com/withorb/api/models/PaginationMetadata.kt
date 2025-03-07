@@ -16,6 +16,7 @@ import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 @NoAutoDetect
 class PaginationMetadata
@@ -90,7 +91,7 @@ private constructor(
 
         fun nextCursor(nextCursor: String?) = nextCursor(JsonField.ofNullable(nextCursor))
 
-        fun nextCursor(nextCursor: Optional<String>) = nextCursor(nextCursor.orElse(null))
+        fun nextCursor(nextCursor: Optional<String>) = nextCursor(nextCursor.getOrNull())
 
         fun nextCursor(nextCursor: JsonField<String>) = apply { this.nextCursor = nextCursor }
 

@@ -8,6 +8,7 @@ import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint is used to list all add-on prices created using the
@@ -81,7 +82,7 @@ private constructor(
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
          * initial request.
          */
-        fun cursor(cursor: Optional<String>) = cursor(cursor.orElse(null))
+        fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
         /** The number of items to fetch. Defaults to 20. */
         fun limit(limit: Long?) = apply { this.limit = limit }
@@ -90,8 +91,7 @@ private constructor(
         fun limit(limit: Long) = limit(limit as Long?)
 
         /** The number of items to fetch. Defaults to 20. */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun limit(limit: Optional<Long>) = limit(limit.orElse(null) as Long?)
+        fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

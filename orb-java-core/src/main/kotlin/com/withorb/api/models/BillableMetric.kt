@@ -18,6 +18,7 @@ import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * The Metric resource represents a calculation of a quantity based on events. Metrics are defined
@@ -155,7 +156,7 @@ private constructor(
 
         fun description(description: String?) = description(JsonField.ofNullable(description))
 
-        fun description(description: Optional<String>) = description(description.orElse(null))
+        fun description(description: Optional<String>) = description(description.getOrNull())
 
         fun description(description: JsonField<String>) = apply { this.description = description }
 

@@ -22,6 +22,7 @@ import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint is used to create alerts at the subscription level.
@@ -192,7 +193,7 @@ private constructor(
             fun metricId(metricId: String?) = metricId(JsonField.ofNullable(metricId))
 
             /** The metric to track usage for. */
-            fun metricId(metricId: Optional<String>) = metricId(metricId.orElse(null))
+            fun metricId(metricId: Optional<String>) = metricId(metricId.getOrNull())
 
             /** The metric to track usage for. */
             fun metricId(metricId: JsonField<String>) = apply { this.metricId = metricId }
@@ -303,7 +304,7 @@ private constructor(
         fun metricId(metricId: String?) = apply { body.metricId(metricId) }
 
         /** The metric to track usage for. */
-        fun metricId(metricId: Optional<String>) = metricId(metricId.orElse(null))
+        fun metricId(metricId: Optional<String>) = metricId(metricId.getOrNull())
 
         /** The metric to track usage for. */
         fun metricId(metricId: JsonField<String>) = apply { body.metricId(metricId) }

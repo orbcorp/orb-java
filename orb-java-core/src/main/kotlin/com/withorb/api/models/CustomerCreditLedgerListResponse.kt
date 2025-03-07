@@ -634,7 +634,7 @@ private constructor(
 
             fun description(description: String?) = description(JsonField.ofNullable(description))
 
-            fun description(description: Optional<String>) = description(description.orElse(null))
+            fun description(description: Optional<String>) = description(description.getOrNull())
 
             fun description(description: JsonField<String>) = apply {
                 this.description = description
@@ -815,7 +815,7 @@ private constructor(
                     expiryDate(JsonField.ofNullable(expiryDate))
 
                 fun expiryDate(expiryDate: Optional<OffsetDateTime>) =
-                    expiryDate(expiryDate.orElse(null))
+                    expiryDate(expiryDate.getOrNull())
 
                 fun expiryDate(expiryDate: JsonField<OffsetDateTime>) = apply {
                     this.expiryDate = expiryDate
@@ -825,7 +825,7 @@ private constructor(
                     perUnitCostBasis(JsonField.ofNullable(perUnitCostBasis))
 
                 fun perUnitCostBasis(perUnitCostBasis: Optional<String>) =
-                    perUnitCostBasis(perUnitCostBasis.orElse(null))
+                    perUnitCostBasis(perUnitCostBasis.getOrNull())
 
                 fun perUnitCostBasis(perUnitCostBasis: JsonField<String>) = apply {
                     this.perUnitCostBasis = perUnitCostBasis
@@ -959,7 +959,7 @@ private constructor(
                     externalCustomerId(JsonField.ofNullable(externalCustomerId))
 
                 fun externalCustomerId(externalCustomerId: Optional<String>) =
-                    externalCustomerId(externalCustomerId.orElse(null))
+                    externalCustomerId(externalCustomerId.getOrNull())
 
                 fun externalCustomerId(externalCustomerId: JsonField<String>) = apply {
                     this.externalCustomerId = externalCustomerId
@@ -1591,7 +1591,7 @@ private constructor(
 
             fun description(description: String?) = description(JsonField.ofNullable(description))
 
-            fun description(description: Optional<String>) = description(description.orElse(null))
+            fun description(description: Optional<String>) = description(description.getOrNull())
 
             fun description(description: JsonField<String>) = apply {
                 this.description = description
@@ -1643,19 +1643,19 @@ private constructor(
 
             fun eventId(eventId: String?) = eventId(JsonField.ofNullable(eventId))
 
-            fun eventId(eventId: Optional<String>) = eventId(eventId.orElse(null))
+            fun eventId(eventId: Optional<String>) = eventId(eventId.getOrNull())
 
             fun eventId(eventId: JsonField<String>) = apply { this.eventId = eventId }
 
             fun invoiceId(invoiceId: String?) = invoiceId(JsonField.ofNullable(invoiceId))
 
-            fun invoiceId(invoiceId: Optional<String>) = invoiceId(invoiceId.orElse(null))
+            fun invoiceId(invoiceId: Optional<String>) = invoiceId(invoiceId.getOrNull())
 
             fun invoiceId(invoiceId: JsonField<String>) = apply { this.invoiceId = invoiceId }
 
             fun priceId(priceId: String?) = priceId(JsonField.ofNullable(priceId))
 
-            fun priceId(priceId: Optional<String>) = priceId(priceId.orElse(null))
+            fun priceId(priceId: Optional<String>) = priceId(priceId.getOrNull())
 
             fun priceId(priceId: JsonField<String>) = apply { this.priceId = priceId }
 
@@ -1793,7 +1793,7 @@ private constructor(
                     expiryDate(JsonField.ofNullable(expiryDate))
 
                 fun expiryDate(expiryDate: Optional<OffsetDateTime>) =
-                    expiryDate(expiryDate.orElse(null))
+                    expiryDate(expiryDate.getOrNull())
 
                 fun expiryDate(expiryDate: JsonField<OffsetDateTime>) = apply {
                     this.expiryDate = expiryDate
@@ -1803,7 +1803,7 @@ private constructor(
                     perUnitCostBasis(JsonField.ofNullable(perUnitCostBasis))
 
                 fun perUnitCostBasis(perUnitCostBasis: Optional<String>) =
-                    perUnitCostBasis(perUnitCostBasis.orElse(null))
+                    perUnitCostBasis(perUnitCostBasis.getOrNull())
 
                 fun perUnitCostBasis(perUnitCostBasis: JsonField<String>) = apply {
                     this.perUnitCostBasis = perUnitCostBasis
@@ -1937,7 +1937,7 @@ private constructor(
                     externalCustomerId(JsonField.ofNullable(externalCustomerId))
 
                 fun externalCustomerId(externalCustomerId: Optional<String>) =
-                    externalCustomerId(externalCustomerId.orElse(null))
+                    externalCustomerId(externalCustomerId.getOrNull())
 
                 fun externalCustomerId(externalCustomerId: JsonField<String>) = apply {
                     this.externalCustomerId = externalCustomerId
@@ -2555,7 +2555,7 @@ private constructor(
 
             fun description(description: String?) = description(JsonField.ofNullable(description))
 
-            fun description(description: Optional<String>) = description(description.orElse(null))
+            fun description(description: Optional<String>) = description(description.getOrNull())
 
             fun description(description: JsonField<String>) = apply {
                 this.description = description
@@ -2602,7 +2602,7 @@ private constructor(
                 newBlockExpiryDate(JsonField.ofNullable(newBlockExpiryDate))
 
             fun newBlockExpiryDate(newBlockExpiryDate: Optional<OffsetDateTime>) =
-                newBlockExpiryDate(newBlockExpiryDate.orElse(null))
+                newBlockExpiryDate(newBlockExpiryDate.getOrNull())
 
             fun newBlockExpiryDate(newBlockExpiryDate: JsonField<OffsetDateTime>) = apply {
                 this.newBlockExpiryDate = newBlockExpiryDate
@@ -2747,7 +2747,7 @@ private constructor(
                     expiryDate(JsonField.ofNullable(expiryDate))
 
                 fun expiryDate(expiryDate: Optional<OffsetDateTime>) =
-                    expiryDate(expiryDate.orElse(null))
+                    expiryDate(expiryDate.getOrNull())
 
                 fun expiryDate(expiryDate: JsonField<OffsetDateTime>) = apply {
                     this.expiryDate = expiryDate
@@ -2757,7 +2757,7 @@ private constructor(
                     perUnitCostBasis(JsonField.ofNullable(perUnitCostBasis))
 
                 fun perUnitCostBasis(perUnitCostBasis: Optional<String>) =
-                    perUnitCostBasis(perUnitCostBasis.orElse(null))
+                    perUnitCostBasis(perUnitCostBasis.getOrNull())
 
                 fun perUnitCostBasis(perUnitCostBasis: JsonField<String>) = apply {
                     this.perUnitCostBasis = perUnitCostBasis
@@ -2891,7 +2891,7 @@ private constructor(
                     externalCustomerId(JsonField.ofNullable(externalCustomerId))
 
                 fun externalCustomerId(externalCustomerId: Optional<String>) =
-                    externalCustomerId(externalCustomerId.orElse(null))
+                    externalCustomerId(externalCustomerId.getOrNull())
 
                 fun externalCustomerId(externalCustomerId: JsonField<String>) = apply {
                     this.externalCustomerId = externalCustomerId
@@ -3495,7 +3495,7 @@ private constructor(
 
             fun description(description: String?) = description(JsonField.ofNullable(description))
 
-            fun description(description: Optional<String>) = description(description.orElse(null))
+            fun description(description: Optional<String>) = description(description.getOrNull())
 
             fun description(description: JsonField<String>) = apply {
                 this.description = description
@@ -3676,7 +3676,7 @@ private constructor(
                     expiryDate(JsonField.ofNullable(expiryDate))
 
                 fun expiryDate(expiryDate: Optional<OffsetDateTime>) =
-                    expiryDate(expiryDate.orElse(null))
+                    expiryDate(expiryDate.getOrNull())
 
                 fun expiryDate(expiryDate: JsonField<OffsetDateTime>) = apply {
                     this.expiryDate = expiryDate
@@ -3686,7 +3686,7 @@ private constructor(
                     perUnitCostBasis(JsonField.ofNullable(perUnitCostBasis))
 
                 fun perUnitCostBasis(perUnitCostBasis: Optional<String>) =
-                    perUnitCostBasis(perUnitCostBasis.orElse(null))
+                    perUnitCostBasis(perUnitCostBasis.getOrNull())
 
                 fun perUnitCostBasis(perUnitCostBasis: JsonField<String>) = apply {
                     this.perUnitCostBasis = perUnitCostBasis
@@ -3820,7 +3820,7 @@ private constructor(
                     externalCustomerId(JsonField.ofNullable(externalCustomerId))
 
                 fun externalCustomerId(externalCustomerId: Optional<String>) =
-                    externalCustomerId(externalCustomerId.orElse(null))
+                    externalCustomerId(externalCustomerId.getOrNull())
 
                 fun externalCustomerId(externalCustomerId: JsonField<String>) = apply {
                     this.externalCustomerId = externalCustomerId
@@ -4449,7 +4449,7 @@ private constructor(
 
             fun description(description: String?) = description(JsonField.ofNullable(description))
 
-            fun description(description: Optional<String>) = description(description.orElse(null))
+            fun description(description: Optional<String>) = description(description.getOrNull())
 
             fun description(description: JsonField<String>) = apply {
                 this.description = description
@@ -4505,7 +4505,7 @@ private constructor(
 
             fun voidReason(voidReason: String?) = voidReason(JsonField.ofNullable(voidReason))
 
-            fun voidReason(voidReason: Optional<String>) = voidReason(voidReason.orElse(null))
+            fun voidReason(voidReason: Optional<String>) = voidReason(voidReason.getOrNull())
 
             fun voidReason(voidReason: JsonField<String>) = apply { this.voidReason = voidReason }
 
@@ -4642,7 +4642,7 @@ private constructor(
                     expiryDate(JsonField.ofNullable(expiryDate))
 
                 fun expiryDate(expiryDate: Optional<OffsetDateTime>) =
-                    expiryDate(expiryDate.orElse(null))
+                    expiryDate(expiryDate.getOrNull())
 
                 fun expiryDate(expiryDate: JsonField<OffsetDateTime>) = apply {
                     this.expiryDate = expiryDate
@@ -4652,7 +4652,7 @@ private constructor(
                     perUnitCostBasis(JsonField.ofNullable(perUnitCostBasis))
 
                 fun perUnitCostBasis(perUnitCostBasis: Optional<String>) =
-                    perUnitCostBasis(perUnitCostBasis.orElse(null))
+                    perUnitCostBasis(perUnitCostBasis.getOrNull())
 
                 fun perUnitCostBasis(perUnitCostBasis: JsonField<String>) = apply {
                     this.perUnitCostBasis = perUnitCostBasis
@@ -4786,7 +4786,7 @@ private constructor(
                     externalCustomerId(JsonField.ofNullable(externalCustomerId))
 
                 fun externalCustomerId(externalCustomerId: Optional<String>) =
-                    externalCustomerId(externalCustomerId.orElse(null))
+                    externalCustomerId(externalCustomerId.getOrNull())
 
                 fun externalCustomerId(externalCustomerId: JsonField<String>) = apply {
                     this.externalCustomerId = externalCustomerId
@@ -5429,7 +5429,7 @@ private constructor(
 
             fun description(description: String?) = description(JsonField.ofNullable(description))
 
-            fun description(description: Optional<String>) = description(description.orElse(null))
+            fun description(description: Optional<String>) = description(description.getOrNull())
 
             fun description(description: JsonField<String>) = apply {
                 this.description = description
@@ -5492,7 +5492,7 @@ private constructor(
 
             fun voidReason(voidReason: String?) = voidReason(JsonField.ofNullable(voidReason))
 
-            fun voidReason(voidReason: Optional<String>) = voidReason(voidReason.orElse(null))
+            fun voidReason(voidReason: Optional<String>) = voidReason(voidReason.getOrNull())
 
             fun voidReason(voidReason: JsonField<String>) = apply { this.voidReason = voidReason }
 
@@ -5630,7 +5630,7 @@ private constructor(
                     expiryDate(JsonField.ofNullable(expiryDate))
 
                 fun expiryDate(expiryDate: Optional<OffsetDateTime>) =
-                    expiryDate(expiryDate.orElse(null))
+                    expiryDate(expiryDate.getOrNull())
 
                 fun expiryDate(expiryDate: JsonField<OffsetDateTime>) = apply {
                     this.expiryDate = expiryDate
@@ -5640,7 +5640,7 @@ private constructor(
                     perUnitCostBasis(JsonField.ofNullable(perUnitCostBasis))
 
                 fun perUnitCostBasis(perUnitCostBasis: Optional<String>) =
-                    perUnitCostBasis(perUnitCostBasis.orElse(null))
+                    perUnitCostBasis(perUnitCostBasis.getOrNull())
 
                 fun perUnitCostBasis(perUnitCostBasis: JsonField<String>) = apply {
                     this.perUnitCostBasis = perUnitCostBasis
@@ -5774,7 +5774,7 @@ private constructor(
                     externalCustomerId(JsonField.ofNullable(externalCustomerId))
 
                 fun externalCustomerId(externalCustomerId: Optional<String>) =
-                    externalCustomerId(externalCustomerId.orElse(null))
+                    externalCustomerId(externalCustomerId.getOrNull())
 
                 fun externalCustomerId(externalCustomerId: JsonField<String>) = apply {
                     this.externalCustomerId = externalCustomerId
@@ -6376,7 +6376,7 @@ private constructor(
 
             fun description(description: String?) = description(JsonField.ofNullable(description))
 
-            fun description(description: Optional<String>) = description(description.orElse(null))
+            fun description(description: Optional<String>) = description(description.getOrNull())
 
             fun description(description: JsonField<String>) = apply {
                 this.description = description
@@ -6557,7 +6557,7 @@ private constructor(
                     expiryDate(JsonField.ofNullable(expiryDate))
 
                 fun expiryDate(expiryDate: Optional<OffsetDateTime>) =
-                    expiryDate(expiryDate.orElse(null))
+                    expiryDate(expiryDate.getOrNull())
 
                 fun expiryDate(expiryDate: JsonField<OffsetDateTime>) = apply {
                     this.expiryDate = expiryDate
@@ -6567,7 +6567,7 @@ private constructor(
                     perUnitCostBasis(JsonField.ofNullable(perUnitCostBasis))
 
                 fun perUnitCostBasis(perUnitCostBasis: Optional<String>) =
-                    perUnitCostBasis(perUnitCostBasis.orElse(null))
+                    perUnitCostBasis(perUnitCostBasis.getOrNull())
 
                 fun perUnitCostBasis(perUnitCostBasis: JsonField<String>) = apply {
                     this.perUnitCostBasis = perUnitCostBasis
@@ -6701,7 +6701,7 @@ private constructor(
                     externalCustomerId(JsonField.ofNullable(externalCustomerId))
 
                 fun externalCustomerId(externalCustomerId: Optional<String>) =
-                    externalCustomerId(externalCustomerId.orElse(null))
+                    externalCustomerId(externalCustomerId.getOrNull())
 
                 fun externalCustomerId(externalCustomerId: JsonField<String>) = apply {
                     this.externalCustomerId = externalCustomerId

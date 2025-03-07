@@ -22,6 +22,7 @@ import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** This endpoint can be used to update properties on the Item. */
 class ItemUpdateParams
@@ -133,7 +134,7 @@ private constructor(
                 externalConnections(JsonField.ofNullable(externalConnections))
 
             fun externalConnections(externalConnections: Optional<List<ExternalConnection>>) =
-                externalConnections(externalConnections.orElse(null))
+                externalConnections(externalConnections.getOrNull())
 
             fun externalConnections(externalConnections: JsonField<List<ExternalConnection>>) =
                 apply {
@@ -149,7 +150,7 @@ private constructor(
 
             fun name(name: String?) = name(JsonField.ofNullable(name))
 
-            fun name(name: Optional<String>) = name(name.orElse(null))
+            fun name(name: Optional<String>) = name(name.getOrNull())
 
             fun name(name: JsonField<String>) = apply { this.name = name }
 
@@ -237,7 +238,7 @@ private constructor(
         }
 
         fun externalConnections(externalConnections: Optional<List<ExternalConnection>>) =
-            externalConnections(externalConnections.orElse(null))
+            externalConnections(externalConnections.getOrNull())
 
         fun externalConnections(externalConnections: JsonField<List<ExternalConnection>>) = apply {
             body.externalConnections(externalConnections)
@@ -249,7 +250,7 @@ private constructor(
 
         fun name(name: String?) = apply { body.name(name) }
 
-        fun name(name: Optional<String>) = name(name.orElse(null))
+        fun name(name: Optional<String>) = name(name.getOrNull())
 
         fun name(name: JsonField<String>) = apply { body.name(name) }
 

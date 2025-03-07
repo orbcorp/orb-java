@@ -22,6 +22,7 @@ import com.withorb.api.errors.OrbInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint allows you to create a new top-up for a specified customer's balance. While this
@@ -374,7 +375,7 @@ private constructor(
              * immediately.
              */
             fun activeFrom(activeFrom: Optional<OffsetDateTime>) =
-                activeFrom(activeFrom.orElse(null))
+                activeFrom(activeFrom.getOrNull())
 
             /**
              * The date from which the top-up is active. If unspecified, the top-up is active
@@ -400,9 +401,7 @@ private constructor(
              * The number of days or months after which the top-up expires. If unspecified, it does
              * not expire.
              */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun expiresAfter(expiresAfter: Optional<Long>) =
-                expiresAfter(expiresAfter.orElse(null) as Long?)
+            fun expiresAfter(expiresAfter: Optional<Long>) = expiresAfter(expiresAfter.getOrNull())
 
             /**
              * The number of days or months after which the top-up expires. If unspecified, it does
@@ -418,7 +417,7 @@ private constructor(
 
             /** The unit of expires_after. */
             fun expiresAfterUnit(expiresAfterUnit: Optional<ExpiresAfterUnit>) =
-                expiresAfterUnit(expiresAfterUnit.orElse(null))
+                expiresAfterUnit(expiresAfterUnit.getOrNull())
 
             /** The unit of expires_after. */
             fun expiresAfterUnit(expiresAfterUnit: JsonField<ExpiresAfterUnit>) = apply {
@@ -578,7 +577,7 @@ private constructor(
          * The date from which the top-up is active. If unspecified, the top-up is active
          * immediately.
          */
-        fun activeFrom(activeFrom: Optional<OffsetDateTime>) = activeFrom(activeFrom.orElse(null))
+        fun activeFrom(activeFrom: Optional<OffsetDateTime>) = activeFrom(activeFrom.getOrNull())
 
         /**
          * The date from which the top-up is active. If unspecified, the top-up is active
@@ -604,9 +603,7 @@ private constructor(
          * The number of days or months after which the top-up expires. If unspecified, it does not
          * expire.
          */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun expiresAfter(expiresAfter: Optional<Long>) =
-            expiresAfter(expiresAfter.orElse(null) as Long?)
+        fun expiresAfter(expiresAfter: Optional<Long>) = expiresAfter(expiresAfter.getOrNull())
 
         /**
          * The number of days or months after which the top-up expires. If unspecified, it does not
@@ -621,7 +618,7 @@ private constructor(
 
         /** The unit of expires_after. */
         fun expiresAfterUnit(expiresAfterUnit: Optional<ExpiresAfterUnit>) =
-            expiresAfterUnit(expiresAfterUnit.orElse(null))
+            expiresAfterUnit(expiresAfterUnit.getOrNull())
 
         /** The unit of expires_after. */
         fun expiresAfterUnit(expiresAfterUnit: JsonField<ExpiresAfterUnit>) = apply {
@@ -905,7 +902,7 @@ private constructor(
             fun memo(memo: String?) = memo(JsonField.ofNullable(memo))
 
             /** An optional memo to display on the invoice. */
-            fun memo(memo: Optional<String>) = memo(memo.orElse(null))
+            fun memo(memo: Optional<String>) = memo(memo.getOrNull())
 
             /** An optional memo to display on the invoice. */
             fun memo(memo: JsonField<String>) = apply { this.memo = memo }

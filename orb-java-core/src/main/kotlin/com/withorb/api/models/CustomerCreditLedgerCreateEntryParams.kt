@@ -807,7 +807,7 @@ private constructor(
                  * The currency or custom pricing unit to use for this ledger entry. If this is a
                  * real-world currency, it must match the customer's invoicing currency.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * The currency or custom pricing unit to use for this ledger entry. If this is a
@@ -829,7 +829,7 @@ private constructor(
                  * for noting corrections as a result of an incident, etc.
                  */
                 fun description(description: Optional<String>) =
-                    description(description.orElse(null))
+                    description(description.getOrNull())
 
                 /**
                  * Optional metadata that can be specified when adding ledger results via the API.
@@ -852,7 +852,7 @@ private constructor(
                  * available for use.
                  */
                 fun effectiveDate(effectiveDate: Optional<OffsetDateTime>) =
-                    effectiveDate(effectiveDate.orElse(null))
+                    effectiveDate(effectiveDate.getOrNull())
 
                 /**
                  * An ISO 8601 format date that denotes when this credit balance should become
@@ -868,7 +868,7 @@ private constructor(
 
                 /** An ISO 8601 format date that denotes when this credit balance should expire. */
                 fun expiryDate(expiryDate: Optional<OffsetDateTime>) =
-                    expiryDate(expiryDate.orElse(null))
+                    expiryDate(expiryDate.getOrNull())
 
                 /** An ISO 8601 format date that denotes when this credit balance should expire. */
                 fun expiryDate(expiryDate: JsonField<OffsetDateTime>) = apply {
@@ -889,7 +889,7 @@ private constructor(
                  * as the calculation of the invoice total is done on that basis.
                  */
                 fun invoiceSettings(invoiceSettings: Optional<InvoiceSettings>) =
-                    invoiceSettings(invoiceSettings.orElse(null))
+                    invoiceSettings(invoiceSettings.getOrNull())
 
                 /**
                  * Passing `invoice_settings` automatically generates an invoice for the newly added
@@ -912,7 +912,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -933,7 +933,7 @@ private constructor(
                  * currency, a customer paid for a single credit in this block
                  */
                 fun perUnitCostBasis(perUnitCostBasis: Optional<String>) =
-                    perUnitCostBasis(perUnitCostBasis.orElse(null))
+                    perUnitCostBasis(perUnitCostBasis.getOrNull())
 
                 /**
                  * Can only be specified when entry_type=increment. How much, in the customer's
@@ -1241,7 +1241,7 @@ private constructor(
                     fun memo(memo: String?) = memo(JsonField.ofNullable(memo))
 
                     /** An optional memo to display on the invoice. */
-                    fun memo(memo: Optional<String>) = memo(memo.orElse(null))
+                    fun memo(memo: Optional<String>) = memo(memo.getOrNull())
 
                     /** An optional memo to display on the invoice. */
                     fun memo(memo: JsonField<String>) = apply { this.memo = memo }
@@ -1593,7 +1593,7 @@ private constructor(
                  * The currency or custom pricing unit to use for this ledger entry. If this is a
                  * real-world currency, it must match the customer's invoicing currency.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * The currency or custom pricing unit to use for this ledger entry. If this is a
@@ -1615,7 +1615,7 @@ private constructor(
                  * for noting corrections as a result of an incident, etc.
                  */
                 fun description(description: Optional<String>) =
-                    description(description.orElse(null))
+                    description(description.getOrNull())
 
                 /**
                  * Optional metadata that can be specified when adding ledger results via the API.
@@ -1638,7 +1638,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -2102,7 +2102,7 @@ private constructor(
                  * An ISO 8601 format date that identifies the origination credit block to expire
                  */
                 fun expiryDate(expiryDate: Optional<OffsetDateTime>) =
-                    expiryDate(expiryDate.orElse(null))
+                    expiryDate(expiryDate.getOrNull())
 
                 /**
                  * An ISO 8601 format date that identifies the origination credit block to expire
@@ -2144,8 +2144,7 @@ private constructor(
                  * The number of credits to effect. Note that this is required for increment,
                  * decrement, void, or undo operations.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                fun amount(amount: Optional<Double>) = amount(amount.orElse(null) as Double?)
+                fun amount(amount: Optional<Double>) = amount(amount.getOrNull())
 
                 /**
                  * The number of credits to effect. Note that this is required for increment,
@@ -2163,7 +2162,7 @@ private constructor(
                  * The ID of the block affected by an expiration_change, used to differentiate
                  * between multiple blocks with the same `expiry_date`.
                  */
-                fun blockId(blockId: Optional<String>) = blockId(blockId.orElse(null))
+                fun blockId(blockId: Optional<String>) = blockId(blockId.getOrNull())
 
                 /**
                  * The ID of the block affected by an expiration_change, used to differentiate
@@ -2181,7 +2180,7 @@ private constructor(
                  * The currency or custom pricing unit to use for this ledger entry. If this is a
                  * real-world currency, it must match the customer's invoicing currency.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * The currency or custom pricing unit to use for this ledger entry. If this is a
@@ -2203,7 +2202,7 @@ private constructor(
                  * for noting corrections as a result of an incident, etc.
                  */
                 fun description(description: Optional<String>) =
-                    description(description.orElse(null))
+                    description(description.getOrNull())
 
                 /**
                  * Optional metadata that can be specified when adding ledger results via the API.
@@ -2226,7 +2225,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -2682,7 +2681,7 @@ private constructor(
                  * The currency or custom pricing unit to use for this ledger entry. If this is a
                  * real-world currency, it must match the customer's invoicing currency.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * The currency or custom pricing unit to use for this ledger entry. If this is a
@@ -2704,7 +2703,7 @@ private constructor(
                  * for noting corrections as a result of an incident, etc.
                  */
                 fun description(description: Optional<String>) =
-                    description(description.orElse(null))
+                    description(description.getOrNull())
 
                 /**
                  * Optional metadata that can be specified when adding ledger results via the API.
@@ -2727,7 +2726,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -2742,7 +2741,7 @@ private constructor(
 
                 /** Can only be specified when `entry_type=void`. The reason for the void. */
                 fun voidReason(voidReason: Optional<VoidReason>) =
-                    voidReason(voidReason.orElse(null))
+                    voidReason(voidReason.getOrNull())
 
                 /** Can only be specified when `entry_type=void`. The reason for the void. */
                 fun voidReason(voidReason: JsonField<VoidReason>) = apply {
@@ -3282,7 +3281,7 @@ private constructor(
                  * The currency or custom pricing unit to use for this ledger entry. If this is a
                  * real-world currency, it must match the customer's invoicing currency.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * The currency or custom pricing unit to use for this ledger entry. If this is a
@@ -3304,7 +3303,7 @@ private constructor(
                  * for noting corrections as a result of an incident, etc.
                  */
                 fun description(description: Optional<String>) =
-                    description(description.orElse(null))
+                    description(description.getOrNull())
 
                 /**
                  * Optional metadata that can be specified when adding ledger results via the API.
@@ -3327,7 +3326,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed

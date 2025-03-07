@@ -21,6 +21,7 @@ import com.withorb.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint returns a filtered set of events for an account in a
@@ -244,7 +245,7 @@ private constructor(
              * current time is used.
              */
             fun timeframeEnd(timeframeEnd: Optional<OffsetDateTime>) =
-                timeframeEnd(timeframeEnd.orElse(null))
+                timeframeEnd(timeframeEnd.getOrNull())
 
             /**
              * The end of the timeframe, exclusive, in which to search events. If not specified, the
@@ -266,7 +267,7 @@ private constructor(
              * the one week ago is used.
              */
             fun timeframeStart(timeframeStart: Optional<OffsetDateTime>) =
-                timeframeStart(timeframeStart.orElse(null))
+                timeframeStart(timeframeStart.getOrNull())
 
             /**
              * The start of the timeframe, inclusive, in which to search events. If not specified,
@@ -384,7 +385,7 @@ private constructor(
          * current time is used.
          */
         fun timeframeEnd(timeframeEnd: Optional<OffsetDateTime>) =
-            timeframeEnd(timeframeEnd.orElse(null))
+            timeframeEnd(timeframeEnd.getOrNull())
 
         /**
          * The end of the timeframe, exclusive, in which to search events. If not specified, the
@@ -407,7 +408,7 @@ private constructor(
          * one week ago is used.
          */
         fun timeframeStart(timeframeStart: Optional<OffsetDateTime>) =
-            timeframeStart(timeframeStart.orElse(null))
+            timeframeStart(timeframeStart.getOrNull())
 
         /**
          * The start of the timeframe, inclusive, in which to search events. If not specified, the

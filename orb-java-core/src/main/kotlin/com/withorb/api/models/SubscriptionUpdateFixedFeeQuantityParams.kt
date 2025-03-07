@@ -22,6 +22,7 @@ import com.withorb.api.errors.OrbInvalidDataException
 import java.time.LocalDate
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint can be used to update the quantity for a fixed fee.
@@ -290,9 +291,8 @@ private constructor(
              * credit note. Consider using this as a safety mechanism if you do not expect existing
              * invoices to be changed.
              */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid: Optional<Boolean>) =
-                allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid.orElse(null) as Boolean?)
+                allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid.getOrNull())
 
             /**
              * If false, this request will fail if it would void an issued invoice or create a
@@ -333,7 +333,7 @@ private constructor(
              * according to `change_option`.
              */
             fun effectiveDate(effectiveDate: Optional<LocalDate>) =
-                effectiveDate(effectiveDate.orElse(null))
+                effectiveDate(effectiveDate.getOrNull())
 
             /**
              * The date that the quantity change should take effect, localized to the customer's
@@ -465,9 +465,8 @@ private constructor(
          * note. Consider using this as a safety mechanism if you do not expect existing invoices to
          * be changed.
          */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
         fun allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid: Optional<Boolean>) =
-            allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid.orElse(null) as Boolean?)
+            allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid.getOrNull())
 
         /**
          * If false, this request will fail if it would void an issued invoice or create a credit
@@ -507,7 +506,7 @@ private constructor(
          * to `change_option`.
          */
         fun effectiveDate(effectiveDate: Optional<LocalDate>) =
-            effectiveDate(effectiveDate.orElse(null))
+            effectiveDate(effectiveDate.getOrNull())
 
         /**
          * The date that the quantity change should take effect, localized to the customer's

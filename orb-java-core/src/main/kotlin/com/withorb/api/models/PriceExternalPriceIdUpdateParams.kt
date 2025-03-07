@@ -19,6 +19,7 @@ import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint allows you to update the `metadata` property on a price. If you pass null for the
@@ -139,7 +140,7 @@ private constructor(
              * setting the value to `null`, and the entire metadata mapping can be cleared by
              * setting `metadata` to `null`.
              */
-            fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+            fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
             /**
              * User-specified key/value pairs for the resource. Individual keys can be removed by
@@ -239,7 +240,7 @@ private constructor(
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+        fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by

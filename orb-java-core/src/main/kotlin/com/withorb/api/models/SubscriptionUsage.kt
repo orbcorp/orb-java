@@ -30,6 +30,7 @@ import com.withorb.api.errors.OrbInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 @JsonDeserialize(using = SubscriptionUsage.Deserializer::class)
 @JsonSerialize(using = SubscriptionUsage.Serializer::class)
@@ -909,7 +910,7 @@ private constructor(
                 paginationMetadata(JsonField.ofNullable(paginationMetadata))
 
             fun paginationMetadata(paginationMetadata: Optional<PaginationMetadata>) =
-                paginationMetadata(paginationMetadata.orElse(null))
+                paginationMetadata(paginationMetadata.getOrNull())
 
             fun paginationMetadata(paginationMetadata: JsonField<PaginationMetadata>) = apply {
                 this.paginationMetadata = paginationMetadata

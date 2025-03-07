@@ -20,6 +20,7 @@ import com.withorb.api.core.toImmutable
 import java.time.LocalDate
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Manually trigger a phase, effective the given date (or the current time, if not specified). */
 class SubscriptionTriggerPhaseParams
@@ -184,9 +185,8 @@ private constructor(
              * credit note. Consider using this as a safety mechanism if you do not expect existing
              * invoices to be changed.
              */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid: Optional<Boolean>) =
-                allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid.orElse(null) as Boolean?)
+                allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid.getOrNull())
 
             /**
              * If false, this request will fail if it would void an issued invoice or create a
@@ -209,7 +209,7 @@ private constructor(
              * today in the customer's timezone.
              */
             fun effectiveDate(effectiveDate: Optional<LocalDate>) =
-                effectiveDate(effectiveDate.orElse(null))
+                effectiveDate(effectiveDate.getOrNull())
 
             /**
              * The date on which the phase change should take effect. If not provided, defaults to
@@ -317,9 +317,8 @@ private constructor(
          * note. Consider using this as a safety mechanism if you do not expect existing invoices to
          * be changed.
          */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
         fun allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid: Optional<Boolean>) =
-            allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid.orElse(null) as Boolean?)
+            allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid.getOrNull())
 
         /**
          * If false, this request will fail if it would void an issued invoice or create a credit
@@ -341,7 +340,7 @@ private constructor(
          * in the customer's timezone.
          */
         fun effectiveDate(effectiveDate: Optional<LocalDate>) =
-            effectiveDate(effectiveDate.orElse(null))
+            effectiveDate(effectiveDate.getOrNull())
 
         /**
          * The date on which the phase change should take effect. If not provided, defaults to today

@@ -15,6 +15,7 @@ import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint is used to fetch a subscription's usage in Orb. Especially when combined with
@@ -359,54 +360,54 @@ private constructor(
          * together.
          */
         fun billableMetricId(billableMetricId: Optional<String>) =
-            billableMetricId(billableMetricId.orElse(null))
+            billableMetricId(billableMetricId.getOrNull())
 
         fun firstDimensionKey(firstDimensionKey: String?) = apply {
             this.firstDimensionKey = firstDimensionKey
         }
 
         fun firstDimensionKey(firstDimensionKey: Optional<String>) =
-            firstDimensionKey(firstDimensionKey.orElse(null))
+            firstDimensionKey(firstDimensionKey.getOrNull())
 
         fun firstDimensionValue(firstDimensionValue: String?) = apply {
             this.firstDimensionValue = firstDimensionValue
         }
 
         fun firstDimensionValue(firstDimensionValue: Optional<String>) =
-            firstDimensionValue(firstDimensionValue.orElse(null))
+            firstDimensionValue(firstDimensionValue.getOrNull())
 
         /** This determines the windowing of usage reporting. */
         fun granularity(granularity: Granularity?) = apply { this.granularity = granularity }
 
         /** This determines the windowing of usage reporting. */
-        fun granularity(granularity: Optional<Granularity>) = granularity(granularity.orElse(null))
+        fun granularity(granularity: Optional<Granularity>) = granularity(granularity.getOrNull())
 
         /** Groups per-price usage by the key provided. */
         fun groupBy(groupBy: String?) = apply { this.groupBy = groupBy }
 
         /** Groups per-price usage by the key provided. */
-        fun groupBy(groupBy: Optional<String>) = groupBy(groupBy.orElse(null))
+        fun groupBy(groupBy: Optional<String>) = groupBy(groupBy.getOrNull())
 
         fun secondDimensionKey(secondDimensionKey: String?) = apply {
             this.secondDimensionKey = secondDimensionKey
         }
 
         fun secondDimensionKey(secondDimensionKey: Optional<String>) =
-            secondDimensionKey(secondDimensionKey.orElse(null))
+            secondDimensionKey(secondDimensionKey.getOrNull())
 
         fun secondDimensionValue(secondDimensionValue: String?) = apply {
             this.secondDimensionValue = secondDimensionValue
         }
 
         fun secondDimensionValue(secondDimensionValue: Optional<String>) =
-            secondDimensionValue(secondDimensionValue.orElse(null))
+            secondDimensionValue(secondDimensionValue.getOrNull())
 
         /** Usage returned is exclusive of `timeframe_end`. */
         fun timeframeEnd(timeframeEnd: OffsetDateTime?) = apply { this.timeframeEnd = timeframeEnd }
 
         /** Usage returned is exclusive of `timeframe_end`. */
         fun timeframeEnd(timeframeEnd: Optional<OffsetDateTime>) =
-            timeframeEnd(timeframeEnd.orElse(null))
+            timeframeEnd(timeframeEnd.getOrNull())
 
         /** Usage returned is inclusive of `timeframe_start`. */
         fun timeframeStart(timeframeStart: OffsetDateTime?) = apply {
@@ -415,7 +416,7 @@ private constructor(
 
         /** Usage returned is inclusive of `timeframe_start`. */
         fun timeframeStart(timeframeStart: Optional<OffsetDateTime>) =
-            timeframeStart(timeframeStart.orElse(null))
+            timeframeStart(timeframeStart.getOrNull())
 
         /**
          * Controls whether Orb returns cumulative usage since the start of the billing period, or
@@ -429,7 +430,7 @@ private constructor(
          * incremental day-by-day usage. If your customer has minimums or discounts, it's strongly
          * recommended that you use the default cumulative behavior.
          */
-        fun viewMode(viewMode: Optional<ViewMode>) = viewMode(viewMode.orElse(null))
+        fun viewMode(viewMode: Optional<ViewMode>) = viewMode(viewMode.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

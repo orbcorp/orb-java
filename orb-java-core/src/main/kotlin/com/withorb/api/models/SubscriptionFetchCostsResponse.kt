@@ -18,6 +18,7 @@ import com.withorb.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 @NoAutoDetect
 class SubscriptionFetchCostsResponse
@@ -548,9 +549,7 @@ private constructor(
                 fun quantity(quantity: Double) = quantity(quantity as Double?)
 
                 /** The price's quantity for the timeframe */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                fun quantity(quantity: Optional<Double>) =
-                    quantity(quantity.orElse(null) as Double?)
+                fun quantity(quantity: Optional<Double>) = quantity(quantity.getOrNull())
 
                 /** The price's quantity for the timeframe */
                 fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
