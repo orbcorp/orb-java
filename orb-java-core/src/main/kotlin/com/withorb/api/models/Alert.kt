@@ -20,6 +20,7 @@ import com.withorb.api.errors.OrbInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * [Alerts within Orb](/product-catalog/configuring-alerts) monitor spending, usage, or credit
@@ -220,7 +221,7 @@ private constructor(
         fun currency(currency: String?) = currency(JsonField.ofNullable(currency))
 
         /** The name of the currency the credit balance or invoice cost is denominated in. */
-        fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+        fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
         /** The name of the currency the credit balance or invoice cost is denominated in. */
         fun currency(currency: JsonField<String>) = apply { this.currency = currency }
@@ -229,7 +230,7 @@ private constructor(
         fun customer(customer: Customer?) = customer(JsonField.ofNullable(customer))
 
         /** The customer the alert applies to. */
-        fun customer(customer: Optional<Customer>) = customer(customer.orElse(null))
+        fun customer(customer: Optional<Customer>) = customer(customer.getOrNull())
 
         /** The customer the alert applies to. */
         fun customer(customer: JsonField<Customer>) = apply { this.customer = customer }
@@ -244,7 +245,7 @@ private constructor(
         fun metric(metric: Metric?) = metric(JsonField.ofNullable(metric))
 
         /** The metric the alert applies to. */
-        fun metric(metric: Optional<Metric>) = metric(metric.orElse(null))
+        fun metric(metric: Optional<Metric>) = metric(metric.getOrNull())
 
         /** The metric the alert applies to. */
         fun metric(metric: JsonField<Metric>) = apply { this.metric = metric }
@@ -253,7 +254,7 @@ private constructor(
         fun plan(plan: Plan?) = plan(JsonField.ofNullable(plan))
 
         /** The plan the alert applies to. */
-        fun plan(plan: Optional<Plan>) = plan(plan.orElse(null))
+        fun plan(plan: Optional<Plan>) = plan(plan.getOrNull())
 
         /** The plan the alert applies to. */
         fun plan(plan: JsonField<Plan>) = apply { this.plan = plan }
@@ -264,7 +265,7 @@ private constructor(
 
         /** The subscription the alert applies to. */
         fun subscription(subscription: Optional<Subscription>) =
-            subscription(subscription.orElse(null))
+            subscription(subscription.getOrNull())
 
         /** The subscription the alert applies to. */
         fun subscription(subscription: JsonField<Subscription>) = apply {
@@ -275,7 +276,7 @@ private constructor(
         fun thresholds(thresholds: List<Threshold>?) = thresholds(JsonField.ofNullable(thresholds))
 
         /** The thresholds that define the conditions under which the alert will be triggered. */
-        fun thresholds(thresholds: Optional<List<Threshold>>) = thresholds(thresholds.orElse(null))
+        fun thresholds(thresholds: Optional<List<Threshold>>) = thresholds(thresholds.getOrNull())
 
         /** The thresholds that define the conditions under which the alert will be triggered. */
         fun thresholds(thresholds: JsonField<List<Threshold>>) = apply {
@@ -409,7 +410,7 @@ private constructor(
                 externalCustomerId(JsonField.ofNullable(externalCustomerId))
 
             fun externalCustomerId(externalCustomerId: Optional<String>) =
-                externalCustomerId(externalCustomerId.orElse(null))
+                externalCustomerId(externalCustomerId.getOrNull())
 
             fun externalCustomerId(externalCustomerId: JsonField<String>) = apply {
                 this.externalCustomerId = externalCustomerId
@@ -666,7 +667,7 @@ private constructor(
 
             fun id(id: String?) = id(JsonField.ofNullable(id))
 
-            fun id(id: Optional<String>) = id(id.orElse(null))
+            fun id(id: Optional<String>) = id(id.getOrNull())
 
             fun id(id: JsonField<String>) = apply { this.id = id }
 
@@ -684,7 +685,7 @@ private constructor(
              * your system.
              */
             fun externalPlanId(externalPlanId: Optional<String>) =
-                externalPlanId(externalPlanId.orElse(null))
+                externalPlanId(externalPlanId.getOrNull())
 
             /**
              * An optional user-defined ID for this plan resource, used throughout the system as an
@@ -697,7 +698,7 @@ private constructor(
 
             fun name(name: String?) = name(JsonField.ofNullable(name))
 
-            fun name(name: Optional<String>) = name(name.orElse(null))
+            fun name(name: Optional<String>) = name(name.getOrNull())
 
             fun name(name: JsonField<String>) = apply { this.name = name }
 

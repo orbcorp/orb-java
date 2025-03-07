@@ -15,6 +15,7 @@ import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint is used to fetch a day-by-day snapshot of a customer's costs in Orb, calculated by
@@ -230,14 +231,14 @@ private constructor(
         fun currency(currency: String?) = apply { this.currency = currency }
 
         /** The currency or custom pricing unit to use. */
-        fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+        fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
         /** Costs returned are exclusive of `timeframe_end`. */
         fun timeframeEnd(timeframeEnd: OffsetDateTime?) = apply { this.timeframeEnd = timeframeEnd }
 
         /** Costs returned are exclusive of `timeframe_end`. */
         fun timeframeEnd(timeframeEnd: Optional<OffsetDateTime>) =
-            timeframeEnd(timeframeEnd.orElse(null))
+            timeframeEnd(timeframeEnd.getOrNull())
 
         /** Costs returned are inclusive of `timeframe_start`. */
         fun timeframeStart(timeframeStart: OffsetDateTime?) = apply {
@@ -246,7 +247,7 @@ private constructor(
 
         /** Costs returned are inclusive of `timeframe_start`. */
         fun timeframeStart(timeframeStart: Optional<OffsetDateTime>) =
-            timeframeStart(timeframeStart.orElse(null))
+            timeframeStart(timeframeStart.getOrNull())
 
         /**
          * Controls whether Orb returns cumulative costs since the start of the billing period, or
@@ -260,7 +261,7 @@ private constructor(
          * incremental day-by-day costs. If your customer has minimums or discounts, it's strongly
          * recommended that you use the default cumulative behavior.
          */
-        fun viewMode(viewMode: Optional<ViewMode>) = viewMode(viewMode.orElse(null))
+        fun viewMode(viewMode: Optional<ViewMode>) = viewMode(viewMode.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

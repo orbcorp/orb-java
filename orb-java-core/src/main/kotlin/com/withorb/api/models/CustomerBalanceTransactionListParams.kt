@@ -11,6 +11,7 @@ import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * ## The customer balance
@@ -173,7 +174,7 @@ private constructor(
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
          * initial request.
          */
-        fun cursor(cursor: Optional<String>) = cursor(cursor.orElse(null))
+        fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
         /** The number of items to fetch. Defaults to 20. */
         fun limit(limit: Long?) = apply { this.limit = limit }
@@ -182,36 +183,35 @@ private constructor(
         fun limit(limit: Long) = limit(limit as Long?)
 
         /** The number of items to fetch. Defaults to 20. */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun limit(limit: Optional<Long>) = limit(limit.orElse(null) as Long?)
+        fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         fun operationTimeGt(operationTimeGt: OffsetDateTime?) = apply {
             this.operationTimeGt = operationTimeGt
         }
 
         fun operationTimeGt(operationTimeGt: Optional<OffsetDateTime>) =
-            operationTimeGt(operationTimeGt.orElse(null))
+            operationTimeGt(operationTimeGt.getOrNull())
 
         fun operationTimeGte(operationTimeGte: OffsetDateTime?) = apply {
             this.operationTimeGte = operationTimeGte
         }
 
         fun operationTimeGte(operationTimeGte: Optional<OffsetDateTime>) =
-            operationTimeGte(operationTimeGte.orElse(null))
+            operationTimeGte(operationTimeGte.getOrNull())
 
         fun operationTimeLt(operationTimeLt: OffsetDateTime?) = apply {
             this.operationTimeLt = operationTimeLt
         }
 
         fun operationTimeLt(operationTimeLt: Optional<OffsetDateTime>) =
-            operationTimeLt(operationTimeLt.orElse(null))
+            operationTimeLt(operationTimeLt.getOrNull())
 
         fun operationTimeLte(operationTimeLte: OffsetDateTime?) = apply {
             this.operationTimeLte = operationTimeLte
         }
 
         fun operationTimeLte(operationTimeLte: Optional<OffsetDateTime>) =
-            operationTimeLte(operationTimeLte.orElse(null))
+            operationTimeLte(operationTimeLte.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

@@ -19,6 +19,7 @@ import com.withorb.api.errors.OrbInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * A backfill represents an update to historical usage data, adding or replacing events in a
@@ -261,7 +262,7 @@ private constructor(
          * If in the future, the time at which the backfill will automatically close. If in the
          * past, the time at which the backfill was closed.
          */
-        fun closeTime(closeTime: Optional<OffsetDateTime>) = closeTime(closeTime.orElse(null))
+        fun closeTime(closeTime: Optional<OffsetDateTime>) = closeTime(closeTime.getOrNull())
 
         /**
          * If in the future, the time at which the backfill will automatically close. If in the
@@ -283,7 +284,7 @@ private constructor(
          * The Orb-generated ID of the customer to which this backfill is scoped. If `null`, this
          * backfill is scoped to all customers.
          */
-        fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
+        fun customerId(customerId: Optional<String>) = customerId(customerId.getOrNull())
 
         /**
          * The Orb-generated ID of the customer to which this backfill is scoped. If `null`, this
@@ -320,7 +321,7 @@ private constructor(
         fun revertedAt(revertedAt: OffsetDateTime?) = revertedAt(JsonField.ofNullable(revertedAt))
 
         /** The time at which this backfill was reverted. */
-        fun revertedAt(revertedAt: Optional<OffsetDateTime>) = revertedAt(revertedAt.orElse(null))
+        fun revertedAt(revertedAt: Optional<OffsetDateTime>) = revertedAt(revertedAt.getOrNull())
 
         /** The time at which this backfill was reverted. */
         fun revertedAt(revertedAt: JsonField<OffsetDateTime>) = apply {
@@ -358,7 +359,7 @@ private constructor(
          * to filter the set of events to deprecate
          */
         fun deprecationFilter(deprecationFilter: Optional<String>) =
-            deprecationFilter(deprecationFilter.orElse(null))
+            deprecationFilter(deprecationFilter.getOrNull())
 
         /**
          * A boolean [computed property](/extensibility/advanced-metrics#computed-properties) used

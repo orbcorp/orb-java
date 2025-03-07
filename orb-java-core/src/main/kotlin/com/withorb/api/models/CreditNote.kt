@@ -20,6 +20,7 @@ import com.withorb.api.errors.OrbInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * The [Credit Note](/invoicing/credit-notes) resource represents a credit that has been applied to
@@ -309,7 +310,7 @@ private constructor(
 
         /** A URL to a PDF of the credit note. */
         fun creditNotePdf(creditNotePdf: Optional<String>) =
-            creditNotePdf(creditNotePdf.orElse(null))
+            creditNotePdf(creditNotePdf.getOrNull())
 
         /** A URL to a PDF of the credit note. */
         fun creditNotePdf(creditNotePdf: JsonField<String>) = apply {
@@ -348,7 +349,7 @@ private constructor(
 
         /** The maximum amount applied on the original invoice */
         fun maximumAmountAdjustment(maximumAmountAdjustment: Optional<MaximumAmountAdjustment>) =
-            maximumAmountAdjustment(maximumAmountAdjustment.orElse(null))
+            maximumAmountAdjustment(maximumAmountAdjustment.getOrNull())
 
         /** The maximum amount applied on the original invoice */
         fun maximumAmountAdjustment(maximumAmountAdjustment: JsonField<MaximumAmountAdjustment>) =
@@ -360,7 +361,7 @@ private constructor(
         fun memo(memo: String?) = memo(JsonField.ofNullable(memo))
 
         /** An optional memo supplied on the credit note. */
-        fun memo(memo: Optional<String>) = memo(memo.orElse(null))
+        fun memo(memo: Optional<String>) = memo(memo.getOrNull())
 
         /** An optional memo supplied on the credit note. */
         fun memo(memo: JsonField<String>) = apply { this.memo = memo }
@@ -371,7 +372,7 @@ private constructor(
 
         /** Any credited amount from the applied minimum on the invoice. */
         fun minimumAmountRefunded(minimumAmountRefunded: Optional<String>) =
-            minimumAmountRefunded(minimumAmountRefunded.orElse(null))
+            minimumAmountRefunded(minimumAmountRefunded.getOrNull())
 
         /** Any credited amount from the applied minimum on the invoice. */
         fun minimumAmountRefunded(minimumAmountRefunded: JsonField<String>) = apply {
@@ -380,7 +381,7 @@ private constructor(
 
         fun reason(reason: Reason?) = reason(JsonField.ofNullable(reason))
 
-        fun reason(reason: Optional<Reason>) = reason(reason.orElse(null))
+        fun reason(reason: Optional<Reason>) = reason(reason.getOrNull())
 
         fun reason(reason: JsonField<Reason>) = apply { this.reason = reason }
 
@@ -404,7 +405,7 @@ private constructor(
         fun voidedAt(voidedAt: OffsetDateTime?) = voidedAt(JsonField.ofNullable(voidedAt))
 
         /** The time at which the credit note was voided in Orb, if applicable. */
-        fun voidedAt(voidedAt: Optional<OffsetDateTime>) = voidedAt(voidedAt.orElse(null))
+        fun voidedAt(voidedAt: Optional<OffsetDateTime>) = voidedAt(voidedAt.getOrNull())
 
         /** The time at which the credit note was voided in Orb, if applicable. */
         fun voidedAt(voidedAt: JsonField<OffsetDateTime>) = apply { this.voidedAt = voidedAt }
@@ -543,7 +544,7 @@ private constructor(
                 externalCustomerId(JsonField.ofNullable(externalCustomerId))
 
             fun externalCustomerId(externalCustomerId: Optional<String>) =
-                externalCustomerId(externalCustomerId.orElse(null))
+                externalCustomerId(externalCustomerId.getOrNull())
 
             fun externalCustomerId(externalCustomerId: JsonField<String>) = apply {
                 this.externalCustomerId = externalCustomerId
@@ -777,8 +778,7 @@ private constructor(
             fun quantity(quantity: Double) = quantity(quantity as Double?)
 
             /** An optional quantity credited. */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun quantity(quantity: Optional<Double>) = quantity(quantity.orElse(null) as Double?)
+            fun quantity(quantity: Optional<Double>) = quantity(quantity.getOrNull())
 
             /** An optional quantity credited. */
             fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
@@ -966,7 +966,7 @@ private constructor(
 
                 /** The tax rate percentage, out of 100. */
                 fun taxRatePercentage(taxRatePercentage: Optional<String>) =
-                    taxRatePercentage(taxRatePercentage.orElse(null))
+                    taxRatePercentage(taxRatePercentage.getOrNull())
 
                 /** The tax rate percentage, out of 100. */
                 fun taxRatePercentage(taxRatePercentage: JsonField<String>) = apply {
@@ -1198,7 +1198,7 @@ private constructor(
                     amountDiscount(JsonField.ofNullable(amountDiscount))
 
                 fun amountDiscount(amountDiscount: Optional<String>) =
-                    amountDiscount(amountDiscount.orElse(null))
+                    amountDiscount(amountDiscount.getOrNull())
 
                 fun amountDiscount(amountDiscount: JsonField<String>) = apply {
                     this.amountDiscount = amountDiscount
@@ -1206,7 +1206,7 @@ private constructor(
 
                 fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
-                fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+                fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
                 fun reason(reason: JsonField<String>) = apply { this.reason = reason }
 
@@ -1521,7 +1521,7 @@ private constructor(
                 appliesToPrices(JsonField.ofNullable(appliesToPrices))
 
             fun appliesToPrices(appliesToPrices: Optional<List<AppliesToPrice>>) =
-                appliesToPrices(appliesToPrices.orElse(null))
+                appliesToPrices(appliesToPrices.getOrNull())
 
             fun appliesToPrices(appliesToPrices: JsonField<List<AppliesToPrice>>) = apply {
                 this.appliesToPrices = appliesToPrices.map { it.toMutableList() }
@@ -1536,7 +1536,7 @@ private constructor(
 
             fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
-            fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+            fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
             fun reason(reason: JsonField<String>) = apply { this.reason = reason }
 
@@ -2145,7 +2145,7 @@ private constructor(
                 appliesToPrices(JsonField.ofNullable(appliesToPrices))
 
             fun appliesToPrices(appliesToPrices: Optional<List<AppliesToPrice>>) =
-                appliesToPrices(appliesToPrices.orElse(null))
+                appliesToPrices(appliesToPrices.getOrNull())
 
             fun appliesToPrices(appliesToPrices: JsonField<List<AppliesToPrice>>) = apply {
                 this.appliesToPrices = appliesToPrices.map { it.toMutableList() }
@@ -2160,7 +2160,7 @@ private constructor(
 
             fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
-            fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+            fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
             fun reason(reason: JsonField<String>) = apply { this.reason = reason }
 

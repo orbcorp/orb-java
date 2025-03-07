@@ -22,6 +22,7 @@ import com.withorb.api.errors.OrbInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint can be used to cancel an existing subscription. It returns the serialized
@@ -271,9 +272,8 @@ private constructor(
              * credit note. Consider using this as a safety mechanism if you do not expect existing
              * invoices to be changed.
              */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid: Optional<Boolean>) =
-                allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid.orElse(null) as Boolean?)
+                allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid.getOrNull())
 
             /**
              * If false, this request will fail if it would void an issued invoice or create a
@@ -296,7 +296,7 @@ private constructor(
              * if the `cancel_option` is `requested_date`.
              */
             fun cancellationDate(cancellationDate: Optional<OffsetDateTime>) =
-                cancellationDate(cancellationDate.orElse(null))
+                cancellationDate(cancellationDate.getOrNull())
 
             /**
              * The date that the cancellation should take effect. This parameter can only be passed
@@ -417,9 +417,8 @@ private constructor(
          * note. Consider using this as a safety mechanism if you do not expect existing invoices to
          * be changed.
          */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
         fun allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid: Optional<Boolean>) =
-            allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid.orElse(null) as Boolean?)
+            allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid.getOrNull())
 
         /**
          * If false, this request will fail if it would void an issued invoice or create a credit
@@ -443,7 +442,7 @@ private constructor(
          * the `cancel_option` is `requested_date`.
          */
         fun cancellationDate(cancellationDate: Optional<OffsetDateTime>) =
-            cancellationDate(cancellationDate.orElse(null))
+            cancellationDate(cancellationDate.getOrNull())
 
         /**
          * The date that the cancellation should take effect. This parameter can only be passed if

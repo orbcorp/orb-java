@@ -215,7 +215,7 @@ private constructor(
          * An archived coupon can no longer be redeemed. Active coupons will have a value of null
          * for `archived_at`; this field will be non-null for archived coupons.
          */
-        fun archivedAt(archivedAt: Optional<OffsetDateTime>) = archivedAt(archivedAt.orElse(null))
+        fun archivedAt(archivedAt: Optional<OffsetDateTime>) = archivedAt(archivedAt.getOrNull())
 
         /**
          * An archived coupon can no longer be redeemed. Active coupons will have a value of null
@@ -250,9 +250,8 @@ private constructor(
          * This allows for a coupon's discount to apply for a limited time (determined in months); a
          * `null` value here means "unlimited time".
          */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
         fun durationInMonths(durationInMonths: Optional<Long>) =
-            durationInMonths(durationInMonths.orElse(null) as Long?)
+            durationInMonths(durationInMonths.getOrNull())
 
         /**
          * This allows for a coupon's discount to apply for a limited time (determined in months); a
@@ -279,9 +278,8 @@ private constructor(
          * The maximum number of redemptions allowed for this coupon before it is exhausted; `null`
          * here means "unlimited".
          */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
         fun maxRedemptions(maxRedemptions: Optional<Long>) =
-            maxRedemptions(maxRedemptions.orElse(null) as Long?)
+            maxRedemptions(maxRedemptions.getOrNull())
 
         /**
          * The maximum number of redemptions allowed for this coupon before it is exhausted; `null`

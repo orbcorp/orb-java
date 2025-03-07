@@ -24,6 +24,7 @@ import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** This endpoint is used to create a one-off invoice for a customer. */
 class InvoiceCreateParams
@@ -433,7 +434,7 @@ private constructor(
              * The id of the `Customer` to create this invoice for. One of `customer_id` and
              * `external_customer_id` are required.
              */
-            fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
+            fun customerId(customerId: Optional<String>) = customerId(customerId.getOrNull())
 
             /**
              * The id of the `Customer` to create this invoice for. One of `customer_id` and
@@ -445,7 +446,7 @@ private constructor(
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
             /** An optional discount to attach to the invoice. */
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             /** An optional discount to attach to the invoice. */
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
@@ -484,7 +485,7 @@ private constructor(
              * `customer_id` and `external_customer_id` are required.
              */
             fun externalCustomerId(externalCustomerId: Optional<String>) =
-                externalCustomerId(externalCustomerId.orElse(null))
+                externalCustomerId(externalCustomerId.getOrNull())
 
             /**
              * The `external_customer_id` of the `Customer` to create this invoice for. One of
@@ -498,7 +499,7 @@ private constructor(
             fun memo(memo: String?) = memo(JsonField.ofNullable(memo))
 
             /** An optional memo to attach to the invoice. */
-            fun memo(memo: Optional<String>) = memo(memo.orElse(null))
+            fun memo(memo: Optional<String>) = memo(memo.getOrNull())
 
             /** An optional memo to attach to the invoice. */
             fun memo(memo: JsonField<String>) = apply { this.memo = memo }
@@ -515,7 +516,7 @@ private constructor(
              * setting the value to `null`, and the entire metadata mapping can be cleared by
              * setting `metadata` to `null`.
              */
-            fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+            fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
             /**
              * User-specified key/value pairs for the resource. Individual keys can be removed by
@@ -678,7 +679,7 @@ private constructor(
          * The id of the `Customer` to create this invoice for. One of `customer_id` and
          * `external_customer_id` are required.
          */
-        fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
+        fun customerId(customerId: Optional<String>) = customerId(customerId.getOrNull())
 
         /**
          * The id of the `Customer` to create this invoice for. One of `customer_id` and
@@ -690,7 +691,7 @@ private constructor(
         fun discount(discount: Discount?) = apply { body.discount(discount) }
 
         /** An optional discount to attach to the invoice. */
-        fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+        fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
         /** An optional discount to attach to the invoice. */
         fun discount(discount: JsonField<Discount>) = apply { body.discount(discount) }
@@ -725,7 +726,7 @@ private constructor(
          * `customer_id` and `external_customer_id` are required.
          */
         fun externalCustomerId(externalCustomerId: Optional<String>) =
-            externalCustomerId(externalCustomerId.orElse(null))
+            externalCustomerId(externalCustomerId.getOrNull())
 
         /**
          * The `external_customer_id` of the `Customer` to create this invoice for. One of
@@ -739,7 +740,7 @@ private constructor(
         fun memo(memo: String?) = apply { body.memo(memo) }
 
         /** An optional memo to attach to the invoice. */
-        fun memo(memo: Optional<String>) = memo(memo.orElse(null))
+        fun memo(memo: Optional<String>) = memo(memo.getOrNull())
 
         /** An optional memo to attach to the invoice. */
         fun memo(memo: JsonField<String>) = apply { body.memo(memo) }
@@ -756,7 +757,7 @@ private constructor(
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+        fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by

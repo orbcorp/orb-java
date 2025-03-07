@@ -21,6 +21,7 @@ import com.withorb.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Orb's event ingestion model and API is designed around two core principles:
@@ -407,7 +408,7 @@ private constructor(
          * If this ingestion request is part of a backfill, this parameter ties the ingested events
          * to the backfill
          */
-        fun backfillId(backfillId: Optional<String>) = backfillId(backfillId.orElse(null))
+        fun backfillId(backfillId: Optional<String>) = backfillId(backfillId.getOrNull())
 
         /** Flag to enable additional debug information in the endpoint response */
         fun debug(debug: Boolean?) = apply { this.debug = debug }
@@ -416,8 +417,7 @@ private constructor(
         fun debug(debug: Boolean) = debug(debug as Boolean?)
 
         /** Flag to enable additional debug information in the endpoint response */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun debug(debug: Optional<Boolean>) = debug(debug.orElse(null) as Boolean?)
+        fun debug(debug: Optional<Boolean>) = debug(debug.getOrNull())
 
         fun events(events: List<Event>) = apply { body.events(events) }
 
@@ -748,7 +748,7 @@ private constructor(
             fun customerId(customerId: String?) = customerId(JsonField.ofNullable(customerId))
 
             /** The Orb Customer identifier */
-            fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
+            fun customerId(customerId: Optional<String>) = customerId(customerId.getOrNull())
 
             /** The Orb Customer identifier */
             fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
@@ -763,7 +763,7 @@ private constructor(
              * An alias for the Orb customer, whose mapping is specified when creating the customer
              */
             fun externalCustomerId(externalCustomerId: Optional<String>) =
-                externalCustomerId(externalCustomerId.orElse(null))
+                externalCustomerId(externalCustomerId.getOrNull())
 
             /**
              * An alias for the Orb customer, whose mapping is specified when creating the customer

@@ -18,6 +18,7 @@ import com.withorb.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 @NoAutoDetect
 class EventSearchResponse
@@ -297,7 +298,7 @@ private constructor(
             fun customerId(customerId: String?) = customerId(JsonField.ofNullable(customerId))
 
             /** The Orb Customer identifier */
-            fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
+            fun customerId(customerId: Optional<String>) = customerId(customerId.getOrNull())
 
             /** The Orb Customer identifier */
             fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
@@ -324,7 +325,7 @@ private constructor(
              * An alias for the Orb customer, whose mapping is specified when creating the customer
              */
             fun externalCustomerId(externalCustomerId: Optional<String>) =
-                externalCustomerId(externalCustomerId.orElse(null))
+                externalCustomerId(externalCustomerId.getOrNull())
 
             /**
              * An alias for the Orb customer, whose mapping is specified when creating the customer

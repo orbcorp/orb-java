@@ -20,6 +20,7 @@ import com.withorb.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Creating the backfill enables adding or replacing past events, even those that are older than the
@@ -357,7 +358,7 @@ private constructor(
              * will automatically begin reflecting throughout Orb at the close time. If not
              * specified, it will default to 1 day after the creation of the backfill.
              */
-            fun closeTime(closeTime: Optional<OffsetDateTime>) = closeTime(closeTime.orElse(null))
+            fun closeTime(closeTime: Optional<OffsetDateTime>) = closeTime(closeTime.getOrNull())
 
             /**
              * The time at which no more events will be accepted for this backfill. The backfill
@@ -378,7 +379,7 @@ private constructor(
              * The Orb-generated ID of the customer to which this backfill is scoped. Omitting this
              * field will scope the backfill to all customers.
              */
-            fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
+            fun customerId(customerId: Optional<String>) = customerId(customerId.getOrNull())
 
             /**
              * The Orb-generated ID of the customer to which this backfill is scoped. Omitting this
@@ -398,7 +399,7 @@ private constructor(
              * used to filter the set of events to deprecate
              */
             fun deprecationFilter(deprecationFilter: Optional<String>) =
-                deprecationFilter(deprecationFilter.orElse(null))
+                deprecationFilter(deprecationFilter.getOrNull())
 
             /**
              * A boolean [computed property](/extensibility/advanced-metrics#computed-properties)
@@ -420,7 +421,7 @@ private constructor(
              * this field will scope the backfill to all customers.
              */
             fun externalCustomerId(externalCustomerId: Optional<String>) =
-                externalCustomerId(externalCustomerId.orElse(null))
+                externalCustomerId(externalCustomerId.getOrNull())
 
             /**
              * The external customer ID of the customer to which this backfill is scoped. Omitting
@@ -556,7 +557,7 @@ private constructor(
          * automatically begin reflecting throughout Orb at the close time. If not specified, it
          * will default to 1 day after the creation of the backfill.
          */
-        fun closeTime(closeTime: Optional<OffsetDateTime>) = closeTime(closeTime.orElse(null))
+        fun closeTime(closeTime: Optional<OffsetDateTime>) = closeTime(closeTime.getOrNull())
 
         /**
          * The time at which no more events will be accepted for this backfill. The backfill will
@@ -575,7 +576,7 @@ private constructor(
          * The Orb-generated ID of the customer to which this backfill is scoped. Omitting this
          * field will scope the backfill to all customers.
          */
-        fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
+        fun customerId(customerId: Optional<String>) = customerId(customerId.getOrNull())
 
         /**
          * The Orb-generated ID of the customer to which this backfill is scoped. Omitting this
@@ -596,7 +597,7 @@ private constructor(
          * to filter the set of events to deprecate
          */
         fun deprecationFilter(deprecationFilter: Optional<String>) =
-            deprecationFilter(deprecationFilter.orElse(null))
+            deprecationFilter(deprecationFilter.getOrNull())
 
         /**
          * A boolean [computed property](/extensibility/advanced-metrics#computed-properties) used
@@ -619,7 +620,7 @@ private constructor(
          * field will scope the backfill to all customers.
          */
         fun externalCustomerId(externalCustomerId: Optional<String>) =
-            externalCustomerId(externalCustomerId.orElse(null))
+            externalCustomerId(externalCustomerId.getOrNull())
 
         /**
          * The external customer ID of the customer to which this backfill is scoped. Omitting this

@@ -20,6 +20,7 @@ import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * A dimensional price group is used to partition the result of a billable metric by a set of
@@ -235,7 +236,7 @@ private constructor(
                 )
 
             fun externalDimensionalPriceGroupId(externalDimensionalPriceGroupId: Optional<String>) =
-                externalDimensionalPriceGroupId(externalDimensionalPriceGroupId.orElse(null))
+                externalDimensionalPriceGroupId(externalDimensionalPriceGroupId.getOrNull())
 
             fun externalDimensionalPriceGroupId(
                 externalDimensionalPriceGroupId: JsonField<String>
@@ -253,7 +254,7 @@ private constructor(
              * setting the value to `null`, and the entire metadata mapping can be cleared by
              * setting `metadata` to `null`.
              */
-            fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+            fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
             /**
              * User-specified key/value pairs for the resource. Individual keys can be removed by
@@ -371,7 +372,7 @@ private constructor(
         }
 
         fun externalDimensionalPriceGroupId(externalDimensionalPriceGroupId: Optional<String>) =
-            externalDimensionalPriceGroupId(externalDimensionalPriceGroupId.orElse(null))
+            externalDimensionalPriceGroupId(externalDimensionalPriceGroupId.getOrNull())
 
         fun externalDimensionalPriceGroupId(externalDimensionalPriceGroupId: JsonField<String>) =
             apply {
@@ -390,7 +391,7 @@ private constructor(
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+        fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by

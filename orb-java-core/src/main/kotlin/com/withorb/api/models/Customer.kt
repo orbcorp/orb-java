@@ -20,6 +20,7 @@ import com.withorb.api.errors.OrbInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * A customer is a buyer of your products, and the other party to the billing relationship.
@@ -659,7 +660,7 @@ private constructor(
             billingAddress(JsonField.ofNullable(billingAddress))
 
         fun billingAddress(billingAddress: Optional<BillingAddress>) =
-            billingAddress(billingAddress.orElse(null))
+            billingAddress(billingAddress.getOrNull())
 
         fun billingAddress(billingAddress: JsonField<BillingAddress>) = apply {
             this.billingAddress = billingAddress
@@ -671,7 +672,7 @@ private constructor(
 
         fun currency(currency: String?) = currency(JsonField.ofNullable(currency))
 
-        fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+        fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
         fun currency(currency: JsonField<String>) = apply { this.currency = currency }
 
@@ -699,9 +700,8 @@ private constructor(
         fun exemptFromAutomatedTax(exemptFromAutomatedTax: Boolean) =
             exemptFromAutomatedTax(exemptFromAutomatedTax as Boolean?)
 
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
         fun exemptFromAutomatedTax(exemptFromAutomatedTax: Optional<Boolean>) =
-            exemptFromAutomatedTax(exemptFromAutomatedTax.orElse(null) as Boolean?)
+            exemptFromAutomatedTax(exemptFromAutomatedTax.getOrNull())
 
         fun exemptFromAutomatedTax(exemptFromAutomatedTax: JsonField<Boolean>) = apply {
             this.exemptFromAutomatedTax = exemptFromAutomatedTax
@@ -721,7 +721,7 @@ private constructor(
          * in your system.
          */
         fun externalCustomerId(externalCustomerId: Optional<String>) =
-            externalCustomerId(externalCustomerId.orElse(null))
+            externalCustomerId(externalCustomerId.getOrNull())
 
         /**
          * An optional user-defined ID for this customer resource, used throughout the system as an
@@ -770,7 +770,7 @@ private constructor(
          * test mode, the connection must first be configured in the Orb webapp.
          */
         fun paymentProvider(paymentProvider: Optional<PaymentProvider>) =
-            paymentProvider(paymentProvider.orElse(null))
+            paymentProvider(paymentProvider.getOrNull())
 
         /**
          * This is used for creating charges or invoices in an external system via Orb. When not in
@@ -792,7 +792,7 @@ private constructor(
          * for creating charges or invoices in the external system via Orb.
          */
         fun paymentProviderId(paymentProviderId: Optional<String>) =
-            paymentProviderId(paymentProviderId.orElse(null))
+            paymentProviderId(paymentProviderId.getOrNull())
 
         /**
          * The ID of this customer in an external payments solution, such as Stripe. This is used
@@ -804,7 +804,7 @@ private constructor(
 
         fun portalUrl(portalUrl: String?) = portalUrl(JsonField.ofNullable(portalUrl))
 
-        fun portalUrl(portalUrl: Optional<String>) = portalUrl(portalUrl.orElse(null))
+        fun portalUrl(portalUrl: Optional<String>) = portalUrl(portalUrl.getOrNull())
 
         fun portalUrl(portalUrl: JsonField<String>) = apply { this.portalUrl = portalUrl }
 
@@ -812,7 +812,7 @@ private constructor(
             shippingAddress(JsonField.ofNullable(shippingAddress))
 
         fun shippingAddress(shippingAddress: Optional<ShippingAddress>) =
-            shippingAddress(shippingAddress.orElse(null))
+            shippingAddress(shippingAddress.getOrNull())
 
         fun shippingAddress(shippingAddress: JsonField<ShippingAddress>) = apply {
             this.shippingAddress = shippingAddress
@@ -1032,7 +1032,7 @@ private constructor(
          * |Venezuela           |`ve_rif`    |Venezuelan RIF Number                                                                                  |
          * |Vietnam             |`vn_tin`    |Vietnamese Tax ID Number                                                                               |
          */
-        fun taxId(taxId: Optional<TaxId>) = taxId(taxId.orElse(null))
+        fun taxId(taxId: Optional<TaxId>) = taxId(taxId.getOrNull())
 
         /**
          * Tax IDs are commonly required to be displayed on customer invoices, which are added to
@@ -1161,7 +1161,7 @@ private constructor(
 
         fun accountingSyncConfiguration(
             accountingSyncConfiguration: Optional<AccountingSyncConfiguration>
-        ) = accountingSyncConfiguration(accountingSyncConfiguration.orElse(null))
+        ) = accountingSyncConfiguration(accountingSyncConfiguration.getOrNull())
 
         fun accountingSyncConfiguration(
             accountingSyncConfiguration: JsonField<AccountingSyncConfiguration>
@@ -1171,7 +1171,7 @@ private constructor(
             reportingConfiguration(JsonField.ofNullable(reportingConfiguration))
 
         fun reportingConfiguration(reportingConfiguration: Optional<ReportingConfiguration>) =
-            reportingConfiguration(reportingConfiguration.orElse(null))
+            reportingConfiguration(reportingConfiguration.getOrNull())
 
         fun reportingConfiguration(reportingConfiguration: JsonField<ReportingConfiguration>) =
             apply {
@@ -1342,37 +1342,37 @@ private constructor(
 
             fun city(city: String?) = city(JsonField.ofNullable(city))
 
-            fun city(city: Optional<String>) = city(city.orElse(null))
+            fun city(city: Optional<String>) = city(city.getOrNull())
 
             fun city(city: JsonField<String>) = apply { this.city = city }
 
             fun country(country: String?) = country(JsonField.ofNullable(country))
 
-            fun country(country: Optional<String>) = country(country.orElse(null))
+            fun country(country: Optional<String>) = country(country.getOrNull())
 
             fun country(country: JsonField<String>) = apply { this.country = country }
 
             fun line1(line1: String?) = line1(JsonField.ofNullable(line1))
 
-            fun line1(line1: Optional<String>) = line1(line1.orElse(null))
+            fun line1(line1: Optional<String>) = line1(line1.getOrNull())
 
             fun line1(line1: JsonField<String>) = apply { this.line1 = line1 }
 
             fun line2(line2: String?) = line2(JsonField.ofNullable(line2))
 
-            fun line2(line2: Optional<String>) = line2(line2.orElse(null))
+            fun line2(line2: Optional<String>) = line2(line2.getOrNull())
 
             fun line2(line2: JsonField<String>) = apply { this.line2 = line2 }
 
             fun postalCode(postalCode: String?) = postalCode(JsonField.ofNullable(postalCode))
 
-            fun postalCode(postalCode: Optional<String>) = postalCode(postalCode.orElse(null))
+            fun postalCode(postalCode: Optional<String>) = postalCode(postalCode.getOrNull())
 
             fun postalCode(postalCode: JsonField<String>) = apply { this.postalCode = postalCode }
 
             fun state(state: String?) = state(JsonField.ofNullable(state))
 
-            fun state(state: Optional<String>) = state(state.orElse(null))
+            fun state(state: Optional<String>) = state(state.getOrNull())
 
             fun state(state: JsonField<String>) = apply { this.state = state }
 
@@ -1509,7 +1509,7 @@ private constructor(
 
             fun parent(parent: Parent?) = parent(JsonField.ofNullable(parent))
 
-            fun parent(parent: Optional<Parent>) = parent(parent.orElse(null))
+            fun parent(parent: Optional<Parent>) = parent(parent.getOrNull())
 
             fun parent(parent: JsonField<Parent>) = apply { this.parent = parent }
 
@@ -1619,7 +1619,7 @@ private constructor(
                     externalCustomerId(JsonField.ofNullable(externalCustomerId))
 
                 fun externalCustomerId(externalCustomerId: Optional<String>) =
-                    externalCustomerId(externalCustomerId.orElse(null))
+                    externalCustomerId(externalCustomerId.getOrNull())
 
                 fun externalCustomerId(externalCustomerId: JsonField<String>) = apply {
                     this.externalCustomerId = externalCustomerId
@@ -1752,7 +1752,7 @@ private constructor(
                     externalCustomerId(JsonField.ofNullable(externalCustomerId))
 
                 fun externalCustomerId(externalCustomerId: Optional<String>) =
-                    externalCustomerId(externalCustomerId.orElse(null))
+                    externalCustomerId(externalCustomerId.getOrNull())
 
                 fun externalCustomerId(externalCustomerId: JsonField<String>) = apply {
                     this.externalCustomerId = externalCustomerId
@@ -2148,37 +2148,37 @@ private constructor(
 
             fun city(city: String?) = city(JsonField.ofNullable(city))
 
-            fun city(city: Optional<String>) = city(city.orElse(null))
+            fun city(city: Optional<String>) = city(city.getOrNull())
 
             fun city(city: JsonField<String>) = apply { this.city = city }
 
             fun country(country: String?) = country(JsonField.ofNullable(country))
 
-            fun country(country: Optional<String>) = country(country.orElse(null))
+            fun country(country: Optional<String>) = country(country.getOrNull())
 
             fun country(country: JsonField<String>) = apply { this.country = country }
 
             fun line1(line1: String?) = line1(JsonField.ofNullable(line1))
 
-            fun line1(line1: Optional<String>) = line1(line1.orElse(null))
+            fun line1(line1: Optional<String>) = line1(line1.getOrNull())
 
             fun line1(line1: JsonField<String>) = apply { this.line1 = line1 }
 
             fun line2(line2: String?) = line2(JsonField.ofNullable(line2))
 
-            fun line2(line2: Optional<String>) = line2(line2.orElse(null))
+            fun line2(line2: Optional<String>) = line2(line2.getOrNull())
 
             fun line2(line2: JsonField<String>) = apply { this.line2 = line2 }
 
             fun postalCode(postalCode: String?) = postalCode(JsonField.ofNullable(postalCode))
 
-            fun postalCode(postalCode: Optional<String>) = postalCode(postalCode.orElse(null))
+            fun postalCode(postalCode: Optional<String>) = postalCode(postalCode.getOrNull())
 
             fun postalCode(postalCode: JsonField<String>) = apply { this.postalCode = postalCode }
 
             fun state(state: String?) = state(JsonField.ofNullable(state))
 
-            fun state(state: Optional<String>) = state(state.orElse(null))
+            fun state(state: Optional<String>) = state(state.getOrNull())
 
             fun state(state: JsonField<String>) = apply { this.state = state }
 
@@ -3740,7 +3740,7 @@ private constructor(
                     externalProviderId(JsonField.ofNullable(externalProviderId))
 
                 fun externalProviderId(externalProviderId: Optional<String>) =
-                    externalProviderId(externalProviderId.orElse(null))
+                    externalProviderId(externalProviderId.getOrNull())
 
                 fun externalProviderId(externalProviderId: JsonField<String>) = apply {
                     this.externalProviderId = externalProviderId

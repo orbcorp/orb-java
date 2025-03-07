@@ -22,6 +22,7 @@ import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** This endpoint is used to create a single [`Credit Note`](/invoicing/credit-notes). */
 class CreditNoteCreateParams
@@ -159,7 +160,7 @@ private constructor(
             fun memo(memo: String?) = memo(JsonField.ofNullable(memo))
 
             /** An optional memo to attach to the credit note. */
-            fun memo(memo: Optional<String>) = memo(memo.orElse(null))
+            fun memo(memo: Optional<String>) = memo(memo.getOrNull())
 
             /** An optional memo to attach to the credit note. */
             fun memo(memo: JsonField<String>) = apply { this.memo = memo }
@@ -168,7 +169,7 @@ private constructor(
             fun reason(reason: Reason?) = reason(JsonField.ofNullable(reason))
 
             /** An optional reason for the credit note. */
-            fun reason(reason: Optional<Reason>) = reason(reason.orElse(null))
+            fun reason(reason: Optional<Reason>) = reason(reason.getOrNull())
 
             /** An optional reason for the credit note. */
             fun reason(reason: JsonField<Reason>) = apply { this.reason = reason }
@@ -259,7 +260,7 @@ private constructor(
         fun memo(memo: String?) = apply { body.memo(memo) }
 
         /** An optional memo to attach to the credit note. */
-        fun memo(memo: Optional<String>) = memo(memo.orElse(null))
+        fun memo(memo: Optional<String>) = memo(memo.getOrNull())
 
         /** An optional memo to attach to the credit note. */
         fun memo(memo: JsonField<String>) = apply { body.memo(memo) }
@@ -268,7 +269,7 @@ private constructor(
         fun reason(reason: Reason?) = apply { body.reason(reason) }
 
         /** An optional reason for the credit note. */
-        fun reason(reason: Optional<Reason>) = reason(reason.orElse(null))
+        fun reason(reason: Optional<Reason>) = reason(reason.getOrNull())
 
         /** An optional reason for the credit note. */
         fun reason(reason: JsonField<Reason>) = apply { body.reason(reason) }
