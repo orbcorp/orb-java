@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.45.0 (2025-03-07)
+
+Full Changelog: [v0.44.0...v0.45.0](https://github.com/orbcorp/orb-java/compare/v0.44.0...v0.45.0)
+
+### Features
+
+* **api:** api update ([#317](https://github.com/orbcorp/orb-java/issues/317)) ([540fe9c](https://github.com/orbcorp/orb-java/commit/540fe9cfb9c92531ee1c517d06c3401f3b4511a1))
+* **client:** detect binary incompatible jackson versions ([#315](https://github.com/orbcorp/orb-java/issues/315)) ([50dd8a9](https://github.com/orbcorp/orb-java/commit/50dd8a98c468428cc2598ba4ce5d561a615b736e))
+
 ## 0.44.0 (2025-03-06)
 
 Full Changelog: [v0.43.0...v0.44.0](https://github.com/orbcorp/orb-java/compare/v0.43.0...v0.44.0)
