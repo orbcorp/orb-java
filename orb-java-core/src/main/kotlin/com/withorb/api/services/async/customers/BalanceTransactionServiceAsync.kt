@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.async.customers
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -24,7 +22,12 @@ interface BalanceTransactionServiceAsync {
      * Creates an immutable balance transaction that updates the customer's balance and returns back
      * the newly created transaction.
      */
-    @JvmOverloads
+    fun create(
+        params: CustomerBalanceTransactionCreateParams
+    ): CompletableFuture<CustomerBalanceTransactionCreateResponse> =
+        create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
         params: CustomerBalanceTransactionCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -57,7 +60,12 @@ interface BalanceTransactionServiceAsync {
      * synced to a separate invoicing provider. If a payment gateway such as Stripe is used, the
      * balance will be applied to the invoice before forwarding payment to the gateway.
      */
-    @JvmOverloads
+    fun list(
+        params: CustomerBalanceTransactionListParams
+    ): CompletableFuture<CustomerBalanceTransactionListPageAsync> =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(
         params: CustomerBalanceTransactionListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -73,7 +81,13 @@ interface BalanceTransactionServiceAsync {
          * Returns a raw HTTP response for `post /customers/{customer_id}/balance_transactions`, but
          * is otherwise the same as [BalanceTransactionServiceAsync.create].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun create(
+            params: CustomerBalanceTransactionCreateParams
+        ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionCreateResponse>> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
         @MustBeClosed
         fun create(
             params: CustomerBalanceTransactionCreateParams,
@@ -84,7 +98,13 @@ interface BalanceTransactionServiceAsync {
          * Returns a raw HTTP response for `get /customers/{customer_id}/balance_transactions`, but
          * is otherwise the same as [BalanceTransactionServiceAsync.list].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun list(
+            params: CustomerBalanceTransactionListParams
+        ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: CustomerBalanceTransactionListParams,

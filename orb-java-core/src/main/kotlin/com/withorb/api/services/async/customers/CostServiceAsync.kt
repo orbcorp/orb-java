@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.async.customers
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -130,7 +128,10 @@ interface CostServiceAsync {
      * `secondary_grouping_key` based on the matrix price definition, for each `grouping_value` and
      * `secondary_grouping_value` available.
      */
-    @JvmOverloads
+    fun list(params: CustomerCostListParams): CompletableFuture<CustomerCostListResponse> =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(
         params: CustomerCostListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -246,7 +247,12 @@ interface CostServiceAsync {
      * `secondary_grouping_key` based on the matrix price definition, for each `grouping_value` and
      * `secondary_grouping_value` available.
      */
-    @JvmOverloads
+    fun listByExternalId(
+        params: CustomerCostListByExternalIdParams
+    ): CompletableFuture<CustomerCostListByExternalIdResponse> =
+        listByExternalId(params, RequestOptions.none())
+
+    /** @see [listByExternalId] */
     fun listByExternalId(
         params: CustomerCostListByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -259,7 +265,13 @@ interface CostServiceAsync {
          * Returns a raw HTTP response for `get /customers/{customer_id}/costs`, but is otherwise
          * the same as [CostServiceAsync.list].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun list(
+            params: CustomerCostListParams
+        ): CompletableFuture<HttpResponseFor<CustomerCostListResponse>> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: CustomerCostListParams,
@@ -271,7 +283,13 @@ interface CostServiceAsync {
          * /customers/external_customer_id/{external_customer_id}/costs`, but is otherwise the same
          * as [CostServiceAsync.listByExternalId].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun listByExternalId(
+            params: CustomerCostListByExternalIdParams
+        ): CompletableFuture<HttpResponseFor<CustomerCostListByExternalIdResponse>> =
+            listByExternalId(params, RequestOptions.none())
+
+        /** @see [listByExternalId] */
         @MustBeClosed
         fun listByExternalId(
             params: CustomerCostListByExternalIdParams,

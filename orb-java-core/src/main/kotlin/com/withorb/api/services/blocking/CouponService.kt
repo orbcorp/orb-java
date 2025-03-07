@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -28,7 +26,9 @@ interface CouponService {
      * This endpoint allows the creation of coupons, which can then be redeemed at subscription
      * creation or plan change.
      */
-    @JvmOverloads
+    fun create(params: CouponCreateParams): Coupon = create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
         params: CouponCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -42,20 +42,19 @@ interface CouponService {
      * if they exist. More information about pagination can be found in the Pagination-metadata
      * schema.
      */
-    @JvmOverloads
+    fun list(): CouponListPage = list(CouponListParams.none())
+
+    /** @see [list] */
     fun list(
         params: CouponListParams = CouponListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CouponListPage
 
-    /**
-     * This endpoint returns a list of all coupons for an account in a list format.
-     *
-     * The list of coupons is ordered starting from the most recently created coupon. The response
-     * also includes `pagination_metadata`, which lets the caller retrieve the next page of results
-     * if they exist. More information about pagination can be found in the Pagination-metadata
-     * schema.
-     */
+    /** @see [list] */
+    fun list(params: CouponListParams = CouponListParams.none()): CouponListPage =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(requestOptions: RequestOptions): CouponListPage =
         list(CouponListParams.none(), requestOptions)
 
@@ -64,7 +63,9 @@ interface CouponService {
      * will be hidden from lists of active coupons. Additionally, once a coupon is archived, its
      * redemption code can be reused for a different coupon.
      */
-    @JvmOverloads
+    fun archive(params: CouponArchiveParams): Coupon = archive(params, RequestOptions.none())
+
+    /** @see [archive] */
     fun archive(
         params: CouponArchiveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -74,7 +75,9 @@ interface CouponService {
      * This endpoint retrieves a coupon by its ID. To fetch coupons by their redemption code, use
      * the [List coupons](list-coupons) endpoint with the redemption_code parameter.
      */
-    @JvmOverloads
+    fun fetch(params: CouponFetchParams): Coupon = fetch(params, RequestOptions.none())
+
+    /** @see [fetch] */
     fun fetch(
         params: CouponFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -89,7 +92,11 @@ interface CouponService {
          * Returns a raw HTTP response for `post /coupons`, but is otherwise the same as
          * [CouponService.create].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun create(params: CouponCreateParams): HttpResponseFor<Coupon> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
         @MustBeClosed
         fun create(
             params: CouponCreateParams,
@@ -100,17 +107,22 @@ interface CouponService {
          * Returns a raw HTTP response for `get /coupons`, but is otherwise the same as
          * [CouponService.list].
          */
-        @JvmOverloads
+        @MustBeClosed fun list(): HttpResponseFor<CouponListPage> = list(CouponListParams.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: CouponListParams = CouponListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CouponListPage>
 
-        /**
-         * Returns a raw HTTP response for `get /coupons`, but is otherwise the same as
-         * [CouponService.list].
-         */
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            params: CouponListParams = CouponListParams.none()
+        ): HttpResponseFor<CouponListPage> = list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<CouponListPage> =
             list(CouponListParams.none(), requestOptions)
@@ -119,7 +131,11 @@ interface CouponService {
          * Returns a raw HTTP response for `post /coupons/{coupon_id}/archive`, but is otherwise the
          * same as [CouponService.archive].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun archive(params: CouponArchiveParams): HttpResponseFor<Coupon> =
+            archive(params, RequestOptions.none())
+
+        /** @see [archive] */
         @MustBeClosed
         fun archive(
             params: CouponArchiveParams,
@@ -130,7 +146,11 @@ interface CouponService {
          * Returns a raw HTTP response for `get /coupons/{coupon_id}`, but is otherwise the same as
          * [CouponService.fetch].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun fetch(params: CouponFetchParams): HttpResponseFor<Coupon> =
+            fetch(params, RequestOptions.none())
+
+        /** @see [fetch] */
         @MustBeClosed
         fun fetch(
             params: CouponFetchParams,
