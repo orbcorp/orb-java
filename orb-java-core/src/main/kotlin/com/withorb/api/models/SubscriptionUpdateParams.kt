@@ -19,6 +19,7 @@ import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint can be used to update the `metadata`, `net terms`, `auto_collection`,
@@ -286,9 +287,8 @@ private constructor(
              * charged with the saved payment method on the due date. This property defaults to the
              * plan's behavior.
              */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun autoCollection(autoCollection: Optional<Boolean>) =
-                autoCollection(autoCollection.orElse(null) as Boolean?)
+                autoCollection(autoCollection.getOrNull())
 
             /**
              * Determines whether issued invoices for this subscription will automatically be
@@ -311,7 +311,7 @@ private constructor(
              * provided, it is determined by the plan configuration.
              */
             fun defaultInvoiceMemo(defaultInvoiceMemo: Optional<String>) =
-                defaultInvoiceMemo(defaultInvoiceMemo.orElse(null))
+                defaultInvoiceMemo(defaultInvoiceMemo.getOrNull())
 
             /**
              * Determines the default memo on this subscription's invoices. Note that if this is not
@@ -335,7 +335,7 @@ private constructor(
              * end of the billing period.
              */
             fun invoicingThreshold(invoicingThreshold: Optional<String>) =
-                invoicingThreshold(invoicingThreshold.orElse(null))
+                invoicingThreshold(invoicingThreshold.getOrNull())
 
             /**
              * When this subscription's accrued usage reaches this threshold, an invoice will be
@@ -358,7 +358,7 @@ private constructor(
              * setting the value to `null`, and the entire metadata mapping can be cleared by
              * setting `metadata` to `null`.
              */
-            fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+            fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
             /**
              * User-specified key/value pairs for the resource. Individual keys can be removed by
@@ -389,8 +389,7 @@ private constructor(
              * issue, whereas a value of `30` represents that the customer has a month to pay the
              * invoice.
              */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun netTerms(netTerms: Optional<Long>) = netTerms(netTerms.orElse(null) as Long?)
+            fun netTerms(netTerms: Optional<Long>) = netTerms(netTerms.getOrNull())
 
             /**
              * Determines the difference between the invoice issue date for subscription invoices as
@@ -501,9 +500,8 @@ private constructor(
          * with the saved payment method on the due date. This property defaults to the plan's
          * behavior.
          */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
         fun autoCollection(autoCollection: Optional<Boolean>) =
-            autoCollection(autoCollection.orElse(null) as Boolean?)
+            autoCollection(autoCollection.getOrNull())
 
         /**
          * Determines whether issued invoices for this subscription will automatically be charged
@@ -527,7 +525,7 @@ private constructor(
          * provided, it is determined by the plan configuration.
          */
         fun defaultInvoiceMemo(defaultInvoiceMemo: Optional<String>) =
-            defaultInvoiceMemo(defaultInvoiceMemo.orElse(null))
+            defaultInvoiceMemo(defaultInvoiceMemo.getOrNull())
 
         /**
          * Determines the default memo on this subscription's invoices. Note that if this is not
@@ -552,7 +550,7 @@ private constructor(
          * billing period.
          */
         fun invoicingThreshold(invoicingThreshold: Optional<String>) =
-            invoicingThreshold(invoicingThreshold.orElse(null))
+            invoicingThreshold(invoicingThreshold.getOrNull())
 
         /**
          * When this subscription's accrued usage reaches this threshold, an invoice will be issued
@@ -575,7 +573,7 @@ private constructor(
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+        fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
@@ -603,8 +601,7 @@ private constructor(
          * date that they are due. A value of `0` here represents that the invoice is due on issue,
          * whereas a value of `30` represents that the customer has a month to pay the invoice.
          */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun netTerms(netTerms: Optional<Long>) = netTerms(netTerms.orElse(null) as Long?)
+        fun netTerms(netTerms: Optional<Long>) = netTerms(netTerms.getOrNull())
 
         /**
          * Determines the difference between the invoice issue date for subscription invoices as the

@@ -19,6 +19,7 @@ import com.withorb.api.errors.OrbInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 @NoAutoDetect
 class CustomerCreditListByExternalIdResponse
@@ -168,7 +169,7 @@ private constructor(
             effectiveDate(JsonField.ofNullable(effectiveDate))
 
         fun effectiveDate(effectiveDate: Optional<OffsetDateTime>) =
-            effectiveDate(effectiveDate.orElse(null))
+            effectiveDate(effectiveDate.getOrNull())
 
         fun effectiveDate(effectiveDate: JsonField<OffsetDateTime>) = apply {
             this.effectiveDate = effectiveDate
@@ -176,7 +177,7 @@ private constructor(
 
         fun expiryDate(expiryDate: OffsetDateTime?) = expiryDate(JsonField.ofNullable(expiryDate))
 
-        fun expiryDate(expiryDate: Optional<OffsetDateTime>) = expiryDate(expiryDate.orElse(null))
+        fun expiryDate(expiryDate: Optional<OffsetDateTime>) = expiryDate(expiryDate.getOrNull())
 
         fun expiryDate(expiryDate: JsonField<OffsetDateTime>) = apply {
             this.expiryDate = expiryDate
@@ -188,9 +189,8 @@ private constructor(
         fun maximumInitialBalance(maximumInitialBalance: Double) =
             maximumInitialBalance(maximumInitialBalance as Double?)
 
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
         fun maximumInitialBalance(maximumInitialBalance: Optional<Double>) =
-            maximumInitialBalance(maximumInitialBalance.orElse(null) as Double?)
+            maximumInitialBalance(maximumInitialBalance.getOrNull())
 
         fun maximumInitialBalance(maximumInitialBalance: JsonField<Double>) = apply {
             this.maximumInitialBalance = maximumInitialBalance
@@ -200,7 +200,7 @@ private constructor(
             perUnitCostBasis(JsonField.ofNullable(perUnitCostBasis))
 
         fun perUnitCostBasis(perUnitCostBasis: Optional<String>) =
-            perUnitCostBasis(perUnitCostBasis.orElse(null))
+            perUnitCostBasis(perUnitCostBasis.getOrNull())
 
         fun perUnitCostBasis(perUnitCostBasis: JsonField<String>) = apply {
             this.perUnitCostBasis = perUnitCostBasis

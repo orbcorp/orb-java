@@ -565,7 +565,7 @@ private constructor(
 
         fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-        fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+        fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
         fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -595,7 +595,7 @@ private constructor(
         fun filter(filter: String?) = filter(JsonField.ofNullable(filter))
 
         /** An additional filter that was used to calculate the usage for this line item. */
-        fun filter(filter: Optional<String>) = filter(filter.orElse(null))
+        fun filter(filter: Optional<String>) = filter(filter.getOrNull())
 
         /** An additional filter that was used to calculate the usage for this line item. */
         fun filter(filter: JsonField<String>) = apply { this.filter = filter }
@@ -612,7 +612,7 @@ private constructor(
          * populated with the key and a value. The `amount` and `subtotal` will be the values for
          * this particular grouping.
          */
-        fun grouping(grouping: Optional<String>) = grouping(grouping.orElse(null))
+        fun grouping(grouping: Optional<String>) = grouping(grouping.getOrNull())
 
         /**
          * [DEPRECATED] For configured prices that are split by a grouping key, this will be
@@ -627,7 +627,7 @@ private constructor(
 
         /** This field is deprecated in favor of `adjustments`. */
         @Deprecated("deprecated")
-        fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+        fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
         /** This field is deprecated in favor of `adjustments`. */
         @Deprecated("deprecated")
@@ -641,7 +641,7 @@ private constructor(
         /** This field is deprecated in favor of `adjustments`. */
         @Deprecated("deprecated")
         fun maximumAmount(maximumAmount: Optional<String>) =
-            maximumAmount(maximumAmount.orElse(null))
+            maximumAmount(maximumAmount.getOrNull())
 
         /** This field is deprecated in favor of `adjustments`. */
         @Deprecated("deprecated")
@@ -655,7 +655,7 @@ private constructor(
 
         /** This field is deprecated in favor of `adjustments`. */
         @Deprecated("deprecated")
-        fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+        fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
         /** This field is deprecated in favor of `adjustments`. */
         @Deprecated("deprecated")
@@ -669,7 +669,7 @@ private constructor(
         /** This field is deprecated in favor of `adjustments`. */
         @Deprecated("deprecated")
         fun minimumAmount(minimumAmount: Optional<String>) =
-            minimumAmount(minimumAmount.orElse(null))
+            minimumAmount(minimumAmount.getOrNull())
 
         /** This field is deprecated in favor of `adjustments`. */
         @Deprecated("deprecated")
@@ -718,7 +718,7 @@ private constructor(
          * For more on the types of prices, see
          * [the core concepts documentation](/core-concepts#plan-and-price)
          */
-        fun price(price: Optional<Price>) = price(price.orElse(null))
+        fun price(price: Optional<Price>) = price(price.getOrNull())
 
         /**
          * The Price resource represents a price that can be billed on a subscription, resulting in
@@ -1241,7 +1241,7 @@ private constructor(
 
         /** A list of customer ids that were used to calculate the usage for this line item. */
         fun usageCustomerIds(usageCustomerIds: Optional<List<String>>) =
-            usageCustomerIds(usageCustomerIds.orElse(null))
+            usageCustomerIds(usageCustomerIds.getOrNull())
 
         /** A list of customer ids that were used to calculate the usage for this line item. */
         fun usageCustomerIds(usageCustomerIds: JsonField<List<String>>) = apply {
@@ -1785,7 +1785,7 @@ private constructor(
                 fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
                 /** The reason for the adjustment. */
-                fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+                fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
                 /** The reason for the adjustment. */
                 fun reason(reason: JsonField<String>) = apply { this.reason = reason }
@@ -2190,7 +2190,7 @@ private constructor(
                 fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
                 /** The reason for the adjustment. */
-                fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+                fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
                 /** The reason for the adjustment. */
                 fun reason(reason: JsonField<String>) = apply { this.reason = reason }
@@ -2580,7 +2580,7 @@ private constructor(
                 fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
                 /** The reason for the adjustment. */
-                fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+                fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
                 /** The reason for the adjustment. */
                 fun reason(reason: JsonField<String>) = apply { this.reason = reason }
@@ -2985,7 +2985,7 @@ private constructor(
                 fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
                 /** The reason for the adjustment. */
-                fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+                fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
                 /** The reason for the adjustment. */
                 fun reason(reason: JsonField<String>) = apply { this.reason = reason }
@@ -3372,7 +3372,7 @@ private constructor(
                 fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
                 /** The reason for the adjustment. */
-                fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+                fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
                 /** The reason for the adjustment. */
                 fun reason(reason: JsonField<String>) = apply { this.reason = reason }
@@ -4156,7 +4156,7 @@ private constructor(
 
                 fun grouping(grouping: Grouping?) = grouping(JsonField.ofNullable(grouping))
 
-                fun grouping(grouping: Optional<Grouping>) = grouping(grouping.orElse(null))
+                fun grouping(grouping: Optional<Grouping>) = grouping(grouping.getOrNull())
 
                 fun grouping(grouping: JsonField<Grouping>) = apply { this.grouping = grouping }
 
@@ -4291,7 +4291,7 @@ private constructor(
                     fun value(value: String?) = value(JsonField.ofNullable(value))
 
                     /** No value indicates the default group */
-                    fun value(value: Optional<String>) = value(value.orElse(null))
+                    fun value(value: Optional<String>) = value(value.getOrNull())
 
                     /** No value indicates the default group */
                     fun value(value: JsonField<String>) = apply { this.value = value }
@@ -4714,7 +4714,7 @@ private constructor(
 
                 fun grouping(grouping: Grouping?) = grouping(JsonField.ofNullable(grouping))
 
-                fun grouping(grouping: Optional<Grouping>) = grouping(grouping.orElse(null))
+                fun grouping(grouping: Optional<Grouping>) = grouping(grouping.getOrNull())
 
                 fun grouping(grouping: JsonField<Grouping>) = apply { this.grouping = grouping }
 
@@ -4848,7 +4848,7 @@ private constructor(
                     fun value(value: String?) = value(JsonField.ofNullable(value))
 
                     /** No value indicates the default group */
-                    fun value(value: Optional<String>) = value(value.orElse(null))
+                    fun value(value: Optional<String>) = value(value.getOrNull())
 
                     /** No value indicates the default group */
                     fun value(value: JsonField<String>) = apply { this.value = value }
@@ -4997,9 +4997,7 @@ private constructor(
 
                     fun lastUnit(lastUnit: Double) = lastUnit(lastUnit as Double?)
 
-                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                    fun lastUnit(lastUnit: Optional<Double>) =
-                        lastUnit(lastUnit.orElse(null) as Double?)
+                    fun lastUnit(lastUnit: Optional<Double>) = lastUnit(lastUnit.getOrNull())
 
                     fun lastUnit(lastUnit: JsonField<Double>) = apply { this.lastUnit = lastUnit }
 
@@ -5287,7 +5285,7 @@ private constructor(
 
                 fun grouping(grouping: Grouping?) = grouping(JsonField.ofNullable(grouping))
 
-                fun grouping(grouping: Optional<Grouping>) = grouping(grouping.orElse(null))
+                fun grouping(grouping: Optional<Grouping>) = grouping(grouping.getOrNull())
 
                 fun grouping(grouping: JsonField<Grouping>) = apply { this.grouping = grouping }
 
@@ -5414,7 +5412,7 @@ private constructor(
                     fun value(value: String?) = value(JsonField.ofNullable(value))
 
                     /** No value indicates the default group */
-                    fun value(value: Optional<String>) = value(value.orElse(null))
+                    fun value(value: Optional<String>) = value(value.getOrNull())
 
                     /** No value indicates the default group */
                     fun value(value: JsonField<String>) = apply { this.value = value }
@@ -5694,7 +5692,7 @@ private constructor(
 
             /** The tax rate percentage, out of 100. */
             fun taxRatePercentage(taxRatePercentage: Optional<String>) =
-                taxRatePercentage(taxRatePercentage.orElse(null))
+                taxRatePercentage(taxRatePercentage.getOrNull())
 
             /** The tax rate percentage, out of 100. */
             fun taxRatePercentage(taxRatePercentage: JsonField<String>) = apply {

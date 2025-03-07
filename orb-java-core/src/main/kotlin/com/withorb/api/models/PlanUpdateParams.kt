@@ -19,6 +19,7 @@ import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint can be used to update the `external_plan_id`, and `metadata` of an existing plan.
@@ -177,7 +178,7 @@ private constructor(
              * your system.
              */
             fun externalPlanId(externalPlanId: Optional<String>) =
-                externalPlanId(externalPlanId.orElse(null))
+                externalPlanId(externalPlanId.getOrNull())
 
             /**
              * An optional user-defined ID for this plan resource, used throughout the system as an
@@ -200,7 +201,7 @@ private constructor(
              * setting the value to `null`, and the entire metadata mapping can be cleared by
              * setting `metadata` to `null`.
              */
-            fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+            fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
             /**
              * User-specified key/value pairs for the resource. Individual keys can be removed by
@@ -296,7 +297,7 @@ private constructor(
          * system.
          */
         fun externalPlanId(externalPlanId: Optional<String>) =
-            externalPlanId(externalPlanId.orElse(null))
+            externalPlanId(externalPlanId.getOrNull())
 
         /**
          * An optional user-defined ID for this plan resource, used throughout the system as an
@@ -319,7 +320,7 @@ private constructor(
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+        fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by

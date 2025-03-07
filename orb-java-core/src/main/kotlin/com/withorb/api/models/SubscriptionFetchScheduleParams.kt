@@ -11,6 +11,7 @@ import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint returns a [paginated](/api-reference/pagination) list of all plans associated with
@@ -151,7 +152,7 @@ private constructor(
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
          * initial request.
          */
-        fun cursor(cursor: Optional<String>) = cursor(cursor.orElse(null))
+        fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
         /** The number of items to fetch. Defaults to 20. */
         fun limit(limit: Long?) = apply { this.limit = limit }
@@ -160,28 +161,27 @@ private constructor(
         fun limit(limit: Long) = limit(limit as Long?)
 
         /** The number of items to fetch. Defaults to 20. */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun limit(limit: Optional<Long>) = limit(limit.orElse(null) as Long?)
+        fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         fun startDateGt(startDateGt: OffsetDateTime?) = apply { this.startDateGt = startDateGt }
 
         fun startDateGt(startDateGt: Optional<OffsetDateTime>) =
-            startDateGt(startDateGt.orElse(null))
+            startDateGt(startDateGt.getOrNull())
 
         fun startDateGte(startDateGte: OffsetDateTime?) = apply { this.startDateGte = startDateGte }
 
         fun startDateGte(startDateGte: Optional<OffsetDateTime>) =
-            startDateGte(startDateGte.orElse(null))
+            startDateGte(startDateGte.getOrNull())
 
         fun startDateLt(startDateLt: OffsetDateTime?) = apply { this.startDateLt = startDateLt }
 
         fun startDateLt(startDateLt: Optional<OffsetDateTime>) =
-            startDateLt(startDateLt.orElse(null))
+            startDateLt(startDateLt.getOrNull())
 
         fun startDateLte(startDateLte: OffsetDateTime?) = apply { this.startDateLte = startDateLte }
 
         fun startDateLte(startDateLte: Optional<OffsetDateTime>) =
-            startDateLte(startDateLte.orElse(null))
+            startDateLte(startDateLte.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

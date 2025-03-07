@@ -19,6 +19,7 @@ import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 @NoAutoDetect
 class TrialDiscount
@@ -173,7 +174,7 @@ private constructor(
 
         fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
-        fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+        fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
         fun reason(reason: JsonField<String>) = apply { this.reason = reason }
 
@@ -183,7 +184,7 @@ private constructor(
 
         /** Only available if discount_type is `trial` */
         fun trialAmountDiscount(trialAmountDiscount: Optional<String>) =
-            trialAmountDiscount(trialAmountDiscount.orElse(null))
+            trialAmountDiscount(trialAmountDiscount.getOrNull())
 
         /** Only available if discount_type is `trial` */
         fun trialAmountDiscount(trialAmountDiscount: JsonField<String>) = apply {
@@ -199,9 +200,8 @@ private constructor(
             trialPercentageDiscount(trialPercentageDiscount as Double?)
 
         /** Only available if discount_type is `trial` */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
         fun trialPercentageDiscount(trialPercentageDiscount: Optional<Double>) =
-            trialPercentageDiscount(trialPercentageDiscount.orElse(null) as Double?)
+            trialPercentageDiscount(trialPercentageDiscount.getOrNull())
 
         /** Only available if discount_type is `trial` */
         fun trialPercentageDiscount(trialPercentageDiscount: JsonField<Double>) = apply {

@@ -19,6 +19,7 @@ import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint is used to create a [metric](/core-concepts###metric) using a SQL string. See
@@ -205,7 +206,7 @@ private constructor(
             fun description(description: String?) = description(JsonField.ofNullable(description))
 
             /** A description of the metric. */
-            fun description(description: Optional<String>) = description(description.orElse(null))
+            fun description(description: Optional<String>) = description(description.getOrNull())
 
             /** A description of the metric. */
             fun description(description: JsonField<String>) = apply {
@@ -242,7 +243,7 @@ private constructor(
              * setting the value to `null`, and the entire metadata mapping can be cleared by
              * setting `metadata` to `null`.
              */
-            fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+            fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
             /**
              * User-specified key/value pairs for the resource. Individual keys can be removed by
@@ -336,7 +337,7 @@ private constructor(
         fun description(description: String?) = apply { body.description(description) }
 
         /** A description of the metric. */
-        fun description(description: Optional<String>) = description(description.orElse(null))
+        fun description(description: Optional<String>) = description(description.getOrNull())
 
         /** A description of the metric. */
         fun description(description: JsonField<String>) = apply { body.description(description) }
@@ -371,7 +372,7 @@ private constructor(
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+        fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by

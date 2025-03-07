@@ -17,6 +17,7 @@ import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 @NoAutoDetect
 class EventIngestResponse
@@ -137,7 +138,7 @@ private constructor(
          * Optional debug information (only present when debug=true is passed to the endpoint).
          * Contains ingested and duplicate event idempotency keys.
          */
-        fun debug(debug: Optional<Debug>) = debug(debug.orElse(null))
+        fun debug(debug: Optional<Debug>) = debug(debug.getOrNull())
 
         /**
          * Optional debug information (only present when debug=true is passed to the endpoint).

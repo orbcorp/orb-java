@@ -17,6 +17,7 @@ import com.withorb.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 @NoAutoDetect
 class SubscriptionFetchScheduleResponse
@@ -118,7 +119,7 @@ private constructor(
 
         fun endDate(endDate: OffsetDateTime?) = endDate(JsonField.ofNullable(endDate))
 
-        fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.orElse(null))
+        fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.getOrNull())
 
         fun endDate(endDate: JsonField<OffsetDateTime>) = apply { this.endDate = endDate }
 
@@ -251,7 +252,7 @@ private constructor(
 
             fun id(id: String?) = id(JsonField.ofNullable(id))
 
-            fun id(id: Optional<String>) = id(id.orElse(null))
+            fun id(id: Optional<String>) = id(id.getOrNull())
 
             fun id(id: JsonField<String>) = apply { this.id = id }
 
@@ -269,7 +270,7 @@ private constructor(
              * your system.
              */
             fun externalPlanId(externalPlanId: Optional<String>) =
-                externalPlanId(externalPlanId.orElse(null))
+                externalPlanId(externalPlanId.getOrNull())
 
             /**
              * An optional user-defined ID for this plan resource, used throughout the system as an
@@ -282,7 +283,7 @@ private constructor(
 
             fun name(name: String?) = name(JsonField.ofNullable(name))
 
-            fun name(name: Optional<String>) = name(name.orElse(null))
+            fun name(name: Optional<String>) = name(name.getOrNull())
 
             fun name(name: JsonField<String>) = apply { this.name = name }
 

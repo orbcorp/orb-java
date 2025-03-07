@@ -1349,7 +1349,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -1371,9 +1371,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -1389,7 +1388,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -1401,7 +1400,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -1426,7 +1425,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -1438,9 +1437,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -1452,7 +1450,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -1464,7 +1462,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -1472,7 +1470,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -1494,7 +1492,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -1502,7 +1500,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -1521,9 +1519,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -1545,7 +1542,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
@@ -3835,7 +3832,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -3857,9 +3854,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -3875,7 +3871,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -3887,7 +3883,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -3912,7 +3908,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -3924,9 +3920,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -3938,7 +3933,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -3950,7 +3945,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -3958,7 +3953,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -3980,7 +3975,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -3988,7 +3983,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -4014,9 +4009,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -4032,7 +4026,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
@@ -6359,7 +6353,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -6381,9 +6375,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -6399,7 +6392,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -6411,7 +6404,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -6436,7 +6429,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -6448,9 +6441,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -6462,7 +6454,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -6480,7 +6472,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -6488,7 +6480,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -6510,7 +6502,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -6518,7 +6510,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -6537,9 +6529,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -6555,7 +6546,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
@@ -9087,7 +9078,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -9109,9 +9100,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -9127,7 +9117,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -9139,7 +9129,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -9164,7 +9154,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -9176,9 +9166,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -9190,7 +9179,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -9202,7 +9191,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -9210,7 +9199,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -9232,7 +9221,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -9240,7 +9229,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -9259,9 +9248,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -9283,7 +9271,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
@@ -11135,9 +11123,7 @@ private constructor(
                     fun lastUnit(lastUnit: Double) = lastUnit(lastUnit as Double?)
 
                     /** Exclusive tier ending value. If null, this is treated as the last tier */
-                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-                    fun lastUnit(lastUnit: Optional<Double>) =
-                        lastUnit(lastUnit.orElse(null) as Double?)
+                    fun lastUnit(lastUnit: Optional<Double>) = lastUnit(lastUnit.getOrNull())
 
                     /** Exclusive tier ending value. If null, this is treated as the last tier */
                     fun lastUnit(lastUnit: JsonField<Double>) = apply { this.lastUnit = lastUnit }
@@ -11749,7 +11735,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -11771,9 +11757,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -11789,7 +11774,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -11801,7 +11786,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -11826,7 +11811,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -11838,9 +11823,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -11852,7 +11836,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -11864,7 +11848,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -11872,7 +11856,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -11894,7 +11878,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -11902,7 +11886,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -11921,9 +11905,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -11946,7 +11929,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
@@ -13822,7 +13805,7 @@ private constructor(
 
                     /** Exclusive tier ending value */
                     fun maximumAmount(maximumAmount: Optional<String>) =
-                        maximumAmount(maximumAmount.orElse(null))
+                        maximumAmount(maximumAmount.getOrNull())
 
                     /** Exclusive tier ending value */
                     fun maximumAmount(maximumAmount: JsonField<String>) = apply {
@@ -13835,7 +13818,7 @@ private constructor(
 
                     /** Per unit maximum to charge */
                     fun perUnitMaximum(perUnitMaximum: Optional<String>) =
-                        perUnitMaximum(perUnitMaximum.orElse(null))
+                        perUnitMaximum(perUnitMaximum.getOrNull())
 
                     /** Per unit maximum to charge */
                     fun perUnitMaximum(perUnitMaximum: JsonField<String>) = apply {
@@ -14450,7 +14433,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -14476,9 +14459,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -14494,7 +14476,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -14506,7 +14488,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -14531,7 +14513,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -14543,9 +14525,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -14557,7 +14538,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -14569,7 +14550,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -14577,7 +14558,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -14599,7 +14580,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -14607,7 +14588,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -14626,9 +14607,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -14644,7 +14624,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
@@ -15127,7 +15107,7 @@ private constructor(
 
                 /** Optional currency amount maximum to cap spend per event */
                 fun perUnitMaximum(perUnitMaximum: Optional<String>) =
-                    perUnitMaximum(perUnitMaximum.orElse(null))
+                    perUnitMaximum(perUnitMaximum.getOrNull())
 
                 /** Optional currency amount maximum to cap spend per event */
                 fun perUnitMaximum(perUnitMaximum: JsonField<String>) = apply {
@@ -16959,7 +16939,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -16988,9 +16968,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -17006,7 +16985,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -17018,7 +16997,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -17043,7 +17022,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -17055,9 +17034,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -17069,7 +17047,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -17081,7 +17059,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -17089,7 +17067,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -17111,7 +17089,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -17119,7 +17097,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -17138,9 +17116,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -17156,7 +17133,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
@@ -17773,7 +17750,7 @@ private constructor(
 
                     /** Upper bound for tier */
                     fun maximumAmount(maximumAmount: Optional<String>) =
-                        maximumAmount(maximumAmount.orElse(null))
+                        maximumAmount(maximumAmount.getOrNull())
 
                     /** Upper bound for tier */
                     fun maximumAmount(maximumAmount: JsonField<String>) = apply {
@@ -17786,7 +17763,7 @@ private constructor(
 
                     /** The maximum amount to charge for any one event */
                     fun perUnitMaximum(perUnitMaximum: Optional<String>) =
-                        perUnitMaximum(perUnitMaximum.orElse(null))
+                        perUnitMaximum(perUnitMaximum.getOrNull())
 
                     /** The maximum amount to charge for any one event */
                     fun perUnitMaximum(perUnitMaximum: JsonField<String>) = apply {
@@ -19637,7 +19614,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -19665,9 +19642,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -19683,7 +19659,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -19695,7 +19671,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -19720,7 +19696,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -19732,9 +19708,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -19746,7 +19721,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -19758,7 +19733,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -19766,7 +19741,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -19788,7 +19763,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -19796,7 +19771,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -19815,9 +19790,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -19833,7 +19807,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
@@ -20426,9 +20400,8 @@ private constructor(
                     fun maximumUnits(maximumUnits: Double) = maximumUnits(maximumUnits as Double?)
 
                     /** Upper bound for this tier */
-                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                     fun maximumUnits(maximumUnits: Optional<Double>) =
-                        maximumUnits(maximumUnits.orElse(null) as Double?)
+                        maximumUnits(maximumUnits.getOrNull())
 
                     /** Upper bound for this tier */
                     fun maximumUnits(maximumUnits: JsonField<Double>) = apply {
@@ -22283,7 +22256,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -22305,9 +22278,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -22323,7 +22295,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -22335,7 +22307,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -22360,7 +22332,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -22372,9 +22344,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -22386,7 +22357,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -22398,7 +22369,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -22406,7 +22377,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -22428,7 +22399,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -22436,7 +22407,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -22455,9 +22426,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -22480,7 +22450,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
@@ -24743,7 +24713,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -24765,9 +24735,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -24783,7 +24752,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -24795,7 +24764,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -24820,7 +24789,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -24832,9 +24801,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -24846,7 +24814,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -24858,7 +24826,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -24866,7 +24834,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -24888,7 +24856,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -24896,7 +24864,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -24915,9 +24883,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -24940,7 +24907,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
@@ -27201,7 +27168,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -27223,9 +27190,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -27241,7 +27207,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -27253,7 +27219,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -27278,7 +27244,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -27290,9 +27256,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -27311,7 +27276,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -27323,7 +27288,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -27331,7 +27296,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -27353,7 +27318,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -27361,7 +27326,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -27380,9 +27345,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -27398,7 +27362,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
@@ -29659,7 +29623,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -29681,9 +29645,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -29699,7 +29662,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -29711,7 +29674,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -29736,7 +29699,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -29748,9 +29711,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -29762,7 +29724,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -29774,7 +29736,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -29782,7 +29744,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -29804,7 +29766,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -29812,7 +29774,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -29831,9 +29793,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -29856,7 +29817,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
@@ -32129,7 +32090,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -32151,9 +32112,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -32169,7 +32129,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -32181,7 +32141,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -32206,7 +32166,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -32218,9 +32178,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -32232,7 +32191,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -32244,7 +32203,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -32252,7 +32211,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -32274,7 +32233,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -32282,7 +32241,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -32301,9 +32260,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -32327,7 +32285,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
@@ -34596,7 +34554,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -34618,9 +34576,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -34636,7 +34593,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -34648,7 +34605,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -34673,7 +34630,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -34685,9 +34642,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -34699,7 +34655,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -34711,7 +34667,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -34719,7 +34675,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -34741,7 +34697,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -34749,7 +34705,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -34776,9 +34732,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -34794,7 +34749,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
@@ -37058,7 +37013,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -37080,9 +37035,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -37098,7 +37052,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -37110,7 +37064,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -37135,7 +37089,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -37147,9 +37101,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -37161,7 +37114,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -37173,7 +37126,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -37181,7 +37134,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -37203,7 +37156,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -37211,7 +37164,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -37230,9 +37183,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -37256,7 +37208,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
@@ -39522,7 +39474,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -39544,9 +39496,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -39562,7 +39513,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -39574,7 +39525,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -39599,7 +39550,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -39611,9 +39562,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -39625,7 +39575,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -39644,7 +39594,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -39652,7 +39602,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -39674,7 +39624,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -39682,7 +39632,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -39701,9 +39651,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -39719,7 +39668,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
@@ -42282,7 +42231,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -42304,9 +42253,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -42322,7 +42270,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -42334,7 +42282,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -42359,7 +42307,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -42371,9 +42319,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -42385,7 +42332,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -42397,7 +42344,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -42405,7 +42352,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -42427,7 +42374,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -42435,7 +42382,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -42454,9 +42401,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -42479,7 +42425,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
@@ -44742,7 +44688,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -44764,9 +44710,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -44782,7 +44727,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -44794,7 +44739,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -44819,7 +44764,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -44831,9 +44776,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -44845,7 +44789,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -44857,7 +44801,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -44865,7 +44809,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -44887,7 +44831,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -44895,7 +44839,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -44914,9 +44858,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -44939,7 +44882,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
@@ -47202,7 +47145,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -47224,9 +47167,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -47242,7 +47184,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -47254,7 +47196,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -47279,7 +47221,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -47291,9 +47233,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -47312,7 +47253,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -47324,7 +47265,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -47332,7 +47273,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -47354,7 +47295,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -47362,7 +47303,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -47381,9 +47322,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -47399,7 +47339,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
@@ -49673,7 +49613,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -49695,9 +49635,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -49713,7 +49652,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -49725,7 +49664,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -49750,7 +49689,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -49762,9 +49701,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -49784,7 +49722,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -49796,7 +49734,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -49804,7 +49742,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -49826,7 +49764,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -49834,7 +49772,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -49853,9 +49791,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -49871,7 +49808,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
@@ -52150,7 +52087,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -52172,9 +52109,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -52190,7 +52126,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -52202,7 +52138,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -52227,7 +52163,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -52239,9 +52175,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -52261,7 +52196,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -52273,7 +52208,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -52281,7 +52216,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -52303,7 +52238,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -52311,7 +52246,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -52330,9 +52265,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -52348,7 +52282,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
@@ -54621,7 +54555,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -54643,9 +54577,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -54661,7 +54594,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -54673,7 +54606,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -54698,7 +54631,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -54710,9 +54643,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -54724,7 +54656,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -54744,7 +54676,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -54752,7 +54684,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -54774,7 +54706,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -54782,7 +54714,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -54801,9 +54733,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -54819,7 +54750,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
@@ -57083,7 +57014,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -57112,9 +57043,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -57130,7 +57060,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -57142,7 +57072,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -57167,7 +57097,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -57179,9 +57109,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -57193,7 +57122,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -57205,7 +57134,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -57213,7 +57142,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -57235,7 +57164,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -57243,7 +57172,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -57262,9 +57191,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -57280,7 +57208,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
@@ -59547,7 +59475,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -59569,9 +59497,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -59587,7 +59514,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -59599,7 +59526,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -59624,7 +59551,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -59636,9 +59563,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -59657,7 +59583,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -59669,7 +59595,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -59677,7 +59603,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -59699,7 +59625,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -59707,7 +59633,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -59726,9 +59652,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -59744,7 +59669,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
@@ -62012,7 +61937,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -62034,9 +61959,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -62052,7 +61976,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -62064,7 +61988,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -62089,7 +62013,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -62101,9 +62025,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -62115,7 +62038,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -62135,7 +62058,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -62143,7 +62066,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -62165,7 +62088,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -62173,7 +62096,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -62192,9 +62115,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -62210,7 +62132,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
@@ -64489,7 +64411,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -64511,9 +64433,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -64529,7 +64450,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -64541,7 +64462,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -64566,7 +64487,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -64578,9 +64499,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -64592,7 +64512,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -64604,7 +64524,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -64612,7 +64532,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -64634,7 +64554,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -64642,7 +64562,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -64661,9 +64581,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -64692,7 +64611,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
@@ -66976,7 +66895,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -66998,9 +66917,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -67016,7 +66934,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -67028,7 +66946,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -67053,7 +66971,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -67065,9 +66983,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -67079,7 +66996,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -67091,7 +67008,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -67099,7 +67016,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -67121,7 +67038,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -67129,7 +67046,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -67148,9 +67065,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -67180,7 +67096,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
@@ -69454,7 +69370,7 @@ private constructor(
                 billableMetric(JsonField.ofNullable(billableMetric))
 
             fun billableMetric(billableMetric: Optional<BillableMetric>) =
-                billableMetric(billableMetric.orElse(null))
+                billableMetric(billableMetric.getOrNull())
 
             fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                 this.billableMetric = billableMetric
@@ -69476,9 +69392,8 @@ private constructor(
 
             fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.orElse(null) as Double?)
+                conversionRate(conversionRate.getOrNull())
 
             fun conversionRate(conversionRate: JsonField<Double>) = apply {
                 this.conversionRate = conversionRate
@@ -69494,7 +69409,7 @@ private constructor(
                 creditAllocation(JsonField.ofNullable(creditAllocation))
 
             fun creditAllocation(creditAllocation: Optional<CreditAllocation>) =
-                creditAllocation(creditAllocation.orElse(null))
+                creditAllocation(creditAllocation.getOrNull())
 
             fun creditAllocation(creditAllocation: JsonField<CreditAllocation>) = apply {
                 this.creditAllocation = creditAllocation
@@ -69514,7 +69429,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -69539,7 +69454,7 @@ private constructor(
                 externalPriceId(JsonField.ofNullable(externalPriceId))
 
             fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.orElse(null))
+                externalPriceId(externalPriceId.getOrNull())
 
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
@@ -69551,9 +69466,8 @@ private constructor(
             fun fixedPriceQuantity(fixedPriceQuantity: Double) =
                 fixedPriceQuantity(fixedPriceQuantity as Double?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
             fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
                 this.fixedPriceQuantity = fixedPriceQuantity
@@ -69565,7 +69479,7 @@ private constructor(
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
             fun invoicingCycleConfiguration(
                 invoicingCycleConfiguration: JsonField<InvoicingCycleConfiguration>
@@ -69577,7 +69491,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -69585,7 +69499,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -69607,7 +69521,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -69615,7 +69529,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -69634,9 +69548,8 @@ private constructor(
 
             fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                planPhaseOrder(planPhaseOrder.getOrNull())
 
             fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
                 this.planPhaseOrder = planPhaseOrder
@@ -69652,7 +69565,7 @@ private constructor(
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.orElse(null))
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
 
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>

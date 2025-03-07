@@ -17,6 +17,7 @@ import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * A dimensional price group is used to partition the result of a billable metric by a set of
@@ -203,7 +204,7 @@ private constructor(
 
         /** An alias for the dimensional price group */
         fun externalDimensionalPriceGroupId(externalDimensionalPriceGroupId: Optional<String>) =
-            externalDimensionalPriceGroupId(externalDimensionalPriceGroupId.orElse(null))
+            externalDimensionalPriceGroupId(externalDimensionalPriceGroupId.getOrNull())
 
         /** An alias for the dimensional price group */
         fun externalDimensionalPriceGroupId(externalDimensionalPriceGroupId: JsonField<String>) =

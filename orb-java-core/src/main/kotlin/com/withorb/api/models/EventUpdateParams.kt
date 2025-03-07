@@ -20,6 +20,7 @@ import com.withorb.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint is used to amend a single usage event with a given `event_id`. `event_id` refers to
@@ -283,7 +284,7 @@ private constructor(
             fun customerId(customerId: String?) = customerId(JsonField.ofNullable(customerId))
 
             /** The Orb Customer identifier */
-            fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
+            fun customerId(customerId: Optional<String>) = customerId(customerId.getOrNull())
 
             /** The Orb Customer identifier */
             fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
@@ -298,7 +299,7 @@ private constructor(
              * An alias for the Orb customer, whose mapping is specified when creating the customer
              */
             fun externalCustomerId(externalCustomerId: Optional<String>) =
-                externalCustomerId(externalCustomerId.orElse(null))
+                externalCustomerId(externalCustomerId.getOrNull())
 
             /**
              * An alias for the Orb customer, whose mapping is specified when creating the customer
@@ -422,7 +423,7 @@ private constructor(
         fun customerId(customerId: String?) = apply { body.customerId(customerId) }
 
         /** The Orb Customer identifier */
-        fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
+        fun customerId(customerId: Optional<String>) = customerId(customerId.getOrNull())
 
         /** The Orb Customer identifier */
         fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
@@ -434,7 +435,7 @@ private constructor(
 
         /** An alias for the Orb customer, whose mapping is specified when creating the customer */
         fun externalCustomerId(externalCustomerId: Optional<String>) =
-            externalCustomerId(externalCustomerId.orElse(null))
+            externalCustomerId(externalCustomerId.getOrNull())
 
         /** An alias for the Orb customer, whose mapping is specified when creating the customer */
         fun externalCustomerId(externalCustomerId: JsonField<String>) = apply {

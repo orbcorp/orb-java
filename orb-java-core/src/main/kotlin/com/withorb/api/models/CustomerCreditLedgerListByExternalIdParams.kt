@@ -15,6 +15,7 @@ import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * The credits ledger provides _auditing_ functionality over Orb's credits system with a list of
@@ -249,28 +250,28 @@ private constructor(
         fun createdAtGt(createdAtGt: OffsetDateTime?) = apply { this.createdAtGt = createdAtGt }
 
         fun createdAtGt(createdAtGt: Optional<OffsetDateTime>) =
-            createdAtGt(createdAtGt.orElse(null))
+            createdAtGt(createdAtGt.getOrNull())
 
         fun createdAtGte(createdAtGte: OffsetDateTime?) = apply { this.createdAtGte = createdAtGte }
 
         fun createdAtGte(createdAtGte: Optional<OffsetDateTime>) =
-            createdAtGte(createdAtGte.orElse(null))
+            createdAtGte(createdAtGte.getOrNull())
 
         fun createdAtLt(createdAtLt: OffsetDateTime?) = apply { this.createdAtLt = createdAtLt }
 
         fun createdAtLt(createdAtLt: Optional<OffsetDateTime>) =
-            createdAtLt(createdAtLt.orElse(null))
+            createdAtLt(createdAtLt.getOrNull())
 
         fun createdAtLte(createdAtLte: OffsetDateTime?) = apply { this.createdAtLte = createdAtLte }
 
         fun createdAtLte(createdAtLte: Optional<OffsetDateTime>) =
-            createdAtLte(createdAtLte.orElse(null))
+            createdAtLte(createdAtLte.getOrNull())
 
         /** The ledger currency or custom pricing unit to use. */
         fun currency(currency: String?) = apply { this.currency = currency }
 
         /** The ledger currency or custom pricing unit to use. */
-        fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+        fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
         /**
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
@@ -282,15 +283,15 @@ private constructor(
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
          * initial request.
          */
-        fun cursor(cursor: Optional<String>) = cursor(cursor.orElse(null))
+        fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
         fun entryStatus(entryStatus: EntryStatus?) = apply { this.entryStatus = entryStatus }
 
-        fun entryStatus(entryStatus: Optional<EntryStatus>) = entryStatus(entryStatus.orElse(null))
+        fun entryStatus(entryStatus: Optional<EntryStatus>) = entryStatus(entryStatus.getOrNull())
 
         fun entryType(entryType: EntryType?) = apply { this.entryType = entryType }
 
-        fun entryType(entryType: Optional<EntryType>) = entryType(entryType.orElse(null))
+        fun entryType(entryType: Optional<EntryType>) = entryType(entryType.getOrNull())
 
         /** The number of items to fetch. Defaults to 20. */
         fun limit(limit: Long?) = apply { this.limit = limit }
@@ -299,13 +300,12 @@ private constructor(
         fun limit(limit: Long) = limit(limit as Long?)
 
         /** The number of items to fetch. Defaults to 20. */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun limit(limit: Optional<Long>) = limit(limit.orElse(null) as Long?)
+        fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         fun minimumAmount(minimumAmount: String?) = apply { this.minimumAmount = minimumAmount }
 
         fun minimumAmount(minimumAmount: Optional<String>) =
-            minimumAmount(minimumAmount.orElse(null))
+            minimumAmount(minimumAmount.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

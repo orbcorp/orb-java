@@ -507,7 +507,7 @@ private constructor(
 
         fun basePlan(basePlan: BasePlan?) = basePlan(JsonField.ofNullable(basePlan))
 
-        fun basePlan(basePlan: Optional<BasePlan>) = basePlan(basePlan.orElse(null))
+        fun basePlan(basePlan: Optional<BasePlan>) = basePlan(basePlan.getOrNull())
 
         fun basePlan(basePlan: JsonField<BasePlan>) = apply { this.basePlan = basePlan }
 
@@ -521,7 +521,7 @@ private constructor(
          * The parent plan id if the given plan was created by overriding one or more of the
          * parent's prices
          */
-        fun basePlanId(basePlanId: Optional<String>) = basePlanId(basePlanId.orElse(null))
+        fun basePlanId(basePlanId: Optional<String>) = basePlanId(basePlanId.getOrNull())
 
         /**
          * The parent plan id if the given plan was created by overriding one or more of the
@@ -556,7 +556,7 @@ private constructor(
          * that each subscription may configure its own memo.
          */
         fun defaultInvoiceMemo(defaultInvoiceMemo: Optional<String>) =
-            defaultInvoiceMemo(defaultInvoiceMemo.orElse(null))
+            defaultInvoiceMemo(defaultInvoiceMemo.getOrNull())
 
         /**
          * The default memo text on the invoices corresponding to subscriptions on this plan. Note
@@ -572,7 +572,7 @@ private constructor(
 
         fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-        fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+        fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
         fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -606,7 +606,7 @@ private constructor(
          * system.
          */
         fun externalPlanId(externalPlanId: Optional<String>) =
-            externalPlanId(externalPlanId.orElse(null))
+            externalPlanId(externalPlanId.getOrNull())
 
         /**
          * An optional user-defined ID for this plan resource, used throughout the system as an
@@ -634,7 +634,7 @@ private constructor(
 
         fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-        fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+        fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
         fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -642,7 +642,7 @@ private constructor(
             maximumAmount(JsonField.ofNullable(maximumAmount))
 
         fun maximumAmount(maximumAmount: Optional<String>) =
-            maximumAmount(maximumAmount.orElse(null))
+            maximumAmount(maximumAmount.getOrNull())
 
         fun maximumAmount(maximumAmount: JsonField<String>) = apply {
             this.maximumAmount = maximumAmount
@@ -664,7 +664,7 @@ private constructor(
 
         fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-        fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+        fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
         fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -672,7 +672,7 @@ private constructor(
             minimumAmount(JsonField.ofNullable(minimumAmount))
 
         fun minimumAmount(minimumAmount: Optional<String>) =
-            minimumAmount(minimumAmount.orElse(null))
+            minimumAmount(minimumAmount.getOrNull())
 
         fun minimumAmount(minimumAmount: JsonField<String>) = apply {
             this.minimumAmount = minimumAmount
@@ -704,8 +704,7 @@ private constructor(
          * customer has a month to pay the invoice before its overdue. Note that individual
          * subscriptions or invoices may set a different net terms configuration.
          */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun netTerms(netTerms: Optional<Long>) = netTerms(netTerms.orElse(null) as Long?)
+        fun netTerms(netTerms: Optional<Long>) = netTerms(netTerms.getOrNull())
 
         /**
          * Determines the difference between the invoice issue date and the due date. A value of "0"
@@ -717,7 +716,7 @@ private constructor(
 
         fun planPhases(planPhases: List<PlanPhase>?) = planPhases(JsonField.ofNullable(planPhases))
 
-        fun planPhases(planPhases: Optional<List<PlanPhase>>) = planPhases(planPhases.orElse(null))
+        fun planPhases(planPhases: Optional<List<PlanPhase>>) = planPhases(planPhases.getOrNull())
 
         fun planPhases(planPhases: JsonField<List<PlanPhase>>) = apply {
             this.planPhases = planPhases.map { it.toMutableList() }
@@ -1501,9 +1500,8 @@ private constructor(
                 fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
                 /** The plan phase in which this adjustment is active. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                    planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                    planPhaseOrder(planPhaseOrder.getOrNull())
 
                 /** The plan phase in which this adjustment is active. */
                 fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
@@ -1514,7 +1512,7 @@ private constructor(
                 fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
                 /** The reason for the adjustment. */
-                fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+                fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
                 /** The reason for the adjustment. */
                 fun reason(reason: JsonField<String>) = apply { this.reason = reason }
@@ -1920,9 +1918,8 @@ private constructor(
                 fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
                 /** The plan phase in which this adjustment is active. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                    planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                    planPhaseOrder(planPhaseOrder.getOrNull())
 
                 /** The plan phase in which this adjustment is active. */
                 fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
@@ -1933,7 +1930,7 @@ private constructor(
                 fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
                 /** The reason for the adjustment. */
-                fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+                fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
                 /** The reason for the adjustment. */
                 fun reason(reason: JsonField<String>) = apply { this.reason = reason }
@@ -2324,9 +2321,8 @@ private constructor(
                 fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
                 /** The plan phase in which this adjustment is active. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                    planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                    planPhaseOrder(planPhaseOrder.getOrNull())
 
                 /** The plan phase in which this adjustment is active. */
                 fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
@@ -2337,7 +2333,7 @@ private constructor(
                 fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
                 /** The reason for the adjustment. */
-                fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+                fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
                 /** The reason for the adjustment. */
                 fun reason(reason: JsonField<String>) = apply { this.reason = reason }
@@ -2743,9 +2739,8 @@ private constructor(
                 fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
                 /** The plan phase in which this adjustment is active. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                    planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                    planPhaseOrder(planPhaseOrder.getOrNull())
 
                 /** The plan phase in which this adjustment is active. */
                 fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
@@ -2756,7 +2751,7 @@ private constructor(
                 fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
                 /** The reason for the adjustment. */
-                fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+                fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
                 /** The reason for the adjustment. */
                 fun reason(reason: JsonField<String>) = apply { this.reason = reason }
@@ -3144,9 +3139,8 @@ private constructor(
                 fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
 
                 /** The plan phase in which this adjustment is active. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                    planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                    planPhaseOrder(planPhaseOrder.getOrNull())
 
                 /** The plan phase in which this adjustment is active. */
                 fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
@@ -3157,7 +3151,7 @@ private constructor(
                 fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
                 /** The reason for the adjustment. */
-                fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+                fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
                 /** The reason for the adjustment. */
                 fun reason(reason: JsonField<String>) = apply { this.reason = reason }
@@ -3411,7 +3405,7 @@ private constructor(
 
             fun id(id: String?) = id(JsonField.ofNullable(id))
 
-            fun id(id: Optional<String>) = id(id.orElse(null))
+            fun id(id: Optional<String>) = id(id.getOrNull())
 
             fun id(id: JsonField<String>) = apply { this.id = id }
 
@@ -3429,7 +3423,7 @@ private constructor(
              * your system.
              */
             fun externalPlanId(externalPlanId: Optional<String>) =
-                externalPlanId(externalPlanId.orElse(null))
+                externalPlanId(externalPlanId.getOrNull())
 
             /**
              * An optional user-defined ID for this plan resource, used throughout the system as an
@@ -3442,7 +3436,7 @@ private constructor(
 
             fun name(name: String?) = name(JsonField.ofNullable(name))
 
-            fun name(name: Optional<String>) = name(name.orElse(null))
+            fun name(name: Optional<String>) = name(name.getOrNull())
 
             fun name(name: JsonField<String>) = apply { this.name = name }
 
@@ -4093,7 +4087,7 @@ private constructor(
 
             fun description(description: String?) = description(JsonField.ofNullable(description))
 
-            fun description(description: Optional<String>) = description(description.orElse(null))
+            fun description(description: Optional<String>) = description(description.getOrNull())
 
             fun description(description: JsonField<String>) = apply {
                 this.description = description
@@ -4101,7 +4095,7 @@ private constructor(
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
-            fun discount(discount: Optional<Discount>) = discount(discount.orElse(null))
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
@@ -4138,8 +4132,7 @@ private constructor(
              * How many terms of length `duration_unit` this phase is active for. If null, this
              * phase is evergreen and active indefinitely
              */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun duration(duration: Optional<Long>) = duration(duration.orElse(null) as Long?)
+            fun duration(duration: Optional<Long>) = duration(duration.getOrNull())
 
             /**
              * How many terms of length `duration_unit` this phase is active for. If null, this
@@ -4151,7 +4144,7 @@ private constructor(
                 durationUnit(JsonField.ofNullable(durationUnit))
 
             fun durationUnit(durationUnit: Optional<DurationUnit>) =
-                durationUnit(durationUnit.orElse(null))
+                durationUnit(durationUnit.getOrNull())
 
             fun durationUnit(durationUnit: JsonField<DurationUnit>) = apply {
                 this.durationUnit = durationUnit
@@ -4159,7 +4152,7 @@ private constructor(
 
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.orElse(null))
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -4167,7 +4160,7 @@ private constructor(
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
             fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.orElse(null))
+                maximumAmount(maximumAmount.getOrNull())
 
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -4175,7 +4168,7 @@ private constructor(
 
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.orElse(null))
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -4183,7 +4176,7 @@ private constructor(
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
             fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.orElse(null))
+                minimumAmount(minimumAmount.getOrNull())
 
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -5028,9 +5021,7 @@ private constructor(
 
             fun trialPeriod(trialPeriod: Long) = trialPeriod(trialPeriod as Long?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun trialPeriod(trialPeriod: Optional<Long>) =
-                trialPeriod(trialPeriod.orElse(null) as Long?)
+            fun trialPeriod(trialPeriod: Optional<Long>) = trialPeriod(trialPeriod.getOrNull())
 
             fun trialPeriod(trialPeriod: JsonField<Long>) = apply { this.trialPeriod = trialPeriod }
 

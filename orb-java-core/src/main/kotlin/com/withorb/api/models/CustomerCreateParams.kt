@@ -1027,7 +1027,7 @@ private constructor(
 
             fun accountingSyncConfiguration(
                 accountingSyncConfiguration: Optional<AccountingSyncConfiguration>
-            ) = accountingSyncConfiguration(accountingSyncConfiguration.orElse(null))
+            ) = accountingSyncConfiguration(accountingSyncConfiguration.getOrNull())
 
             fun accountingSyncConfiguration(
                 accountingSyncConfiguration: JsonField<AccountingSyncConfiguration>
@@ -1045,7 +1045,7 @@ private constructor(
              * will be CC'd for customer communications.
              */
             fun additionalEmails(additionalEmails: Optional<List<String>>) =
-                additionalEmails(additionalEmails.orElse(null))
+                additionalEmails(additionalEmails.getOrNull())
 
             /**
              * Additional email addresses for this customer. If populated, these email addresses
@@ -1086,9 +1086,8 @@ private constructor(
              * a saved payment method, if available. This parameter defaults to `True` when a
              * payment provider is provided on customer creation.
              */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun autoCollection(autoCollection: Optional<Boolean>) =
-                autoCollection(autoCollection.orElse(null) as Boolean?)
+                autoCollection(autoCollection.getOrNull())
 
             /**
              * Used to determine if invoices for this customer will automatically attempt to charge
@@ -1103,7 +1102,7 @@ private constructor(
                 billingAddress(JsonField.ofNullable(billingAddress))
 
             fun billingAddress(billingAddress: Optional<BillingAddress>) =
-                billingAddress(billingAddress.orElse(null))
+                billingAddress(billingAddress.getOrNull())
 
             fun billingAddress(billingAddress: JsonField<BillingAddress>) = apply {
                 this.billingAddress = billingAddress
@@ -1119,7 +1118,7 @@ private constructor(
              * An ISO 4217 currency string used for the customer's invoices and balance. If not set
              * at creation time, will be set at subscription creation time.
              */
-            fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+            fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
             /**
              * An ISO 4217 currency string used for the customer's invoices and balance. If not set
@@ -1132,9 +1131,8 @@ private constructor(
 
             fun emailDelivery(emailDelivery: Boolean) = emailDelivery(emailDelivery as Boolean?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun emailDelivery(emailDelivery: Optional<Boolean>) =
-                emailDelivery(emailDelivery.orElse(null) as Boolean?)
+                emailDelivery(emailDelivery.getOrNull())
 
             fun emailDelivery(emailDelivery: JsonField<Boolean>) = apply {
                 this.emailDelivery = emailDelivery
@@ -1154,7 +1152,7 @@ private constructor(
              * identifier in your system.
              */
             fun externalCustomerId(externalCustomerId: Optional<String>) =
-                externalCustomerId(externalCustomerId.orElse(null))
+                externalCustomerId(externalCustomerId.getOrNull())
 
             /**
              * An optional user-defined ID for this customer resource, used throughout the system as
@@ -1169,7 +1167,7 @@ private constructor(
             fun hierarchy(hierarchy: Hierarchy?) = hierarchy(JsonField.ofNullable(hierarchy))
 
             /** The hierarchical relationships for this customer. */
-            fun hierarchy(hierarchy: Optional<Hierarchy>) = hierarchy(hierarchy.orElse(null))
+            fun hierarchy(hierarchy: Optional<Hierarchy>) = hierarchy(hierarchy.getOrNull())
 
             /** The hierarchical relationships for this customer. */
             fun hierarchy(hierarchy: JsonField<Hierarchy>) = apply { this.hierarchy = hierarchy }
@@ -1186,7 +1184,7 @@ private constructor(
              * setting the value to `null`, and the entire metadata mapping can be cleared by
              * setting `metadata` to `null`.
              */
-            fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+            fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
             /**
              * User-specified key/value pairs for the resource. Individual keys can be removed by
@@ -1207,7 +1205,7 @@ private constructor(
              * in test mode, the connection must first be configured in the Orb webapp.
              */
             fun paymentProvider(paymentProvider: Optional<PaymentProvider>) =
-                paymentProvider(paymentProvider.orElse(null))
+                paymentProvider(paymentProvider.getOrNull())
 
             /**
              * This is used for creating charges or invoices in an external system via Orb. When not
@@ -1229,7 +1227,7 @@ private constructor(
              * used for creating charges or invoices in the external system via Orb.
              */
             fun paymentProviderId(paymentProviderId: Optional<String>) =
-                paymentProviderId(paymentProviderId.orElse(null))
+                paymentProviderId(paymentProviderId.getOrNull())
 
             /**
              * The ID of this customer in an external payments solution, such as Stripe. This is
@@ -1243,7 +1241,7 @@ private constructor(
                 reportingConfiguration(JsonField.ofNullable(reportingConfiguration))
 
             fun reportingConfiguration(reportingConfiguration: Optional<ReportingConfiguration>) =
-                reportingConfiguration(reportingConfiguration.orElse(null))
+                reportingConfiguration(reportingConfiguration.getOrNull())
 
             fun reportingConfiguration(reportingConfiguration: JsonField<ReportingConfiguration>) =
                 apply {
@@ -1254,7 +1252,7 @@ private constructor(
                 shippingAddress(JsonField.ofNullable(shippingAddress))
 
             fun shippingAddress(shippingAddress: Optional<ShippingAddress>) =
-                shippingAddress(shippingAddress.orElse(null))
+                shippingAddress(shippingAddress.getOrNull())
 
             fun shippingAddress(shippingAddress: JsonField<ShippingAddress>) = apply {
                 this.shippingAddress = shippingAddress
@@ -1264,7 +1262,7 @@ private constructor(
                 taxConfiguration(JsonField.ofNullable(taxConfiguration))
 
             fun taxConfiguration(taxConfiguration: Optional<TaxConfiguration>) =
-                taxConfiguration(taxConfiguration.orElse(null))
+                taxConfiguration(taxConfiguration.getOrNull())
 
             fun taxConfiguration(taxConfiguration: JsonField<TaxConfiguration>) = apply {
                 this.taxConfiguration = taxConfiguration
@@ -1513,7 +1511,7 @@ private constructor(
              * |Venezuela           |`ve_rif`    |Venezuelan RIF Number                                                                                  |
              * |Vietnam             |`vn_tin`    |Vietnamese Tax ID Number                                                                               |
              */
-            fun taxId(taxId: Optional<TaxId>) = taxId(taxId.orElse(null))
+            fun taxId(taxId: Optional<TaxId>) = taxId(taxId.getOrNull())
 
             /**
              * Tax IDs are commonly required to be displayed on customer invoices, which are added
@@ -1635,7 +1633,7 @@ private constructor(
              * `"America/Los_Angeles"`. This defaults to your account's timezone if not set. This
              * cannot be changed after customer creation.
              */
-            fun timezone(timezone: Optional<String>) = timezone(timezone.orElse(null))
+            fun timezone(timezone: Optional<String>) = timezone(timezone.getOrNull())
 
             /**
              * A timezone identifier from the IANA timezone database, such as
@@ -1761,7 +1759,7 @@ private constructor(
 
         fun accountingSyncConfiguration(
             accountingSyncConfiguration: Optional<AccountingSyncConfiguration>
-        ) = accountingSyncConfiguration(accountingSyncConfiguration.orElse(null))
+        ) = accountingSyncConfiguration(accountingSyncConfiguration.getOrNull())
 
         fun accountingSyncConfiguration(
             accountingSyncConfiguration: JsonField<AccountingSyncConfiguration>
@@ -1780,7 +1778,7 @@ private constructor(
          * CC'd for customer communications.
          */
         fun additionalEmails(additionalEmails: Optional<List<String>>) =
-            additionalEmails(additionalEmails.orElse(null))
+            additionalEmails(additionalEmails.getOrNull())
 
         /**
          * Additional email addresses for this customer. If populated, these email addresses will be
@@ -1817,9 +1815,8 @@ private constructor(
          * saved payment method, if available. This parameter defaults to `True` when a payment
          * provider is provided on customer creation.
          */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
         fun autoCollection(autoCollection: Optional<Boolean>) =
-            autoCollection(autoCollection.orElse(null) as Boolean?)
+            autoCollection(autoCollection.getOrNull())
 
         /**
          * Used to determine if invoices for this customer will automatically attempt to charge a
@@ -1835,7 +1832,7 @@ private constructor(
         }
 
         fun billingAddress(billingAddress: Optional<BillingAddress>) =
-            billingAddress(billingAddress.orElse(null))
+            billingAddress(billingAddress.getOrNull())
 
         fun billingAddress(billingAddress: JsonField<BillingAddress>) = apply {
             body.billingAddress(billingAddress)
@@ -1851,7 +1848,7 @@ private constructor(
          * An ISO 4217 currency string used for the customer's invoices and balance. If not set at
          * creation time, will be set at subscription creation time.
          */
-        fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+        fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
         /**
          * An ISO 4217 currency string used for the customer's invoices and balance. If not set at
@@ -1863,9 +1860,8 @@ private constructor(
 
         fun emailDelivery(emailDelivery: Boolean) = emailDelivery(emailDelivery as Boolean?)
 
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
         fun emailDelivery(emailDelivery: Optional<Boolean>) =
-            emailDelivery(emailDelivery.orElse(null) as Boolean?)
+            emailDelivery(emailDelivery.getOrNull())
 
         fun emailDelivery(emailDelivery: JsonField<Boolean>) = apply {
             body.emailDelivery(emailDelivery)
@@ -1886,7 +1882,7 @@ private constructor(
          * in your system.
          */
         fun externalCustomerId(externalCustomerId: Optional<String>) =
-            externalCustomerId(externalCustomerId.orElse(null))
+            externalCustomerId(externalCustomerId.getOrNull())
 
         /**
          * An optional user-defined ID for this customer resource, used throughout the system as an
@@ -1901,7 +1897,7 @@ private constructor(
         fun hierarchy(hierarchy: Hierarchy?) = apply { body.hierarchy(hierarchy) }
 
         /** The hierarchical relationships for this customer. */
-        fun hierarchy(hierarchy: Optional<Hierarchy>) = hierarchy(hierarchy.orElse(null))
+        fun hierarchy(hierarchy: Optional<Hierarchy>) = hierarchy(hierarchy.getOrNull())
 
         /** The hierarchical relationships for this customer. */
         fun hierarchy(hierarchy: JsonField<Hierarchy>) = apply { body.hierarchy(hierarchy) }
@@ -1918,7 +1914,7 @@ private constructor(
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+        fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
@@ -1940,7 +1936,7 @@ private constructor(
          * test mode, the connection must first be configured in the Orb webapp.
          */
         fun paymentProvider(paymentProvider: Optional<PaymentProvider>) =
-            paymentProvider(paymentProvider.orElse(null))
+            paymentProvider(paymentProvider.getOrNull())
 
         /**
          * This is used for creating charges or invoices in an external system via Orb. When not in
@@ -1963,7 +1959,7 @@ private constructor(
          * for creating charges or invoices in the external system via Orb.
          */
         fun paymentProviderId(paymentProviderId: Optional<String>) =
-            paymentProviderId(paymentProviderId.orElse(null))
+            paymentProviderId(paymentProviderId.getOrNull())
 
         /**
          * The ID of this customer in an external payments solution, such as Stripe. This is used
@@ -1978,7 +1974,7 @@ private constructor(
         }
 
         fun reportingConfiguration(reportingConfiguration: Optional<ReportingConfiguration>) =
-            reportingConfiguration(reportingConfiguration.orElse(null))
+            reportingConfiguration(reportingConfiguration.getOrNull())
 
         fun reportingConfiguration(reportingConfiguration: JsonField<ReportingConfiguration>) =
             apply {
@@ -1990,7 +1986,7 @@ private constructor(
         }
 
         fun shippingAddress(shippingAddress: Optional<ShippingAddress>) =
-            shippingAddress(shippingAddress.orElse(null))
+            shippingAddress(shippingAddress.getOrNull())
 
         fun shippingAddress(shippingAddress: JsonField<ShippingAddress>) = apply {
             body.shippingAddress(shippingAddress)
@@ -2001,7 +1997,7 @@ private constructor(
         }
 
         fun taxConfiguration(taxConfiguration: Optional<TaxConfiguration>) =
-            taxConfiguration(taxConfiguration.orElse(null))
+            taxConfiguration(taxConfiguration.getOrNull())
 
         fun taxConfiguration(taxConfiguration: JsonField<TaxConfiguration>) = apply {
             body.taxConfiguration(taxConfiguration)
@@ -2237,7 +2233,7 @@ private constructor(
          * |Venezuela           |`ve_rif`    |Venezuelan RIF Number                                                                                  |
          * |Vietnam             |`vn_tin`    |Vietnamese Tax ID Number                                                                               |
          */
-        fun taxId(taxId: Optional<TaxId>) = taxId(taxId.orElse(null))
+        fun taxId(taxId: Optional<TaxId>) = taxId(taxId.getOrNull())
 
         /**
          * Tax IDs are commonly required to be displayed on customer invoices, which are added to
@@ -2359,7 +2355,7 @@ private constructor(
          * This defaults to your account's timezone if not set. This cannot be changed after
          * customer creation.
          */
-        fun timezone(timezone: Optional<String>) = timezone(timezone.orElse(null))
+        fun timezone(timezone: Optional<String>) = timezone(timezone.getOrNull())
 
         /**
          * A timezone identifier from the IANA timezone database, such as `"America/Los_Angeles"`.
@@ -2565,7 +2561,7 @@ private constructor(
                 accountingProviders(JsonField.ofNullable(accountingProviders))
 
             fun accountingProviders(accountingProviders: Optional<List<AccountingProvider>>) =
-                accountingProviders(accountingProviders.orElse(null))
+                accountingProviders(accountingProviders.getOrNull())
 
             fun accountingProviders(accountingProviders: JsonField<List<AccountingProvider>>) =
                 apply {
@@ -2583,8 +2579,7 @@ private constructor(
 
             fun excluded(excluded: Boolean) = excluded(excluded as Boolean?)
 
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun excluded(excluded: Optional<Boolean>) = excluded(excluded.orElse(null) as Boolean?)
+            fun excluded(excluded: Optional<Boolean>) = excluded(excluded.getOrNull())
 
             fun excluded(excluded: JsonField<Boolean>) = apply { this.excluded = excluded }
 
@@ -2872,37 +2867,37 @@ private constructor(
 
             fun city(city: String?) = city(JsonField.ofNullable(city))
 
-            fun city(city: Optional<String>) = city(city.orElse(null))
+            fun city(city: Optional<String>) = city(city.getOrNull())
 
             fun city(city: JsonField<String>) = apply { this.city = city }
 
             fun country(country: String?) = country(JsonField.ofNullable(country))
 
-            fun country(country: Optional<String>) = country(country.orElse(null))
+            fun country(country: Optional<String>) = country(country.getOrNull())
 
             fun country(country: JsonField<String>) = apply { this.country = country }
 
             fun line1(line1: String?) = line1(JsonField.ofNullable(line1))
 
-            fun line1(line1: Optional<String>) = line1(line1.orElse(null))
+            fun line1(line1: Optional<String>) = line1(line1.getOrNull())
 
             fun line1(line1: JsonField<String>) = apply { this.line1 = line1 }
 
             fun line2(line2: String?) = line2(JsonField.ofNullable(line2))
 
-            fun line2(line2: Optional<String>) = line2(line2.orElse(null))
+            fun line2(line2: Optional<String>) = line2(line2.getOrNull())
 
             fun line2(line2: JsonField<String>) = apply { this.line2 = line2 }
 
             fun postalCode(postalCode: String?) = postalCode(JsonField.ofNullable(postalCode))
 
-            fun postalCode(postalCode: Optional<String>) = postalCode(postalCode.orElse(null))
+            fun postalCode(postalCode: Optional<String>) = postalCode(postalCode.getOrNull())
 
             fun postalCode(postalCode: JsonField<String>) = apply { this.postalCode = postalCode }
 
             fun state(state: String?) = state(JsonField.ofNullable(state))
 
-            fun state(state: Optional<String>) = state(state.orElse(null))
+            fun state(state: Optional<String>) = state(state.getOrNull())
 
             fun state(state: JsonField<String>) = apply { this.state = state }
 
@@ -3076,7 +3071,7 @@ private constructor(
              * be a child of another customer.
              */
             fun parentCustomerId(parentCustomerId: Optional<String>) =
-                parentCustomerId(parentCustomerId.orElse(null))
+                parentCustomerId(parentCustomerId.getOrNull())
 
             /**
              * The ID of the parent customer in the hierarchy. The desired parent customer must not
@@ -3548,37 +3543,37 @@ private constructor(
 
             fun city(city: String?) = city(JsonField.ofNullable(city))
 
-            fun city(city: Optional<String>) = city(city.orElse(null))
+            fun city(city: Optional<String>) = city(city.getOrNull())
 
             fun city(city: JsonField<String>) = apply { this.city = city }
 
             fun country(country: String?) = country(JsonField.ofNullable(country))
 
-            fun country(country: Optional<String>) = country(country.orElse(null))
+            fun country(country: Optional<String>) = country(country.getOrNull())
 
             fun country(country: JsonField<String>) = apply { this.country = country }
 
             fun line1(line1: String?) = line1(JsonField.ofNullable(line1))
 
-            fun line1(line1: Optional<String>) = line1(line1.orElse(null))
+            fun line1(line1: Optional<String>) = line1(line1.getOrNull())
 
             fun line1(line1: JsonField<String>) = apply { this.line1 = line1 }
 
             fun line2(line2: String?) = line2(JsonField.ofNullable(line2))
 
-            fun line2(line2: Optional<String>) = line2(line2.orElse(null))
+            fun line2(line2: Optional<String>) = line2(line2.getOrNull())
 
             fun line2(line2: JsonField<String>) = apply { this.line2 = line2 }
 
             fun postalCode(postalCode: String?) = postalCode(JsonField.ofNullable(postalCode))
 
-            fun postalCode(postalCode: Optional<String>) = postalCode(postalCode.orElse(null))
+            fun postalCode(postalCode: Optional<String>) = postalCode(postalCode.getOrNull())
 
             fun postalCode(postalCode: JsonField<String>) = apply { this.postalCode = postalCode }
 
             fun state(state: String?) = state(JsonField.ofNullable(state))
 
-            fun state(state: Optional<String>) = state(state.orElse(null))
+            fun state(state: Optional<String>) = state(state.getOrNull())
 
             fun state(state: JsonField<String>) = apply { this.state = state }
 
@@ -3884,7 +3879,7 @@ private constructor(
                     taxExemptionCode(JsonField.ofNullable(taxExemptionCode))
 
                 fun taxExemptionCode(taxExemptionCode: Optional<String>) =
-                    taxExemptionCode(taxExemptionCode.orElse(null))
+                    taxExemptionCode(taxExemptionCode.getOrNull())
 
                 fun taxExemptionCode(taxExemptionCode: JsonField<String>) = apply {
                     this.taxExemptionCode = taxExemptionCode

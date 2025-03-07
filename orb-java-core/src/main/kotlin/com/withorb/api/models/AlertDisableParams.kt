@@ -11,6 +11,7 @@ import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint allows you to disable an alert. To disable a plan-level alert for a specific
@@ -100,7 +101,7 @@ private constructor(
 
         /** Used to update the status of a plan alert scoped to this subscription_id */
         fun subscriptionId(subscriptionId: Optional<String>) =
-            subscriptionId(subscriptionId.orElse(null))
+            subscriptionId(subscriptionId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
