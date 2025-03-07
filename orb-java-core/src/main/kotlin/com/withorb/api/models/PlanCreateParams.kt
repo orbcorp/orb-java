@@ -532,7 +532,7 @@ private constructor(
 
             /** Free-form text which is available on the invoice PDF and the Orb invoice portal. */
             fun defaultInvoiceMemo(defaultInvoiceMemo: Optional<String>) =
-                defaultInvoiceMemo(defaultInvoiceMemo.orElse(null))
+                defaultInvoiceMemo(defaultInvoiceMemo.getOrNull())
 
             /** Free-form text which is available on the invoice PDF and the Orb invoice portal. */
             fun defaultInvoiceMemo(defaultInvoiceMemo: JsonField<String>) = apply {
@@ -543,7 +543,7 @@ private constructor(
                 externalPlanId(JsonField.ofNullable(externalPlanId))
 
             fun externalPlanId(externalPlanId: Optional<String>) =
-                externalPlanId(externalPlanId.orElse(null))
+                externalPlanId(externalPlanId.getOrNull())
 
             fun externalPlanId(externalPlanId: JsonField<String>) = apply {
                 this.externalPlanId = externalPlanId
@@ -561,7 +561,7 @@ private constructor(
              * setting the value to `null`, and the entire metadata mapping can be cleared by
              * setting `metadata` to `null`.
              */
-            fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+            fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
             /**
              * User-specified key/value pairs for the resource. Individual keys can be removed by
@@ -586,8 +586,7 @@ private constructor(
              * The net terms determines the difference between the invoice date and the issue date
              * for the invoice. If you intend the invoice to be due on issue, set this to 0.
              */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun netTerms(netTerms: Optional<Long>) = netTerms(netTerms.orElse(null) as Long?)
+            fun netTerms(netTerms: Optional<Long>) = netTerms(netTerms.getOrNull())
 
             /**
              * The net terms determines the difference between the invoice date and the issue date
@@ -924,7 +923,7 @@ private constructor(
 
         /** Free-form text which is available on the invoice PDF and the Orb invoice portal. */
         fun defaultInvoiceMemo(defaultInvoiceMemo: Optional<String>) =
-            defaultInvoiceMemo(defaultInvoiceMemo.orElse(null))
+            defaultInvoiceMemo(defaultInvoiceMemo.getOrNull())
 
         /** Free-form text which is available on the invoice PDF and the Orb invoice portal. */
         fun defaultInvoiceMemo(defaultInvoiceMemo: JsonField<String>) = apply {
@@ -934,7 +933,7 @@ private constructor(
         fun externalPlanId(externalPlanId: String?) = apply { body.externalPlanId(externalPlanId) }
 
         fun externalPlanId(externalPlanId: Optional<String>) =
-            externalPlanId(externalPlanId.orElse(null))
+            externalPlanId(externalPlanId.getOrNull())
 
         fun externalPlanId(externalPlanId: JsonField<String>) = apply {
             body.externalPlanId(externalPlanId)
@@ -952,7 +951,7 @@ private constructor(
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+        fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
@@ -977,8 +976,7 @@ private constructor(
          * The net terms determines the difference between the invoice date and the issue date for
          * the invoice. If you intend the invoice to be due on issue, set this to 0.
          */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun netTerms(netTerms: Optional<Long>) = netTerms(netTerms.orElse(null) as Long?)
+        fun netTerms(netTerms: Optional<Long>) = netTerms(netTerms.getOrNull())
 
         /**
          * The net terms determines the difference between the invoice date and the issue date for
@@ -2454,7 +2452,7 @@ private constructor(
                  * usage-based.
                  */
                 fun billableMetricId(billableMetricId: Optional<String>) =
-                    billableMetricId(billableMetricId.orElse(null))
+                    billableMetricId(billableMetricId.getOrNull())
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -2482,9 +2480,8 @@ private constructor(
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
-                    billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
+                    billedInAdvance(billedInAdvance.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -2508,7 +2505,7 @@ private constructor(
                  */
                 fun billingCycleConfiguration(
                     billingCycleConfiguration: Optional<BillingCycleConfiguration>
-                ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
+                ) = billingCycleConfiguration(billingCycleConfiguration.getOrNull())
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -2527,9 +2524,8 @@ private constructor(
                     conversionRate(conversionRate as Double?)
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun conversionRate(conversionRate: Optional<Double>) =
-                    conversionRate(conversionRate.orElse(null) as Double?)
+                    conversionRate(conversionRate.getOrNull())
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 fun conversionRate(conversionRate: JsonField<Double>) = apply {
@@ -2546,7 +2542,7 @@ private constructor(
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                  * price is billed.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -2560,7 +2556,7 @@ private constructor(
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: Optional<String>) =
-                    externalPriceId(externalPriceId.orElse(null))
+                    externalPriceId(externalPriceId.getOrNull())
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: JsonField<String>) = apply {
@@ -2585,9 +2581,8 @@ private constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                    fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                    fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -2603,7 +2598,7 @@ private constructor(
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
-                    invoiceGroupingKey(invoiceGroupingKey.orElse(null))
+                    invoiceGroupingKey(invoiceGroupingKey.getOrNull())
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: JsonField<String>) = apply {
@@ -2624,7 +2619,7 @@ private constructor(
                  */
                 fun invoicingCycleConfiguration(
                     invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -2646,7 +2641,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -4004,7 +3999,7 @@ private constructor(
                  * usage-based.
                  */
                 fun billableMetricId(billableMetricId: Optional<String>) =
-                    billableMetricId(billableMetricId.orElse(null))
+                    billableMetricId(billableMetricId.getOrNull())
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -4032,9 +4027,8 @@ private constructor(
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
-                    billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
+                    billedInAdvance(billedInAdvance.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -4058,7 +4052,7 @@ private constructor(
                  */
                 fun billingCycleConfiguration(
                     billingCycleConfiguration: Optional<BillingCycleConfiguration>
-                ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
+                ) = billingCycleConfiguration(billingCycleConfiguration.getOrNull())
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -4077,9 +4071,8 @@ private constructor(
                     conversionRate(conversionRate as Double?)
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun conversionRate(conversionRate: Optional<Double>) =
-                    conversionRate(conversionRate.orElse(null) as Double?)
+                    conversionRate(conversionRate.getOrNull())
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 fun conversionRate(conversionRate: JsonField<Double>) = apply {
@@ -4096,7 +4089,7 @@ private constructor(
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                  * price is billed.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -4110,7 +4103,7 @@ private constructor(
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: Optional<String>) =
-                    externalPriceId(externalPriceId.orElse(null))
+                    externalPriceId(externalPriceId.getOrNull())
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: JsonField<String>) = apply {
@@ -4135,9 +4128,8 @@ private constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                    fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                    fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -4153,7 +4145,7 @@ private constructor(
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
-                    invoiceGroupingKey(invoiceGroupingKey.orElse(null))
+                    invoiceGroupingKey(invoiceGroupingKey.getOrNull())
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: JsonField<String>) = apply {
@@ -4174,7 +4166,7 @@ private constructor(
                  */
                 fun invoicingCycleConfiguration(
                     invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -4196,7 +4188,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -5591,7 +5583,7 @@ private constructor(
                  * usage-based.
                  */
                 fun billableMetricId(billableMetricId: Optional<String>) =
-                    billableMetricId(billableMetricId.orElse(null))
+                    billableMetricId(billableMetricId.getOrNull())
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -5619,9 +5611,8 @@ private constructor(
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
-                    billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
+                    billedInAdvance(billedInAdvance.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -5645,7 +5636,7 @@ private constructor(
                  */
                 fun billingCycleConfiguration(
                     billingCycleConfiguration: Optional<BillingCycleConfiguration>
-                ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
+                ) = billingCycleConfiguration(billingCycleConfiguration.getOrNull())
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -5664,9 +5655,8 @@ private constructor(
                     conversionRate(conversionRate as Double?)
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun conversionRate(conversionRate: Optional<Double>) =
-                    conversionRate(conversionRate.orElse(null) as Double?)
+                    conversionRate(conversionRate.getOrNull())
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 fun conversionRate(conversionRate: JsonField<Double>) = apply {
@@ -5683,7 +5673,7 @@ private constructor(
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                  * price is billed.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -5697,7 +5687,7 @@ private constructor(
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: Optional<String>) =
-                    externalPriceId(externalPriceId.orElse(null))
+                    externalPriceId(externalPriceId.getOrNull())
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: JsonField<String>) = apply {
@@ -5722,9 +5712,8 @@ private constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                    fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                    fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -5740,7 +5729,7 @@ private constructor(
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
-                    invoiceGroupingKey(invoiceGroupingKey.orElse(null))
+                    invoiceGroupingKey(invoiceGroupingKey.getOrNull())
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: JsonField<String>) = apply {
@@ -5761,7 +5750,7 @@ private constructor(
                  */
                 fun invoicingCycleConfiguration(
                     invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -5783,7 +5772,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -7391,7 +7380,7 @@ private constructor(
                  * usage-based.
                  */
                 fun billableMetricId(billableMetricId: Optional<String>) =
-                    billableMetricId(billableMetricId.orElse(null))
+                    billableMetricId(billableMetricId.getOrNull())
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -7419,9 +7408,8 @@ private constructor(
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
-                    billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
+                    billedInAdvance(billedInAdvance.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -7445,7 +7433,7 @@ private constructor(
                  */
                 fun billingCycleConfiguration(
                     billingCycleConfiguration: Optional<BillingCycleConfiguration>
-                ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
+                ) = billingCycleConfiguration(billingCycleConfiguration.getOrNull())
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -7464,9 +7452,8 @@ private constructor(
                     conversionRate(conversionRate as Double?)
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun conversionRate(conversionRate: Optional<Double>) =
-                    conversionRate(conversionRate.orElse(null) as Double?)
+                    conversionRate(conversionRate.getOrNull())
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 fun conversionRate(conversionRate: JsonField<Double>) = apply {
@@ -7483,7 +7470,7 @@ private constructor(
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                  * price is billed.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -7497,7 +7484,7 @@ private constructor(
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: Optional<String>) =
-                    externalPriceId(externalPriceId.orElse(null))
+                    externalPriceId(externalPriceId.getOrNull())
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: JsonField<String>) = apply {
@@ -7522,9 +7509,8 @@ private constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                    fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                    fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -7540,7 +7526,7 @@ private constructor(
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
-                    invoiceGroupingKey(invoiceGroupingKey.orElse(null))
+                    invoiceGroupingKey(invoiceGroupingKey.getOrNull())
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: JsonField<String>) = apply {
@@ -7561,7 +7547,7 @@ private constructor(
                  */
                 fun invoicingCycleConfiguration(
                     invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -7583,7 +7569,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -8087,11 +8073,7 @@ private constructor(
                         /**
                          * Exclusive tier ending value. If null, this is treated as the last tier
                          */
-                        @Suppress(
-                            "USELESS_CAST"
-                        ) // See https://youtrack.jetbrains.com/issue/KT-74228
-                        fun lastUnit(lastUnit: Optional<Double>) =
-                            lastUnit(lastUnit.orElse(null) as Double?)
+                        fun lastUnit(lastUnit: Optional<Double>) = lastUnit(lastUnit.getOrNull())
 
                         /**
                          * Exclusive tier ending value. If null, this is treated as the last tier
@@ -9132,7 +9114,7 @@ private constructor(
                  * usage-based.
                  */
                 fun billableMetricId(billableMetricId: Optional<String>) =
-                    billableMetricId(billableMetricId.orElse(null))
+                    billableMetricId(billableMetricId.getOrNull())
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -9160,9 +9142,8 @@ private constructor(
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
-                    billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
+                    billedInAdvance(billedInAdvance.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -9186,7 +9167,7 @@ private constructor(
                  */
                 fun billingCycleConfiguration(
                     billingCycleConfiguration: Optional<BillingCycleConfiguration>
-                ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
+                ) = billingCycleConfiguration(billingCycleConfiguration.getOrNull())
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -9205,9 +9186,8 @@ private constructor(
                     conversionRate(conversionRate as Double?)
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun conversionRate(conversionRate: Optional<Double>) =
-                    conversionRate(conversionRate.orElse(null) as Double?)
+                    conversionRate(conversionRate.getOrNull())
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 fun conversionRate(conversionRate: JsonField<Double>) = apply {
@@ -9224,7 +9204,7 @@ private constructor(
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                  * price is billed.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -9238,7 +9218,7 @@ private constructor(
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: Optional<String>) =
-                    externalPriceId(externalPriceId.orElse(null))
+                    externalPriceId(externalPriceId.getOrNull())
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: JsonField<String>) = apply {
@@ -9263,9 +9243,8 @@ private constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                    fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                    fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -9281,7 +9260,7 @@ private constructor(
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
-                    invoiceGroupingKey(invoiceGroupingKey.orElse(null))
+                    invoiceGroupingKey(invoiceGroupingKey.getOrNull())
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: JsonField<String>) = apply {
@@ -9302,7 +9281,7 @@ private constructor(
                  */
                 fun invoicingCycleConfiguration(
                     invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -9324,7 +9303,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -9848,7 +9827,7 @@ private constructor(
 
                         /** Exclusive tier ending value */
                         fun maximumAmount(maximumAmount: Optional<String>) =
-                            maximumAmount(maximumAmount.orElse(null))
+                            maximumAmount(maximumAmount.getOrNull())
 
                         /** Exclusive tier ending value */
                         fun maximumAmount(maximumAmount: JsonField<String>) = apply {
@@ -9861,7 +9840,7 @@ private constructor(
 
                         /** Per unit maximum to charge */
                         fun perUnitMaximum(perUnitMaximum: Optional<String>) =
-                            perUnitMaximum(perUnitMaximum.orElse(null))
+                            perUnitMaximum(perUnitMaximum.getOrNull())
 
                         /** Per unit maximum to charge */
                         fun perUnitMaximum(perUnitMaximum: JsonField<String>) = apply {
@@ -10898,7 +10877,7 @@ private constructor(
                  * usage-based.
                  */
                 fun billableMetricId(billableMetricId: Optional<String>) =
-                    billableMetricId(billableMetricId.orElse(null))
+                    billableMetricId(billableMetricId.getOrNull())
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -10926,9 +10905,8 @@ private constructor(
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
-                    billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
+                    billedInAdvance(billedInAdvance.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -10952,7 +10930,7 @@ private constructor(
                  */
                 fun billingCycleConfiguration(
                     billingCycleConfiguration: Optional<BillingCycleConfiguration>
-                ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
+                ) = billingCycleConfiguration(billingCycleConfiguration.getOrNull())
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -10971,9 +10949,8 @@ private constructor(
                     conversionRate(conversionRate as Double?)
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun conversionRate(conversionRate: Optional<Double>) =
-                    conversionRate(conversionRate.orElse(null) as Double?)
+                    conversionRate(conversionRate.getOrNull())
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 fun conversionRate(conversionRate: JsonField<Double>) = apply {
@@ -10990,7 +10967,7 @@ private constructor(
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                  * price is billed.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -11004,7 +10981,7 @@ private constructor(
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: Optional<String>) =
-                    externalPriceId(externalPriceId.orElse(null))
+                    externalPriceId(externalPriceId.getOrNull())
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: JsonField<String>) = apply {
@@ -11029,9 +11006,8 @@ private constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                    fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                    fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -11047,7 +11023,7 @@ private constructor(
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
-                    invoiceGroupingKey(invoiceGroupingKey.orElse(null))
+                    invoiceGroupingKey(invoiceGroupingKey.getOrNull())
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: JsonField<String>) = apply {
@@ -11068,7 +11044,7 @@ private constructor(
                  */
                 fun invoicingCycleConfiguration(
                     invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -11090,7 +11066,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -11228,7 +11204,7 @@ private constructor(
 
                     /** Optional currency amount maximum to cap spend per event */
                     fun perUnitMaximum(perUnitMaximum: Optional<String>) =
-                        perUnitMaximum(perUnitMaximum.orElse(null))
+                        perUnitMaximum(perUnitMaximum.getOrNull())
 
                     /** Optional currency amount maximum to cap spend per event */
                     fun perUnitMaximum(perUnitMaximum: JsonField<String>) = apply {
@@ -12473,7 +12449,7 @@ private constructor(
                  * usage-based.
                  */
                 fun billableMetricId(billableMetricId: Optional<String>) =
-                    billableMetricId(billableMetricId.orElse(null))
+                    billableMetricId(billableMetricId.getOrNull())
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -12501,9 +12477,8 @@ private constructor(
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
-                    billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
+                    billedInAdvance(billedInAdvance.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -12527,7 +12502,7 @@ private constructor(
                  */
                 fun billingCycleConfiguration(
                     billingCycleConfiguration: Optional<BillingCycleConfiguration>
-                ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
+                ) = billingCycleConfiguration(billingCycleConfiguration.getOrNull())
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -12546,9 +12521,8 @@ private constructor(
                     conversionRate(conversionRate as Double?)
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun conversionRate(conversionRate: Optional<Double>) =
-                    conversionRate(conversionRate.orElse(null) as Double?)
+                    conversionRate(conversionRate.getOrNull())
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 fun conversionRate(conversionRate: JsonField<Double>) = apply {
@@ -12565,7 +12539,7 @@ private constructor(
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                  * price is billed.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -12579,7 +12553,7 @@ private constructor(
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: Optional<String>) =
-                    externalPriceId(externalPriceId.orElse(null))
+                    externalPriceId(externalPriceId.getOrNull())
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: JsonField<String>) = apply {
@@ -12604,9 +12578,8 @@ private constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                    fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                    fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -12622,7 +12595,7 @@ private constructor(
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
-                    invoiceGroupingKey(invoiceGroupingKey.orElse(null))
+                    invoiceGroupingKey(invoiceGroupingKey.getOrNull())
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: JsonField<String>) = apply {
@@ -12643,7 +12616,7 @@ private constructor(
                  */
                 fun invoicingCycleConfiguration(
                     invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -12665,7 +12638,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -12938,7 +12911,7 @@ private constructor(
 
                         /** Upper bound for tier */
                         fun maximumAmount(maximumAmount: Optional<String>) =
-                            maximumAmount(maximumAmount.orElse(null))
+                            maximumAmount(maximumAmount.getOrNull())
 
                         /** Upper bound for tier */
                         fun maximumAmount(maximumAmount: JsonField<String>) = apply {
@@ -12951,7 +12924,7 @@ private constructor(
 
                         /** The maximum amount to charge for any one event */
                         fun perUnitMaximum(perUnitMaximum: Optional<String>) =
-                            perUnitMaximum(perUnitMaximum.orElse(null))
+                            perUnitMaximum(perUnitMaximum.getOrNull())
 
                         /** The maximum amount to charge for any one event */
                         fun perUnitMaximum(perUnitMaximum: JsonField<String>) = apply {
@@ -14214,7 +14187,7 @@ private constructor(
                  * usage-based.
                  */
                 fun billableMetricId(billableMetricId: Optional<String>) =
-                    billableMetricId(billableMetricId.orElse(null))
+                    billableMetricId(billableMetricId.getOrNull())
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -14242,9 +14215,8 @@ private constructor(
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
-                    billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
+                    billedInAdvance(billedInAdvance.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -14268,7 +14240,7 @@ private constructor(
                  */
                 fun billingCycleConfiguration(
                     billingCycleConfiguration: Optional<BillingCycleConfiguration>
-                ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
+                ) = billingCycleConfiguration(billingCycleConfiguration.getOrNull())
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -14287,9 +14259,8 @@ private constructor(
                     conversionRate(conversionRate as Double?)
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun conversionRate(conversionRate: Optional<Double>) =
-                    conversionRate(conversionRate.orElse(null) as Double?)
+                    conversionRate(conversionRate.getOrNull())
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 fun conversionRate(conversionRate: JsonField<Double>) = apply {
@@ -14306,7 +14277,7 @@ private constructor(
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                  * price is billed.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -14320,7 +14291,7 @@ private constructor(
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: Optional<String>) =
-                    externalPriceId(externalPriceId.orElse(null))
+                    externalPriceId(externalPriceId.getOrNull())
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: JsonField<String>) = apply {
@@ -14345,9 +14316,8 @@ private constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                    fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                    fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -14363,7 +14333,7 @@ private constructor(
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
-                    invoiceGroupingKey(invoiceGroupingKey.orElse(null))
+                    invoiceGroupingKey(invoiceGroupingKey.getOrNull())
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: JsonField<String>) = apply {
@@ -14384,7 +14354,7 @@ private constructor(
                  */
                 fun invoicingCycleConfiguration(
                     invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -14406,7 +14376,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -14656,11 +14626,8 @@ private constructor(
                             maximumUnits(maximumUnits as Double?)
 
                         /** Upper bound for this tier */
-                        @Suppress(
-                            "USELESS_CAST"
-                        ) // See https://youtrack.jetbrains.com/issue/KT-74228
                         fun maximumUnits(maximumUnits: Optional<Double>) =
-                            maximumUnits(maximumUnits.orElse(null) as Double?)
+                            maximumUnits(maximumUnits.getOrNull())
 
                         /** Upper bound for this tier */
                         fun maximumUnits(maximumUnits: JsonField<Double>) = apply {
@@ -15935,7 +15902,7 @@ private constructor(
                  * usage-based.
                  */
                 fun billableMetricId(billableMetricId: Optional<String>) =
-                    billableMetricId(billableMetricId.orElse(null))
+                    billableMetricId(billableMetricId.getOrNull())
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -15963,9 +15930,8 @@ private constructor(
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
-                    billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
+                    billedInAdvance(billedInAdvance.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -15989,7 +15955,7 @@ private constructor(
                  */
                 fun billingCycleConfiguration(
                     billingCycleConfiguration: Optional<BillingCycleConfiguration>
-                ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
+                ) = billingCycleConfiguration(billingCycleConfiguration.getOrNull())
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -16008,9 +15974,8 @@ private constructor(
                     conversionRate(conversionRate as Double?)
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun conversionRate(conversionRate: Optional<Double>) =
-                    conversionRate(conversionRate.orElse(null) as Double?)
+                    conversionRate(conversionRate.getOrNull())
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 fun conversionRate(conversionRate: JsonField<Double>) = apply {
@@ -16027,7 +15992,7 @@ private constructor(
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                  * price is billed.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -16041,7 +16006,7 @@ private constructor(
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: Optional<String>) =
-                    externalPriceId(externalPriceId.orElse(null))
+                    externalPriceId(externalPriceId.getOrNull())
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: JsonField<String>) = apply {
@@ -16066,9 +16031,8 @@ private constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                    fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                    fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -16084,7 +16048,7 @@ private constructor(
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
-                    invoiceGroupingKey(invoiceGroupingKey.orElse(null))
+                    invoiceGroupingKey(invoiceGroupingKey.getOrNull())
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: JsonField<String>) = apply {
@@ -16105,7 +16069,7 @@ private constructor(
                  */
                 fun invoicingCycleConfiguration(
                     invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -16127,7 +16091,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -17463,7 +17427,7 @@ private constructor(
                  * usage-based.
                  */
                 fun billableMetricId(billableMetricId: Optional<String>) =
-                    billableMetricId(billableMetricId.orElse(null))
+                    billableMetricId(billableMetricId.getOrNull())
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -17491,9 +17455,8 @@ private constructor(
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
-                    billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
+                    billedInAdvance(billedInAdvance.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -17517,7 +17480,7 @@ private constructor(
                  */
                 fun billingCycleConfiguration(
                     billingCycleConfiguration: Optional<BillingCycleConfiguration>
-                ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
+                ) = billingCycleConfiguration(billingCycleConfiguration.getOrNull())
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -17536,9 +17499,8 @@ private constructor(
                     conversionRate(conversionRate as Double?)
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun conversionRate(conversionRate: Optional<Double>) =
-                    conversionRate(conversionRate.orElse(null) as Double?)
+                    conversionRate(conversionRate.getOrNull())
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 fun conversionRate(conversionRate: JsonField<Double>) = apply {
@@ -17555,7 +17517,7 @@ private constructor(
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                  * price is billed.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -17569,7 +17531,7 @@ private constructor(
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: Optional<String>) =
-                    externalPriceId(externalPriceId.orElse(null))
+                    externalPriceId(externalPriceId.getOrNull())
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: JsonField<String>) = apply {
@@ -17594,9 +17556,8 @@ private constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                    fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                    fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -17612,7 +17573,7 @@ private constructor(
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
-                    invoiceGroupingKey(invoiceGroupingKey.orElse(null))
+                    invoiceGroupingKey(invoiceGroupingKey.getOrNull())
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: JsonField<String>) = apply {
@@ -17633,7 +17594,7 @@ private constructor(
                  */
                 fun invoicingCycleConfiguration(
                     invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -17655,7 +17616,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -18994,7 +18955,7 @@ private constructor(
                  * usage-based.
                  */
                 fun billableMetricId(billableMetricId: Optional<String>) =
-                    billableMetricId(billableMetricId.orElse(null))
+                    billableMetricId(billableMetricId.getOrNull())
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -19022,9 +18983,8 @@ private constructor(
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
-                    billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
+                    billedInAdvance(billedInAdvance.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -19048,7 +19008,7 @@ private constructor(
                  */
                 fun billingCycleConfiguration(
                     billingCycleConfiguration: Optional<BillingCycleConfiguration>
-                ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
+                ) = billingCycleConfiguration(billingCycleConfiguration.getOrNull())
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -19067,9 +19027,8 @@ private constructor(
                     conversionRate(conversionRate as Double?)
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun conversionRate(conversionRate: Optional<Double>) =
-                    conversionRate(conversionRate.orElse(null) as Double?)
+                    conversionRate(conversionRate.getOrNull())
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 fun conversionRate(conversionRate: JsonField<Double>) = apply {
@@ -19086,7 +19045,7 @@ private constructor(
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                  * price is billed.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -19100,7 +19059,7 @@ private constructor(
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: Optional<String>) =
-                    externalPriceId(externalPriceId.orElse(null))
+                    externalPriceId(externalPriceId.getOrNull())
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: JsonField<String>) = apply {
@@ -19125,9 +19084,8 @@ private constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                    fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                    fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -19143,7 +19101,7 @@ private constructor(
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
-                    invoiceGroupingKey(invoiceGroupingKey.orElse(null))
+                    invoiceGroupingKey(invoiceGroupingKey.getOrNull())
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: JsonField<String>) = apply {
@@ -19164,7 +19122,7 @@ private constructor(
                  */
                 fun invoicingCycleConfiguration(
                     invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -19186,7 +19144,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -20523,7 +20481,7 @@ private constructor(
                  * usage-based.
                  */
                 fun billableMetricId(billableMetricId: Optional<String>) =
-                    billableMetricId(billableMetricId.orElse(null))
+                    billableMetricId(billableMetricId.getOrNull())
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -20551,9 +20509,8 @@ private constructor(
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
-                    billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
+                    billedInAdvance(billedInAdvance.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -20577,7 +20534,7 @@ private constructor(
                  */
                 fun billingCycleConfiguration(
                     billingCycleConfiguration: Optional<BillingCycleConfiguration>
-                ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
+                ) = billingCycleConfiguration(billingCycleConfiguration.getOrNull())
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -20596,9 +20553,8 @@ private constructor(
                     conversionRate(conversionRate as Double?)
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun conversionRate(conversionRate: Optional<Double>) =
-                    conversionRate(conversionRate.orElse(null) as Double?)
+                    conversionRate(conversionRate.getOrNull())
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 fun conversionRate(conversionRate: JsonField<Double>) = apply {
@@ -20615,7 +20571,7 @@ private constructor(
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                  * price is billed.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -20629,7 +20585,7 @@ private constructor(
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: Optional<String>) =
-                    externalPriceId(externalPriceId.orElse(null))
+                    externalPriceId(externalPriceId.getOrNull())
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: JsonField<String>) = apply {
@@ -20654,9 +20610,8 @@ private constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                    fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                    fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -20672,7 +20627,7 @@ private constructor(
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
-                    invoiceGroupingKey(invoiceGroupingKey.orElse(null))
+                    invoiceGroupingKey(invoiceGroupingKey.getOrNull())
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: JsonField<String>) = apply {
@@ -20693,7 +20648,7 @@ private constructor(
                  */
                 fun invoicingCycleConfiguration(
                     invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -20715,7 +20670,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -22057,7 +22012,7 @@ private constructor(
                  * usage-based.
                  */
                 fun billableMetricId(billableMetricId: Optional<String>) =
-                    billableMetricId(billableMetricId.orElse(null))
+                    billableMetricId(billableMetricId.getOrNull())
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -22085,9 +22040,8 @@ private constructor(
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
-                    billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
+                    billedInAdvance(billedInAdvance.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -22111,7 +22065,7 @@ private constructor(
                  */
                 fun billingCycleConfiguration(
                     billingCycleConfiguration: Optional<BillingCycleConfiguration>
-                ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
+                ) = billingCycleConfiguration(billingCycleConfiguration.getOrNull())
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -22130,9 +22084,8 @@ private constructor(
                     conversionRate(conversionRate as Double?)
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun conversionRate(conversionRate: Optional<Double>) =
-                    conversionRate(conversionRate.orElse(null) as Double?)
+                    conversionRate(conversionRate.getOrNull())
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 fun conversionRate(conversionRate: JsonField<Double>) = apply {
@@ -22149,7 +22102,7 @@ private constructor(
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                  * price is billed.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -22163,7 +22116,7 @@ private constructor(
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: Optional<String>) =
-                    externalPriceId(externalPriceId.orElse(null))
+                    externalPriceId(externalPriceId.getOrNull())
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: JsonField<String>) = apply {
@@ -22188,9 +22141,8 @@ private constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                    fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                    fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -22206,7 +22158,7 @@ private constructor(
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
-                    invoiceGroupingKey(invoiceGroupingKey.orElse(null))
+                    invoiceGroupingKey(invoiceGroupingKey.getOrNull())
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: JsonField<String>) = apply {
@@ -22227,7 +22179,7 @@ private constructor(
                  */
                 fun invoicingCycleConfiguration(
                     invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -22249,7 +22201,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -23590,7 +23542,7 @@ private constructor(
                  * usage-based.
                  */
                 fun billableMetricId(billableMetricId: Optional<String>) =
-                    billableMetricId(billableMetricId.orElse(null))
+                    billableMetricId(billableMetricId.getOrNull())
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -23618,9 +23570,8 @@ private constructor(
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
-                    billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
+                    billedInAdvance(billedInAdvance.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -23644,7 +23595,7 @@ private constructor(
                  */
                 fun billingCycleConfiguration(
                     billingCycleConfiguration: Optional<BillingCycleConfiguration>
-                ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
+                ) = billingCycleConfiguration(billingCycleConfiguration.getOrNull())
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -23663,9 +23614,8 @@ private constructor(
                     conversionRate(conversionRate as Double?)
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun conversionRate(conversionRate: Optional<Double>) =
-                    conversionRate(conversionRate.orElse(null) as Double?)
+                    conversionRate(conversionRate.getOrNull())
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 fun conversionRate(conversionRate: JsonField<Double>) = apply {
@@ -23682,7 +23632,7 @@ private constructor(
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                  * price is billed.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -23696,7 +23646,7 @@ private constructor(
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: Optional<String>) =
-                    externalPriceId(externalPriceId.orElse(null))
+                    externalPriceId(externalPriceId.getOrNull())
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: JsonField<String>) = apply {
@@ -23721,9 +23671,8 @@ private constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                    fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                    fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -23739,7 +23688,7 @@ private constructor(
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
-                    invoiceGroupingKey(invoiceGroupingKey.orElse(null))
+                    invoiceGroupingKey(invoiceGroupingKey.getOrNull())
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: JsonField<String>) = apply {
@@ -23760,7 +23709,7 @@ private constructor(
                  */
                 fun invoicingCycleConfiguration(
                     invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -23782,7 +23731,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -25122,7 +25071,7 @@ private constructor(
                  * usage-based.
                  */
                 fun billableMetricId(billableMetricId: Optional<String>) =
-                    billableMetricId(billableMetricId.orElse(null))
+                    billableMetricId(billableMetricId.getOrNull())
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -25150,9 +25099,8 @@ private constructor(
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
-                    billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
+                    billedInAdvance(billedInAdvance.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -25176,7 +25124,7 @@ private constructor(
                  */
                 fun billingCycleConfiguration(
                     billingCycleConfiguration: Optional<BillingCycleConfiguration>
-                ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
+                ) = billingCycleConfiguration(billingCycleConfiguration.getOrNull())
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -25195,9 +25143,8 @@ private constructor(
                     conversionRate(conversionRate as Double?)
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun conversionRate(conversionRate: Optional<Double>) =
-                    conversionRate(conversionRate.orElse(null) as Double?)
+                    conversionRate(conversionRate.getOrNull())
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 fun conversionRate(conversionRate: JsonField<Double>) = apply {
@@ -25214,7 +25161,7 @@ private constructor(
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                  * price is billed.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -25228,7 +25175,7 @@ private constructor(
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: Optional<String>) =
-                    externalPriceId(externalPriceId.orElse(null))
+                    externalPriceId(externalPriceId.getOrNull())
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: JsonField<String>) = apply {
@@ -25253,9 +25200,8 @@ private constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                    fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                    fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -25271,7 +25217,7 @@ private constructor(
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
-                    invoiceGroupingKey(invoiceGroupingKey.orElse(null))
+                    invoiceGroupingKey(invoiceGroupingKey.getOrNull())
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: JsonField<String>) = apply {
@@ -25292,7 +25238,7 @@ private constructor(
                  */
                 fun invoicingCycleConfiguration(
                     invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -25314,7 +25260,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -26653,7 +26599,7 @@ private constructor(
                  * usage-based.
                  */
                 fun billableMetricId(billableMetricId: Optional<String>) =
-                    billableMetricId(billableMetricId.orElse(null))
+                    billableMetricId(billableMetricId.getOrNull())
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -26681,9 +26627,8 @@ private constructor(
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
-                    billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
+                    billedInAdvance(billedInAdvance.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -26707,7 +26652,7 @@ private constructor(
                  */
                 fun billingCycleConfiguration(
                     billingCycleConfiguration: Optional<BillingCycleConfiguration>
-                ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
+                ) = billingCycleConfiguration(billingCycleConfiguration.getOrNull())
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -26726,9 +26671,8 @@ private constructor(
                     conversionRate(conversionRate as Double?)
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun conversionRate(conversionRate: Optional<Double>) =
-                    conversionRate(conversionRate.orElse(null) as Double?)
+                    conversionRate(conversionRate.getOrNull())
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 fun conversionRate(conversionRate: JsonField<Double>) = apply {
@@ -26745,7 +26689,7 @@ private constructor(
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                  * price is billed.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -26759,7 +26703,7 @@ private constructor(
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: Optional<String>) =
-                    externalPriceId(externalPriceId.orElse(null))
+                    externalPriceId(externalPriceId.getOrNull())
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: JsonField<String>) = apply {
@@ -26784,9 +26728,8 @@ private constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                    fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                    fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -26802,7 +26745,7 @@ private constructor(
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
-                    invoiceGroupingKey(invoiceGroupingKey.orElse(null))
+                    invoiceGroupingKey(invoiceGroupingKey.getOrNull())
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: JsonField<String>) = apply {
@@ -26823,7 +26766,7 @@ private constructor(
                  */
                 fun invoicingCycleConfiguration(
                     invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -26845,7 +26788,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -28191,7 +28134,7 @@ private constructor(
                  * usage-based.
                  */
                 fun billableMetricId(billableMetricId: Optional<String>) =
-                    billableMetricId(billableMetricId.orElse(null))
+                    billableMetricId(billableMetricId.getOrNull())
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -28219,9 +28162,8 @@ private constructor(
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
-                    billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
+                    billedInAdvance(billedInAdvance.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -28245,7 +28187,7 @@ private constructor(
                  */
                 fun billingCycleConfiguration(
                     billingCycleConfiguration: Optional<BillingCycleConfiguration>
-                ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
+                ) = billingCycleConfiguration(billingCycleConfiguration.getOrNull())
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -28264,9 +28206,8 @@ private constructor(
                     conversionRate(conversionRate as Double?)
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun conversionRate(conversionRate: Optional<Double>) =
-                    conversionRate(conversionRate.orElse(null) as Double?)
+                    conversionRate(conversionRate.getOrNull())
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 fun conversionRate(conversionRate: JsonField<Double>) = apply {
@@ -28283,7 +28224,7 @@ private constructor(
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                  * price is billed.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -28297,7 +28238,7 @@ private constructor(
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: Optional<String>) =
-                    externalPriceId(externalPriceId.orElse(null))
+                    externalPriceId(externalPriceId.getOrNull())
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: JsonField<String>) = apply {
@@ -28322,9 +28263,8 @@ private constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                    fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                    fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -28340,7 +28280,7 @@ private constructor(
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
-                    invoiceGroupingKey(invoiceGroupingKey.orElse(null))
+                    invoiceGroupingKey(invoiceGroupingKey.getOrNull())
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: JsonField<String>) = apply {
@@ -28361,7 +28301,7 @@ private constructor(
                  */
                 fun invoicingCycleConfiguration(
                     invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -28383,7 +28323,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -29733,7 +29673,7 @@ private constructor(
                  * usage-based.
                  */
                 fun billableMetricId(billableMetricId: Optional<String>) =
-                    billableMetricId(billableMetricId.orElse(null))
+                    billableMetricId(billableMetricId.getOrNull())
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -29761,9 +29701,8 @@ private constructor(
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
-                    billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
+                    billedInAdvance(billedInAdvance.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -29787,7 +29726,7 @@ private constructor(
                  */
                 fun billingCycleConfiguration(
                     billingCycleConfiguration: Optional<BillingCycleConfiguration>
-                ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
+                ) = billingCycleConfiguration(billingCycleConfiguration.getOrNull())
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -29806,9 +29745,8 @@ private constructor(
                     conversionRate(conversionRate as Double?)
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun conversionRate(conversionRate: Optional<Double>) =
-                    conversionRate(conversionRate.orElse(null) as Double?)
+                    conversionRate(conversionRate.getOrNull())
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 fun conversionRate(conversionRate: JsonField<Double>) = apply {
@@ -29825,7 +29763,7 @@ private constructor(
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                  * price is billed.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -29839,7 +29777,7 @@ private constructor(
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: Optional<String>) =
-                    externalPriceId(externalPriceId.orElse(null))
+                    externalPriceId(externalPriceId.getOrNull())
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: JsonField<String>) = apply {
@@ -29864,9 +29802,8 @@ private constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                    fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                    fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -29882,7 +29819,7 @@ private constructor(
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
-                    invoiceGroupingKey(invoiceGroupingKey.orElse(null))
+                    invoiceGroupingKey(invoiceGroupingKey.getOrNull())
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: JsonField<String>) = apply {
@@ -29903,7 +29840,7 @@ private constructor(
                  */
                 fun invoicingCycleConfiguration(
                     invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -29925,7 +29862,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -31272,7 +31209,7 @@ private constructor(
                  * usage-based.
                  */
                 fun billableMetricId(billableMetricId: Optional<String>) =
-                    billableMetricId(billableMetricId.orElse(null))
+                    billableMetricId(billableMetricId.getOrNull())
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -31300,9 +31237,8 @@ private constructor(
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
-                    billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
+                    billedInAdvance(billedInAdvance.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -31326,7 +31262,7 @@ private constructor(
                  */
                 fun billingCycleConfiguration(
                     billingCycleConfiguration: Optional<BillingCycleConfiguration>
-                ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
+                ) = billingCycleConfiguration(billingCycleConfiguration.getOrNull())
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -31345,9 +31281,8 @@ private constructor(
                     conversionRate(conversionRate as Double?)
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun conversionRate(conversionRate: Optional<Double>) =
-                    conversionRate(conversionRate.orElse(null) as Double?)
+                    conversionRate(conversionRate.getOrNull())
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 fun conversionRate(conversionRate: JsonField<Double>) = apply {
@@ -31364,7 +31299,7 @@ private constructor(
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                  * price is billed.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -31378,7 +31313,7 @@ private constructor(
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: Optional<String>) =
-                    externalPriceId(externalPriceId.orElse(null))
+                    externalPriceId(externalPriceId.getOrNull())
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: JsonField<String>) = apply {
@@ -31403,9 +31338,8 @@ private constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                    fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                    fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -31421,7 +31355,7 @@ private constructor(
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
-                    invoiceGroupingKey(invoiceGroupingKey.orElse(null))
+                    invoiceGroupingKey(invoiceGroupingKey.getOrNull())
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: JsonField<String>) = apply {
@@ -31442,7 +31376,7 @@ private constructor(
                  */
                 fun invoicingCycleConfiguration(
                     invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -31464,7 +31398,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -32804,7 +32738,7 @@ private constructor(
                  * usage-based.
                  */
                 fun billableMetricId(billableMetricId: Optional<String>) =
-                    billableMetricId(billableMetricId.orElse(null))
+                    billableMetricId(billableMetricId.getOrNull())
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -32832,9 +32766,8 @@ private constructor(
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
-                    billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
+                    billedInAdvance(billedInAdvance.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -32858,7 +32791,7 @@ private constructor(
                  */
                 fun billingCycleConfiguration(
                     billingCycleConfiguration: Optional<BillingCycleConfiguration>
-                ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
+                ) = billingCycleConfiguration(billingCycleConfiguration.getOrNull())
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -32877,9 +32810,8 @@ private constructor(
                     conversionRate(conversionRate as Double?)
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun conversionRate(conversionRate: Optional<Double>) =
-                    conversionRate(conversionRate.orElse(null) as Double?)
+                    conversionRate(conversionRate.getOrNull())
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 fun conversionRate(conversionRate: JsonField<Double>) = apply {
@@ -32896,7 +32828,7 @@ private constructor(
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                  * price is billed.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -32910,7 +32842,7 @@ private constructor(
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: Optional<String>) =
-                    externalPriceId(externalPriceId.orElse(null))
+                    externalPriceId(externalPriceId.getOrNull())
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: JsonField<String>) = apply {
@@ -32935,9 +32867,8 @@ private constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                    fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                    fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -32953,7 +32884,7 @@ private constructor(
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
-                    invoiceGroupingKey(invoiceGroupingKey.orElse(null))
+                    invoiceGroupingKey(invoiceGroupingKey.getOrNull())
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: JsonField<String>) = apply {
@@ -32974,7 +32905,7 @@ private constructor(
                  */
                 fun invoicingCycleConfiguration(
                     invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -32996,7 +32927,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -34338,7 +34269,7 @@ private constructor(
                  * usage-based.
                  */
                 fun billableMetricId(billableMetricId: Optional<String>) =
-                    billableMetricId(billableMetricId.orElse(null))
+                    billableMetricId(billableMetricId.getOrNull())
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -34366,9 +34297,8 @@ private constructor(
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
-                    billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
+                    billedInAdvance(billedInAdvance.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -34392,7 +34322,7 @@ private constructor(
                  */
                 fun billingCycleConfiguration(
                     billingCycleConfiguration: Optional<BillingCycleConfiguration>
-                ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
+                ) = billingCycleConfiguration(billingCycleConfiguration.getOrNull())
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -34411,9 +34341,8 @@ private constructor(
                     conversionRate(conversionRate as Double?)
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun conversionRate(conversionRate: Optional<Double>) =
-                    conversionRate(conversionRate.orElse(null) as Double?)
+                    conversionRate(conversionRate.getOrNull())
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 fun conversionRate(conversionRate: JsonField<Double>) = apply {
@@ -34430,7 +34359,7 @@ private constructor(
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                  * price is billed.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -34444,7 +34373,7 @@ private constructor(
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: Optional<String>) =
-                    externalPriceId(externalPriceId.orElse(null))
+                    externalPriceId(externalPriceId.getOrNull())
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: JsonField<String>) = apply {
@@ -34469,9 +34398,8 @@ private constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                    fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                    fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -34487,7 +34415,7 @@ private constructor(
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
-                    invoiceGroupingKey(invoiceGroupingKey.orElse(null))
+                    invoiceGroupingKey(invoiceGroupingKey.getOrNull())
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: JsonField<String>) = apply {
@@ -34508,7 +34436,7 @@ private constructor(
                  */
                 fun invoicingCycleConfiguration(
                     invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -34530,7 +34458,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -35873,7 +35801,7 @@ private constructor(
                  * usage-based.
                  */
                 fun billableMetricId(billableMetricId: Optional<String>) =
-                    billableMetricId(billableMetricId.orElse(null))
+                    billableMetricId(billableMetricId.getOrNull())
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -35901,9 +35829,8 @@ private constructor(
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
-                    billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
+                    billedInAdvance(billedInAdvance.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -35927,7 +35854,7 @@ private constructor(
                  */
                 fun billingCycleConfiguration(
                     billingCycleConfiguration: Optional<BillingCycleConfiguration>
-                ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
+                ) = billingCycleConfiguration(billingCycleConfiguration.getOrNull())
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -35946,9 +35873,8 @@ private constructor(
                     conversionRate(conversionRate as Double?)
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun conversionRate(conversionRate: Optional<Double>) =
-                    conversionRate(conversionRate.orElse(null) as Double?)
+                    conversionRate(conversionRate.getOrNull())
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 fun conversionRate(conversionRate: JsonField<Double>) = apply {
@@ -35965,7 +35891,7 @@ private constructor(
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                  * price is billed.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -35979,7 +35905,7 @@ private constructor(
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: Optional<String>) =
-                    externalPriceId(externalPriceId.orElse(null))
+                    externalPriceId(externalPriceId.getOrNull())
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: JsonField<String>) = apply {
@@ -36004,9 +35930,8 @@ private constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                    fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                    fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -36022,7 +35947,7 @@ private constructor(
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
-                    invoiceGroupingKey(invoiceGroupingKey.orElse(null))
+                    invoiceGroupingKey(invoiceGroupingKey.getOrNull())
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: JsonField<String>) = apply {
@@ -36043,7 +35968,7 @@ private constructor(
                  */
                 fun invoicingCycleConfiguration(
                     invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -36065,7 +35990,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -37423,7 +37348,7 @@ private constructor(
                  * usage-based.
                  */
                 fun billableMetricId(billableMetricId: Optional<String>) =
-                    billableMetricId(billableMetricId.orElse(null))
+                    billableMetricId(billableMetricId.getOrNull())
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -37451,9 +37376,8 @@ private constructor(
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
-                    billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
+                    billedInAdvance(billedInAdvance.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -37477,7 +37401,7 @@ private constructor(
                  */
                 fun billingCycleConfiguration(
                     billingCycleConfiguration: Optional<BillingCycleConfiguration>
-                ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
+                ) = billingCycleConfiguration(billingCycleConfiguration.getOrNull())
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -37496,9 +37420,8 @@ private constructor(
                     conversionRate(conversionRate as Double?)
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun conversionRate(conversionRate: Optional<Double>) =
-                    conversionRate(conversionRate.orElse(null) as Double?)
+                    conversionRate(conversionRate.getOrNull())
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 fun conversionRate(conversionRate: JsonField<Double>) = apply {
@@ -37515,7 +37438,7 @@ private constructor(
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                  * price is billed.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -37529,7 +37452,7 @@ private constructor(
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: Optional<String>) =
-                    externalPriceId(externalPriceId.orElse(null))
+                    externalPriceId(externalPriceId.getOrNull())
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: JsonField<String>) = apply {
@@ -37554,9 +37477,8 @@ private constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                    fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                    fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -37572,7 +37494,7 @@ private constructor(
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
-                    invoiceGroupingKey(invoiceGroupingKey.orElse(null))
+                    invoiceGroupingKey(invoiceGroupingKey.getOrNull())
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: JsonField<String>) = apply {
@@ -37593,7 +37515,7 @@ private constructor(
                  */
                 fun invoicingCycleConfiguration(
                     invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -37615,7 +37537,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -38980,7 +38902,7 @@ private constructor(
                  * usage-based.
                  */
                 fun billableMetricId(billableMetricId: Optional<String>) =
-                    billableMetricId(billableMetricId.orElse(null))
+                    billableMetricId(billableMetricId.getOrNull())
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -39008,9 +38930,8 @@ private constructor(
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
-                    billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
+                    billedInAdvance(billedInAdvance.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -39034,7 +38955,7 @@ private constructor(
                  */
                 fun billingCycleConfiguration(
                     billingCycleConfiguration: Optional<BillingCycleConfiguration>
-                ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
+                ) = billingCycleConfiguration(billingCycleConfiguration.getOrNull())
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -39053,9 +38974,8 @@ private constructor(
                     conversionRate(conversionRate as Double?)
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun conversionRate(conversionRate: Optional<Double>) =
-                    conversionRate(conversionRate.orElse(null) as Double?)
+                    conversionRate(conversionRate.getOrNull())
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 fun conversionRate(conversionRate: JsonField<Double>) = apply {
@@ -39072,7 +38992,7 @@ private constructor(
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                  * price is billed.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -39086,7 +39006,7 @@ private constructor(
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: Optional<String>) =
-                    externalPriceId(externalPriceId.orElse(null))
+                    externalPriceId(externalPriceId.getOrNull())
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: JsonField<String>) = apply {
@@ -39111,9 +39031,8 @@ private constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                    fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                    fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -39129,7 +39048,7 @@ private constructor(
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
-                    invoiceGroupingKey(invoiceGroupingKey.orElse(null))
+                    invoiceGroupingKey(invoiceGroupingKey.getOrNull())
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: JsonField<String>) = apply {
@@ -39150,7 +39069,7 @@ private constructor(
                  */
                 fun invoicingCycleConfiguration(
                     invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -39172,7 +39091,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -40524,7 +40443,7 @@ private constructor(
                  * usage-based.
                  */
                 fun billableMetricId(billableMetricId: Optional<String>) =
-                    billableMetricId(billableMetricId.orElse(null))
+                    billableMetricId(billableMetricId.getOrNull())
 
                 /**
                  * The id of the billable metric for the price. Only needed if the price is
@@ -40552,9 +40471,8 @@ private constructor(
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
                  * is true, and in-arrears if this is false.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun billedInAdvance(billedInAdvance: Optional<Boolean>) =
-                    billedInAdvance(billedInAdvance.orElse(null) as Boolean?)
+                    billedInAdvance(billedInAdvance.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -40578,7 +40496,7 @@ private constructor(
                  */
                 fun billingCycleConfiguration(
                     billingCycleConfiguration: Optional<BillingCycleConfiguration>
-                ) = billingCycleConfiguration(billingCycleConfiguration.orElse(null))
+                ) = billingCycleConfiguration(billingCycleConfiguration.getOrNull())
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -40597,9 +40515,8 @@ private constructor(
                     conversionRate(conversionRate as Double?)
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun conversionRate(conversionRate: Optional<Double>) =
-                    conversionRate(conversionRate.orElse(null) as Double?)
+                    conversionRate(conversionRate.getOrNull())
 
                 /** The per unit conversion rate of the price currency to the invoicing currency. */
                 fun conversionRate(conversionRate: JsonField<Double>) = apply {
@@ -40616,7 +40533,7 @@ private constructor(
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
                  * price is billed.
                  */
-                fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+                fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
                 /**
                  * An ISO 4217 currency string, or custom pricing unit identifier, in which this
@@ -40630,7 +40547,7 @@ private constructor(
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: Optional<String>) =
-                    externalPriceId(externalPriceId.orElse(null))
+                    externalPriceId(externalPriceId.getOrNull())
 
                 /** An alias for the price. */
                 fun externalPriceId(externalPriceId: JsonField<String>) = apply {
@@ -40655,9 +40572,8 @@ private constructor(
                  * If the Price represents a fixed cost, this represents the quantity of units
                  * applied.
                  */
-                @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                 fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                    fixedPriceQuantity(fixedPriceQuantity.orElse(null) as Double?)
+                    fixedPriceQuantity(fixedPriceQuantity.getOrNull())
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -40673,7 +40589,7 @@ private constructor(
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: Optional<String>) =
-                    invoiceGroupingKey(invoiceGroupingKey.orElse(null))
+                    invoiceGroupingKey(invoiceGroupingKey.getOrNull())
 
                 /** The property used to group this price on an invoice */
                 fun invoiceGroupingKey(invoiceGroupingKey: JsonField<String>) = apply {
@@ -40694,7 +40610,7 @@ private constructor(
                  */
                 fun invoicingCycleConfiguration(
                     invoicingCycleConfiguration: Optional<InvoicingCycleConfiguration>
-                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.orElse(null))
+                ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -40716,7 +40632,7 @@ private constructor(
                  * by setting the value to `null`, and the entire metadata mapping can be cleared by
                  * setting `metadata` to `null`.
                  */
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed

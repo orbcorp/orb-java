@@ -8,6 +8,7 @@ import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint returns a list of all coupons for an account in a list format.
@@ -98,7 +99,7 @@ private constructor(
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
          * initial request.
          */
-        fun cursor(cursor: Optional<String>) = cursor(cursor.orElse(null))
+        fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
         /** The number of items to fetch. Defaults to 20. */
         fun limit(limit: Long?) = apply { this.limit = limit }
@@ -107,15 +108,14 @@ private constructor(
         fun limit(limit: Long) = limit(limit as Long?)
 
         /** The number of items to fetch. Defaults to 20. */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun limit(limit: Optional<Long>) = limit(limit.orElse(null) as Long?)
+        fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         /** Filter to coupons matching this redemption code. */
         fun redemptionCode(redemptionCode: String?) = apply { this.redemptionCode = redemptionCode }
 
         /** Filter to coupons matching this redemption code. */
         fun redemptionCode(redemptionCode: Optional<String>) =
-            redemptionCode(redemptionCode.orElse(null))
+            redemptionCode(redemptionCode.getOrNull())
 
         /**
          * Show archived coupons as well (by default, this endpoint only returns active coupons).
@@ -130,9 +130,7 @@ private constructor(
         /**
          * Show archived coupons as well (by default, this endpoint only returns active coupons).
          */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun showArchived(showArchived: Optional<Boolean>) =
-            showArchived(showArchived.orElse(null) as Boolean?)
+        fun showArchived(showArchived: Optional<Boolean>) = showArchived(showArchived.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

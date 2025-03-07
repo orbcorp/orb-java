@@ -19,6 +19,7 @@ import com.withorb.api.errors.OrbInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 @NoAutoDetect
 class CustomerBalanceTransactionCreateResponse
@@ -231,7 +232,7 @@ private constructor(
 
         fun creditNote(creditNote: CreditNote?) = creditNote(JsonField.ofNullable(creditNote))
 
-        fun creditNote(creditNote: Optional<CreditNote>) = creditNote(creditNote.orElse(null))
+        fun creditNote(creditNote: Optional<CreditNote>) = creditNote(creditNote.getOrNull())
 
         fun creditNote(creditNote: JsonField<CreditNote>) = apply { this.creditNote = creditNote }
 
@@ -239,7 +240,7 @@ private constructor(
         fun description(description: String?) = description(JsonField.ofNullable(description))
 
         /** An optional description provided for manual customer balance adjustments. */
-        fun description(description: Optional<String>) = description(description.orElse(null))
+        fun description(description: Optional<String>) = description(description.getOrNull())
 
         /** An optional description provided for manual customer balance adjustments. */
         fun description(description: JsonField<String>) = apply { this.description = description }
@@ -260,7 +261,7 @@ private constructor(
 
         fun invoice(invoice: Invoice?) = invoice(JsonField.ofNullable(invoice))
 
-        fun invoice(invoice: Optional<Invoice>) = invoice(invoice.orElse(null))
+        fun invoice(invoice: Optional<Invoice>) = invoice(invoice.getOrNull())
 
         fun invoice(invoice: JsonField<Invoice>) = apply { this.invoice = invoice }
 

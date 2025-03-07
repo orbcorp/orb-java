@@ -2,8 +2,7 @@
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.withorb.api/orb-java)](https://central.sonatype.com/artifact/com.withorb.api/orb-java/0.46.0)
-[![javadoc](https://javadoc.io/badge2/com.withorb.api/orb-java/0.46.0/javadoc.svg)](https://javadoc.io/doc/com.withorb.api/orb-java/0.46.0)
+[![Maven Central](https://img.shields.io/maven-central/v/com.withorb.api/orb-java)](https://central.sonatype.com/artifact/com.withorb.api/orb-java/0.46.1)
 
 <!-- x-release-please-end -->
 
@@ -11,7 +10,7 @@ The Orb Java SDK provides convenient access to the Orb REST API from application
 
 The Orb Java SDK is similar to the Orb Kotlin SDK but with minor differences that make it more ergonomic for use in Java, such as `Optional` instead of nullable values, `Stream` instead of `Sequence`, and `CompletableFuture` instead of suspend functions.
 
-The REST API documentation can be found on [docs.withorb.com](https://docs.withorb.com/reference/api-reference). Javadocs are also available on [javadoc.io](https://javadoc.io/doc/com.withorb.api/orb-java/0.45.0).
+The REST API documentation can be found on [docs.withorb.com](https://docs.withorb.com/reference/api-reference).
 
 ## Installation
 
@@ -20,7 +19,7 @@ The REST API documentation can be found on [docs.withorb.com](https://docs.witho
 ### Gradle
 
 ```kotlin
-implementation("com.withorb.api:orb-java:0.46.0")
+implementation("com.withorb.api:orb-java:0.46.1")
 ```
 
 ### Maven
@@ -29,7 +28,7 @@ implementation("com.withorb.api:orb-java:0.46.0")
 <dependency>
     <groupId>com.withorb.api</groupId>
     <artifactId>orb-java</artifactId>
-    <version>0.46.0</version>
+    <version>0.46.1</version>
 </dependency>
 ```
 

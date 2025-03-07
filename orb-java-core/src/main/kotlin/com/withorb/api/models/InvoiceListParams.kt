@@ -16,6 +16,7 @@ import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint returns a list of all [`Invoice`](/core-concepts#invoice)s for an account in a list
@@ -220,15 +221,15 @@ private constructor(
 
         fun amount(amount: String?) = apply { this.amount = amount }
 
-        fun amount(amount: Optional<String>) = amount(amount.orElse(null))
+        fun amount(amount: Optional<String>) = amount(amount.getOrNull())
 
         fun amountGt(amountGt: String?) = apply { this.amountGt = amountGt }
 
-        fun amountGt(amountGt: Optional<String>) = amountGt(amountGt.orElse(null))
+        fun amountGt(amountGt: Optional<String>) = amountGt(amountGt.getOrNull())
 
         fun amountLt(amountLt: String?) = apply { this.amountLt = amountLt }
 
-        fun amountLt(amountLt: Optional<String>) = amountLt(amountLt.orElse(null))
+        fun amountLt(amountLt: Optional<String>) = amountLt(amountLt.getOrNull())
 
         /**
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
@@ -240,19 +241,19 @@ private constructor(
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
          * initial request.
          */
-        fun cursor(cursor: Optional<String>) = cursor(cursor.orElse(null))
+        fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
         fun customerId(customerId: String?) = apply { this.customerId = customerId }
 
-        fun customerId(customerId: Optional<String>) = customerId(customerId.orElse(null))
+        fun customerId(customerId: Optional<String>) = customerId(customerId.getOrNull())
 
         fun dateType(dateType: DateType?) = apply { this.dateType = dateType }
 
-        fun dateType(dateType: Optional<DateType>) = dateType(dateType.orElse(null))
+        fun dateType(dateType: Optional<DateType>) = dateType(dateType.getOrNull())
 
         fun dueDate(dueDate: LocalDate?) = apply { this.dueDate = dueDate }
 
-        fun dueDate(dueDate: Optional<LocalDate>) = dueDate(dueDate.orElse(null))
+        fun dueDate(dueDate: Optional<LocalDate>) = dueDate(dueDate.getOrNull())
 
         /**
          * Filters invoices by their due dates within a specific time range in the past. Specify the
@@ -267,58 +268,56 @@ private constructor(
          * invoices due in the last 7 days, and '2m' filters those due in the last 2 months.
          */
         fun dueDateWindow(dueDateWindow: Optional<String>) =
-            dueDateWindow(dueDateWindow.orElse(null))
+            dueDateWindow(dueDateWindow.getOrNull())
 
         fun dueDateGt(dueDateGt: LocalDate?) = apply { this.dueDateGt = dueDateGt }
 
-        fun dueDateGt(dueDateGt: Optional<LocalDate>) = dueDateGt(dueDateGt.orElse(null))
+        fun dueDateGt(dueDateGt: Optional<LocalDate>) = dueDateGt(dueDateGt.getOrNull())
 
         fun dueDateLt(dueDateLt: LocalDate?) = apply { this.dueDateLt = dueDateLt }
 
-        fun dueDateLt(dueDateLt: Optional<LocalDate>) = dueDateLt(dueDateLt.orElse(null))
+        fun dueDateLt(dueDateLt: Optional<LocalDate>) = dueDateLt(dueDateLt.getOrNull())
 
         fun externalCustomerId(externalCustomerId: String?) = apply {
             this.externalCustomerId = externalCustomerId
         }
 
         fun externalCustomerId(externalCustomerId: Optional<String>) =
-            externalCustomerId(externalCustomerId.orElse(null))
+            externalCustomerId(externalCustomerId.getOrNull())
 
         fun invoiceDateGt(invoiceDateGt: OffsetDateTime?) = apply {
             this.invoiceDateGt = invoiceDateGt
         }
 
         fun invoiceDateGt(invoiceDateGt: Optional<OffsetDateTime>) =
-            invoiceDateGt(invoiceDateGt.orElse(null))
+            invoiceDateGt(invoiceDateGt.getOrNull())
 
         fun invoiceDateGte(invoiceDateGte: OffsetDateTime?) = apply {
             this.invoiceDateGte = invoiceDateGte
         }
 
         fun invoiceDateGte(invoiceDateGte: Optional<OffsetDateTime>) =
-            invoiceDateGte(invoiceDateGte.orElse(null))
+            invoiceDateGte(invoiceDateGte.getOrNull())
 
         fun invoiceDateLt(invoiceDateLt: OffsetDateTime?) = apply {
             this.invoiceDateLt = invoiceDateLt
         }
 
         fun invoiceDateLt(invoiceDateLt: Optional<OffsetDateTime>) =
-            invoiceDateLt(invoiceDateLt.orElse(null))
+            invoiceDateLt(invoiceDateLt.getOrNull())
 
         fun invoiceDateLte(invoiceDateLte: OffsetDateTime?) = apply {
             this.invoiceDateLte = invoiceDateLte
         }
 
         fun invoiceDateLte(invoiceDateLte: Optional<OffsetDateTime>) =
-            invoiceDateLte(invoiceDateLte.orElse(null))
+            invoiceDateLte(invoiceDateLte.getOrNull())
 
         fun isRecurring(isRecurring: Boolean?) = apply { this.isRecurring = isRecurring }
 
         fun isRecurring(isRecurring: Boolean) = isRecurring(isRecurring as Boolean?)
 
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun isRecurring(isRecurring: Optional<Boolean>) =
-            isRecurring(isRecurring.orElse(null) as Boolean?)
+        fun isRecurring(isRecurring: Optional<Boolean>) = isRecurring(isRecurring.getOrNull())
 
         /** The number of items to fetch. Defaults to 20. */
         fun limit(limit: Long?) = apply { this.limit = limit }
@@ -327,12 +326,11 @@ private constructor(
         fun limit(limit: Long) = limit(limit as Long?)
 
         /** The number of items to fetch. Defaults to 20. */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun limit(limit: Optional<Long>) = limit(limit.orElse(null) as Long?)
+        fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         fun status(status: List<Status>?) = apply { this.status = status?.toMutableList() }
 
-        fun status(status: Optional<List<Status>>) = status(status.orElse(null))
+        fun status(status: Optional<List<Status>>) = status(status.getOrNull())
 
         fun addStatus(status: Status) = apply {
             this.status = (this.status ?: mutableListOf()).apply { add(status) }
@@ -341,7 +339,7 @@ private constructor(
         fun subscriptionId(subscriptionId: String?) = apply { this.subscriptionId = subscriptionId }
 
         fun subscriptionId(subscriptionId: Optional<String>) =
-            subscriptionId(subscriptionId.orElse(null))
+            subscriptionId(subscriptionId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

@@ -22,6 +22,7 @@ import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint creates a new alert to monitor a customer's credit balance. There are three types
@@ -181,7 +182,7 @@ private constructor(
 
             /** The thresholds that define the values at which the alert will be triggered. */
             fun thresholds(thresholds: Optional<List<Threshold>>) =
-                thresholds(thresholds.orElse(null))
+                thresholds(thresholds.getOrNull())
 
             /** The thresholds that define the values at which the alert will be triggered. */
             fun thresholds(thresholds: JsonField<List<Threshold>>) = apply {
@@ -300,7 +301,7 @@ private constructor(
         fun thresholds(thresholds: List<Threshold>?) = apply { body.thresholds(thresholds) }
 
         /** The thresholds that define the values at which the alert will be triggered. */
-        fun thresholds(thresholds: Optional<List<Threshold>>) = thresholds(thresholds.orElse(null))
+        fun thresholds(thresholds: Optional<List<Threshold>>) = thresholds(thresholds.getOrNull())
 
         /** The thresholds that define the values at which the alert will be triggered. */
         fun thresholds(thresholds: JsonField<List<Threshold>>) = apply {

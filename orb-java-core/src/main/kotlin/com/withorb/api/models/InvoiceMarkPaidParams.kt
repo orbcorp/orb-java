@@ -20,6 +20,7 @@ import com.withorb.api.core.toImmutable
 import java.time.LocalDate
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint allows an invoice's status to be set the `paid` status. This can only be done to
@@ -174,7 +175,7 @@ private constructor(
             fun externalId(externalId: String?) = externalId(JsonField.ofNullable(externalId))
 
             /** An optional external ID to associate with the payment. */
-            fun externalId(externalId: Optional<String>) = externalId(externalId.orElse(null))
+            fun externalId(externalId: Optional<String>) = externalId(externalId.getOrNull())
 
             /** An optional external ID to associate with the payment. */
             fun externalId(externalId: JsonField<String>) = apply { this.externalId = externalId }
@@ -183,7 +184,7 @@ private constructor(
             fun notes(notes: String?) = notes(JsonField.ofNullable(notes))
 
             /** An optional note to associate with the payment. */
-            fun notes(notes: Optional<String>) = notes(notes.orElse(null))
+            fun notes(notes: Optional<String>) = notes(notes.getOrNull())
 
             /** An optional note to associate with the payment. */
             fun notes(notes: JsonField<String>) = apply { this.notes = notes }
@@ -283,7 +284,7 @@ private constructor(
         fun externalId(externalId: String?) = apply { body.externalId(externalId) }
 
         /** An optional external ID to associate with the payment. */
-        fun externalId(externalId: Optional<String>) = externalId(externalId.orElse(null))
+        fun externalId(externalId: Optional<String>) = externalId(externalId.getOrNull())
 
         /** An optional external ID to associate with the payment. */
         fun externalId(externalId: JsonField<String>) = apply { body.externalId(externalId) }
@@ -292,7 +293,7 @@ private constructor(
         fun notes(notes: String?) = apply { body.notes(notes) }
 
         /** An optional note to associate with the payment. */
-        fun notes(notes: Optional<String>) = notes(notes.orElse(null))
+        fun notes(notes: Optional<String>) = notes(notes.getOrNull())
 
         /** An optional note to associate with the payment. */
         fun notes(notes: JsonField<String>) = apply { body.notes(notes) }

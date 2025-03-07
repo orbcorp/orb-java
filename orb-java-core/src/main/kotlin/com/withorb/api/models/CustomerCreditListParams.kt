@@ -9,6 +9,7 @@ import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Returns a paginated list of unexpired, non-zero credit blocks for a customer.
@@ -116,7 +117,7 @@ private constructor(
         fun currency(currency: String?) = apply { this.currency = currency }
 
         /** The ledger currency or custom pricing unit to use. */
-        fun currency(currency: Optional<String>) = currency(currency.orElse(null))
+        fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
         /**
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
@@ -128,7 +129,7 @@ private constructor(
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
          * initial request.
          */
-        fun cursor(cursor: Optional<String>) = cursor(cursor.orElse(null))
+        fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
         /**
          * If set to True, all expired and depleted blocks, as well as active block will be
@@ -149,9 +150,8 @@ private constructor(
          * If set to True, all expired and depleted blocks, as well as active block will be
          * returned.
          */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
         fun includeAllBlocks(includeAllBlocks: Optional<Boolean>) =
-            includeAllBlocks(includeAllBlocks.orElse(null) as Boolean?)
+            includeAllBlocks(includeAllBlocks.getOrNull())
 
         /** The number of items to fetch. Defaults to 20. */
         fun limit(limit: Long?) = apply { this.limit = limit }
@@ -160,8 +160,7 @@ private constructor(
         fun limit(limit: Long) = limit(limit as Long?)
 
         /** The number of items to fetch. Defaults to 20. */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun limit(limit: Optional<Long>) = limit(limit.orElse(null) as Long?)
+        fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

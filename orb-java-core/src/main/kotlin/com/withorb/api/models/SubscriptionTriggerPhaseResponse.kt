@@ -568,9 +568,8 @@ private constructor(
             activePlanPhaseOrder(activePlanPhaseOrder as Long?)
 
         /** The current plan phase that is active, only if the subscription's plan has phases. */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
         fun activePlanPhaseOrder(activePlanPhaseOrder: Optional<Long>) =
-            activePlanPhaseOrder(activePlanPhaseOrder.orElse(null) as Long?)
+            activePlanPhaseOrder(activePlanPhaseOrder.getOrNull())
 
         /** The current plan phase that is active, only if the subscription's plan has phases. */
         fun activePlanPhaseOrder(activePlanPhaseOrder: JsonField<Long>) = apply {
@@ -623,9 +622,8 @@ private constructor(
          * with the saved payment method on the due date. This property defaults to the plan's
          * behavior. If null, defaults to the customer's setting.
          */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
         fun autoCollection(autoCollection: Optional<Boolean>) =
-            autoCollection(autoCollection.orElse(null) as Boolean?)
+            autoCollection(autoCollection.getOrNull())
 
         /**
          * Determines whether issued invoices for this subscription will automatically be charged
@@ -680,7 +678,7 @@ private constructor(
          * are not currently active.
          */
         fun currentBillingPeriodEndDate(currentBillingPeriodEndDate: Optional<OffsetDateTime>) =
-            currentBillingPeriodEndDate(currentBillingPeriodEndDate.orElse(null))
+            currentBillingPeriodEndDate(currentBillingPeriodEndDate.getOrNull())
 
         /**
          * The end of the current billing period. This is an exclusive timestamp, such that the
@@ -706,7 +704,7 @@ private constructor(
          * is not currently active.
          */
         fun currentBillingPeriodStartDate(currentBillingPeriodStartDate: Optional<OffsetDateTime>) =
-            currentBillingPeriodStartDate(currentBillingPeriodStartDate.orElse(null))
+            currentBillingPeriodStartDate(currentBillingPeriodStartDate.getOrNull())
 
         /**
          * The start date of the current billing period. This is an inclusive timestamp; the instant
@@ -769,7 +767,7 @@ private constructor(
          * provided, it is determined by the plan configuration.
          */
         fun defaultInvoiceMemo(defaultInvoiceMemo: Optional<String>) =
-            defaultInvoiceMemo(defaultInvoiceMemo.orElse(null))
+            defaultInvoiceMemo(defaultInvoiceMemo.getOrNull())
 
         /**
          * Determines the default memo on this subscriptions' invoices. Note that if this is not
@@ -812,7 +810,7 @@ private constructor(
         fun endDate(endDate: OffsetDateTime?) = endDate(JsonField.ofNullable(endDate))
 
         /** The date Orb stops billing for this subscription. */
-        fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.orElse(null))
+        fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.getOrNull())
 
         /** The date Orb stops billing for this subscription. */
         fun endDate(endDate: JsonField<OffsetDateTime>) = apply { this.endDate = endDate }
@@ -838,7 +836,7 @@ private constructor(
             invoicingThreshold(JsonField.ofNullable(invoicingThreshold))
 
         fun invoicingThreshold(invoicingThreshold: Optional<String>) =
-            invoicingThreshold(invoicingThreshold.orElse(null))
+            invoicingThreshold(invoicingThreshold.getOrNull())
 
         fun invoicingThreshold(invoicingThreshold: JsonField<String>) = apply {
             this.invoicingThreshold = invoicingThreshold
@@ -941,7 +939,7 @@ private constructor(
             redeemedCoupon(JsonField.ofNullable(redeemedCoupon))
 
         fun redeemedCoupon(redeemedCoupon: Optional<RedeemedCoupon>) =
-            redeemedCoupon(redeemedCoupon.orElse(null))
+            redeemedCoupon(redeemedCoupon.getOrNull())
 
         fun redeemedCoupon(redeemedCoupon: JsonField<RedeemedCoupon>) = apply {
             this.redeemedCoupon = redeemedCoupon
@@ -1178,7 +1176,7 @@ private constructor(
             fun endDate(endDate: OffsetDateTime?) = endDate(JsonField.ofNullable(endDate))
 
             /** The end date of the adjustment interval. */
-            fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.orElse(null))
+            fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.getOrNull())
 
             /** The end date of the adjustment interval. */
             fun endDate(endDate: JsonField<OffsetDateTime>) = apply { this.endDate = endDate }
@@ -1727,9 +1725,8 @@ private constructor(
                         planPhaseOrder(planPhaseOrder as Long?)
 
                     /** The plan phase in which this adjustment is active. */
-                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                     fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                        planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                        planPhaseOrder(planPhaseOrder.getOrNull())
 
                     /** The plan phase in which this adjustment is active. */
                     fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
@@ -1740,7 +1737,7 @@ private constructor(
                     fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
                     /** The reason for the adjustment. */
-                    fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+                    fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
                     /** The reason for the adjustment. */
                     fun reason(reason: JsonField<String>) = apply { this.reason = reason }
@@ -2148,9 +2145,8 @@ private constructor(
                         planPhaseOrder(planPhaseOrder as Long?)
 
                     /** The plan phase in which this adjustment is active. */
-                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                     fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                        planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                        planPhaseOrder(planPhaseOrder.getOrNull())
 
                     /** The plan phase in which this adjustment is active. */
                     fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
@@ -2161,7 +2157,7 @@ private constructor(
                     fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
                     /** The reason for the adjustment. */
-                    fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+                    fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
                     /** The reason for the adjustment. */
                     fun reason(reason: JsonField<String>) = apply { this.reason = reason }
@@ -2557,9 +2553,8 @@ private constructor(
                         planPhaseOrder(planPhaseOrder as Long?)
 
                     /** The plan phase in which this adjustment is active. */
-                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                     fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                        planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                        planPhaseOrder(planPhaseOrder.getOrNull())
 
                     /** The plan phase in which this adjustment is active. */
                     fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
@@ -2570,7 +2565,7 @@ private constructor(
                     fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
                     /** The reason for the adjustment. */
-                    fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+                    fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
                     /** The reason for the adjustment. */
                     fun reason(reason: JsonField<String>) = apply { this.reason = reason }
@@ -2981,9 +2976,8 @@ private constructor(
                         planPhaseOrder(planPhaseOrder as Long?)
 
                     /** The plan phase in which this adjustment is active. */
-                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                     fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                        planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                        planPhaseOrder(planPhaseOrder.getOrNull())
 
                     /** The plan phase in which this adjustment is active. */
                     fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
@@ -2994,7 +2988,7 @@ private constructor(
                     fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
                     /** The reason for the adjustment. */
-                    fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+                    fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
                     /** The reason for the adjustment. */
                     fun reason(reason: JsonField<String>) = apply { this.reason = reason }
@@ -3387,9 +3381,8 @@ private constructor(
                         planPhaseOrder(planPhaseOrder as Long?)
 
                     /** The plan phase in which this adjustment is active. */
-                    @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
                     fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                        planPhaseOrder(planPhaseOrder.orElse(null) as Long?)
+                        planPhaseOrder(planPhaseOrder.getOrNull())
 
                     /** The plan phase in which this adjustment is active. */
                     fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
@@ -3400,7 +3393,7 @@ private constructor(
                     fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
                     /** The reason for the adjustment. */
-                    fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+                    fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
                     /** The reason for the adjustment. */
                     fun reason(reason: JsonField<String>) = apply { this.reason = reason }
@@ -3717,8 +3710,7 @@ private constructor(
              * The month on which the billing cycle is anchored (e.g. a quarterly price anchored in
              * February would have cycles starting February, May, August, and November).
              */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun month(month: Optional<Long>) = month(month.orElse(null) as Long?)
+            fun month(month: Optional<Long>) = month(month.getOrNull())
 
             /**
              * The month on which the billing cycle is anchored (e.g. a quarterly price anchored in
@@ -3742,8 +3734,7 @@ private constructor(
              * The year on which the billing cycle is anchored (e.g. a 2 year billing cycle anchored
              * on 2021 would have cycles starting on 2021, 2023, 2025, etc.).
              */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun year(year: Optional<Long>) = year(year.orElse(null) as Long?)
+            fun year(year: Optional<Long>) = year(year.getOrNull())
 
             /**
              * The year on which the billing cycle is anchored (e.g. a 2 year billing cycle anchored
@@ -4172,7 +4163,7 @@ private constructor(
                 fun endDate(endDate: OffsetDateTime?) = endDate(JsonField.ofNullable(endDate))
 
                 /** The end date of the discount interval. */
-                fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.orElse(null))
+                fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.getOrNull())
 
                 /** The end date of the discount interval. */
                 fun endDate(endDate: JsonField<OffsetDateTime>) = apply { this.endDate = endDate }
@@ -4532,7 +4523,7 @@ private constructor(
                 fun endDate(endDate: OffsetDateTime?) = endDate(JsonField.ofNullable(endDate))
 
                 /** The end date of the discount interval. */
-                fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.orElse(null))
+                fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.getOrNull())
 
                 /** The end date of the discount interval. */
                 fun endDate(endDate: JsonField<OffsetDateTime>) = apply { this.endDate = endDate }
@@ -4908,7 +4899,7 @@ private constructor(
                 fun endDate(endDate: OffsetDateTime?) = endDate(JsonField.ofNullable(endDate))
 
                 /** The end date of the discount interval. */
-                fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.orElse(null))
+                fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.getOrNull())
 
                 /** The end date of the discount interval. */
                 fun endDate(endDate: JsonField<OffsetDateTime>) = apply { this.endDate = endDate }
@@ -5190,7 +5181,7 @@ private constructor(
 
             fun endDate(endDate: OffsetDateTime?) = endDate(JsonField.ofNullable(endDate))
 
-            fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.orElse(null))
+            fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.getOrNull())
 
             fun endDate(endDate: JsonField<OffsetDateTime>) = apply { this.endDate = endDate }
 
@@ -5426,7 +5417,7 @@ private constructor(
             fun endDate(endDate: OffsetDateTime?) = endDate(JsonField.ofNullable(endDate))
 
             /** The end date of the maximum interval. */
-            fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.orElse(null))
+            fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.getOrNull())
 
             /** The end date of the maximum interval. */
             fun endDate(endDate: JsonField<OffsetDateTime>) = apply { this.endDate = endDate }
@@ -5758,7 +5749,7 @@ private constructor(
             fun endDate(endDate: OffsetDateTime?) = endDate(JsonField.ofNullable(endDate))
 
             /** The end date of the minimum interval. */
-            fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.orElse(null))
+            fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.getOrNull())
 
             /** The end date of the minimum interval. */
             fun endDate(endDate: JsonField<OffsetDateTime>) = apply { this.endDate = endDate }
@@ -6131,7 +6122,7 @@ private constructor(
              * interval is not currently active.
              */
             fun currentBillingPeriodEndDate(currentBillingPeriodEndDate: Optional<OffsetDateTime>) =
-                currentBillingPeriodEndDate(currentBillingPeriodEndDate.orElse(null))
+                currentBillingPeriodEndDate(currentBillingPeriodEndDate.getOrNull())
 
             /**
              * The end of the current billing period. This is an exclusive timestamp, such that the
@@ -6157,7 +6148,7 @@ private constructor(
              */
             fun currentBillingPeriodStartDate(
                 currentBillingPeriodStartDate: Optional<OffsetDateTime>
-            ) = currentBillingPeriodStartDate(currentBillingPeriodStartDate.orElse(null))
+            ) = currentBillingPeriodStartDate(currentBillingPeriodStartDate.getOrNull())
 
             /**
              * The start date of the current billing period. This is an inclusive timestamp; the
@@ -6178,7 +6169,7 @@ private constructor(
              * The end date of the price interval. This is the date that Orb stops billing for this
              * price.
              */
-            fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.orElse(null))
+            fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.getOrNull())
 
             /**
              * The end date of the price interval. This is the date that Orb stops billing for this
@@ -6190,7 +6181,7 @@ private constructor(
             fun filter(filter: String?) = filter(JsonField.ofNullable(filter))
 
             /** An additional filter to apply to usage queries. */
-            fun filter(filter: Optional<String>) = filter(filter.orElse(null))
+            fun filter(filter: Optional<String>) = filter(filter.getOrNull())
 
             /** An additional filter to apply to usage queries. */
             fun filter(filter: JsonField<String>) = apply { this.filter = filter }
@@ -6209,7 +6200,7 @@ private constructor(
              */
             fun fixedFeeQuantityTransitions(
                 fixedFeeQuantityTransitions: Optional<List<FixedFeeQuantityTransition>>
-            ) = fixedFeeQuantityTransitions(fixedFeeQuantityTransitions.orElse(null))
+            ) = fixedFeeQuantityTransitions(fixedFeeQuantityTransitions.getOrNull())
 
             /**
              * The fixed fee quantity transitions for this price interval. This is only relevant for
@@ -6702,7 +6693,7 @@ private constructor(
              * price interval.
              */
             fun usageCustomerIds(usageCustomerIds: Optional<List<String>>) =
-                usageCustomerIds(usageCustomerIds.orElse(null))
+                usageCustomerIds(usageCustomerIds.getOrNull())
 
             /**
              * A list of customer IDs whose usage events will be aggregated and billed under this
@@ -7015,7 +7006,7 @@ private constructor(
 
             fun endDate(endDate: OffsetDateTime?) = endDate(JsonField.ofNullable(endDate))
 
-            fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.orElse(null))
+            fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.getOrNull())
 
             fun endDate(endDate: JsonField<OffsetDateTime>) = apply { this.endDate = endDate }
 
@@ -7236,7 +7227,7 @@ private constructor(
 
             fun endDate(endDate: OffsetDateTime?) = endDate(JsonField.ofNullable(endDate))
 
-            fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.orElse(null))
+            fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.getOrNull())
 
             fun endDate(endDate: JsonField<OffsetDateTime>) = apply { this.endDate = endDate }
 

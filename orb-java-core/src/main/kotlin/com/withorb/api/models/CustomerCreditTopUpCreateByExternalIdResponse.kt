@@ -18,6 +18,7 @@ import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 @NoAutoDetect
 class CustomerCreditTopUpCreateByExternalIdResponse
@@ -263,9 +264,7 @@ private constructor(
          * The number of days or months after which the top-up expires. If unspecified, it does not
          * expire.
          */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun expiresAfter(expiresAfter: Optional<Long>) =
-            expiresAfter(expiresAfter.orElse(null) as Long?)
+        fun expiresAfter(expiresAfter: Optional<Long>) = expiresAfter(expiresAfter.getOrNull())
 
         /**
          * The number of days or months after which the top-up expires. If unspecified, it does not
@@ -279,7 +278,7 @@ private constructor(
 
         /** The unit of expires_after. */
         fun expiresAfterUnit(expiresAfterUnit: Optional<ExpiresAfterUnit>) =
-            expiresAfterUnit(expiresAfterUnit.orElse(null))
+            expiresAfterUnit(expiresAfterUnit.getOrNull())
 
         /** The unit of expires_after. */
         fun expiresAfterUnit(expiresAfterUnit: JsonField<ExpiresAfterUnit>) = apply {
@@ -470,7 +469,7 @@ private constructor(
             fun memo(memo: String?) = memo(JsonField.ofNullable(memo))
 
             /** An optional memo to display on the invoice. */
-            fun memo(memo: Optional<String>) = memo(memo.orElse(null))
+            fun memo(memo: Optional<String>) = memo(memo.getOrNull())
 
             /** An optional memo to display on the invoice. */
             fun memo(memo: JsonField<String>) = apply { this.memo = memo }
