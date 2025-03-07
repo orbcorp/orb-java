@@ -11,7 +11,7 @@ The Orb Java SDK provides convenient access to the Orb REST API from application
 
 The Orb Java SDK is similar to the Orb Kotlin SDK but with minor differences that make it more ergonomic for use in Java, such as `Optional` instead of nullable values, `Stream` instead of `Sequence`, and `CompletableFuture` instead of suspend functions.
 
-The REST API documentation can be found on [docs.withorb.com](https://docs.withorb.com/reference/api-reference). Javadocs are also available on [javadoc.io](https://javadoc.io/doc/com.withorb.api/orb-java/0.45.0).
+The REST API documentation can be found on [docs.withorb.com](https://docs.withorb.com/reference/api-reference). Javadocs are also available on [javadoc.io](https://javadoc.io/doc/com.withorb.api/orb-java/0.46.0).
 
 ## Installation
 
