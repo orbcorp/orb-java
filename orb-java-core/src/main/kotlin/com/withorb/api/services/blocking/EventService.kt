@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -70,7 +68,10 @@ interface EventService {
      *   period. For higher volume updates, consider using the [event backfill](create-backfill)
      *   endpoint.
      */
-    @JvmOverloads
+    fun update(params: EventUpdateParams): EventUpdateResponse =
+        update(params, RequestOptions.none())
+
+    /** @see [update] */
     fun update(
         params: EventUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -112,7 +113,10 @@ interface EventService {
      *   period. For higher volume updates, consider using the [event backfill](create-backfill)
      *   endpoint.
      */
-    @JvmOverloads
+    fun deprecate(params: EventDeprecateParams): EventDeprecateResponse =
+        deprecate(params, RequestOptions.none())
+
+    /** @see [deprecate] */
     fun deprecate(
         params: EventDeprecateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -309,7 +313,10 @@ interface EventService {
      * }
      * ```
      */
-    @JvmOverloads
+    fun ingest(params: EventIngestParams): EventIngestResponse =
+        ingest(params, RequestOptions.none())
+
+    /** @see [ingest] */
     fun ingest(
         params: EventIngestParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -331,7 +338,10 @@ interface EventService {
      * By default, Orb will not throw a `404` if no events matched, Orb will return an empty array
      * for `data` instead.
      */
-    @JvmOverloads
+    fun search(params: EventSearchParams): EventSearchResponse =
+        search(params, RequestOptions.none())
+
+    /** @see [search] */
     fun search(
         params: EventSearchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -348,7 +358,11 @@ interface EventService {
          * Returns a raw HTTP response for `put /events/{event_id}`, but is otherwise the same as
          * [EventService.update].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun update(params: EventUpdateParams): HttpResponseFor<EventUpdateResponse> =
+            update(params, RequestOptions.none())
+
+        /** @see [update] */
         @MustBeClosed
         fun update(
             params: EventUpdateParams,
@@ -359,7 +373,11 @@ interface EventService {
          * Returns a raw HTTP response for `put /events/{event_id}/deprecate`, but is otherwise the
          * same as [EventService.deprecate].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun deprecate(params: EventDeprecateParams): HttpResponseFor<EventDeprecateResponse> =
+            deprecate(params, RequestOptions.none())
+
+        /** @see [deprecate] */
         @MustBeClosed
         fun deprecate(
             params: EventDeprecateParams,
@@ -370,7 +388,11 @@ interface EventService {
          * Returns a raw HTTP response for `post /ingest`, but is otherwise the same as
          * [EventService.ingest].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun ingest(params: EventIngestParams): HttpResponseFor<EventIngestResponse> =
+            ingest(params, RequestOptions.none())
+
+        /** @see [ingest] */
         @MustBeClosed
         fun ingest(
             params: EventIngestParams,
@@ -381,7 +403,11 @@ interface EventService {
          * Returns a raw HTTP response for `post /events/search`, but is otherwise the same as
          * [EventService.search].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun search(params: EventSearchParams): HttpResponseFor<EventSearchResponse> =
+            search(params, RequestOptions.none())
+
+        /** @see [search] */
         @MustBeClosed
         fun search(
             params: EventSearchParams,

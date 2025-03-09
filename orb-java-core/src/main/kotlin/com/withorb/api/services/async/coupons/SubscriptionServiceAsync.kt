@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.async.coupons
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -24,7 +22,11 @@ interface SubscriptionServiceAsync {
      * subscription. For a full discussion of the subscription resource, see
      * [Subscription](/core-concepts#subscription).
      */
-    @JvmOverloads
+    fun list(
+        params: CouponSubscriptionListParams
+    ): CompletableFuture<CouponSubscriptionListPageAsync> = list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(
         params: CouponSubscriptionListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -40,7 +42,13 @@ interface SubscriptionServiceAsync {
          * Returns a raw HTTP response for `get /coupons/{coupon_id}/subscriptions`, but is
          * otherwise the same as [SubscriptionServiceAsync.list].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun list(
+            params: CouponSubscriptionListParams
+        ): CompletableFuture<HttpResponseFor<CouponSubscriptionListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: CouponSubscriptionListParams,

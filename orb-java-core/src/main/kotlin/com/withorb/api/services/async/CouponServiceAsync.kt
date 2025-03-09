@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.async
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -29,7 +27,10 @@ interface CouponServiceAsync {
      * This endpoint allows the creation of coupons, which can then be redeemed at subscription
      * creation or plan change.
      */
-    @JvmOverloads
+    fun create(params: CouponCreateParams): CompletableFuture<Coupon> =
+        create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
         params: CouponCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -43,20 +44,20 @@ interface CouponServiceAsync {
      * if they exist. More information about pagination can be found in the Pagination-metadata
      * schema.
      */
-    @JvmOverloads
+    fun list(): CompletableFuture<CouponListPageAsync> = list(CouponListParams.none())
+
+    /** @see [list] */
     fun list(
         params: CouponListParams = CouponListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CouponListPageAsync>
 
-    /**
-     * This endpoint returns a list of all coupons for an account in a list format.
-     *
-     * The list of coupons is ordered starting from the most recently created coupon. The response
-     * also includes `pagination_metadata`, which lets the caller retrieve the next page of results
-     * if they exist. More information about pagination can be found in the Pagination-metadata
-     * schema.
-     */
+    /** @see [list] */
+    fun list(
+        params: CouponListParams = CouponListParams.none()
+    ): CompletableFuture<CouponListPageAsync> = list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(requestOptions: RequestOptions): CompletableFuture<CouponListPageAsync> =
         list(CouponListParams.none(), requestOptions)
 
@@ -65,7 +66,10 @@ interface CouponServiceAsync {
      * will be hidden from lists of active coupons. Additionally, once a coupon is archived, its
      * redemption code can be reused for a different coupon.
      */
-    @JvmOverloads
+    fun archive(params: CouponArchiveParams): CompletableFuture<Coupon> =
+        archive(params, RequestOptions.none())
+
+    /** @see [archive] */
     fun archive(
         params: CouponArchiveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -75,7 +79,10 @@ interface CouponServiceAsync {
      * This endpoint retrieves a coupon by its ID. To fetch coupons by their redemption code, use
      * the [List coupons](list-coupons) endpoint with the redemption_code parameter.
      */
-    @JvmOverloads
+    fun fetch(params: CouponFetchParams): CompletableFuture<Coupon> =
+        fetch(params, RequestOptions.none())
+
+    /** @see [fetch] */
     fun fetch(
         params: CouponFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -92,7 +99,11 @@ interface CouponServiceAsync {
          * Returns a raw HTTP response for `post /coupons`, but is otherwise the same as
          * [CouponServiceAsync.create].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun create(params: CouponCreateParams): CompletableFuture<HttpResponseFor<Coupon>> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
         @MustBeClosed
         fun create(
             params: CouponCreateParams,
@@ -103,17 +114,25 @@ interface CouponServiceAsync {
          * Returns a raw HTTP response for `get /coupons`, but is otherwise the same as
          * [CouponServiceAsync.list].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun list(): CompletableFuture<HttpResponseFor<CouponListPageAsync>> =
+            list(CouponListParams.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: CouponListParams = CouponListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<CouponListPageAsync>>
 
-        /**
-         * Returns a raw HTTP response for `get /coupons`, but is otherwise the same as
-         * [CouponServiceAsync.list].
-         */
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            params: CouponListParams = CouponListParams.none()
+        ): CompletableFuture<HttpResponseFor<CouponListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             requestOptions: RequestOptions
@@ -124,7 +143,11 @@ interface CouponServiceAsync {
          * Returns a raw HTTP response for `post /coupons/{coupon_id}/archive`, but is otherwise the
          * same as [CouponServiceAsync.archive].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun archive(params: CouponArchiveParams): CompletableFuture<HttpResponseFor<Coupon>> =
+            archive(params, RequestOptions.none())
+
+        /** @see [archive] */
         @MustBeClosed
         fun archive(
             params: CouponArchiveParams,
@@ -135,7 +158,11 @@ interface CouponServiceAsync {
          * Returns a raw HTTP response for `get /coupons/{coupon_id}`, but is otherwise the same as
          * [CouponServiceAsync.fetch].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun fetch(params: CouponFetchParams): CompletableFuture<HttpResponseFor<Coupon>> =
+            fetch(params, RequestOptions.none())
+
+        /** @see [fetch] */
         @MustBeClosed
         fun fetch(
             params: CouponFetchParams,

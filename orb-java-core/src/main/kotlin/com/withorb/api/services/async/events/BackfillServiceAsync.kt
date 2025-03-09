@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.async.events
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -56,7 +54,10 @@ interface BackfillServiceAsync {
      * expressiveness of computed properties allows you to deprecate existing events based on both a
      * period of time and specific property values.
      */
-    @JvmOverloads
+    fun create(params: EventBackfillCreateParams): CompletableFuture<EventBackfillCreateResponse> =
+        create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
         params: EventBackfillCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -70,20 +71,20 @@ interface BackfillServiceAsync {
      * caller retrieve the next page of results if they exist. More information about pagination can
      * be found in the [Pagination-metadata schema](pagination).
      */
-    @JvmOverloads
+    fun list(): CompletableFuture<EventBackfillListPageAsync> = list(EventBackfillListParams.none())
+
+    /** @see [list] */
     fun list(
         params: EventBackfillListParams = EventBackfillListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<EventBackfillListPageAsync>
 
-    /**
-     * This endpoint returns a list of all backfills in a list format.
-     *
-     * The list of backfills is ordered starting from the most recently created backfill. The
-     * response also includes [`pagination_metadata`](/api-reference/pagination), which lets the
-     * caller retrieve the next page of results if they exist. More information about pagination can
-     * be found in the [Pagination-metadata schema](pagination).
-     */
+    /** @see [list] */
+    fun list(
+        params: EventBackfillListParams = EventBackfillListParams.none()
+    ): CompletableFuture<EventBackfillListPageAsync> = list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(requestOptions: RequestOptions): CompletableFuture<EventBackfillListPageAsync> =
         list(EventBackfillListParams.none(), requestOptions)
 
@@ -92,14 +93,20 @@ interface BackfillServiceAsync {
      * asynchronously reflect the updated usage in invoice amounts and usage graphs. Once all of the
      * updates are complete, the backfill's status will transition to `reflected`.
      */
-    @JvmOverloads
+    fun close(params: EventBackfillCloseParams): CompletableFuture<EventBackfillCloseResponse> =
+        close(params, RequestOptions.none())
+
+    /** @see [close] */
     fun close(
         params: EventBackfillCloseParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<EventBackfillCloseResponse>
 
     /** This endpoint is used to fetch a backfill given an identifier. */
-    @JvmOverloads
+    fun fetch(params: EventBackfillFetchParams): CompletableFuture<EventBackfillFetchResponse> =
+        fetch(params, RequestOptions.none())
+
+    /** @see [fetch] */
     fun fetch(
         params: EventBackfillFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -113,7 +120,10 @@ interface BackfillServiceAsync {
      * If a backfill is reverted before its closed, no usage will be updated as a result of the
      * backfill and it will immediately transition to `reverted`.
      */
-    @JvmOverloads
+    fun revert(params: EventBackfillRevertParams): CompletableFuture<EventBackfillRevertResponse> =
+        revert(params, RequestOptions.none())
+
+    /** @see [revert] */
     fun revert(
         params: EventBackfillRevertParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -128,7 +138,13 @@ interface BackfillServiceAsync {
          * Returns a raw HTTP response for `post /events/backfills`, but is otherwise the same as
          * [BackfillServiceAsync.create].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun create(
+            params: EventBackfillCreateParams
+        ): CompletableFuture<HttpResponseFor<EventBackfillCreateResponse>> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
         @MustBeClosed
         fun create(
             params: EventBackfillCreateParams,
@@ -139,17 +155,25 @@ interface BackfillServiceAsync {
          * Returns a raw HTTP response for `get /events/backfills`, but is otherwise the same as
          * [BackfillServiceAsync.list].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun list(): CompletableFuture<HttpResponseFor<EventBackfillListPageAsync>> =
+            list(EventBackfillListParams.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: EventBackfillListParams = EventBackfillListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<EventBackfillListPageAsync>>
 
-        /**
-         * Returns a raw HTTP response for `get /events/backfills`, but is otherwise the same as
-         * [BackfillServiceAsync.list].
-         */
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            params: EventBackfillListParams = EventBackfillListParams.none()
+        ): CompletableFuture<HttpResponseFor<EventBackfillListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             requestOptions: RequestOptions
@@ -160,7 +184,13 @@ interface BackfillServiceAsync {
          * Returns a raw HTTP response for `post /events/backfills/{backfill_id}/close`, but is
          * otherwise the same as [BackfillServiceAsync.close].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun close(
+            params: EventBackfillCloseParams
+        ): CompletableFuture<HttpResponseFor<EventBackfillCloseResponse>> =
+            close(params, RequestOptions.none())
+
+        /** @see [close] */
         @MustBeClosed
         fun close(
             params: EventBackfillCloseParams,
@@ -171,7 +201,13 @@ interface BackfillServiceAsync {
          * Returns a raw HTTP response for `get /events/backfills/{backfill_id}`, but is otherwise
          * the same as [BackfillServiceAsync.fetch].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun fetch(
+            params: EventBackfillFetchParams
+        ): CompletableFuture<HttpResponseFor<EventBackfillFetchResponse>> =
+            fetch(params, RequestOptions.none())
+
+        /** @see [fetch] */
         @MustBeClosed
         fun fetch(
             params: EventBackfillFetchParams,
@@ -182,7 +218,13 @@ interface BackfillServiceAsync {
          * Returns a raw HTTP response for `post /events/backfills/{backfill_id}/revert`, but is
          * otherwise the same as [BackfillServiceAsync.revert].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun revert(
+            params: EventBackfillRevertParams
+        ): CompletableFuture<HttpResponseFor<EventBackfillRevertResponse>> =
+            revert(params, RequestOptions.none())
+
+        /** @see [revert] */
         @MustBeClosed
         fun revert(
             params: EventBackfillRevertParams,

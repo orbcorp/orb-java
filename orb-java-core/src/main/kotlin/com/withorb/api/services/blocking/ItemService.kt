@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -22,32 +20,44 @@ interface ItemService {
     fun withRawResponse(): WithRawResponse
 
     /** This endpoint is used to create an [Item](/core-concepts#item). */
-    @JvmOverloads
+    fun create(params: ItemCreateParams): Item = create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
         params: ItemCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Item
 
     /** This endpoint can be used to update properties on the Item. */
-    @JvmOverloads
+    fun update(params: ItemUpdateParams): Item = update(params, RequestOptions.none())
+
+    /** @see [update] */
     fun update(
         params: ItemUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Item
 
     /** This endpoint returns a list of all Items, ordered in descending order by creation time. */
-    @JvmOverloads
+    fun list(): ItemListPage = list(ItemListParams.none())
+
+    /** @see [list] */
     fun list(
         params: ItemListParams = ItemListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ItemListPage
 
-    /** This endpoint returns a list of all Items, ordered in descending order by creation time. */
+    /** @see [list] */
+    fun list(params: ItemListParams = ItemListParams.none()): ItemListPage =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(requestOptions: RequestOptions): ItemListPage =
         list(ItemListParams.none(), requestOptions)
 
     /** This endpoint returns an item identified by its item_id. */
-    @JvmOverloads
+    fun fetch(params: ItemFetchParams): Item = fetch(params, RequestOptions.none())
+
+    /** @see [fetch] */
     fun fetch(params: ItemFetchParams, requestOptions: RequestOptions = RequestOptions.none()): Item
 
     /** A view of [ItemService] that provides access to raw HTTP responses for each method. */
@@ -57,7 +67,11 @@ interface ItemService {
          * Returns a raw HTTP response for `post /items`, but is otherwise the same as
          * [ItemService.create].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun create(params: ItemCreateParams): HttpResponseFor<Item> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
         @MustBeClosed
         fun create(
             params: ItemCreateParams,
@@ -68,7 +82,11 @@ interface ItemService {
          * Returns a raw HTTP response for `put /items/{item_id}`, but is otherwise the same as
          * [ItemService.update].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun update(params: ItemUpdateParams): HttpResponseFor<Item> =
+            update(params, RequestOptions.none())
+
+        /** @see [update] */
         @MustBeClosed
         fun update(
             params: ItemUpdateParams,
@@ -79,17 +97,21 @@ interface ItemService {
          * Returns a raw HTTP response for `get /items`, but is otherwise the same as
          * [ItemService.list].
          */
-        @JvmOverloads
+        @MustBeClosed fun list(): HttpResponseFor<ItemListPage> = list(ItemListParams.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: ItemListParams = ItemListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ItemListPage>
 
-        /**
-         * Returns a raw HTTP response for `get /items`, but is otherwise the same as
-         * [ItemService.list].
-         */
+        /** @see [list] */
+        @MustBeClosed
+        fun list(params: ItemListParams = ItemListParams.none()): HttpResponseFor<ItemListPage> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<ItemListPage> =
             list(ItemListParams.none(), requestOptions)
@@ -98,7 +120,11 @@ interface ItemService {
          * Returns a raw HTTP response for `get /items/{item_id}`, but is otherwise the same as
          * [ItemService.fetch].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun fetch(params: ItemFetchParams): HttpResponseFor<Item> =
+            fetch(params, RequestOptions.none())
+
+        /** @see [fetch] */
         @MustBeClosed
         fun fetch(
             params: ItemFetchParams,

@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.blocking.prices
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -22,7 +20,10 @@ interface ExternalPriceIdService {
      * This endpoint allows you to update the `metadata` property on a price. If you pass null for
      * the metadata value, it will clear any existing metadata for that price.
      */
-    @JvmOverloads
+    fun update(params: PriceExternalPriceIdUpdateParams): Price =
+        update(params, RequestOptions.none())
+
+    /** @see [update] */
     fun update(
         params: PriceExternalPriceIdUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -33,7 +34,9 @@ interface ExternalPriceIdService {
      * [price creation API](/api-reference/price/create-price) for more information about external
      * price aliases.
      */
-    @JvmOverloads
+    fun fetch(params: PriceExternalPriceIdFetchParams): Price = fetch(params, RequestOptions.none())
+
+    /** @see [fetch] */
     fun fetch(
         params: PriceExternalPriceIdFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -49,7 +52,11 @@ interface ExternalPriceIdService {
          * Returns a raw HTTP response for `put /prices/external_price_id/{external_price_id}`, but
          * is otherwise the same as [ExternalPriceIdService.update].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun update(params: PriceExternalPriceIdUpdateParams): HttpResponseFor<Price> =
+            update(params, RequestOptions.none())
+
+        /** @see [update] */
         @MustBeClosed
         fun update(
             params: PriceExternalPriceIdUpdateParams,
@@ -60,7 +67,11 @@ interface ExternalPriceIdService {
          * Returns a raw HTTP response for `get /prices/external_price_id/{external_price_id}`, but
          * is otherwise the same as [ExternalPriceIdService.fetch].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun fetch(params: PriceExternalPriceIdFetchParams): HttpResponseFor<Price> =
+            fetch(params, RequestOptions.none())
+
+        /** @see [fetch] */
         @MustBeClosed
         fun fetch(
             params: PriceExternalPriceIdFetchParams,

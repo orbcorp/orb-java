@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.async
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -27,7 +25,10 @@ interface MetricServiceAsync {
      * [SQL support](/extensibility/advanced-metrics#sql-support) for a description of constructing
      * SQL queries with examples.
      */
-    @JvmOverloads
+    fun create(params: MetricCreateParams): CompletableFuture<BillableMetric> =
+        create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
         params: MetricCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -37,7 +38,10 @@ interface MetricServiceAsync {
      * This endpoint allows you to update the `metadata` property on a metric. If you pass `null`
      * for the metadata value, it will clear any existing metadata for that invoice.
      */
-    @JvmOverloads
+    fun update(params: MetricUpdateParams): CompletableFuture<BillableMetric> =
+        update(params, RequestOptions.none())
+
+    /** @see [update] */
     fun update(
         params: MetricUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -48,17 +52,20 @@ interface MetricServiceAsync {
      * identifier. It returns information about the metrics including its name, description, and
      * item.
      */
-    @JvmOverloads
+    fun list(): CompletableFuture<MetricListPageAsync> = list(MetricListParams.none())
+
+    /** @see [list] */
     fun list(
         params: MetricListParams = MetricListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<MetricListPageAsync>
 
-    /**
-     * This endpoint is used to fetch [metric](/core-concepts##metric) details given a metric
-     * identifier. It returns information about the metrics including its name, description, and
-     * item.
-     */
+    /** @see [list] */
+    fun list(
+        params: MetricListParams = MetricListParams.none()
+    ): CompletableFuture<MetricListPageAsync> = list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(requestOptions: RequestOptions): CompletableFuture<MetricListPageAsync> =
         list(MetricListParams.none(), requestOptions)
 
@@ -66,7 +73,10 @@ interface MetricServiceAsync {
      * This endpoint is used to list [metrics](/core-concepts#metric). It returns information about
      * the metrics including its name, description, and item.
      */
-    @JvmOverloads
+    fun fetch(params: MetricFetchParams): CompletableFuture<BillableMetric> =
+        fetch(params, RequestOptions.none())
+
+    /** @see [fetch] */
     fun fetch(
         params: MetricFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -81,7 +91,11 @@ interface MetricServiceAsync {
          * Returns a raw HTTP response for `post /metrics`, but is otherwise the same as
          * [MetricServiceAsync.create].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun create(params: MetricCreateParams): CompletableFuture<HttpResponseFor<BillableMetric>> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
         @MustBeClosed
         fun create(
             params: MetricCreateParams,
@@ -92,7 +106,11 @@ interface MetricServiceAsync {
          * Returns a raw HTTP response for `put /metrics/{metric_id}`, but is otherwise the same as
          * [MetricServiceAsync.update].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun update(params: MetricUpdateParams): CompletableFuture<HttpResponseFor<BillableMetric>> =
+            update(params, RequestOptions.none())
+
+        /** @see [update] */
         @MustBeClosed
         fun update(
             params: MetricUpdateParams,
@@ -103,17 +121,25 @@ interface MetricServiceAsync {
          * Returns a raw HTTP response for `get /metrics`, but is otherwise the same as
          * [MetricServiceAsync.list].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun list(): CompletableFuture<HttpResponseFor<MetricListPageAsync>> =
+            list(MetricListParams.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: MetricListParams = MetricListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<MetricListPageAsync>>
 
-        /**
-         * Returns a raw HTTP response for `get /metrics`, but is otherwise the same as
-         * [MetricServiceAsync.list].
-         */
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            params: MetricListParams = MetricListParams.none()
+        ): CompletableFuture<HttpResponseFor<MetricListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             requestOptions: RequestOptions
@@ -124,7 +150,11 @@ interface MetricServiceAsync {
          * Returns a raw HTTP response for `get /metrics/{metric_id}`, but is otherwise the same as
          * [MetricServiceAsync.fetch].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun fetch(params: MetricFetchParams): CompletableFuture<HttpResponseFor<BillableMetric>> =
+            fetch(params, RequestOptions.none())
+
+        /** @see [fetch] */
         @MustBeClosed
         fun fetch(
             params: MetricFetchParams,

@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.blocking.customers.credits
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -102,7 +100,10 @@ interface LedgerService {
      * When credits are added to a customer's balance as a result of a correction, this entry will
      * be added to the ledger to indicate the adjustment of credits.
      */
-    @JvmOverloads
+    fun list(params: CustomerCreditLedgerListParams): CustomerCreditLedgerListPage =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(
         params: CustomerCreditLedgerListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -211,7 +212,11 @@ interface LedgerService {
      * decremented from, and `amount` indicates how many credits to return to the customer, up to
      * the block's initial balance.
      */
-    @JvmOverloads
+    fun createEntry(
+        params: CustomerCreditLedgerCreateEntryParams
+    ): CustomerCreditLedgerCreateEntryResponse = createEntry(params, RequestOptions.none())
+
+    /** @see [createEntry] */
     fun createEntry(
         params: CustomerCreditLedgerCreateEntryParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -320,7 +325,12 @@ interface LedgerService {
      * decremented from, and `amount` indicates how many credits to return to the customer, up to
      * the block's initial balance.
      */
-    @JvmOverloads
+    fun createEntryByExternalId(
+        params: CustomerCreditLedgerCreateEntryByExternalIdParams
+    ): CustomerCreditLedgerCreateEntryByExternalIdResponse =
+        createEntryByExternalId(params, RequestOptions.none())
+
+    /** @see [createEntryByExternalId] */
     fun createEntryByExternalId(
         params: CustomerCreditLedgerCreateEntryByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -405,7 +415,11 @@ interface LedgerService {
      * When credits are added to a customer's balance as a result of a correction, this entry will
      * be added to the ledger to indicate the adjustment of credits.
      */
-    @JvmOverloads
+    fun listByExternalId(
+        params: CustomerCreditLedgerListByExternalIdParams
+    ): CustomerCreditLedgerListByExternalIdPage = listByExternalId(params, RequestOptions.none())
+
+    /** @see [listByExternalId] */
     fun listByExternalId(
         params: CustomerCreditLedgerListByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -418,7 +432,12 @@ interface LedgerService {
          * Returns a raw HTTP response for `get /customers/{customer_id}/credits/ledger`, but is
          * otherwise the same as [LedgerService.list].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun list(
+            params: CustomerCreditLedgerListParams
+        ): HttpResponseFor<CustomerCreditLedgerListPage> = list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: CustomerCreditLedgerListParams,
@@ -429,7 +448,13 @@ interface LedgerService {
          * Returns a raw HTTP response for `post /customers/{customer_id}/credits/ledger_entry`, but
          * is otherwise the same as [LedgerService.createEntry].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun createEntry(
+            params: CustomerCreditLedgerCreateEntryParams
+        ): HttpResponseFor<CustomerCreditLedgerCreateEntryResponse> =
+            createEntry(params, RequestOptions.none())
+
+        /** @see [createEntry] */
         @MustBeClosed
         fun createEntry(
             params: CustomerCreditLedgerCreateEntryParams,
@@ -441,7 +466,13 @@ interface LedgerService {
          * /customers/external_customer_id/{external_customer_id}/credits/ledger_entry`, but is
          * otherwise the same as [LedgerService.createEntryByExternalId].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun createEntryByExternalId(
+            params: CustomerCreditLedgerCreateEntryByExternalIdParams
+        ): HttpResponseFor<CustomerCreditLedgerCreateEntryByExternalIdResponse> =
+            createEntryByExternalId(params, RequestOptions.none())
+
+        /** @see [createEntryByExternalId] */
         @MustBeClosed
         fun createEntryByExternalId(
             params: CustomerCreditLedgerCreateEntryByExternalIdParams,
@@ -453,7 +484,13 @@ interface LedgerService {
          * /customers/external_customer_id/{external_customer_id}/credits/ledger`, but is otherwise
          * the same as [LedgerService.listByExternalId].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun listByExternalId(
+            params: CustomerCreditLedgerListByExternalIdParams
+        ): HttpResponseFor<CustomerCreditLedgerListByExternalIdPage> =
+            listByExternalId(params, RequestOptions.none())
+
+        /** @see [listByExternalId] */
         @MustBeClosed
         fun listByExternalId(
             params: CustomerCreditLedgerListByExternalIdParams,

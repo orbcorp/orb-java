@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.async
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -33,27 +31,43 @@ interface DimensionalPriceGroupServiceAsync {
      * group with a dimension "color" and two prices: one that charges $10 per red widget and one
      * that charges $20 per blue widget.
      */
-    @JvmOverloads
+    fun create(
+        params: DimensionalPriceGroupCreateParams
+    ): CompletableFuture<DimensionalPriceGroup> = create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
         params: DimensionalPriceGroupCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<DimensionalPriceGroup>
 
     /** Fetch dimensional price group */
-    @JvmOverloads
+    fun retrieve(
+        params: DimensionalPriceGroupRetrieveParams
+    ): CompletableFuture<DimensionalPriceGroup> = retrieve(params, RequestOptions.none())
+
+    /** @see [retrieve] */
     fun retrieve(
         params: DimensionalPriceGroupRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<DimensionalPriceGroup>
 
     /** List dimensional price groups */
-    @JvmOverloads
+    fun list(): CompletableFuture<DimensionalPriceGroupListPageAsync> =
+        list(DimensionalPriceGroupListParams.none())
+
+    /** @see [list] */
     fun list(
         params: DimensionalPriceGroupListParams = DimensionalPriceGroupListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<DimensionalPriceGroupListPageAsync>
 
-    /** List dimensional price groups */
+    /** @see [list] */
+    fun list(
+        params: DimensionalPriceGroupListParams = DimensionalPriceGroupListParams.none()
+    ): CompletableFuture<DimensionalPriceGroupListPageAsync> = list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(
         requestOptions: RequestOptions
     ): CompletableFuture<DimensionalPriceGroupListPageAsync> =
@@ -72,7 +86,13 @@ interface DimensionalPriceGroupServiceAsync {
          * Returns a raw HTTP response for `post /dimensional_price_groups`, but is otherwise the
          * same as [DimensionalPriceGroupServiceAsync.create].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun create(
+            params: DimensionalPriceGroupCreateParams
+        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
         @MustBeClosed
         fun create(
             params: DimensionalPriceGroupCreateParams,
@@ -84,7 +104,13 @@ interface DimensionalPriceGroupServiceAsync {
          * /dimensional_price_groups/{dimensional_price_group_id}`, but is otherwise the same as
          * [DimensionalPriceGroupServiceAsync.retrieve].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun retrieve(
+            params: DimensionalPriceGroupRetrieveParams
+        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
+            retrieve(params, RequestOptions.none())
+
+        /** @see [retrieve] */
         @MustBeClosed
         fun retrieve(
             params: DimensionalPriceGroupRetrieveParams,
@@ -95,17 +121,25 @@ interface DimensionalPriceGroupServiceAsync {
          * Returns a raw HTTP response for `get /dimensional_price_groups`, but is otherwise the
          * same as [DimensionalPriceGroupServiceAsync.list].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun list(): CompletableFuture<HttpResponseFor<DimensionalPriceGroupListPageAsync>> =
+            list(DimensionalPriceGroupListParams.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: DimensionalPriceGroupListParams = DimensionalPriceGroupListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<DimensionalPriceGroupListPageAsync>>
 
-        /**
-         * Returns a raw HTTP response for `get /dimensional_price_groups`, but is otherwise the
-         * same as [DimensionalPriceGroupServiceAsync.list].
-         */
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            params: DimensionalPriceGroupListParams = DimensionalPriceGroupListParams.none()
+        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroupListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             requestOptions: RequestOptions

@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -28,7 +26,9 @@ interface InvoiceService {
     fun withRawResponse(): WithRawResponse
 
     /** This endpoint is used to create a one-off invoice for a customer. */
-    @JvmOverloads
+    fun create(params: InvoiceCreateParams): Invoice = create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
         params: InvoiceCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -40,7 +40,9 @@ interface InvoiceService {
      *
      * `metadata` can be modified regardless of invoice state.
      */
-    @JvmOverloads
+    fun update(params: InvoiceUpdateParams): Invoice = update(params, RequestOptions.none())
+
+    /** @see [update] */
     fun update(
         params: InvoiceUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -60,33 +62,28 @@ interface InvoiceService {
      * draft invoice, which may not always be up-to-date since Orb regularly refreshes invoices
      * asynchronously.
      */
-    @JvmOverloads
+    fun list(): InvoiceListPage = list(InvoiceListParams.none())
+
+    /** @see [list] */
     fun list(
         params: InvoiceListParams = InvoiceListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): InvoiceListPage
 
-    /**
-     * This endpoint returns a list of all [`Invoice`](/core-concepts#invoice)s for an account in a
-     * list format.
-     *
-     * The list of invoices is ordered starting from the most recently issued invoice date. The
-     * response also includes [`pagination_metadata`](/api-reference/pagination), which lets the
-     * caller retrieve the next page of results if they exist.
-     *
-     * By default, this only returns invoices that are `issued`, `paid`, or `synced`.
-     *
-     * When fetching any `draft` invoices, this returns the last-computed invoice values for each
-     * draft invoice, which may not always be up-to-date since Orb regularly refreshes invoices
-     * asynchronously.
-     */
+    /** @see [list] */
+    fun list(params: InvoiceListParams = InvoiceListParams.none()): InvoiceListPage =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(requestOptions: RequestOptions): InvoiceListPage =
         list(InvoiceListParams.none(), requestOptions)
 
     /**
      * This endpoint is used to fetch an [`Invoice`](/core-concepts#invoice) given an identifier.
      */
-    @JvmOverloads
+    fun fetch(params: InvoiceFetchParams): Invoice = fetch(params, RequestOptions.none())
+
+    /** @see [fetch] */
     fun fetch(
         params: InvoiceFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -96,7 +93,10 @@ interface InvoiceService {
      * This endpoint can be used to fetch the upcoming [invoice](/core-concepts#invoice) for the
      * current billing period given a subscription.
      */
-    @JvmOverloads
+    fun fetchUpcoming(params: InvoiceFetchUpcomingParams): InvoiceFetchUpcomingResponse =
+        fetchUpcoming(params, RequestOptions.none())
+
+    /** @see [fetchUpcoming] */
     fun fetchUpcoming(
         params: InvoiceFetchUpcomingParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -109,7 +109,9 @@ interface InvoiceService {
      * could be customer-visible (e.g. sending emails, auto-collecting payment, syncing the invoice
      * to external providers, etc).
      */
-    @JvmOverloads
+    fun issue(params: InvoiceIssueParams): Invoice = issue(params, RequestOptions.none())
+
+    /** @see [issue] */
     fun issue(
         params: InvoiceIssueParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -119,7 +121,9 @@ interface InvoiceService {
      * This endpoint allows an invoice's status to be set the `paid` status. This can only be done
      * to invoices that are in the `issued` status.
      */
-    @JvmOverloads
+    fun markPaid(params: InvoiceMarkPaidParams): Invoice = markPaid(params, RequestOptions.none())
+
+    /** @see [markPaid] */
     fun markPaid(
         params: InvoiceMarkPaidParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -129,7 +133,9 @@ interface InvoiceService {
      * This endpoint collects payment for an invoice using the customer's default payment method.
      * This action can only be taken on invoices with status "issued".
      */
-    @JvmOverloads
+    fun pay(params: InvoicePayParams): Invoice = pay(params, RequestOptions.none())
+
+    /** @see [pay] */
     fun pay(
         params: InvoicePayParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -147,7 +153,10 @@ interface InvoiceService {
      * credit block will be voided. If the invoice was created due to a top-up, the top-up will be
      * disabled.
      */
-    @JvmOverloads
+    fun voidInvoice(params: InvoiceVoidInvoiceParams): Invoice =
+        voidInvoice(params, RequestOptions.none())
+
+    /** @see [voidInvoice] */
     fun voidInvoice(
         params: InvoiceVoidInvoiceParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -160,7 +169,11 @@ interface InvoiceService {
          * Returns a raw HTTP response for `post /invoices`, but is otherwise the same as
          * [InvoiceService.create].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun create(params: InvoiceCreateParams): HttpResponseFor<Invoice> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
         @MustBeClosed
         fun create(
             params: InvoiceCreateParams,
@@ -171,7 +184,11 @@ interface InvoiceService {
          * Returns a raw HTTP response for `put /invoices/{invoice_id}`, but is otherwise the same
          * as [InvoiceService.update].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun update(params: InvoiceUpdateParams): HttpResponseFor<Invoice> =
+            update(params, RequestOptions.none())
+
+        /** @see [update] */
         @MustBeClosed
         fun update(
             params: InvoiceUpdateParams,
@@ -182,17 +199,22 @@ interface InvoiceService {
          * Returns a raw HTTP response for `get /invoices`, but is otherwise the same as
          * [InvoiceService.list].
          */
-        @JvmOverloads
+        @MustBeClosed fun list(): HttpResponseFor<InvoiceListPage> = list(InvoiceListParams.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: InvoiceListParams = InvoiceListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<InvoiceListPage>
 
-        /**
-         * Returns a raw HTTP response for `get /invoices`, but is otherwise the same as
-         * [InvoiceService.list].
-         */
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            params: InvoiceListParams = InvoiceListParams.none()
+        ): HttpResponseFor<InvoiceListPage> = list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<InvoiceListPage> =
             list(InvoiceListParams.none(), requestOptions)
@@ -201,7 +223,11 @@ interface InvoiceService {
          * Returns a raw HTTP response for `get /invoices/{invoice_id}`, but is otherwise the same
          * as [InvoiceService.fetch].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun fetch(params: InvoiceFetchParams): HttpResponseFor<Invoice> =
+            fetch(params, RequestOptions.none())
+
+        /** @see [fetch] */
         @MustBeClosed
         fun fetch(
             params: InvoiceFetchParams,
@@ -212,7 +238,13 @@ interface InvoiceService {
          * Returns a raw HTTP response for `get /invoices/upcoming`, but is otherwise the same as
          * [InvoiceService.fetchUpcoming].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun fetchUpcoming(
+            params: InvoiceFetchUpcomingParams
+        ): HttpResponseFor<InvoiceFetchUpcomingResponse> =
+            fetchUpcoming(params, RequestOptions.none())
+
+        /** @see [fetchUpcoming] */
         @MustBeClosed
         fun fetchUpcoming(
             params: InvoiceFetchUpcomingParams,
@@ -223,7 +255,11 @@ interface InvoiceService {
          * Returns a raw HTTP response for `post /invoices/{invoice_id}/issue`, but is otherwise the
          * same as [InvoiceService.issue].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun issue(params: InvoiceIssueParams): HttpResponseFor<Invoice> =
+            issue(params, RequestOptions.none())
+
+        /** @see [issue] */
         @MustBeClosed
         fun issue(
             params: InvoiceIssueParams,
@@ -234,7 +270,11 @@ interface InvoiceService {
          * Returns a raw HTTP response for `post /invoices/{invoice_id}/mark_paid`, but is otherwise
          * the same as [InvoiceService.markPaid].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun markPaid(params: InvoiceMarkPaidParams): HttpResponseFor<Invoice> =
+            markPaid(params, RequestOptions.none())
+
+        /** @see [markPaid] */
         @MustBeClosed
         fun markPaid(
             params: InvoiceMarkPaidParams,
@@ -245,7 +285,11 @@ interface InvoiceService {
          * Returns a raw HTTP response for `post /invoices/{invoice_id}/pay`, but is otherwise the
          * same as [InvoiceService.pay].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun pay(params: InvoicePayParams): HttpResponseFor<Invoice> =
+            pay(params, RequestOptions.none())
+
+        /** @see [pay] */
         @MustBeClosed
         fun pay(
             params: InvoicePayParams,
@@ -256,7 +300,11 @@ interface InvoiceService {
          * Returns a raw HTTP response for `post /invoices/{invoice_id}/void`, but is otherwise the
          * same as [InvoiceService.voidInvoice].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun voidInvoice(params: InvoiceVoidInvoiceParams): HttpResponseFor<Invoice> =
+            voidInvoice(params, RequestOptions.none())
+
+        /** @see [voidInvoice] */
         @MustBeClosed
         fun voidInvoice(
             params: InvoiceVoidInvoiceParams,

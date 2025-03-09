@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -25,7 +23,9 @@ interface PlanService {
     fun externalPlanId(): ExternalPlanIdService
 
     /** This endpoint allows creation of plans including their prices. */
-    @JvmOverloads
+    fun create(params: PlanCreateParams): Plan = create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
         params: PlanCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -37,7 +37,9 @@ interface PlanService {
      *
      * Other fields on a customer are currently immutable.
      */
-    @JvmOverloads
+    fun update(params: PlanUpdateParams): Plan = update(params, RequestOptions.none())
+
+    /** @see [update] */
     fun update(
         params: PlanUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -49,18 +51,19 @@ interface PlanService {
      * response also includes [`pagination_metadata`](/api-reference/pagination), which lets the
      * caller retrieve the next page of results if they exist.
      */
-    @JvmOverloads
+    fun list(): PlanListPage = list(PlanListParams.none())
+
+    /** @see [list] */
     fun list(
         params: PlanListParams = PlanListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): PlanListPage
 
-    /**
-     * This endpoint returns a list of all [plans](/core-concepts#plan-and-price) for an account in
-     * a list format. The list of plans is ordered starting from the most recently created plan. The
-     * response also includes [`pagination_metadata`](/api-reference/pagination), which lets the
-     * caller retrieve the next page of results if they exist.
-     */
+    /** @see [list] */
+    fun list(params: PlanListParams = PlanListParams.none()): PlanListPage =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(requestOptions: RequestOptions): PlanListPage =
         list(PlanListParams.none(), requestOptions)
 
@@ -82,7 +85,9 @@ interface PlanService {
      * Orb supports plan phases, also known as contract ramps. For plans with phases, the serialized
      * prices refer to all prices across all phases.
      */
-    @JvmOverloads
+    fun fetch(params: PlanFetchParams): Plan = fetch(params, RequestOptions.none())
+
+    /** @see [fetch] */
     fun fetch(params: PlanFetchParams, requestOptions: RequestOptions = RequestOptions.none()): Plan
 
     /** A view of [PlanService] that provides access to raw HTTP responses for each method. */
@@ -94,7 +99,11 @@ interface PlanService {
          * Returns a raw HTTP response for `post /plans`, but is otherwise the same as
          * [PlanService.create].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun create(params: PlanCreateParams): HttpResponseFor<Plan> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
         @MustBeClosed
         fun create(
             params: PlanCreateParams,
@@ -105,7 +114,11 @@ interface PlanService {
          * Returns a raw HTTP response for `put /plans/{plan_id}`, but is otherwise the same as
          * [PlanService.update].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun update(params: PlanUpdateParams): HttpResponseFor<Plan> =
+            update(params, RequestOptions.none())
+
+        /** @see [update] */
         @MustBeClosed
         fun update(
             params: PlanUpdateParams,
@@ -116,17 +129,21 @@ interface PlanService {
          * Returns a raw HTTP response for `get /plans`, but is otherwise the same as
          * [PlanService.list].
          */
-        @JvmOverloads
+        @MustBeClosed fun list(): HttpResponseFor<PlanListPage> = list(PlanListParams.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: PlanListParams = PlanListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<PlanListPage>
 
-        /**
-         * Returns a raw HTTP response for `get /plans`, but is otherwise the same as
-         * [PlanService.list].
-         */
+        /** @see [list] */
+        @MustBeClosed
+        fun list(params: PlanListParams = PlanListParams.none()): HttpResponseFor<PlanListPage> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<PlanListPage> =
             list(PlanListParams.none(), requestOptions)
@@ -135,7 +152,11 @@ interface PlanService {
          * Returns a raw HTTP response for `get /plans/{plan_id}`, but is otherwise the same as
          * [PlanService.fetch].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun fetch(params: PlanFetchParams): HttpResponseFor<Plan> =
+            fetch(params, RequestOptions.none())
+
+        /** @see [fetch] */
         @MustBeClosed
         fun fetch(
             params: PlanFetchParams,

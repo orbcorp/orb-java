@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -26,14 +24,18 @@ interface AlertService {
     fun withRawResponse(): WithRawResponse
 
     /** This endpoint retrieves an alert by its ID. */
-    @JvmOverloads
+    fun retrieve(params: AlertRetrieveParams): Alert = retrieve(params, RequestOptions.none())
+
+    /** @see [retrieve] */
     fun retrieve(
         params: AlertRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Alert
 
     /** This endpoint updates the thresholds of an alert. */
-    @JvmOverloads
+    fun update(params: AlertUpdateParams): Alert = update(params, RequestOptions.none())
+
+    /** @see [update] */
     fun update(
         params: AlertUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -50,23 +52,19 @@ interface AlertService {
      * The list of alerts is ordered starting from the most recently created alert. This endpoint
      * follows Orb's [standardized pagination format](/api-reference/pagination).
      */
-    @JvmOverloads
+    fun list(): AlertListPage = list(AlertListParams.none())
+
+    /** @see [list] */
     fun list(
         params: AlertListParams = AlertListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AlertListPage
 
-    /**
-     * This endpoint returns a list of alerts within Orb.
-     *
-     * The request must specify one of `customer_id`, `external_customer_id`, or `subscription_id`.
-     *
-     * If querying by subscripion_id, the endpoint will return the subscription level alerts as well
-     * as the plan level alerts associated with the subscription.
-     *
-     * The list of alerts is ordered starting from the most recently created alert. This endpoint
-     * follows Orb's [standardized pagination format](/api-reference/pagination).
-     */
+    /** @see [list] */
+    fun list(params: AlertListParams = AlertListParams.none()): AlertListPage =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(requestOptions: RequestOptions): AlertListPage =
         list(AlertListParams.none(), requestOptions)
 
@@ -78,7 +76,10 @@ interface AlertService {
      * `credit_balance_dropped` alerts require a list of thresholds to be provided while
      * `credit_balance_depleted` and `credit_balance_recovered` alerts do not require thresholds.
      */
-    @JvmOverloads
+    fun createForCustomer(params: AlertCreateForCustomerParams): Alert =
+        createForCustomer(params, RequestOptions.none())
+
+    /** @see [createForCustomer] */
     fun createForCustomer(
         params: AlertCreateForCustomerParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -92,7 +93,10 @@ interface AlertService {
      * `credit_balance_dropped` alerts require a list of thresholds to be provided while
      * `credit_balance_depleted` and `credit_balance_recovered` alerts do not require thresholds.
      */
-    @JvmOverloads
+    fun createForExternalCustomer(params: AlertCreateForExternalCustomerParams): Alert =
+        createForExternalCustomer(params, RequestOptions.none())
+
+    /** @see [createForExternalCustomer] */
     fun createForExternalCustomer(
         params: AlertCreateForExternalCustomerParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -110,7 +114,10 @@ interface AlertService {
      * per metric that is a part of the subscription. Alerts are triggered based on usage or cost
      * conditions met during the current billing cycle.
      */
-    @JvmOverloads
+    fun createForSubscription(params: AlertCreateForSubscriptionParams): Alert =
+        createForSubscription(params, RequestOptions.none())
+
+    /** @see [createForSubscription] */
     fun createForSubscription(
         params: AlertCreateForSubscriptionParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -121,7 +128,9 @@ interface AlertService {
      * subscription, you must include the `subscription_id`. The `subscription_id` is not required
      * for customer or subscription level alerts.
      */
-    @JvmOverloads
+    fun disable(params: AlertDisableParams): Alert = disable(params, RequestOptions.none())
+
+    /** @see [disable] */
     fun disable(
         params: AlertDisableParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -132,7 +141,9 @@ interface AlertService {
      * subscription, you must include the `subscription_id`. The `subscription_id` is not required
      * for customer or subscription level alerts.
      */
-    @JvmOverloads
+    fun enable(params: AlertEnableParams): Alert = enable(params, RequestOptions.none())
+
+    /** @see [enable] */
     fun enable(
         params: AlertEnableParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -145,7 +156,11 @@ interface AlertService {
          * Returns a raw HTTP response for `get /alerts/{alert_id}`, but is otherwise the same as
          * [AlertService.retrieve].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun retrieve(params: AlertRetrieveParams): HttpResponseFor<Alert> =
+            retrieve(params, RequestOptions.none())
+
+        /** @see [retrieve] */
         @MustBeClosed
         fun retrieve(
             params: AlertRetrieveParams,
@@ -156,7 +171,11 @@ interface AlertService {
          * Returns a raw HTTP response for `put /alerts/{alert_configuration_id}`, but is otherwise
          * the same as [AlertService.update].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun update(params: AlertUpdateParams): HttpResponseFor<Alert> =
+            update(params, RequestOptions.none())
+
+        /** @see [update] */
         @MustBeClosed
         fun update(
             params: AlertUpdateParams,
@@ -167,17 +186,21 @@ interface AlertService {
          * Returns a raw HTTP response for `get /alerts`, but is otherwise the same as
          * [AlertService.list].
          */
-        @JvmOverloads
+        @MustBeClosed fun list(): HttpResponseFor<AlertListPage> = list(AlertListParams.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: AlertListParams = AlertListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<AlertListPage>
 
-        /**
-         * Returns a raw HTTP response for `get /alerts`, but is otherwise the same as
-         * [AlertService.list].
-         */
+        /** @see [list] */
+        @MustBeClosed
+        fun list(params: AlertListParams = AlertListParams.none()): HttpResponseFor<AlertListPage> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<AlertListPage> =
             list(AlertListParams.none(), requestOptions)
@@ -186,7 +209,11 @@ interface AlertService {
          * Returns a raw HTTP response for `post /alerts/customer_id/{customer_id}`, but is
          * otherwise the same as [AlertService.createForCustomer].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun createForCustomer(params: AlertCreateForCustomerParams): HttpResponseFor<Alert> =
+            createForCustomer(params, RequestOptions.none())
+
+        /** @see [createForCustomer] */
         @MustBeClosed
         fun createForCustomer(
             params: AlertCreateForCustomerParams,
@@ -198,7 +225,12 @@ interface AlertService {
          * /alerts/external_customer_id/{external_customer_id}`, but is otherwise the same as
          * [AlertService.createForExternalCustomer].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun createForExternalCustomer(
+            params: AlertCreateForExternalCustomerParams
+        ): HttpResponseFor<Alert> = createForExternalCustomer(params, RequestOptions.none())
+
+        /** @see [createForExternalCustomer] */
         @MustBeClosed
         fun createForExternalCustomer(
             params: AlertCreateForExternalCustomerParams,
@@ -209,7 +241,12 @@ interface AlertService {
          * Returns a raw HTTP response for `post /alerts/subscription_id/{subscription_id}`, but is
          * otherwise the same as [AlertService.createForSubscription].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun createForSubscription(
+            params: AlertCreateForSubscriptionParams
+        ): HttpResponseFor<Alert> = createForSubscription(params, RequestOptions.none())
+
+        /** @see [createForSubscription] */
         @MustBeClosed
         fun createForSubscription(
             params: AlertCreateForSubscriptionParams,
@@ -220,7 +257,11 @@ interface AlertService {
          * Returns a raw HTTP response for `post /alerts/{alert_configuration_id}/disable`, but is
          * otherwise the same as [AlertService.disable].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun disable(params: AlertDisableParams): HttpResponseFor<Alert> =
+            disable(params, RequestOptions.none())
+
+        /** @see [disable] */
         @MustBeClosed
         fun disable(
             params: AlertDisableParams,
@@ -231,7 +272,11 @@ interface AlertService {
          * Returns a raw HTTP response for `post /alerts/{alert_configuration_id}/enable`, but is
          * otherwise the same as [AlertService.enable].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun enable(params: AlertEnableParams): HttpResponseFor<Alert> =
+            enable(params, RequestOptions.none())
+
+        /** @see [enable] */
         @MustBeClosed
         fun enable(
             params: AlertEnableParams,

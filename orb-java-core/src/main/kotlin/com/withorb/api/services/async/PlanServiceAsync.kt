@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.async
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -26,7 +24,10 @@ interface PlanServiceAsync {
     fun externalPlanId(): ExternalPlanIdServiceAsync
 
     /** This endpoint allows creation of plans including their prices. */
-    @JvmOverloads
+    fun create(params: PlanCreateParams): CompletableFuture<Plan> =
+        create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
         params: PlanCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -38,7 +39,10 @@ interface PlanServiceAsync {
      *
      * Other fields on a customer are currently immutable.
      */
-    @JvmOverloads
+    fun update(params: PlanUpdateParams): CompletableFuture<Plan> =
+        update(params, RequestOptions.none())
+
+    /** @see [update] */
     fun update(
         params: PlanUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -50,18 +54,19 @@ interface PlanServiceAsync {
      * response also includes [`pagination_metadata`](/api-reference/pagination), which lets the
      * caller retrieve the next page of results if they exist.
      */
-    @JvmOverloads
+    fun list(): CompletableFuture<PlanListPageAsync> = list(PlanListParams.none())
+
+    /** @see [list] */
     fun list(
         params: PlanListParams = PlanListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<PlanListPageAsync>
 
-    /**
-     * This endpoint returns a list of all [plans](/core-concepts#plan-and-price) for an account in
-     * a list format. The list of plans is ordered starting from the most recently created plan. The
-     * response also includes [`pagination_metadata`](/api-reference/pagination), which lets the
-     * caller retrieve the next page of results if they exist.
-     */
+    /** @see [list] */
+    fun list(params: PlanListParams = PlanListParams.none()): CompletableFuture<PlanListPageAsync> =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(requestOptions: RequestOptions): CompletableFuture<PlanListPageAsync> =
         list(PlanListParams.none(), requestOptions)
 
@@ -83,7 +88,10 @@ interface PlanServiceAsync {
      * Orb supports plan phases, also known as contract ramps. For plans with phases, the serialized
      * prices refer to all prices across all phases.
      */
-    @JvmOverloads
+    fun fetch(params: PlanFetchParams): CompletableFuture<Plan> =
+        fetch(params, RequestOptions.none())
+
+    /** @see [fetch] */
     fun fetch(
         params: PlanFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -98,7 +106,11 @@ interface PlanServiceAsync {
          * Returns a raw HTTP response for `post /plans`, but is otherwise the same as
          * [PlanServiceAsync.create].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun create(params: PlanCreateParams): CompletableFuture<HttpResponseFor<Plan>> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
         @MustBeClosed
         fun create(
             params: PlanCreateParams,
@@ -109,7 +121,11 @@ interface PlanServiceAsync {
          * Returns a raw HTTP response for `put /plans/{plan_id}`, but is otherwise the same as
          * [PlanServiceAsync.update].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun update(params: PlanUpdateParams): CompletableFuture<HttpResponseFor<Plan>> =
+            update(params, RequestOptions.none())
+
+        /** @see [update] */
         @MustBeClosed
         fun update(
             params: PlanUpdateParams,
@@ -120,17 +136,25 @@ interface PlanServiceAsync {
          * Returns a raw HTTP response for `get /plans`, but is otherwise the same as
          * [PlanServiceAsync.list].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun list(): CompletableFuture<HttpResponseFor<PlanListPageAsync>> =
+            list(PlanListParams.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: PlanListParams = PlanListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<PlanListPageAsync>>
 
-        /**
-         * Returns a raw HTTP response for `get /plans`, but is otherwise the same as
-         * [PlanServiceAsync.list].
-         */
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            params: PlanListParams = PlanListParams.none()
+        ): CompletableFuture<HttpResponseFor<PlanListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             requestOptions: RequestOptions
@@ -141,7 +165,11 @@ interface PlanServiceAsync {
          * Returns a raw HTTP response for `get /plans/{plan_id}`, but is otherwise the same as
          * [PlanServiceAsync.fetch].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun fetch(params: PlanFetchParams): CompletableFuture<HttpResponseFor<Plan>> =
+            fetch(params, RequestOptions.none())
+
+        /** @see [fetch] */
         @MustBeClosed
         fun fetch(
             params: PlanFetchParams,

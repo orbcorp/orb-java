@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.async.customers
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -35,7 +33,10 @@ interface CreditServiceAsync {
      * Note that `currency` defaults to credits if not specified. To use a real world currency, set
      * `currency` to an ISO 4217 string.
      */
-    @JvmOverloads
+    fun list(params: CustomerCreditListParams): CompletableFuture<CustomerCreditListPageAsync> =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(
         params: CustomerCreditListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -50,7 +51,12 @@ interface CreditServiceAsync {
      * Note that `currency` defaults to credits if not specified. To use a real world currency, set
      * `currency` to an ISO 4217 string.
      */
-    @JvmOverloads
+    fun listByExternalId(
+        params: CustomerCreditListByExternalIdParams
+    ): CompletableFuture<CustomerCreditListByExternalIdPageAsync> =
+        listByExternalId(params, RequestOptions.none())
+
+    /** @see [listByExternalId] */
     fun listByExternalId(
         params: CustomerCreditListByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -69,7 +75,13 @@ interface CreditServiceAsync {
          * Returns a raw HTTP response for `get /customers/{customer_id}/credits`, but is otherwise
          * the same as [CreditServiceAsync.list].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun list(
+            params: CustomerCreditListParams
+        ): CompletableFuture<HttpResponseFor<CustomerCreditListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: CustomerCreditListParams,
@@ -81,7 +93,13 @@ interface CreditServiceAsync {
          * /customers/external_customer_id/{external_customer_id}/credits`, but is otherwise the
          * same as [CreditServiceAsync.listByExternalId].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun listByExternalId(
+            params: CustomerCreditListByExternalIdParams
+        ): CompletableFuture<HttpResponseFor<CustomerCreditListByExternalIdPageAsync>> =
+            listByExternalId(params, RequestOptions.none())
+
+        /** @see [listByExternalId] */
         @MustBeClosed
         fun listByExternalId(
             params: CustomerCreditListByExternalIdParams,

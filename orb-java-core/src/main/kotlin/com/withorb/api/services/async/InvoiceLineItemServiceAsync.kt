@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.async
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -22,7 +20,11 @@ interface InvoiceLineItemServiceAsync {
      * This creates a one-off fixed fee invoice line item on an Invoice. This can only be done for
      * invoices that are in a `draft` status.
      */
-    @JvmOverloads
+    fun create(
+        params: InvoiceLineItemCreateParams
+    ): CompletableFuture<InvoiceLineItemCreateResponse> = create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
         params: InvoiceLineItemCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -38,7 +40,13 @@ interface InvoiceLineItemServiceAsync {
          * Returns a raw HTTP response for `post /invoice_line_items`, but is otherwise the same as
          * [InvoiceLineItemServiceAsync.create].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun create(
+            params: InvoiceLineItemCreateParams
+        ): CompletableFuture<HttpResponseFor<InvoiceLineItemCreateResponse>> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
         @MustBeClosed
         fun create(
             params: InvoiceLineItemCreateParams,

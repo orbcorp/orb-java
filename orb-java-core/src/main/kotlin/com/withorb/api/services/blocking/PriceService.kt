@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -38,7 +36,9 @@ interface PriceService {
      * See the [Price resource](/product-catalog/price-configuration) for the specification of
      * different price model configurations possible in this endpoint.
      */
-    @JvmOverloads
+    fun create(params: PriceCreateParams): Price = create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
         params: PriceCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -48,7 +48,9 @@ interface PriceService {
      * This endpoint allows you to update the `metadata` property on a price. If you pass null for
      * the metadata value, it will clear any existing metadata for that price.
      */
-    @JvmOverloads
+    fun update(params: PriceUpdateParams): Price = update(params, RequestOptions.none())
+
+    /** @see [update] */
     fun update(
         params: PriceUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -58,16 +60,19 @@ interface PriceService {
      * This endpoint is used to list all add-on prices created using the
      * [price creation endpoint](/api-reference/price/create-price).
      */
-    @JvmOverloads
+    fun list(): PriceListPage = list(PriceListParams.none())
+
+    /** @see [list] */
     fun list(
         params: PriceListParams = PriceListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): PriceListPage
 
-    /**
-     * This endpoint is used to list all add-on prices created using the
-     * [price creation endpoint](/api-reference/price/create-price).
-     */
+    /** @see [list] */
+    fun list(params: PriceListParams = PriceListParams.none()): PriceListPage =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(requestOptions: RequestOptions): PriceListPage =
         list(PriceListParams.none(), requestOptions)
 
@@ -90,14 +95,19 @@ interface PriceService {
      * the results must be no greater than 1000. Note that this is a POST endpoint rather than a GET
      * endpoint because it employs a JSON body rather than query parameters.
      */
-    @JvmOverloads
+    fun evaluate(params: PriceEvaluateParams): PriceEvaluateResponse =
+        evaluate(params, RequestOptions.none())
+
+    /** @see [evaluate] */
     fun evaluate(
         params: PriceEvaluateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): PriceEvaluateResponse
 
     /** This endpoint returns a price given an identifier. */
-    @JvmOverloads
+    fun fetch(params: PriceFetchParams): Price = fetch(params, RequestOptions.none())
+
+    /** @see [fetch] */
     fun fetch(
         params: PriceFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -112,7 +122,11 @@ interface PriceService {
          * Returns a raw HTTP response for `post /prices`, but is otherwise the same as
          * [PriceService.create].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun create(params: PriceCreateParams): HttpResponseFor<Price> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
         @MustBeClosed
         fun create(
             params: PriceCreateParams,
@@ -123,7 +137,11 @@ interface PriceService {
          * Returns a raw HTTP response for `put /prices/{price_id}`, but is otherwise the same as
          * [PriceService.update].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun update(params: PriceUpdateParams): HttpResponseFor<Price> =
+            update(params, RequestOptions.none())
+
+        /** @see [update] */
         @MustBeClosed
         fun update(
             params: PriceUpdateParams,
@@ -134,17 +152,21 @@ interface PriceService {
          * Returns a raw HTTP response for `get /prices`, but is otherwise the same as
          * [PriceService.list].
          */
-        @JvmOverloads
+        @MustBeClosed fun list(): HttpResponseFor<PriceListPage> = list(PriceListParams.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: PriceListParams = PriceListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<PriceListPage>
 
-        /**
-         * Returns a raw HTTP response for `get /prices`, but is otherwise the same as
-         * [PriceService.list].
-         */
+        /** @see [list] */
+        @MustBeClosed
+        fun list(params: PriceListParams = PriceListParams.none()): HttpResponseFor<PriceListPage> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<PriceListPage> =
             list(PriceListParams.none(), requestOptions)
@@ -153,7 +175,11 @@ interface PriceService {
          * Returns a raw HTTP response for `post /prices/{price_id}/evaluate`, but is otherwise the
          * same as [PriceService.evaluate].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun evaluate(params: PriceEvaluateParams): HttpResponseFor<PriceEvaluateResponse> =
+            evaluate(params, RequestOptions.none())
+
+        /** @see [evaluate] */
         @MustBeClosed
         fun evaluate(
             params: PriceEvaluateParams,
@@ -164,7 +190,11 @@ interface PriceService {
          * Returns a raw HTTP response for `get /prices/{price_id}`, but is otherwise the same as
          * [PriceService.fetch].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun fetch(params: PriceFetchParams): HttpResponseFor<Price> =
+            fetch(params, RequestOptions.none())
+
+        /** @see [fetch] */
         @MustBeClosed
         fun fetch(
             params: PriceFetchParams,

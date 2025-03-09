@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.blocking.dimensionalPriceGroups
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -18,7 +16,11 @@ interface ExternalDimensionalPriceGroupIdService {
     fun withRawResponse(): WithRawResponse
 
     /** Fetch dimensional price group by external ID */
-    @JvmOverloads
+    fun retrieve(
+        params: DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams
+    ): DimensionalPriceGroup = retrieve(params, RequestOptions.none())
+
+    /** @see [retrieve] */
     fun retrieve(
         params: DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -35,7 +37,12 @@ interface ExternalDimensionalPriceGroupIdService {
          * /dimensional_price_groups/external_dimensional_price_group_id/{external_dimensional_price_group_id}`,
          * but is otherwise the same as [ExternalDimensionalPriceGroupIdService.retrieve].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun retrieve(
+            params: DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams
+        ): HttpResponseFor<DimensionalPriceGroup> = retrieve(params, RequestOptions.none())
+
+        /** @see [retrieve] */
         @MustBeClosed
         fun retrieve(
             params: DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams,

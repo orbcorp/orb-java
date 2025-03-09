@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.blocking.customers
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -129,7 +127,10 @@ interface CostService {
      * `secondary_grouping_key` based on the matrix price definition, for each `grouping_value` and
      * `secondary_grouping_value` available.
      */
-    @JvmOverloads
+    fun list(params: CustomerCostListParams): CustomerCostListResponse =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(
         params: CustomerCostListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -245,7 +246,11 @@ interface CostService {
      * `secondary_grouping_key` based on the matrix price definition, for each `grouping_value` and
      * `secondary_grouping_value` available.
      */
-    @JvmOverloads
+    fun listByExternalId(
+        params: CustomerCostListByExternalIdParams
+    ): CustomerCostListByExternalIdResponse = listByExternalId(params, RequestOptions.none())
+
+    /** @see [listByExternalId] */
     fun listByExternalId(
         params: CustomerCostListByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -258,7 +263,11 @@ interface CostService {
          * Returns a raw HTTP response for `get /customers/{customer_id}/costs`, but is otherwise
          * the same as [CostService.list].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun list(params: CustomerCostListParams): HttpResponseFor<CustomerCostListResponse> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: CustomerCostListParams,
@@ -270,7 +279,13 @@ interface CostService {
          * /customers/external_customer_id/{external_customer_id}/costs`, but is otherwise the same
          * as [CostService.listByExternalId].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun listByExternalId(
+            params: CustomerCostListByExternalIdParams
+        ): HttpResponseFor<CustomerCostListByExternalIdResponse> =
+            listByExternalId(params, RequestOptions.none())
+
+        /** @see [listByExternalId] */
         @MustBeClosed
         fun listByExternalId(
             params: CustomerCostListByExternalIdParams,

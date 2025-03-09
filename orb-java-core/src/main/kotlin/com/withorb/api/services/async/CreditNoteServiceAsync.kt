@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.async
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -22,7 +20,10 @@ interface CreditNoteServiceAsync {
     fun withRawResponse(): WithRawResponse
 
     /** This endpoint is used to create a single [`Credit Note`](/invoicing/credit-notes). */
-    @JvmOverloads
+    fun create(params: CreditNoteCreateParams): CompletableFuture<CreditNote> =
+        create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
         params: CreditNoteCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -33,17 +34,20 @@ interface CreditNoteServiceAsync {
      * or external_customer_id. The credit notes will be returned in reverse chronological order by
      * `creation_time`.
      */
-    @JvmOverloads
+    fun list(): CompletableFuture<CreditNoteListPageAsync> = list(CreditNoteListParams.none())
+
+    /** @see [list] */
     fun list(
         params: CreditNoteListParams = CreditNoteListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CreditNoteListPageAsync>
 
-    /**
-     * Get a paginated list of CreditNotes. Users can also filter by customer_id, subscription_id,
-     * or external_customer_id. The credit notes will be returned in reverse chronological order by
-     * `creation_time`.
-     */
+    /** @see [list] */
+    fun list(
+        params: CreditNoteListParams = CreditNoteListParams.none()
+    ): CompletableFuture<CreditNoteListPageAsync> = list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(requestOptions: RequestOptions): CompletableFuture<CreditNoteListPageAsync> =
         list(CreditNoteListParams.none(), requestOptions)
 
@@ -51,7 +55,10 @@ interface CreditNoteServiceAsync {
      * This endpoint is used to fetch a single [`Credit Note`](/invoicing/credit-notes) given an
      * identifier.
      */
-    @JvmOverloads
+    fun fetch(params: CreditNoteFetchParams): CompletableFuture<CreditNote> =
+        fetch(params, RequestOptions.none())
+
+    /** @see [fetch] */
     fun fetch(
         params: CreditNoteFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -67,7 +74,11 @@ interface CreditNoteServiceAsync {
          * Returns a raw HTTP response for `post /credit_notes`, but is otherwise the same as
          * [CreditNoteServiceAsync.create].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun create(params: CreditNoteCreateParams): CompletableFuture<HttpResponseFor<CreditNote>> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
         @MustBeClosed
         fun create(
             params: CreditNoteCreateParams,
@@ -78,17 +89,25 @@ interface CreditNoteServiceAsync {
          * Returns a raw HTTP response for `get /credit_notes`, but is otherwise the same as
          * [CreditNoteServiceAsync.list].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun list(): CompletableFuture<HttpResponseFor<CreditNoteListPageAsync>> =
+            list(CreditNoteListParams.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: CreditNoteListParams = CreditNoteListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<CreditNoteListPageAsync>>
 
-        /**
-         * Returns a raw HTTP response for `get /credit_notes`, but is otherwise the same as
-         * [CreditNoteServiceAsync.list].
-         */
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            params: CreditNoteListParams = CreditNoteListParams.none()
+        ): CompletableFuture<HttpResponseFor<CreditNoteListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             requestOptions: RequestOptions
@@ -99,7 +118,11 @@ interface CreditNoteServiceAsync {
          * Returns a raw HTTP response for `get /credit_notes/{credit_note_id}`, but is otherwise
          * the same as [CreditNoteServiceAsync.fetch].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun fetch(params: CreditNoteFetchParams): CompletableFuture<HttpResponseFor<CreditNote>> =
+            fetch(params, RequestOptions.none())
+
+        /** @see [fetch] */
         @MustBeClosed
         fun fetch(
             params: CreditNoteFetchParams,

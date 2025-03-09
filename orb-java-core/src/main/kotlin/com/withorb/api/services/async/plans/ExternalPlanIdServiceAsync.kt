@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.async.plans
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -25,7 +23,10 @@ interface ExternalPlanIdServiceAsync {
      *
      * Other fields on a customer are currently immutable.
      */
-    @JvmOverloads
+    fun update(params: PlanExternalPlanIdUpdateParams): CompletableFuture<Plan> =
+        update(params, RequestOptions.none())
+
+    /** @see [update] */
     fun update(
         params: PlanExternalPlanIdUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -48,7 +49,10 @@ interface ExternalPlanIdServiceAsync {
      * detailed explanation of price types can be found in the
      * [Price schema](/core-concepts#plan-and-price). "
      */
-    @JvmOverloads
+    fun fetch(params: PlanExternalPlanIdFetchParams): CompletableFuture<Plan> =
+        fetch(params, RequestOptions.none())
+
+    /** @see [fetch] */
     fun fetch(
         params: PlanExternalPlanIdFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -64,7 +68,12 @@ interface ExternalPlanIdServiceAsync {
          * Returns a raw HTTP response for `put /plans/external_plan_id/{external_plan_id}`, but is
          * otherwise the same as [ExternalPlanIdServiceAsync.update].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun update(
+            params: PlanExternalPlanIdUpdateParams
+        ): CompletableFuture<HttpResponseFor<Plan>> = update(params, RequestOptions.none())
+
+        /** @see [update] */
         @MustBeClosed
         fun update(
             params: PlanExternalPlanIdUpdateParams,
@@ -75,7 +84,11 @@ interface ExternalPlanIdServiceAsync {
          * Returns a raw HTTP response for `get /plans/external_plan_id/{external_plan_id}`, but is
          * otherwise the same as [ExternalPlanIdServiceAsync.fetch].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun fetch(params: PlanExternalPlanIdFetchParams): CompletableFuture<HttpResponseFor<Plan>> =
+            fetch(params, RequestOptions.none())
+
+        /** @see [fetch] */
         @MustBeClosed
         fun fetch(
             params: PlanExternalPlanIdFetchParams,

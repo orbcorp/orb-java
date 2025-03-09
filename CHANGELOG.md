@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.46.2 (2025-03-09)
+
+Full Changelog: [v0.46.1...v0.46.2](https://github.com/orbcorp/orb-java/compare/v0.46.1...v0.46.2)
+
+### Chores
+
+* **internal:** don't use `JvmOverloads` in interfaces ([19acfcf](https://github.com/orbcorp/orb-java/commit/19acfcfd105bacde55593bc1d6d7b1c9621fc996))
+* **internal:** reenable warnings as errors ([#327](https://github.com/orbcorp/orb-java/issues/327)) ([19acfcf](https://github.com/orbcorp/orb-java/commit/19acfcfd105bacde55593bc1d6d7b1c9621fc996))
+
+
+### Documentation
+
+* document `JsonValue` construction in readme ([#330](https://github.com/orbcorp/orb-java/issues/330)) ([9401e34](https://github.com/orbcorp/orb-java/commit/9401e349149fe4cbc37ee2174e8609cf60d107b0))
+* revise readme docs about nested params ([#329](https://github.com/orbcorp/orb-java/issues/329)) ([9a2a812](https://github.com/orbcorp/orb-java/commit/9a2a812cc9aa3b4ab369a28784e0afaaf37badb4))
+
 ## 0.46.1 (2025-03-07)
 
 Full Changelog: [v0.46.0...v0.46.1](https://github.com/orbcorp/orb-java/compare/v0.46.0...v0.46.1)

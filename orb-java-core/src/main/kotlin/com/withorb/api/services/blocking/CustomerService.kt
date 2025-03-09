@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -49,7 +47,9 @@ interface CustomerService {
      * - [Timezone localization](/essentials/timezones) can be configured on a per-customer basis by
      *   setting the `timezone` parameter
      */
-    @JvmOverloads
+    fun create(params: CustomerCreateParams): Customer = create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
         params: CustomerCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -61,7 +61,9 @@ interface CustomerService {
      * `billing_address`, and `additional_emails` of an existing customer. Other fields on a
      * customer are currently immutable.
      */
-    @JvmOverloads
+    fun update(params: CustomerUpdateParams): Customer = update(params, RequestOptions.none())
+
+    /** @see [update] */
     fun update(
         params: CustomerUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -74,19 +76,19 @@ interface CustomerService {
      *
      * See [Customer](/core-concepts##customer) for an overview of the customer model.
      */
-    @JvmOverloads
+    fun list(): CustomerListPage = list(CustomerListParams.none())
+
+    /** @see [list] */
     fun list(
         params: CustomerListParams = CustomerListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerListPage
 
-    /**
-     * This endpoint returns a list of all customers for an account. The list of customers is
-     * ordered starting from the most recently created customer. This endpoint follows Orb's
-     * [standardized pagination format](/api-reference/pagination).
-     *
-     * See [Customer](/core-concepts##customer) for an overview of the customer model.
-     */
+    /** @see [list] */
+    fun list(params: CustomerListParams = CustomerListParams.none()): CustomerListPage =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(requestOptions: RequestOptions): CustomerListPage =
         list(CustomerListParams.none(), requestOptions)
 
@@ -105,7 +107,9 @@ interface CustomerService {
      *
      * On successful processing, this returns an empty dictionary (`{}`) in the API.
      */
-    @JvmOverloads
+    fun delete(params: CustomerDeleteParams) = delete(params, RequestOptions.none())
+
+    /** @see [delete] */
     fun delete(params: CustomerDeleteParams, requestOptions: RequestOptions = RequestOptions.none())
 
     /**
@@ -115,7 +119,9 @@ interface CustomerService {
      * See the [Customer resource](/core-concepts#customer) for a full discussion of the Customer
      * model.
      */
-    @JvmOverloads
+    fun fetch(params: CustomerFetchParams): Customer = fetch(params, RequestOptions.none())
+
+    /** @see [fetch] */
     fun fetch(
         params: CustomerFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -128,7 +134,10 @@ interface CustomerService {
      * Note that the resource and semantics of this endpoint exactly mirror
      * [Get Customer](fetch-customer).
      */
-    @JvmOverloads
+    fun fetchByExternalId(params: CustomerFetchByExternalIdParams): Customer =
+        fetchByExternalId(params, RequestOptions.none())
+
+    /** @see [fetchByExternalId] */
     fun fetchByExternalId(
         params: CustomerFetchByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -142,7 +151,10 @@ interface CustomerService {
      *
      * **Note**: This functionality is currently only available for Stripe.
      */
-    @JvmOverloads
+    fun syncPaymentMethodsFromGateway(params: CustomerSyncPaymentMethodsFromGatewayParams) =
+        syncPaymentMethodsFromGateway(params, RequestOptions.none())
+
+    /** @see [syncPaymentMethodsFromGateway] */
     fun syncPaymentMethodsFromGateway(
         params: CustomerSyncPaymentMethodsFromGatewayParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -156,7 +168,11 @@ interface CustomerService {
      *
      * **Note**: This functionality is currently only available for Stripe.
      */
-    @JvmOverloads
+    fun syncPaymentMethodsFromGatewayByExternalCustomerId(
+        params: CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams
+    ) = syncPaymentMethodsFromGatewayByExternalCustomerId(params, RequestOptions.none())
+
+    /** @see [syncPaymentMethodsFromGatewayByExternalCustomerId] */
     fun syncPaymentMethodsFromGatewayByExternalCustomerId(
         params: CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -167,7 +183,10 @@ interface CustomerService {
      * [Customer ID Aliases](/events-and-metrics/customer-aliases)). Note that the resource and
      * semantics of this endpoint exactly mirror [Update Customer](update-customer).
      */
-    @JvmOverloads
+    fun updateByExternalId(params: CustomerUpdateByExternalIdParams): Customer =
+        updateByExternalId(params, RequestOptions.none())
+
+    /** @see [updateByExternalId] */
     fun updateByExternalId(
         params: CustomerUpdateByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -186,7 +205,11 @@ interface CustomerService {
          * Returns a raw HTTP response for `post /customers`, but is otherwise the same as
          * [CustomerService.create].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun create(params: CustomerCreateParams): HttpResponseFor<Customer> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
         @MustBeClosed
         fun create(
             params: CustomerCreateParams,
@@ -197,7 +220,11 @@ interface CustomerService {
          * Returns a raw HTTP response for `put /customers/{customer_id}`, but is otherwise the same
          * as [CustomerService.update].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun update(params: CustomerUpdateParams): HttpResponseFor<Customer> =
+            update(params, RequestOptions.none())
+
+        /** @see [update] */
         @MustBeClosed
         fun update(
             params: CustomerUpdateParams,
@@ -208,17 +235,23 @@ interface CustomerService {
          * Returns a raw HTTP response for `get /customers`, but is otherwise the same as
          * [CustomerService.list].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun list(): HttpResponseFor<CustomerListPage> = list(CustomerListParams.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: CustomerListParams = CustomerListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CustomerListPage>
 
-        /**
-         * Returns a raw HTTP response for `get /customers`, but is otherwise the same as
-         * [CustomerService.list].
-         */
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            params: CustomerListParams = CustomerListParams.none()
+        ): HttpResponseFor<CustomerListPage> = list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<CustomerListPage> =
             list(CustomerListParams.none(), requestOptions)
@@ -227,7 +260,11 @@ interface CustomerService {
          * Returns a raw HTTP response for `delete /customers/{customer_id}`, but is otherwise the
          * same as [CustomerService.delete].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun delete(params: CustomerDeleteParams): HttpResponse =
+            delete(params, RequestOptions.none())
+
+        /** @see [delete] */
         @MustBeClosed
         fun delete(
             params: CustomerDeleteParams,
@@ -238,7 +275,11 @@ interface CustomerService {
          * Returns a raw HTTP response for `get /customers/{customer_id}`, but is otherwise the same
          * as [CustomerService.fetch].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun fetch(params: CustomerFetchParams): HttpResponseFor<Customer> =
+            fetch(params, RequestOptions.none())
+
+        /** @see [fetch] */
         @MustBeClosed
         fun fetch(
             params: CustomerFetchParams,
@@ -250,7 +291,11 @@ interface CustomerService {
          * /customers/external_customer_id/{external_customer_id}`, but is otherwise the same as
          * [CustomerService.fetchByExternalId].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun fetchByExternalId(params: CustomerFetchByExternalIdParams): HttpResponseFor<Customer> =
+            fetchByExternalId(params, RequestOptions.none())
+
+        /** @see [fetchByExternalId] */
         @MustBeClosed
         fun fetchByExternalId(
             params: CustomerFetchByExternalIdParams,
@@ -262,7 +307,12 @@ interface CustomerService {
          * /customers/external_customer_id/{external_customer_id}/sync_payment_methods_from_gateway`,
          * but is otherwise the same as [CustomerService.syncPaymentMethodsFromGateway].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun syncPaymentMethodsFromGateway(
+            params: CustomerSyncPaymentMethodsFromGatewayParams
+        ): HttpResponse = syncPaymentMethodsFromGateway(params, RequestOptions.none())
+
+        /** @see [syncPaymentMethodsFromGateway] */
         @MustBeClosed
         fun syncPaymentMethodsFromGateway(
             params: CustomerSyncPaymentMethodsFromGatewayParams,
@@ -274,7 +324,13 @@ interface CustomerService {
          * /customers/{customer_id}/sync_payment_methods_from_gateway`, but is otherwise the same as
          * [CustomerService.syncPaymentMethodsFromGatewayByExternalCustomerId].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun syncPaymentMethodsFromGatewayByExternalCustomerId(
+            params: CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams
+        ): HttpResponse =
+            syncPaymentMethodsFromGatewayByExternalCustomerId(params, RequestOptions.none())
+
+        /** @see [syncPaymentMethodsFromGatewayByExternalCustomerId] */
         @MustBeClosed
         fun syncPaymentMethodsFromGatewayByExternalCustomerId(
             params: CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams,
@@ -286,7 +342,12 @@ interface CustomerService {
          * /customers/external_customer_id/{external_customer_id}`, but is otherwise the same as
          * [CustomerService.updateByExternalId].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun updateByExternalId(
+            params: CustomerUpdateByExternalIdParams
+        ): HttpResponseFor<Customer> = updateByExternalId(params, RequestOptions.none())
+
+        /** @see [updateByExternalId] */
         @MustBeClosed
         fun updateByExternalId(
             params: CustomerUpdateByExternalIdParams,
