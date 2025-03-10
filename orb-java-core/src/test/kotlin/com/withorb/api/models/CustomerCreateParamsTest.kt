@@ -26,7 +26,7 @@ class CustomerCreateParamsTest {
                     .excluded(true)
                     .build()
             )
-            .addAdditionalEmail("string")
+            .addAdditionalEmail("dev@stainless.com")
             .autoCollection(true)
             .billingAddress(
                 CustomerCreateParams.BillingAddress.builder()
@@ -106,7 +106,7 @@ class CustomerCreateParamsTest {
                         .excluded(true)
                         .build()
                 )
-                .addAdditionalEmail("string")
+                .addAdditionalEmail("dev@stainless.com")
                 .autoCollection(true)
                 .billingAddress(
                     CustomerCreateParams.BillingAddress.builder()
@@ -186,7 +186,7 @@ class CustomerCreateParamsTest {
                     .excluded(true)
                     .build()
             )
-        assertThat(body.additionalEmails()).contains(listOf("string"))
+        assertThat(body.additionalEmails()).contains(listOf("dev@stainless.com"))
         assertThat(body.autoCollection()).contains(true)
         assertThat(body.billingAddress())
             .contains(
