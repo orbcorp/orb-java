@@ -14,8 +14,10 @@ import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.core.http.parseable
 import com.withorb.api.core.prepareAsync
 import com.withorb.api.errors.OrbError
+import com.withorb.api.models.CustomerCreditListByExternalIdPage
 import com.withorb.api.models.CustomerCreditListByExternalIdPageAsync
 import com.withorb.api.models.CustomerCreditListByExternalIdParams
+import com.withorb.api.models.CustomerCreditListPage
 import com.withorb.api.models.CustomerCreditListPageAsync
 import com.withorb.api.models.CustomerCreditListParams
 import com.withorb.api.services.async.customers.credits.LedgerServiceAsync
@@ -24,12 +26,12 @@ import com.withorb.api.services.async.customers.credits.TopUpServiceAsync
 import com.withorb.api.services.async.customers.credits.TopUpServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 
-class CreditServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
-    CreditServiceAsync {
+class CreditServiceAsyncImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: CreditServiceAsync.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : CreditServiceAsync {
+
+    private val withRawResponse: CreditServiceAsync.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     private val ledger: LedgerServiceAsync by lazy { LedgerServiceAsyncImpl(clientOptions) }
 
@@ -41,115 +43,81 @@ class CreditServiceAsyncImpl internal constructor(private val clientOptions: Cli
 
     override fun topUps(): TopUpServiceAsync = topUps
 
-    override fun list(
-        params: CustomerCreditListParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<CustomerCreditListPageAsync> =
+    override fun list(params: CustomerCreditListParams, requestOptions: RequestOptions): CompletableFuture<CustomerCreditListPageAsync> =
         // get /customers/{customer_id}/credits
         withRawResponse().list(params, requestOptions).thenApply { it.parse() }
 
-    override fun listByExternalId(
-        params: CustomerCreditListByExternalIdParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<CustomerCreditListByExternalIdPageAsync> =
+    override fun listByExternalId(params: CustomerCreditListByExternalIdParams, requestOptions: RequestOptions): CompletableFuture<CustomerCreditListByExternalIdPageAsync> =
         // get /customers/external_customer_id/{external_customer_id}/credits
         withRawResponse().listByExternalId(params, requestOptions).thenApply { it.parse() }
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        CreditServiceAsync.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
+
+    ) : CreditServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
-        private val ledger: LedgerServiceAsync.WithRawResponse by lazy {
-            LedgerServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+        private val ledger: LedgerServiceAsync.WithRawResponse by lazy { LedgerServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
 
-        private val topUps: TopUpServiceAsync.WithRawResponse by lazy {
-            TopUpServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+        private val topUps: TopUpServiceAsync.WithRawResponse by lazy { TopUpServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
 
         override fun ledger(): LedgerServiceAsync.WithRawResponse = ledger
 
         override fun topUps(): TopUpServiceAsync.WithRawResponse = topUps
 
-        private val listHandler: Handler<CustomerCreditListPageAsync.Response> =
-            jsonHandler<CustomerCreditListPageAsync.Response>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val listHandler: Handler<CustomerCreditListPageAsync.Response> = jsonHandler<CustomerCreditListPageAsync.Response>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun list(
-            params: CustomerCreditListParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<CustomerCreditListPageAsync>> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .addPathSegments("customers", params.getPathParam(0), "credits")
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    response.parseable {
-                        response
-                            .use { listHandler.handle(it) }
-                            .also {
-                                if (requestOptions.responseValidation!!) {
-                                    it.validate()
-                                }
-                            }
-                            .let {
-                                CustomerCreditListPageAsync.of(
-                                    CreditServiceAsyncImpl(clientOptions),
-                                    params,
-                                    it,
-                                )
-                            }
-                    }
-                }
+        override fun list(params: CustomerCreditListParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<CustomerCreditListPageAsync>> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.GET)
+            .addPathSegments("customers", params.getPathParam(0), "credits")
+            .build()
+            .prepareAsync(clientOptions, params)
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
+            it, requestOptions
+          ) }.thenApply { response -> response.parseable {
+              response.use {
+                  listHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+              .let {
+                  CustomerCreditListPageAsync.of(CreditServiceAsyncImpl(clientOptions), params, it)
+              }
+          } }
         }
 
-        private val listByExternalIdHandler:
-            Handler<CustomerCreditListByExternalIdPageAsync.Response> =
-            jsonHandler<CustomerCreditListByExternalIdPageAsync.Response>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val listByExternalIdHandler: Handler<CustomerCreditListByExternalIdPageAsync.Response> = jsonHandler<CustomerCreditListByExternalIdPageAsync.Response>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun listByExternalId(
-            params: CustomerCreditListByExternalIdParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<CustomerCreditListByExternalIdPageAsync>> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .addPathSegments(
-                        "customers",
-                        "external_customer_id",
-                        params.getPathParam(0),
-                        "credits",
-                    )
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    response.parseable {
-                        response
-                            .use { listByExternalIdHandler.handle(it) }
-                            .also {
-                                if (requestOptions.responseValidation!!) {
-                                    it.validate()
-                                }
-                            }
-                            .let {
-                                CustomerCreditListByExternalIdPageAsync.of(
-                                    CreditServiceAsyncImpl(clientOptions),
-                                    params,
-                                    it,
-                                )
-                            }
-                    }
-                }
+        override fun listByExternalId(params: CustomerCreditListByExternalIdParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<CustomerCreditListByExternalIdPageAsync>> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.GET)
+            .addPathSegments("customers", "external_customer_id", params.getPathParam(0), "credits")
+            .build()
+            .prepareAsync(clientOptions, params)
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
+            it, requestOptions
+          ) }.thenApply { response -> response.parseable {
+              response.use {
+                  listByExternalIdHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+              .let {
+                  CustomerCreditListByExternalIdPageAsync.of(CreditServiceAsyncImpl(clientOptions), params, it)
+              }
+          } }
         }
     }
 }

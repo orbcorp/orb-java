@@ -12,29 +12,28 @@ import java.util.concurrent.CompletableFuture
 interface SubscriptionServiceAsync {
 
     /**
-     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     * Returns a view of this service that provides access to raw HTTP responses for
+     * each method.
      */
     fun withRawResponse(): WithRawResponse
 
     /**
-     * This endpoint returns a list of all subscriptions that have redeemed a given coupon as a
-     * [paginated](/api-reference/pagination) list, ordered starting from the most recently created
-     * subscription. For a full discussion of the subscription resource, see
-     * [Subscription](/core-concepts#subscription).
+     * This endpoint returns a list of all subscriptions that have redeemed a given
+     * coupon as a [paginated](/api-reference/pagination) list, ordered starting from
+     * the most recently created subscription. For a full discussion of the
+     * subscription resource, see [Subscription](/core-concepts#subscription).
      */
-    fun list(
-        params: CouponSubscriptionListParams
-    ): CompletableFuture<CouponSubscriptionListPageAsync> = list(params, RequestOptions.none())
+    fun list(params: CouponSubscriptionListParams): CompletableFuture<CouponSubscriptionListPageAsync> =
+        list(
+          params, RequestOptions.none()
+        )
 
     /** @see [list] */
-    fun list(
-        params: CouponSubscriptionListParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<CouponSubscriptionListPageAsync>
+    fun list(params: CouponSubscriptionListParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<CouponSubscriptionListPageAsync>
 
     /**
-     * A view of [SubscriptionServiceAsync] that provides access to raw HTTP responses for each
-     * method.
+     * A view of [SubscriptionServiceAsync] that provides access to raw HTTP responses
+     * for each method.
      */
     interface WithRawResponse {
 
@@ -43,16 +42,13 @@ interface SubscriptionServiceAsync {
          * otherwise the same as [SubscriptionServiceAsync.list].
          */
         @MustBeClosed
-        fun list(
-            params: CouponSubscriptionListParams
-        ): CompletableFuture<HttpResponseFor<CouponSubscriptionListPageAsync>> =
-            list(params, RequestOptions.none())
+        fun list(params: CouponSubscriptionListParams): CompletableFuture<HttpResponseFor<CouponSubscriptionListPageAsync>> =
+            list(
+              params, RequestOptions.none()
+            )
 
         /** @see [list] */
         @MustBeClosed
-        fun list(
-            params: CouponSubscriptionListParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<CouponSubscriptionListPageAsync>>
+        fun list(params: CouponSubscriptionListParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<HttpResponseFor<CouponSubscriptionListPageAsync>>
     }
 }

@@ -18,54 +18,48 @@ import com.withorb.api.models.EventVolumeListParams
 import com.withorb.api.models.EventVolumes
 import java.util.concurrent.CompletableFuture
 
-class VolumeServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
-    VolumeServiceAsync {
+class VolumeServiceAsyncImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: VolumeServiceAsync.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : VolumeServiceAsync {
+
+    private val withRawResponse: VolumeServiceAsync.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     override fun withRawResponse(): VolumeServiceAsync.WithRawResponse = withRawResponse
 
-    override fun list(
-        params: EventVolumeListParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<EventVolumes> =
+    override fun list(params: EventVolumeListParams, requestOptions: RequestOptions): CompletableFuture<EventVolumes> =
         // get /events/volume
         withRawResponse().list(params, requestOptions).thenApply { it.parse() }
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        VolumeServiceAsync.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
+
+    ) : VolumeServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
-        private val listHandler: Handler<EventVolumes> =
-            jsonHandler<EventVolumes>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val listHandler: Handler<EventVolumes> = jsonHandler<EventVolumes>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun list(
-            params: EventVolumeListParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<EventVolumes>> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .addPathSegments("events", "volume")
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    response.parseable {
-                        response
-                            .use { listHandler.handle(it) }
-                            .also {
-                                if (requestOptions.responseValidation!!) {
-                                    it.validate()
-                                }
-                            }
-                    }
-                }
+        override fun list(params: EventVolumeListParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<EventVolumes>> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.GET)
+            .addPathSegments("events", "volume")
+            .build()
+            .prepareAsync(clientOptions, params)
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
+            it, requestOptions
+          ) }.thenApply { response -> response.parseable {
+              response.use {
+                  listHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          } }
         }
     }
 }
