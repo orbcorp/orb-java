@@ -18,48 +18,55 @@ import com.withorb.api.models.TopLevelPingParams
 import com.withorb.api.models.TopLevelPingResponse
 import java.util.concurrent.CompletableFuture
 
-class TopLevelServiceAsyncImpl internal constructor(
-    private val clientOptions: ClientOptions,
+class TopLevelServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    TopLevelServiceAsync {
 
-) : TopLevelServiceAsync {
-
-    private val withRawResponse: TopLevelServiceAsync.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
+    private val withRawResponse: TopLevelServiceAsync.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
     override fun withRawResponse(): TopLevelServiceAsync.WithRawResponse = withRawResponse
 
-    override fun ping(params: TopLevelPingParams, requestOptions: RequestOptions): CompletableFuture<TopLevelPingResponse> =
+    override fun ping(
+        params: TopLevelPingParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<TopLevelPingResponse> =
         // get /ping
         withRawResponse().ping(params, requestOptions).thenApply { it.parse() }
 
-    class WithRawResponseImpl internal constructor(
-        private val clientOptions: ClientOptions,
-
-    ) : TopLevelServiceAsync.WithRawResponse {
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        TopLevelServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
-        private val pingHandler: Handler<TopLevelPingResponse> = jsonHandler<TopLevelPingResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val pingHandler: Handler<TopLevelPingResponse> =
+            jsonHandler<TopLevelPingResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
-        override fun ping(params: TopLevelPingParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<TopLevelPingResponse>> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .addPathSegments("ping")
-            .build()
-            .prepareAsync(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
-            it, requestOptions
-          ) }.thenApply { response -> response.parseable {
-              response.use {
-                  pingHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          } }
+        override fun ping(
+            params: TopLevelPingParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<TopLevelPingResponse>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("ping")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { pingHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
         }
     }
 }

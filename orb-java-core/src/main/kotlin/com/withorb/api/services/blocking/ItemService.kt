@@ -15,60 +15,52 @@ import com.withorb.api.models.ItemUpdateParams
 interface ItemService {
 
     /**
-     * Returns a view of this service that provides access to raw HTTP responses for
-     * each method.
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
 
     /** This endpoint is used to create an [Item](/core-concepts#item). */
-    fun create(params: ItemCreateParams): Item =
-        create(
-          params, RequestOptions.none()
-        )
+    fun create(params: ItemCreateParams): Item = create(params, RequestOptions.none())
 
     /** @see [create] */
-    fun create(params: ItemCreateParams, requestOptions: RequestOptions = RequestOptions.none()): Item
+    fun create(
+        params: ItemCreateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Item
 
     /** This endpoint can be used to update properties on the Item. */
-    fun update(params: ItemUpdateParams): Item =
-        update(
-          params, RequestOptions.none()
-        )
+    fun update(params: ItemUpdateParams): Item = update(params, RequestOptions.none())
 
     /** @see [update] */
-    fun update(params: ItemUpdateParams, requestOptions: RequestOptions = RequestOptions.none()): Item
+    fun update(
+        params: ItemUpdateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Item
 
-    /**
-     * This endpoint returns a list of all Items, ordered in descending order by
-     * creation time.
-     */
+    /** This endpoint returns a list of all Items, ordered in descending order by creation time. */
     fun list(): ItemListPage = list(ItemListParams.none())
 
     /** @see [list] */
-    fun list(params: ItemListParams = ItemListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): ItemListPage
+    fun list(
+        params: ItemListParams = ItemListParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ItemListPage
 
     /** @see [list] */
     fun list(params: ItemListParams = ItemListParams.none()): ItemListPage =
-        list(
-          params, RequestOptions.none()
-        )
+        list(params, RequestOptions.none())
 
     /** @see [list] */
-    fun list(requestOptions: RequestOptions): ItemListPage = list(ItemListParams.none(), requestOptions)
+    fun list(requestOptions: RequestOptions): ItemListPage =
+        list(ItemListParams.none(), requestOptions)
 
     /** This endpoint returns an item identified by its item_id. */
-    fun fetch(params: ItemFetchParams): Item =
-        fetch(
-          params, RequestOptions.none()
-        )
+    fun fetch(params: ItemFetchParams): Item = fetch(params, RequestOptions.none())
 
     /** @see [fetch] */
     fun fetch(params: ItemFetchParams, requestOptions: RequestOptions = RequestOptions.none()): Item
 
-    /**
-     * A view of [ItemService] that provides access to raw HTTP responses for each
-     * method.
-     */
+    /** A view of [ItemService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
 
         /**
@@ -77,62 +69,66 @@ interface ItemService {
          */
         @MustBeClosed
         fun create(params: ItemCreateParams): HttpResponseFor<Item> =
-            create(
-              params, RequestOptions.none()
-            )
+            create(params, RequestOptions.none())
 
         /** @see [create] */
         @MustBeClosed
-        fun create(params: ItemCreateParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<Item>
+        fun create(
+            params: ItemCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Item>
 
         /**
-         * Returns a raw HTTP response for `put /items/{item_id}`, but is otherwise the
-         * same as [ItemService.update].
+         * Returns a raw HTTP response for `put /items/{item_id}`, but is otherwise the same as
+         * [ItemService.update].
          */
         @MustBeClosed
         fun update(params: ItemUpdateParams): HttpResponseFor<Item> =
-            update(
-              params, RequestOptions.none()
-            )
+            update(params, RequestOptions.none())
 
         /** @see [update] */
         @MustBeClosed
-        fun update(params: ItemUpdateParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<Item>
+        fun update(
+            params: ItemUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Item>
 
         /**
          * Returns a raw HTTP response for `get /items`, but is otherwise the same as
          * [ItemService.list].
          */
-        @MustBeClosed
-        fun list(): HttpResponseFor<ItemListPage> = list(ItemListParams.none())
+        @MustBeClosed fun list(): HttpResponseFor<ItemListPage> = list(ItemListParams.none())
 
         /** @see [list] */
         @MustBeClosed
-        fun list(params: ItemListParams = ItemListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<ItemListPage>
+        fun list(
+            params: ItemListParams = ItemListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ItemListPage>
 
         /** @see [list] */
         @MustBeClosed
         fun list(params: ItemListParams = ItemListParams.none()): HttpResponseFor<ItemListPage> =
-            list(
-              params, RequestOptions.none()
-            )
+            list(params, RequestOptions.none())
 
         /** @see [list] */
         @MustBeClosed
-        fun list(requestOptions: RequestOptions): HttpResponseFor<ItemListPage> = list(ItemListParams.none(), requestOptions)
+        fun list(requestOptions: RequestOptions): HttpResponseFor<ItemListPage> =
+            list(ItemListParams.none(), requestOptions)
 
         /**
-         * Returns a raw HTTP response for `get /items/{item_id}`, but is otherwise the
-         * same as [ItemService.fetch].
+         * Returns a raw HTTP response for `get /items/{item_id}`, but is otherwise the same as
+         * [ItemService.fetch].
          */
         @MustBeClosed
         fun fetch(params: ItemFetchParams): HttpResponseFor<Item> =
-            fetch(
-              params, RequestOptions.none()
-            )
+            fetch(params, RequestOptions.none())
 
         /** @see [fetch] */
         @MustBeClosed
-        fun fetch(params: ItemFetchParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<Item>
+        fun fetch(
+            params: ItemFetchParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Item>
     }
 }

@@ -20,76 +20,97 @@ import com.withorb.api.models.CustomerCostListParams
 import com.withorb.api.models.CustomerCostListResponse
 import java.util.concurrent.CompletableFuture
 
-class CostServiceAsyncImpl internal constructor(
-    private val clientOptions: ClientOptions,
+class CostServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    CostServiceAsync {
 
-) : CostServiceAsync {
-
-    private val withRawResponse: CostServiceAsync.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
+    private val withRawResponse: CostServiceAsync.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
     override fun withRawResponse(): CostServiceAsync.WithRawResponse = withRawResponse
 
-    override fun list(params: CustomerCostListParams, requestOptions: RequestOptions): CompletableFuture<CustomerCostListResponse> =
+    override fun list(
+        params: CustomerCostListParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<CustomerCostListResponse> =
         // get /customers/{customer_id}/costs
         withRawResponse().list(params, requestOptions).thenApply { it.parse() }
 
-    override fun listByExternalId(params: CustomerCostListByExternalIdParams, requestOptions: RequestOptions): CompletableFuture<CustomerCostListByExternalIdResponse> =
+    override fun listByExternalId(
+        params: CustomerCostListByExternalIdParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<CustomerCostListByExternalIdResponse> =
         // get /customers/external_customer_id/{external_customer_id}/costs
         withRawResponse().listByExternalId(params, requestOptions).thenApply { it.parse() }
 
-    class WithRawResponseImpl internal constructor(
-        private val clientOptions: ClientOptions,
-
-    ) : CostServiceAsync.WithRawResponse {
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        CostServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
-        private val listHandler: Handler<CustomerCostListResponse> = jsonHandler<CustomerCostListResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val listHandler: Handler<CustomerCostListResponse> =
+            jsonHandler<CustomerCostListResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
-        override fun list(params: CustomerCostListParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<CustomerCostListResponse>> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .addPathSegments("customers", params.getPathParam(0), "costs")
-            .build()
-            .prepareAsync(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
-            it, requestOptions
-          ) }.thenApply { response -> response.parseable {
-              response.use {
-                  listHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          } }
+        override fun list(
+            params: CustomerCostListParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<CustomerCostListResponse>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("customers", params.getPathParam(0), "costs")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { listHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
         }
 
-        private val listByExternalIdHandler: Handler<CustomerCostListByExternalIdResponse> = jsonHandler<CustomerCostListByExternalIdResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val listByExternalIdHandler: Handler<CustomerCostListByExternalIdResponse> =
+            jsonHandler<CustomerCostListByExternalIdResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
-        override fun listByExternalId(params: CustomerCostListByExternalIdParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<CustomerCostListByExternalIdResponse>> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .addPathSegments("customers", "external_customer_id", params.getPathParam(0), "costs")
-            .build()
-            .prepareAsync(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
-            it, requestOptions
-          ) }.thenApply { response -> response.parseable {
-              response.use {
-                  listByExternalIdHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          } }
+        override fun listByExternalId(
+            params: CustomerCostListByExternalIdParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<CustomerCostListByExternalIdResponse>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments(
+                        "customers",
+                        "external_customer_id",
+                        params.getPathParam(0),
+                        "costs",
+                    )
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { listByExternalIdHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
         }
     }
 }
