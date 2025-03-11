@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.48.0 (2025-03-11)
+
+Full Changelog: [v0.47.0...v0.48.0](https://github.com/orbcorp/orb-java/compare/v0.47.0...v0.48.0)
+
+### Features
+
+* **api:** api update ([#336](https://github.com/orbcorp/orb-java/issues/336)) ([328aa62](https://github.com/orbcorp/orb-java/commit/328aa621e91be9f5bbf078a6f068529f17da889a))
+
+
+### Chores
+
+* **internal:** codegen related update ([#333](https://github.com/orbcorp/orb-java/issues/333)) ([bd596c4](https://github.com/orbcorp/orb-java/commit/bd596c44a076d9806cf7661974f53f508a581d4f))
+* **internal:** codegen related update ([#335](https://github.com/orbcorp/orb-java/issues/335)) ([4784160](https://github.com/orbcorp/orb-java/commit/4784160c237cfe0dae76f40fae520473cb912d12))
+
 ## 0.47.0 (2025-03-10)
 
 Full Changelog: [v0.46.1...v0.47.0](https://github.com/orbcorp/orb-java/compare/v0.46.1...v0.47.0)
