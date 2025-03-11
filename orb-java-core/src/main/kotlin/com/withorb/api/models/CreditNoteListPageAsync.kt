@@ -13,23 +13,27 @@ import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
 import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
+import com.withorb.api.models
 import com.withorb.api.services.async.CreditNoteServiceAsync
 import java.util.Objects
 import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
+import kotlin.jvm.optionals.getOrNull
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
 
 /**
- * Get a paginated list of CreditNotes. Users can also filter by customer_id, subscription_id, or
- * external_customer_id. The credit notes will be returned in reverse chronological order by
- * `creation_time`.
+ * Get a paginated list of CreditNotes. Users can also filter by customer_id,
+ * subscription_id, or external_customer_id. The credit notes will be returned in
+ * reverse chronological order by `creation_time`.
  */
-class CreditNoteListPageAsync
-private constructor(
+class CreditNoteListPageAsync private constructor(
     private val creditNotesService: CreditNoteServiceAsync,
     private val params: CreditNoteListParams,
     private val response: Response,
+
 ) {
 
     fun response(): Response = response
@@ -39,43 +43,39 @@ private constructor(
     fun paginationMetadata(): PaginationMetadata = response().paginationMetadata()
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return /* spotless:off */ other is CreditNoteListPageAsync && creditNotesService == other.creditNotesService && params == other.params && response == other.response /* spotless:on */
+      return /* spotless:off */ other is CreditNoteListPageAsync && creditNotesService == other.creditNotesService && params == other.params && response == other.response /* spotless:on */
     }
 
     override fun hashCode(): Int = /* spotless:off */ Objects.hash(creditNotesService, params, response) /* spotless:on */
 
-    override fun toString() =
-        "CreditNoteListPageAsync{creditNotesService=$creditNotesService, params=$params, response=$response}"
+    override fun toString() = "CreditNoteListPageAsync{creditNotesService=$creditNotesService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean {
-        if (data().isEmpty()) {
-            return false
-        }
+      if (data().isEmpty()) {
+        return false;
+      }
 
-        return paginationMetadata().nextCursor().isPresent
+      return paginationMetadata().nextCursor().isPresent
     }
 
     fun getNextPageParams(): Optional<CreditNoteListParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
+      if (!hasNextPage()) {
+        return Optional.empty()
+      }
 
-        return Optional.of(
-            CreditNoteListParams.builder()
-                .from(params)
-                .apply { paginationMetadata().nextCursor().ifPresent { this.cursor(it) } }
-                .build()
-        )
+      return Optional.of(CreditNoteListParams.builder().from(params).apply {paginationMetadata().nextCursor().ifPresent{ this.cursor(it) } }.build())
     }
 
     fun getNextPage(): CompletableFuture<Optional<CreditNoteListPageAsync>> {
-        return getNextPageParams()
-            .map { creditNotesService.list(it).thenApply { Optional.of(it) } }
-            .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
+      return getNextPageParams().map {
+        creditNotesService.list(it).thenApply { Optional.of(it) }
+      }.orElseGet {
+          CompletableFuture.completedFuture(Optional.empty())
+      }
     }
 
     fun autoPager(): AutoPager = AutoPager(this)
@@ -83,35 +83,31 @@ private constructor(
     companion object {
 
         @JvmStatic
-        fun of(
-            creditNotesService: CreditNoteServiceAsync,
-            params: CreditNoteListParams,
-            response: Response,
-        ) = CreditNoteListPageAsync(creditNotesService, params, response)
+        fun of(creditNotesService: CreditNoteServiceAsync, params: CreditNoteListParams, response: Response) =
+            CreditNoteListPageAsync(
+              creditNotesService,
+              params,
+              response,
+            )
     }
 
     @NoAutoDetect
-    class Response
-    @JsonCreator
-    constructor(
+    class Response @JsonCreator constructor(
         @JsonProperty("data") private val data: JsonField<List<CreditNote>> = JsonMissing.of(),
-        @JsonProperty("pagination_metadata")
-        private val paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        @JsonProperty("pagination_metadata") private val paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of(),
+        @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
     ) {
 
         fun data(): List<CreditNote> = data.getNullable("data") ?: listOf()
 
-        fun paginationMetadata(): PaginationMetadata =
-            paginationMetadata.getRequired("pagination_metadata")
+        fun paginationMetadata(): PaginationMetadata = paginationMetadata.getRequired("pagination_metadata")
 
         @JsonProperty("data")
         fun _data(): Optional<JsonField<List<CreditNote>>> = Optional.ofNullable(data)
 
         @JsonProperty("pagination_metadata")
-        fun _paginationMetadata(): Optional<JsonField<PaginationMetadata>> =
-            Optional.ofNullable(paginationMetadata)
+        fun _paginationMetadata(): Optional<JsonField<PaginationMetadata>> = Optional.ofNullable(paginationMetadata)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -119,37 +115,39 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): Response = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): Response =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            data().map { it.validate() }
-            paginationMetadata().validate()
-            validated = true
-        }
+                data().map { it.validate() }
+                paginationMetadata().validate()
+                validated = true
+            }
 
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return /* spotless:off */ other is Response && data == other.data && paginationMetadata == other.paginationMetadata && additionalProperties == other.additionalProperties /* spotless:on */
+          return /* spotless:off */ other is Response && data == other.data && paginationMetadata == other.paginationMetadata && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         override fun hashCode(): Int = /* spotless:off */ Objects.hash(data, paginationMetadata, additionalProperties) /* spotless:on */
 
-        override fun toString() =
-            "Response{data=$data, paginationMetadata=$paginationMetadata, additionalProperties=$additionalProperties}"
+        override fun toString() = "Response{data=$data, paginationMetadata=$paginationMetadata, additionalProperties=$additionalProperties}"
 
         companion object {
 
             /**
-             * Returns a mutable builder for constructing an instance of [CreditNoteListPageAsync].
+             * Returns a mutable builder for constructing an instance of
+             * [CreditNoteListPageAsync].
              */
-            @JvmStatic fun builder() = Builder()
+            @JvmStatic
+            fun builder() = Builder()
         }
 
         class Builder {
@@ -159,54 +157,70 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(page: Response) = apply {
-                this.data = page.data
-                this.paginationMetadata = page.paginationMetadata
-                this.additionalProperties.putAll(page.additionalProperties)
-            }
+            internal fun from(page: Response) =
+                apply {
+                    this.data = page.data
+                    this.paginationMetadata = page.paginationMetadata
+                    this.additionalProperties.putAll(page.additionalProperties)
+                }
 
             fun data(data: List<CreditNote>) = data(JsonField.of(data))
 
             fun data(data: JsonField<List<CreditNote>>) = apply { this.data = data }
 
-            fun paginationMetadata(paginationMetadata: PaginationMetadata) =
-                paginationMetadata(JsonField.of(paginationMetadata))
+            fun paginationMetadata(paginationMetadata: PaginationMetadata) = paginationMetadata(JsonField.of(paginationMetadata))
 
-            fun paginationMetadata(paginationMetadata: JsonField<PaginationMetadata>) = apply {
-                this.paginationMetadata = paginationMetadata
-            }
+            fun paginationMetadata(paginationMetadata: JsonField<PaginationMetadata>) = apply { this.paginationMetadata = paginationMetadata }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
+            fun putAdditionalProperty(key: String, value: JsonValue) =
+                apply {
+                    this.additionalProperties.put(key, value)
+                }
 
-            fun build() = Response(data, paginationMetadata, additionalProperties.toImmutable())
+            fun build() =
+                Response(
+                  data,
+                  paginationMetadata,
+                  additionalProperties.toImmutable(),
+                )
         }
     }
 
-    class AutoPager(private val firstPage: CreditNoteListPageAsync) {
+    class AutoPager(
+        private val firstPage: CreditNoteListPageAsync,
+
+    ) {
 
         fun forEach(action: Predicate<CreditNote>, executor: Executor): CompletableFuture<Void> {
-            fun CompletableFuture<Optional<CreditNoteListPageAsync>>.forEach(
-                action: (CreditNote) -> Boolean,
-                executor: Executor,
-            ): CompletableFuture<Void> =
-                thenComposeAsync(
-                    { page ->
-                        page
-                            .filter { it.data().all(action) }
-                            .map { it.getNextPage().forEach(action, executor) }
-                            .orElseGet { CompletableFuture.completedFuture(null) }
-                    },
-                    executor,
-                )
-            return CompletableFuture.completedFuture(Optional.of(firstPage))
-                .forEach(action::test, executor)
+          fun CompletableFuture<Optional<CreditNoteListPageAsync>>.forEach(action: (CreditNote) -> Boolean, executor: Executor): CompletableFuture<Void> =
+              thenComposeAsync(
+                { page ->
+                    page
+                    .filter {
+                        it.data().all(action)
+                    }
+                    .map {
+                        it.getNextPage().forEach(action, executor)
+                    }
+                    .orElseGet {
+                        CompletableFuture.completedFuture(null)
+                    }
+                }, executor
+              )
+          return CompletableFuture.completedFuture(Optional.of(firstPage))
+          .forEach(
+            action::test, executor
+          )
         }
 
         fun toList(executor: Executor): CompletableFuture<List<CreditNote>> {
-            val values = mutableListOf<CreditNote>()
-            return forEach(values::add, executor).thenApply { values }
+          val values = mutableListOf<CreditNote>()
+          return forEach(
+            values::add, executor
+          )
+          .thenApply {
+              values
+          }
         }
     }
 }

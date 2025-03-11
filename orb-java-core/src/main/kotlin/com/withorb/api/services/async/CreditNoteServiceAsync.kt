@@ -15,118 +15,108 @@ import java.util.concurrent.CompletableFuture
 interface CreditNoteServiceAsync {
 
     /**
-     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     * Returns a view of this service that provides access to raw HTTP responses for
+     * each method.
      */
     fun withRawResponse(): WithRawResponse
 
-    /** This endpoint is used to create a single [`Credit Note`](/invoicing/credit-notes). */
+    /**
+     * This endpoint is used to create a single
+     * [`Credit Note`](/invoicing/credit-notes).
+     */
     fun create(params: CreditNoteCreateParams): CompletableFuture<CreditNote> =
-        create(params, RequestOptions.none())
+        create(
+          params, RequestOptions.none()
+        )
 
     /** @see [create] */
-    fun create(
-        params: CreditNoteCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<CreditNote>
+    fun create(params: CreditNoteCreateParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<CreditNote>
 
     /**
-     * Get a paginated list of CreditNotes. Users can also filter by customer_id, subscription_id,
-     * or external_customer_id. The credit notes will be returned in reverse chronological order by
-     * `creation_time`.
+     * Get a paginated list of CreditNotes. Users can also filter by customer_id,
+     * subscription_id, or external_customer_id. The credit notes will be returned in
+     * reverse chronological order by `creation_time`.
      */
     fun list(): CompletableFuture<CreditNoteListPageAsync> = list(CreditNoteListParams.none())
 
     /** @see [list] */
-    fun list(
-        params: CreditNoteListParams = CreditNoteListParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<CreditNoteListPageAsync>
+    fun list(params: CreditNoteListParams = CreditNoteListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<CreditNoteListPageAsync>
 
     /** @see [list] */
-    fun list(
-        params: CreditNoteListParams = CreditNoteListParams.none()
-    ): CompletableFuture<CreditNoteListPageAsync> = list(params, RequestOptions.none())
+    fun list(params: CreditNoteListParams = CreditNoteListParams.none()): CompletableFuture<CreditNoteListPageAsync> =
+        list(
+          params, RequestOptions.none()
+        )
 
     /** @see [list] */
-    fun list(requestOptions: RequestOptions): CompletableFuture<CreditNoteListPageAsync> =
-        list(CreditNoteListParams.none(), requestOptions)
+    fun list(requestOptions: RequestOptions): CompletableFuture<CreditNoteListPageAsync> = list(CreditNoteListParams.none(), requestOptions)
 
     /**
-     * This endpoint is used to fetch a single [`Credit Note`](/invoicing/credit-notes) given an
-     * identifier.
+     * This endpoint is used to fetch a single [`Credit Note`](/invoicing/credit-notes)
+     * given an identifier.
      */
     fun fetch(params: CreditNoteFetchParams): CompletableFuture<CreditNote> =
-        fetch(params, RequestOptions.none())
+        fetch(
+          params, RequestOptions.none()
+        )
 
     /** @see [fetch] */
-    fun fetch(
-        params: CreditNoteFetchParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<CreditNote>
+    fun fetch(params: CreditNoteFetchParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<CreditNote>
 
     /**
-     * A view of [CreditNoteServiceAsync] that provides access to raw HTTP responses for each
-     * method.
+     * A view of [CreditNoteServiceAsync] that provides access to raw HTTP responses
+     * for each method.
      */
     interface WithRawResponse {
 
         /**
-         * Returns a raw HTTP response for `post /credit_notes`, but is otherwise the same as
-         * [CreditNoteServiceAsync.create].
+         * Returns a raw HTTP response for `post /credit_notes`, but is otherwise the same
+         * as [CreditNoteServiceAsync.create].
          */
         @MustBeClosed
         fun create(params: CreditNoteCreateParams): CompletableFuture<HttpResponseFor<CreditNote>> =
-            create(params, RequestOptions.none())
+            create(
+              params, RequestOptions.none()
+            )
 
         /** @see [create] */
         @MustBeClosed
-        fun create(
-            params: CreditNoteCreateParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<CreditNote>>
+        fun create(params: CreditNoteCreateParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<HttpResponseFor<CreditNote>>
 
         /**
-         * Returns a raw HTTP response for `get /credit_notes`, but is otherwise the same as
-         * [CreditNoteServiceAsync.list].
+         * Returns a raw HTTP response for `get /credit_notes`, but is otherwise the same
+         * as [CreditNoteServiceAsync.list].
          */
         @MustBeClosed
-        fun list(): CompletableFuture<HttpResponseFor<CreditNoteListPageAsync>> =
-            list(CreditNoteListParams.none())
+        fun list(): CompletableFuture<HttpResponseFor<CreditNoteListPageAsync>> = list(CreditNoteListParams.none())
 
         /** @see [list] */
         @MustBeClosed
-        fun list(
-            params: CreditNoteListParams = CreditNoteListParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<CreditNoteListPageAsync>>
+        fun list(params: CreditNoteListParams = CreditNoteListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<HttpResponseFor<CreditNoteListPageAsync>>
 
         /** @see [list] */
         @MustBeClosed
-        fun list(
-            params: CreditNoteListParams = CreditNoteListParams.none()
-        ): CompletableFuture<HttpResponseFor<CreditNoteListPageAsync>> =
-            list(params, RequestOptions.none())
+        fun list(params: CreditNoteListParams = CreditNoteListParams.none()): CompletableFuture<HttpResponseFor<CreditNoteListPageAsync>> =
+            list(
+              params, RequestOptions.none()
+            )
 
         /** @see [list] */
         @MustBeClosed
-        fun list(
-            requestOptions: RequestOptions
-        ): CompletableFuture<HttpResponseFor<CreditNoteListPageAsync>> =
-            list(CreditNoteListParams.none(), requestOptions)
+        fun list(requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<CreditNoteListPageAsync>> = list(CreditNoteListParams.none(), requestOptions)
 
         /**
-         * Returns a raw HTTP response for `get /credit_notes/{credit_note_id}`, but is otherwise
-         * the same as [CreditNoteServiceAsync.fetch].
+         * Returns a raw HTTP response for `get /credit_notes/{credit_note_id}`, but is
+         * otherwise the same as [CreditNoteServiceAsync.fetch].
          */
         @MustBeClosed
         fun fetch(params: CreditNoteFetchParams): CompletableFuture<HttpResponseFor<CreditNote>> =
-            fetch(params, RequestOptions.none())
+            fetch(
+              params, RequestOptions.none()
+            )
 
         /** @see [fetch] */
         @MustBeClosed
-        fun fetch(
-            params: CreditNoteFetchParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<CreditNote>>
+        fun fetch(params: CreditNoteFetchParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<HttpResponseFor<CreditNote>>
     }
 }
