@@ -13,17 +13,19 @@ class SubscriptionServiceAsyncTest {
 
     @Test
     fun list() {
-      val client = OrbOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .apiKey("My API Key")
-          .build()
-      val subscriptionServiceAsync = client.coupons().subscriptions()
+        val client =
+            OrbOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val subscriptionServiceAsync = client.coupons().subscriptions()
 
-      val pageFuture = subscriptionServiceAsync.list(CouponSubscriptionListParams.builder()
-          .couponId("coupon_id")
-          .build())
+        val pageFuture =
+            subscriptionServiceAsync.list(
+                CouponSubscriptionListParams.builder().couponId("coupon_id").build()
+            )
 
-      val page = pageFuture.get()
-      page.response().validate()
+        val page = pageFuture.get()
+        page.response().validate()
     }
 }

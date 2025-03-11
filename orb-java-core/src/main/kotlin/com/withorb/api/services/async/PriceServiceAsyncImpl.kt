@@ -20,7 +20,6 @@ import com.withorb.api.models.PriceCreateParams
 import com.withorb.api.models.PriceEvaluateParams
 import com.withorb.api.models.PriceEvaluateResponse
 import com.withorb.api.models.PriceFetchParams
-import com.withorb.api.models.PriceListPage
 import com.withorb.api.models.PriceListPageAsync
 import com.withorb.api.models.PriceListParams
 import com.withorb.api.models.PriceUpdateParams
@@ -28,174 +27,223 @@ import com.withorb.api.services.async.prices.ExternalPriceIdServiceAsync
 import com.withorb.api.services.async.prices.ExternalPriceIdServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 
-class PriceServiceAsyncImpl internal constructor(
-    private val clientOptions: ClientOptions,
+class PriceServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    PriceServiceAsync {
 
-) : PriceServiceAsync {
+    private val withRawResponse: PriceServiceAsync.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
-    private val withRawResponse: PriceServiceAsync.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
-
-    private val externalPriceId: ExternalPriceIdServiceAsync by lazy { ExternalPriceIdServiceAsyncImpl(clientOptions) }
+    private val externalPriceId: ExternalPriceIdServiceAsync by lazy {
+        ExternalPriceIdServiceAsyncImpl(clientOptions)
+    }
 
     override fun withRawResponse(): PriceServiceAsync.WithRawResponse = withRawResponse
 
     override fun externalPriceId(): ExternalPriceIdServiceAsync = externalPriceId
 
-    override fun create(params: PriceCreateParams, requestOptions: RequestOptions): CompletableFuture<Price> =
+    override fun create(
+        params: PriceCreateParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Price> =
         // post /prices
         withRawResponse().create(params, requestOptions).thenApply { it.parse() }
 
-    override fun update(params: PriceUpdateParams, requestOptions: RequestOptions): CompletableFuture<Price> =
+    override fun update(
+        params: PriceUpdateParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Price> =
         // put /prices/{price_id}
         withRawResponse().update(params, requestOptions).thenApply { it.parse() }
 
-    override fun list(params: PriceListParams, requestOptions: RequestOptions): CompletableFuture<PriceListPageAsync> =
+    override fun list(
+        params: PriceListParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<PriceListPageAsync> =
         // get /prices
         withRawResponse().list(params, requestOptions).thenApply { it.parse() }
 
-    override fun evaluate(params: PriceEvaluateParams, requestOptions: RequestOptions): CompletableFuture<PriceEvaluateResponse> =
+    override fun evaluate(
+        params: PriceEvaluateParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<PriceEvaluateResponse> =
         // post /prices/{price_id}/evaluate
         withRawResponse().evaluate(params, requestOptions).thenApply { it.parse() }
 
-    override fun fetch(params: PriceFetchParams, requestOptions: RequestOptions): CompletableFuture<Price> =
+    override fun fetch(
+        params: PriceFetchParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Price> =
         // get /prices/{price_id}
         withRawResponse().fetch(params, requestOptions).thenApply { it.parse() }
 
-    class WithRawResponseImpl internal constructor(
-        private val clientOptions: ClientOptions,
-
-    ) : PriceServiceAsync.WithRawResponse {
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        PriceServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
-        private val externalPriceId: ExternalPriceIdServiceAsync.WithRawResponse by lazy { ExternalPriceIdServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
-
-        override fun externalPriceId(): ExternalPriceIdServiceAsync.WithRawResponse = externalPriceId
-
-        private val createHandler: Handler<Price> = jsonHandler<Price>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
-
-        override fun create(params: PriceCreateParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<Price>> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.POST)
-            .addPathSegments("prices")
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepareAsync(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
-            it, requestOptions
-          ) }.thenApply { response -> response.parseable {
-              response.use {
-                  createHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          } }
+        private val externalPriceId: ExternalPriceIdServiceAsync.WithRawResponse by lazy {
+            ExternalPriceIdServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
-        private val updateHandler: Handler<Price> = jsonHandler<Price>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        override fun externalPriceId(): ExternalPriceIdServiceAsync.WithRawResponse =
+            externalPriceId
 
-        override fun update(params: PriceUpdateParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<Price>> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.PUT)
-            .addPathSegments("prices", params.getPathParam(0))
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepareAsync(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
-            it, requestOptions
-          ) }.thenApply { response -> response.parseable {
-              response.use {
-                  updateHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          } }
+        private val createHandler: Handler<Price> =
+            jsonHandler<Price>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
+        override fun create(
+            params: PriceCreateParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Price>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments("prices")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { createHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
         }
 
-        private val listHandler: Handler<PriceListPageAsync.Response> = jsonHandler<PriceListPageAsync.Response>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val updateHandler: Handler<Price> =
+            jsonHandler<Price>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun list(params: PriceListParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<PriceListPageAsync>> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .addPathSegments("prices")
-            .build()
-            .prepareAsync(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
-            it, requestOptions
-          ) }.thenApply { response -> response.parseable {
-              response.use {
-                  listHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-              .let {
-                  PriceListPageAsync.of(PriceServiceAsyncImpl(clientOptions), params, it)
-              }
-          } }
+        override fun update(
+            params: PriceUpdateParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Price>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .addPathSegments("prices", params.getPathParam(0))
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { updateHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
         }
 
-        private val evaluateHandler: Handler<PriceEvaluateResponse> = jsonHandler<PriceEvaluateResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val listHandler: Handler<PriceListPageAsync.Response> =
+            jsonHandler<PriceListPageAsync.Response>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
-        override fun evaluate(params: PriceEvaluateParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<PriceEvaluateResponse>> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.POST)
-            .addPathSegments("prices", params.getPathParam(0), "evaluate")
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepareAsync(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
-            it, requestOptions
-          ) }.thenApply { response -> response.parseable {
-              response.use {
-                  evaluateHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          } }
+        override fun list(
+            params: PriceListParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<PriceListPageAsync>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("prices")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { listHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                            .let {
+                                PriceListPageAsync.of(
+                                    PriceServiceAsyncImpl(clientOptions),
+                                    params,
+                                    it,
+                                )
+                            }
+                    }
+                }
         }
 
-        private val fetchHandler: Handler<Price> = jsonHandler<Price>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val evaluateHandler: Handler<PriceEvaluateResponse> =
+            jsonHandler<PriceEvaluateResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
-        override fun fetch(params: PriceFetchParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<Price>> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .addPathSegments("prices", params.getPathParam(0))
-            .build()
-            .prepareAsync(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
-            it, requestOptions
-          ) }.thenApply { response -> response.parseable {
-              response.use {
-                  fetchHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          } }
+        override fun evaluate(
+            params: PriceEvaluateParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<PriceEvaluateResponse>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments("prices", params.getPathParam(0), "evaluate")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { evaluateHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val fetchHandler: Handler<Price> =
+            jsonHandler<Price>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
+        override fun fetch(
+            params: PriceFetchParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Price>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("prices", params.getPathParam(0))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { fetchHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
         }
     }
 }

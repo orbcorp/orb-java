@@ -18,113 +18,139 @@ import com.withorb.api.errors.OrbError
 import com.withorb.api.models.CreditNote
 import com.withorb.api.models.CreditNoteCreateParams
 import com.withorb.api.models.CreditNoteFetchParams
-import com.withorb.api.models.CreditNoteListPage
 import com.withorb.api.models.CreditNoteListPageAsync
 import com.withorb.api.models.CreditNoteListParams
 import java.util.concurrent.CompletableFuture
 
-class CreditNoteServiceAsyncImpl internal constructor(
-    private val clientOptions: ClientOptions,
+class CreditNoteServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    CreditNoteServiceAsync {
 
-) : CreditNoteServiceAsync {
-
-    private val withRawResponse: CreditNoteServiceAsync.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
+    private val withRawResponse: CreditNoteServiceAsync.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
     override fun withRawResponse(): CreditNoteServiceAsync.WithRawResponse = withRawResponse
 
-    override fun create(params: CreditNoteCreateParams, requestOptions: RequestOptions): CompletableFuture<CreditNote> =
+    override fun create(
+        params: CreditNoteCreateParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<CreditNote> =
         // post /credit_notes
         withRawResponse().create(params, requestOptions).thenApply { it.parse() }
 
-    override fun list(params: CreditNoteListParams, requestOptions: RequestOptions): CompletableFuture<CreditNoteListPageAsync> =
+    override fun list(
+        params: CreditNoteListParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<CreditNoteListPageAsync> =
         // get /credit_notes
         withRawResponse().list(params, requestOptions).thenApply { it.parse() }
 
-    override fun fetch(params: CreditNoteFetchParams, requestOptions: RequestOptions): CompletableFuture<CreditNote> =
+    override fun fetch(
+        params: CreditNoteFetchParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<CreditNote> =
         // get /credit_notes/{credit_note_id}
         withRawResponse().fetch(params, requestOptions).thenApply { it.parse() }
 
-    class WithRawResponseImpl internal constructor(
-        private val clientOptions: ClientOptions,
-
-    ) : CreditNoteServiceAsync.WithRawResponse {
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        CreditNoteServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
-        private val createHandler: Handler<CreditNote> = jsonHandler<CreditNote>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val createHandler: Handler<CreditNote> =
+            jsonHandler<CreditNote>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun create(params: CreditNoteCreateParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<CreditNote>> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.POST)
-            .addPathSegments("credit_notes")
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepareAsync(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
-            it, requestOptions
-          ) }.thenApply { response -> response.parseable {
-              response.use {
-                  createHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          } }
+        override fun create(
+            params: CreditNoteCreateParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<CreditNote>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments("credit_notes")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { createHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
         }
 
-        private val listHandler: Handler<CreditNoteListPageAsync.Response> = jsonHandler<CreditNoteListPageAsync.Response>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val listHandler: Handler<CreditNoteListPageAsync.Response> =
+            jsonHandler<CreditNoteListPageAsync.Response>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
-        override fun list(params: CreditNoteListParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<CreditNoteListPageAsync>> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .addPathSegments("credit_notes")
-            .build()
-            .prepareAsync(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
-            it, requestOptions
-          ) }.thenApply { response -> response.parseable {
-              response.use {
-                  listHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-              .let {
-                  CreditNoteListPageAsync.of(CreditNoteServiceAsyncImpl(clientOptions), params, it)
-              }
-          } }
+        override fun list(
+            params: CreditNoteListParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<CreditNoteListPageAsync>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("credit_notes")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { listHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                            .let {
+                                CreditNoteListPageAsync.of(
+                                    CreditNoteServiceAsyncImpl(clientOptions),
+                                    params,
+                                    it,
+                                )
+                            }
+                    }
+                }
         }
 
-        private val fetchHandler: Handler<CreditNote> = jsonHandler<CreditNote>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val fetchHandler: Handler<CreditNote> =
+            jsonHandler<CreditNote>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun fetch(params: CreditNoteFetchParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<CreditNote>> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .addPathSegments("credit_notes", params.getPathParam(0))
-            .build()
-            .prepareAsync(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
-            it, requestOptions
-          ) }.thenApply { response -> response.parseable {
-              response.use {
-                  fetchHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          } }
+        override fun fetch(
+            params: CreditNoteFetchParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<CreditNote>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("credit_notes", params.getPathParam(0))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { fetchHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
         }
     }
 }

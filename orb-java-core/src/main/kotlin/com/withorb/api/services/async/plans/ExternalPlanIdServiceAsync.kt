@@ -13,85 +13,86 @@ import java.util.concurrent.CompletableFuture
 interface ExternalPlanIdServiceAsync {
 
     /**
-     * Returns a view of this service that provides access to raw HTTP responses for
-     * each method.
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
 
     /**
-     * This endpoint can be used to update the `external_plan_id`, and `metadata` of an
-     * existing plan.
+     * This endpoint can be used to update the `external_plan_id`, and `metadata` of an existing
+     * plan.
      *
      * Other fields on a customer are currently immutable.
      */
     fun update(params: PlanExternalPlanIdUpdateParams): CompletableFuture<Plan> =
-        update(
-          params, RequestOptions.none()
-        )
+        update(params, RequestOptions.none())
 
     /** @see [update] */
-    fun update(params: PlanExternalPlanIdUpdateParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<Plan>
+    fun update(
+        params: PlanExternalPlanIdUpdateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Plan>
 
     /**
-     * This endpoint is used to fetch [plan](/core-concepts##plan-and-price) details
-     * given an external_plan_id identifier. It returns information about the prices
-     * included in the plan and their configuration, as well as the product that the
-     * plan is attached to.
+     * This endpoint is used to fetch [plan](/core-concepts##plan-and-price) details given an
+     * external_plan_id identifier. It returns information about the prices included in the plan and
+     * their configuration, as well as the product that the plan is attached to.
      *
-     * If multiple plans are found to contain the specified external_plan_id, the
-     * active plans will take priority over archived ones, and among those, the
-     * endpoint will return the most recently created plan.
+     * If multiple plans are found to contain the specified external_plan_id, the active plans will
+     * take priority over archived ones, and among those, the endpoint will return the most recently
+     * created plan.
      *
      * ## Serialized prices
      *
-     * Orb supports a few different pricing models out of the box. Each of these models
-     * is serialized differently in a given [Price](/core-concepts#plan-and-price)
-     * object. The `model_type` field determines the key for the configuration object
-     * that is present. A detailed explanation of price types can be found in the
+     * Orb supports a few different pricing models out of the box. Each of these models is
+     * serialized differently in a given [Price](/core-concepts#plan-and-price) object. The
+     * `model_type` field determines the key for the configuration object that is present. A
+     * detailed explanation of price types can be found in the
      * [Price schema](/core-concepts#plan-and-price). "
      */
     fun fetch(params: PlanExternalPlanIdFetchParams): CompletableFuture<Plan> =
-        fetch(
-          params, RequestOptions.none()
-        )
+        fetch(params, RequestOptions.none())
 
     /** @see [fetch] */
-    fun fetch(params: PlanExternalPlanIdFetchParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<Plan>
+    fun fetch(
+        params: PlanExternalPlanIdFetchParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Plan>
 
     /**
-     * A view of [ExternalPlanIdServiceAsync] that provides access to raw HTTP
-     * responses for each method.
+     * A view of [ExternalPlanIdServiceAsync] that provides access to raw HTTP responses for each
+     * method.
      */
     interface WithRawResponse {
 
         /**
-         * Returns a raw HTTP response for
-         * `put /plans/external_plan_id/{external_plan_id}`, but is otherwise the same as
-         * [ExternalPlanIdServiceAsync.update].
+         * Returns a raw HTTP response for `put /plans/external_plan_id/{external_plan_id}`, but is
+         * otherwise the same as [ExternalPlanIdServiceAsync.update].
          */
         @MustBeClosed
-        fun update(params: PlanExternalPlanIdUpdateParams): CompletableFuture<HttpResponseFor<Plan>> =
-            update(
-              params, RequestOptions.none()
-            )
+        fun update(
+            params: PlanExternalPlanIdUpdateParams
+        ): CompletableFuture<HttpResponseFor<Plan>> = update(params, RequestOptions.none())
 
         /** @see [update] */
         @MustBeClosed
-        fun update(params: PlanExternalPlanIdUpdateParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<HttpResponseFor<Plan>>
+        fun update(
+            params: PlanExternalPlanIdUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Plan>>
 
         /**
-         * Returns a raw HTTP response for
-         * `get /plans/external_plan_id/{external_plan_id}`, but is otherwise the same as
-         * [ExternalPlanIdServiceAsync.fetch].
+         * Returns a raw HTTP response for `get /plans/external_plan_id/{external_plan_id}`, but is
+         * otherwise the same as [ExternalPlanIdServiceAsync.fetch].
          */
         @MustBeClosed
         fun fetch(params: PlanExternalPlanIdFetchParams): CompletableFuture<HttpResponseFor<Plan>> =
-            fetch(
-              params, RequestOptions.none()
-            )
+            fetch(params, RequestOptions.none())
 
         /** @see [fetch] */
         @MustBeClosed
-        fun fetch(params: PlanExternalPlanIdFetchParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<HttpResponseFor<Plan>>
+        fun fetch(
+            params: PlanExternalPlanIdFetchParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Plan>>
     }
 }
