@@ -13,28 +13,24 @@ import com.withorb.api.core.JsonValue
 import com.withorb.api.core.NoAutoDetect
 import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
-import com.withorb.api.models
 import com.withorb.api.services.async.coupons.SubscriptionServiceAsync
 import java.util.Objects
 import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
-import kotlin.jvm.optionals.getOrNull
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
 
 /**
- * This endpoint returns a list of all subscriptions that have redeemed a given
- * coupon as a [paginated](/api-reference/pagination) list, ordered starting from
- * the most recently created subscription. For a full discussion of the
- * subscription resource, see [Subscription](/core-concepts#subscription).
+ * This endpoint returns a list of all subscriptions that have redeemed a given coupon as a
+ * [paginated](/api-reference/pagination) list, ordered starting from the most recently created
+ * subscription. For a full discussion of the subscription resource, see
+ * [Subscription](/core-concepts#subscription).
  */
-class CouponSubscriptionListPageAsync private constructor(
+class CouponSubscriptionListPageAsync
+private constructor(
     private val subscriptionsService: SubscriptionServiceAsync,
     private val params: CouponSubscriptionListParams,
     private val response: Response,
-
 ) {
 
     fun response(): Response = response
@@ -44,39 +40,43 @@ class CouponSubscriptionListPageAsync private constructor(
     fun paginationMetadata(): PaginationMetadata = response().paginationMetadata()
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return /* spotless:off */ other is CouponSubscriptionListPageAsync && subscriptionsService == other.subscriptionsService && params == other.params && response == other.response /* spotless:on */
+        return /* spotless:off */ other is CouponSubscriptionListPageAsync && subscriptionsService == other.subscriptionsService && params == other.params && response == other.response /* spotless:on */
     }
 
     override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionsService, params, response) /* spotless:on */
 
-    override fun toString() = "CouponSubscriptionListPageAsync{subscriptionsService=$subscriptionsService, params=$params, response=$response}"
+    override fun toString() =
+        "CouponSubscriptionListPageAsync{subscriptionsService=$subscriptionsService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean {
-      if (data().isEmpty()) {
-        return false;
-      }
+        if (data().isEmpty()) {
+            return false
+        }
 
-      return paginationMetadata().nextCursor().isPresent
+        return paginationMetadata().nextCursor().isPresent
     }
 
     fun getNextPageParams(): Optional<CouponSubscriptionListParams> {
-      if (!hasNextPage()) {
-        return Optional.empty()
-      }
+        if (!hasNextPage()) {
+            return Optional.empty()
+        }
 
-      return Optional.of(CouponSubscriptionListParams.builder().from(params).apply {paginationMetadata().nextCursor().ifPresent{ this.cursor(it) } }.build())
+        return Optional.of(
+            CouponSubscriptionListParams.builder()
+                .from(params)
+                .apply { paginationMetadata().nextCursor().ifPresent { this.cursor(it) } }
+                .build()
+        )
     }
 
     fun getNextPage(): CompletableFuture<Optional<CouponSubscriptionListPageAsync>> {
-      return getNextPageParams().map {
-        subscriptionsService.list(it).thenApply { Optional.of(it) }
-      }.orElseGet {
-          CompletableFuture.completedFuture(Optional.empty())
-      }
+        return getNextPageParams()
+            .map { subscriptionsService.list(it).thenApply { Optional.of(it) } }
+            .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
     }
 
     fun autoPager(): AutoPager = AutoPager(this)
@@ -84,31 +84,35 @@ class CouponSubscriptionListPageAsync private constructor(
     companion object {
 
         @JvmStatic
-        fun of(subscriptionsService: SubscriptionServiceAsync, params: CouponSubscriptionListParams, response: Response) =
-            CouponSubscriptionListPageAsync(
-              subscriptionsService,
-              params,
-              response,
-            )
+        fun of(
+            subscriptionsService: SubscriptionServiceAsync,
+            params: CouponSubscriptionListParams,
+            response: Response,
+        ) = CouponSubscriptionListPageAsync(subscriptionsService, params, response)
     }
 
     @NoAutoDetect
-    class Response @JsonCreator constructor(
+    class Response
+    @JsonCreator
+    constructor(
         @JsonProperty("data") private val data: JsonField<List<Subscription>> = JsonMissing.of(),
-        @JsonProperty("pagination_metadata") private val paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of(),
-        @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-
+        @JsonProperty("pagination_metadata")
+        private val paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun data(): List<Subscription> = data.getNullable("data") ?: listOf()
 
-        fun paginationMetadata(): PaginationMetadata = paginationMetadata.getRequired("pagination_metadata")
+        fun paginationMetadata(): PaginationMetadata =
+            paginationMetadata.getRequired("pagination_metadata")
 
         @JsonProperty("data")
         fun _data(): Optional<JsonField<List<Subscription>>> = Optional.ofNullable(data)
 
         @JsonProperty("pagination_metadata")
-        fun _paginationMetadata(): Optional<JsonField<PaginationMetadata>> = Optional.ofNullable(paginationMetadata)
+        fun _paginationMetadata(): Optional<JsonField<PaginationMetadata>> =
+            Optional.ofNullable(paginationMetadata)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -116,30 +120,30 @@ class CouponSubscriptionListPageAsync private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): Response =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                data().map { it.validate() }
-                paginationMetadata().validate()
-                validated = true
+        fun validate(): Response = apply {
+            if (validated) {
+                return@apply
             }
+
+            data().map { it.validate() }
+            paginationMetadata().validate()
+            validated = true
+        }
 
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return /* spotless:off */ other is Response && data == other.data && paginationMetadata == other.paginationMetadata && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Response && data == other.data && paginationMetadata == other.paginationMetadata && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         override fun hashCode(): Int = /* spotless:off */ Objects.hash(data, paginationMetadata, additionalProperties) /* spotless:on */
 
-        override fun toString() = "Response{data=$data, paginationMetadata=$paginationMetadata, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "Response{data=$data, paginationMetadata=$paginationMetadata, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -147,8 +151,7 @@ class CouponSubscriptionListPageAsync private constructor(
              * Returns a mutable builder for constructing an instance of
              * [CouponSubscriptionListPageAsync].
              */
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         class Builder {
@@ -158,70 +161,54 @@ class CouponSubscriptionListPageAsync private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(page: Response) =
-                apply {
-                    this.data = page.data
-                    this.paginationMetadata = page.paginationMetadata
-                    this.additionalProperties.putAll(page.additionalProperties)
-                }
+            internal fun from(page: Response) = apply {
+                this.data = page.data
+                this.paginationMetadata = page.paginationMetadata
+                this.additionalProperties.putAll(page.additionalProperties)
+            }
 
             fun data(data: List<Subscription>) = data(JsonField.of(data))
 
             fun data(data: JsonField<List<Subscription>>) = apply { this.data = data }
 
-            fun paginationMetadata(paginationMetadata: PaginationMetadata) = paginationMetadata(JsonField.of(paginationMetadata))
+            fun paginationMetadata(paginationMetadata: PaginationMetadata) =
+                paginationMetadata(JsonField.of(paginationMetadata))
 
-            fun paginationMetadata(paginationMetadata: JsonField<PaginationMetadata>) = apply { this.paginationMetadata = paginationMetadata }
+            fun paginationMetadata(paginationMetadata: JsonField<PaginationMetadata>) = apply {
+                this.paginationMetadata = paginationMetadata
+            }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) =
-                apply {
-                    this.additionalProperties.put(key, value)
-                }
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                this.additionalProperties.put(key, value)
+            }
 
-            fun build() =
-                Response(
-                  data,
-                  paginationMetadata,
-                  additionalProperties.toImmutable(),
-                )
+            fun build() = Response(data, paginationMetadata, additionalProperties.toImmutable())
         }
     }
 
-    class AutoPager(
-        private val firstPage: CouponSubscriptionListPageAsync,
-
-    ) {
+    class AutoPager(private val firstPage: CouponSubscriptionListPageAsync) {
 
         fun forEach(action: Predicate<Subscription>, executor: Executor): CompletableFuture<Void> {
-          fun CompletableFuture<Optional<CouponSubscriptionListPageAsync>>.forEach(action: (Subscription) -> Boolean, executor: Executor): CompletableFuture<Void> =
-              thenComposeAsync(
-                { page ->
-                    page
-                    .filter {
-                        it.data().all(action)
-                    }
-                    .map {
-                        it.getNextPage().forEach(action, executor)
-                    }
-                    .orElseGet {
-                        CompletableFuture.completedFuture(null)
-                    }
-                }, executor
-              )
-          return CompletableFuture.completedFuture(Optional.of(firstPage))
-          .forEach(
-            action::test, executor
-          )
+            fun CompletableFuture<Optional<CouponSubscriptionListPageAsync>>.forEach(
+                action: (Subscription) -> Boolean,
+                executor: Executor,
+            ): CompletableFuture<Void> =
+                thenComposeAsync(
+                    { page ->
+                        page
+                            .filter { it.data().all(action) }
+                            .map { it.getNextPage().forEach(action, executor) }
+                            .orElseGet { CompletableFuture.completedFuture(null) }
+                    },
+                    executor,
+                )
+            return CompletableFuture.completedFuture(Optional.of(firstPage))
+                .forEach(action::test, executor)
         }
 
         fun toList(executor: Executor): CompletableFuture<List<Subscription>> {
-          val values = mutableListOf<Subscription>()
-          return forEach(
-            values::add, executor
-          )
-          .thenApply {
-              values
-          }
+            val values = mutableListOf<Subscription>()
+            return forEach(values::add, executor).thenApply { values }
         }
     }
 }
