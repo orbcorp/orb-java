@@ -20,13 +20,13 @@ import kotlin.jvm.optionals.getOrNull
 
 @JsonDeserialize(using = Discount.Deserializer::class)
 @JsonSerialize(using = Discount.Serializer::class)
-class Discount private constructor(
+class Discount
+private constructor(
     private val percentage: PercentageDiscount? = null,
     private val trial: TrialDiscount? = null,
     private val usage: UsageDiscount? = null,
     private val amount: AmountDiscount? = null,
     private val _json: JsonValue? = null,
-
 ) {
 
     fun percentage(): Optional<PercentageDiscount> = Optional.ofNullable(percentage)
@@ -56,49 +56,50 @@ class Discount private constructor(
     fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
     fun <T> accept(visitor: Visitor<T>): T {
-      return when {
-          percentage != null -> visitor.visitPercentage(percentage)
-          trial != null -> visitor.visitTrial(trial)
-          usage != null -> visitor.visitUsage(usage)
-          amount != null -> visitor.visitAmount(amount)
-          else -> visitor.unknown(_json)
-      }
+        return when {
+            percentage != null -> visitor.visitPercentage(percentage)
+            trial != null -> visitor.visitTrial(trial)
+            usage != null -> visitor.visitUsage(usage)
+            amount != null -> visitor.visitAmount(amount)
+            else -> visitor.unknown(_json)
+        }
     }
 
     private var validated: Boolean = false
 
-    fun validate(): Discount =
-        apply {
-            if (validated) {
-              return@apply
-            }
+    fun validate(): Discount = apply {
+        if (validated) {
+            return@apply
+        }
 
-            accept(object : Visitor<Unit> {
+        accept(
+            object : Visitor<Unit> {
                 override fun visitPercentage(percentage: PercentageDiscount) {
-                  percentage.validate()
+                    percentage.validate()
                 }
 
                 override fun visitTrial(trial: TrialDiscount) {
-                  trial.validate()
+                    trial.validate()
                 }
 
                 override fun visitUsage(usage: UsageDiscount) {
-                  usage.validate()
+                    usage.validate()
                 }
 
                 override fun visitAmount(amount: AmountDiscount) {
-                  amount.validate()
+                    amount.validate()
                 }
-            })
-            validated = true
-        }
+            }
+        )
+        validated = true
+    }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return /* spotless:off */ other is Discount && percentage == other.percentage && trial == other.trial && usage == other.usage && amount == other.amount /* spotless:on */
+        return /* spotless:off */ other is Discount && percentage == other.percentage && trial == other.trial && usage == other.usage && amount == other.amount /* spotless:on */
     }
 
     override fun hashCode(): Int = /* spotless:off */ Objects.hash(percentage, trial, usage, amount) /* spotless:on */
@@ -118,20 +119,14 @@ class Discount private constructor(
         @JvmStatic
         fun ofPercentage(percentage: PercentageDiscount) = Discount(percentage = percentage)
 
-        @JvmStatic
-        fun ofTrial(trial: TrialDiscount) = Discount(trial = trial)
+        @JvmStatic fun ofTrial(trial: TrialDiscount) = Discount(trial = trial)
 
-        @JvmStatic
-        fun ofUsage(usage: UsageDiscount) = Discount(usage = usage)
+        @JvmStatic fun ofUsage(usage: UsageDiscount) = Discount(usage = usage)
 
-        @JvmStatic
-        fun ofAmount(amount: AmountDiscount) = Discount(amount = amount)
+        @JvmStatic fun ofAmount(amount: AmountDiscount) = Discount(amount = amount)
     }
 
-    /**
-     * An interface that defines how to map each variant of [Discount] to a value of
-     * type [T].
-     */
+    /** An interface that defines how to map each variant of [Discount] to a value of type [T]. */
     interface Visitor<out T> {
 
         fun visitPercentage(percentage: PercentageDiscount): T
@@ -145,62 +140,70 @@ class Discount private constructor(
         /**
          * Maps an unknown variant of [Discount] to a value of type [T].
          *
-         * An instance of [Discount] can contain an unknown variant if it was deserialized
-         * from data that doesn't match any known variant. For example, if the SDK is on an
-         * older version than the API, then the API may respond with new variants that the
-         * SDK is unaware of.
+         * An instance of [Discount] can contain an unknown variant if it was deserialized from data
+         * that doesn't match any known variant. For example, if the SDK is on an older version than
+         * the API, then the API may respond with new variants that the SDK is unaware of.
          *
          * @throws OrbInvalidDataException in the default implementation.
          */
         fun unknown(json: JsonValue?): T {
-          throw OrbInvalidDataException("Unknown Discount: $json")
+            throw OrbInvalidDataException("Unknown Discount: $json")
         }
     }
 
     internal class Deserializer : BaseDeserializer<Discount>(Discount::class) {
 
         override fun ObjectCodec.deserialize(node: JsonNode): Discount {
-          val json = JsonValue.fromJsonNode(node)
-          val discountType = json.asObject().getOrNull()?.get("discount_type")?.asString()?.getOrNull()
+            val json = JsonValue.fromJsonNode(node)
+            val discountType =
+                json.asObject().getOrNull()?.get("discount_type")?.asString()?.getOrNull()
 
-          when (discountType) {
-              "percentage" -> {
-                  tryDeserialize(node, jacksonTypeRef<PercentageDiscount>()){ it.validate() }?.let {
-                      return Discount(percentage = it, _json = json)
-                  }
-              }
-              "trial" -> {
-                  tryDeserialize(node, jacksonTypeRef<TrialDiscount>()){ it.validate() }?.let {
-                      return Discount(trial = it, _json = json)
-                  }
-              }
-              "usage" -> {
-                  tryDeserialize(node, jacksonTypeRef<UsageDiscount>()){ it.validate() }?.let {
-                      return Discount(usage = it, _json = json)
-                  }
-              }
-              "amount" -> {
-                  tryDeserialize(node, jacksonTypeRef<AmountDiscount>()){ it.validate() }?.let {
-                      return Discount(amount = it, _json = json)
-                  }
-              }
-          }
+            when (discountType) {
+                "percentage" -> {
+                    tryDeserialize(node, jacksonTypeRef<PercentageDiscount>()) { it.validate() }
+                        ?.let {
+                            return Discount(percentage = it, _json = json)
+                        }
+                }
+                "trial" -> {
+                    tryDeserialize(node, jacksonTypeRef<TrialDiscount>()) { it.validate() }
+                        ?.let {
+                            return Discount(trial = it, _json = json)
+                        }
+                }
+                "usage" -> {
+                    tryDeserialize(node, jacksonTypeRef<UsageDiscount>()) { it.validate() }
+                        ?.let {
+                            return Discount(usage = it, _json = json)
+                        }
+                }
+                "amount" -> {
+                    tryDeserialize(node, jacksonTypeRef<AmountDiscount>()) { it.validate() }
+                        ?.let {
+                            return Discount(amount = it, _json = json)
+                        }
+                }
+            }
 
-          return Discount(_json = json)
+            return Discount(_json = json)
         }
     }
 
     internal class Serializer : BaseSerializer<Discount>(Discount::class) {
 
-        override fun serialize(value: Discount, generator: JsonGenerator, provider: SerializerProvider) {
-          when {
-              value.percentage != null -> generator.writeObject(value.percentage)
-              value.trial != null -> generator.writeObject(value.trial)
-              value.usage != null -> generator.writeObject(value.usage)
-              value.amount != null -> generator.writeObject(value.amount)
-              value._json != null -> generator.writeObject(value._json)
-              else -> throw IllegalStateException("Invalid Discount")
-          }
+        override fun serialize(
+            value: Discount,
+            generator: JsonGenerator,
+            provider: SerializerProvider,
+        ) {
+            when {
+                value.percentage != null -> generator.writeObject(value.percentage)
+                value.trial != null -> generator.writeObject(value.trial)
+                value.usage != null -> generator.writeObject(value.usage)
+                value.amount != null -> generator.writeObject(value.amount)
+                value._json != null -> generator.writeObject(value._json)
+                else -> throw IllegalStateException("Invalid Discount")
+            }
         }
     }
 }

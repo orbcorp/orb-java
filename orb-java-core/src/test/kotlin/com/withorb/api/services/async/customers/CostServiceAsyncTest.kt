@@ -15,41 +15,49 @@ class CostServiceAsyncTest {
 
     @Test
     fun list() {
-      val client = OrbOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .apiKey("My API Key")
-          .build()
-      val costServiceAsync = client.customers().costs()
+        val client =
+            OrbOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val costServiceAsync = client.customers().costs()
 
-      val costFuture = costServiceAsync.list(CustomerCostListParams.builder()
-          .customerId("customer_id")
-          .currency("currency")
-          .timeframeEnd(OffsetDateTime.parse("2022-03-01T05:00:00Z"))
-          .timeframeStart(OffsetDateTime.parse("2022-02-01T05:00:00Z"))
-          .viewMode(CustomerCostListParams.ViewMode.PERIODIC)
-          .build())
+        val costFuture =
+            costServiceAsync.list(
+                CustomerCostListParams.builder()
+                    .customerId("customer_id")
+                    .currency("currency")
+                    .timeframeEnd(OffsetDateTime.parse("2022-03-01T05:00:00Z"))
+                    .timeframeStart(OffsetDateTime.parse("2022-02-01T05:00:00Z"))
+                    .viewMode(CustomerCostListParams.ViewMode.PERIODIC)
+                    .build()
+            )
 
-      val cost = costFuture.get()
-      cost.validate()
+        val cost = costFuture.get()
+        cost.validate()
     }
 
     @Test
     fun listByExternalId() {
-      val client = OrbOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .apiKey("My API Key")
-          .build()
-      val costServiceAsync = client.customers().costs()
+        val client =
+            OrbOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val costServiceAsync = client.customers().costs()
 
-      val responseFuture = costServiceAsync.listByExternalId(CustomerCostListByExternalIdParams.builder()
-          .externalCustomerId("external_customer_id")
-          .currency("currency")
-          .timeframeEnd(OffsetDateTime.parse("2022-03-01T05:00:00Z"))
-          .timeframeStart(OffsetDateTime.parse("2022-02-01T05:00:00Z"))
-          .viewMode(CustomerCostListByExternalIdParams.ViewMode.PERIODIC)
-          .build())
+        val responseFuture =
+            costServiceAsync.listByExternalId(
+                CustomerCostListByExternalIdParams.builder()
+                    .externalCustomerId("external_customer_id")
+                    .currency("currency")
+                    .timeframeEnd(OffsetDateTime.parse("2022-03-01T05:00:00Z"))
+                    .timeframeStart(OffsetDateTime.parse("2022-02-01T05:00:00Z"))
+                    .viewMode(CustomerCostListByExternalIdParams.ViewMode.PERIODIC)
+                    .build()
+            )
 
-      val response = responseFuture.get()
-      response.validate()
+        val response = responseFuture.get()
+        response.validate()
     }
 }

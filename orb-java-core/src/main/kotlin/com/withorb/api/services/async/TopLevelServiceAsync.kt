@@ -12,36 +12,37 @@ import java.util.concurrent.CompletableFuture
 interface TopLevelServiceAsync {
 
     /**
-     * Returns a view of this service that provides access to raw HTTP responses for
-     * each method.
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
 
     /**
-     * This endpoint allows you to test your connection to the Orb API and check the
-     * validity of your API key, passed in the Authorization header. This is
-     * particularly useful for checking that your environment is set up properly, and
-     * is a great choice for connectors and integrations.
+     * This endpoint allows you to test your connection to the Orb API and check the validity of
+     * your API key, passed in the Authorization header. This is particularly useful for checking
+     * that your environment is set up properly, and is a great choice for connectors and
+     * integrations.
      *
      * This API does not have any side-effects or return any Orb resources.
      */
     fun ping(): CompletableFuture<TopLevelPingResponse> = ping(TopLevelPingParams.none())
 
     /** @see [ping] */
-    fun ping(params: TopLevelPingParams = TopLevelPingParams.none(), requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<TopLevelPingResponse>
+    fun ping(
+        params: TopLevelPingParams = TopLevelPingParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<TopLevelPingResponse>
 
     /** @see [ping] */
-    fun ping(params: TopLevelPingParams = TopLevelPingParams.none()): CompletableFuture<TopLevelPingResponse> =
-        ping(
-          params, RequestOptions.none()
-        )
+    fun ping(
+        params: TopLevelPingParams = TopLevelPingParams.none()
+    ): CompletableFuture<TopLevelPingResponse> = ping(params, RequestOptions.none())
 
     /** @see [ping] */
-    fun ping(requestOptions: RequestOptions): CompletableFuture<TopLevelPingResponse> = ping(TopLevelPingParams.none(), requestOptions)
+    fun ping(requestOptions: RequestOptions): CompletableFuture<TopLevelPingResponse> =
+        ping(TopLevelPingParams.none(), requestOptions)
 
     /**
-     * A view of [TopLevelServiceAsync] that provides access to raw HTTP responses for
-     * each method.
+     * A view of [TopLevelServiceAsync] that provides access to raw HTTP responses for each method.
      */
     interface WithRawResponse {
 
@@ -50,21 +51,28 @@ interface TopLevelServiceAsync {
          * [TopLevelServiceAsync.ping].
          */
         @MustBeClosed
-        fun ping(): CompletableFuture<HttpResponseFor<TopLevelPingResponse>> = ping(TopLevelPingParams.none())
+        fun ping(): CompletableFuture<HttpResponseFor<TopLevelPingResponse>> =
+            ping(TopLevelPingParams.none())
 
         /** @see [ping] */
         @MustBeClosed
-        fun ping(params: TopLevelPingParams = TopLevelPingParams.none(), requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<HttpResponseFor<TopLevelPingResponse>>
+        fun ping(
+            params: TopLevelPingParams = TopLevelPingParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<TopLevelPingResponse>>
 
         /** @see [ping] */
         @MustBeClosed
-        fun ping(params: TopLevelPingParams = TopLevelPingParams.none()): CompletableFuture<HttpResponseFor<TopLevelPingResponse>> =
-            ping(
-              params, RequestOptions.none()
-            )
+        fun ping(
+            params: TopLevelPingParams = TopLevelPingParams.none()
+        ): CompletableFuture<HttpResponseFor<TopLevelPingResponse>> =
+            ping(params, RequestOptions.none())
 
         /** @see [ping] */
         @MustBeClosed
-        fun ping(requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<TopLevelPingResponse>> = ping(TopLevelPingParams.none(), requestOptions)
+        fun ping(
+            requestOptions: RequestOptions
+        ): CompletableFuture<HttpResponseFor<TopLevelPingResponse>> =
+            ping(TopLevelPingParams.none(), requestOptions)
     }
 }
