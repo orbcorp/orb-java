@@ -17,20 +17,19 @@ import com.withorb.api.core.toImmutable
 import java.util.Objects
 
 @NoAutoDetect
-class EventDeprecateResponse
-@JsonCreator
-private constructor(
-    @JsonProperty("deprecated")
-    @ExcludeMissing
-    private val deprecated: JsonField<String> = JsonMissing.of(),
+class EventDeprecateResponse @JsonCreator private constructor(
+    @JsonProperty("deprecated") @ExcludeMissing private val deprecated: JsonField<String> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
 ) {
 
     /** event_id of the deprecated event, if successfully updated */
     fun deprecated(): String = deprecated.getRequired("deprecated")
 
     /** event_id of the deprecated event, if successfully updated */
-    @JsonProperty("deprecated") @ExcludeMissing fun _deprecated(): JsonField<String> = deprecated
+    @JsonProperty("deprecated")
+    @ExcludeMissing
+    fun _deprecated(): JsonField<String> = deprecated
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -38,28 +37,32 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): EventDeprecateResponse = apply {
-        if (validated) {
-            return@apply
-        }
+    fun validate(): EventDeprecateResponse =
+        apply {
+            if (validated) {
+              return@apply
+            }
 
-        deprecated()
-        validated = true
-    }
+            deprecated()
+            validated = true
+        }
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [EventDeprecateResponse].
+         * Returns a mutable builder for constructing an instance of
+         * [EventDeprecateResponse].
          *
          * The following fields are required:
+         *
          * ```java
          * .deprecated()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [EventDeprecateResponse]. */
@@ -69,49 +72,61 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(eventDeprecateResponse: EventDeprecateResponse) = apply {
-            deprecated = eventDeprecateResponse.deprecated
-            additionalProperties = eventDeprecateResponse.additionalProperties.toMutableMap()
-        }
+        internal fun from(eventDeprecateResponse: EventDeprecateResponse) =
+            apply {
+                deprecated = eventDeprecateResponse.deprecated
+                additionalProperties = eventDeprecateResponse.additionalProperties.toMutableMap()
+            }
 
         /** event_id of the deprecated event, if successfully updated */
         fun deprecated(deprecated: String) = deprecated(JsonField.of(deprecated))
 
         /** event_id of the deprecated event, if successfully updated */
-        fun deprecated(deprecated: JsonField<String>) = apply { this.deprecated = deprecated }
+        fun deprecated(deprecated: JsonField<String>) =
+            apply {
+                this.deprecated = deprecated
+            }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.clear()
-            putAllAdditionalProperties(additionalProperties)
-        }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            additionalProperties.put(key, value)
-        }
+        fun putAdditionalProperty(key: String, value: JsonValue) =
+            apply {
+                additionalProperties.put(key, value)
+            }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.putAll(additionalProperties)
-        }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+        fun removeAdditionalProperty(key: String) =
+            apply {
+                additionalProperties.remove(key)
+            }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalProperty)
-        }
+        fun removeAllAdditionalProperties(keys: Set<String>) =
+            apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
         fun build(): EventDeprecateResponse =
             EventDeprecateResponse(
-                checkRequired("deprecated", deprecated),
-                additionalProperties.toImmutable(),
+              checkRequired(
+                "deprecated", deprecated
+              ), additionalProperties.toImmutable()
             )
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return /* spotless:off */ other is EventDeprecateResponse && deprecated == other.deprecated && additionalProperties == other.additionalProperties /* spotless:on */
+      return /* spotless:off */ other is EventDeprecateResponse && deprecated == other.deprecated && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -120,6 +135,5 @@ private constructor(
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() =
-        "EventDeprecateResponse{deprecated=$deprecated, additionalProperties=$additionalProperties}"
+    override fun toString() = "EventDeprecateResponse{deprecated=$deprecated, additionalProperties=$additionalProperties}"
 }

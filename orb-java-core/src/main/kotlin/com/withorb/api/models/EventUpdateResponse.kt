@@ -17,20 +17,19 @@ import com.withorb.api.core.toImmutable
 import java.util.Objects
 
 @NoAutoDetect
-class EventUpdateResponse
-@JsonCreator
-private constructor(
-    @JsonProperty("amended")
-    @ExcludeMissing
-    private val amended: JsonField<String> = JsonMissing.of(),
+class EventUpdateResponse @JsonCreator private constructor(
+    @JsonProperty("amended") @ExcludeMissing private val amended: JsonField<String> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
 ) {
 
     /** event_id of the amended event, if successfully ingested */
     fun amended(): String = amended.getRequired("amended")
 
     /** event_id of the amended event, if successfully ingested */
-    @JsonProperty("amended") @ExcludeMissing fun _amended(): JsonField<String> = amended
+    @JsonProperty("amended")
+    @ExcludeMissing
+    fun _amended(): JsonField<String> = amended
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -38,14 +37,15 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): EventUpdateResponse = apply {
-        if (validated) {
-            return@apply
-        }
+    fun validate(): EventUpdateResponse =
+        apply {
+            if (validated) {
+              return@apply
+            }
 
-        amended()
-        validated = true
-    }
+            amended()
+            validated = true
+        }
 
     fun toBuilder() = Builder().from(this)
 
@@ -55,11 +55,13 @@ private constructor(
          * Returns a mutable builder for constructing an instance of [EventUpdateResponse].
          *
          * The following fields are required:
+         *
          * ```java
          * .amended()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [EventUpdateResponse]. */
@@ -69,49 +71,61 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(eventUpdateResponse: EventUpdateResponse) = apply {
-            amended = eventUpdateResponse.amended
-            additionalProperties = eventUpdateResponse.additionalProperties.toMutableMap()
-        }
+        internal fun from(eventUpdateResponse: EventUpdateResponse) =
+            apply {
+                amended = eventUpdateResponse.amended
+                additionalProperties = eventUpdateResponse.additionalProperties.toMutableMap()
+            }
 
         /** event_id of the amended event, if successfully ingested */
         fun amended(amended: String) = amended(JsonField.of(amended))
 
         /** event_id of the amended event, if successfully ingested */
-        fun amended(amended: JsonField<String>) = apply { this.amended = amended }
+        fun amended(amended: JsonField<String>) =
+            apply {
+                this.amended = amended
+            }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.clear()
-            putAllAdditionalProperties(additionalProperties)
-        }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            additionalProperties.put(key, value)
-        }
+        fun putAdditionalProperty(key: String, value: JsonValue) =
+            apply {
+                additionalProperties.put(key, value)
+            }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.putAll(additionalProperties)
-        }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+        fun removeAdditionalProperty(key: String) =
+            apply {
+                additionalProperties.remove(key)
+            }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalProperty)
-        }
+        fun removeAllAdditionalProperties(keys: Set<String>) =
+            apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
         fun build(): EventUpdateResponse =
             EventUpdateResponse(
-                checkRequired("amended", amended),
-                additionalProperties.toImmutable(),
+              checkRequired(
+                "amended", amended
+              ), additionalProperties.toImmutable()
             )
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return /* spotless:off */ other is EventUpdateResponse && amended == other.amended && additionalProperties == other.additionalProperties /* spotless:on */
+      return /* spotless:off */ other is EventUpdateResponse && amended == other.amended && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -120,6 +134,5 @@ private constructor(
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() =
-        "EventUpdateResponse{amended=$amended, additionalProperties=$additionalProperties}"
+    override fun toString() = "EventUpdateResponse{amended=$amended, additionalProperties=$additionalProperties}"
 }
