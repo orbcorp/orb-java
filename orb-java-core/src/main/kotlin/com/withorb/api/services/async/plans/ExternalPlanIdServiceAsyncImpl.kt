@@ -20,91 +20,77 @@ import com.withorb.api.models.PlanExternalPlanIdFetchParams
 import com.withorb.api.models.PlanExternalPlanIdUpdateParams
 import java.util.concurrent.CompletableFuture
 
-class ExternalPlanIdServiceAsyncImpl
-internal constructor(private val clientOptions: ClientOptions) : ExternalPlanIdServiceAsync {
+class ExternalPlanIdServiceAsyncImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: ExternalPlanIdServiceAsync.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : ExternalPlanIdServiceAsync {
+
+    private val withRawResponse: ExternalPlanIdServiceAsync.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     override fun withRawResponse(): ExternalPlanIdServiceAsync.WithRawResponse = withRawResponse
 
-    override fun update(
-        params: PlanExternalPlanIdUpdateParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<Plan> =
+    override fun update(params: PlanExternalPlanIdUpdateParams, requestOptions: RequestOptions): CompletableFuture<Plan> =
         // put /plans/external_plan_id/{external_plan_id}
         withRawResponse().update(params, requestOptions).thenApply { it.parse() }
 
-    override fun fetch(
-        params: PlanExternalPlanIdFetchParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<Plan> =
+    override fun fetch(params: PlanExternalPlanIdFetchParams, requestOptions: RequestOptions): CompletableFuture<Plan> =
         // get /plans/external_plan_id/{external_plan_id}
         withRawResponse().fetch(params, requestOptions).thenApply { it.parse() }
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        ExternalPlanIdServiceAsync.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
+
+    ) : ExternalPlanIdServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
 
-        private val updateHandler: Handler<Plan> =
-            jsonHandler<Plan>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val updateHandler: Handler<Plan> = jsonHandler<Plan>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun update(
-            params: PlanExternalPlanIdUpdateParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<Plan>> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.PUT)
-                    .addPathSegments("plans", "external_plan_id", params.getPathParam(0))
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    response.parseable {
-                        response
-                            .use { updateHandler.handle(it) }
-                            .also {
-                                if (requestOptions.responseValidation!!) {
-                                    it.validate()
-                                }
-                            }
-                    }
-                }
+        override fun update(params: PlanExternalPlanIdUpdateParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<Plan>> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.PUT)
+            .addPathSegments("plans", "external_plan_id", params.getPathParam(0))
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepareAsync(clientOptions, params)
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
+            it, requestOptions
+          ) }.thenApply { response -> response.parseable {
+              response.use {
+                  updateHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          } }
         }
 
-        private val fetchHandler: Handler<Plan> =
-            jsonHandler<Plan>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val fetchHandler: Handler<Plan> = jsonHandler<Plan>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun fetch(
-            params: PlanExternalPlanIdFetchParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<Plan>> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .addPathSegments("plans", "external_plan_id", params.getPathParam(0))
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    response.parseable {
-                        response
-                            .use { fetchHandler.handle(it) }
-                            .also {
-                                if (requestOptions.responseValidation!!) {
-                                    it.validate()
-                                }
-                            }
-                    }
-                }
+        override fun fetch(params: PlanExternalPlanIdFetchParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<Plan>> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.GET)
+            .addPathSegments("plans", "external_plan_id", params.getPathParam(0))
+            .build()
+            .prepareAsync(clientOptions, params)
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
+            it, requestOptions
+          ) }.thenApply { response -> response.parseable {
+              response.use {
+                  fetchHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          } }
         }
     }
 }
