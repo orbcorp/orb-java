@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.49.0 (2025-03-14)
+
+Full Changelog: [v0.48.0...v0.49.0](https://github.com/orbcorp/orb-java/compare/v0.48.0...v0.49.0)
+
+### Features
+
+* **api:** api update ([#341](https://github.com/orbcorp/orb-java/issues/341)) ([3d8a83b](https://github.com/orbcorp/orb-java/commit/3d8a83bab9ac6fe453be2450ee0db32ee07c16c9))
+
+
+### Chores
+
+* **api:** correctly support ExternalCustomerID array filter on Subscriptions.List ([#340](https://github.com/orbcorp/orb-java/issues/340)) ([f5c8c0b](https://github.com/orbcorp/orb-java/commit/f5c8c0b4e7debfa773bc040831fa9935ca981215))
+* **internal:** remove extra empty newlines ([#338](https://github.com/orbcorp/orb-java/issues/338)) ([fb8b1a2](https://github.com/orbcorp/orb-java/commit/fb8b1a215c5397eef151a4dc0d33810b37c745b8))
+
 ## 0.48.0 (2025-03-11)
 
 Full Changelog: [v0.47.0...v0.48.0](https://github.com/orbcorp/orb-java/compare/v0.47.0...v0.48.0)
