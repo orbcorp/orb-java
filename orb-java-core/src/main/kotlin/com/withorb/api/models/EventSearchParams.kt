@@ -18,6 +18,7 @@ import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
+import com.withorb.api.errors.OrbInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
@@ -48,37 +49,48 @@ private constructor(
      * This is an explicit array of IDs to filter by. Note that an event's ID is the idempotency_key
      * that was originally used for ingestion, and this only supports events that have not been
      * amended. Values in this array will be treated case sensitively.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun eventIds(): List<String> = body.eventIds()
 
     /**
      * The end of the timeframe, exclusive, in which to search events. If not specified, the current
      * time is used.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
      */
     fun timeframeEnd(): Optional<OffsetDateTime> = body.timeframeEnd()
 
     /**
      * The start of the timeframe, inclusive, in which to search events. If not specified, the one
      * week ago is used.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
      */
     fun timeframeStart(): Optional<OffsetDateTime> = body.timeframeStart()
 
     /**
-     * This is an explicit array of IDs to filter by. Note that an event's ID is the idempotency_key
-     * that was originally used for ingestion, and this only supports events that have not been
-     * amended. Values in this array will be treated case sensitively.
+     * Returns the raw JSON value of [eventIds].
+     *
+     * Unlike [eventIds], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _eventIds(): JsonField<List<String>> = body._eventIds()
 
     /**
-     * The end of the timeframe, exclusive, in which to search events. If not specified, the current
-     * time is used.
+     * Returns the raw JSON value of [timeframeEnd].
+     *
+     * Unlike [timeframeEnd], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _timeframeEnd(): JsonField<OffsetDateTime> = body._timeframeEnd()
 
     /**
-     * The start of the timeframe, inclusive, in which to search events. If not specified, the one
-     * week ago is used.
+     * Returns the raw JSON value of [timeframeStart].
+     *
+     * Unlike [timeframeStart], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _timeframeStart(): JsonField<OffsetDateTime> = body._timeframeStart()
 
@@ -115,12 +127,18 @@ private constructor(
          * This is an explicit array of IDs to filter by. Note that an event's ID is the
          * idempotency_key that was originally used for ingestion, and this only supports events
          * that have not been amended. Values in this array will be treated case sensitively.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun eventIds(): List<String> = eventIds.getRequired("event_ids")
 
         /**
          * The end of the timeframe, exclusive, in which to search events. If not specified, the
          * current time is used.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
         fun timeframeEnd(): Optional<OffsetDateTime> =
             Optional.ofNullable(timeframeEnd.getNullable("timeframe_end"))
@@ -128,30 +146,37 @@ private constructor(
         /**
          * The start of the timeframe, inclusive, in which to search events. If not specified, the
          * one week ago is used.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
         fun timeframeStart(): Optional<OffsetDateTime> =
             Optional.ofNullable(timeframeStart.getNullable("timeframe_start"))
 
         /**
-         * This is an explicit array of IDs to filter by. Note that an event's ID is the
-         * idempotency_key that was originally used for ingestion, and this only supports events
-         * that have not been amended. Values in this array will be treated case sensitively.
+         * Returns the raw JSON value of [eventIds].
+         *
+         * Unlike [eventIds], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("event_ids")
         @ExcludeMissing
         fun _eventIds(): JsonField<List<String>> = eventIds
 
         /**
-         * The end of the timeframe, exclusive, in which to search events. If not specified, the
-         * current time is used.
+         * Returns the raw JSON value of [timeframeEnd].
+         *
+         * Unlike [timeframeEnd], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("timeframe_end")
         @ExcludeMissing
         fun _timeframeEnd(): JsonField<OffsetDateTime> = timeframeEnd
 
         /**
-         * The start of the timeframe, inclusive, in which to search events. If not specified, the
-         * one week ago is used.
+         * Returns the raw JSON value of [timeframeStart].
+         *
+         * Unlike [timeframeStart], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("timeframe_start")
         @ExcludeMissing
@@ -213,18 +238,20 @@ private constructor(
             fun eventIds(eventIds: List<String>) = eventIds(JsonField.of(eventIds))
 
             /**
-             * This is an explicit array of IDs to filter by. Note that an event's ID is the
-             * idempotency_key that was originally used for ingestion, and this only supports events
-             * that have not been amended. Values in this array will be treated case sensitively.
+             * Sets [Builder.eventIds] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.eventIds] with a well-typed `List<String>` value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun eventIds(eventIds: JsonField<List<String>>) = apply {
                 this.eventIds = eventIds.map { it.toMutableList() }
             }
 
             /**
-             * This is an explicit array of IDs to filter by. Note that an event's ID is the
-             * idempotency_key that was originally used for ingestion, and this only supports events
-             * that have not been amended. Values in this array will be treated case sensitively.
+             * Adds a single [String] to [eventIds].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
              */
             fun addEventId(eventId: String) = apply {
                 eventIds =
@@ -240,16 +267,16 @@ private constructor(
             fun timeframeEnd(timeframeEnd: OffsetDateTime?) =
                 timeframeEnd(JsonField.ofNullable(timeframeEnd))
 
-            /**
-             * The end of the timeframe, exclusive, in which to search events. If not specified, the
-             * current time is used.
-             */
+            /** Alias for calling [Builder.timeframeEnd] with `timeframeEnd.orElse(null)`. */
             fun timeframeEnd(timeframeEnd: Optional<OffsetDateTime>) =
                 timeframeEnd(timeframeEnd.getOrNull())
 
             /**
-             * The end of the timeframe, exclusive, in which to search events. If not specified, the
-             * current time is used.
+             * Sets [Builder.timeframeEnd] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.timeframeEnd] with a well-typed [OffsetDateTime]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
             fun timeframeEnd(timeframeEnd: JsonField<OffsetDateTime>) = apply {
                 this.timeframeEnd = timeframeEnd
@@ -262,16 +289,16 @@ private constructor(
             fun timeframeStart(timeframeStart: OffsetDateTime?) =
                 timeframeStart(JsonField.ofNullable(timeframeStart))
 
-            /**
-             * The start of the timeframe, inclusive, in which to search events. If not specified,
-             * the one week ago is used.
-             */
+            /** Alias for calling [Builder.timeframeStart] with `timeframeStart.orElse(null)`. */
             fun timeframeStart(timeframeStart: Optional<OffsetDateTime>) =
                 timeframeStart(timeframeStart.getOrNull())
 
             /**
-             * The start of the timeframe, inclusive, in which to search events. If not specified,
-             * the one week ago is used.
+             * Sets [Builder.timeframeStart] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.timeframeStart] with a well-typed [OffsetDateTime]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
             fun timeframeStart(timeframeStart: JsonField<OffsetDateTime>) = apply {
                 this.timeframeStart = timeframeStart
@@ -361,16 +388,18 @@ private constructor(
         fun eventIds(eventIds: List<String>) = apply { body.eventIds(eventIds) }
 
         /**
-         * This is an explicit array of IDs to filter by. Note that an event's ID is the
-         * idempotency_key that was originally used for ingestion, and this only supports events
-         * that have not been amended. Values in this array will be treated case sensitively.
+         * Sets [Builder.eventIds] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.eventIds] with a well-typed `List<String>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
         fun eventIds(eventIds: JsonField<List<String>>) = apply { body.eventIds(eventIds) }
 
         /**
-         * This is an explicit array of IDs to filter by. Note that an event's ID is the
-         * idempotency_key that was originally used for ingestion, and this only supports events
-         * that have not been amended. Values in this array will be treated case sensitively.
+         * Adds a single [String] to [eventIds].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
          */
         fun addEventId(eventId: String) = apply { body.addEventId(eventId) }
 
@@ -380,16 +409,16 @@ private constructor(
          */
         fun timeframeEnd(timeframeEnd: OffsetDateTime?) = apply { body.timeframeEnd(timeframeEnd) }
 
-        /**
-         * The end of the timeframe, exclusive, in which to search events. If not specified, the
-         * current time is used.
-         */
+        /** Alias for calling [Builder.timeframeEnd] with `timeframeEnd.orElse(null)`. */
         fun timeframeEnd(timeframeEnd: Optional<OffsetDateTime>) =
             timeframeEnd(timeframeEnd.getOrNull())
 
         /**
-         * The end of the timeframe, exclusive, in which to search events. If not specified, the
-         * current time is used.
+         * Sets [Builder.timeframeEnd] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.timeframeEnd] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
         fun timeframeEnd(timeframeEnd: JsonField<OffsetDateTime>) = apply {
             body.timeframeEnd(timeframeEnd)
@@ -403,16 +432,16 @@ private constructor(
             body.timeframeStart(timeframeStart)
         }
 
-        /**
-         * The start of the timeframe, inclusive, in which to search events. If not specified, the
-         * one week ago is used.
-         */
+        /** Alias for calling [Builder.timeframeStart] with `timeframeStart.orElse(null)`. */
         fun timeframeStart(timeframeStart: Optional<OffsetDateTime>) =
             timeframeStart(timeframeStart.getOrNull())
 
         /**
-         * The start of the timeframe, inclusive, in which to search events. If not specified, the
-         * one week ago is used.
+         * Sets [Builder.timeframeStart] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.timeframeStart] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
         fun timeframeStart(timeframeStart: JsonField<OffsetDateTime>) = apply {
             body.timeframeStart(timeframeStart)

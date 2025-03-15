@@ -40,36 +40,68 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
-    /** Only available if discount_type is `amount`. */
+    /**
+     * Only available if discount_type is `amount`.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun amountDiscount(): String = amountDiscount.getRequired("amount_discount")
 
     /**
      * List of price_ids that this discount applies to. For plan/plan phase discounts, this can be a
      * subset of prices.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun appliesToPriceIds(): List<String> = appliesToPriceIds.getRequired("applies_to_price_ids")
 
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
     fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
 
-    /** Only available if discount_type is `amount`. */
+    /**
+     * Returns the raw JSON value of [amountDiscount].
+     *
+     * Unlike [amountDiscount], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("amount_discount")
     @ExcludeMissing
     fun _amountDiscount(): JsonField<String> = amountDiscount
 
     /**
-     * List of price_ids that this discount applies to. For plan/plan phase discounts, this can be a
-     * subset of prices.
+     * Returns the raw JSON value of [appliesToPriceIds].
+     *
+     * Unlike [appliesToPriceIds], this method doesn't throw if the JSON field has an unexpected
+     * type.
      */
     @JsonProperty("applies_to_price_ids")
     @ExcludeMissing
     fun _appliesToPriceIds(): JsonField<List<String>> = appliesToPriceIds
 
+    /**
+     * Returns the raw JSON value of [discountType].
+     *
+     * Unlike [discountType], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("discount_type")
     @ExcludeMissing
     fun _discountType(): JsonField<DiscountType> = discountType
 
+    /**
+     * Returns the raw JSON value of [reason].
+     *
+     * Unlike [reason], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<String> = reason
 
     @JsonAnyGetter
@@ -128,7 +160,13 @@ private constructor(
         /** Only available if discount_type is `amount`. */
         fun amountDiscount(amountDiscount: String) = amountDiscount(JsonField.of(amountDiscount))
 
-        /** Only available if discount_type is `amount`. */
+        /**
+         * Sets [Builder.amountDiscount] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.amountDiscount] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun amountDiscount(amountDiscount: JsonField<String>) = apply {
             this.amountDiscount = amountDiscount
         }
@@ -141,16 +179,20 @@ private constructor(
             appliesToPriceIds(JsonField.of(appliesToPriceIds))
 
         /**
-         * List of price_ids that this discount applies to. For plan/plan phase discounts, this can
-         * be a subset of prices.
+         * Sets [Builder.appliesToPriceIds] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.appliesToPriceIds] with a well-typed `List<String>`
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
          */
         fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
             this.appliesToPriceIds = appliesToPriceIds.map { it.toMutableList() }
         }
 
         /**
-         * List of price_ids that this discount applies to. For plan/plan phase discounts, this can
-         * be a subset of prices.
+         * Adds a single [String] to [appliesToPriceIds].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
          */
         fun addAppliesToPriceId(appliesToPriceId: String) = apply {
             appliesToPriceIds =
@@ -161,14 +203,28 @@ private constructor(
 
         fun discountType(discountType: DiscountType) = discountType(JsonField.of(discountType))
 
+        /**
+         * Sets [Builder.discountType] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.discountType] with a well-typed [DiscountType] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun discountType(discountType: JsonField<DiscountType>) = apply {
             this.discountType = discountType
         }
 
         fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
+        /** Alias for calling [Builder.reason] with `reason.orElse(null)`. */
         fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
+        /**
+         * Sets [Builder.reason] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.reason] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun reason(reason: JsonField<String>) = apply { this.reason = reason }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {

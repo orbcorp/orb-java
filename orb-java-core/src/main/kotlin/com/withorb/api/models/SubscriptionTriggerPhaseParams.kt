@@ -17,6 +17,7 @@ import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
+import com.withorb.api.errors.OrbInvalidDataException
 import java.time.LocalDate
 import java.util.Objects
 import java.util.Optional
@@ -37,25 +38,33 @@ private constructor(
      * If false, this request will fail if it would void an issued invoice or create a credit note.
      * Consider using this as a safety mechanism if you do not expect existing invoices to be
      * changed.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
      */
     fun allowInvoiceCreditOrVoid(): Optional<Boolean> = body.allowInvoiceCreditOrVoid()
 
     /**
      * The date on which the phase change should take effect. If not provided, defaults to today in
      * the customer's timezone.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
      */
     fun effectiveDate(): Optional<LocalDate> = body.effectiveDate()
 
     /**
-     * If false, this request will fail if it would void an issued invoice or create a credit note.
-     * Consider using this as a safety mechanism if you do not expect existing invoices to be
-     * changed.
+     * Returns the raw JSON value of [allowInvoiceCreditOrVoid].
+     *
+     * Unlike [allowInvoiceCreditOrVoid], this method doesn't throw if the JSON field has an
+     * unexpected type.
      */
     fun _allowInvoiceCreditOrVoid(): JsonField<Boolean> = body._allowInvoiceCreditOrVoid()
 
     /**
-     * The date on which the phase change should take effect. If not provided, defaults to today in
-     * the customer's timezone.
+     * Returns the raw JSON value of [effectiveDate].
+     *
+     * Unlike [effectiveDate], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _effectiveDate(): JsonField<LocalDate> = body._effectiveDate()
 
@@ -96,6 +105,9 @@ private constructor(
          * If false, this request will fail if it would void an issued invoice or create a credit
          * note. Consider using this as a safety mechanism if you do not expect existing invoices to
          * be changed.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
         fun allowInvoiceCreditOrVoid(): Optional<Boolean> =
             Optional.ofNullable(
@@ -105,22 +117,28 @@ private constructor(
         /**
          * The date on which the phase change should take effect. If not provided, defaults to today
          * in the customer's timezone.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
         fun effectiveDate(): Optional<LocalDate> =
             Optional.ofNullable(effectiveDate.getNullable("effective_date"))
 
         /**
-         * If false, this request will fail if it would void an issued invoice or create a credit
-         * note. Consider using this as a safety mechanism if you do not expect existing invoices to
-         * be changed.
+         * Returns the raw JSON value of [allowInvoiceCreditOrVoid].
+         *
+         * Unlike [allowInvoiceCreditOrVoid], this method doesn't throw if the JSON field has an
+         * unexpected type.
          */
         @JsonProperty("allow_invoice_credit_or_void")
         @ExcludeMissing
         fun _allowInvoiceCreditOrVoid(): JsonField<Boolean> = allowInvoiceCreditOrVoid
 
         /**
-         * The date on which the phase change should take effect. If not provided, defaults to today
-         * in the customer's timezone.
+         * Returns the raw JSON value of [effectiveDate].
+         *
+         * Unlike [effectiveDate], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("effective_date")
         @ExcludeMissing
@@ -173,25 +191,26 @@ private constructor(
                 allowInvoiceCreditOrVoid(JsonField.ofNullable(allowInvoiceCreditOrVoid))
 
             /**
-             * If false, this request will fail if it would void an issued invoice or create a
-             * credit note. Consider using this as a safety mechanism if you do not expect existing
-             * invoices to be changed.
+             * Alias for [Builder.allowInvoiceCreditOrVoid].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
              */
             fun allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid: Boolean) =
                 allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid as Boolean?)
 
             /**
-             * If false, this request will fail if it would void an issued invoice or create a
-             * credit note. Consider using this as a safety mechanism if you do not expect existing
-             * invoices to be changed.
+             * Alias for calling [Builder.allowInvoiceCreditOrVoid] with
+             * `allowInvoiceCreditOrVoid.orElse(null)`.
              */
             fun allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid: Optional<Boolean>) =
                 allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid.getOrNull())
 
             /**
-             * If false, this request will fail if it would void an issued invoice or create a
-             * credit note. Consider using this as a safety mechanism if you do not expect existing
-             * invoices to be changed.
+             * Sets [Builder.allowInvoiceCreditOrVoid] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.allowInvoiceCreditOrVoid] with a well-typed
+             * [Boolean] value instead. This method is primarily for setting the field to an
+             * undocumented or not yet supported value.
              */
             fun allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid: JsonField<Boolean>) = apply {
                 this.allowInvoiceCreditOrVoid = allowInvoiceCreditOrVoid
@@ -204,16 +223,16 @@ private constructor(
             fun effectiveDate(effectiveDate: LocalDate?) =
                 effectiveDate(JsonField.ofNullable(effectiveDate))
 
-            /**
-             * The date on which the phase change should take effect. If not provided, defaults to
-             * today in the customer's timezone.
-             */
+            /** Alias for calling [Builder.effectiveDate] with `effectiveDate.orElse(null)`. */
             fun effectiveDate(effectiveDate: Optional<LocalDate>) =
                 effectiveDate(effectiveDate.getOrNull())
 
             /**
-             * The date on which the phase change should take effect. If not provided, defaults to
-             * today in the customer's timezone.
+             * Sets [Builder.effectiveDate] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.effectiveDate] with a well-typed [LocalDate] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun effectiveDate(effectiveDate: JsonField<LocalDate>) = apply {
                 this.effectiveDate = effectiveDate
@@ -305,25 +324,26 @@ private constructor(
         }
 
         /**
-         * If false, this request will fail if it would void an issued invoice or create a credit
-         * note. Consider using this as a safety mechanism if you do not expect existing invoices to
-         * be changed.
+         * Alias for [Builder.allowInvoiceCreditOrVoid].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
          */
         fun allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid: Boolean) =
             allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid as Boolean?)
 
         /**
-         * If false, this request will fail if it would void an issued invoice or create a credit
-         * note. Consider using this as a safety mechanism if you do not expect existing invoices to
-         * be changed.
+         * Alias for calling [Builder.allowInvoiceCreditOrVoid] with
+         * `allowInvoiceCreditOrVoid.orElse(null)`.
          */
         fun allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid: Optional<Boolean>) =
             allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid.getOrNull())
 
         /**
-         * If false, this request will fail if it would void an issued invoice or create a credit
-         * note. Consider using this as a safety mechanism if you do not expect existing invoices to
-         * be changed.
+         * Sets [Builder.allowInvoiceCreditOrVoid] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.allowInvoiceCreditOrVoid] with a well-typed [Boolean]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
          */
         fun allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid: JsonField<Boolean>) = apply {
             body.allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid)
@@ -335,16 +355,16 @@ private constructor(
          */
         fun effectiveDate(effectiveDate: LocalDate?) = apply { body.effectiveDate(effectiveDate) }
 
-        /**
-         * The date on which the phase change should take effect. If not provided, defaults to today
-         * in the customer's timezone.
-         */
+        /** Alias for calling [Builder.effectiveDate] with `effectiveDate.orElse(null)`. */
         fun effectiveDate(effectiveDate: Optional<LocalDate>) =
             effectiveDate(effectiveDate.getOrNull())
 
         /**
-         * The date on which the phase change should take effect. If not provided, defaults to today
-         * in the customer's timezone.
+         * Sets [Builder.effectiveDate] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.effectiveDate] with a well-typed [LocalDate] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
         fun effectiveDate(effectiveDate: JsonField<LocalDate>) = apply {
             body.effectiveDate(effectiveDate)
