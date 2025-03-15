@@ -148,38 +148,43 @@ private constructor(
          */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
-        /**
-         * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
-         * initial request.
-         */
+        /** Alias for calling [Builder.cursor] with `cursor.orElse(null)`. */
         fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
         /** The number of items to fetch. Defaults to 20. */
         fun limit(limit: Long?) = apply { this.limit = limit }
 
-        /** The number of items to fetch. Defaults to 20. */
+        /**
+         * Alias for [Builder.limit].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
         fun limit(limit: Long) = limit(limit as Long?)
 
-        /** The number of items to fetch. Defaults to 20. */
+        /** Alias for calling [Builder.limit] with `limit.orElse(null)`. */
         fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         fun startDateGt(startDateGt: OffsetDateTime?) = apply { this.startDateGt = startDateGt }
 
+        /** Alias for calling [Builder.startDateGt] with `startDateGt.orElse(null)`. */
         fun startDateGt(startDateGt: Optional<OffsetDateTime>) =
             startDateGt(startDateGt.getOrNull())
 
         fun startDateGte(startDateGte: OffsetDateTime?) = apply { this.startDateGte = startDateGte }
 
+        /** Alias for calling [Builder.startDateGte] with `startDateGte.orElse(null)`. */
         fun startDateGte(startDateGte: Optional<OffsetDateTime>) =
             startDateGte(startDateGte.getOrNull())
 
         fun startDateLt(startDateLt: OffsetDateTime?) = apply { this.startDateLt = startDateLt }
 
+        /** Alias for calling [Builder.startDateLt] with `startDateLt.orElse(null)`. */
         fun startDateLt(startDateLt: Optional<OffsetDateTime>) =
             startDateLt(startDateLt.getOrNull())
 
         fun startDateLte(startDateLte: OffsetDateTime?) = apply { this.startDateLte = startDateLte }
 
+        /** Alias for calling [Builder.startDateLte] with `startDateLte.orElse(null)`. */
         fun startDateLte(startDateLte: Optional<OffsetDateTime>) =
             startDateLte(startDateLte.getOrNull())
 

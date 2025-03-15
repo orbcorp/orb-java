@@ -221,14 +221,17 @@ private constructor(
 
         fun amount(amount: String?) = apply { this.amount = amount }
 
+        /** Alias for calling [Builder.amount] with `amount.orElse(null)`. */
         fun amount(amount: Optional<String>) = amount(amount.getOrNull())
 
         fun amountGt(amountGt: String?) = apply { this.amountGt = amountGt }
 
+        /** Alias for calling [Builder.amountGt] with `amountGt.orElse(null)`. */
         fun amountGt(amountGt: Optional<String>) = amountGt(amountGt.getOrNull())
 
         fun amountLt(amountLt: String?) = apply { this.amountLt = amountLt }
 
+        /** Alias for calling [Builder.amountLt] with `amountLt.orElse(null)`. */
         fun amountLt(amountLt: Optional<String>) = amountLt(amountLt.getOrNull())
 
         /**
@@ -237,22 +240,22 @@ private constructor(
          */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
-        /**
-         * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
-         * initial request.
-         */
+        /** Alias for calling [Builder.cursor] with `cursor.orElse(null)`. */
         fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
         fun customerId(customerId: String?) = apply { this.customerId = customerId }
 
+        /** Alias for calling [Builder.customerId] with `customerId.orElse(null)`. */
         fun customerId(customerId: Optional<String>) = customerId(customerId.getOrNull())
 
         fun dateType(dateType: DateType?) = apply { this.dateType = dateType }
 
+        /** Alias for calling [Builder.dateType] with `dateType.orElse(null)`. */
         fun dateType(dateType: Optional<DateType>) = dateType(dateType.getOrNull())
 
         fun dueDate(dueDate: LocalDate?) = apply { this.dueDate = dueDate }
 
+        /** Alias for calling [Builder.dueDate] with `dueDate.orElse(null)`. */
         fun dueDate(dueDate: Optional<LocalDate>) = dueDate(dueDate.getOrNull())
 
         /**
@@ -262,26 +265,27 @@ private constructor(
          */
         fun dueDateWindow(dueDateWindow: String?) = apply { this.dueDateWindow = dueDateWindow }
 
-        /**
-         * Filters invoices by their due dates within a specific time range in the past. Specify the
-         * range as a number followed by 'd' (days) or 'm' (months). For example, '7d' filters
-         * invoices due in the last 7 days, and '2m' filters those due in the last 2 months.
-         */
+        /** Alias for calling [Builder.dueDateWindow] with `dueDateWindow.orElse(null)`. */
         fun dueDateWindow(dueDateWindow: Optional<String>) =
             dueDateWindow(dueDateWindow.getOrNull())
 
         fun dueDateGt(dueDateGt: LocalDate?) = apply { this.dueDateGt = dueDateGt }
 
+        /** Alias for calling [Builder.dueDateGt] with `dueDateGt.orElse(null)`. */
         fun dueDateGt(dueDateGt: Optional<LocalDate>) = dueDateGt(dueDateGt.getOrNull())
 
         fun dueDateLt(dueDateLt: LocalDate?) = apply { this.dueDateLt = dueDateLt }
 
+        /** Alias for calling [Builder.dueDateLt] with `dueDateLt.orElse(null)`. */
         fun dueDateLt(dueDateLt: Optional<LocalDate>) = dueDateLt(dueDateLt.getOrNull())
 
         fun externalCustomerId(externalCustomerId: String?) = apply {
             this.externalCustomerId = externalCustomerId
         }
 
+        /**
+         * Alias for calling [Builder.externalCustomerId] with `externalCustomerId.orElse(null)`.
+         */
         fun externalCustomerId(externalCustomerId: Optional<String>) =
             externalCustomerId(externalCustomerId.getOrNull())
 
@@ -289,6 +293,7 @@ private constructor(
             this.invoiceDateGt = invoiceDateGt
         }
 
+        /** Alias for calling [Builder.invoiceDateGt] with `invoiceDateGt.orElse(null)`. */
         fun invoiceDateGt(invoiceDateGt: Optional<OffsetDateTime>) =
             invoiceDateGt(invoiceDateGt.getOrNull())
 
@@ -296,6 +301,7 @@ private constructor(
             this.invoiceDateGte = invoiceDateGte
         }
 
+        /** Alias for calling [Builder.invoiceDateGte] with `invoiceDateGte.orElse(null)`. */
         fun invoiceDateGte(invoiceDateGte: Optional<OffsetDateTime>) =
             invoiceDateGte(invoiceDateGte.getOrNull())
 
@@ -303,6 +309,7 @@ private constructor(
             this.invoiceDateLt = invoiceDateLt
         }
 
+        /** Alias for calling [Builder.invoiceDateLt] with `invoiceDateLt.orElse(null)`. */
         fun invoiceDateLt(invoiceDateLt: Optional<OffsetDateTime>) =
             invoiceDateLt(invoiceDateLt.getOrNull())
 
@@ -310,34 +317,52 @@ private constructor(
             this.invoiceDateLte = invoiceDateLte
         }
 
+        /** Alias for calling [Builder.invoiceDateLte] with `invoiceDateLte.orElse(null)`. */
         fun invoiceDateLte(invoiceDateLte: Optional<OffsetDateTime>) =
             invoiceDateLte(invoiceDateLte.getOrNull())
 
         fun isRecurring(isRecurring: Boolean?) = apply { this.isRecurring = isRecurring }
 
+        /**
+         * Alias for [Builder.isRecurring].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
         fun isRecurring(isRecurring: Boolean) = isRecurring(isRecurring as Boolean?)
 
+        /** Alias for calling [Builder.isRecurring] with `isRecurring.orElse(null)`. */
         fun isRecurring(isRecurring: Optional<Boolean>) = isRecurring(isRecurring.getOrNull())
 
         /** The number of items to fetch. Defaults to 20. */
         fun limit(limit: Long?) = apply { this.limit = limit }
 
-        /** The number of items to fetch. Defaults to 20. */
+        /**
+         * Alias for [Builder.limit].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
         fun limit(limit: Long) = limit(limit as Long?)
 
-        /** The number of items to fetch. Defaults to 20. */
+        /** Alias for calling [Builder.limit] with `limit.orElse(null)`. */
         fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         fun status(status: List<Status>?) = apply { this.status = status?.toMutableList() }
 
+        /** Alias for calling [Builder.status] with `status.orElse(null)`. */
         fun status(status: Optional<List<Status>>) = status(status.getOrNull())
 
+        /**
+         * Adds a single [Status] to [Builder.status].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addStatus(status: Status) = apply {
             this.status = (this.status ?: mutableListOf()).apply { add(status) }
         }
 
         fun subscriptionId(subscriptionId: String?) = apply { this.subscriptionId = subscriptionId }
 
+        /** Alias for calling [Builder.subscriptionId] with `subscriptionId.orElse(null)`. */
         fun subscriptionId(subscriptionId: Optional<String>) =
             subscriptionId(subscriptionId.getOrNull())
 

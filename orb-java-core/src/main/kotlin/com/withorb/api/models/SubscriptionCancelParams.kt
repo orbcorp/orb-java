@@ -85,35 +85,53 @@ private constructor(
 
     fun subscriptionId(): String = subscriptionId
 
-    /** Determines the timing of subscription cancellation */
+    /**
+     * Determines the timing of subscription cancellation
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun cancelOption(): CancelOption = body.cancelOption()
 
     /**
      * If false, this request will fail if it would void an issued invoice or create a credit note.
      * Consider using this as a safety mechanism if you do not expect existing invoices to be
      * changed.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
      */
     fun allowInvoiceCreditOrVoid(): Optional<Boolean> = body.allowInvoiceCreditOrVoid()
 
     /**
      * The date that the cancellation should take effect. This parameter can only be passed if the
      * `cancel_option` is `requested_date`.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
      */
     fun cancellationDate(): Optional<OffsetDateTime> = body.cancellationDate()
 
-    /** Determines the timing of subscription cancellation */
+    /**
+     * Returns the raw JSON value of [cancelOption].
+     *
+     * Unlike [cancelOption], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _cancelOption(): JsonField<CancelOption> = body._cancelOption()
 
     /**
-     * If false, this request will fail if it would void an issued invoice or create a credit note.
-     * Consider using this as a safety mechanism if you do not expect existing invoices to be
-     * changed.
+     * Returns the raw JSON value of [allowInvoiceCreditOrVoid].
+     *
+     * Unlike [allowInvoiceCreditOrVoid], this method doesn't throw if the JSON field has an
+     * unexpected type.
      */
     fun _allowInvoiceCreditOrVoid(): JsonField<Boolean> = body._allowInvoiceCreditOrVoid()
 
     /**
-     * The date that the cancellation should take effect. This parameter can only be passed if the
-     * `cancel_option` is `requested_date`.
+     * Returns the raw JSON value of [cancellationDate].
+     *
+     * Unlike [cancellationDate], this method doesn't throw if the JSON field has an unexpected
+     * type.
      */
     fun _cancellationDate(): JsonField<OffsetDateTime> = body._cancellationDate()
 
@@ -153,13 +171,21 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** Determines the timing of subscription cancellation */
+        /**
+         * Determines the timing of subscription cancellation
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun cancelOption(): CancelOption = cancelOption.getRequired("cancel_option")
 
         /**
          * If false, this request will fail if it would void an issued invoice or create a credit
          * note. Consider using this as a safety mechanism if you do not expect existing invoices to
          * be changed.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
         fun allowInvoiceCreditOrVoid(): Optional<Boolean> =
             Optional.ofNullable(
@@ -169,27 +195,38 @@ private constructor(
         /**
          * The date that the cancellation should take effect. This parameter can only be passed if
          * the `cancel_option` is `requested_date`.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
         fun cancellationDate(): Optional<OffsetDateTime> =
             Optional.ofNullable(cancellationDate.getNullable("cancellation_date"))
 
-        /** Determines the timing of subscription cancellation */
+        /**
+         * Returns the raw JSON value of [cancelOption].
+         *
+         * Unlike [cancelOption], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @JsonProperty("cancel_option")
         @ExcludeMissing
         fun _cancelOption(): JsonField<CancelOption> = cancelOption
 
         /**
-         * If false, this request will fail if it would void an issued invoice or create a credit
-         * note. Consider using this as a safety mechanism if you do not expect existing invoices to
-         * be changed.
+         * Returns the raw JSON value of [allowInvoiceCreditOrVoid].
+         *
+         * Unlike [allowInvoiceCreditOrVoid], this method doesn't throw if the JSON field has an
+         * unexpected type.
          */
         @JsonProperty("allow_invoice_credit_or_void")
         @ExcludeMissing
         fun _allowInvoiceCreditOrVoid(): JsonField<Boolean> = allowInvoiceCreditOrVoid
 
         /**
-         * The date that the cancellation should take effect. This parameter can only be passed if
-         * the `cancel_option` is `requested_date`.
+         * Returns the raw JSON value of [cancellationDate].
+         *
+         * Unlike [cancellationDate], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("cancellation_date")
         @ExcludeMissing
@@ -246,7 +283,13 @@ private constructor(
             /** Determines the timing of subscription cancellation */
             fun cancelOption(cancelOption: CancelOption) = cancelOption(JsonField.of(cancelOption))
 
-            /** Determines the timing of subscription cancellation */
+            /**
+             * Sets [Builder.cancelOption] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.cancelOption] with a well-typed [CancelOption] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun cancelOption(cancelOption: JsonField<CancelOption>) = apply {
                 this.cancelOption = cancelOption
             }
@@ -260,25 +303,26 @@ private constructor(
                 allowInvoiceCreditOrVoid(JsonField.ofNullable(allowInvoiceCreditOrVoid))
 
             /**
-             * If false, this request will fail if it would void an issued invoice or create a
-             * credit note. Consider using this as a safety mechanism if you do not expect existing
-             * invoices to be changed.
+             * Alias for [Builder.allowInvoiceCreditOrVoid].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
              */
             fun allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid: Boolean) =
                 allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid as Boolean?)
 
             /**
-             * If false, this request will fail if it would void an issued invoice or create a
-             * credit note. Consider using this as a safety mechanism if you do not expect existing
-             * invoices to be changed.
+             * Alias for calling [Builder.allowInvoiceCreditOrVoid] with
+             * `allowInvoiceCreditOrVoid.orElse(null)`.
              */
             fun allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid: Optional<Boolean>) =
                 allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid.getOrNull())
 
             /**
-             * If false, this request will fail if it would void an issued invoice or create a
-             * credit note. Consider using this as a safety mechanism if you do not expect existing
-             * invoices to be changed.
+             * Sets [Builder.allowInvoiceCreditOrVoid] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.allowInvoiceCreditOrVoid] with a well-typed
+             * [Boolean] value instead. This method is primarily for setting the field to an
+             * undocumented or not yet supported value.
              */
             fun allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid: JsonField<Boolean>) = apply {
                 this.allowInvoiceCreditOrVoid = allowInvoiceCreditOrVoid
@@ -292,15 +336,17 @@ private constructor(
                 cancellationDate(JsonField.ofNullable(cancellationDate))
 
             /**
-             * The date that the cancellation should take effect. This parameter can only be passed
-             * if the `cancel_option` is `requested_date`.
+             * Alias for calling [Builder.cancellationDate] with `cancellationDate.orElse(null)`.
              */
             fun cancellationDate(cancellationDate: Optional<OffsetDateTime>) =
                 cancellationDate(cancellationDate.getOrNull())
 
             /**
-             * The date that the cancellation should take effect. This parameter can only be passed
-             * if the `cancel_option` is `requested_date`.
+             * Sets [Builder.cancellationDate] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.cancellationDate] with a well-typed [OffsetDateTime]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
             fun cancellationDate(cancellationDate: JsonField<OffsetDateTime>) = apply {
                 this.cancellationDate = cancellationDate
@@ -390,7 +436,13 @@ private constructor(
         /** Determines the timing of subscription cancellation */
         fun cancelOption(cancelOption: CancelOption) = apply { body.cancelOption(cancelOption) }
 
-        /** Determines the timing of subscription cancellation */
+        /**
+         * Sets [Builder.cancelOption] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cancelOption] with a well-typed [CancelOption] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun cancelOption(cancelOption: JsonField<CancelOption>) = apply {
             body.cancelOption(cancelOption)
         }
@@ -405,25 +457,26 @@ private constructor(
         }
 
         /**
-         * If false, this request will fail if it would void an issued invoice or create a credit
-         * note. Consider using this as a safety mechanism if you do not expect existing invoices to
-         * be changed.
+         * Alias for [Builder.allowInvoiceCreditOrVoid].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
          */
         fun allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid: Boolean) =
             allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid as Boolean?)
 
         /**
-         * If false, this request will fail if it would void an issued invoice or create a credit
-         * note. Consider using this as a safety mechanism if you do not expect existing invoices to
-         * be changed.
+         * Alias for calling [Builder.allowInvoiceCreditOrVoid] with
+         * `allowInvoiceCreditOrVoid.orElse(null)`.
          */
         fun allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid: Optional<Boolean>) =
             allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid.getOrNull())
 
         /**
-         * If false, this request will fail if it would void an issued invoice or create a credit
-         * note. Consider using this as a safety mechanism if you do not expect existing invoices to
-         * be changed.
+         * Sets [Builder.allowInvoiceCreditOrVoid] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.allowInvoiceCreditOrVoid] with a well-typed [Boolean]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
          */
         fun allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid: JsonField<Boolean>) = apply {
             body.allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid)
@@ -437,16 +490,16 @@ private constructor(
             body.cancellationDate(cancellationDate)
         }
 
-        /**
-         * The date that the cancellation should take effect. This parameter can only be passed if
-         * the `cancel_option` is `requested_date`.
-         */
+        /** Alias for calling [Builder.cancellationDate] with `cancellationDate.orElse(null)`. */
         fun cancellationDate(cancellationDate: Optional<OffsetDateTime>) =
             cancellationDate(cancellationDate.getOrNull())
 
         /**
-         * The date that the cancellation should take effect. This parameter can only be passed if
-         * the `cancel_option` is `requested_date`.
+         * Sets [Builder.cancellationDate] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cancellationDate] with a well-typed [OffsetDateTime]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
          */
         fun cancellationDate(cancellationDate: JsonField<OffsetDateTime>) = apply {
             body.cancellationDate(cancellationDate)

@@ -151,21 +151,25 @@ private constructor(
 
         fun createdAtGt(createdAtGt: OffsetDateTime?) = apply { this.createdAtGt = createdAtGt }
 
+        /** Alias for calling [Builder.createdAtGt] with `createdAtGt.orElse(null)`. */
         fun createdAtGt(createdAtGt: Optional<OffsetDateTime>) =
             createdAtGt(createdAtGt.getOrNull())
 
         fun createdAtGte(createdAtGte: OffsetDateTime?) = apply { this.createdAtGte = createdAtGte }
 
+        /** Alias for calling [Builder.createdAtGte] with `createdAtGte.orElse(null)`. */
         fun createdAtGte(createdAtGte: Optional<OffsetDateTime>) =
             createdAtGte(createdAtGte.getOrNull())
 
         fun createdAtLt(createdAtLt: OffsetDateTime?) = apply { this.createdAtLt = createdAtLt }
 
+        /** Alias for calling [Builder.createdAtLt] with `createdAtLt.orElse(null)`. */
         fun createdAtLt(createdAtLt: Optional<OffsetDateTime>) =
             createdAtLt(createdAtLt.getOrNull())
 
         fun createdAtLte(createdAtLte: OffsetDateTime?) = apply { this.createdAtLte = createdAtLte }
 
+        /** Alias for calling [Builder.createdAtLte] with `createdAtLte.orElse(null)`. */
         fun createdAtLte(createdAtLte: Optional<OffsetDateTime>) =
             createdAtLte(createdAtLte.getOrNull())
 
@@ -175,18 +179,21 @@ private constructor(
          */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
-        /**
-         * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
-         * initial request.
-         */
+        /** Alias for calling [Builder.cursor] with `cursor.orElse(null)`. */
         fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
         fun customerId(customerId: List<String>?) = apply {
             this.customerId = customerId?.toMutableList()
         }
 
+        /** Alias for calling [Builder.customerId] with `customerId.orElse(null)`. */
         fun customerId(customerId: Optional<List<String>>) = customerId(customerId.getOrNull())
 
+        /**
+         * Adds a single [String] to [Builder.customerId].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addCustomerId(customerId: String) = apply {
             this.customerId = (this.customerId ?: mutableListOf()).apply { add(customerId) }
         }
@@ -195,9 +202,17 @@ private constructor(
             this.externalCustomerId = externalCustomerId?.toMutableList()
         }
 
+        /**
+         * Alias for calling [Builder.externalCustomerId] with `externalCustomerId.orElse(null)`.
+         */
         fun externalCustomerId(externalCustomerId: Optional<List<String>>) =
             externalCustomerId(externalCustomerId.getOrNull())
 
+        /**
+         * Adds a single [String] to [Builder.externalCustomerId].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addExternalCustomerId(externalCustomerId: String) = apply {
             this.externalCustomerId =
                 (this.externalCustomerId ?: mutableListOf()).apply { add(externalCustomerId) }
@@ -206,14 +221,19 @@ private constructor(
         /** The number of items to fetch. Defaults to 20. */
         fun limit(limit: Long?) = apply { this.limit = limit }
 
-        /** The number of items to fetch. Defaults to 20. */
+        /**
+         * Alias for [Builder.limit].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
         fun limit(limit: Long) = limit(limit as Long?)
 
-        /** The number of items to fetch. Defaults to 20. */
+        /** Alias for calling [Builder.limit] with `limit.orElse(null)`. */
         fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         fun status(status: Status?) = apply { this.status = status }
 
+        /** Alias for calling [Builder.status] with `status.orElse(null)`. */
         fun status(status: Optional<Status>) = status(status.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {

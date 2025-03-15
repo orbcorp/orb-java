@@ -137,19 +137,20 @@ private constructor(
          */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
-        /**
-         * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
-         * initial request.
-         */
+        /** Alias for calling [Builder.cursor] with `cursor.orElse(null)`. */
         fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
         /** The number of items to fetch. Defaults to 20. */
         fun limit(limit: Long?) = apply { this.limit = limit }
 
-        /** The number of items to fetch. Defaults to 20. */
+        /**
+         * Alias for [Builder.limit].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
         fun limit(limit: Long) = limit(limit as Long?)
 
-        /** The number of items to fetch. Defaults to 20. */
+        /** Alias for calling [Builder.limit] with `limit.orElse(null)`. */
         fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         /**
@@ -160,12 +161,7 @@ private constructor(
          */
         fun timeframeEnd(timeframeEnd: OffsetDateTime?) = apply { this.timeframeEnd = timeframeEnd }
 
-        /**
-         * The end of the timeframe, exclusive, in which to return event volume. If not specified,
-         * the current time is used. All datetime values are converted to UTC time.If the specified
-         * time isn't hour-aligned, the response includes the event volumecount for the hour the
-         * time falls in.
-         */
+        /** Alias for calling [Builder.timeframeEnd] with `timeframeEnd.orElse(null)`. */
         fun timeframeEnd(timeframeEnd: Optional<OffsetDateTime>) =
             timeframeEnd(timeframeEnd.getOrNull())
 

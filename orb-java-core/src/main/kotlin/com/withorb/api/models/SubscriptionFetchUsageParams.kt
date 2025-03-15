@@ -354,11 +354,7 @@ private constructor(
             this.billableMetricId = billableMetricId
         }
 
-        /**
-         * When specified in conjunction with `group_by`, this parameter filters usage to a single
-         * billable metric. Note that both `group_by` and `billable_metric_id` must be specified
-         * together.
-         */
+        /** Alias for calling [Builder.billableMetricId] with `billableMetricId.orElse(null)`. */
         fun billableMetricId(billableMetricId: Optional<String>) =
             billableMetricId(billableMetricId.getOrNull())
 
@@ -366,6 +362,7 @@ private constructor(
             this.firstDimensionKey = firstDimensionKey
         }
 
+        /** Alias for calling [Builder.firstDimensionKey] with `firstDimensionKey.orElse(null)`. */
         fun firstDimensionKey(firstDimensionKey: Optional<String>) =
             firstDimensionKey(firstDimensionKey.getOrNull())
 
@@ -373,25 +370,31 @@ private constructor(
             this.firstDimensionValue = firstDimensionValue
         }
 
+        /**
+         * Alias for calling [Builder.firstDimensionValue] with `firstDimensionValue.orElse(null)`.
+         */
         fun firstDimensionValue(firstDimensionValue: Optional<String>) =
             firstDimensionValue(firstDimensionValue.getOrNull())
 
         /** This determines the windowing of usage reporting. */
         fun granularity(granularity: Granularity?) = apply { this.granularity = granularity }
 
-        /** This determines the windowing of usage reporting. */
+        /** Alias for calling [Builder.granularity] with `granularity.orElse(null)`. */
         fun granularity(granularity: Optional<Granularity>) = granularity(granularity.getOrNull())
 
         /** Groups per-price usage by the key provided. */
         fun groupBy(groupBy: String?) = apply { this.groupBy = groupBy }
 
-        /** Groups per-price usage by the key provided. */
+        /** Alias for calling [Builder.groupBy] with `groupBy.orElse(null)`. */
         fun groupBy(groupBy: Optional<String>) = groupBy(groupBy.getOrNull())
 
         fun secondDimensionKey(secondDimensionKey: String?) = apply {
             this.secondDimensionKey = secondDimensionKey
         }
 
+        /**
+         * Alias for calling [Builder.secondDimensionKey] with `secondDimensionKey.orElse(null)`.
+         */
         fun secondDimensionKey(secondDimensionKey: Optional<String>) =
             secondDimensionKey(secondDimensionKey.getOrNull())
 
@@ -399,13 +402,17 @@ private constructor(
             this.secondDimensionValue = secondDimensionValue
         }
 
+        /**
+         * Alias for calling [Builder.secondDimensionValue] with
+         * `secondDimensionValue.orElse(null)`.
+         */
         fun secondDimensionValue(secondDimensionValue: Optional<String>) =
             secondDimensionValue(secondDimensionValue.getOrNull())
 
         /** Usage returned is exclusive of `timeframe_end`. */
         fun timeframeEnd(timeframeEnd: OffsetDateTime?) = apply { this.timeframeEnd = timeframeEnd }
 
-        /** Usage returned is exclusive of `timeframe_end`. */
+        /** Alias for calling [Builder.timeframeEnd] with `timeframeEnd.orElse(null)`. */
         fun timeframeEnd(timeframeEnd: Optional<OffsetDateTime>) =
             timeframeEnd(timeframeEnd.getOrNull())
 
@@ -414,7 +421,7 @@ private constructor(
             this.timeframeStart = timeframeStart
         }
 
-        /** Usage returned is inclusive of `timeframe_start`. */
+        /** Alias for calling [Builder.timeframeStart] with `timeframeStart.orElse(null)`. */
         fun timeframeStart(timeframeStart: Optional<OffsetDateTime>) =
             timeframeStart(timeframeStart.getOrNull())
 
@@ -425,11 +432,7 @@ private constructor(
          */
         fun viewMode(viewMode: ViewMode?) = apply { this.viewMode = viewMode }
 
-        /**
-         * Controls whether Orb returns cumulative usage since the start of the billing period, or
-         * incremental day-by-day usage. If your customer has minimums or discounts, it's strongly
-         * recommended that you use the default cumulative behavior.
-         */
+        /** Alias for calling [Builder.viewMode] with `viewMode.orElse(null)`. */
         fun viewMode(viewMode: Optional<ViewMode>) = viewMode(viewMode.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {

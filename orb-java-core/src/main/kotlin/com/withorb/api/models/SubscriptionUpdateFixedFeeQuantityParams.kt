@@ -48,15 +48,27 @@ private constructor(
 
     fun subscriptionId(): String = subscriptionId
 
-    /** Price for which the quantity should be updated. Must be a fixed fee. */
+    /**
+     * Price for which the quantity should be updated. Must be a fixed fee.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun priceId(): String = body.priceId()
 
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun quantity(): Double = body.quantity()
 
     /**
      * If false, this request will fail if it would void an issued invoice or create a credit note.
      * Consider using this as a safety mechanism if you do not expect existing invoices to be
      * changed.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
      */
     fun allowInvoiceCreditOrVoid(): Optional<Boolean> = body.allowInvoiceCreditOrVoid()
 
@@ -64,6 +76,9 @@ private constructor(
      * Determines when the change takes effect. Note that if `effective_date` is specified, this
      * defaults to `effective_date`. Otherwise, this defaults to `immediate` unless it's explicitly
      * set to `upcoming_invoice`.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
      */
     fun changeOption(): Optional<ChangeOption> = body.changeOption()
 
@@ -71,32 +86,45 @@ private constructor(
      * The date that the quantity change should take effect, localized to the customer's timezone.
      * Ifthis parameter is not passed in, the quantity change is effective according to
      * `change_option`.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
      */
     fun effectiveDate(): Optional<LocalDate> = body.effectiveDate()
 
-    /** Price for which the quantity should be updated. Must be a fixed fee. */
+    /**
+     * Returns the raw JSON value of [priceId].
+     *
+     * Unlike [priceId], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _priceId(): JsonField<String> = body._priceId()
 
+    /**
+     * Returns the raw JSON value of [quantity].
+     *
+     * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _quantity(): JsonField<Double> = body._quantity()
 
     /**
-     * If false, this request will fail if it would void an issued invoice or create a credit note.
-     * Consider using this as a safety mechanism if you do not expect existing invoices to be
-     * changed.
+     * Returns the raw JSON value of [allowInvoiceCreditOrVoid].
+     *
+     * Unlike [allowInvoiceCreditOrVoid], this method doesn't throw if the JSON field has an
+     * unexpected type.
      */
     fun _allowInvoiceCreditOrVoid(): JsonField<Boolean> = body._allowInvoiceCreditOrVoid()
 
     /**
-     * Determines when the change takes effect. Note that if `effective_date` is specified, this
-     * defaults to `effective_date`. Otherwise, this defaults to `immediate` unless it's explicitly
-     * set to `upcoming_invoice`.
+     * Returns the raw JSON value of [changeOption].
+     *
+     * Unlike [changeOption], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _changeOption(): JsonField<ChangeOption> = body._changeOption()
 
     /**
-     * The date that the quantity change should take effect, localized to the customer's timezone.
-     * Ifthis parameter is not passed in, the quantity change is effective according to
-     * `change_option`.
+     * Returns the raw JSON value of [effectiveDate].
+     *
+     * Unlike [effectiveDate], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _effectiveDate(): JsonField<LocalDate> = body._effectiveDate()
 
@@ -142,15 +170,27 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** Price for which the quantity should be updated. Must be a fixed fee. */
+        /**
+         * Price for which the quantity should be updated. Must be a fixed fee.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun priceId(): String = priceId.getRequired("price_id")
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun quantity(): Double = quantity.getRequired("quantity")
 
         /**
          * If false, this request will fail if it would void an issued invoice or create a credit
          * note. Consider using this as a safety mechanism if you do not expect existing invoices to
          * be changed.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
         fun allowInvoiceCreditOrVoid(): Optional<Boolean> =
             Optional.ofNullable(
@@ -161,6 +201,9 @@ private constructor(
          * Determines when the change takes effect. Note that if `effective_date` is specified, this
          * defaults to `effective_date`. Otherwise, this defaults to `immediate` unless it's
          * explicitly set to `upcoming_invoice`.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
         fun changeOption(): Optional<ChangeOption> =
             Optional.ofNullable(changeOption.getNullable("change_option"))
@@ -169,37 +212,52 @@ private constructor(
          * The date that the quantity change should take effect, localized to the customer's
          * timezone. Ifthis parameter is not passed in, the quantity change is effective according
          * to `change_option`.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
         fun effectiveDate(): Optional<LocalDate> =
             Optional.ofNullable(effectiveDate.getNullable("effective_date"))
 
-        /** Price for which the quantity should be updated. Must be a fixed fee. */
+        /**
+         * Returns the raw JSON value of [priceId].
+         *
+         * Unlike [priceId], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("price_id") @ExcludeMissing fun _priceId(): JsonField<String> = priceId
 
+        /**
+         * Returns the raw JSON value of [quantity].
+         *
+         * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
 
         /**
-         * If false, this request will fail if it would void an issued invoice or create a credit
-         * note. Consider using this as a safety mechanism if you do not expect existing invoices to
-         * be changed.
+         * Returns the raw JSON value of [allowInvoiceCreditOrVoid].
+         *
+         * Unlike [allowInvoiceCreditOrVoid], this method doesn't throw if the JSON field has an
+         * unexpected type.
          */
         @JsonProperty("allow_invoice_credit_or_void")
         @ExcludeMissing
         fun _allowInvoiceCreditOrVoid(): JsonField<Boolean> = allowInvoiceCreditOrVoid
 
         /**
-         * Determines when the change takes effect. Note that if `effective_date` is specified, this
-         * defaults to `effective_date`. Otherwise, this defaults to `immediate` unless it's
-         * explicitly set to `upcoming_invoice`.
+         * Returns the raw JSON value of [changeOption].
+         *
+         * Unlike [changeOption], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("change_option")
         @ExcludeMissing
         fun _changeOption(): JsonField<ChangeOption> = changeOption
 
         /**
-         * The date that the quantity change should take effect, localized to the customer's
-         * timezone. Ifthis parameter is not passed in, the quantity change is effective according
-         * to `change_option`.
+         * Returns the raw JSON value of [effectiveDate].
+         *
+         * Unlike [effectiveDate], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("effective_date")
         @ExcludeMissing
@@ -263,11 +321,24 @@ private constructor(
             /** Price for which the quantity should be updated. Must be a fixed fee. */
             fun priceId(priceId: String) = priceId(JsonField.of(priceId))
 
-            /** Price for which the quantity should be updated. Must be a fixed fee. */
+            /**
+             * Sets [Builder.priceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.priceId] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun priceId(priceId: JsonField<String>) = apply { this.priceId = priceId }
 
             fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
+            /**
+             * Sets [Builder.quantity] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.quantity] with a well-typed [Double] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
             /**
@@ -279,25 +350,26 @@ private constructor(
                 allowInvoiceCreditOrVoid(JsonField.ofNullable(allowInvoiceCreditOrVoid))
 
             /**
-             * If false, this request will fail if it would void an issued invoice or create a
-             * credit note. Consider using this as a safety mechanism if you do not expect existing
-             * invoices to be changed.
+             * Alias for [Builder.allowInvoiceCreditOrVoid].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
              */
             fun allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid: Boolean) =
                 allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid as Boolean?)
 
             /**
-             * If false, this request will fail if it would void an issued invoice or create a
-             * credit note. Consider using this as a safety mechanism if you do not expect existing
-             * invoices to be changed.
+             * Alias for calling [Builder.allowInvoiceCreditOrVoid] with
+             * `allowInvoiceCreditOrVoid.orElse(null)`.
              */
             fun allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid: Optional<Boolean>) =
                 allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid.getOrNull())
 
             /**
-             * If false, this request will fail if it would void an issued invoice or create a
-             * credit note. Consider using this as a safety mechanism if you do not expect existing
-             * invoices to be changed.
+             * Sets [Builder.allowInvoiceCreditOrVoid] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.allowInvoiceCreditOrVoid] with a well-typed
+             * [Boolean] value instead. This method is primarily for setting the field to an
+             * undocumented or not yet supported value.
              */
             fun allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid: JsonField<Boolean>) = apply {
                 this.allowInvoiceCreditOrVoid = allowInvoiceCreditOrVoid
@@ -311,9 +383,11 @@ private constructor(
             fun changeOption(changeOption: ChangeOption) = changeOption(JsonField.of(changeOption))
 
             /**
-             * Determines when the change takes effect. Note that if `effective_date` is specified,
-             * this defaults to `effective_date`. Otherwise, this defaults to `immediate` unless
-             * it's explicitly set to `upcoming_invoice`.
+             * Sets [Builder.changeOption] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.changeOption] with a well-typed [ChangeOption] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun changeOption(changeOption: JsonField<ChangeOption>) = apply {
                 this.changeOption = changeOption
@@ -327,18 +401,16 @@ private constructor(
             fun effectiveDate(effectiveDate: LocalDate?) =
                 effectiveDate(JsonField.ofNullable(effectiveDate))
 
-            /**
-             * The date that the quantity change should take effect, localized to the customer's
-             * timezone. Ifthis parameter is not passed in, the quantity change is effective
-             * according to `change_option`.
-             */
+            /** Alias for calling [Builder.effectiveDate] with `effectiveDate.orElse(null)`. */
             fun effectiveDate(effectiveDate: Optional<LocalDate>) =
                 effectiveDate(effectiveDate.getOrNull())
 
             /**
-             * The date that the quantity change should take effect, localized to the customer's
-             * timezone. Ifthis parameter is not passed in, the quantity change is effective
-             * according to `change_option`.
+             * Sets [Builder.effectiveDate] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.effectiveDate] with a well-typed [LocalDate] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun effectiveDate(effectiveDate: JsonField<LocalDate>) = apply {
                 this.effectiveDate = effectiveDate
@@ -436,11 +508,22 @@ private constructor(
         /** Price for which the quantity should be updated. Must be a fixed fee. */
         fun priceId(priceId: String) = apply { body.priceId(priceId) }
 
-        /** Price for which the quantity should be updated. Must be a fixed fee. */
+        /**
+         * Sets [Builder.priceId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.priceId] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun priceId(priceId: JsonField<String>) = apply { body.priceId(priceId) }
 
         fun quantity(quantity: Double) = apply { body.quantity(quantity) }
 
+        /**
+         * Sets [Builder.quantity] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.quantity] with a well-typed [Double] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun quantity(quantity: JsonField<Double>) = apply { body.quantity(quantity) }
 
         /**
@@ -453,25 +536,26 @@ private constructor(
         }
 
         /**
-         * If false, this request will fail if it would void an issued invoice or create a credit
-         * note. Consider using this as a safety mechanism if you do not expect existing invoices to
-         * be changed.
+         * Alias for [Builder.allowInvoiceCreditOrVoid].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
          */
         fun allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid: Boolean) =
             allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid as Boolean?)
 
         /**
-         * If false, this request will fail if it would void an issued invoice or create a credit
-         * note. Consider using this as a safety mechanism if you do not expect existing invoices to
-         * be changed.
+         * Alias for calling [Builder.allowInvoiceCreditOrVoid] with
+         * `allowInvoiceCreditOrVoid.orElse(null)`.
          */
         fun allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid: Optional<Boolean>) =
             allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid.getOrNull())
 
         /**
-         * If false, this request will fail if it would void an issued invoice or create a credit
-         * note. Consider using this as a safety mechanism if you do not expect existing invoices to
-         * be changed.
+         * Sets [Builder.allowInvoiceCreditOrVoid] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.allowInvoiceCreditOrVoid] with a well-typed [Boolean]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
          */
         fun allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid: JsonField<Boolean>) = apply {
             body.allowInvoiceCreditOrVoid(allowInvoiceCreditOrVoid)
@@ -485,9 +569,11 @@ private constructor(
         fun changeOption(changeOption: ChangeOption) = apply { body.changeOption(changeOption) }
 
         /**
-         * Determines when the change takes effect. Note that if `effective_date` is specified, this
-         * defaults to `effective_date`. Otherwise, this defaults to `immediate` unless it's
-         * explicitly set to `upcoming_invoice`.
+         * Sets [Builder.changeOption] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.changeOption] with a well-typed [ChangeOption] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
         fun changeOption(changeOption: JsonField<ChangeOption>) = apply {
             body.changeOption(changeOption)
@@ -500,18 +586,16 @@ private constructor(
          */
         fun effectiveDate(effectiveDate: LocalDate?) = apply { body.effectiveDate(effectiveDate) }
 
-        /**
-         * The date that the quantity change should take effect, localized to the customer's
-         * timezone. Ifthis parameter is not passed in, the quantity change is effective according
-         * to `change_option`.
-         */
+        /** Alias for calling [Builder.effectiveDate] with `effectiveDate.orElse(null)`. */
         fun effectiveDate(effectiveDate: Optional<LocalDate>) =
             effectiveDate(effectiveDate.getOrNull())
 
         /**
-         * The date that the quantity change should take effect, localized to the customer's
-         * timezone. Ifthis parameter is not passed in, the quantity change is effective according
-         * to `change_option`.
+         * Sets [Builder.effectiveDate] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.effectiveDate] with a well-typed [LocalDate] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
         fun effectiveDate(effectiveDate: JsonField<LocalDate>) = apply {
             body.effectiveDate(effectiveDate)

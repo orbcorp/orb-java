@@ -230,13 +230,13 @@ private constructor(
         /** The currency or custom pricing unit to use. */
         fun currency(currency: String?) = apply { this.currency = currency }
 
-        /** The currency or custom pricing unit to use. */
+        /** Alias for calling [Builder.currency] with `currency.orElse(null)`. */
         fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
         /** Costs returned are exclusive of `timeframe_end`. */
         fun timeframeEnd(timeframeEnd: OffsetDateTime?) = apply { this.timeframeEnd = timeframeEnd }
 
-        /** Costs returned are exclusive of `timeframe_end`. */
+        /** Alias for calling [Builder.timeframeEnd] with `timeframeEnd.orElse(null)`. */
         fun timeframeEnd(timeframeEnd: Optional<OffsetDateTime>) =
             timeframeEnd(timeframeEnd.getOrNull())
 
@@ -245,7 +245,7 @@ private constructor(
             this.timeframeStart = timeframeStart
         }
 
-        /** Costs returned are inclusive of `timeframe_start`. */
+        /** Alias for calling [Builder.timeframeStart] with `timeframeStart.orElse(null)`. */
         fun timeframeStart(timeframeStart: Optional<OffsetDateTime>) =
             timeframeStart(timeframeStart.getOrNull())
 
@@ -256,11 +256,7 @@ private constructor(
          */
         fun viewMode(viewMode: ViewMode?) = apply { this.viewMode = viewMode }
 
-        /**
-         * Controls whether Orb returns cumulative costs since the start of the billing period, or
-         * incremental day-by-day costs. If your customer has minimums or discounts, it's strongly
-         * recommended that you use the default cumulative behavior.
-         */
+        /** Alias for calling [Builder.viewMode] with `viewMode.orElse(null)`. */
         fun viewMode(viewMode: Optional<ViewMode>) = viewMode(viewMode.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {

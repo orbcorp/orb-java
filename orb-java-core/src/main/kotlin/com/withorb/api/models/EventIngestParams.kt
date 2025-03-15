@@ -18,6 +18,7 @@ import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
+import com.withorb.api.errors.OrbInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
@@ -229,8 +230,17 @@ private constructor(
     /** Flag to enable additional debug information in the endpoint response */
     fun debug(): Optional<Boolean> = Optional.ofNullable(debug)
 
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun events(): List<Event> = body.events()
 
+    /**
+     * Returns the raw JSON value of [events].
+     *
+     * Unlike [events], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _events(): JsonField<List<Event>> = body._events()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
@@ -262,8 +272,17 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun events(): List<Event> = events.getRequired("events")
 
+        /**
+         * Returns the raw JSON value of [events].
+         *
+         * Unlike [events], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("events") @ExcludeMissing fun _events(): JsonField<List<Event>> = events
 
         @JsonAnyGetter
@@ -310,10 +329,22 @@ private constructor(
 
             fun events(events: List<Event>) = events(JsonField.of(events))
 
+            /**
+             * Sets [Builder.events] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.events] with a well-typed `List<Event>` value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun events(events: JsonField<List<Event>>) = apply {
                 this.events = events.map { it.toMutableList() }
             }
 
+            /**
+             * Adds a single [Event] to [events].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
             fun addEvent(event: Event) = apply {
                 events =
                     (events ?: JsonField.of(mutableListOf())).also {
@@ -404,25 +435,38 @@ private constructor(
          */
         fun backfillId(backfillId: String?) = apply { this.backfillId = backfillId }
 
-        /**
-         * If this ingestion request is part of a backfill, this parameter ties the ingested events
-         * to the backfill
-         */
+        /** Alias for calling [Builder.backfillId] with `backfillId.orElse(null)`. */
         fun backfillId(backfillId: Optional<String>) = backfillId(backfillId.getOrNull())
 
         /** Flag to enable additional debug information in the endpoint response */
         fun debug(debug: Boolean?) = apply { this.debug = debug }
 
-        /** Flag to enable additional debug information in the endpoint response */
+        /**
+         * Alias for [Builder.debug].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
         fun debug(debug: Boolean) = debug(debug as Boolean?)
 
-        /** Flag to enable additional debug information in the endpoint response */
+        /** Alias for calling [Builder.debug] with `debug.orElse(null)`. */
         fun debug(debug: Optional<Boolean>) = debug(debug.getOrNull())
 
         fun events(events: List<Event>) = apply { body.events(events) }
 
+        /**
+         * Sets [Builder.events] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.events] with a well-typed `List<Event>` value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun events(events: JsonField<List<Event>>) = apply { body.events(events) }
 
+        /**
+         * Adds a single [Event] to [events].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addEvent(event: Event) = apply { body.addEvent(event) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
@@ -578,13 +622,21 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** A name to meaningfully identify the action or event type. */
+        /**
+         * A name to meaningfully identify the action or event type.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun eventName(): String = eventName.getRequired("event_name")
 
         /**
          * A unique value, generated by the client, that is used to de-duplicate events. Exactly one
          * event with a given idempotency key will be ingested, which allows for safe request
          * retries.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun idempotencyKey(): String = idempotencyKey.getRequired("idempotency_key")
 
@@ -598,44 +650,71 @@ private constructor(
          * An ISO 8601 format date with no timezone offset (i.e. UTC). This should represent the
          * time that usage was recorded, and is particularly important to attribute usage to a given
          * billing period.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
 
-        /** The Orb Customer identifier */
+        /**
+         * The Orb Customer identifier
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun customerId(): Optional<String> =
             Optional.ofNullable(customerId.getNullable("customer_id"))
 
-        /** An alias for the Orb customer, whose mapping is specified when creating the customer */
+        /**
+         * An alias for the Orb customer, whose mapping is specified when creating the customer
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun externalCustomerId(): Optional<String> =
             Optional.ofNullable(externalCustomerId.getNullable("external_customer_id"))
 
-        /** A name to meaningfully identify the action or event type. */
+        /**
+         * Returns the raw JSON value of [eventName].
+         *
+         * Unlike [eventName], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("event_name") @ExcludeMissing fun _eventName(): JsonField<String> = eventName
 
         /**
-         * A unique value, generated by the client, that is used to de-duplicate events. Exactly one
-         * event with a given idempotency key will be ingested, which allows for safe request
-         * retries.
+         * Returns the raw JSON value of [idempotencyKey].
+         *
+         * Unlike [idempotencyKey], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("idempotency_key")
         @ExcludeMissing
         fun _idempotencyKey(): JsonField<String> = idempotencyKey
 
         /**
-         * An ISO 8601 format date with no timezone offset (i.e. UTC). This should represent the
-         * time that usage was recorded, and is particularly important to attribute usage to a given
-         * billing period.
+         * Returns the raw JSON value of [timestamp].
+         *
+         * Unlike [timestamp], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("timestamp")
         @ExcludeMissing
         fun _timestamp(): JsonField<OffsetDateTime> = timestamp
 
-        /** The Orb Customer identifier */
+        /**
+         * Returns the raw JSON value of [customerId].
+         *
+         * Unlike [customerId], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("customer_id")
         @ExcludeMissing
         fun _customerId(): JsonField<String> = customerId
 
-        /** An alias for the Orb customer, whose mapping is specified when creating the customer */
+        /**
+         * Returns the raw JSON value of [externalCustomerId].
+         *
+         * Unlike [externalCustomerId], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
         @JsonProperty("external_customer_id")
         @ExcludeMissing
         fun _externalCustomerId(): JsonField<String> = externalCustomerId
@@ -702,7 +781,13 @@ private constructor(
             /** A name to meaningfully identify the action or event type. */
             fun eventName(eventName: String) = eventName(JsonField.of(eventName))
 
-            /** A name to meaningfully identify the action or event type. */
+            /**
+             * Sets [Builder.eventName] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.eventName] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun eventName(eventName: JsonField<String>) = apply { this.eventName = eventName }
 
             /**
@@ -714,9 +799,11 @@ private constructor(
                 idempotencyKey(JsonField.of(idempotencyKey))
 
             /**
-             * A unique value, generated by the client, that is used to de-duplicate events. Exactly
-             * one event with a given idempotency key will be ingested, which allows for safe
-             * request retries.
+             * Sets [Builder.idempotencyKey] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.idempotencyKey] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun idempotencyKey(idempotencyKey: JsonField<String>) = apply {
                 this.idempotencyKey = idempotencyKey
@@ -736,9 +823,11 @@ private constructor(
             fun timestamp(timestamp: OffsetDateTime) = timestamp(JsonField.of(timestamp))
 
             /**
-             * An ISO 8601 format date with no timezone offset (i.e. UTC). This should represent the
-             * time that usage was recorded, and is particularly important to attribute usage to a
-             * given billing period.
+             * Sets [Builder.timestamp] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.timestamp] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun timestamp(timestamp: JsonField<OffsetDateTime>) = apply {
                 this.timestamp = timestamp
@@ -747,10 +836,16 @@ private constructor(
             /** The Orb Customer identifier */
             fun customerId(customerId: String?) = customerId(JsonField.ofNullable(customerId))
 
-            /** The Orb Customer identifier */
+            /** Alias for calling [Builder.customerId] with `customerId.orElse(null)`. */
             fun customerId(customerId: Optional<String>) = customerId(customerId.getOrNull())
 
-            /** The Orb Customer identifier */
+            /**
+             * Sets [Builder.customerId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.customerId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
             /**
@@ -760,13 +855,18 @@ private constructor(
                 externalCustomerId(JsonField.ofNullable(externalCustomerId))
 
             /**
-             * An alias for the Orb customer, whose mapping is specified when creating the customer
+             * Alias for calling [Builder.externalCustomerId] with
+             * `externalCustomerId.orElse(null)`.
              */
             fun externalCustomerId(externalCustomerId: Optional<String>) =
                 externalCustomerId(externalCustomerId.getOrNull())
 
             /**
-             * An alias for the Orb customer, whose mapping is specified when creating the customer
+             * Sets [Builder.externalCustomerId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.externalCustomerId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun externalCustomerId(externalCustomerId: JsonField<String>) = apply {
                 this.externalCustomerId = externalCustomerId

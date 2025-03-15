@@ -99,7 +99,7 @@ private constructor(
         /** Used to update the status of a plan alert scoped to this subscription_id */
         fun subscriptionId(subscriptionId: String?) = apply { this.subscriptionId = subscriptionId }
 
-        /** Used to update the status of a plan alert scoped to this subscription_id */
+        /** Alias for calling [Builder.subscriptionId] with `subscriptionId.orElse(null)`. */
         fun subscriptionId(subscriptionId: Optional<String>) =
             subscriptionId(subscriptionId.getOrNull())
 
