@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.49.1 (2025-03-15)
+
+Full Changelog: [v0.49.0...v0.49.1](https://github.com/orbcorp/orb-java/compare/v0.49.0...v0.49.1)
+
+### Documentation
+
+* deduplicate and refine comments ([#343](https://github.com/orbcorp/orb-java/issues/343)) ([483df7c](https://github.com/orbcorp/orb-java/commit/483df7c06115b3a5584b939e1f640a1b618abd79))
+
 ## 0.49.0 (2025-03-14)
 
 Full Changelog: [v0.48.0...v0.49.0](https://github.com/orbcorp/orb-java/compare/v0.48.0...v0.49.0)
