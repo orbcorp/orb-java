@@ -122,7 +122,7 @@ private constructor(
         /** The ledger currency or custom pricing unit to use. */
         fun currency(currency: String?) = apply { this.currency = currency }
 
-        /** The ledger currency or custom pricing unit to use. */
+        /** Alias for calling [Builder.currency] with `currency.orElse(null)`. */
         fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
         /**
@@ -131,10 +131,7 @@ private constructor(
          */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
-        /**
-         * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
-         * initial request.
-         */
+        /** Alias for calling [Builder.cursor] with `cursor.orElse(null)`. */
         fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
         /**
@@ -146,26 +143,28 @@ private constructor(
         }
 
         /**
-         * If set to True, all expired and depleted blocks, as well as active block will be
-         * returned.
+         * Alias for [Builder.includeAllBlocks].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
          */
         fun includeAllBlocks(includeAllBlocks: Boolean) =
             includeAllBlocks(includeAllBlocks as Boolean?)
 
-        /**
-         * If set to True, all expired and depleted blocks, as well as active block will be
-         * returned.
-         */
+        /** Alias for calling [Builder.includeAllBlocks] with `includeAllBlocks.orElse(null)`. */
         fun includeAllBlocks(includeAllBlocks: Optional<Boolean>) =
             includeAllBlocks(includeAllBlocks.getOrNull())
 
         /** The number of items to fetch. Defaults to 20. */
         fun limit(limit: Long?) = apply { this.limit = limit }
 
-        /** The number of items to fetch. Defaults to 20. */
+        /**
+         * Alias for [Builder.limit].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
         fun limit(limit: Long) = limit(limit as Long?)
 
-        /** The number of items to fetch. Defaults to 20. */
+        /** Alias for calling [Builder.limit] with `limit.orElse(null)`. */
         fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {

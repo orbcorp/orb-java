@@ -170,25 +170,27 @@ private constructor(
          */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
-        /**
-         * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
-         * initial request.
-         */
+        /** Alias for calling [Builder.cursor] with `cursor.orElse(null)`. */
         fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
         /** The number of items to fetch. Defaults to 20. */
         fun limit(limit: Long?) = apply { this.limit = limit }
 
-        /** The number of items to fetch. Defaults to 20. */
+        /**
+         * Alias for [Builder.limit].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
         fun limit(limit: Long) = limit(limit as Long?)
 
-        /** The number of items to fetch. Defaults to 20. */
+        /** Alias for calling [Builder.limit] with `limit.orElse(null)`. */
         fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         fun operationTimeGt(operationTimeGt: OffsetDateTime?) = apply {
             this.operationTimeGt = operationTimeGt
         }
 
+        /** Alias for calling [Builder.operationTimeGt] with `operationTimeGt.orElse(null)`. */
         fun operationTimeGt(operationTimeGt: Optional<OffsetDateTime>) =
             operationTimeGt(operationTimeGt.getOrNull())
 
@@ -196,6 +198,7 @@ private constructor(
             this.operationTimeGte = operationTimeGte
         }
 
+        /** Alias for calling [Builder.operationTimeGte] with `operationTimeGte.orElse(null)`. */
         fun operationTimeGte(operationTimeGte: Optional<OffsetDateTime>) =
             operationTimeGte(operationTimeGte.getOrNull())
 
@@ -203,6 +206,7 @@ private constructor(
             this.operationTimeLt = operationTimeLt
         }
 
+        /** Alias for calling [Builder.operationTimeLt] with `operationTimeLt.orElse(null)`. */
         fun operationTimeLt(operationTimeLt: Optional<OffsetDateTime>) =
             operationTimeLt(operationTimeLt.getOrNull())
 
@@ -210,6 +214,7 @@ private constructor(
             this.operationTimeLte = operationTimeLte
         }
 
+        /** Alias for calling [Builder.operationTimeLte] with `operationTimeLte.orElse(null)`. */
         fun operationTimeLte(operationTimeLte: Optional<OffsetDateTime>) =
             operationTimeLte(operationTimeLte.getOrNull())
 
