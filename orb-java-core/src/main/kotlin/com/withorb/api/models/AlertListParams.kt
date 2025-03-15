@@ -150,21 +150,25 @@ private constructor(
 
         fun createdAtGt(createdAtGt: OffsetDateTime?) = apply { this.createdAtGt = createdAtGt }
 
+        /** Alias for calling [Builder.createdAtGt] with `createdAtGt.orElse(null)`. */
         fun createdAtGt(createdAtGt: Optional<OffsetDateTime>) =
             createdAtGt(createdAtGt.getOrNull())
 
         fun createdAtGte(createdAtGte: OffsetDateTime?) = apply { this.createdAtGte = createdAtGte }
 
+        /** Alias for calling [Builder.createdAtGte] with `createdAtGte.orElse(null)`. */
         fun createdAtGte(createdAtGte: Optional<OffsetDateTime>) =
             createdAtGte(createdAtGte.getOrNull())
 
         fun createdAtLt(createdAtLt: OffsetDateTime?) = apply { this.createdAtLt = createdAtLt }
 
+        /** Alias for calling [Builder.createdAtLt] with `createdAtLt.orElse(null)`. */
         fun createdAtLt(createdAtLt: Optional<OffsetDateTime>) =
             createdAtLt(createdAtLt.getOrNull())
 
         fun createdAtLte(createdAtLte: OffsetDateTime?) = apply { this.createdAtLte = createdAtLte }
 
+        /** Alias for calling [Builder.createdAtLte] with `createdAtLte.orElse(null)`. */
         fun createdAtLte(createdAtLte: Optional<OffsetDateTime>) =
             createdAtLte(createdAtLte.getOrNull())
 
@@ -174,16 +178,13 @@ private constructor(
          */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
-        /**
-         * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
-         * initial request.
-         */
+        /** Alias for calling [Builder.cursor] with `cursor.orElse(null)`. */
         fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
         /** Fetch alerts scoped to this customer_id */
         fun customerId(customerId: String?) = apply { this.customerId = customerId }
 
-        /** Fetch alerts scoped to this customer_id */
+        /** Alias for calling [Builder.customerId] with `customerId.orElse(null)`. */
         fun customerId(customerId: Optional<String>) = customerId(customerId.getOrNull())
 
         /** Fetch alerts scoped to this external_customer_id */
@@ -191,23 +192,29 @@ private constructor(
             this.externalCustomerId = externalCustomerId
         }
 
-        /** Fetch alerts scoped to this external_customer_id */
+        /**
+         * Alias for calling [Builder.externalCustomerId] with `externalCustomerId.orElse(null)`.
+         */
         fun externalCustomerId(externalCustomerId: Optional<String>) =
             externalCustomerId(externalCustomerId.getOrNull())
 
         /** The number of items to fetch. Defaults to 20. */
         fun limit(limit: Long?) = apply { this.limit = limit }
 
-        /** The number of items to fetch. Defaults to 20. */
+        /**
+         * Alias for [Builder.limit].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
         fun limit(limit: Long) = limit(limit as Long?)
 
-        /** The number of items to fetch. Defaults to 20. */
+        /** Alias for calling [Builder.limit] with `limit.orElse(null)`. */
         fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         /** Fetch alerts scoped to this subscription_id */
         fun subscriptionId(subscriptionId: String?) = apply { this.subscriptionId = subscriptionId }
 
-        /** Fetch alerts scoped to this subscription_id */
+        /** Alias for calling [Builder.subscriptionId] with `subscriptionId.orElse(null)`. */
         fun subscriptionId(subscriptionId: Optional<String>) =
             subscriptionId(subscriptionId.getOrNull())
 

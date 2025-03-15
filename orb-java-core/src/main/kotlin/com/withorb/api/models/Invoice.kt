@@ -162,30 +162,68 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun id(): String = id.getRequired("id")
 
     /**
      * This is the final amount required to be charged to the customer and reflects the application
      * of the customer balance to the `total` of the invoice.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun amountDue(): String = amountDue.getRequired("amount_due")
 
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun autoCollection(): AutoCollection = autoCollection.getRequired("auto_collection")
 
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
     fun billingAddress(): Optional<BillingAddress> =
         Optional.ofNullable(billingAddress.getNullable("billing_address"))
 
-    /** The creation time of the resource in Orb. */
+    /**
+     * The creation time of the resource in Orb.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
-    /** A list of credit notes associated with the invoice */
+    /**
+     * A list of credit notes associated with the invoice
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun creditNotes(): List<CreditNote> = creditNotes.getRequired("credit_notes")
 
-    /** An ISO 4217 currency string or `credits` */
+    /**
+     * An ISO 4217 currency string or `credits`
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun currency(): String = currency.getRequired("currency")
 
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun customer(): Customer = customer.getRequired("customer")
 
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun customerBalanceTransactions(): List<CustomerBalanceTransaction> =
         customerBalanceTransactions.getRequired("customer_balance_transactions")
 
@@ -294,6 +332,9 @@ private constructor(
      * |Uruguay             |`uy_ruc`    |Uruguayan RUC Number                                                                                   |
      * |Venezuela           |`ve_rif`    |Venezuelan RIF Number                                                                                  |
      * |Vietnam             |`vn_tin`    |Vietnamese Tax ID Number                                                                               |
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
      */
     fun customerTaxId(): Optional<CustomerTaxId> =
         Optional.ofNullable(customerTaxId.getNullable("customer_tax_id"))
@@ -307,10 +348,17 @@ private constructor(
     @ExcludeMissing
     fun _discount(): JsonValue = discount
 
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun discounts(): List<InvoiceLevelDiscount> = discounts.getRequired("discounts")
 
     /**
      * When the invoice payment is due. The due date is null if the invoice is not yet finalized.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
      */
     fun dueDate(): Optional<OffsetDateTime> = Optional.ofNullable(dueDate.getNullable("due_date"))
 
@@ -318,6 +366,9 @@ private constructor(
      * If the invoice has a status of `draft`, this will be the time that the invoice will be
      * eligible to be issued, otherwise it will be `null`. If `auto-issue` is true, the invoice will
      * automatically begin issuing at this time.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
      */
     fun eligibleToIssueAt(): Optional<OffsetDateTime> =
         Optional.ofNullable(eligibleToIssueAt.getNullable("eligible_to_issue_at"))
@@ -325,27 +376,50 @@ private constructor(
     /**
      * A URL for the customer-facing invoice portal. This URL expires 30 days after the invoice's
      * due date, or 60 days after being re-generated through the UI.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
      */
     fun hostedInvoiceUrl(): Optional<String> =
         Optional.ofNullable(hostedInvoiceUrl.getNullable("hosted_invoice_url"))
 
-    /** The scheduled date of the invoice */
+    /**
+     * The scheduled date of the invoice
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun invoiceDate(): OffsetDateTime = invoiceDate.getRequired("invoice_date")
 
     /**
      * Automatically generated invoice number to help track and reconcile invoices. Invoice numbers
      * have a prefix such as `RFOBWG`. These can be sequential per account or customer.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun invoiceNumber(): String = invoiceNumber.getRequired("invoice_number")
 
-    /** The link to download the PDF representation of the `Invoice`. */
+    /**
+     * The link to download the PDF representation of the `Invoice`.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
     fun invoicePdf(): Optional<String> = Optional.ofNullable(invoicePdf.getNullable("invoice_pdf"))
 
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun invoiceSource(): InvoiceSource = invoiceSource.getRequired("invoice_source")
 
     /**
      * If the invoice failed to issue, this will be the last time it failed to issue (even if it is
      * now in a different state.)
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
      */
     fun issueFailedAt(): Optional<OffsetDateTime> =
         Optional.ofNullable(issueFailedAt.getNullable("issue_failed_at"))
@@ -353,42 +427,87 @@ private constructor(
     /**
      * If the invoice has been issued, this will be the time it transitioned to `issued` (even if it
      * is now in a different state.)
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
      */
     fun issuedAt(): Optional<OffsetDateTime> =
         Optional.ofNullable(issuedAt.getNullable("issued_at"))
 
-    /** The breakdown of prices in this invoice. */
+    /**
+     * The breakdown of prices in this invoice.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun lineItems(): List<LineItem> = lineItems.getRequired("line_items")
 
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
     fun maximum(): Optional<Maximum> = Optional.ofNullable(maximum.getNullable("maximum"))
 
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
     fun maximumAmount(): Optional<String> =
         Optional.ofNullable(maximumAmount.getNullable("maximum_amount"))
 
-    /** Free-form text which is available on the invoice PDF and the Orb invoice portal. */
+    /**
+     * Free-form text which is available on the invoice PDF and the Orb invoice portal.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
     fun memo(): Optional<String> = Optional.ofNullable(memo.getNullable("memo"))
 
     /**
      * User specified key-value pairs for the resource. If not present, this defaults to an empty
      * dictionary. Individual keys can be removed by setting the value to `null`, and the entire
      * metadata mapping can be cleared by setting `metadata` to `null`.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun metadata(): Metadata = metadata.getRequired("metadata")
 
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
     fun minimum(): Optional<Minimum> = Optional.ofNullable(minimum.getNullable("minimum"))
 
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
     fun minimumAmount(): Optional<String> =
         Optional.ofNullable(minimumAmount.getNullable("minimum_amount"))
 
-    /** If the invoice has a status of `paid`, this gives a timestamp when the invoice was paid. */
+    /**
+     * If the invoice has a status of `paid`, this gives a timestamp when the invoice was paid.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
     fun paidAt(): Optional<OffsetDateTime> = Optional.ofNullable(paidAt.getNullable("paid_at"))
 
-    /** A list of payment attempts associated with the invoice */
+    /**
+     * A list of payment attempts associated with the invoice
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun paymentAttempts(): List<PaymentAttempt> = paymentAttempts.getRequired("payment_attempts")
 
     /**
      * If payment was attempted on this invoice but failed, this will be the time of the most recent
      * attempt.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
      */
     fun paymentFailedAt(): Optional<OffsetDateTime> =
         Optional.ofNullable(paymentFailedAt.getNullable("payment_failed_at"))
@@ -397,6 +516,9 @@ private constructor(
      * If payment was attempted on this invoice, this will be the start time of the most recent
      * attempt. This field is especially useful for delayed-notification payment mechanisms (like
      * bank transfers), where payment can take 3 days or more.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
      */
     fun paymentStartedAt(): Optional<OffsetDateTime> =
         Optional.ofNullable(paymentStartedAt.getNullable("payment_started_at"))
@@ -404,339 +526,405 @@ private constructor(
     /**
      * If the invoice is in draft, this timestamp will reflect when the invoice is scheduled to be
      * issued.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
      */
     fun scheduledIssueAt(): Optional<OffsetDateTime> =
         Optional.ofNullable(scheduledIssueAt.getNullable("scheduled_issue_at"))
 
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
     fun shippingAddress(): Optional<ShippingAddress> =
         Optional.ofNullable(shippingAddress.getNullable("shipping_address"))
 
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun status(): Status = status.getRequired("status")
 
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
     fun subscription(): Optional<Subscription> =
         Optional.ofNullable(subscription.getNullable("subscription"))
 
-    /** The total before any discounts and minimums are applied. */
+    /**
+     * The total before any discounts and minimums are applied.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun subtotal(): String = subtotal.getRequired("subtotal")
 
     /**
      * If the invoice failed to sync, this will be the last time an external invoicing provider sync
      * was attempted. This field will always be `null` for invoices using Orb Invoicing.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
      */
     fun syncFailedAt(): Optional<OffsetDateTime> =
         Optional.ofNullable(syncFailedAt.getNullable("sync_failed_at"))
 
-    /** The total after any minimums and discounts have been applied. */
+    /**
+     * The total after any minimums and discounts have been applied.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun total(): String = total.getRequired("total")
 
     /**
      * If the invoice has a status of `void`, this gives a timestamp when the invoice was voided.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
      */
     fun voidedAt(): Optional<OffsetDateTime> =
         Optional.ofNullable(voidedAt.getNullable("voided_at"))
 
     /**
      * This is true if the invoice will be automatically issued in the future, and false otherwise.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun willAutoIssue(): Boolean = willAutoIssue.getRequired("will_auto_issue")
 
+    /**
+     * Returns the raw JSON value of [id].
+     *
+     * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
     /**
-     * This is the final amount required to be charged to the customer and reflects the application
-     * of the customer balance to the `total` of the invoice.
+     * Returns the raw JSON value of [amountDue].
+     *
+     * Unlike [amountDue], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("amount_due") @ExcludeMissing fun _amountDue(): JsonField<String> = amountDue
 
+    /**
+     * Returns the raw JSON value of [autoCollection].
+     *
+     * Unlike [autoCollection], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("auto_collection")
     @ExcludeMissing
     fun _autoCollection(): JsonField<AutoCollection> = autoCollection
 
+    /**
+     * Returns the raw JSON value of [billingAddress].
+     *
+     * Unlike [billingAddress], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("billing_address")
     @ExcludeMissing
     fun _billingAddress(): JsonField<BillingAddress> = billingAddress
 
-    /** The creation time of the resource in Orb. */
+    /**
+     * Returns the raw JSON value of [createdAt].
+     *
+     * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("created_at")
     @ExcludeMissing
     fun _createdAt(): JsonField<OffsetDateTime> = createdAt
 
-    /** A list of credit notes associated with the invoice */
+    /**
+     * Returns the raw JSON value of [creditNotes].
+     *
+     * Unlike [creditNotes], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("credit_notes")
     @ExcludeMissing
     fun _creditNotes(): JsonField<List<CreditNote>> = creditNotes
 
-    /** An ISO 4217 currency string or `credits` */
+    /**
+     * Returns the raw JSON value of [currency].
+     *
+     * Unlike [currency], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("currency") @ExcludeMissing fun _currency(): JsonField<String> = currency
 
+    /**
+     * Returns the raw JSON value of [customer].
+     *
+     * Unlike [customer], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("customer") @ExcludeMissing fun _customer(): JsonField<Customer> = customer
 
+    /**
+     * Returns the raw JSON value of [customerBalanceTransactions].
+     *
+     * Unlike [customerBalanceTransactions], this method doesn't throw if the JSON field has an
+     * unexpected type.
+     */
     @JsonProperty("customer_balance_transactions")
     @ExcludeMissing
     fun _customerBalanceTransactions(): JsonField<List<CustomerBalanceTransaction>> =
         customerBalanceTransactions
 
     /**
-     * Tax IDs are commonly required to be displayed on customer invoices, which are added to the
-     * headers of invoices.
+     * Returns the raw JSON value of [customerTaxId].
      *
-     * ### Supported Tax ID Countries and Types
-     * |Country             |Type        |Description                                                                                            |
-     * |--------------------|------------|-------------------------------------------------------------------------------------------------------|
-     * |Andorra             |`ad_nrt`    |Andorran NRT Number                                                                                    |
-     * |Argentina           |`ar_cuit`   |Argentinian Tax ID Number                                                                              |
-     * |Australia           |`au_abn`    |Australian Business Number (AU ABN)                                                                    |
-     * |Australia           |`au_arn`    |Australian Taxation Office Reference Number                                                            |
-     * |Austria             |`eu_vat`    |European VAT Number                                                                                    |
-     * |Bahrain             |`bh_vat`    |Bahraini VAT Number                                                                                    |
-     * |Belgium             |`eu_vat`    |European VAT Number                                                                                    |
-     * |Bolivia             |`bo_tin`    |Bolivian Tax ID                                                                                        |
-     * |Brazil              |`br_cnpj`   |Brazilian CNPJ Number                                                                                  |
-     * |Brazil              |`br_cpf`    |Brazilian CPF Number                                                                                   |
-     * |Bulgaria            |`bg_uic`    |Bulgaria Unified Identification Code                                                                   |
-     * |Bulgaria            |`eu_vat`    |European VAT Number                                                                                    |
-     * |Canada              |`ca_bn`     |Canadian BN                                                                                            |
-     * |Canada              |`ca_gst_hst`|Canadian GST/HST Number                                                                                |
-     * |Canada              |`ca_pst_bc` |Canadian PST Number (British Columbia)                                                                 |
-     * |Canada              |`ca_pst_mb` |Canadian PST Number (Manitoba)                                                                         |
-     * |Canada              |`ca_pst_sk` |Canadian PST Number (Saskatchewan)                                                                     |
-     * |Canada              |`ca_qst`    |Canadian QST Number (Québec)                                                                           |
-     * |Chile               |`cl_tin`    |Chilean TIN                                                                                            |
-     * |China               |`cn_tin`    |Chinese Tax ID                                                                                         |
-     * |Colombia            |`co_nit`    |Colombian NIT Number                                                                                   |
-     * |Costa Rica          |`cr_tin`    |Costa Rican Tax ID                                                                                     |
-     * |Croatia             |`eu_vat`    |European VAT Number                                                                                    |
-     * |Cyprus              |`eu_vat`    |European VAT Number                                                                                    |
-     * |Czech Republic      |`eu_vat`    |European VAT Number                                                                                    |
-     * |Denmark             |`eu_vat`    |European VAT Number                                                                                    |
-     * |Dominican Republic  |`do_rcn`    |Dominican RCN Number                                                                                   |
-     * |Ecuador             |`ec_ruc`    |Ecuadorian RUC Number                                                                                  |
-     * |Egypt               |`eg_tin`    |Egyptian Tax Identification Number                                                                     |
-     * |El Salvador         |`sv_nit`    |El Salvadorian NIT Number                                                                              |
-     * |Estonia             |`eu_vat`    |European VAT Number                                                                                    |
-     * |EU                  |`eu_oss_vat`|European One Stop Shop VAT Number for non-Union scheme                                                 |
-     * |Finland             |`eu_vat`    |European VAT Number                                                                                    |
-     * |France              |`eu_vat`    |European VAT Number                                                                                    |
-     * |Georgia             |`ge_vat`    |Georgian VAT                                                                                           |
-     * |Germany             |`eu_vat`    |European VAT Number                                                                                    |
-     * |Greece              |`eu_vat`    |European VAT Number                                                                                    |
-     * |Hong Kong           |`hk_br`     |Hong Kong BR Number                                                                                    |
-     * |Hungary             |`eu_vat`    |European VAT Number                                                                                    |
-     * |Hungary             |`hu_tin`    |Hungary Tax Number (adószám)                                                                           |
-     * |Iceland             |`is_vat`    |Icelandic VAT                                                                                          |
-     * |India               |`in_gst`    |Indian GST Number                                                                                      |
-     * |Indonesia           |`id_npwp`   |Indonesian NPWP Number                                                                                 |
-     * |Ireland             |`eu_vat`    |European VAT Number                                                                                    |
-     * |Israel              |`il_vat`    |Israel VAT                                                                                             |
-     * |Italy               |`eu_vat`    |European VAT Number                                                                                    |
-     * |Japan               |`jp_cn`     |Japanese Corporate Number (_Hōjin Bangō_)                                                              |
-     * |Japan               |`jp_rn`     |Japanese Registered Foreign Businesses' Registration Number (_Tōroku Kokugai Jigyōsha no Tōroku Bangō_)|
-     * |Japan               |`jp_trn`    |Japanese Tax Registration Number (_Tōroku Bangō_)                                                      |
-     * |Kazakhstan          |`kz_bin`    |Kazakhstani Business Identification Number                                                             |
-     * |Kenya               |`ke_pin`    |Kenya Revenue Authority Personal Identification Number                                                 |
-     * |Latvia              |`eu_vat`    |European VAT Number                                                                                    |
-     * |Liechtenstein       |`li_uid`    |Liechtensteinian UID Number                                                                            |
-     * |Lithuania           |`eu_vat`    |European VAT Number                                                                                    |
-     * |Luxembourg          |`eu_vat`    |European VAT Number                                                                                    |
-     * |Malaysia            |`my_frp`    |Malaysian FRP Number                                                                                   |
-     * |Malaysia            |`my_itn`    |Malaysian ITN                                                                                          |
-     * |Malaysia            |`my_sst`    |Malaysian SST Number                                                                                   |
-     * |Malta               |`eu_vat `   |European VAT Number                                                                                    |
-     * |Mexico              |`mx_rfc`    |Mexican RFC Number                                                                                     |
-     * |Netherlands         |`eu_vat`    |European VAT Number                                                                                    |
-     * |New Zealand         |`nz_gst`    |New Zealand GST Number                                                                                 |
-     * |Nigeria             |`ng_tin`    |Nigerian Tax Identification Number                                                                     |
-     * |Norway              |`no_vat`    |Norwegian VAT Number                                                                                   |
-     * |Norway              |`no_voec`   |Norwegian VAT on e-commerce Number                                                                     |
-     * |Oman                |`om_vat`    |Omani VAT Number                                                                                       |
-     * |Peru                |`pe_ruc`    |Peruvian RUC Number                                                                                    |
-     * |Philippines         |`ph_tin `   |Philippines Tax Identification Number                                                                  |
-     * |Poland              |`eu_vat`    |European VAT Number                                                                                    |
-     * |Portugal            |`eu_vat`    |European VAT Number                                                                                    |
-     * |Romania             |`eu_vat`    |European VAT Number                                                                                    |
-     * |Romania             |`ro_tin`    |Romanian Tax ID Number                                                                                 |
-     * |Russia              |`ru_inn`    |Russian INN                                                                                            |
-     * |Russia              |`ru_kpp`    |Russian KPP                                                                                            |
-     * |Saudi Arabia        |`sa_vat`    |Saudi Arabia VAT                                                                                       |
-     * |Serbia              |`rs_pib`    |Serbian PIB Number                                                                                     |
-     * |Singapore           |`sg_gst`    |Singaporean GST                                                                                        |
-     * |Singapore           |`sg_uen`    |Singaporean UEN                                                                                        |
-     * |Slovakia            |`eu_vat`    |European VAT Number                                                                                    |
-     * |Slovenia            |`eu_vat`    |European VAT Number                                                                                    |
-     * |Slovenia            |`si_tin`    |Slovenia Tax Number (davčna številka)                                                                  |
-     * |South Africa        |`za_vat`    |South African VAT Number                                                                               |
-     * |South Korea         |`kr_brn`    |Korean BRN                                                                                             |
-     * |Spain               |`es_cif`    |Spanish NIF Number (previously Spanish CIF Number)                                                     |
-     * |Spain               |`eu_vat`    |European VAT Number                                                                                    |
-     * |Sweden              |`eu_vat`    |European VAT Number                                                                                    |
-     * |Switzerland         |`ch_vat`    |Switzerland VAT Number                                                                                 |
-     * |Taiwan              |`tw_vat`    |Taiwanese VAT                                                                                          |
-     * |Thailand            |`th_vat`    |Thai VAT                                                                                               |
-     * |Turkey              |`tr_tin`    |Turkish Tax Identification Number                                                                      |
-     * |Ukraine             |`ua_vat`    |Ukrainian VAT                                                                                          |
-     * |United Arab Emirates|`ae_trn`    |United Arab Emirates TRN                                                                               |
-     * |United Kingdom      |`eu_vat`    |Northern Ireland VAT Number                                                                            |
-     * |United Kingdom      |`gb_vat`    |United Kingdom VAT Number                                                                              |
-     * |United States       |`us_ein`    |United States EIN                                                                                      |
-     * |Uruguay             |`uy_ruc`    |Uruguayan RUC Number                                                                                   |
-     * |Venezuela           |`ve_rif`    |Venezuelan RIF Number                                                                                  |
-     * |Vietnam             |`vn_tin`    |Vietnamese Tax ID Number                                                                               |
+     * Unlike [customerTaxId], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("customer_tax_id")
     @ExcludeMissing
     fun _customerTaxId(): JsonField<CustomerTaxId> = customerTaxId
 
+    /**
+     * Returns the raw JSON value of [discounts].
+     *
+     * Unlike [discounts], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("discounts")
     @ExcludeMissing
     fun _discounts(): JsonField<List<InvoiceLevelDiscount>> = discounts
 
     /**
-     * When the invoice payment is due. The due date is null if the invoice is not yet finalized.
+     * Returns the raw JSON value of [dueDate].
+     *
+     * Unlike [dueDate], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("due_date") @ExcludeMissing fun _dueDate(): JsonField<OffsetDateTime> = dueDate
 
     /**
-     * If the invoice has a status of `draft`, this will be the time that the invoice will be
-     * eligible to be issued, otherwise it will be `null`. If `auto-issue` is true, the invoice will
-     * automatically begin issuing at this time.
+     * Returns the raw JSON value of [eligibleToIssueAt].
+     *
+     * Unlike [eligibleToIssueAt], this method doesn't throw if the JSON field has an unexpected
+     * type.
      */
     @JsonProperty("eligible_to_issue_at")
     @ExcludeMissing
     fun _eligibleToIssueAt(): JsonField<OffsetDateTime> = eligibleToIssueAt
 
     /**
-     * A URL for the customer-facing invoice portal. This URL expires 30 days after the invoice's
-     * due date, or 60 days after being re-generated through the UI.
+     * Returns the raw JSON value of [hostedInvoiceUrl].
+     *
+     * Unlike [hostedInvoiceUrl], this method doesn't throw if the JSON field has an unexpected
+     * type.
      */
     @JsonProperty("hosted_invoice_url")
     @ExcludeMissing
     fun _hostedInvoiceUrl(): JsonField<String> = hostedInvoiceUrl
 
-    /** The scheduled date of the invoice */
+    /**
+     * Returns the raw JSON value of [invoiceDate].
+     *
+     * Unlike [invoiceDate], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("invoice_date")
     @ExcludeMissing
     fun _invoiceDate(): JsonField<OffsetDateTime> = invoiceDate
 
     /**
-     * Automatically generated invoice number to help track and reconcile invoices. Invoice numbers
-     * have a prefix such as `RFOBWG`. These can be sequential per account or customer.
+     * Returns the raw JSON value of [invoiceNumber].
+     *
+     * Unlike [invoiceNumber], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("invoice_number")
     @ExcludeMissing
     fun _invoiceNumber(): JsonField<String> = invoiceNumber
 
-    /** The link to download the PDF representation of the `Invoice`. */
+    /**
+     * Returns the raw JSON value of [invoicePdf].
+     *
+     * Unlike [invoicePdf], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("invoice_pdf") @ExcludeMissing fun _invoicePdf(): JsonField<String> = invoicePdf
 
+    /**
+     * Returns the raw JSON value of [invoiceSource].
+     *
+     * Unlike [invoiceSource], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("invoice_source")
     @ExcludeMissing
     fun _invoiceSource(): JsonField<InvoiceSource> = invoiceSource
 
     /**
-     * If the invoice failed to issue, this will be the last time it failed to issue (even if it is
-     * now in a different state.)
+     * Returns the raw JSON value of [issueFailedAt].
+     *
+     * Unlike [issueFailedAt], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("issue_failed_at")
     @ExcludeMissing
     fun _issueFailedAt(): JsonField<OffsetDateTime> = issueFailedAt
 
     /**
-     * If the invoice has been issued, this will be the time it transitioned to `issued` (even if it
-     * is now in a different state.)
+     * Returns the raw JSON value of [issuedAt].
+     *
+     * Unlike [issuedAt], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("issued_at") @ExcludeMissing fun _issuedAt(): JsonField<OffsetDateTime> = issuedAt
 
-    /** The breakdown of prices in this invoice. */
+    /**
+     * Returns the raw JSON value of [lineItems].
+     *
+     * Unlike [lineItems], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("line_items")
     @ExcludeMissing
     fun _lineItems(): JsonField<List<LineItem>> = lineItems
 
+    /**
+     * Returns the raw JSON value of [maximum].
+     *
+     * Unlike [maximum], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("maximum") @ExcludeMissing fun _maximum(): JsonField<Maximum> = maximum
 
+    /**
+     * Returns the raw JSON value of [maximumAmount].
+     *
+     * Unlike [maximumAmount], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("maximum_amount")
     @ExcludeMissing
     fun _maximumAmount(): JsonField<String> = maximumAmount
 
-    /** Free-form text which is available on the invoice PDF and the Orb invoice portal. */
+    /**
+     * Returns the raw JSON value of [memo].
+     *
+     * Unlike [memo], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("memo") @ExcludeMissing fun _memo(): JsonField<String> = memo
 
     /**
-     * User specified key-value pairs for the resource. If not present, this defaults to an empty
-     * dictionary. Individual keys can be removed by setting the value to `null`, and the entire
-     * metadata mapping can be cleared by setting `metadata` to `null`.
+     * Returns the raw JSON value of [metadata].
+     *
+     * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
 
+    /**
+     * Returns the raw JSON value of [minimum].
+     *
+     * Unlike [minimum], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("minimum") @ExcludeMissing fun _minimum(): JsonField<Minimum> = minimum
 
+    /**
+     * Returns the raw JSON value of [minimumAmount].
+     *
+     * Unlike [minimumAmount], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("minimum_amount")
     @ExcludeMissing
     fun _minimumAmount(): JsonField<String> = minimumAmount
 
-    /** If the invoice has a status of `paid`, this gives a timestamp when the invoice was paid. */
+    /**
+     * Returns the raw JSON value of [paidAt].
+     *
+     * Unlike [paidAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("paid_at") @ExcludeMissing fun _paidAt(): JsonField<OffsetDateTime> = paidAt
 
-    /** A list of payment attempts associated with the invoice */
+    /**
+     * Returns the raw JSON value of [paymentAttempts].
+     *
+     * Unlike [paymentAttempts], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("payment_attempts")
     @ExcludeMissing
     fun _paymentAttempts(): JsonField<List<PaymentAttempt>> = paymentAttempts
 
     /**
-     * If payment was attempted on this invoice but failed, this will be the time of the most recent
-     * attempt.
+     * Returns the raw JSON value of [paymentFailedAt].
+     *
+     * Unlike [paymentFailedAt], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("payment_failed_at")
     @ExcludeMissing
     fun _paymentFailedAt(): JsonField<OffsetDateTime> = paymentFailedAt
 
     /**
-     * If payment was attempted on this invoice, this will be the start time of the most recent
-     * attempt. This field is especially useful for delayed-notification payment mechanisms (like
-     * bank transfers), where payment can take 3 days or more.
+     * Returns the raw JSON value of [paymentStartedAt].
+     *
+     * Unlike [paymentStartedAt], this method doesn't throw if the JSON field has an unexpected
+     * type.
      */
     @JsonProperty("payment_started_at")
     @ExcludeMissing
     fun _paymentStartedAt(): JsonField<OffsetDateTime> = paymentStartedAt
 
     /**
-     * If the invoice is in draft, this timestamp will reflect when the invoice is scheduled to be
-     * issued.
+     * Returns the raw JSON value of [scheduledIssueAt].
+     *
+     * Unlike [scheduledIssueAt], this method doesn't throw if the JSON field has an unexpected
+     * type.
      */
     @JsonProperty("scheduled_issue_at")
     @ExcludeMissing
     fun _scheduledIssueAt(): JsonField<OffsetDateTime> = scheduledIssueAt
 
+    /**
+     * Returns the raw JSON value of [shippingAddress].
+     *
+     * Unlike [shippingAddress], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("shipping_address")
     @ExcludeMissing
     fun _shippingAddress(): JsonField<ShippingAddress> = shippingAddress
 
+    /**
+     * Returns the raw JSON value of [status].
+     *
+     * Unlike [status], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("status") @ExcludeMissing fun _status(): JsonField<Status> = status
 
+    /**
+     * Returns the raw JSON value of [subscription].
+     *
+     * Unlike [subscription], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("subscription")
     @ExcludeMissing
     fun _subscription(): JsonField<Subscription> = subscription
 
-    /** The total before any discounts and minimums are applied. */
+    /**
+     * Returns the raw JSON value of [subtotal].
+     *
+     * Unlike [subtotal], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("subtotal") @ExcludeMissing fun _subtotal(): JsonField<String> = subtotal
 
     /**
-     * If the invoice failed to sync, this will be the last time an external invoicing provider sync
-     * was attempted. This field will always be `null` for invoices using Orb Invoicing.
+     * Returns the raw JSON value of [syncFailedAt].
+     *
+     * Unlike [syncFailedAt], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("sync_failed_at")
     @ExcludeMissing
     fun _syncFailedAt(): JsonField<OffsetDateTime> = syncFailedAt
 
-    /** The total after any minimums and discounts have been applied. */
+    /**
+     * Returns the raw JSON value of [total].
+     *
+     * Unlike [total], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("total") @ExcludeMissing fun _total(): JsonField<String> = total
 
     /**
-     * If the invoice has a status of `void`, this gives a timestamp when the invoice was voided.
+     * Returns the raw JSON value of [voidedAt].
+     *
+     * Unlike [voidedAt], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("voided_at") @ExcludeMissing fun _voidedAt(): JsonField<OffsetDateTime> = voidedAt
 
     /**
-     * This is true if the invoice will be automatically issued in the future, and false otherwise.
+     * Returns the raw JSON value of [willAutoIssue].
+     *
+     * Unlike [willAutoIssue], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("will_auto_issue")
     @ExcludeMissing
@@ -948,6 +1136,12 @@ private constructor(
 
         fun id(id: String) = id(JsonField.of(id))
 
+        /**
+         * Sets [Builder.id] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.id] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
         /**
@@ -957,14 +1151,24 @@ private constructor(
         fun amountDue(amountDue: String) = amountDue(JsonField.of(amountDue))
 
         /**
-         * This is the final amount required to be charged to the customer and reflects the
-         * application of the customer balance to the `total` of the invoice.
+         * Sets [Builder.amountDue] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.amountDue] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
         fun amountDue(amountDue: JsonField<String>) = apply { this.amountDue = amountDue }
 
         fun autoCollection(autoCollection: AutoCollection) =
             autoCollection(JsonField.of(autoCollection))
 
+        /**
+         * Sets [Builder.autoCollection] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.autoCollection] with a well-typed [AutoCollection] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun autoCollection(autoCollection: JsonField<AutoCollection>) = apply {
             this.autoCollection = autoCollection
         }
@@ -972,9 +1176,17 @@ private constructor(
         fun billingAddress(billingAddress: BillingAddress?) =
             billingAddress(JsonField.ofNullable(billingAddress))
 
+        /** Alias for calling [Builder.billingAddress] with `billingAddress.orElse(null)`. */
         fun billingAddress(billingAddress: Optional<BillingAddress>) =
             billingAddress(billingAddress.getOrNull())
 
+        /**
+         * Sets [Builder.billingAddress] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.billingAddress] with a well-typed [BillingAddress] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun billingAddress(billingAddress: JsonField<BillingAddress>) = apply {
             this.billingAddress = billingAddress
         }
@@ -982,18 +1194,34 @@ private constructor(
         /** The creation time of the resource in Orb. */
         fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
 
-        /** The creation time of the resource in Orb. */
+        /**
+         * Sets [Builder.createdAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
         /** A list of credit notes associated with the invoice */
         fun creditNotes(creditNotes: List<CreditNote>) = creditNotes(JsonField.of(creditNotes))
 
-        /** A list of credit notes associated with the invoice */
+        /**
+         * Sets [Builder.creditNotes] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.creditNotes] with a well-typed `List<CreditNote>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun creditNotes(creditNotes: JsonField<List<CreditNote>>) = apply {
             this.creditNotes = creditNotes.map { it.toMutableList() }
         }
 
-        /** A list of credit notes associated with the invoice */
+        /**
+         * Adds a single [CreditNote] to [creditNotes].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addCreditNote(creditNote: CreditNote) = apply {
             creditNotes =
                 (creditNotes ?: JsonField.of(mutableListOf())).also {
@@ -1004,17 +1232,36 @@ private constructor(
         /** An ISO 4217 currency string or `credits` */
         fun currency(currency: String) = currency(JsonField.of(currency))
 
-        /** An ISO 4217 currency string or `credits` */
+        /**
+         * Sets [Builder.currency] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.currency] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun currency(currency: JsonField<String>) = apply { this.currency = currency }
 
         fun customer(customer: Customer) = customer(JsonField.of(customer))
 
+        /**
+         * Sets [Builder.customer] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.customer] with a well-typed [Customer] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun customer(customer: JsonField<Customer>) = apply { this.customer = customer }
 
         fun customerBalanceTransactions(
             customerBalanceTransactions: List<CustomerBalanceTransaction>
         ) = customerBalanceTransactions(JsonField.of(customerBalanceTransactions))
 
+        /**
+         * Sets [Builder.customerBalanceTransactions] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.customerBalanceTransactions] with a well-typed
+         * `List<CustomerBalanceTransaction>` value instead. This method is primarily for setting
+         * the field to an undocumented or not yet supported value.
+         */
         fun customerBalanceTransactions(
             customerBalanceTransactions: JsonField<List<CustomerBalanceTransaction>>
         ) = apply {
@@ -1022,6 +1269,11 @@ private constructor(
                 customerBalanceTransactions.map { it.toMutableList() }
         }
 
+        /**
+         * Adds a single [CustomerBalanceTransaction] to [customerBalanceTransactions].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addCustomerBalanceTransaction(customerBalanceTransaction: CustomerBalanceTransaction) =
             apply {
                 customerBalanceTransactions =
@@ -1140,220 +1392,16 @@ private constructor(
         fun customerTaxId(customerTaxId: CustomerTaxId?) =
             customerTaxId(JsonField.ofNullable(customerTaxId))
 
-        /**
-         * Tax IDs are commonly required to be displayed on customer invoices, which are added to
-         * the headers of invoices.
-         *
-         * ### Supported Tax ID Countries and Types
-         * |Country             |Type        |Description                                                                                            |
-         * |--------------------|------------|-------------------------------------------------------------------------------------------------------|
-         * |Andorra             |`ad_nrt`    |Andorran NRT Number                                                                                    |
-         * |Argentina           |`ar_cuit`   |Argentinian Tax ID Number                                                                              |
-         * |Australia           |`au_abn`    |Australian Business Number (AU ABN)                                                                    |
-         * |Australia           |`au_arn`    |Australian Taxation Office Reference Number                                                            |
-         * |Austria             |`eu_vat`    |European VAT Number                                                                                    |
-         * |Bahrain             |`bh_vat`    |Bahraini VAT Number                                                                                    |
-         * |Belgium             |`eu_vat`    |European VAT Number                                                                                    |
-         * |Bolivia             |`bo_tin`    |Bolivian Tax ID                                                                                        |
-         * |Brazil              |`br_cnpj`   |Brazilian CNPJ Number                                                                                  |
-         * |Brazil              |`br_cpf`    |Brazilian CPF Number                                                                                   |
-         * |Bulgaria            |`bg_uic`    |Bulgaria Unified Identification Code                                                                   |
-         * |Bulgaria            |`eu_vat`    |European VAT Number                                                                                    |
-         * |Canada              |`ca_bn`     |Canadian BN                                                                                            |
-         * |Canada              |`ca_gst_hst`|Canadian GST/HST Number                                                                                |
-         * |Canada              |`ca_pst_bc` |Canadian PST Number (British Columbia)                                                                 |
-         * |Canada              |`ca_pst_mb` |Canadian PST Number (Manitoba)                                                                         |
-         * |Canada              |`ca_pst_sk` |Canadian PST Number (Saskatchewan)                                                                     |
-         * |Canada              |`ca_qst`    |Canadian QST Number (Québec)                                                                           |
-         * |Chile               |`cl_tin`    |Chilean TIN                                                                                            |
-         * |China               |`cn_tin`    |Chinese Tax ID                                                                                         |
-         * |Colombia            |`co_nit`    |Colombian NIT Number                                                                                   |
-         * |Costa Rica          |`cr_tin`    |Costa Rican Tax ID                                                                                     |
-         * |Croatia             |`eu_vat`    |European VAT Number                                                                                    |
-         * |Cyprus              |`eu_vat`    |European VAT Number                                                                                    |
-         * |Czech Republic      |`eu_vat`    |European VAT Number                                                                                    |
-         * |Denmark             |`eu_vat`    |European VAT Number                                                                                    |
-         * |Dominican Republic  |`do_rcn`    |Dominican RCN Number                                                                                   |
-         * |Ecuador             |`ec_ruc`    |Ecuadorian RUC Number                                                                                  |
-         * |Egypt               |`eg_tin`    |Egyptian Tax Identification Number                                                                     |
-         * |El Salvador         |`sv_nit`    |El Salvadorian NIT Number                                                                              |
-         * |Estonia             |`eu_vat`    |European VAT Number                                                                                    |
-         * |EU                  |`eu_oss_vat`|European One Stop Shop VAT Number for non-Union scheme                                                 |
-         * |Finland             |`eu_vat`    |European VAT Number                                                                                    |
-         * |France              |`eu_vat`    |European VAT Number                                                                                    |
-         * |Georgia             |`ge_vat`    |Georgian VAT                                                                                           |
-         * |Germany             |`eu_vat`    |European VAT Number                                                                                    |
-         * |Greece              |`eu_vat`    |European VAT Number                                                                                    |
-         * |Hong Kong           |`hk_br`     |Hong Kong BR Number                                                                                    |
-         * |Hungary             |`eu_vat`    |European VAT Number                                                                                    |
-         * |Hungary             |`hu_tin`    |Hungary Tax Number (adószám)                                                                           |
-         * |Iceland             |`is_vat`    |Icelandic VAT                                                                                          |
-         * |India               |`in_gst`    |Indian GST Number                                                                                      |
-         * |Indonesia           |`id_npwp`   |Indonesian NPWP Number                                                                                 |
-         * |Ireland             |`eu_vat`    |European VAT Number                                                                                    |
-         * |Israel              |`il_vat`    |Israel VAT                                                                                             |
-         * |Italy               |`eu_vat`    |European VAT Number                                                                                    |
-         * |Japan               |`jp_cn`     |Japanese Corporate Number (_Hōjin Bangō_)                                                              |
-         * |Japan               |`jp_rn`     |Japanese Registered Foreign Businesses' Registration Number (_Tōroku Kokugai Jigyōsha no Tōroku Bangō_)|
-         * |Japan               |`jp_trn`    |Japanese Tax Registration Number (_Tōroku Bangō_)                                                      |
-         * |Kazakhstan          |`kz_bin`    |Kazakhstani Business Identification Number                                                             |
-         * |Kenya               |`ke_pin`    |Kenya Revenue Authority Personal Identification Number                                                 |
-         * |Latvia              |`eu_vat`    |European VAT Number                                                                                    |
-         * |Liechtenstein       |`li_uid`    |Liechtensteinian UID Number                                                                            |
-         * |Lithuania           |`eu_vat`    |European VAT Number                                                                                    |
-         * |Luxembourg          |`eu_vat`    |European VAT Number                                                                                    |
-         * |Malaysia            |`my_frp`    |Malaysian FRP Number                                                                                   |
-         * |Malaysia            |`my_itn`    |Malaysian ITN                                                                                          |
-         * |Malaysia            |`my_sst`    |Malaysian SST Number                                                                                   |
-         * |Malta               |`eu_vat `   |European VAT Number                                                                                    |
-         * |Mexico              |`mx_rfc`    |Mexican RFC Number                                                                                     |
-         * |Netherlands         |`eu_vat`    |European VAT Number                                                                                    |
-         * |New Zealand         |`nz_gst`    |New Zealand GST Number                                                                                 |
-         * |Nigeria             |`ng_tin`    |Nigerian Tax Identification Number                                                                     |
-         * |Norway              |`no_vat`    |Norwegian VAT Number                                                                                   |
-         * |Norway              |`no_voec`   |Norwegian VAT on e-commerce Number                                                                     |
-         * |Oman                |`om_vat`    |Omani VAT Number                                                                                       |
-         * |Peru                |`pe_ruc`    |Peruvian RUC Number                                                                                    |
-         * |Philippines         |`ph_tin `   |Philippines Tax Identification Number                                                                  |
-         * |Poland              |`eu_vat`    |European VAT Number                                                                                    |
-         * |Portugal            |`eu_vat`    |European VAT Number                                                                                    |
-         * |Romania             |`eu_vat`    |European VAT Number                                                                                    |
-         * |Romania             |`ro_tin`    |Romanian Tax ID Number                                                                                 |
-         * |Russia              |`ru_inn`    |Russian INN                                                                                            |
-         * |Russia              |`ru_kpp`    |Russian KPP                                                                                            |
-         * |Saudi Arabia        |`sa_vat`    |Saudi Arabia VAT                                                                                       |
-         * |Serbia              |`rs_pib`    |Serbian PIB Number                                                                                     |
-         * |Singapore           |`sg_gst`    |Singaporean GST                                                                                        |
-         * |Singapore           |`sg_uen`    |Singaporean UEN                                                                                        |
-         * |Slovakia            |`eu_vat`    |European VAT Number                                                                                    |
-         * |Slovenia            |`eu_vat`    |European VAT Number                                                                                    |
-         * |Slovenia            |`si_tin`    |Slovenia Tax Number (davčna številka)                                                                  |
-         * |South Africa        |`za_vat`    |South African VAT Number                                                                               |
-         * |South Korea         |`kr_brn`    |Korean BRN                                                                                             |
-         * |Spain               |`es_cif`    |Spanish NIF Number (previously Spanish CIF Number)                                                     |
-         * |Spain               |`eu_vat`    |European VAT Number                                                                                    |
-         * |Sweden              |`eu_vat`    |European VAT Number                                                                                    |
-         * |Switzerland         |`ch_vat`    |Switzerland VAT Number                                                                                 |
-         * |Taiwan              |`tw_vat`    |Taiwanese VAT                                                                                          |
-         * |Thailand            |`th_vat`    |Thai VAT                                                                                               |
-         * |Turkey              |`tr_tin`    |Turkish Tax Identification Number                                                                      |
-         * |Ukraine             |`ua_vat`    |Ukrainian VAT                                                                                          |
-         * |United Arab Emirates|`ae_trn`    |United Arab Emirates TRN                                                                               |
-         * |United Kingdom      |`eu_vat`    |Northern Ireland VAT Number                                                                            |
-         * |United Kingdom      |`gb_vat`    |United Kingdom VAT Number                                                                              |
-         * |United States       |`us_ein`    |United States EIN                                                                                      |
-         * |Uruguay             |`uy_ruc`    |Uruguayan RUC Number                                                                                   |
-         * |Venezuela           |`ve_rif`    |Venezuelan RIF Number                                                                                  |
-         * |Vietnam             |`vn_tin`    |Vietnamese Tax ID Number                                                                               |
-         */
+        /** Alias for calling [Builder.customerTaxId] with `customerTaxId.orElse(null)`. */
         fun customerTaxId(customerTaxId: Optional<CustomerTaxId>) =
             customerTaxId(customerTaxId.getOrNull())
 
         /**
-         * Tax IDs are commonly required to be displayed on customer invoices, which are added to
-         * the headers of invoices.
+         * Sets [Builder.customerTaxId] to an arbitrary JSON value.
          *
-         * ### Supported Tax ID Countries and Types
-         * |Country             |Type        |Description                                                                                            |
-         * |--------------------|------------|-------------------------------------------------------------------------------------------------------|
-         * |Andorra             |`ad_nrt`    |Andorran NRT Number                                                                                    |
-         * |Argentina           |`ar_cuit`   |Argentinian Tax ID Number                                                                              |
-         * |Australia           |`au_abn`    |Australian Business Number (AU ABN)                                                                    |
-         * |Australia           |`au_arn`    |Australian Taxation Office Reference Number                                                            |
-         * |Austria             |`eu_vat`    |European VAT Number                                                                                    |
-         * |Bahrain             |`bh_vat`    |Bahraini VAT Number                                                                                    |
-         * |Belgium             |`eu_vat`    |European VAT Number                                                                                    |
-         * |Bolivia             |`bo_tin`    |Bolivian Tax ID                                                                                        |
-         * |Brazil              |`br_cnpj`   |Brazilian CNPJ Number                                                                                  |
-         * |Brazil              |`br_cpf`    |Brazilian CPF Number                                                                                   |
-         * |Bulgaria            |`bg_uic`    |Bulgaria Unified Identification Code                                                                   |
-         * |Bulgaria            |`eu_vat`    |European VAT Number                                                                                    |
-         * |Canada              |`ca_bn`     |Canadian BN                                                                                            |
-         * |Canada              |`ca_gst_hst`|Canadian GST/HST Number                                                                                |
-         * |Canada              |`ca_pst_bc` |Canadian PST Number (British Columbia)                                                                 |
-         * |Canada              |`ca_pst_mb` |Canadian PST Number (Manitoba)                                                                         |
-         * |Canada              |`ca_pst_sk` |Canadian PST Number (Saskatchewan)                                                                     |
-         * |Canada              |`ca_qst`    |Canadian QST Number (Québec)                                                                           |
-         * |Chile               |`cl_tin`    |Chilean TIN                                                                                            |
-         * |China               |`cn_tin`    |Chinese Tax ID                                                                                         |
-         * |Colombia            |`co_nit`    |Colombian NIT Number                                                                                   |
-         * |Costa Rica          |`cr_tin`    |Costa Rican Tax ID                                                                                     |
-         * |Croatia             |`eu_vat`    |European VAT Number                                                                                    |
-         * |Cyprus              |`eu_vat`    |European VAT Number                                                                                    |
-         * |Czech Republic      |`eu_vat`    |European VAT Number                                                                                    |
-         * |Denmark             |`eu_vat`    |European VAT Number                                                                                    |
-         * |Dominican Republic  |`do_rcn`    |Dominican RCN Number                                                                                   |
-         * |Ecuador             |`ec_ruc`    |Ecuadorian RUC Number                                                                                  |
-         * |Egypt               |`eg_tin`    |Egyptian Tax Identification Number                                                                     |
-         * |El Salvador         |`sv_nit`    |El Salvadorian NIT Number                                                                              |
-         * |Estonia             |`eu_vat`    |European VAT Number                                                                                    |
-         * |EU                  |`eu_oss_vat`|European One Stop Shop VAT Number for non-Union scheme                                                 |
-         * |Finland             |`eu_vat`    |European VAT Number                                                                                    |
-         * |France              |`eu_vat`    |European VAT Number                                                                                    |
-         * |Georgia             |`ge_vat`    |Georgian VAT                                                                                           |
-         * |Germany             |`eu_vat`    |European VAT Number                                                                                    |
-         * |Greece              |`eu_vat`    |European VAT Number                                                                                    |
-         * |Hong Kong           |`hk_br`     |Hong Kong BR Number                                                                                    |
-         * |Hungary             |`eu_vat`    |European VAT Number                                                                                    |
-         * |Hungary             |`hu_tin`    |Hungary Tax Number (adószám)                                                                           |
-         * |Iceland             |`is_vat`    |Icelandic VAT                                                                                          |
-         * |India               |`in_gst`    |Indian GST Number                                                                                      |
-         * |Indonesia           |`id_npwp`   |Indonesian NPWP Number                                                                                 |
-         * |Ireland             |`eu_vat`    |European VAT Number                                                                                    |
-         * |Israel              |`il_vat`    |Israel VAT                                                                                             |
-         * |Italy               |`eu_vat`    |European VAT Number                                                                                    |
-         * |Japan               |`jp_cn`     |Japanese Corporate Number (_Hōjin Bangō_)                                                              |
-         * |Japan               |`jp_rn`     |Japanese Registered Foreign Businesses' Registration Number (_Tōroku Kokugai Jigyōsha no Tōroku Bangō_)|
-         * |Japan               |`jp_trn`    |Japanese Tax Registration Number (_Tōroku Bangō_)                                                      |
-         * |Kazakhstan          |`kz_bin`    |Kazakhstani Business Identification Number                                                             |
-         * |Kenya               |`ke_pin`    |Kenya Revenue Authority Personal Identification Number                                                 |
-         * |Latvia              |`eu_vat`    |European VAT Number                                                                                    |
-         * |Liechtenstein       |`li_uid`    |Liechtensteinian UID Number                                                                            |
-         * |Lithuania           |`eu_vat`    |European VAT Number                                                                                    |
-         * |Luxembourg          |`eu_vat`    |European VAT Number                                                                                    |
-         * |Malaysia            |`my_frp`    |Malaysian FRP Number                                                                                   |
-         * |Malaysia            |`my_itn`    |Malaysian ITN                                                                                          |
-         * |Malaysia            |`my_sst`    |Malaysian SST Number                                                                                   |
-         * |Malta               |`eu_vat `   |European VAT Number                                                                                    |
-         * |Mexico              |`mx_rfc`    |Mexican RFC Number                                                                                     |
-         * |Netherlands         |`eu_vat`    |European VAT Number                                                                                    |
-         * |New Zealand         |`nz_gst`    |New Zealand GST Number                                                                                 |
-         * |Nigeria             |`ng_tin`    |Nigerian Tax Identification Number                                                                     |
-         * |Norway              |`no_vat`    |Norwegian VAT Number                                                                                   |
-         * |Norway              |`no_voec`   |Norwegian VAT on e-commerce Number                                                                     |
-         * |Oman                |`om_vat`    |Omani VAT Number                                                                                       |
-         * |Peru                |`pe_ruc`    |Peruvian RUC Number                                                                                    |
-         * |Philippines         |`ph_tin `   |Philippines Tax Identification Number                                                                  |
-         * |Poland              |`eu_vat`    |European VAT Number                                                                                    |
-         * |Portugal            |`eu_vat`    |European VAT Number                                                                                    |
-         * |Romania             |`eu_vat`    |European VAT Number                                                                                    |
-         * |Romania             |`ro_tin`    |Romanian Tax ID Number                                                                                 |
-         * |Russia              |`ru_inn`    |Russian INN                                                                                            |
-         * |Russia              |`ru_kpp`    |Russian KPP                                                                                            |
-         * |Saudi Arabia        |`sa_vat`    |Saudi Arabia VAT                                                                                       |
-         * |Serbia              |`rs_pib`    |Serbian PIB Number                                                                                     |
-         * |Singapore           |`sg_gst`    |Singaporean GST                                                                                        |
-         * |Singapore           |`sg_uen`    |Singaporean UEN                                                                                        |
-         * |Slovakia            |`eu_vat`    |European VAT Number                                                                                    |
-         * |Slovenia            |`eu_vat`    |European VAT Number                                                                                    |
-         * |Slovenia            |`si_tin`    |Slovenia Tax Number (davčna številka)                                                                  |
-         * |South Africa        |`za_vat`    |South African VAT Number                                                                               |
-         * |South Korea         |`kr_brn`    |Korean BRN                                                                                             |
-         * |Spain               |`es_cif`    |Spanish NIF Number (previously Spanish CIF Number)                                                     |
-         * |Spain               |`eu_vat`    |European VAT Number                                                                                    |
-         * |Sweden              |`eu_vat`    |European VAT Number                                                                                    |
-         * |Switzerland         |`ch_vat`    |Switzerland VAT Number                                                                                 |
-         * |Taiwan              |`tw_vat`    |Taiwanese VAT                                                                                          |
-         * |Thailand            |`th_vat`    |Thai VAT                                                                                               |
-         * |Turkey              |`tr_tin`    |Turkish Tax Identification Number                                                                      |
-         * |Ukraine             |`ua_vat`    |Ukrainian VAT                                                                                          |
-         * |United Arab Emirates|`ae_trn`    |United Arab Emirates TRN                                                                               |
-         * |United Kingdom      |`eu_vat`    |Northern Ireland VAT Number                                                                            |
-         * |United Kingdom      |`gb_vat`    |United Kingdom VAT Number                                                                              |
-         * |United States       |`us_ein`    |United States EIN                                                                                      |
-         * |Uruguay             |`uy_ruc`    |Uruguayan RUC Number                                                                                   |
-         * |Venezuela           |`ve_rif`    |Venezuelan RIF Number                                                                                  |
-         * |Vietnam             |`vn_tin`    |Vietnamese Tax ID Number                                                                               |
+         * You should usually call [Builder.customerTaxId] with a well-typed [CustomerTaxId] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
         fun customerTaxId(customerTaxId: JsonField<CustomerTaxId>) = apply {
             this.customerTaxId = customerTaxId
@@ -1369,10 +1417,22 @@ private constructor(
 
         fun discounts(discounts: List<InvoiceLevelDiscount>) = discounts(JsonField.of(discounts))
 
+        /**
+         * Sets [Builder.discounts] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.discounts] with a well-typed
+         * `List<InvoiceLevelDiscount>` value instead. This method is primarily for setting the
+         * field to an undocumented or not yet supported value.
+         */
         fun discounts(discounts: JsonField<List<InvoiceLevelDiscount>>) = apply {
             this.discounts = discounts.map { it.toMutableList() }
         }
 
+        /**
+         * Adds a single [InvoiceLevelDiscount] to [discounts].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addDiscount(discount: InvoiceLevelDiscount) = apply {
             discounts =
                 (discounts ?: JsonField.of(mutableListOf())).also {
@@ -1380,13 +1440,25 @@ private constructor(
                 }
         }
 
+        /** Alias for calling [addDiscount] with `InvoiceLevelDiscount.ofPercentage(percentage)`. */
         fun addDiscount(percentage: PercentageDiscount) =
             addDiscount(InvoiceLevelDiscount.ofPercentage(percentage))
 
+        /** Alias for calling [addDiscount] with `InvoiceLevelDiscount.ofAmount(amount)`. */
         fun addDiscount(amount: AmountDiscount) = addDiscount(InvoiceLevelDiscount.ofAmount(amount))
 
+        /** Alias for calling [addDiscount] with `InvoiceLevelDiscount.ofTrial(trial)`. */
         fun addDiscount(trial: TrialDiscount) = addDiscount(InvoiceLevelDiscount.ofTrial(trial))
 
+        /**
+         * Alias for calling [addDiscount] with the following:
+         * ```java
+         * TrialDiscount.builder()
+         *     .discountType(TrialDiscount.DiscountType.TRIAL)
+         *     .appliesToPriceIds(appliesToPriceIds)
+         *     .build()
+         * ```
+         */
         fun addTrialDiscount(appliesToPriceIds: List<String>) =
             addDiscount(
                 TrialDiscount.builder()
@@ -1401,15 +1473,15 @@ private constructor(
          */
         fun dueDate(dueDate: OffsetDateTime?) = dueDate(JsonField.ofNullable(dueDate))
 
-        /**
-         * When the invoice payment is due. The due date is null if the invoice is not yet
-         * finalized.
-         */
+        /** Alias for calling [Builder.dueDate] with `dueDate.orElse(null)`. */
         fun dueDate(dueDate: Optional<OffsetDateTime>) = dueDate(dueDate.getOrNull())
 
         /**
-         * When the invoice payment is due. The due date is null if the invoice is not yet
-         * finalized.
+         * Sets [Builder.dueDate] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.dueDate] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
         fun dueDate(dueDate: JsonField<OffsetDateTime>) = apply { this.dueDate = dueDate }
 
@@ -1421,18 +1493,16 @@ private constructor(
         fun eligibleToIssueAt(eligibleToIssueAt: OffsetDateTime?) =
             eligibleToIssueAt(JsonField.ofNullable(eligibleToIssueAt))
 
-        /**
-         * If the invoice has a status of `draft`, this will be the time that the invoice will be
-         * eligible to be issued, otherwise it will be `null`. If `auto-issue` is true, the invoice
-         * will automatically begin issuing at this time.
-         */
+        /** Alias for calling [Builder.eligibleToIssueAt] with `eligibleToIssueAt.orElse(null)`. */
         fun eligibleToIssueAt(eligibleToIssueAt: Optional<OffsetDateTime>) =
             eligibleToIssueAt(eligibleToIssueAt.getOrNull())
 
         /**
-         * If the invoice has a status of `draft`, this will be the time that the invoice will be
-         * eligible to be issued, otherwise it will be `null`. If `auto-issue` is true, the invoice
-         * will automatically begin issuing at this time.
+         * Sets [Builder.eligibleToIssueAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.eligibleToIssueAt] with a well-typed [OffsetDateTime]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
          */
         fun eligibleToIssueAt(eligibleToIssueAt: JsonField<OffsetDateTime>) = apply {
             this.eligibleToIssueAt = eligibleToIssueAt
@@ -1445,16 +1515,16 @@ private constructor(
         fun hostedInvoiceUrl(hostedInvoiceUrl: String?) =
             hostedInvoiceUrl(JsonField.ofNullable(hostedInvoiceUrl))
 
-        /**
-         * A URL for the customer-facing invoice portal. This URL expires 30 days after the
-         * invoice's due date, or 60 days after being re-generated through the UI.
-         */
+        /** Alias for calling [Builder.hostedInvoiceUrl] with `hostedInvoiceUrl.orElse(null)`. */
         fun hostedInvoiceUrl(hostedInvoiceUrl: Optional<String>) =
             hostedInvoiceUrl(hostedInvoiceUrl.getOrNull())
 
         /**
-         * A URL for the customer-facing invoice portal. This URL expires 30 days after the
-         * invoice's due date, or 60 days after being re-generated through the UI.
+         * Sets [Builder.hostedInvoiceUrl] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.hostedInvoiceUrl] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
         fun hostedInvoiceUrl(hostedInvoiceUrl: JsonField<String>) = apply {
             this.hostedInvoiceUrl = hostedInvoiceUrl
@@ -1463,7 +1533,13 @@ private constructor(
         /** The scheduled date of the invoice */
         fun invoiceDate(invoiceDate: OffsetDateTime) = invoiceDate(JsonField.of(invoiceDate))
 
-        /** The scheduled date of the invoice */
+        /**
+         * Sets [Builder.invoiceDate] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.invoiceDate] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun invoiceDate(invoiceDate: JsonField<OffsetDateTime>) = apply {
             this.invoiceDate = invoiceDate
         }
@@ -1475,8 +1551,11 @@ private constructor(
         fun invoiceNumber(invoiceNumber: String) = invoiceNumber(JsonField.of(invoiceNumber))
 
         /**
-         * Automatically generated invoice number to help track and reconcile invoices. Invoice
-         * numbers have a prefix such as `RFOBWG`. These can be sequential per account or customer.
+         * Sets [Builder.invoiceNumber] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.invoiceNumber] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
         fun invoiceNumber(invoiceNumber: JsonField<String>) = apply {
             this.invoiceNumber = invoiceNumber
@@ -1485,14 +1564,27 @@ private constructor(
         /** The link to download the PDF representation of the `Invoice`. */
         fun invoicePdf(invoicePdf: String?) = invoicePdf(JsonField.ofNullable(invoicePdf))
 
-        /** The link to download the PDF representation of the `Invoice`. */
+        /** Alias for calling [Builder.invoicePdf] with `invoicePdf.orElse(null)`. */
         fun invoicePdf(invoicePdf: Optional<String>) = invoicePdf(invoicePdf.getOrNull())
 
-        /** The link to download the PDF representation of the `Invoice`. */
+        /**
+         * Sets [Builder.invoicePdf] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.invoicePdf] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun invoicePdf(invoicePdf: JsonField<String>) = apply { this.invoicePdf = invoicePdf }
 
         fun invoiceSource(invoiceSource: InvoiceSource) = invoiceSource(JsonField.of(invoiceSource))
 
+        /**
+         * Sets [Builder.invoiceSource] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.invoiceSource] with a well-typed [InvoiceSource] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun invoiceSource(invoiceSource: JsonField<InvoiceSource>) = apply {
             this.invoiceSource = invoiceSource
         }
@@ -1504,16 +1596,16 @@ private constructor(
         fun issueFailedAt(issueFailedAt: OffsetDateTime?) =
             issueFailedAt(JsonField.ofNullable(issueFailedAt))
 
-        /**
-         * If the invoice failed to issue, this will be the last time it failed to issue (even if it
-         * is now in a different state.)
-         */
+        /** Alias for calling [Builder.issueFailedAt] with `issueFailedAt.orElse(null)`. */
         fun issueFailedAt(issueFailedAt: Optional<OffsetDateTime>) =
             issueFailedAt(issueFailedAt.getOrNull())
 
         /**
-         * If the invoice failed to issue, this will be the last time it failed to issue (even if it
-         * is now in a different state.)
+         * Sets [Builder.issueFailedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.issueFailedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
         fun issueFailedAt(issueFailedAt: JsonField<OffsetDateTime>) = apply {
             this.issueFailedAt = issueFailedAt
@@ -1525,27 +1617,37 @@ private constructor(
          */
         fun issuedAt(issuedAt: OffsetDateTime?) = issuedAt(JsonField.ofNullable(issuedAt))
 
-        /**
-         * If the invoice has been issued, this will be the time it transitioned to `issued` (even
-         * if it is now in a different state.)
-         */
+        /** Alias for calling [Builder.issuedAt] with `issuedAt.orElse(null)`. */
         fun issuedAt(issuedAt: Optional<OffsetDateTime>) = issuedAt(issuedAt.getOrNull())
 
         /**
-         * If the invoice has been issued, this will be the time it transitioned to `issued` (even
-         * if it is now in a different state.)
+         * Sets [Builder.issuedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.issuedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
         fun issuedAt(issuedAt: JsonField<OffsetDateTime>) = apply { this.issuedAt = issuedAt }
 
         /** The breakdown of prices in this invoice. */
         fun lineItems(lineItems: List<LineItem>) = lineItems(JsonField.of(lineItems))
 
-        /** The breakdown of prices in this invoice. */
+        /**
+         * Sets [Builder.lineItems] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.lineItems] with a well-typed `List<LineItem>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun lineItems(lineItems: JsonField<List<LineItem>>) = apply {
             this.lineItems = lineItems.map { it.toMutableList() }
         }
 
-        /** The breakdown of prices in this invoice. */
+        /**
+         * Adds a single [LineItem] to [lineItems].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addLineItem(lineItem: LineItem) = apply {
             lineItems =
                 (lineItems ?: JsonField.of(mutableListOf())).also {
@@ -1555,16 +1657,31 @@ private constructor(
 
         fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
+        /** Alias for calling [Builder.maximum] with `maximum.orElse(null)`. */
         fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
+        /**
+         * Sets [Builder.maximum] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.maximum] with a well-typed [Maximum] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
         fun maximumAmount(maximumAmount: String?) =
             maximumAmount(JsonField.ofNullable(maximumAmount))
 
+        /** Alias for calling [Builder.maximumAmount] with `maximumAmount.orElse(null)`. */
         fun maximumAmount(maximumAmount: Optional<String>) =
             maximumAmount(maximumAmount.getOrNull())
 
+        /**
+         * Sets [Builder.maximumAmount] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.maximumAmount] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun maximumAmount(maximumAmount: JsonField<String>) = apply {
             this.maximumAmount = maximumAmount
         }
@@ -1572,10 +1689,15 @@ private constructor(
         /** Free-form text which is available on the invoice PDF and the Orb invoice portal. */
         fun memo(memo: String?) = memo(JsonField.ofNullable(memo))
 
-        /** Free-form text which is available on the invoice PDF and the Orb invoice portal. */
+        /** Alias for calling [Builder.memo] with `memo.orElse(null)`. */
         fun memo(memo: Optional<String>) = memo(memo.getOrNull())
 
-        /** Free-form text which is available on the invoice PDF and the Orb invoice portal. */
+        /**
+         * Sets [Builder.memo] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.memo] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun memo(memo: JsonField<String>) = apply { this.memo = memo }
 
         /**
@@ -1586,24 +1708,41 @@ private constructor(
         fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
         /**
-         * User specified key-value pairs for the resource. If not present, this defaults to an
-         * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
-         * entire metadata mapping can be cleared by setting `metadata` to `null`.
+         * Sets [Builder.metadata] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.metadata] with a well-typed [Metadata] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
         fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
         fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
+        /** Alias for calling [Builder.minimum] with `minimum.orElse(null)`. */
         fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
+        /**
+         * Sets [Builder.minimum] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.minimum] with a well-typed [Minimum] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
         fun minimumAmount(minimumAmount: String?) =
             minimumAmount(JsonField.ofNullable(minimumAmount))
 
+        /** Alias for calling [Builder.minimumAmount] with `minimumAmount.orElse(null)`. */
         fun minimumAmount(minimumAmount: Optional<String>) =
             minimumAmount(minimumAmount.getOrNull())
 
+        /**
+         * Sets [Builder.minimumAmount] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.minimumAmount] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun minimumAmount(minimumAmount: JsonField<String>) = apply {
             this.minimumAmount = minimumAmount
         }
@@ -1613,13 +1752,15 @@ private constructor(
          */
         fun paidAt(paidAt: OffsetDateTime?) = paidAt(JsonField.ofNullable(paidAt))
 
-        /**
-         * If the invoice has a status of `paid`, this gives a timestamp when the invoice was paid.
-         */
+        /** Alias for calling [Builder.paidAt] with `paidAt.orElse(null)`. */
         fun paidAt(paidAt: Optional<OffsetDateTime>) = paidAt(paidAt.getOrNull())
 
         /**
-         * If the invoice has a status of `paid`, this gives a timestamp when the invoice was paid.
+         * Sets [Builder.paidAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.paidAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
         fun paidAt(paidAt: JsonField<OffsetDateTime>) = apply { this.paidAt = paidAt }
 
@@ -1627,12 +1768,22 @@ private constructor(
         fun paymentAttempts(paymentAttempts: List<PaymentAttempt>) =
             paymentAttempts(JsonField.of(paymentAttempts))
 
-        /** A list of payment attempts associated with the invoice */
+        /**
+         * Sets [Builder.paymentAttempts] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.paymentAttempts] with a well-typed
+         * `List<PaymentAttempt>` value instead. This method is primarily for setting the field to
+         * an undocumented or not yet supported value.
+         */
         fun paymentAttempts(paymentAttempts: JsonField<List<PaymentAttempt>>) = apply {
             this.paymentAttempts = paymentAttempts.map { it.toMutableList() }
         }
 
-        /** A list of payment attempts associated with the invoice */
+        /**
+         * Adds a single [PaymentAttempt] to [paymentAttempts].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addPaymentAttempt(paymentAttempt: PaymentAttempt) = apply {
             paymentAttempts =
                 (paymentAttempts ?: JsonField.of(mutableListOf())).also {
@@ -1647,16 +1798,16 @@ private constructor(
         fun paymentFailedAt(paymentFailedAt: OffsetDateTime?) =
             paymentFailedAt(JsonField.ofNullable(paymentFailedAt))
 
-        /**
-         * If payment was attempted on this invoice but failed, this will be the time of the most
-         * recent attempt.
-         */
+        /** Alias for calling [Builder.paymentFailedAt] with `paymentFailedAt.orElse(null)`. */
         fun paymentFailedAt(paymentFailedAt: Optional<OffsetDateTime>) =
             paymentFailedAt(paymentFailedAt.getOrNull())
 
         /**
-         * If payment was attempted on this invoice but failed, this will be the time of the most
-         * recent attempt.
+         * Sets [Builder.paymentFailedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.paymentFailedAt] with a well-typed [OffsetDateTime]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
          */
         fun paymentFailedAt(paymentFailedAt: JsonField<OffsetDateTime>) = apply {
             this.paymentFailedAt = paymentFailedAt
@@ -1670,18 +1821,16 @@ private constructor(
         fun paymentStartedAt(paymentStartedAt: OffsetDateTime?) =
             paymentStartedAt(JsonField.ofNullable(paymentStartedAt))
 
-        /**
-         * If payment was attempted on this invoice, this will be the start time of the most recent
-         * attempt. This field is especially useful for delayed-notification payment mechanisms
-         * (like bank transfers), where payment can take 3 days or more.
-         */
+        /** Alias for calling [Builder.paymentStartedAt] with `paymentStartedAt.orElse(null)`. */
         fun paymentStartedAt(paymentStartedAt: Optional<OffsetDateTime>) =
             paymentStartedAt(paymentStartedAt.getOrNull())
 
         /**
-         * If payment was attempted on this invoice, this will be the start time of the most recent
-         * attempt. This field is especially useful for delayed-notification payment mechanisms
-         * (like bank transfers), where payment can take 3 days or more.
+         * Sets [Builder.paymentStartedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.paymentStartedAt] with a well-typed [OffsetDateTime]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
          */
         fun paymentStartedAt(paymentStartedAt: JsonField<OffsetDateTime>) = apply {
             this.paymentStartedAt = paymentStartedAt
@@ -1694,16 +1843,16 @@ private constructor(
         fun scheduledIssueAt(scheduledIssueAt: OffsetDateTime?) =
             scheduledIssueAt(JsonField.ofNullable(scheduledIssueAt))
 
-        /**
-         * If the invoice is in draft, this timestamp will reflect when the invoice is scheduled to
-         * be issued.
-         */
+        /** Alias for calling [Builder.scheduledIssueAt] with `scheduledIssueAt.orElse(null)`. */
         fun scheduledIssueAt(scheduledIssueAt: Optional<OffsetDateTime>) =
             scheduledIssueAt(scheduledIssueAt.getOrNull())
 
         /**
-         * If the invoice is in draft, this timestamp will reflect when the invoice is scheduled to
-         * be issued.
+         * Sets [Builder.scheduledIssueAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.scheduledIssueAt] with a well-typed [OffsetDateTime]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
          */
         fun scheduledIssueAt(scheduledIssueAt: JsonField<OffsetDateTime>) = apply {
             this.scheduledIssueAt = scheduledIssueAt
@@ -1712,23 +1861,45 @@ private constructor(
         fun shippingAddress(shippingAddress: ShippingAddress?) =
             shippingAddress(JsonField.ofNullable(shippingAddress))
 
+        /** Alias for calling [Builder.shippingAddress] with `shippingAddress.orElse(null)`. */
         fun shippingAddress(shippingAddress: Optional<ShippingAddress>) =
             shippingAddress(shippingAddress.getOrNull())
 
+        /**
+         * Sets [Builder.shippingAddress] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.shippingAddress] with a well-typed [ShippingAddress]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
         fun shippingAddress(shippingAddress: JsonField<ShippingAddress>) = apply {
             this.shippingAddress = shippingAddress
         }
 
         fun status(status: Status) = status(JsonField.of(status))
 
+        /**
+         * Sets [Builder.status] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.status] with a well-typed [Status] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun status(status: JsonField<Status>) = apply { this.status = status }
 
         fun subscription(subscription: Subscription?) =
             subscription(JsonField.ofNullable(subscription))
 
+        /** Alias for calling [Builder.subscription] with `subscription.orElse(null)`. */
         fun subscription(subscription: Optional<Subscription>) =
             subscription(subscription.getOrNull())
 
+        /**
+         * Sets [Builder.subscription] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.subscription] with a well-typed [Subscription] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun subscription(subscription: JsonField<Subscription>) = apply {
             this.subscription = subscription
         }
@@ -1736,7 +1907,12 @@ private constructor(
         /** The total before any discounts and minimums are applied. */
         fun subtotal(subtotal: String) = subtotal(JsonField.of(subtotal))
 
-        /** The total before any discounts and minimums are applied. */
+        /**
+         * Sets [Builder.subtotal] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.subtotal] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun subtotal(subtotal: JsonField<String>) = apply { this.subtotal = subtotal }
 
         /**
@@ -1746,16 +1922,16 @@ private constructor(
         fun syncFailedAt(syncFailedAt: OffsetDateTime?) =
             syncFailedAt(JsonField.ofNullable(syncFailedAt))
 
-        /**
-         * If the invoice failed to sync, this will be the last time an external invoicing provider
-         * sync was attempted. This field will always be `null` for invoices using Orb Invoicing.
-         */
+        /** Alias for calling [Builder.syncFailedAt] with `syncFailedAt.orElse(null)`. */
         fun syncFailedAt(syncFailedAt: Optional<OffsetDateTime>) =
             syncFailedAt(syncFailedAt.getOrNull())
 
         /**
-         * If the invoice failed to sync, this will be the last time an external invoicing provider
-         * sync was attempted. This field will always be `null` for invoices using Orb Invoicing.
+         * Sets [Builder.syncFailedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.syncFailedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
         fun syncFailedAt(syncFailedAt: JsonField<OffsetDateTime>) = apply {
             this.syncFailedAt = syncFailedAt
@@ -1764,7 +1940,12 @@ private constructor(
         /** The total after any minimums and discounts have been applied. */
         fun total(total: String) = total(JsonField.of(total))
 
-        /** The total after any minimums and discounts have been applied. */
+        /**
+         * Sets [Builder.total] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.total] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun total(total: JsonField<String>) = apply { this.total = total }
 
         /**
@@ -1773,15 +1954,15 @@ private constructor(
          */
         fun voidedAt(voidedAt: OffsetDateTime?) = voidedAt(JsonField.ofNullable(voidedAt))
 
-        /**
-         * If the invoice has a status of `void`, this gives a timestamp when the invoice was
-         * voided.
-         */
+        /** Alias for calling [Builder.voidedAt] with `voidedAt.orElse(null)`. */
         fun voidedAt(voidedAt: Optional<OffsetDateTime>) = voidedAt(voidedAt.getOrNull())
 
         /**
-         * If the invoice has a status of `void`, this gives a timestamp when the invoice was
-         * voided.
+         * Sets [Builder.voidedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.voidedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
         fun voidedAt(voidedAt: JsonField<OffsetDateTime>) = apply { this.voidedAt = voidedAt }
 
@@ -1792,8 +1973,11 @@ private constructor(
         fun willAutoIssue(willAutoIssue: Boolean) = willAutoIssue(JsonField.of(willAutoIssue))
 
         /**
-         * This is true if the invoice will be automatically issued in the future, and false
-         * otherwise.
+         * Sets [Builder.willAutoIssue] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.willAutoIssue] with a well-typed [Boolean] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
         fun willAutoIssue(willAutoIssue: JsonField<Boolean>) = apply {
             this.willAutoIssue = willAutoIssue
@@ -1887,18 +2071,31 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** True only if auto-collection is enabled for this invoice. */
+        /**
+         * True only if auto-collection is enabled for this invoice.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun enabled(): Optional<Boolean> = Optional.ofNullable(enabled.getNullable("enabled"))
 
         /**
          * If the invoice is scheduled for auto-collection, this field will reflect when the next
          * attempt will occur. If dunning has been exhausted, or auto-collection is not enabled for
          * this invoice, this field will be `null`.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
         fun nextAttemptAt(): Optional<OffsetDateTime> =
             Optional.ofNullable(nextAttemptAt.getNullable("next_attempt_at"))
 
-        /** Number of auto-collection payment attempts. */
+        /**
+         * Number of auto-collection payment attempts.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun numAttempts(): Optional<Long> =
             Optional.ofNullable(numAttempts.getNullable("num_attempts"))
 
@@ -1909,34 +2106,44 @@ private constructor(
          * `previously_attempted_at` is non-null, and `next_attempt_time` is non-null), or if
          * dunning has been exhausted (`previously_attempted_at` is non-null, but
          * `next_attempt_time` is null).
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
         fun previouslyAttemptedAt(): Optional<OffsetDateTime> =
             Optional.ofNullable(previouslyAttemptedAt.getNullable("previously_attempted_at"))
 
-        /** True only if auto-collection is enabled for this invoice. */
+        /**
+         * Returns the raw JSON value of [enabled].
+         *
+         * Unlike [enabled], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("enabled") @ExcludeMissing fun _enabled(): JsonField<Boolean> = enabled
 
         /**
-         * If the invoice is scheduled for auto-collection, this field will reflect when the next
-         * attempt will occur. If dunning has been exhausted, or auto-collection is not enabled for
-         * this invoice, this field will be `null`.
+         * Returns the raw JSON value of [nextAttemptAt].
+         *
+         * Unlike [nextAttemptAt], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("next_attempt_at")
         @ExcludeMissing
         fun _nextAttemptAt(): JsonField<OffsetDateTime> = nextAttemptAt
 
-        /** Number of auto-collection payment attempts. */
+        /**
+         * Returns the raw JSON value of [numAttempts].
+         *
+         * Unlike [numAttempts], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("num_attempts")
         @ExcludeMissing
         fun _numAttempts(): JsonField<Long> = numAttempts
 
         /**
-         * If Orb has ever attempted payment auto-collection for this invoice, this field will
-         * reflect when that attempt occurred. In conjunction with `next_attempt_at`, this can be
-         * used to tell whether the invoice is currently in dunning (that is,
-         * `previously_attempted_at` is non-null, and `next_attempt_time` is non-null), or if
-         * dunning has been exhausted (`previously_attempted_at` is non-null, but
-         * `next_attempt_time` is null).
+         * Returns the raw JSON value of [previouslyAttemptedAt].
+         *
+         * Unlike [previouslyAttemptedAt], this method doesn't throw if the JSON field has an
+         * unexpected type.
          */
         @JsonProperty("previously_attempted_at")
         @ExcludeMissing
@@ -1999,13 +2206,23 @@ private constructor(
             /** True only if auto-collection is enabled for this invoice. */
             fun enabled(enabled: Boolean?) = enabled(JsonField.ofNullable(enabled))
 
-            /** True only if auto-collection is enabled for this invoice. */
+            /**
+             * Alias for [Builder.enabled].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
             fun enabled(enabled: Boolean) = enabled(enabled as Boolean?)
 
-            /** True only if auto-collection is enabled for this invoice. */
+            /** Alias for calling [Builder.enabled] with `enabled.orElse(null)`. */
             fun enabled(enabled: Optional<Boolean>) = enabled(enabled.getOrNull())
 
-            /** True only if auto-collection is enabled for this invoice. */
+            /**
+             * Sets [Builder.enabled] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.enabled] with a well-typed [Boolean] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun enabled(enabled: JsonField<Boolean>) = apply { this.enabled = enabled }
 
             /**
@@ -2016,18 +2233,16 @@ private constructor(
             fun nextAttemptAt(nextAttemptAt: OffsetDateTime?) =
                 nextAttemptAt(JsonField.ofNullable(nextAttemptAt))
 
-            /**
-             * If the invoice is scheduled for auto-collection, this field will reflect when the
-             * next attempt will occur. If dunning has been exhausted, or auto-collection is not
-             * enabled for this invoice, this field will be `null`.
-             */
+            /** Alias for calling [Builder.nextAttemptAt] with `nextAttemptAt.orElse(null)`. */
             fun nextAttemptAt(nextAttemptAt: Optional<OffsetDateTime>) =
                 nextAttemptAt(nextAttemptAt.getOrNull())
 
             /**
-             * If the invoice is scheduled for auto-collection, this field will reflect when the
-             * next attempt will occur. If dunning has been exhausted, or auto-collection is not
-             * enabled for this invoice, this field will be `null`.
+             * Sets [Builder.nextAttemptAt] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.nextAttemptAt] with a well-typed [OffsetDateTime]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
             fun nextAttemptAt(nextAttemptAt: JsonField<OffsetDateTime>) = apply {
                 this.nextAttemptAt = nextAttemptAt
@@ -2036,13 +2251,23 @@ private constructor(
             /** Number of auto-collection payment attempts. */
             fun numAttempts(numAttempts: Long?) = numAttempts(JsonField.ofNullable(numAttempts))
 
-            /** Number of auto-collection payment attempts. */
+            /**
+             * Alias for [Builder.numAttempts].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
             fun numAttempts(numAttempts: Long) = numAttempts(numAttempts as Long?)
 
-            /** Number of auto-collection payment attempts. */
+            /** Alias for calling [Builder.numAttempts] with `numAttempts.orElse(null)`. */
             fun numAttempts(numAttempts: Optional<Long>) = numAttempts(numAttempts.getOrNull())
 
-            /** Number of auto-collection payment attempts. */
+            /**
+             * Sets [Builder.numAttempts] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.numAttempts] with a well-typed [Long] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun numAttempts(numAttempts: JsonField<Long>) = apply { this.numAttempts = numAttempts }
 
             /**
@@ -2057,23 +2282,18 @@ private constructor(
                 previouslyAttemptedAt(JsonField.ofNullable(previouslyAttemptedAt))
 
             /**
-             * If Orb has ever attempted payment auto-collection for this invoice, this field will
-             * reflect when that attempt occurred. In conjunction with `next_attempt_at`, this can
-             * be used to tell whether the invoice is currently in dunning (that is,
-             * `previously_attempted_at` is non-null, and `next_attempt_time` is non-null), or if
-             * dunning has been exhausted (`previously_attempted_at` is non-null, but
-             * `next_attempt_time` is null).
+             * Alias for calling [Builder.previouslyAttemptedAt] with
+             * `previouslyAttemptedAt.orElse(null)`.
              */
             fun previouslyAttemptedAt(previouslyAttemptedAt: Optional<OffsetDateTime>) =
                 previouslyAttemptedAt(previouslyAttemptedAt.getOrNull())
 
             /**
-             * If Orb has ever attempted payment auto-collection for this invoice, this field will
-             * reflect when that attempt occurred. In conjunction with `next_attempt_at`, this can
-             * be used to tell whether the invoice is currently in dunning (that is,
-             * `previously_attempted_at` is non-null, and `next_attempt_time` is non-null), or if
-             * dunning has been exhausted (`previously_attempted_at` is non-null, but
-             * `next_attempt_time` is null).
+             * Sets [Builder.previouslyAttemptedAt] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.previouslyAttemptedAt] with a well-typed
+             * [OffsetDateTime] value instead. This method is primarily for setting the field to an
+             * undocumented or not yet supported value.
              */
             fun previouslyAttemptedAt(previouslyAttemptedAt: JsonField<OffsetDateTime>) = apply {
                 this.previouslyAttemptedAt = previouslyAttemptedAt
@@ -2152,31 +2372,85 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun city(): Optional<String> = Optional.ofNullable(city.getNullable("city"))
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun country(): Optional<String> = Optional.ofNullable(country.getNullable("country"))
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun line1(): Optional<String> = Optional.ofNullable(line1.getNullable("line1"))
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun line2(): Optional<String> = Optional.ofNullable(line2.getNullable("line2"))
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun postalCode(): Optional<String> =
             Optional.ofNullable(postalCode.getNullable("postal_code"))
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun state(): Optional<String> = Optional.ofNullable(state.getNullable("state"))
 
+        /**
+         * Returns the raw JSON value of [city].
+         *
+         * Unlike [city], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("city") @ExcludeMissing fun _city(): JsonField<String> = city
 
+        /**
+         * Returns the raw JSON value of [country].
+         *
+         * Unlike [country], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("country") @ExcludeMissing fun _country(): JsonField<String> = country
 
+        /**
+         * Returns the raw JSON value of [line1].
+         *
+         * Unlike [line1], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("line1") @ExcludeMissing fun _line1(): JsonField<String> = line1
 
+        /**
+         * Returns the raw JSON value of [line2].
+         *
+         * Unlike [line2], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("line2") @ExcludeMissing fun _line2(): JsonField<String> = line2
 
+        /**
+         * Returns the raw JSON value of [postalCode].
+         *
+         * Unlike [postalCode], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("postal_code")
         @ExcludeMissing
         fun _postalCode(): JsonField<String> = postalCode
 
+        /**
+         * Returns the raw JSON value of [state].
+         *
+         * Unlike [state], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("state") @ExcludeMissing fun _state(): JsonField<String> = state
 
         @JsonAnyGetter
@@ -2243,38 +2517,86 @@ private constructor(
 
             fun city(city: String?) = city(JsonField.ofNullable(city))
 
+            /** Alias for calling [Builder.city] with `city.orElse(null)`. */
             fun city(city: Optional<String>) = city(city.getOrNull())
 
+            /**
+             * Sets [Builder.city] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.city] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun city(city: JsonField<String>) = apply { this.city = city }
 
             fun country(country: String?) = country(JsonField.ofNullable(country))
 
+            /** Alias for calling [Builder.country] with `country.orElse(null)`. */
             fun country(country: Optional<String>) = country(country.getOrNull())
 
+            /**
+             * Sets [Builder.country] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.country] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun country(country: JsonField<String>) = apply { this.country = country }
 
             fun line1(line1: String?) = line1(JsonField.ofNullable(line1))
 
+            /** Alias for calling [Builder.line1] with `line1.orElse(null)`. */
             fun line1(line1: Optional<String>) = line1(line1.getOrNull())
 
+            /**
+             * Sets [Builder.line1] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.line1] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun line1(line1: JsonField<String>) = apply { this.line1 = line1 }
 
             fun line2(line2: String?) = line2(JsonField.ofNullable(line2))
 
+            /** Alias for calling [Builder.line2] with `line2.orElse(null)`. */
             fun line2(line2: Optional<String>) = line2(line2.getOrNull())
 
+            /**
+             * Sets [Builder.line2] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.line2] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun line2(line2: JsonField<String>) = apply { this.line2 = line2 }
 
             fun postalCode(postalCode: String?) = postalCode(JsonField.ofNullable(postalCode))
 
+            /** Alias for calling [Builder.postalCode] with `postalCode.orElse(null)`. */
             fun postalCode(postalCode: Optional<String>) = postalCode(postalCode.getOrNull())
 
+            /**
+             * Sets [Builder.postalCode] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.postalCode] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun postalCode(postalCode: JsonField<String>) = apply { this.postalCode = postalCode }
 
             fun state(state: String?) = state(JsonField.ofNullable(state))
 
+            /** Alias for calling [Builder.state] with `state.orElse(null)`. */
             fun state(state: Optional<String>) = state(state.getOrNull())
 
+            /**
+             * Sets [Builder.state] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.state] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun state(state: JsonField<String>) = apply { this.state = state }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -2353,44 +2675,103 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun id(): String = id.getRequired("id")
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun creditNoteNumber(): String = creditNoteNumber.getRequired("credit_note_number")
 
-        /** An optional memo supplied on the credit note. */
+        /**
+         * An optional memo supplied on the credit note.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun memo(): Optional<String> = Optional.ofNullable(memo.getNullable("memo"))
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun reason(): String = reason.getRequired("reason")
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun total(): String = total.getRequired("total")
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun type(): String = type.getRequired("type")
 
         /**
          * If the credit note has a status of `void`, this gives a timestamp when the credit note
          * was voided.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
         fun voidedAt(): Optional<OffsetDateTime> =
             Optional.ofNullable(voidedAt.getNullable("voided_at"))
 
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+        /**
+         * Returns the raw JSON value of [creditNoteNumber].
+         *
+         * Unlike [creditNoteNumber], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @JsonProperty("credit_note_number")
         @ExcludeMissing
         fun _creditNoteNumber(): JsonField<String> = creditNoteNumber
 
-        /** An optional memo supplied on the credit note. */
+        /**
+         * Returns the raw JSON value of [memo].
+         *
+         * Unlike [memo], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("memo") @ExcludeMissing fun _memo(): JsonField<String> = memo
 
+        /**
+         * Returns the raw JSON value of [reason].
+         *
+         * Unlike [reason], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<String> = reason
 
+        /**
+         * Returns the raw JSON value of [total].
+         *
+         * Unlike [total], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("total") @ExcludeMissing fun _total(): JsonField<String> = total
 
+        /**
+         * Returns the raw JSON value of [type].
+         *
+         * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<String> = type
 
         /**
-         * If the credit note has a status of `void`, this gives a timestamp when the credit note
-         * was voided.
+         * Returns the raw JSON value of [voidedAt].
+         *
+         * Unlike [voidedAt], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("voided_at")
         @ExcludeMissing
@@ -2464,11 +2845,25 @@ private constructor(
 
             fun id(id: String) = id(JsonField.of(id))
 
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             fun creditNoteNumber(creditNoteNumber: String) =
                 creditNoteNumber(JsonField.of(creditNoteNumber))
 
+            /**
+             * Sets [Builder.creditNoteNumber] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.creditNoteNumber] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun creditNoteNumber(creditNoteNumber: JsonField<String>) = apply {
                 this.creditNoteNumber = creditNoteNumber
             }
@@ -2476,22 +2871,49 @@ private constructor(
             /** An optional memo supplied on the credit note. */
             fun memo(memo: String?) = memo(JsonField.ofNullable(memo))
 
-            /** An optional memo supplied on the credit note. */
+            /** Alias for calling [Builder.memo] with `memo.orElse(null)`. */
             fun memo(memo: Optional<String>) = memo(memo.getOrNull())
 
-            /** An optional memo supplied on the credit note. */
+            /**
+             * Sets [Builder.memo] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.memo] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun memo(memo: JsonField<String>) = apply { this.memo = memo }
 
             fun reason(reason: String) = reason(JsonField.of(reason))
 
+            /**
+             * Sets [Builder.reason] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.reason] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun reason(reason: JsonField<String>) = apply { this.reason = reason }
 
             fun total(total: String) = total(JsonField.of(total))
 
+            /**
+             * Sets [Builder.total] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.total] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun total(total: JsonField<String>) = apply { this.total = total }
 
             fun type(type: String) = type(JsonField.of(type))
 
+            /**
+             * Sets [Builder.type] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.type] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun type(type: JsonField<String>) = apply { this.type = type }
 
             /**
@@ -2500,15 +2922,15 @@ private constructor(
              */
             fun voidedAt(voidedAt: OffsetDateTime?) = voidedAt(JsonField.ofNullable(voidedAt))
 
-            /**
-             * If the credit note has a status of `void`, this gives a timestamp when the credit
-             * note was voided.
-             */
+            /** Alias for calling [Builder.voidedAt] with `voidedAt.orElse(null)`. */
             fun voidedAt(voidedAt: Optional<OffsetDateTime>) = voidedAt(voidedAt.getOrNull())
 
             /**
-             * If the credit note has a status of `void`, this gives a timestamp when the credit
-             * note was voided.
+             * Sets [Builder.voidedAt] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.voidedAt] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun voidedAt(voidedAt: JsonField<OffsetDateTime>) = apply { this.voidedAt = voidedAt }
 
@@ -2574,13 +2996,32 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun id(): String = id.getRequired("id")
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun externalCustomerId(): Optional<String> =
             Optional.ofNullable(externalCustomerId.getNullable("external_customer_id"))
 
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+        /**
+         * Returns the raw JSON value of [externalCustomerId].
+         *
+         * Unlike [externalCustomerId], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
         @JsonProperty("external_customer_id")
         @ExcludeMissing
         fun _externalCustomerId(): JsonField<String> = externalCustomerId
@@ -2633,14 +3074,32 @@ private constructor(
 
             fun id(id: String) = id(JsonField.of(id))
 
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             fun externalCustomerId(externalCustomerId: String?) =
                 externalCustomerId(JsonField.ofNullable(externalCustomerId))
 
+            /**
+             * Alias for calling [Builder.externalCustomerId] with
+             * `externalCustomerId.orElse(null)`.
+             */
             fun externalCustomerId(externalCustomerId: Optional<String>) =
                 externalCustomerId(externalCustomerId.getOrNull())
 
+            /**
+             * Sets [Builder.externalCustomerId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.externalCustomerId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun externalCustomerId(externalCustomerId: JsonField<String>) = apply {
                 this.externalCustomerId = externalCustomerId
             }
@@ -2724,80 +3183,162 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** A unique id for this transaction. */
+        /**
+         * A unique id for this transaction.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun id(): String = id.getRequired("id")
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun action(): Action = action.getRequired("action")
 
-        /** The value of the amount changed in the transaction. */
+        /**
+         * The value of the amount changed in the transaction.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun amount(): String = amount.getRequired("amount")
 
-        /** The creation time of this transaction. */
+        /**
+         * The creation time of this transaction.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun creditNote(): Optional<CreditNote> =
             Optional.ofNullable(creditNote.getNullable("credit_note"))
 
-        /** An optional description provided for manual customer balance adjustments. */
+        /**
+         * An optional description provided for manual customer balance adjustments.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun description(): Optional<String> =
             Optional.ofNullable(description.getNullable("description"))
 
         /**
          * The new value of the customer's balance prior to the transaction, in the customer's
          * currency.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun endingBalance(): String = endingBalance.getRequired("ending_balance")
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun invoice(): Optional<InnerInvoice> = Optional.ofNullable(invoice.getNullable("invoice"))
 
         /**
          * The original value of the customer's balance prior to the transaction, in the customer's
          * currency.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun startingBalance(): String = startingBalance.getRequired("starting_balance")
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun type(): Type = type.getRequired("type")
 
-        /** A unique id for this transaction. */
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+        /**
+         * Returns the raw JSON value of [action].
+         *
+         * Unlike [action], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("action") @ExcludeMissing fun _action(): JsonField<Action> = action
 
-        /** The value of the amount changed in the transaction. */
+        /**
+         * Returns the raw JSON value of [amount].
+         *
+         * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<String> = amount
 
-        /** The creation time of this transaction. */
+        /**
+         * Returns the raw JSON value of [createdAt].
+         *
+         * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("created_at")
         @ExcludeMissing
         fun _createdAt(): JsonField<OffsetDateTime> = createdAt
 
+        /**
+         * Returns the raw JSON value of [creditNote].
+         *
+         * Unlike [creditNote], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("credit_note")
         @ExcludeMissing
         fun _creditNote(): JsonField<CreditNote> = creditNote
 
-        /** An optional description provided for manual customer balance adjustments. */
+        /**
+         * Returns the raw JSON value of [description].
+         *
+         * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("description")
         @ExcludeMissing
         fun _description(): JsonField<String> = description
 
         /**
-         * The new value of the customer's balance prior to the transaction, in the customer's
-         * currency.
+         * Returns the raw JSON value of [endingBalance].
+         *
+         * Unlike [endingBalance], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("ending_balance")
         @ExcludeMissing
         fun _endingBalance(): JsonField<String> = endingBalance
 
+        /**
+         * Returns the raw JSON value of [invoice].
+         *
+         * Unlike [invoice], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("invoice") @ExcludeMissing fun _invoice(): JsonField<InnerInvoice> = invoice
 
         /**
-         * The original value of the customer's balance prior to the transaction, in the customer's
-         * currency.
+         * Returns the raw JSON value of [startingBalance].
+         *
+         * Unlike [startingBalance], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("starting_balance")
         @ExcludeMissing
         fun _startingBalance(): JsonField<String> = startingBalance
 
+        /**
+         * Returns the raw JSON value of [type].
+         *
+         * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
         @JsonAnyGetter
@@ -2883,31 +3424,64 @@ private constructor(
             /** A unique id for this transaction. */
             fun id(id: String) = id(JsonField.of(id))
 
-            /** A unique id for this transaction. */
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             fun action(action: Action) = action(JsonField.of(action))
 
+            /**
+             * Sets [Builder.action] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.action] with a well-typed [Action] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun action(action: JsonField<Action>) = apply { this.action = action }
 
             /** The value of the amount changed in the transaction. */
             fun amount(amount: String) = amount(JsonField.of(amount))
 
-            /** The value of the amount changed in the transaction. */
+            /**
+             * Sets [Builder.amount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.amount] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun amount(amount: JsonField<String>) = apply { this.amount = amount }
 
             /** The creation time of this transaction. */
             fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
 
-            /** The creation time of this transaction. */
+            /**
+             * Sets [Builder.createdAt] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
                 this.createdAt = createdAt
             }
 
             fun creditNote(creditNote: CreditNote?) = creditNote(JsonField.ofNullable(creditNote))
 
+            /** Alias for calling [Builder.creditNote] with `creditNote.orElse(null)`. */
             fun creditNote(creditNote: Optional<CreditNote>) = creditNote(creditNote.getOrNull())
 
+            /**
+             * Sets [Builder.creditNote] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.creditNote] with a well-typed [CreditNote] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun creditNote(creditNote: JsonField<CreditNote>) = apply {
                 this.creditNote = creditNote
             }
@@ -2915,10 +3489,16 @@ private constructor(
             /** An optional description provided for manual customer balance adjustments. */
             fun description(description: String?) = description(JsonField.ofNullable(description))
 
-            /** An optional description provided for manual customer balance adjustments. */
+            /** Alias for calling [Builder.description] with `description.orElse(null)`. */
             fun description(description: Optional<String>) = description(description.getOrNull())
 
-            /** An optional description provided for manual customer balance adjustments. */
+            /**
+             * Sets [Builder.description] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.description] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun description(description: JsonField<String>) = apply {
                 this.description = description
             }
@@ -2930,8 +3510,11 @@ private constructor(
             fun endingBalance(endingBalance: String) = endingBalance(JsonField.of(endingBalance))
 
             /**
-             * The new value of the customer's balance prior to the transaction, in the customer's
-             * currency.
+             * Sets [Builder.endingBalance] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.endingBalance] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun endingBalance(endingBalance: JsonField<String>) = apply {
                 this.endingBalance = endingBalance
@@ -2939,8 +3522,16 @@ private constructor(
 
             fun invoice(invoice: InnerInvoice?) = invoice(JsonField.ofNullable(invoice))
 
+            /** Alias for calling [Builder.invoice] with `invoice.orElse(null)`. */
             fun invoice(invoice: Optional<InnerInvoice>) = invoice(invoice.getOrNull())
 
+            /**
+             * Sets [Builder.invoice] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.invoice] with a well-typed [InnerInvoice] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun invoice(invoice: JsonField<InnerInvoice>) = apply { this.invoice = invoice }
 
             /**
@@ -2951,8 +3542,11 @@ private constructor(
                 startingBalance(JsonField.of(startingBalance))
 
             /**
-             * The original value of the customer's balance prior to the transaction, in the
-             * customer's currency.
+             * Sets [Builder.startingBalance] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.startingBalance] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun startingBalance(startingBalance: JsonField<String>) = apply {
                 this.startingBalance = startingBalance
@@ -2960,6 +3554,13 @@ private constructor(
 
             fun type(type: Type) = type(JsonField.of(type))
 
+            /**
+             * Sets [Builder.type] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.type] with a well-typed [Type] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun type(type: JsonField<Type>) = apply { this.type = type }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -3150,10 +3751,20 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            /** The id of the Credit note */
+            /**
+             * The id of the Credit note
+             *
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
-            /** The id of the Credit note */
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
             @JsonAnyGetter
@@ -3201,7 +3812,13 @@ private constructor(
                 /** The id of the Credit note */
                 fun id(id: String) = id(JsonField.of(id))
 
-                /** The id of the Credit note */
+                /**
+                 * Sets [Builder.id] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun id(id: JsonField<String>) = apply { this.id = id }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -3259,10 +3876,20 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            /** The Invoice id */
+            /**
+             * The Invoice id
+             *
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
-            /** The Invoice id */
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
             @JsonAnyGetter
@@ -3310,7 +3937,13 @@ private constructor(
                 /** The Invoice id */
                 fun id(id: String) = id(JsonField.of(id))
 
-                /** The Invoice id */
+                /**
+                 * Sets [Builder.id] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun id(id: JsonField<String>) = apply { this.id = id }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -3594,16 +4227,43 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun country(): Country = country.getRequired("country")
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun type(): Type = type.getRequired("type")
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun value(): String = value.getRequired("value")
 
+        /**
+         * Returns the raw JSON value of [country].
+         *
+         * Unlike [country], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("country") @ExcludeMissing fun _country(): JsonField<Country> = country
 
+        /**
+         * Returns the raw JSON value of [type].
+         *
+         * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
+        /**
+         * Returns the raw JSON value of [value].
+         *
+         * Unlike [value], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<String> = value
 
         @JsonAnyGetter
@@ -3658,14 +4318,35 @@ private constructor(
 
             fun country(country: Country) = country(JsonField.of(country))
 
+            /**
+             * Sets [Builder.country] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.country] with a well-typed [Country] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun country(country: JsonField<Country>) = apply { this.country = country }
 
             fun type(type: Type) = type(JsonField.of(type))
 
+            /**
+             * Sets [Builder.type] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.type] with a well-typed [Type] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun type(type: JsonField<Type>) = apply { this.type = type }
 
             fun value(value: String) = value(JsonField.of(value))
 
+            /**
+             * Sets [Builder.value] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.value] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun value(value: JsonField<String>) = apply { this.value = value }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -4962,12 +5643,20 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** A unique ID for this line item. */
+        /**
+         * A unique ID for this line item.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun id(): String = id.getRequired("id")
 
         /**
          * The line amount after any adjustments and before overage conversion, credits and partial
          * invoicing.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun adjustedSubtotal(): String = adjustedSubtotal.getRequired("adjusted_subtotal")
 
@@ -4975,55 +5664,113 @@ private constructor(
          * All adjustments applied to the line item in the order they were applied based on invoice
          * calculations (ie. usage discounts -> amount discounts -> percentage discounts -> minimums
          * -> maximums).
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun adjustments(): List<Adjustment> = adjustments.getRequired("adjustments")
 
         /**
          * The final amount for a line item after all adjustments and pre paid credits have been
          * applied.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun amount(): String = amount.getRequired("amount")
 
-        /** The number of prepaid credits applied. */
+        /**
+         * The number of prepaid credits applied.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun creditsApplied(): String = creditsApplied.getRequired("credits_applied")
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun discount(): Optional<Discount> = Optional.ofNullable(discount.getNullable("discount"))
 
-        /** The end date of the range of time applied for this line item's price. */
+        /**
+         * The end date of the range of time applied for this line item's price.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun endDate(): OffsetDateTime = endDate.getRequired("end_date")
 
-        /** An additional filter that was used to calculate the usage for this line item. */
+        /**
+         * An additional filter that was used to calculate the usage for this line item.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun filter(): Optional<String> = Optional.ofNullable(filter.getNullable("filter"))
 
         /**
          * [DEPRECATED] For configured prices that are split by a grouping key, this will be
          * populated with the key and a value. The `amount` and `subtotal` will be the values for
          * this particular grouping.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
         fun grouping(): Optional<String> = Optional.ofNullable(grouping.getNullable("grouping"))
 
-        /** This field is deprecated in favor of `adjustments`. */
+        /**
+         * This field is deprecated in favor of `adjustments`.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         @Deprecated("deprecated")
         fun maximum(): Optional<Maximum> = Optional.ofNullable(maximum.getNullable("maximum"))
 
-        /** This field is deprecated in favor of `adjustments`. */
+        /**
+         * This field is deprecated in favor of `adjustments`.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         @Deprecated("deprecated")
         fun maximumAmount(): Optional<String> =
             Optional.ofNullable(maximumAmount.getNullable("maximum_amount"))
 
-        /** This field is deprecated in favor of `adjustments`. */
+        /**
+         * This field is deprecated in favor of `adjustments`.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         @Deprecated("deprecated")
         fun minimum(): Optional<Minimum> = Optional.ofNullable(minimum.getNullable("minimum"))
 
-        /** This field is deprecated in favor of `adjustments`. */
+        /**
+         * This field is deprecated in favor of `adjustments`.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         @Deprecated("deprecated")
         fun minimumAmount(): Optional<String> =
             Optional.ofNullable(minimumAmount.getNullable("minimum_amount"))
 
-        /** The name of the price associated with this line item. */
+        /**
+         * The name of the price associated with this line item.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun name(): String = name.getRequired("name")
 
-        /** Any amount applied from a partial invoice */
+        /**
+         * Any amount applied from a partial invoice
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun partiallyInvoicedAmount(): String =
             partiallyInvoicedAmount.getRequired("partially_invoiced_amount")
 
@@ -5038,156 +5785,250 @@ private constructor(
          *
          * For more on the types of prices, see
          * [the core concepts documentation](/core-concepts#plan-and-price)
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
         fun price(): Optional<Price> = Optional.ofNullable(price.getNullable("price"))
 
-        /** Either the fixed fee quantity or the usage during the service period. */
+        /**
+         * Either the fixed fee quantity or the usage during the service period.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun quantity(): Double = quantity.getRequired("quantity")
 
-        /** The start date of the range of time applied for this line item's price. */
+        /**
+         * The start date of the range of time applied for this line item's price.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun startDate(): OffsetDateTime = startDate.getRequired("start_date")
 
         /**
          * For complex pricing structures, the line item can be broken down further in
          * `sub_line_items`.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun subLineItems(): List<SubLineItem> = subLineItems.getRequired("sub_line_items")
 
-        /** The line amount before before any adjustments. */
+        /**
+         * The line amount before before any adjustments.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun subtotal(): String = subtotal.getRequired("subtotal")
 
         /**
          * An array of tax rates and their incurred tax amounts. Empty if no tax integration is
          * configured.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun taxAmounts(): List<TaxAmount> = taxAmounts.getRequired("tax_amounts")
 
-        /** A list of customer ids that were used to calculate the usage for this line item. */
+        /**
+         * A list of customer ids that were used to calculate the usage for this line item.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun usageCustomerIds(): Optional<List<String>> =
             Optional.ofNullable(usageCustomerIds.getNullable("usage_customer_ids"))
 
-        /** A unique ID for this line item. */
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
         /**
-         * The line amount after any adjustments and before overage conversion, credits and partial
-         * invoicing.
+         * Returns the raw JSON value of [adjustedSubtotal].
+         *
+         * Unlike [adjustedSubtotal], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("adjusted_subtotal")
         @ExcludeMissing
         fun _adjustedSubtotal(): JsonField<String> = adjustedSubtotal
 
         /**
-         * All adjustments applied to the line item in the order they were applied based on invoice
-         * calculations (ie. usage discounts -> amount discounts -> percentage discounts -> minimums
-         * -> maximums).
+         * Returns the raw JSON value of [adjustments].
+         *
+         * Unlike [adjustments], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("adjustments")
         @ExcludeMissing
         fun _adjustments(): JsonField<List<Adjustment>> = adjustments
 
         /**
-         * The final amount for a line item after all adjustments and pre paid credits have been
-         * applied.
+         * Returns the raw JSON value of [amount].
+         *
+         * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<String> = amount
 
-        /** The number of prepaid credits applied. */
+        /**
+         * Returns the raw JSON value of [creditsApplied].
+         *
+         * Unlike [creditsApplied], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @JsonProperty("credits_applied")
         @ExcludeMissing
         fun _creditsApplied(): JsonField<String> = creditsApplied
 
+        /**
+         * Returns the raw JSON value of [discount].
+         *
+         * Unlike [discount], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("discount") @ExcludeMissing fun _discount(): JsonField<Discount> = discount
 
-        /** The end date of the range of time applied for this line item's price. */
+        /**
+         * Returns the raw JSON value of [endDate].
+         *
+         * Unlike [endDate], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("end_date")
         @ExcludeMissing
         fun _endDate(): JsonField<OffsetDateTime> = endDate
 
-        /** An additional filter that was used to calculate the usage for this line item. */
+        /**
+         * Returns the raw JSON value of [filter].
+         *
+         * Unlike [filter], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("filter") @ExcludeMissing fun _filter(): JsonField<String> = filter
 
         /**
-         * [DEPRECATED] For configured prices that are split by a grouping key, this will be
-         * populated with the key and a value. The `amount` and `subtotal` will be the values for
-         * this particular grouping.
+         * Returns the raw JSON value of [grouping].
+         *
+         * Unlike [grouping], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("grouping") @ExcludeMissing fun _grouping(): JsonField<String> = grouping
 
-        /** This field is deprecated in favor of `adjustments`. */
+        /**
+         * Returns the raw JSON value of [maximum].
+         *
+         * Unlike [maximum], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @Deprecated("deprecated")
         @JsonProperty("maximum")
         @ExcludeMissing
         fun _maximum(): JsonField<Maximum> = maximum
 
-        /** This field is deprecated in favor of `adjustments`. */
+        /**
+         * Returns the raw JSON value of [maximumAmount].
+         *
+         * Unlike [maximumAmount], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @Deprecated("deprecated")
         @JsonProperty("maximum_amount")
         @ExcludeMissing
         fun _maximumAmount(): JsonField<String> = maximumAmount
 
-        /** This field is deprecated in favor of `adjustments`. */
+        /**
+         * Returns the raw JSON value of [minimum].
+         *
+         * Unlike [minimum], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @Deprecated("deprecated")
         @JsonProperty("minimum")
         @ExcludeMissing
         fun _minimum(): JsonField<Minimum> = minimum
 
-        /** This field is deprecated in favor of `adjustments`. */
+        /**
+         * Returns the raw JSON value of [minimumAmount].
+         *
+         * Unlike [minimumAmount], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @Deprecated("deprecated")
         @JsonProperty("minimum_amount")
         @ExcludeMissing
         fun _minimumAmount(): JsonField<String> = minimumAmount
 
-        /** The name of the price associated with this line item. */
+        /**
+         * Returns the raw JSON value of [name].
+         *
+         * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
-        /** Any amount applied from a partial invoice */
+        /**
+         * Returns the raw JSON value of [partiallyInvoicedAmount].
+         *
+         * Unlike [partiallyInvoicedAmount], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
         @JsonProperty("partially_invoiced_amount")
         @ExcludeMissing
         fun _partiallyInvoicedAmount(): JsonField<String> = partiallyInvoicedAmount
 
         /**
-         * The Price resource represents a price that can be billed on a subscription, resulting in
-         * a charge on an invoice in the form of an invoice line item. Prices take a quantity and
-         * determine an amount to bill.
+         * Returns the raw JSON value of [price].
          *
-         * Orb supports a few different pricing models out of the box. Each of these models is
-         * serialized differently in a given Price object. The model_type field determines the key
-         * for the configuration object that is present.
-         *
-         * For more on the types of prices, see
-         * [the core concepts documentation](/core-concepts#plan-and-price)
+         * Unlike [price], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Price> = price
 
-        /** Either the fixed fee quantity or the usage during the service period. */
+        /**
+         * Returns the raw JSON value of [quantity].
+         *
+         * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
 
-        /** The start date of the range of time applied for this line item's price. */
+        /**
+         * Returns the raw JSON value of [startDate].
+         *
+         * Unlike [startDate], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("start_date")
         @ExcludeMissing
         fun _startDate(): JsonField<OffsetDateTime> = startDate
 
         /**
-         * For complex pricing structures, the line item can be broken down further in
-         * `sub_line_items`.
+         * Returns the raw JSON value of [subLineItems].
+         *
+         * Unlike [subLineItems], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("sub_line_items")
         @ExcludeMissing
         fun _subLineItems(): JsonField<List<SubLineItem>> = subLineItems
 
-        /** The line amount before before any adjustments. */
+        /**
+         * Returns the raw JSON value of [subtotal].
+         *
+         * Unlike [subtotal], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("subtotal") @ExcludeMissing fun _subtotal(): JsonField<String> = subtotal
 
         /**
-         * An array of tax rates and their incurred tax amounts. Empty if no tax integration is
-         * configured.
+         * Returns the raw JSON value of [taxAmounts].
+         *
+         * Unlike [taxAmounts], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("tax_amounts")
         @ExcludeMissing
         fun _taxAmounts(): JsonField<List<TaxAmount>> = taxAmounts
 
-        /** A list of customer ids that were used to calculate the usage for this line item. */
+        /**
+         * Returns the raw JSON value of [usageCustomerIds].
+         *
+         * Unlike [usageCustomerIds], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @JsonProperty("usage_customer_ids")
         @ExcludeMissing
         fun _usageCustomerIds(): JsonField<List<String>> = usageCustomerIds
@@ -5321,7 +6162,13 @@ private constructor(
             /** A unique ID for this line item. */
             fun id(id: String) = id(JsonField.of(id))
 
-            /** A unique ID for this line item. */
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             /**
@@ -5332,8 +6179,11 @@ private constructor(
                 adjustedSubtotal(JsonField.of(adjustedSubtotal))
 
             /**
-             * The line amount after any adjustments and before overage conversion, credits and
-             * partial invoicing.
+             * Sets [Builder.adjustedSubtotal] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.adjustedSubtotal] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun adjustedSubtotal(adjustedSubtotal: JsonField<String>) = apply {
                 this.adjustedSubtotal = adjustedSubtotal
@@ -5347,18 +6197,20 @@ private constructor(
             fun adjustments(adjustments: List<Adjustment>) = adjustments(JsonField.of(adjustments))
 
             /**
-             * All adjustments applied to the line item in the order they were applied based on
-             * invoice calculations (ie. usage discounts -> amount discounts -> percentage discounts
-             * -> minimums -> maximums).
+             * Sets [Builder.adjustments] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.adjustments] with a well-typed `List<Adjustment>`
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
             fun adjustments(adjustments: JsonField<List<Adjustment>>) = apply {
                 this.adjustments = adjustments.map { it.toMutableList() }
             }
 
             /**
-             * All adjustments applied to the line item in the order they were applied based on
-             * invoice calculations (ie. usage discounts -> amount discounts -> percentage discounts
-             * -> minimums -> maximums).
+             * Adds a single [Adjustment] to [adjustments].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
              */
             fun addAdjustment(adjustment: Adjustment) = apply {
                 adjustments =
@@ -5368,42 +6220,37 @@ private constructor(
             }
 
             /**
-             * All adjustments applied to the line item in the order they were applied based on
-             * invoice calculations (ie. usage discounts -> amount discounts -> percentage discounts
-             * -> minimums -> maximums).
+             * Alias for calling [addAdjustment] with
+             * `Adjustment.ofMonetaryUsageDiscount(monetaryUsageDiscount)`.
              */
             fun addAdjustment(monetaryUsageDiscount: Adjustment.MonetaryUsageDiscountAdjustment) =
                 addAdjustment(Adjustment.ofMonetaryUsageDiscount(monetaryUsageDiscount))
 
             /**
-             * All adjustments applied to the line item in the order they were applied based on
-             * invoice calculations (ie. usage discounts -> amount discounts -> percentage discounts
-             * -> minimums -> maximums).
+             * Alias for calling [addAdjustment] with
+             * `Adjustment.ofMonetaryAmountDiscount(monetaryAmountDiscount)`.
              */
             fun addAdjustment(monetaryAmountDiscount: Adjustment.MonetaryAmountDiscountAdjustment) =
                 addAdjustment(Adjustment.ofMonetaryAmountDiscount(monetaryAmountDiscount))
 
             /**
-             * All adjustments applied to the line item in the order they were applied based on
-             * invoice calculations (ie. usage discounts -> amount discounts -> percentage discounts
-             * -> minimums -> maximums).
+             * Alias for calling [addAdjustment] with
+             * `Adjustment.ofMonetaryPercentageDiscount(monetaryPercentageDiscount)`.
              */
             fun addAdjustment(
                 monetaryPercentageDiscount: Adjustment.MonetaryPercentageDiscountAdjustment
             ) = addAdjustment(Adjustment.ofMonetaryPercentageDiscount(monetaryPercentageDiscount))
 
             /**
-             * All adjustments applied to the line item in the order they were applied based on
-             * invoice calculations (ie. usage discounts -> amount discounts -> percentage discounts
-             * -> minimums -> maximums).
+             * Alias for calling [addAdjustment] with
+             * `Adjustment.ofMonetaryMinimum(monetaryMinimum)`.
              */
             fun addAdjustment(monetaryMinimum: Adjustment.MonetaryMinimumAdjustment) =
                 addAdjustment(Adjustment.ofMonetaryMinimum(monetaryMinimum))
 
             /**
-             * All adjustments applied to the line item in the order they were applied based on
-             * invoice calculations (ie. usage discounts -> amount discounts -> percentage discounts
-             * -> minimums -> maximums).
+             * Alias for calling [addAdjustment] with
+             * `Adjustment.ofMonetaryMaximum(monetaryMaximum)`.
              */
             fun addAdjustment(monetaryMaximum: Adjustment.MonetaryMaximumAdjustment) =
                 addAdjustment(Adjustment.ofMonetaryMaximum(monetaryMaximum))
@@ -5415,8 +6262,11 @@ private constructor(
             fun amount(amount: String) = amount(JsonField.of(amount))
 
             /**
-             * The final amount for a line item after all adjustments and pre paid credits have been
-             * applied.
+             * Sets [Builder.amount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.amount] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun amount(amount: JsonField<String>) = apply { this.amount = amount }
 
@@ -5424,22 +6274,47 @@ private constructor(
             fun creditsApplied(creditsApplied: String) =
                 creditsApplied(JsonField.of(creditsApplied))
 
-            /** The number of prepaid credits applied. */
+            /**
+             * Sets [Builder.creditsApplied] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.creditsApplied] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun creditsApplied(creditsApplied: JsonField<String>) = apply {
                 this.creditsApplied = creditsApplied
             }
 
             fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
 
+            /** Alias for calling [Builder.discount] with `discount.orElse(null)`. */
             fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
 
+            /**
+             * Sets [Builder.discount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.discount] with a well-typed [Discount] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
 
+            /** Alias for calling [discount] with `Discount.ofPercentage(percentage)`. */
             fun discount(percentage: PercentageDiscount) =
                 discount(Discount.ofPercentage(percentage))
 
+            /** Alias for calling [discount] with `Discount.ofTrial(trial)`. */
             fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
 
+            /**
+             * Alias for calling [discount] with the following:
+             * ```java
+             * TrialDiscount.builder()
+             *     .discountType(TrialDiscount.DiscountType.TRIAL)
+             *     .appliesToPriceIds(appliesToPriceIds)
+             *     .build()
+             * ```
+             */
             fun trialDiscount(appliesToPriceIds: List<String>) =
                 discount(
                     TrialDiscount.builder()
@@ -5448,23 +6323,37 @@ private constructor(
                         .build()
                 )
 
+            /** Alias for calling [discount] with `Discount.ofUsage(usage)`. */
             fun discount(usage: UsageDiscount) = discount(Discount.ofUsage(usage))
 
+            /** Alias for calling [discount] with `Discount.ofAmount(amount)`. */
             fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
 
             /** The end date of the range of time applied for this line item's price. */
             fun endDate(endDate: OffsetDateTime) = endDate(JsonField.of(endDate))
 
-            /** The end date of the range of time applied for this line item's price. */
+            /**
+             * Sets [Builder.endDate] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.endDate] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun endDate(endDate: JsonField<OffsetDateTime>) = apply { this.endDate = endDate }
 
             /** An additional filter that was used to calculate the usage for this line item. */
             fun filter(filter: String?) = filter(JsonField.ofNullable(filter))
 
-            /** An additional filter that was used to calculate the usage for this line item. */
+            /** Alias for calling [Builder.filter] with `filter.orElse(null)`. */
             fun filter(filter: Optional<String>) = filter(filter.getOrNull())
 
-            /** An additional filter that was used to calculate the usage for this line item. */
+            /**
+             * Sets [Builder.filter] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.filter] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun filter(filter: JsonField<String>) = apply { this.filter = filter }
 
             /**
@@ -5474,17 +6363,15 @@ private constructor(
              */
             fun grouping(grouping: String?) = grouping(JsonField.ofNullable(grouping))
 
-            /**
-             * [DEPRECATED] For configured prices that are split by a grouping key, this will be
-             * populated with the key and a value. The `amount` and `subtotal` will be the values
-             * for this particular grouping.
-             */
+            /** Alias for calling [Builder.grouping] with `grouping.orElse(null)`. */
             fun grouping(grouping: Optional<String>) = grouping(grouping.getOrNull())
 
             /**
-             * [DEPRECATED] For configured prices that are split by a grouping key, this will be
-             * populated with the key and a value. The `amount` and `subtotal` will be the values
-             * for this particular grouping.
+             * Sets [Builder.grouping] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.grouping] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun grouping(grouping: JsonField<String>) = apply { this.grouping = grouping }
 
@@ -5492,11 +6379,17 @@ private constructor(
             @Deprecated("deprecated")
             fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
 
-            /** This field is deprecated in favor of `adjustments`. */
+            /** Alias for calling [Builder.maximum] with `maximum.orElse(null)`. */
             @Deprecated("deprecated")
             fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
 
-            /** This field is deprecated in favor of `adjustments`. */
+            /**
+             * Sets [Builder.maximum] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.maximum] with a well-typed [Maximum] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             @Deprecated("deprecated")
             fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
 
@@ -5505,12 +6398,18 @@ private constructor(
             fun maximumAmount(maximumAmount: String?) =
                 maximumAmount(JsonField.ofNullable(maximumAmount))
 
-            /** This field is deprecated in favor of `adjustments`. */
+            /** Alias for calling [Builder.maximumAmount] with `maximumAmount.orElse(null)`. */
             @Deprecated("deprecated")
             fun maximumAmount(maximumAmount: Optional<String>) =
                 maximumAmount(maximumAmount.getOrNull())
 
-            /** This field is deprecated in favor of `adjustments`. */
+            /**
+             * Sets [Builder.maximumAmount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.maximumAmount] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             @Deprecated("deprecated")
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
@@ -5520,11 +6419,17 @@ private constructor(
             @Deprecated("deprecated")
             fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
 
-            /** This field is deprecated in favor of `adjustments`. */
+            /** Alias for calling [Builder.minimum] with `minimum.orElse(null)`. */
             @Deprecated("deprecated")
             fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
 
-            /** This field is deprecated in favor of `adjustments`. */
+            /**
+             * Sets [Builder.minimum] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.minimum] with a well-typed [Minimum] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             @Deprecated("deprecated")
             fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
 
@@ -5533,12 +6438,18 @@ private constructor(
             fun minimumAmount(minimumAmount: String?) =
                 minimumAmount(JsonField.ofNullable(minimumAmount))
 
-            /** This field is deprecated in favor of `adjustments`. */
+            /** Alias for calling [Builder.minimumAmount] with `minimumAmount.orElse(null)`. */
             @Deprecated("deprecated")
             fun minimumAmount(minimumAmount: Optional<String>) =
                 minimumAmount(minimumAmount.getOrNull())
 
-            /** This field is deprecated in favor of `adjustments`. */
+            /**
+             * Sets [Builder.minimumAmount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.minimumAmount] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             @Deprecated("deprecated")
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
@@ -5547,14 +6458,26 @@ private constructor(
             /** The name of the price associated with this line item. */
             fun name(name: String) = name(JsonField.of(name))
 
-            /** The name of the price associated with this line item. */
+            /**
+             * Sets [Builder.name] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.name] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun name(name: JsonField<String>) = apply { this.name = name }
 
             /** Any amount applied from a partial invoice */
             fun partiallyInvoicedAmount(partiallyInvoicedAmount: String) =
                 partiallyInvoicedAmount(JsonField.of(partiallyInvoicedAmount))
 
-            /** Any amount applied from a partial invoice */
+            /**
+             * Sets [Builder.partiallyInvoicedAmount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.partiallyInvoicedAmount] with a well-typed [String]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
             fun partiallyInvoicedAmount(partiallyInvoicedAmount: JsonField<String>) = apply {
                 this.partiallyInvoicedAmount = partiallyInvoicedAmount
             }
@@ -5573,442 +6496,153 @@ private constructor(
              */
             fun price(price: Price?) = price(JsonField.ofNullable(price))
 
-            /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
-             */
+            /** Alias for calling [Builder.price] with `price.orElse(null)`. */
             fun price(price: Optional<Price>) = price(price.getOrNull())
 
             /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
+             * Sets [Builder.price] to an arbitrary JSON value.
              *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
+             * You should usually call [Builder.price] with a well-typed [Price] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
              */
             fun price(price: JsonField<Price>) = apply { this.price = price }
 
-            /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
-             */
+            /** Alias for calling [price] with `Price.ofUnit(unit)`. */
             fun price(unit: Price.UnitPrice) = price(Price.ofUnit(unit))
 
-            /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
-             */
+            /** Alias for calling [price] with `Price.ofPackagePrice(packagePrice)`. */
             fun price(packagePrice: Price.PackagePrice) = price(Price.ofPackagePrice(packagePrice))
 
-            /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
-             */
+            /** Alias for calling [price] with `Price.ofMatrix(matrix)`. */
             fun price(matrix: Price.MatrixPrice) = price(Price.ofMatrix(matrix))
 
-            /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
-             */
+            /** Alias for calling [price] with `Price.ofTiered(tiered)`. */
             fun price(tiered: Price.TieredPrice) = price(Price.ofTiered(tiered))
 
-            /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
-             */
+            /** Alias for calling [price] with `Price.ofTieredBps(tieredBps)`. */
             fun price(tieredBps: Price.TieredBpsPrice) = price(Price.ofTieredBps(tieredBps))
 
-            /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
-             */
+            /** Alias for calling [price] with `Price.ofBps(bps)`. */
             fun price(bps: Price.BpsPrice) = price(Price.ofBps(bps))
 
-            /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
-             */
+            /** Alias for calling [price] with `Price.ofBulkBps(bulkBps)`. */
             fun price(bulkBps: Price.BulkBpsPrice) = price(Price.ofBulkBps(bulkBps))
 
-            /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
-             */
+            /** Alias for calling [price] with `Price.ofBulk(bulk)`. */
             fun price(bulk: Price.BulkPrice) = price(Price.ofBulk(bulk))
 
             /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
+             * Alias for calling [price] with `Price.ofThresholdTotalAmount(thresholdTotalAmount)`.
              */
             fun price(thresholdTotalAmount: Price.ThresholdTotalAmountPrice) =
                 price(Price.ofThresholdTotalAmount(thresholdTotalAmount))
 
-            /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
-             */
+            /** Alias for calling [price] with `Price.ofTieredPackage(tieredPackage)`. */
             fun price(tieredPackage: Price.TieredPackagePrice) =
                 price(Price.ofTieredPackage(tieredPackage))
 
-            /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
-             */
+            /** Alias for calling [price] with `Price.ofGroupedTiered(groupedTiered)`. */
             fun price(groupedTiered: Price.GroupedTieredPrice) =
                 price(Price.ofGroupedTiered(groupedTiered))
 
-            /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
-             */
+            /** Alias for calling [price] with `Price.ofTieredWithMinimum(tieredWithMinimum)`. */
             fun price(tieredWithMinimum: Price.TieredWithMinimumPrice) =
                 price(Price.ofTieredWithMinimum(tieredWithMinimum))
 
             /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
+             * Alias for calling [price] with
+             * `Price.ofTieredPackageWithMinimum(tieredPackageWithMinimum)`.
              */
             fun price(tieredPackageWithMinimum: Price.TieredPackageWithMinimumPrice) =
                 price(Price.ofTieredPackageWithMinimum(tieredPackageWithMinimum))
 
             /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
+             * Alias for calling [price] with
+             * `Price.ofPackageWithAllocation(packageWithAllocation)`.
              */
             fun price(packageWithAllocation: Price.PackageWithAllocationPrice) =
                 price(Price.ofPackageWithAllocation(packageWithAllocation))
 
-            /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
-             */
+            /** Alias for calling [price] with `Price.ofUnitWithPercent(unitWithPercent)`. */
             fun price(unitWithPercent: Price.UnitWithPercentPrice) =
                 price(Price.ofUnitWithPercent(unitWithPercent))
 
             /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
+             * Alias for calling [price] with `Price.ofMatrixWithAllocation(matrixWithAllocation)`.
              */
             fun price(matrixWithAllocation: Price.MatrixWithAllocationPrice) =
                 price(Price.ofMatrixWithAllocation(matrixWithAllocation))
 
             /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
+             * Alias for calling [price] with `Price.ofTieredWithProration(tieredWithProration)`.
              */
             fun price(tieredWithProration: Price.TieredWithProrationPrice) =
                 price(Price.ofTieredWithProration(tieredWithProration))
 
-            /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
-             */
+            /** Alias for calling [price] with `Price.ofUnitWithProration(unitWithProration)`. */
             fun price(unitWithProration: Price.UnitWithProrationPrice) =
                 price(Price.ofUnitWithProration(unitWithProration))
 
-            /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
-             */
+            /** Alias for calling [price] with `Price.ofGroupedAllocation(groupedAllocation)`. */
             fun price(groupedAllocation: Price.GroupedAllocationPrice) =
                 price(Price.ofGroupedAllocation(groupedAllocation))
 
             /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
+             * Alias for calling [price] with
+             * `Price.ofGroupedWithProratedMinimum(groupedWithProratedMinimum)`.
              */
             fun price(groupedWithProratedMinimum: Price.GroupedWithProratedMinimumPrice) =
                 price(Price.ofGroupedWithProratedMinimum(groupedWithProratedMinimum))
 
             /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
+             * Alias for calling [price] with
+             * `Price.ofGroupedWithMeteredMinimum(groupedWithMeteredMinimum)`.
              */
             fun price(groupedWithMeteredMinimum: Price.GroupedWithMeteredMinimumPrice) =
                 price(Price.ofGroupedWithMeteredMinimum(groupedWithMeteredMinimum))
 
             /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
+             * Alias for calling [price] with
+             * `Price.ofMatrixWithDisplayName(matrixWithDisplayName)`.
              */
             fun price(matrixWithDisplayName: Price.MatrixWithDisplayNamePrice) =
                 price(Price.ofMatrixWithDisplayName(matrixWithDisplayName))
 
-            /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
-             */
+            /** Alias for calling [price] with `Price.ofBulkWithProration(bulkWithProration)`. */
             fun price(bulkWithProration: Price.BulkWithProrationPrice) =
                 price(Price.ofBulkWithProration(bulkWithProration))
 
             /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
+             * Alias for calling [price] with `Price.ofGroupedTieredPackage(groupedTieredPackage)`.
              */
             fun price(groupedTieredPackage: Price.GroupedTieredPackagePrice) =
                 price(Price.ofGroupedTieredPackage(groupedTieredPackage))
 
             /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
+             * Alias for calling [price] with
+             * `Price.ofMaxGroupTieredPackage(maxGroupTieredPackage)`.
              */
             fun price(maxGroupTieredPackage: Price.MaxGroupTieredPackagePrice) =
                 price(Price.ofMaxGroupTieredPackage(maxGroupTieredPackage))
 
             /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
+             * Alias for calling [price] with
+             * `Price.ofScalableMatrixWithUnitPricing(scalableMatrixWithUnitPricing)`.
              */
             fun price(scalableMatrixWithUnitPricing: Price.ScalableMatrixWithUnitPricingPrice) =
                 price(Price.ofScalableMatrixWithUnitPricing(scalableMatrixWithUnitPricing))
 
             /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
+             * Alias for calling [price] with
+             * `Price.ofScalableMatrixWithTieredPricing(scalableMatrixWithTieredPricing)`.
              */
             fun price(scalableMatrixWithTieredPricing: Price.ScalableMatrixWithTieredPricingPrice) =
                 price(Price.ofScalableMatrixWithTieredPricing(scalableMatrixWithTieredPricing))
 
             /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
-             *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * For more on the types of prices, see
-             * [the core concepts documentation](/core-concepts#plan-and-price)
+             * Alias for calling [price] with
+             * `Price.ofCumulativeGroupedBulk(cumulativeGroupedBulk)`.
              */
             fun price(cumulativeGroupedBulk: Price.CumulativeGroupedBulkPrice) =
                 price(Price.ofCumulativeGroupedBulk(cumulativeGroupedBulk))
@@ -6016,13 +6650,25 @@ private constructor(
             /** Either the fixed fee quantity or the usage during the service period. */
             fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
-            /** Either the fixed fee quantity or the usage during the service period. */
+            /**
+             * Sets [Builder.quantity] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.quantity] with a well-typed [Double] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
             /** The start date of the range of time applied for this line item's price. */
             fun startDate(startDate: OffsetDateTime) = startDate(JsonField.of(startDate))
 
-            /** The start date of the range of time applied for this line item's price. */
+            /**
+             * Sets [Builder.startDate] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.startDate] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun startDate(startDate: JsonField<OffsetDateTime>) = apply {
                 this.startDate = startDate
             }
@@ -6035,16 +6681,20 @@ private constructor(
                 subLineItems(JsonField.of(subLineItems))
 
             /**
-             * For complex pricing structures, the line item can be broken down further in
-             * `sub_line_items`.
+             * Sets [Builder.subLineItems] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.subLineItems] with a well-typed `List<SubLineItem>`
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
             fun subLineItems(subLineItems: JsonField<List<SubLineItem>>) = apply {
                 this.subLineItems = subLineItems.map { it.toMutableList() }
             }
 
             /**
-             * For complex pricing structures, the line item can be broken down further in
-             * `sub_line_items`.
+             * Adds a single [SubLineItem] to [subLineItems].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
              */
             fun addSubLineItem(subLineItem: SubLineItem) = apply {
                 subLineItems =
@@ -6053,31 +6703,28 @@ private constructor(
                     }
             }
 
-            /**
-             * For complex pricing structures, the line item can be broken down further in
-             * `sub_line_items`.
-             */
+            /** Alias for calling [addSubLineItem] with `SubLineItem.ofMatrix(matrix)`. */
             fun addSubLineItem(matrix: SubLineItem.MatrixSubLineItem) =
                 addSubLineItem(SubLineItem.ofMatrix(matrix))
 
-            /**
-             * For complex pricing structures, the line item can be broken down further in
-             * `sub_line_items`.
-             */
+            /** Alias for calling [addSubLineItem] with `SubLineItem.ofTier(tier)`. */
             fun addSubLineItem(tier: SubLineItem.TierSubLineItem) =
                 addSubLineItem(SubLineItem.ofTier(tier))
 
-            /**
-             * For complex pricing structures, the line item can be broken down further in
-             * `sub_line_items`.
-             */
+            /** Alias for calling [addSubLineItem] with `SubLineItem.ofOther(other)`. */
             fun addSubLineItem(other: SubLineItem.OtherSubLineItem) =
                 addSubLineItem(SubLineItem.ofOther(other))
 
             /** The line amount before before any adjustments. */
             fun subtotal(subtotal: String) = subtotal(JsonField.of(subtotal))
 
-            /** The line amount before before any adjustments. */
+            /**
+             * Sets [Builder.subtotal] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.subtotal] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun subtotal(subtotal: JsonField<String>) = apply { this.subtotal = subtotal }
 
             /**
@@ -6087,16 +6734,20 @@ private constructor(
             fun taxAmounts(taxAmounts: List<TaxAmount>) = taxAmounts(JsonField.of(taxAmounts))
 
             /**
-             * An array of tax rates and their incurred tax amounts. Empty if no tax integration is
-             * configured.
+             * Sets [Builder.taxAmounts] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.taxAmounts] with a well-typed `List<TaxAmount>`
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
             fun taxAmounts(taxAmounts: JsonField<List<TaxAmount>>) = apply {
                 this.taxAmounts = taxAmounts.map { it.toMutableList() }
             }
 
             /**
-             * An array of tax rates and their incurred tax amounts. Empty if no tax integration is
-             * configured.
+             * Adds a single [TaxAmount] to [taxAmounts].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
              */
             fun addTaxAmount(taxAmount: TaxAmount) = apply {
                 taxAmounts =
@@ -6109,16 +6760,28 @@ private constructor(
             fun usageCustomerIds(usageCustomerIds: List<String>?) =
                 usageCustomerIds(JsonField.ofNullable(usageCustomerIds))
 
-            /** A list of customer ids that were used to calculate the usage for this line item. */
+            /**
+             * Alias for calling [Builder.usageCustomerIds] with `usageCustomerIds.orElse(null)`.
+             */
             fun usageCustomerIds(usageCustomerIds: Optional<List<String>>) =
                 usageCustomerIds(usageCustomerIds.getOrNull())
 
-            /** A list of customer ids that were used to calculate the usage for this line item. */
+            /**
+             * Sets [Builder.usageCustomerIds] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.usageCustomerIds] with a well-typed `List<String>`
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
             fun usageCustomerIds(usageCustomerIds: JsonField<List<String>>) = apply {
                 this.usageCustomerIds = usageCustomerIds.map { it.toMutableList() }
             }
 
-            /** A list of customer ids that were used to calculate the usage for this line item. */
+            /**
+             * Adds a single [String] to [usageCustomerIds].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
             fun addUsageCustomerId(usageCustomerId: String) = apply {
                 usageCustomerIds =
                     (usageCustomerIds ?: JsonField.of(mutableListOf())).also {
@@ -6487,60 +7150,125 @@ private constructor(
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun id(): String = id.getRequired("id")
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun adjustmentType(): AdjustmentType = adjustmentType.getRequired("adjustment_type")
 
-                /** The value applied by an adjustment. */
+                /**
+                 * The value applied by an adjustment.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun amount(): String = amount.getRequired("amount")
 
-                /** The price IDs that this adjustment applies to. */
+                /**
+                 * The price IDs that this adjustment applies to.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun appliesToPriceIds(): List<String> =
                     appliesToPriceIds.getRequired("applies_to_price_ids")
 
                 /**
                  * True for adjustments that apply to an entire invocice, false for adjustments that
                  * apply to only one price.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
                  */
                 fun isInvoiceLevel(): Boolean = isInvoiceLevel.getRequired("is_invoice_level")
 
-                /** The reason for the adjustment. */
+                /**
+                 * The reason for the adjustment.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
+                 *   the server responded with an unexpected value).
+                 */
                 fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
 
                 /**
                  * The number of usage units by which to discount the price this adjustment applies
                  * to in a given billing period.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
                  */
                 fun usageDiscount(): Double = usageDiscount.getRequired("usage_discount")
 
+                /**
+                 * Returns the raw JSON value of [id].
+                 *
+                 * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+                 */
                 @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+                /**
+                 * Returns the raw JSON value of [adjustmentType].
+                 *
+                 * Unlike [adjustmentType], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
                 @JsonProperty("adjustment_type")
                 @ExcludeMissing
                 fun _adjustmentType(): JsonField<AdjustmentType> = adjustmentType
 
-                /** The value applied by an adjustment. */
+                /**
+                 * Returns the raw JSON value of [amount].
+                 *
+                 * Unlike [amount], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<String> = amount
 
-                /** The price IDs that this adjustment applies to. */
+                /**
+                 * Returns the raw JSON value of [appliesToPriceIds].
+                 *
+                 * Unlike [appliesToPriceIds], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
                 @JsonProperty("applies_to_price_ids")
                 @ExcludeMissing
                 fun _appliesToPriceIds(): JsonField<List<String>> = appliesToPriceIds
 
                 /**
-                 * True for adjustments that apply to an entire invocice, false for adjustments that
-                 * apply to only one price.
+                 * Returns the raw JSON value of [isInvoiceLevel].
+                 *
+                 * Unlike [isInvoiceLevel], this method doesn't throw if the JSON field has an
+                 * unexpected type.
                  */
                 @JsonProperty("is_invoice_level")
                 @ExcludeMissing
                 fun _isInvoiceLevel(): JsonField<Boolean> = isInvoiceLevel
 
-                /** The reason for the adjustment. */
+                /**
+                 * Returns the raw JSON value of [reason].
+                 *
+                 * Unlike [reason], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<String> = reason
 
                 /**
-                 * The number of usage units by which to discount the price this adjustment applies
-                 * to in a given billing period.
+                 * Returns the raw JSON value of [usageDiscount].
+                 *
+                 * Unlike [usageDiscount], this method doesn't throw if the JSON field has an
+                 * unexpected type.
                  */
                 @JsonProperty("usage_discount")
                 @ExcludeMissing
@@ -6621,11 +7349,25 @@ private constructor(
 
                     fun id(id: String) = id(JsonField.of(id))
 
+                    /**
+                     * Sets [Builder.id] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.id] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun id(id: JsonField<String>) = apply { this.id = id }
 
                     fun adjustmentType(adjustmentType: AdjustmentType) =
                         adjustmentType(JsonField.of(adjustmentType))
 
+                    /**
+                     * Sets [Builder.adjustmentType] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.adjustmentType] with a well-typed
+                     * [AdjustmentType] value instead. This method is primarily for setting the
+                     * field to an undocumented or not yet supported value.
+                     */
                     fun adjustmentType(adjustmentType: JsonField<AdjustmentType>) = apply {
                         this.adjustmentType = adjustmentType
                     }
@@ -6633,19 +7375,35 @@ private constructor(
                     /** The value applied by an adjustment. */
                     fun amount(amount: String) = amount(JsonField.of(amount))
 
-                    /** The value applied by an adjustment. */
+                    /**
+                     * Sets [Builder.amount] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.amount] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun amount(amount: JsonField<String>) = apply { this.amount = amount }
 
                     /** The price IDs that this adjustment applies to. */
                     fun appliesToPriceIds(appliesToPriceIds: List<String>) =
                         appliesToPriceIds(JsonField.of(appliesToPriceIds))
 
-                    /** The price IDs that this adjustment applies to. */
+                    /**
+                     * Sets [Builder.appliesToPriceIds] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.appliesToPriceIds] with a well-typed
+                     * `List<String>` value instead. This method is primarily for setting the field
+                     * to an undocumented or not yet supported value.
+                     */
                     fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
                         this.appliesToPriceIds = appliesToPriceIds.map { it.toMutableList() }
                     }
 
-                    /** The price IDs that this adjustment applies to. */
+                    /**
+                     * Adds a single [String] to [appliesToPriceIds].
+                     *
+                     * @throws IllegalStateException if the field was previously set to a non-list.
+                     */
                     fun addAppliesToPriceId(appliesToPriceId: String) = apply {
                         appliesToPriceIds =
                             (appliesToPriceIds ?: JsonField.of(mutableListOf())).also {
@@ -6661,8 +7419,11 @@ private constructor(
                         isInvoiceLevel(JsonField.of(isInvoiceLevel))
 
                     /**
-                     * True for adjustments that apply to an entire invocice, false for adjustments
-                     * that apply to only one price.
+                     * Sets [Builder.isInvoiceLevel] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.isInvoiceLevel] with a well-typed [Boolean]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
                      */
                     fun isInvoiceLevel(isInvoiceLevel: JsonField<Boolean>) = apply {
                         this.isInvoiceLevel = isInvoiceLevel
@@ -6671,10 +7432,16 @@ private constructor(
                     /** The reason for the adjustment. */
                     fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
-                    /** The reason for the adjustment. */
+                    /** Alias for calling [Builder.reason] with `reason.orElse(null)`. */
                     fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
-                    /** The reason for the adjustment. */
+                    /**
+                     * Sets [Builder.reason] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.reason] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun reason(reason: JsonField<String>) = apply { this.reason = reason }
 
                     /**
@@ -6685,8 +7452,11 @@ private constructor(
                         usageDiscount(JsonField.of(usageDiscount))
 
                     /**
-                     * The number of usage units by which to discount the price this adjustment
-                     * applies to in a given billing period.
+                     * Sets [Builder.usageDiscount] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.usageDiscount] with a well-typed [Double]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
                      */
                     fun usageDiscount(usageDiscount: JsonField<Double>) = apply {
                         this.usageDiscount = usageDiscount
@@ -6878,63 +7648,128 @@ private constructor(
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun id(): String = id.getRequired("id")
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun adjustmentType(): AdjustmentType = adjustmentType.getRequired("adjustment_type")
 
-                /** The value applied by an adjustment. */
+                /**
+                 * The value applied by an adjustment.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun amount(): String = amount.getRequired("amount")
 
                 /**
                  * The amount by which to discount the prices this adjustment applies to in a given
                  * billing period.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
                  */
                 fun amountDiscount(): String = amountDiscount.getRequired("amount_discount")
 
-                /** The price IDs that this adjustment applies to. */
+                /**
+                 * The price IDs that this adjustment applies to.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun appliesToPriceIds(): List<String> =
                     appliesToPriceIds.getRequired("applies_to_price_ids")
 
                 /**
                  * True for adjustments that apply to an entire invocice, false for adjustments that
                  * apply to only one price.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
                  */
                 fun isInvoiceLevel(): Boolean = isInvoiceLevel.getRequired("is_invoice_level")
 
-                /** The reason for the adjustment. */
+                /**
+                 * The reason for the adjustment.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
+                 *   the server responded with an unexpected value).
+                 */
                 fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
 
+                /**
+                 * Returns the raw JSON value of [id].
+                 *
+                 * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+                 */
                 @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+                /**
+                 * Returns the raw JSON value of [adjustmentType].
+                 *
+                 * Unlike [adjustmentType], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
                 @JsonProperty("adjustment_type")
                 @ExcludeMissing
                 fun _adjustmentType(): JsonField<AdjustmentType> = adjustmentType
 
-                /** The value applied by an adjustment. */
+                /**
+                 * Returns the raw JSON value of [amount].
+                 *
+                 * Unlike [amount], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<String> = amount
 
                 /**
-                 * The amount by which to discount the prices this adjustment applies to in a given
-                 * billing period.
+                 * Returns the raw JSON value of [amountDiscount].
+                 *
+                 * Unlike [amountDiscount], this method doesn't throw if the JSON field has an
+                 * unexpected type.
                  */
                 @JsonProperty("amount_discount")
                 @ExcludeMissing
                 fun _amountDiscount(): JsonField<String> = amountDiscount
 
-                /** The price IDs that this adjustment applies to. */
+                /**
+                 * Returns the raw JSON value of [appliesToPriceIds].
+                 *
+                 * Unlike [appliesToPriceIds], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
                 @JsonProperty("applies_to_price_ids")
                 @ExcludeMissing
                 fun _appliesToPriceIds(): JsonField<List<String>> = appliesToPriceIds
 
                 /**
-                 * True for adjustments that apply to an entire invocice, false for adjustments that
-                 * apply to only one price.
+                 * Returns the raw JSON value of [isInvoiceLevel].
+                 *
+                 * Unlike [isInvoiceLevel], this method doesn't throw if the JSON field has an
+                 * unexpected type.
                  */
                 @JsonProperty("is_invoice_level")
                 @ExcludeMissing
                 fun _isInvoiceLevel(): JsonField<Boolean> = isInvoiceLevel
 
-                /** The reason for the adjustment. */
+                /**
+                 * Returns the raw JSON value of [reason].
+                 *
+                 * Unlike [reason], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<String> = reason
 
                 @JsonAnyGetter
@@ -7012,11 +7847,25 @@ private constructor(
 
                     fun id(id: String) = id(JsonField.of(id))
 
+                    /**
+                     * Sets [Builder.id] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.id] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun id(id: JsonField<String>) = apply { this.id = id }
 
                     fun adjustmentType(adjustmentType: AdjustmentType) =
                         adjustmentType(JsonField.of(adjustmentType))
 
+                    /**
+                     * Sets [Builder.adjustmentType] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.adjustmentType] with a well-typed
+                     * [AdjustmentType] value instead. This method is primarily for setting the
+                     * field to an undocumented or not yet supported value.
+                     */
                     fun adjustmentType(adjustmentType: JsonField<AdjustmentType>) = apply {
                         this.adjustmentType = adjustmentType
                     }
@@ -7024,7 +7873,13 @@ private constructor(
                     /** The value applied by an adjustment. */
                     fun amount(amount: String) = amount(JsonField.of(amount))
 
-                    /** The value applied by an adjustment. */
+                    /**
+                     * Sets [Builder.amount] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.amount] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun amount(amount: JsonField<String>) = apply { this.amount = amount }
 
                     /**
@@ -7035,8 +7890,11 @@ private constructor(
                         amountDiscount(JsonField.of(amountDiscount))
 
                     /**
-                     * The amount by which to discount the prices this adjustment applies to in a
-                     * given billing period.
+                     * Sets [Builder.amountDiscount] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.amountDiscount] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
                      */
                     fun amountDiscount(amountDiscount: JsonField<String>) = apply {
                         this.amountDiscount = amountDiscount
@@ -7046,12 +7904,22 @@ private constructor(
                     fun appliesToPriceIds(appliesToPriceIds: List<String>) =
                         appliesToPriceIds(JsonField.of(appliesToPriceIds))
 
-                    /** The price IDs that this adjustment applies to. */
+                    /**
+                     * Sets [Builder.appliesToPriceIds] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.appliesToPriceIds] with a well-typed
+                     * `List<String>` value instead. This method is primarily for setting the field
+                     * to an undocumented or not yet supported value.
+                     */
                     fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
                         this.appliesToPriceIds = appliesToPriceIds.map { it.toMutableList() }
                     }
 
-                    /** The price IDs that this adjustment applies to. */
+                    /**
+                     * Adds a single [String] to [appliesToPriceIds].
+                     *
+                     * @throws IllegalStateException if the field was previously set to a non-list.
+                     */
                     fun addAppliesToPriceId(appliesToPriceId: String) = apply {
                         appliesToPriceIds =
                             (appliesToPriceIds ?: JsonField.of(mutableListOf())).also {
@@ -7067,8 +7935,11 @@ private constructor(
                         isInvoiceLevel(JsonField.of(isInvoiceLevel))
 
                     /**
-                     * True for adjustments that apply to an entire invocice, false for adjustments
-                     * that apply to only one price.
+                     * Sets [Builder.isInvoiceLevel] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.isInvoiceLevel] with a well-typed [Boolean]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
                      */
                     fun isInvoiceLevel(isInvoiceLevel: JsonField<Boolean>) = apply {
                         this.isInvoiceLevel = isInvoiceLevel
@@ -7077,10 +7948,16 @@ private constructor(
                     /** The reason for the adjustment. */
                     fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
-                    /** The reason for the adjustment. */
+                    /** Alias for calling [Builder.reason] with `reason.orElse(null)`. */
                     fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
-                    /** The reason for the adjustment. */
+                    /**
+                     * Sets [Builder.reason] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.reason] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun reason(reason: JsonField<String>) = apply { this.reason = reason }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -7269,64 +8146,129 @@ private constructor(
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun id(): String = id.getRequired("id")
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun adjustmentType(): AdjustmentType = adjustmentType.getRequired("adjustment_type")
 
-                /** The value applied by an adjustment. */
+                /**
+                 * The value applied by an adjustment.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun amount(): String = amount.getRequired("amount")
 
-                /** The price IDs that this adjustment applies to. */
+                /**
+                 * The price IDs that this adjustment applies to.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun appliesToPriceIds(): List<String> =
                     appliesToPriceIds.getRequired("applies_to_price_ids")
 
                 /**
                  * True for adjustments that apply to an entire invocice, false for adjustments that
                  * apply to only one price.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
                  */
                 fun isInvoiceLevel(): Boolean = isInvoiceLevel.getRequired("is_invoice_level")
 
                 /**
                  * The percentage (as a value between 0 and 1) by which to discount the price
                  * intervals this adjustment applies to in a given billing period.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
                  */
                 fun percentageDiscount(): Double =
                     percentageDiscount.getRequired("percentage_discount")
 
-                /** The reason for the adjustment. */
+                /**
+                 * The reason for the adjustment.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
+                 *   the server responded with an unexpected value).
+                 */
                 fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
 
+                /**
+                 * Returns the raw JSON value of [id].
+                 *
+                 * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+                 */
                 @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+                /**
+                 * Returns the raw JSON value of [adjustmentType].
+                 *
+                 * Unlike [adjustmentType], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
                 @JsonProperty("adjustment_type")
                 @ExcludeMissing
                 fun _adjustmentType(): JsonField<AdjustmentType> = adjustmentType
 
-                /** The value applied by an adjustment. */
+                /**
+                 * Returns the raw JSON value of [amount].
+                 *
+                 * Unlike [amount], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<String> = amount
 
-                /** The price IDs that this adjustment applies to. */
+                /**
+                 * Returns the raw JSON value of [appliesToPriceIds].
+                 *
+                 * Unlike [appliesToPriceIds], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
                 @JsonProperty("applies_to_price_ids")
                 @ExcludeMissing
                 fun _appliesToPriceIds(): JsonField<List<String>> = appliesToPriceIds
 
                 /**
-                 * True for adjustments that apply to an entire invocice, false for adjustments that
-                 * apply to only one price.
+                 * Returns the raw JSON value of [isInvoiceLevel].
+                 *
+                 * Unlike [isInvoiceLevel], this method doesn't throw if the JSON field has an
+                 * unexpected type.
                  */
                 @JsonProperty("is_invoice_level")
                 @ExcludeMissing
                 fun _isInvoiceLevel(): JsonField<Boolean> = isInvoiceLevel
 
                 /**
-                 * The percentage (as a value between 0 and 1) by which to discount the price
-                 * intervals this adjustment applies to in a given billing period.
+                 * Returns the raw JSON value of [percentageDiscount].
+                 *
+                 * Unlike [percentageDiscount], this method doesn't throw if the JSON field has an
+                 * unexpected type.
                  */
                 @JsonProperty("percentage_discount")
                 @ExcludeMissing
                 fun _percentageDiscount(): JsonField<Double> = percentageDiscount
 
-                /** The reason for the adjustment. */
+                /**
+                 * Returns the raw JSON value of [reason].
+                 *
+                 * Unlike [reason], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<String> = reason
 
                 @JsonAnyGetter
@@ -7404,11 +8346,25 @@ private constructor(
 
                     fun id(id: String) = id(JsonField.of(id))
 
+                    /**
+                     * Sets [Builder.id] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.id] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun id(id: JsonField<String>) = apply { this.id = id }
 
                     fun adjustmentType(adjustmentType: AdjustmentType) =
                         adjustmentType(JsonField.of(adjustmentType))
 
+                    /**
+                     * Sets [Builder.adjustmentType] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.adjustmentType] with a well-typed
+                     * [AdjustmentType] value instead. This method is primarily for setting the
+                     * field to an undocumented or not yet supported value.
+                     */
                     fun adjustmentType(adjustmentType: JsonField<AdjustmentType>) = apply {
                         this.adjustmentType = adjustmentType
                     }
@@ -7416,19 +8372,35 @@ private constructor(
                     /** The value applied by an adjustment. */
                     fun amount(amount: String) = amount(JsonField.of(amount))
 
-                    /** The value applied by an adjustment. */
+                    /**
+                     * Sets [Builder.amount] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.amount] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun amount(amount: JsonField<String>) = apply { this.amount = amount }
 
                     /** The price IDs that this adjustment applies to. */
                     fun appliesToPriceIds(appliesToPriceIds: List<String>) =
                         appliesToPriceIds(JsonField.of(appliesToPriceIds))
 
-                    /** The price IDs that this adjustment applies to. */
+                    /**
+                     * Sets [Builder.appliesToPriceIds] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.appliesToPriceIds] with a well-typed
+                     * `List<String>` value instead. This method is primarily for setting the field
+                     * to an undocumented or not yet supported value.
+                     */
                     fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
                         this.appliesToPriceIds = appliesToPriceIds.map { it.toMutableList() }
                     }
 
-                    /** The price IDs that this adjustment applies to. */
+                    /**
+                     * Adds a single [String] to [appliesToPriceIds].
+                     *
+                     * @throws IllegalStateException if the field was previously set to a non-list.
+                     */
                     fun addAppliesToPriceId(appliesToPriceId: String) = apply {
                         appliesToPriceIds =
                             (appliesToPriceIds ?: JsonField.of(mutableListOf())).also {
@@ -7444,8 +8416,11 @@ private constructor(
                         isInvoiceLevel(JsonField.of(isInvoiceLevel))
 
                     /**
-                     * True for adjustments that apply to an entire invocice, false for adjustments
-                     * that apply to only one price.
+                     * Sets [Builder.isInvoiceLevel] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.isInvoiceLevel] with a well-typed [Boolean]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
                      */
                     fun isInvoiceLevel(isInvoiceLevel: JsonField<Boolean>) = apply {
                         this.isInvoiceLevel = isInvoiceLevel
@@ -7459,8 +8434,11 @@ private constructor(
                         percentageDiscount(JsonField.of(percentageDiscount))
 
                     /**
-                     * The percentage (as a value between 0 and 1) by which to discount the price
-                     * intervals this adjustment applies to in a given billing period.
+                     * Sets [Builder.percentageDiscount] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.percentageDiscount] with a well-typed
+                     * [Double] value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
                      */
                     fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
                         this.percentageDiscount = percentageDiscount
@@ -7469,10 +8447,16 @@ private constructor(
                     /** The reason for the adjustment. */
                     fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
-                    /** The reason for the adjustment. */
+                    /** Alias for calling [Builder.reason] with `reason.orElse(null)`. */
                     fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
-                    /** The reason for the adjustment. */
+                    /**
+                     * Sets [Builder.reason] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.reason] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun reason(reason: JsonField<String>) = apply { this.reason = reason }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -7664,69 +8648,145 @@ private constructor(
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun id(): String = id.getRequired("id")
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun adjustmentType(): AdjustmentType = adjustmentType.getRequired("adjustment_type")
 
-                /** The value applied by an adjustment. */
+                /**
+                 * The value applied by an adjustment.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun amount(): String = amount.getRequired("amount")
 
-                /** The price IDs that this adjustment applies to. */
+                /**
+                 * The price IDs that this adjustment applies to.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun appliesToPriceIds(): List<String> =
                     appliesToPriceIds.getRequired("applies_to_price_ids")
 
                 /**
                  * True for adjustments that apply to an entire invocice, false for adjustments that
                  * apply to only one price.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
                  */
                 fun isInvoiceLevel(): Boolean = isInvoiceLevel.getRequired("is_invoice_level")
 
-                /** The item ID that revenue from this minimum will be attributed to. */
+                /**
+                 * The item ID that revenue from this minimum will be attributed to.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun itemId(): String = itemId.getRequired("item_id")
 
                 /**
                  * The minimum amount to charge in a given billing period for the prices this
                  * adjustment applies to.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
                  */
                 fun minimumAmount(): String = minimumAmount.getRequired("minimum_amount")
 
-                /** The reason for the adjustment. */
+                /**
+                 * The reason for the adjustment.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
+                 *   the server responded with an unexpected value).
+                 */
                 fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
 
+                /**
+                 * Returns the raw JSON value of [id].
+                 *
+                 * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+                 */
                 @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+                /**
+                 * Returns the raw JSON value of [adjustmentType].
+                 *
+                 * Unlike [adjustmentType], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
                 @JsonProperty("adjustment_type")
                 @ExcludeMissing
                 fun _adjustmentType(): JsonField<AdjustmentType> = adjustmentType
 
-                /** The value applied by an adjustment. */
+                /**
+                 * Returns the raw JSON value of [amount].
+                 *
+                 * Unlike [amount], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<String> = amount
 
-                /** The price IDs that this adjustment applies to. */
+                /**
+                 * Returns the raw JSON value of [appliesToPriceIds].
+                 *
+                 * Unlike [appliesToPriceIds], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
                 @JsonProperty("applies_to_price_ids")
                 @ExcludeMissing
                 fun _appliesToPriceIds(): JsonField<List<String>> = appliesToPriceIds
 
                 /**
-                 * True for adjustments that apply to an entire invocice, false for adjustments that
-                 * apply to only one price.
+                 * Returns the raw JSON value of [isInvoiceLevel].
+                 *
+                 * Unlike [isInvoiceLevel], this method doesn't throw if the JSON field has an
+                 * unexpected type.
                  */
                 @JsonProperty("is_invoice_level")
                 @ExcludeMissing
                 fun _isInvoiceLevel(): JsonField<Boolean> = isInvoiceLevel
 
-                /** The item ID that revenue from this minimum will be attributed to. */
+                /**
+                 * Returns the raw JSON value of [itemId].
+                 *
+                 * Unlike [itemId], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("item_id") @ExcludeMissing fun _itemId(): JsonField<String> = itemId
 
                 /**
-                 * The minimum amount to charge in a given billing period for the prices this
-                 * adjustment applies to.
+                 * Returns the raw JSON value of [minimumAmount].
+                 *
+                 * Unlike [minimumAmount], this method doesn't throw if the JSON field has an
+                 * unexpected type.
                  */
                 @JsonProperty("minimum_amount")
                 @ExcludeMissing
                 fun _minimumAmount(): JsonField<String> = minimumAmount
 
-                /** The reason for the adjustment. */
+                /**
+                 * Returns the raw JSON value of [reason].
+                 *
+                 * Unlike [reason], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<String> = reason
 
                 @JsonAnyGetter
@@ -7807,11 +8867,25 @@ private constructor(
 
                     fun id(id: String) = id(JsonField.of(id))
 
+                    /**
+                     * Sets [Builder.id] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.id] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun id(id: JsonField<String>) = apply { this.id = id }
 
                     fun adjustmentType(adjustmentType: AdjustmentType) =
                         adjustmentType(JsonField.of(adjustmentType))
 
+                    /**
+                     * Sets [Builder.adjustmentType] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.adjustmentType] with a well-typed
+                     * [AdjustmentType] value instead. This method is primarily for setting the
+                     * field to an undocumented or not yet supported value.
+                     */
                     fun adjustmentType(adjustmentType: JsonField<AdjustmentType>) = apply {
                         this.adjustmentType = adjustmentType
                     }
@@ -7819,19 +8893,35 @@ private constructor(
                     /** The value applied by an adjustment. */
                     fun amount(amount: String) = amount(JsonField.of(amount))
 
-                    /** The value applied by an adjustment. */
+                    /**
+                     * Sets [Builder.amount] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.amount] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun amount(amount: JsonField<String>) = apply { this.amount = amount }
 
                     /** The price IDs that this adjustment applies to. */
                     fun appliesToPriceIds(appliesToPriceIds: List<String>) =
                         appliesToPriceIds(JsonField.of(appliesToPriceIds))
 
-                    /** The price IDs that this adjustment applies to. */
+                    /**
+                     * Sets [Builder.appliesToPriceIds] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.appliesToPriceIds] with a well-typed
+                     * `List<String>` value instead. This method is primarily for setting the field
+                     * to an undocumented or not yet supported value.
+                     */
                     fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
                         this.appliesToPriceIds = appliesToPriceIds.map { it.toMutableList() }
                     }
 
-                    /** The price IDs that this adjustment applies to. */
+                    /**
+                     * Adds a single [String] to [appliesToPriceIds].
+                     *
+                     * @throws IllegalStateException if the field was previously set to a non-list.
+                     */
                     fun addAppliesToPriceId(appliesToPriceId: String) = apply {
                         appliesToPriceIds =
                             (appliesToPriceIds ?: JsonField.of(mutableListOf())).also {
@@ -7847,8 +8937,11 @@ private constructor(
                         isInvoiceLevel(JsonField.of(isInvoiceLevel))
 
                     /**
-                     * True for adjustments that apply to an entire invocice, false for adjustments
-                     * that apply to only one price.
+                     * Sets [Builder.isInvoiceLevel] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.isInvoiceLevel] with a well-typed [Boolean]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
                      */
                     fun isInvoiceLevel(isInvoiceLevel: JsonField<Boolean>) = apply {
                         this.isInvoiceLevel = isInvoiceLevel
@@ -7857,7 +8950,13 @@ private constructor(
                     /** The item ID that revenue from this minimum will be attributed to. */
                     fun itemId(itemId: String) = itemId(JsonField.of(itemId))
 
-                    /** The item ID that revenue from this minimum will be attributed to. */
+                    /**
+                     * Sets [Builder.itemId] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.itemId] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
                     /**
@@ -7868,8 +8967,11 @@ private constructor(
                         minimumAmount(JsonField.of(minimumAmount))
 
                     /**
-                     * The minimum amount to charge in a given billing period for the prices this
-                     * adjustment applies to.
+                     * Sets [Builder.minimumAmount] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.minimumAmount] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
                      */
                     fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                         this.minimumAmount = minimumAmount
@@ -7878,10 +8980,16 @@ private constructor(
                     /** The reason for the adjustment. */
                     fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
-                    /** The reason for the adjustment. */
+                    /** Alias for calling [Builder.reason] with `reason.orElse(null)`. */
                     fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
-                    /** The reason for the adjustment. */
+                    /**
+                     * Sets [Builder.reason] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.reason] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun reason(reason: JsonField<String>) = apply { this.reason = reason }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -8071,63 +9179,128 @@ private constructor(
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun id(): String = id.getRequired("id")
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun adjustmentType(): AdjustmentType = adjustmentType.getRequired("adjustment_type")
 
-                /** The value applied by an adjustment. */
+                /**
+                 * The value applied by an adjustment.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun amount(): String = amount.getRequired("amount")
 
-                /** The price IDs that this adjustment applies to. */
+                /**
+                 * The price IDs that this adjustment applies to.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun appliesToPriceIds(): List<String> =
                     appliesToPriceIds.getRequired("applies_to_price_ids")
 
                 /**
                  * True for adjustments that apply to an entire invocice, false for adjustments that
                  * apply to only one price.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
                  */
                 fun isInvoiceLevel(): Boolean = isInvoiceLevel.getRequired("is_invoice_level")
 
                 /**
                  * The maximum amount to charge in a given billing period for the prices this
                  * adjustment applies to.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
                  */
                 fun maximumAmount(): String = maximumAmount.getRequired("maximum_amount")
 
-                /** The reason for the adjustment. */
+                /**
+                 * The reason for the adjustment.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
+                 *   the server responded with an unexpected value).
+                 */
                 fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
 
+                /**
+                 * Returns the raw JSON value of [id].
+                 *
+                 * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+                 */
                 @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+                /**
+                 * Returns the raw JSON value of [adjustmentType].
+                 *
+                 * Unlike [adjustmentType], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
                 @JsonProperty("adjustment_type")
                 @ExcludeMissing
                 fun _adjustmentType(): JsonField<AdjustmentType> = adjustmentType
 
-                /** The value applied by an adjustment. */
+                /**
+                 * Returns the raw JSON value of [amount].
+                 *
+                 * Unlike [amount], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<String> = amount
 
-                /** The price IDs that this adjustment applies to. */
+                /**
+                 * Returns the raw JSON value of [appliesToPriceIds].
+                 *
+                 * Unlike [appliesToPriceIds], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
                 @JsonProperty("applies_to_price_ids")
                 @ExcludeMissing
                 fun _appliesToPriceIds(): JsonField<List<String>> = appliesToPriceIds
 
                 /**
-                 * True for adjustments that apply to an entire invocice, false for adjustments that
-                 * apply to only one price.
+                 * Returns the raw JSON value of [isInvoiceLevel].
+                 *
+                 * Unlike [isInvoiceLevel], this method doesn't throw if the JSON field has an
+                 * unexpected type.
                  */
                 @JsonProperty("is_invoice_level")
                 @ExcludeMissing
                 fun _isInvoiceLevel(): JsonField<Boolean> = isInvoiceLevel
 
                 /**
-                 * The maximum amount to charge in a given billing period for the prices this
-                 * adjustment applies to.
+                 * Returns the raw JSON value of [maximumAmount].
+                 *
+                 * Unlike [maximumAmount], this method doesn't throw if the JSON field has an
+                 * unexpected type.
                  */
                 @JsonProperty("maximum_amount")
                 @ExcludeMissing
                 fun _maximumAmount(): JsonField<String> = maximumAmount
 
-                /** The reason for the adjustment. */
+                /**
+                 * Returns the raw JSON value of [reason].
+                 *
+                 * Unlike [reason], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<String> = reason
 
                 @JsonAnyGetter
@@ -8204,11 +9377,25 @@ private constructor(
 
                     fun id(id: String) = id(JsonField.of(id))
 
+                    /**
+                     * Sets [Builder.id] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.id] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun id(id: JsonField<String>) = apply { this.id = id }
 
                     fun adjustmentType(adjustmentType: AdjustmentType) =
                         adjustmentType(JsonField.of(adjustmentType))
 
+                    /**
+                     * Sets [Builder.adjustmentType] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.adjustmentType] with a well-typed
+                     * [AdjustmentType] value instead. This method is primarily for setting the
+                     * field to an undocumented or not yet supported value.
+                     */
                     fun adjustmentType(adjustmentType: JsonField<AdjustmentType>) = apply {
                         this.adjustmentType = adjustmentType
                     }
@@ -8216,19 +9403,35 @@ private constructor(
                     /** The value applied by an adjustment. */
                     fun amount(amount: String) = amount(JsonField.of(amount))
 
-                    /** The value applied by an adjustment. */
+                    /**
+                     * Sets [Builder.amount] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.amount] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun amount(amount: JsonField<String>) = apply { this.amount = amount }
 
                     /** The price IDs that this adjustment applies to. */
                     fun appliesToPriceIds(appliesToPriceIds: List<String>) =
                         appliesToPriceIds(JsonField.of(appliesToPriceIds))
 
-                    /** The price IDs that this adjustment applies to. */
+                    /**
+                     * Sets [Builder.appliesToPriceIds] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.appliesToPriceIds] with a well-typed
+                     * `List<String>` value instead. This method is primarily for setting the field
+                     * to an undocumented or not yet supported value.
+                     */
                     fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
                         this.appliesToPriceIds = appliesToPriceIds.map { it.toMutableList() }
                     }
 
-                    /** The price IDs that this adjustment applies to. */
+                    /**
+                     * Adds a single [String] to [appliesToPriceIds].
+                     *
+                     * @throws IllegalStateException if the field was previously set to a non-list.
+                     */
                     fun addAppliesToPriceId(appliesToPriceId: String) = apply {
                         appliesToPriceIds =
                             (appliesToPriceIds ?: JsonField.of(mutableListOf())).also {
@@ -8244,8 +9447,11 @@ private constructor(
                         isInvoiceLevel(JsonField.of(isInvoiceLevel))
 
                     /**
-                     * True for adjustments that apply to an entire invocice, false for adjustments
-                     * that apply to only one price.
+                     * Sets [Builder.isInvoiceLevel] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.isInvoiceLevel] with a well-typed [Boolean]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
                      */
                     fun isInvoiceLevel(isInvoiceLevel: JsonField<Boolean>) = apply {
                         this.isInvoiceLevel = isInvoiceLevel
@@ -8259,8 +9465,11 @@ private constructor(
                         maximumAmount(JsonField.of(maximumAmount))
 
                     /**
-                     * The maximum amount to charge in a given billing period for the prices this
-                     * adjustment applies to.
+                     * Sets [Builder.maximumAmount] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.maximumAmount] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
                      */
                     fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                         this.maximumAmount = maximumAmount
@@ -8269,10 +9478,16 @@ private constructor(
                     /** The reason for the adjustment. */
                     fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
-                    /** The reason for the adjustment. */
+                    /** Alias for calling [Builder.reason] with `reason.orElse(null)`. */
                     fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
-                    /** The reason for the adjustment. */
+                    /**
+                     * Sets [Builder.reason] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.reason] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun reason(reason: JsonField<String>) = apply { this.reason = reason }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -8452,22 +9667,39 @@ private constructor(
             /**
              * List of price_ids that this maximum amount applies to. For plan/plan phase maximums,
              * this can be a subset of prices.
+             *
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
              */
             fun appliesToPriceIds(): List<String> =
                 appliesToPriceIds.getRequired("applies_to_price_ids")
 
-            /** Maximum amount applied */
+            /**
+             * Maximum amount applied
+             *
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun maximumAmount(): String = maximumAmount.getRequired("maximum_amount")
 
             /**
-             * List of price_ids that this maximum amount applies to. For plan/plan phase maximums,
-             * this can be a subset of prices.
+             * Returns the raw JSON value of [appliesToPriceIds].
+             *
+             * Unlike [appliesToPriceIds], this method doesn't throw if the JSON field has an
+             * unexpected type.
              */
             @JsonProperty("applies_to_price_ids")
             @ExcludeMissing
             fun _appliesToPriceIds(): JsonField<List<String>> = appliesToPriceIds
 
-            /** Maximum amount applied */
+            /**
+             * Returns the raw JSON value of [maximumAmount].
+             *
+             * Unlike [maximumAmount], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("maximum_amount")
             @ExcludeMissing
             fun _maximumAmount(): JsonField<String> = maximumAmount
@@ -8526,16 +9758,20 @@ private constructor(
                     appliesToPriceIds(JsonField.of(appliesToPriceIds))
 
                 /**
-                 * List of price_ids that this maximum amount applies to. For plan/plan phase
-                 * maximums, this can be a subset of prices.
+                 * Sets [Builder.appliesToPriceIds] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.appliesToPriceIds] with a well-typed
+                 * `List<String>` value instead. This method is primarily for setting the field to
+                 * an undocumented or not yet supported value.
                  */
                 fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
                     this.appliesToPriceIds = appliesToPriceIds.map { it.toMutableList() }
                 }
 
                 /**
-                 * List of price_ids that this maximum amount applies to. For plan/plan phase
-                 * maximums, this can be a subset of prices.
+                 * Adds a single [String] to [appliesToPriceIds].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
                  */
                 fun addAppliesToPriceId(appliesToPriceId: String) = apply {
                     appliesToPriceIds =
@@ -8548,7 +9784,13 @@ private constructor(
                 fun maximumAmount(maximumAmount: String) =
                     maximumAmount(JsonField.of(maximumAmount))
 
-                /** Maximum amount applied */
+                /**
+                 * Sets [Builder.maximumAmount] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.maximumAmount] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                     this.maximumAmount = maximumAmount
                 }
@@ -8622,22 +9864,39 @@ private constructor(
             /**
              * List of price_ids that this minimum amount applies to. For plan/plan phase minimums,
              * this can be a subset of prices.
+             *
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
              */
             fun appliesToPriceIds(): List<String> =
                 appliesToPriceIds.getRequired("applies_to_price_ids")
 
-            /** Minimum amount applied */
+            /**
+             * Minimum amount applied
+             *
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun minimumAmount(): String = minimumAmount.getRequired("minimum_amount")
 
             /**
-             * List of price_ids that this minimum amount applies to. For plan/plan phase minimums,
-             * this can be a subset of prices.
+             * Returns the raw JSON value of [appliesToPriceIds].
+             *
+             * Unlike [appliesToPriceIds], this method doesn't throw if the JSON field has an
+             * unexpected type.
              */
             @JsonProperty("applies_to_price_ids")
             @ExcludeMissing
             fun _appliesToPriceIds(): JsonField<List<String>> = appliesToPriceIds
 
-            /** Minimum amount applied */
+            /**
+             * Returns the raw JSON value of [minimumAmount].
+             *
+             * Unlike [minimumAmount], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("minimum_amount")
             @ExcludeMissing
             fun _minimumAmount(): JsonField<String> = minimumAmount
@@ -8696,16 +9955,20 @@ private constructor(
                     appliesToPriceIds(JsonField.of(appliesToPriceIds))
 
                 /**
-                 * List of price_ids that this minimum amount applies to. For plan/plan phase
-                 * minimums, this can be a subset of prices.
+                 * Sets [Builder.appliesToPriceIds] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.appliesToPriceIds] with a well-typed
+                 * `List<String>` value instead. This method is primarily for setting the field to
+                 * an undocumented or not yet supported value.
                  */
                 fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
                     this.appliesToPriceIds = appliesToPriceIds.map { it.toMutableList() }
                 }
 
                 /**
-                 * List of price_ids that this minimum amount applies to. For plan/plan phase
-                 * minimums, this can be a subset of prices.
+                 * Adds a single [String] to [appliesToPriceIds].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
                  */
                 fun addAppliesToPriceId(appliesToPriceId: String) = apply {
                     appliesToPriceIds =
@@ -8718,7 +9981,13 @@ private constructor(
                 fun minimumAmount(minimumAmount: String) =
                     minimumAmount(JsonField.of(minimumAmount))
 
-                /** Minimum amount applied */
+                /**
+                 * Sets [Builder.minimumAmount] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.minimumAmount] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                     this.minimumAmount = minimumAmount
                 }
@@ -8972,37 +10241,102 @@ private constructor(
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /** The total amount for this sub line item. */
+                /**
+                 * The total amount for this sub line item.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun amount(): String = amount.getRequired("amount")
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
+                 *   the server responded with an unexpected value).
+                 */
                 fun grouping(): Optional<Grouping> =
                     Optional.ofNullable(grouping.getNullable("grouping"))
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun matrixConfig(): MatrixConfig = matrixConfig.getRequired("matrix_config")
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun name(): String = name.getRequired("name")
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun quantity(): Double = quantity.getRequired("quantity")
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun type(): Type = type.getRequired("type")
 
-                /** The total amount for this sub line item. */
+                /**
+                 * Returns the raw JSON value of [amount].
+                 *
+                 * Unlike [amount], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<String> = amount
 
+                /**
+                 * Returns the raw JSON value of [grouping].
+                 *
+                 * Unlike [grouping], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("grouping")
                 @ExcludeMissing
                 fun _grouping(): JsonField<Grouping> = grouping
 
+                /**
+                 * Returns the raw JSON value of [matrixConfig].
+                 *
+                 * Unlike [matrixConfig], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
                 @JsonProperty("matrix_config")
                 @ExcludeMissing
                 fun _matrixConfig(): JsonField<MatrixConfig> = matrixConfig
 
+                /**
+                 * Returns the raw JSON value of [name].
+                 *
+                 * Unlike [name], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
+                /**
+                 * Returns the raw JSON value of [quantity].
+                 *
+                 * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("quantity")
                 @ExcludeMissing
                 fun _quantity(): JsonField<Double> = quantity
 
+                /**
+                 * Returns the raw JSON value of [type].
+                 *
+                 * Unlike [type], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
                 @JsonAnyGetter
@@ -9071,32 +10405,74 @@ private constructor(
                     /** The total amount for this sub line item. */
                     fun amount(amount: String) = amount(JsonField.of(amount))
 
-                    /** The total amount for this sub line item. */
+                    /**
+                     * Sets [Builder.amount] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.amount] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun amount(amount: JsonField<String>) = apply { this.amount = amount }
 
                     fun grouping(grouping: Grouping?) = grouping(JsonField.ofNullable(grouping))
 
+                    /** Alias for calling [Builder.grouping] with `grouping.orElse(null)`. */
                     fun grouping(grouping: Optional<Grouping>) = grouping(grouping.getOrNull())
 
+                    /**
+                     * Sets [Builder.grouping] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.grouping] with a well-typed [Grouping] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun grouping(grouping: JsonField<Grouping>) = apply { this.grouping = grouping }
 
                     fun matrixConfig(matrixConfig: MatrixConfig) =
                         matrixConfig(JsonField.of(matrixConfig))
 
+                    /**
+                     * Sets [Builder.matrixConfig] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.matrixConfig] with a well-typed
+                     * [MatrixConfig] value instead. This method is primarily for setting the field
+                     * to an undocumented or not yet supported value.
+                     */
                     fun matrixConfig(matrixConfig: JsonField<MatrixConfig>) = apply {
                         this.matrixConfig = matrixConfig
                     }
 
                     fun name(name: String) = name(JsonField.of(name))
 
+                    /**
+                     * Sets [Builder.name] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.name] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun name(name: JsonField<String>) = apply { this.name = name }
 
                     fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
+                    /**
+                     * Sets [Builder.quantity] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.quantity] with a well-typed [Double] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
                     fun type(type: Type) = type(JsonField.of(type))
 
+                    /**
+                     * Sets [Builder.type] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.type] with a well-typed [Type] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun type(type: JsonField<Type>) = apply { this.type = type }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -9147,14 +10523,35 @@ private constructor(
                     private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
                 ) {
 
+                    /**
+                     * @throws OrbInvalidDataException if the JSON field has an unexpected type or
+                     *   is unexpectedly missing or null (e.g. if the server responded with an
+                     *   unexpected value).
+                     */
                     fun key(): String = key.getRequired("key")
 
-                    /** No value indicates the default group */
+                    /**
+                     * No value indicates the default group
+                     *
+                     * @throws OrbInvalidDataException if the JSON field has an unexpected type
+                     *   (e.g. if the server responded with an unexpected value).
+                     */
                     fun value(): Optional<String> = Optional.ofNullable(value.getNullable("value"))
 
+                    /**
+                     * Returns the raw JSON value of [key].
+                     *
+                     * Unlike [key], this method doesn't throw if the JSON field has an unexpected
+                     * type.
+                     */
                     @JsonProperty("key") @ExcludeMissing fun _key(): JsonField<String> = key
 
-                    /** No value indicates the default group */
+                    /**
+                     * Returns the raw JSON value of [value].
+                     *
+                     * Unlike [value], this method doesn't throw if the JSON field has an unexpected
+                     * type.
+                     */
                     @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<String> = value
 
                     @JsonAnyGetter
@@ -9206,15 +10603,28 @@ private constructor(
 
                         fun key(key: String) = key(JsonField.of(key))
 
+                        /**
+                         * Sets [Builder.key] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.key] with a well-typed [String] value
+                         * instead. This method is primarily for setting the field to an
+                         * undocumented or not yet supported value.
+                         */
                         fun key(key: JsonField<String>) = apply { this.key = key }
 
                         /** No value indicates the default group */
                         fun value(value: String?) = value(JsonField.ofNullable(value))
 
-                        /** No value indicates the default group */
+                        /** Alias for calling [Builder.value] with `value.orElse(null)`. */
                         fun value(value: Optional<String>) = value(value.getOrNull())
 
-                        /** No value indicates the default group */
+                        /**
+                         * Sets [Builder.value] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.value] with a well-typed [String] value
+                         * instead. This method is primarily for setting the field to an
+                         * undocumented or not yet supported value.
+                         */
                         fun value(value: JsonField<String>) = apply { this.value = value }
 
                         fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -9276,11 +10686,22 @@ private constructor(
                     private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
                 ) {
 
-                    /** The ordered dimension values for this line item. */
+                    /**
+                     * The ordered dimension values for this line item.
+                     *
+                     * @throws OrbInvalidDataException if the JSON field has an unexpected type or
+                     *   is unexpectedly missing or null (e.g. if the server responded with an
+                     *   unexpected value).
+                     */
                     fun dimensionValues(): List<String?> =
                         dimensionValues.getRequired("dimension_values")
 
-                    /** The ordered dimension values for this line item. */
+                    /**
+                     * Returns the raw JSON value of [dimensionValues].
+                     *
+                     * Unlike [dimensionValues], this method doesn't throw if the JSON field has an
+                     * unexpected type.
+                     */
                     @JsonProperty("dimension_values")
                     @ExcludeMissing
                     fun _dimensionValues(): JsonField<List<String?>> = dimensionValues
@@ -9333,12 +10754,23 @@ private constructor(
                         fun dimensionValues(dimensionValues: List<String?>) =
                             dimensionValues(JsonField.of(dimensionValues))
 
-                        /** The ordered dimension values for this line item. */
+                        /**
+                         * Sets [Builder.dimensionValues] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.dimensionValues] with a well-typed
+                         * `List<String?>` value instead. This method is primarily for setting the
+                         * field to an undocumented or not yet supported value.
+                         */
                         fun dimensionValues(dimensionValues: JsonField<List<String?>>) = apply {
                             this.dimensionValues = dimensionValues.map { it.toMutableList() }
                         }
 
-                        /** The ordered dimension values for this line item. */
+                        /**
+                         * Adds a single [String] to [dimensionValues].
+                         *
+                         * @throws IllegalStateException if the field was previously set to a
+                         *   non-list.
+                         */
                         fun addDimensionValue(dimensionValue: String) = apply {
                             dimensionValues =
                                 (dimensionValues ?: JsonField.of(mutableListOf())).also {
@@ -9538,37 +10970,102 @@ private constructor(
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /** The total amount for this sub line item. */
+                /**
+                 * The total amount for this sub line item.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun amount(): String = amount.getRequired("amount")
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
+                 *   the server responded with an unexpected value).
+                 */
                 fun grouping(): Optional<Grouping> =
                     Optional.ofNullable(grouping.getNullable("grouping"))
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun name(): String = name.getRequired("name")
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun quantity(): Double = quantity.getRequired("quantity")
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun tierConfig(): TierConfig = tierConfig.getRequired("tier_config")
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun type(): Type = type.getRequired("type")
 
-                /** The total amount for this sub line item. */
+                /**
+                 * Returns the raw JSON value of [amount].
+                 *
+                 * Unlike [amount], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<String> = amount
 
+                /**
+                 * Returns the raw JSON value of [grouping].
+                 *
+                 * Unlike [grouping], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("grouping")
                 @ExcludeMissing
                 fun _grouping(): JsonField<Grouping> = grouping
 
+                /**
+                 * Returns the raw JSON value of [name].
+                 *
+                 * Unlike [name], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
+                /**
+                 * Returns the raw JSON value of [quantity].
+                 *
+                 * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("quantity")
                 @ExcludeMissing
                 fun _quantity(): JsonField<Double> = quantity
 
+                /**
+                 * Returns the raw JSON value of [tierConfig].
+                 *
+                 * Unlike [tierConfig], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
                 @JsonProperty("tier_config")
                 @ExcludeMissing
                 fun _tierConfig(): JsonField<TierConfig> = tierConfig
 
+                /**
+                 * Returns the raw JSON value of [type].
+                 *
+                 * Unlike [type], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
                 @JsonAnyGetter
@@ -9636,31 +11133,73 @@ private constructor(
                     /** The total amount for this sub line item. */
                     fun amount(amount: String) = amount(JsonField.of(amount))
 
-                    /** The total amount for this sub line item. */
+                    /**
+                     * Sets [Builder.amount] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.amount] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun amount(amount: JsonField<String>) = apply { this.amount = amount }
 
                     fun grouping(grouping: Grouping?) = grouping(JsonField.ofNullable(grouping))
 
+                    /** Alias for calling [Builder.grouping] with `grouping.orElse(null)`. */
                     fun grouping(grouping: Optional<Grouping>) = grouping(grouping.getOrNull())
 
+                    /**
+                     * Sets [Builder.grouping] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.grouping] with a well-typed [Grouping] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun grouping(grouping: JsonField<Grouping>) = apply { this.grouping = grouping }
 
                     fun name(name: String) = name(JsonField.of(name))
 
+                    /**
+                     * Sets [Builder.name] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.name] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun name(name: JsonField<String>) = apply { this.name = name }
 
                     fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
+                    /**
+                     * Sets [Builder.quantity] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.quantity] with a well-typed [Double] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
                     fun tierConfig(tierConfig: TierConfig) = tierConfig(JsonField.of(tierConfig))
 
+                    /**
+                     * Sets [Builder.tierConfig] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.tierConfig] with a well-typed [TierConfig]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
                     fun tierConfig(tierConfig: JsonField<TierConfig>) = apply {
                         this.tierConfig = tierConfig
                     }
 
                     fun type(type: Type) = type(JsonField.of(type))
 
+                    /**
+                     * Sets [Builder.type] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.type] with a well-typed [Type] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun type(type: JsonField<Type>) = apply { this.type = type }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -9711,14 +11250,35 @@ private constructor(
                     private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
                 ) {
 
+                    /**
+                     * @throws OrbInvalidDataException if the JSON field has an unexpected type or
+                     *   is unexpectedly missing or null (e.g. if the server responded with an
+                     *   unexpected value).
+                     */
                     fun key(): String = key.getRequired("key")
 
-                    /** No value indicates the default group */
+                    /**
+                     * No value indicates the default group
+                     *
+                     * @throws OrbInvalidDataException if the JSON field has an unexpected type
+                     *   (e.g. if the server responded with an unexpected value).
+                     */
                     fun value(): Optional<String> = Optional.ofNullable(value.getNullable("value"))
 
+                    /**
+                     * Returns the raw JSON value of [key].
+                     *
+                     * Unlike [key], this method doesn't throw if the JSON field has an unexpected
+                     * type.
+                     */
                     @JsonProperty("key") @ExcludeMissing fun _key(): JsonField<String> = key
 
-                    /** No value indicates the default group */
+                    /**
+                     * Returns the raw JSON value of [value].
+                     *
+                     * Unlike [value], this method doesn't throw if the JSON field has an unexpected
+                     * type.
+                     */
                     @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<String> = value
 
                     @JsonAnyGetter
@@ -9770,15 +11330,28 @@ private constructor(
 
                         fun key(key: String) = key(JsonField.of(key))
 
+                        /**
+                         * Sets [Builder.key] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.key] with a well-typed [String] value
+                         * instead. This method is primarily for setting the field to an
+                         * undocumented or not yet supported value.
+                         */
                         fun key(key: JsonField<String>) = apply { this.key = key }
 
                         /** No value indicates the default group */
                         fun value(value: String?) = value(JsonField.ofNullable(value))
 
-                        /** No value indicates the default group */
+                        /** Alias for calling [Builder.value] with `value.orElse(null)`. */
                         fun value(value: Optional<String>) = value(value.getOrNull())
 
-                        /** No value indicates the default group */
+                        /**
+                         * Sets [Builder.value] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.value] with a well-typed [String] value
+                         * instead. This method is primarily for setting the field to an
+                         * undocumented or not yet supported value.
+                         */
                         fun value(value: JsonField<String>) = apply { this.value = value }
 
                         fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -9846,21 +11419,53 @@ private constructor(
                     private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
                 ) {
 
+                    /**
+                     * @throws OrbInvalidDataException if the JSON field has an unexpected type or
+                     *   is unexpectedly missing or null (e.g. if the server responded with an
+                     *   unexpected value).
+                     */
                     fun firstUnit(): Double = firstUnit.getRequired("first_unit")
 
+                    /**
+                     * @throws OrbInvalidDataException if the JSON field has an unexpected type
+                     *   (e.g. if the server responded with an unexpected value).
+                     */
                     fun lastUnit(): Optional<Double> =
                         Optional.ofNullable(lastUnit.getNullable("last_unit"))
 
+                    /**
+                     * @throws OrbInvalidDataException if the JSON field has an unexpected type or
+                     *   is unexpectedly missing or null (e.g. if the server responded with an
+                     *   unexpected value).
+                     */
                     fun unitAmount(): String = unitAmount.getRequired("unit_amount")
 
+                    /**
+                     * Returns the raw JSON value of [firstUnit].
+                     *
+                     * Unlike [firstUnit], this method doesn't throw if the JSON field has an
+                     * unexpected type.
+                     */
                     @JsonProperty("first_unit")
                     @ExcludeMissing
                     fun _firstUnit(): JsonField<Double> = firstUnit
 
+                    /**
+                     * Returns the raw JSON value of [lastUnit].
+                     *
+                     * Unlike [lastUnit], this method doesn't throw if the JSON field has an
+                     * unexpected type.
+                     */
                     @JsonProperty("last_unit")
                     @ExcludeMissing
                     fun _lastUnit(): JsonField<Double> = lastUnit
 
+                    /**
+                     * Returns the raw JSON value of [unitAmount].
+                     *
+                     * Unlike [unitAmount], this method doesn't throw if the JSON field has an
+                     * unexpected type.
+                     */
                     @JsonProperty("unit_amount")
                     @ExcludeMissing
                     fun _unitAmount(): JsonField<String> = unitAmount
@@ -9918,22 +11523,49 @@ private constructor(
 
                         fun firstUnit(firstUnit: Double) = firstUnit(JsonField.of(firstUnit))
 
+                        /**
+                         * Sets [Builder.firstUnit] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.firstUnit] with a well-typed [Double]
+                         * value instead. This method is primarily for setting the field to an
+                         * undocumented or not yet supported value.
+                         */
                         fun firstUnit(firstUnit: JsonField<Double>) = apply {
                             this.firstUnit = firstUnit
                         }
 
                         fun lastUnit(lastUnit: Double?) = lastUnit(JsonField.ofNullable(lastUnit))
 
+                        /**
+                         * Alias for [Builder.lastUnit].
+                         *
+                         * This unboxed primitive overload exists for backwards compatibility.
+                         */
                         fun lastUnit(lastUnit: Double) = lastUnit(lastUnit as Double?)
 
+                        /** Alias for calling [Builder.lastUnit] with `lastUnit.orElse(null)`. */
                         fun lastUnit(lastUnit: Optional<Double>) = lastUnit(lastUnit.getOrNull())
 
+                        /**
+                         * Sets [Builder.lastUnit] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.lastUnit] with a well-typed [Double]
+                         * value instead. This method is primarily for setting the field to an
+                         * undocumented or not yet supported value.
+                         */
                         fun lastUnit(lastUnit: JsonField<Double>) = apply {
                             this.lastUnit = lastUnit
                         }
 
                         fun unitAmount(unitAmount: String) = unitAmount(JsonField.of(unitAmount))
 
+                        /**
+                         * Sets [Builder.unitAmount] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.unitAmount] with a well-typed [String]
+                         * value instead. This method is primarily for setting the field to an
+                         * undocumented or not yet supported value.
+                         */
                         fun unitAmount(unitAmount: JsonField<String>) = apply {
                             this.unitAmount = unitAmount
                         }
@@ -10127,31 +11759,85 @@ private constructor(
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /** The total amount for this sub line item. */
+                /**
+                 * The total amount for this sub line item.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun amount(): String = amount.getRequired("amount")
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
+                 *   the server responded with an unexpected value).
+                 */
                 fun grouping(): Optional<Grouping> =
                     Optional.ofNullable(grouping.getNullable("grouping"))
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun name(): String = name.getRequired("name")
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun quantity(): Double = quantity.getRequired("quantity")
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun type(): Type = type.getRequired("type")
 
-                /** The total amount for this sub line item. */
+                /**
+                 * Returns the raw JSON value of [amount].
+                 *
+                 * Unlike [amount], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<String> = amount
 
+                /**
+                 * Returns the raw JSON value of [grouping].
+                 *
+                 * Unlike [grouping], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("grouping")
                 @ExcludeMissing
                 fun _grouping(): JsonField<Grouping> = grouping
 
+                /**
+                 * Returns the raw JSON value of [name].
+                 *
+                 * Unlike [name], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
+                /**
+                 * Returns the raw JSON value of [quantity].
+                 *
+                 * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("quantity")
                 @ExcludeMissing
                 fun _quantity(): JsonField<Double> = quantity
 
+                /**
+                 * Returns the raw JSON value of [type].
+                 *
+                 * Unlike [type], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
                 @JsonAnyGetter
@@ -10215,25 +11901,60 @@ private constructor(
                     /** The total amount for this sub line item. */
                     fun amount(amount: String) = amount(JsonField.of(amount))
 
-                    /** The total amount for this sub line item. */
+                    /**
+                     * Sets [Builder.amount] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.amount] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun amount(amount: JsonField<String>) = apply { this.amount = amount }
 
                     fun grouping(grouping: Grouping?) = grouping(JsonField.ofNullable(grouping))
 
+                    /** Alias for calling [Builder.grouping] with `grouping.orElse(null)`. */
                     fun grouping(grouping: Optional<Grouping>) = grouping(grouping.getOrNull())
 
+                    /**
+                     * Sets [Builder.grouping] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.grouping] with a well-typed [Grouping] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun grouping(grouping: JsonField<Grouping>) = apply { this.grouping = grouping }
 
                     fun name(name: String) = name(JsonField.of(name))
 
+                    /**
+                     * Sets [Builder.name] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.name] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun name(name: JsonField<String>) = apply { this.name = name }
 
                     fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
+                    /**
+                     * Sets [Builder.quantity] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.quantity] with a well-typed [Double] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
                     fun type(type: Type) = type(JsonField.of(type))
 
+                    /**
+                     * Sets [Builder.type] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.type] with a well-typed [Type] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun type(type: JsonField<Type>) = apply { this.type = type }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -10283,14 +12004,35 @@ private constructor(
                     private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
                 ) {
 
+                    /**
+                     * @throws OrbInvalidDataException if the JSON field has an unexpected type or
+                     *   is unexpectedly missing or null (e.g. if the server responded with an
+                     *   unexpected value).
+                     */
                     fun key(): String = key.getRequired("key")
 
-                    /** No value indicates the default group */
+                    /**
+                     * No value indicates the default group
+                     *
+                     * @throws OrbInvalidDataException if the JSON field has an unexpected type
+                     *   (e.g. if the server responded with an unexpected value).
+                     */
                     fun value(): Optional<String> = Optional.ofNullable(value.getNullable("value"))
 
+                    /**
+                     * Returns the raw JSON value of [key].
+                     *
+                     * Unlike [key], this method doesn't throw if the JSON field has an unexpected
+                     * type.
+                     */
                     @JsonProperty("key") @ExcludeMissing fun _key(): JsonField<String> = key
 
-                    /** No value indicates the default group */
+                    /**
+                     * Returns the raw JSON value of [value].
+                     *
+                     * Unlike [value], this method doesn't throw if the JSON field has an unexpected
+                     * type.
+                     */
                     @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<String> = value
 
                     @JsonAnyGetter
@@ -10342,15 +12084,28 @@ private constructor(
 
                         fun key(key: String) = key(JsonField.of(key))
 
+                        /**
+                         * Sets [Builder.key] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.key] with a well-typed [String] value
+                         * instead. This method is primarily for setting the field to an
+                         * undocumented or not yet supported value.
+                         */
                         fun key(key: JsonField<String>) = apply { this.key = key }
 
                         /** No value indicates the default group */
                         fun value(value: String?) = value(JsonField.ofNullable(value))
 
-                        /** No value indicates the default group */
+                        /** Alias for calling [Builder.value] with `value.orElse(null)`. */
                         fun value(value: Optional<String>) = value(value.getOrNull())
 
-                        /** No value indicates the default group */
+                        /**
+                         * Sets [Builder.value] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.value] with a well-typed [String] value
+                         * instead. This method is primarily for setting the field to an
+                         * undocumented or not yet supported value.
+                         */
                         fun value(value: JsonField<String>) = apply { this.value = value }
 
                         fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -10536,26 +12291,57 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            /** The amount of additional tax incurred by this tax rate. */
+            /**
+             * The amount of additional tax incurred by this tax rate.
+             *
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun amount(): String = amount.getRequired("amount")
 
-            /** The human-readable description of the applied tax rate. */
+            /**
+             * The human-readable description of the applied tax rate.
+             *
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun taxRateDescription(): String =
                 taxRateDescription.getRequired("tax_rate_description")
 
-            /** The tax rate percentage, out of 100. */
+            /**
+             * The tax rate percentage, out of 100.
+             *
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
             fun taxRatePercentage(): Optional<String> =
                 Optional.ofNullable(taxRatePercentage.getNullable("tax_rate_percentage"))
 
-            /** The amount of additional tax incurred by this tax rate. */
+            /**
+             * Returns the raw JSON value of [amount].
+             *
+             * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<String> = amount
 
-            /** The human-readable description of the applied tax rate. */
+            /**
+             * Returns the raw JSON value of [taxRateDescription].
+             *
+             * Unlike [taxRateDescription], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
             @JsonProperty("tax_rate_description")
             @ExcludeMissing
             fun _taxRateDescription(): JsonField<String> = taxRateDescription
 
-            /** The tax rate percentage, out of 100. */
+            /**
+             * Returns the raw JSON value of [taxRatePercentage].
+             *
+             * Unlike [taxRatePercentage], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
             @JsonProperty("tax_rate_percentage")
             @ExcludeMissing
             fun _taxRatePercentage(): JsonField<String> = taxRatePercentage
@@ -10613,14 +12399,26 @@ private constructor(
                 /** The amount of additional tax incurred by this tax rate. */
                 fun amount(amount: String) = amount(JsonField.of(amount))
 
-                /** The amount of additional tax incurred by this tax rate. */
+                /**
+                 * Sets [Builder.amount] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.amount] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun amount(amount: JsonField<String>) = apply { this.amount = amount }
 
                 /** The human-readable description of the applied tax rate. */
                 fun taxRateDescription(taxRateDescription: String) =
                     taxRateDescription(JsonField.of(taxRateDescription))
 
-                /** The human-readable description of the applied tax rate. */
+                /**
+                 * Sets [Builder.taxRateDescription] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.taxRateDescription] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun taxRateDescription(taxRateDescription: JsonField<String>) = apply {
                     this.taxRateDescription = taxRateDescription
                 }
@@ -10629,11 +12427,20 @@ private constructor(
                 fun taxRatePercentage(taxRatePercentage: String?) =
                     taxRatePercentage(JsonField.ofNullable(taxRatePercentage))
 
-                /** The tax rate percentage, out of 100. */
+                /**
+                 * Alias for calling [Builder.taxRatePercentage] with
+                 * `taxRatePercentage.orElse(null)`.
+                 */
                 fun taxRatePercentage(taxRatePercentage: Optional<String>) =
                     taxRatePercentage(taxRatePercentage.getOrNull())
 
-                /** The tax rate percentage, out of 100. */
+                /**
+                 * Sets [Builder.taxRatePercentage] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.taxRatePercentage] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun taxRatePercentage(taxRatePercentage: JsonField<String>) = apply {
                     this.taxRatePercentage = taxRatePercentage
                 }
@@ -10722,22 +12529,37 @@ private constructor(
         /**
          * List of price_ids that this maximum amount applies to. For plan/plan phase maximums, this
          * can be a subset of prices.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun appliesToPriceIds(): List<String> =
             appliesToPriceIds.getRequired("applies_to_price_ids")
 
-        /** Maximum amount applied */
+        /**
+         * Maximum amount applied
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun maximumAmount(): String = maximumAmount.getRequired("maximum_amount")
 
         /**
-         * List of price_ids that this maximum amount applies to. For plan/plan phase maximums, this
-         * can be a subset of prices.
+         * Returns the raw JSON value of [appliesToPriceIds].
+         *
+         * Unlike [appliesToPriceIds], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("applies_to_price_ids")
         @ExcludeMissing
         fun _appliesToPriceIds(): JsonField<List<String>> = appliesToPriceIds
 
-        /** Maximum amount applied */
+        /**
+         * Returns the raw JSON value of [maximumAmount].
+         *
+         * Unlike [maximumAmount], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @JsonProperty("maximum_amount")
         @ExcludeMissing
         fun _maximumAmount(): JsonField<String> = maximumAmount
@@ -10796,16 +12618,20 @@ private constructor(
                 appliesToPriceIds(JsonField.of(appliesToPriceIds))
 
             /**
-             * List of price_ids that this maximum amount applies to. For plan/plan phase maximums,
-             * this can be a subset of prices.
+             * Sets [Builder.appliesToPriceIds] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.appliesToPriceIds] with a well-typed `List<String>`
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
             fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
                 this.appliesToPriceIds = appliesToPriceIds.map { it.toMutableList() }
             }
 
             /**
-             * List of price_ids that this maximum amount applies to. For plan/plan phase maximums,
-             * this can be a subset of prices.
+             * Adds a single [String] to [appliesToPriceIds].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
              */
             fun addAppliesToPriceId(appliesToPriceId: String) = apply {
                 appliesToPriceIds =
@@ -10817,7 +12643,13 @@ private constructor(
             /** Maximum amount applied */
             fun maximumAmount(maximumAmount: String) = maximumAmount(JsonField.of(maximumAmount))
 
-            /** Maximum amount applied */
+            /**
+             * Sets [Builder.maximumAmount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.maximumAmount] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun maximumAmount(maximumAmount: JsonField<String>) = apply {
                 this.maximumAmount = maximumAmount
             }
@@ -10968,22 +12800,37 @@ private constructor(
         /**
          * List of price_ids that this minimum amount applies to. For plan/plan phase minimums, this
          * can be a subset of prices.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun appliesToPriceIds(): List<String> =
             appliesToPriceIds.getRequired("applies_to_price_ids")
 
-        /** Minimum amount applied */
+        /**
+         * Minimum amount applied
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun minimumAmount(): String = minimumAmount.getRequired("minimum_amount")
 
         /**
-         * List of price_ids that this minimum amount applies to. For plan/plan phase minimums, this
-         * can be a subset of prices.
+         * Returns the raw JSON value of [appliesToPriceIds].
+         *
+         * Unlike [appliesToPriceIds], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("applies_to_price_ids")
         @ExcludeMissing
         fun _appliesToPriceIds(): JsonField<List<String>> = appliesToPriceIds
 
-        /** Minimum amount applied */
+        /**
+         * Returns the raw JSON value of [minimumAmount].
+         *
+         * Unlike [minimumAmount], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @JsonProperty("minimum_amount")
         @ExcludeMissing
         fun _minimumAmount(): JsonField<String> = minimumAmount
@@ -11042,16 +12889,20 @@ private constructor(
                 appliesToPriceIds(JsonField.of(appliesToPriceIds))
 
             /**
-             * List of price_ids that this minimum amount applies to. For plan/plan phase minimums,
-             * this can be a subset of prices.
+             * Sets [Builder.appliesToPriceIds] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.appliesToPriceIds] with a well-typed `List<String>`
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
             fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
                 this.appliesToPriceIds = appliesToPriceIds.map { it.toMutableList() }
             }
 
             /**
-             * List of price_ids that this minimum amount applies to. For plan/plan phase minimums,
-             * this can be a subset of prices.
+             * Adds a single [String] to [appliesToPriceIds].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
              */
             fun addAppliesToPriceId(appliesToPriceId: String) = apply {
                 appliesToPriceIds =
@@ -11063,7 +12914,13 @@ private constructor(
             /** Minimum amount applied */
             fun minimumAmount(minimumAmount: String) = minimumAmount(JsonField.of(minimumAmount))
 
-            /** Minimum amount applied */
+            /**
+             * Sets [Builder.minimumAmount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.minimumAmount] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
             }
@@ -11137,48 +12994,104 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** The ID of the payment attempt. */
+        /**
+         * The ID of the payment attempt.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun id(): String = id.getRequired("id")
 
-        /** The amount of the payment attempt. */
+        /**
+         * The amount of the payment attempt.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun amount(): String = amount.getRequired("amount")
 
-        /** The time at which the payment attempt was created. */
+        /**
+         * The time at which the payment attempt was created.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
-        /** The payment provider that attempted to collect the payment. */
+        /**
+         * The payment provider that attempted to collect the payment.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun paymentProvider(): Optional<PaymentProvider> =
             Optional.ofNullable(paymentProvider.getNullable("payment_provider"))
 
-        /** The ID of the payment attempt in the payment provider. */
+        /**
+         * The ID of the payment attempt in the payment provider.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun paymentProviderId(): Optional<String> =
             Optional.ofNullable(paymentProviderId.getNullable("payment_provider_id"))
 
-        /** Whether the payment attempt succeeded. */
+        /**
+         * Whether the payment attempt succeeded.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun succeeded(): Boolean = succeeded.getRequired("succeeded")
 
-        /** The ID of the payment attempt. */
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-        /** The amount of the payment attempt. */
+        /**
+         * Returns the raw JSON value of [amount].
+         *
+         * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<String> = amount
 
-        /** The time at which the payment attempt was created. */
+        /**
+         * Returns the raw JSON value of [createdAt].
+         *
+         * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("created_at")
         @ExcludeMissing
         fun _createdAt(): JsonField<OffsetDateTime> = createdAt
 
-        /** The payment provider that attempted to collect the payment. */
+        /**
+         * Returns the raw JSON value of [paymentProvider].
+         *
+         * Unlike [paymentProvider], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @JsonProperty("payment_provider")
         @ExcludeMissing
         fun _paymentProvider(): JsonField<PaymentProvider> = paymentProvider
 
-        /** The ID of the payment attempt in the payment provider. */
+        /**
+         * Returns the raw JSON value of [paymentProviderId].
+         *
+         * Unlike [paymentProviderId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @JsonProperty("payment_provider_id")
         @ExcludeMissing
         fun _paymentProviderId(): JsonField<String> = paymentProviderId
 
-        /** Whether the payment attempt succeeded. */
+        /**
+         * Returns the raw JSON value of [succeeded].
+         *
+         * Unlike [succeeded], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("succeeded") @ExcludeMissing fun _succeeded(): JsonField<Boolean> = succeeded
 
         @JsonAnyGetter
@@ -11246,19 +13159,37 @@ private constructor(
             /** The ID of the payment attempt. */
             fun id(id: String) = id(JsonField.of(id))
 
-            /** The ID of the payment attempt. */
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             /** The amount of the payment attempt. */
             fun amount(amount: String) = amount(JsonField.of(amount))
 
-            /** The amount of the payment attempt. */
+            /**
+             * Sets [Builder.amount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.amount] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun amount(amount: JsonField<String>) = apply { this.amount = amount }
 
             /** The time at which the payment attempt was created. */
             fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
 
-            /** The time at which the payment attempt was created. */
+            /**
+             * Sets [Builder.createdAt] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
                 this.createdAt = createdAt
             }
@@ -11267,11 +13198,17 @@ private constructor(
             fun paymentProvider(paymentProvider: PaymentProvider?) =
                 paymentProvider(JsonField.ofNullable(paymentProvider))
 
-            /** The payment provider that attempted to collect the payment. */
+            /** Alias for calling [Builder.paymentProvider] with `paymentProvider.orElse(null)`. */
             fun paymentProvider(paymentProvider: Optional<PaymentProvider>) =
                 paymentProvider(paymentProvider.getOrNull())
 
-            /** The payment provider that attempted to collect the payment. */
+            /**
+             * Sets [Builder.paymentProvider] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.paymentProvider] with a well-typed [PaymentProvider]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
             fun paymentProvider(paymentProvider: JsonField<PaymentProvider>) = apply {
                 this.paymentProvider = paymentProvider
             }
@@ -11280,11 +13217,19 @@ private constructor(
             fun paymentProviderId(paymentProviderId: String?) =
                 paymentProviderId(JsonField.ofNullable(paymentProviderId))
 
-            /** The ID of the payment attempt in the payment provider. */
+            /**
+             * Alias for calling [Builder.paymentProviderId] with `paymentProviderId.orElse(null)`.
+             */
             fun paymentProviderId(paymentProviderId: Optional<String>) =
                 paymentProviderId(paymentProviderId.getOrNull())
 
-            /** The ID of the payment attempt in the payment provider. */
+            /**
+             * Sets [Builder.paymentProviderId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.paymentProviderId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun paymentProviderId(paymentProviderId: JsonField<String>) = apply {
                 this.paymentProviderId = paymentProviderId
             }
@@ -11292,7 +13237,13 @@ private constructor(
             /** Whether the payment attempt succeeded. */
             fun succeeded(succeeded: Boolean) = succeeded(JsonField.of(succeeded))
 
-            /** Whether the payment attempt succeeded. */
+            /**
+             * Sets [Builder.succeeded] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.succeeded] with a well-typed [Boolean] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun succeeded(succeeded: JsonField<Boolean>) = apply { this.succeeded = succeeded }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -11468,31 +13419,85 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun city(): Optional<String> = Optional.ofNullable(city.getNullable("city"))
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun country(): Optional<String> = Optional.ofNullable(country.getNullable("country"))
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun line1(): Optional<String> = Optional.ofNullable(line1.getNullable("line1"))
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun line2(): Optional<String> = Optional.ofNullable(line2.getNullable("line2"))
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun postalCode(): Optional<String> =
             Optional.ofNullable(postalCode.getNullable("postal_code"))
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun state(): Optional<String> = Optional.ofNullable(state.getNullable("state"))
 
+        /**
+         * Returns the raw JSON value of [city].
+         *
+         * Unlike [city], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("city") @ExcludeMissing fun _city(): JsonField<String> = city
 
+        /**
+         * Returns the raw JSON value of [country].
+         *
+         * Unlike [country], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("country") @ExcludeMissing fun _country(): JsonField<String> = country
 
+        /**
+         * Returns the raw JSON value of [line1].
+         *
+         * Unlike [line1], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("line1") @ExcludeMissing fun _line1(): JsonField<String> = line1
 
+        /**
+         * Returns the raw JSON value of [line2].
+         *
+         * Unlike [line2], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("line2") @ExcludeMissing fun _line2(): JsonField<String> = line2
 
+        /**
+         * Returns the raw JSON value of [postalCode].
+         *
+         * Unlike [postalCode], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("postal_code")
         @ExcludeMissing
         fun _postalCode(): JsonField<String> = postalCode
 
+        /**
+         * Returns the raw JSON value of [state].
+         *
+         * Unlike [state], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("state") @ExcludeMissing fun _state(): JsonField<String> = state
 
         @JsonAnyGetter
@@ -11559,38 +13564,86 @@ private constructor(
 
             fun city(city: String?) = city(JsonField.ofNullable(city))
 
+            /** Alias for calling [Builder.city] with `city.orElse(null)`. */
             fun city(city: Optional<String>) = city(city.getOrNull())
 
+            /**
+             * Sets [Builder.city] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.city] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun city(city: JsonField<String>) = apply { this.city = city }
 
             fun country(country: String?) = country(JsonField.ofNullable(country))
 
+            /** Alias for calling [Builder.country] with `country.orElse(null)`. */
             fun country(country: Optional<String>) = country(country.getOrNull())
 
+            /**
+             * Sets [Builder.country] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.country] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun country(country: JsonField<String>) = apply { this.country = country }
 
             fun line1(line1: String?) = line1(JsonField.ofNullable(line1))
 
+            /** Alias for calling [Builder.line1] with `line1.orElse(null)`. */
             fun line1(line1: Optional<String>) = line1(line1.getOrNull())
 
+            /**
+             * Sets [Builder.line1] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.line1] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun line1(line1: JsonField<String>) = apply { this.line1 = line1 }
 
             fun line2(line2: String?) = line2(JsonField.ofNullable(line2))
 
+            /** Alias for calling [Builder.line2] with `line2.orElse(null)`. */
             fun line2(line2: Optional<String>) = line2(line2.getOrNull())
 
+            /**
+             * Sets [Builder.line2] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.line2] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun line2(line2: JsonField<String>) = apply { this.line2 = line2 }
 
             fun postalCode(postalCode: String?) = postalCode(JsonField.ofNullable(postalCode))
 
+            /** Alias for calling [Builder.postalCode] with `postalCode.orElse(null)`. */
             fun postalCode(postalCode: Optional<String>) = postalCode(postalCode.getOrNull())
 
+            /**
+             * Sets [Builder.postalCode] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.postalCode] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun postalCode(postalCode: JsonField<String>) = apply { this.postalCode = postalCode }
 
             fun state(state: String?) = state(JsonField.ofNullable(state))
 
+            /** Alias for calling [Builder.state] with `state.orElse(null)`. */
             fun state(state: Optional<String>) = state(state.getOrNull())
 
+            /**
+             * Sets [Builder.state] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.state] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun state(state: JsonField<String>) = apply { this.state = state }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -11766,8 +13819,17 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun id(): String = id.getRequired("id")
 
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
         @JsonAnyGetter
@@ -11814,6 +13876,13 @@ private constructor(
 
             fun id(id: String) = id(JsonField.of(id))
 
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {

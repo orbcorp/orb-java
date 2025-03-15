@@ -182,8 +182,17 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun data(): List<Data> = data.getRequired("data")
 
+        /**
+         * Returns the raw JSON value of [data].
+         *
+         * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<Data>> = data
 
         @JsonAnyGetter
@@ -232,10 +241,22 @@ private constructor(
 
             fun data(data: List<Data>) = data(JsonField.of(data))
 
+            /**
+             * Sets [Builder.data] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.data] with a well-typed `List<Data>` value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun data(data: JsonField<List<Data>>) = apply {
                 this.data = data.map { it.toMutableList() }
             }
 
+            /**
+             * Adds a single [Data] to [Builder.data].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
             fun addData(data: Data) = apply {
                 this.data =
                     (this.data ?: JsonField.of(mutableListOf())).also {
@@ -286,18 +307,50 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun billableMetric(): BillableMetric = billableMetric.getRequired("billable_metric")
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun usage(): List<Usage> = usage.getRequired("usage")
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun viewMode(): ViewMode = viewMode.getRequired("view_mode")
 
+            /**
+             * Returns the raw JSON value of [billableMetric].
+             *
+             * Unlike [billableMetric], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
             @JsonProperty("billable_metric")
             @ExcludeMissing
             fun _billableMetric(): JsonField<BillableMetric> = billableMetric
 
+            /**
+             * Returns the raw JSON value of [usage].
+             *
+             * Unlike [usage], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("usage") @ExcludeMissing fun _usage(): JsonField<List<Usage>> = usage
 
+            /**
+             * Returns the raw JSON value of [viewMode].
+             *
+             * Unlike [viewMode], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("view_mode")
             @ExcludeMissing
             fun _viewMode(): JsonField<ViewMode> = viewMode
@@ -355,16 +408,35 @@ private constructor(
                 fun billableMetric(billableMetric: BillableMetric) =
                     billableMetric(JsonField.of(billableMetric))
 
+                /**
+                 * Sets [Builder.billableMetric] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.billableMetric] with a well-typed
+                 * [BillableMetric] value instead. This method is primarily for setting the field to
+                 * an undocumented or not yet supported value.
+                 */
                 fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                     this.billableMetric = billableMetric
                 }
 
                 fun usage(usage: List<Usage>) = usage(JsonField.of(usage))
 
+                /**
+                 * Sets [Builder.usage] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.usage] with a well-typed `List<Usage>` value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun usage(usage: JsonField<List<Usage>>) = apply {
                     this.usage = usage.map { it.toMutableList() }
                 }
 
+                /**
+                 * Adds a single [Usage] to [Builder.usage].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
                 fun addUsage(usage: Usage) = apply {
                     this.usage =
                         (this.usage ?: JsonField.of(mutableListOf())).also {
@@ -374,6 +446,13 @@ private constructor(
 
                 fun viewMode(viewMode: ViewMode) = viewMode(JsonField.of(viewMode))
 
+                /**
+                 * Sets [Builder.viewMode] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.viewMode] with a well-typed [ViewMode] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun viewMode(viewMode: JsonField<ViewMode>) = apply { this.viewMode = viewMode }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -421,12 +500,33 @@ private constructor(
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun id(): String = id.getRequired("id")
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun name(): String = name.getRequired("name")
 
+                /**
+                 * Returns the raw JSON value of [id].
+                 *
+                 * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+                 */
                 @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+                /**
+                 * Returns the raw JSON value of [name].
+                 *
+                 * Unlike [name], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
                 @JsonAnyGetter
@@ -477,10 +577,24 @@ private constructor(
 
                     fun id(id: String) = id(JsonField.of(id))
 
+                    /**
+                     * Sets [Builder.id] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.id] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun id(id: JsonField<String>) = apply { this.id = id }
 
                     fun name(name: String) = name(JsonField.of(name))
 
+                    /**
+                     * Sets [Builder.name] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.name] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun name(name: JsonField<String>) = apply { this.name = name }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -548,20 +662,53 @@ private constructor(
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun quantity(): Double = quantity.getRequired("quantity")
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun timeframeEnd(): OffsetDateTime = timeframeEnd.getRequired("timeframe_end")
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun timeframeStart(): OffsetDateTime = timeframeStart.getRequired("timeframe_start")
 
+                /**
+                 * Returns the raw JSON value of [quantity].
+                 *
+                 * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("quantity")
                 @ExcludeMissing
                 fun _quantity(): JsonField<Double> = quantity
 
+                /**
+                 * Returns the raw JSON value of [timeframeEnd].
+                 *
+                 * Unlike [timeframeEnd], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
                 @JsonProperty("timeframe_end")
                 @ExcludeMissing
                 fun _timeframeEnd(): JsonField<OffsetDateTime> = timeframeEnd
 
+                /**
+                 * Returns the raw JSON value of [timeframeStart].
+                 *
+                 * Unlike [timeframeStart], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
                 @JsonProperty("timeframe_start")
                 @ExcludeMissing
                 fun _timeframeStart(): JsonField<OffsetDateTime> = timeframeStart
@@ -618,11 +765,25 @@ private constructor(
 
                     fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
+                    /**
+                     * Sets [Builder.quantity] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.quantity] with a well-typed [Double] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
                     fun timeframeEnd(timeframeEnd: OffsetDateTime) =
                         timeframeEnd(JsonField.of(timeframeEnd))
 
+                    /**
+                     * Sets [Builder.timeframeEnd] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.timeframeEnd] with a well-typed
+                     * [OffsetDateTime] value instead. This method is primarily for setting the
+                     * field to an undocumented or not yet supported value.
+                     */
                     fun timeframeEnd(timeframeEnd: JsonField<OffsetDateTime>) = apply {
                         this.timeframeEnd = timeframeEnd
                     }
@@ -630,6 +791,13 @@ private constructor(
                     fun timeframeStart(timeframeStart: OffsetDateTime) =
                         timeframeStart(JsonField.of(timeframeStart))
 
+                    /**
+                     * Sets [Builder.timeframeStart] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.timeframeStart] with a well-typed
+                     * [OffsetDateTime] value instead. This method is primarily for setting the
+                     * field to an undocumented or not yet supported value.
+                     */
                     fun timeframeStart(timeframeStart: JsonField<OffsetDateTime>) = apply {
                         this.timeframeStart = timeframeStart
                     }
@@ -837,13 +1005,32 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun data(): List<Data> = data.getRequired("data")
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun paginationMetadata(): Optional<PaginationMetadata> =
             Optional.ofNullable(paginationMetadata.getNullable("pagination_metadata"))
 
+        /**
+         * Returns the raw JSON value of [data].
+         *
+         * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<Data>> = data
 
+        /**
+         * Returns the raw JSON value of [paginationMetadata].
+         *
+         * Unlike [paginationMetadata], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
         @JsonProperty("pagination_metadata")
         @ExcludeMissing
         fun _paginationMetadata(): JsonField<PaginationMetadata> = paginationMetadata
@@ -895,10 +1082,22 @@ private constructor(
 
             fun data(data: List<Data>) = data(JsonField.of(data))
 
+            /**
+             * Sets [Builder.data] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.data] with a well-typed `List<Data>` value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun data(data: JsonField<List<Data>>) = apply {
                 this.data = data.map { it.toMutableList() }
             }
 
+            /**
+             * Adds a single [Data] to [Builder.data].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
             fun addData(data: Data) = apply {
                 this.data =
                     (this.data ?: JsonField.of(mutableListOf())).also {
@@ -909,9 +1108,20 @@ private constructor(
             fun paginationMetadata(paginationMetadata: PaginationMetadata?) =
                 paginationMetadata(JsonField.ofNullable(paginationMetadata))
 
+            /**
+             * Alias for calling [Builder.paginationMetadata] with
+             * `paginationMetadata.orElse(null)`.
+             */
             fun paginationMetadata(paginationMetadata: Optional<PaginationMetadata>) =
                 paginationMetadata(paginationMetadata.getOrNull())
 
+            /**
+             * Sets [Builder.paginationMetadata] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.paginationMetadata] with a well-typed
+             * [PaginationMetadata] value instead. This method is primarily for setting the field to
+             * an undocumented or not yet supported value.
+             */
             fun paginationMetadata(paginationMetadata: JsonField<PaginationMetadata>) = apply {
                 this.paginationMetadata = paginationMetadata
             }
@@ -963,24 +1173,67 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun billableMetric(): BillableMetric = billableMetric.getRequired("billable_metric")
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun metricGroup(): MetricGroup = metricGroup.getRequired("metric_group")
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun usage(): List<Usage> = usage.getRequired("usage")
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun viewMode(): ViewMode = viewMode.getRequired("view_mode")
 
+            /**
+             * Returns the raw JSON value of [billableMetric].
+             *
+             * Unlike [billableMetric], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
             @JsonProperty("billable_metric")
             @ExcludeMissing
             fun _billableMetric(): JsonField<BillableMetric> = billableMetric
 
+            /**
+             * Returns the raw JSON value of [metricGroup].
+             *
+             * Unlike [metricGroup], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("metric_group")
             @ExcludeMissing
             fun _metricGroup(): JsonField<MetricGroup> = metricGroup
 
+            /**
+             * Returns the raw JSON value of [usage].
+             *
+             * Unlike [usage], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("usage") @ExcludeMissing fun _usage(): JsonField<List<Usage>> = usage
 
+            /**
+             * Returns the raw JSON value of [viewMode].
+             *
+             * Unlike [viewMode], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("view_mode")
             @ExcludeMissing
             fun _viewMode(): JsonField<ViewMode> = viewMode
@@ -1042,22 +1295,48 @@ private constructor(
                 fun billableMetric(billableMetric: BillableMetric) =
                     billableMetric(JsonField.of(billableMetric))
 
+                /**
+                 * Sets [Builder.billableMetric] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.billableMetric] with a well-typed
+                 * [BillableMetric] value instead. This method is primarily for setting the field to
+                 * an undocumented or not yet supported value.
+                 */
                 fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                     this.billableMetric = billableMetric
                 }
 
                 fun metricGroup(metricGroup: MetricGroup) = metricGroup(JsonField.of(metricGroup))
 
+                /**
+                 * Sets [Builder.metricGroup] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.metricGroup] with a well-typed [MetricGroup]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun metricGroup(metricGroup: JsonField<MetricGroup>) = apply {
                     this.metricGroup = metricGroup
                 }
 
                 fun usage(usage: List<Usage>) = usage(JsonField.of(usage))
 
+                /**
+                 * Sets [Builder.usage] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.usage] with a well-typed `List<Usage>` value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun usage(usage: JsonField<List<Usage>>) = apply {
                     this.usage = usage.map { it.toMutableList() }
                 }
 
+                /**
+                 * Adds a single [Usage] to [Builder.usage].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
                 fun addUsage(usage: Usage) = apply {
                     this.usage =
                         (this.usage ?: JsonField.of(mutableListOf())).also {
@@ -1067,6 +1346,13 @@ private constructor(
 
                 fun viewMode(viewMode: ViewMode) = viewMode(JsonField.of(viewMode))
 
+                /**
+                 * Sets [Builder.viewMode] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.viewMode] with a well-typed [ViewMode] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun viewMode(viewMode: JsonField<ViewMode>) = apply { this.viewMode = viewMode }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -1115,12 +1401,33 @@ private constructor(
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun id(): String = id.getRequired("id")
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun name(): String = name.getRequired("name")
 
+                /**
+                 * Returns the raw JSON value of [id].
+                 *
+                 * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+                 */
                 @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+                /**
+                 * Returns the raw JSON value of [name].
+                 *
+                 * Unlike [name], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
                 @JsonAnyGetter
@@ -1171,10 +1478,24 @@ private constructor(
 
                     fun id(id: String) = id(JsonField.of(id))
 
+                    /**
+                     * Sets [Builder.id] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.id] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun id(id: JsonField<String>) = apply { this.id = id }
 
                     fun name(name: String) = name(JsonField.of(name))
 
+                    /**
+                     * Sets [Builder.name] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.name] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun name(name: JsonField<String>) = apply { this.name = name }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -1239,14 +1560,36 @@ private constructor(
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun propertyKey(): String = propertyKey.getRequired("property_key")
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun propertyValue(): String = propertyValue.getRequired("property_value")
 
+                /**
+                 * Returns the raw JSON value of [propertyKey].
+                 *
+                 * Unlike [propertyKey], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
                 @JsonProperty("property_key")
                 @ExcludeMissing
                 fun _propertyKey(): JsonField<String> = propertyKey
 
+                /**
+                 * Returns the raw JSON value of [propertyValue].
+                 *
+                 * Unlike [propertyValue], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
                 @JsonProperty("property_value")
                 @ExcludeMissing
                 fun _propertyValue(): JsonField<String> = propertyValue
@@ -1299,6 +1642,13 @@ private constructor(
 
                     fun propertyKey(propertyKey: String) = propertyKey(JsonField.of(propertyKey))
 
+                    /**
+                     * Sets [Builder.propertyKey] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.propertyKey] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
                     fun propertyKey(propertyKey: JsonField<String>) = apply {
                         this.propertyKey = propertyKey
                     }
@@ -1306,6 +1656,13 @@ private constructor(
                     fun propertyValue(propertyValue: String) =
                         propertyValue(JsonField.of(propertyValue))
 
+                    /**
+                     * Sets [Builder.propertyValue] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.propertyValue] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
                     fun propertyValue(propertyValue: JsonField<String>) = apply {
                         this.propertyValue = propertyValue
                     }
@@ -1375,20 +1732,53 @@ private constructor(
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun quantity(): Double = quantity.getRequired("quantity")
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun timeframeEnd(): OffsetDateTime = timeframeEnd.getRequired("timeframe_end")
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun timeframeStart(): OffsetDateTime = timeframeStart.getRequired("timeframe_start")
 
+                /**
+                 * Returns the raw JSON value of [quantity].
+                 *
+                 * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("quantity")
                 @ExcludeMissing
                 fun _quantity(): JsonField<Double> = quantity
 
+                /**
+                 * Returns the raw JSON value of [timeframeEnd].
+                 *
+                 * Unlike [timeframeEnd], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
                 @JsonProperty("timeframe_end")
                 @ExcludeMissing
                 fun _timeframeEnd(): JsonField<OffsetDateTime> = timeframeEnd
 
+                /**
+                 * Returns the raw JSON value of [timeframeStart].
+                 *
+                 * Unlike [timeframeStart], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
                 @JsonProperty("timeframe_start")
                 @ExcludeMissing
                 fun _timeframeStart(): JsonField<OffsetDateTime> = timeframeStart
@@ -1445,11 +1835,25 @@ private constructor(
 
                     fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
+                    /**
+                     * Sets [Builder.quantity] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.quantity] with a well-typed [Double] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
                     fun timeframeEnd(timeframeEnd: OffsetDateTime) =
                         timeframeEnd(JsonField.of(timeframeEnd))
 
+                    /**
+                     * Sets [Builder.timeframeEnd] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.timeframeEnd] with a well-typed
+                     * [OffsetDateTime] value instead. This method is primarily for setting the
+                     * field to an undocumented or not yet supported value.
+                     */
                     fun timeframeEnd(timeframeEnd: JsonField<OffsetDateTime>) = apply {
                         this.timeframeEnd = timeframeEnd
                     }
@@ -1457,6 +1861,13 @@ private constructor(
                     fun timeframeStart(timeframeStart: OffsetDateTime) =
                         timeframeStart(JsonField.of(timeframeStart))
 
+                    /**
+                     * Sets [Builder.timeframeStart] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.timeframeStart] with a well-typed
+                     * [OffsetDateTime] value instead. This method is primarily for setting the
+                     * field to an undocumented or not yet supported value.
+                     */
                     fun timeframeStart(timeframeStart: JsonField<OffsetDateTime>) = apply {
                         this.timeframeStart = timeframeStart
                     }
