@@ -1033,6 +1033,19 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [AddIncrementCreditLedgerEntryRequestParams].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .amount()
+                 * .entryType()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): AddIncrementCreditLedgerEntryRequestParams =
                     AddIncrementCreditLedgerEntryRequestParams(
                         checkRequired("amount", amount),
@@ -1392,6 +1405,19 @@ private constructor(
                         keys.forEach(::removeAdditionalProperty)
                     }
 
+                    /**
+                     * Returns an immutable instance of [InvoiceSettings].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .autoCollection()
+                     * .netTerms()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
                     fun build(): InvoiceSettings =
                         InvoiceSettings(
                             checkRequired("autoCollection", autoCollection),
@@ -1487,6 +1513,11 @@ private constructor(
                         keys.forEach(::removeAdditionalProperty)
                     }
 
+                    /**
+                     * Returns an immutable instance of [Metadata].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
                     fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                 }
 
@@ -1812,6 +1843,19 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [AddDecrementCreditLedgerEntryRequestParams].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .amount()
+                 * .entryType()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): AddDecrementCreditLedgerEntryRequestParams =
                     AddDecrementCreditLedgerEntryRequestParams(
                         checkRequired("amount", amount),
@@ -1988,6 +2032,11 @@ private constructor(
                         keys.forEach(::removeAdditionalProperty)
                     }
 
+                    /**
+                     * Returns an immutable instance of [Metadata].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
                     fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                 }
 
@@ -2455,6 +2504,21 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of
+                 * [AddExpirationChangeCreditLedgerEntryRequestParams].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .entryType()
+                 * .expiryDate()
+                 * .targetExpiryDate()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): AddExpirationChangeCreditLedgerEntryRequestParams =
                     AddExpirationChangeCreditLedgerEntryRequestParams(
                         checkRequired("entryType", entryType),
@@ -2634,6 +2698,11 @@ private constructor(
                         keys.forEach(::removeAdditionalProperty)
                     }
 
+                    /**
+                     * Returns an immutable instance of [Metadata].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
                     fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                 }
 
@@ -3036,6 +3105,20 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [AddVoidCreditLedgerEntryRequestParams].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .amount()
+                 * .blockId()
+                 * .entryType()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): AddVoidCreditLedgerEntryRequestParams =
                     AddVoidCreditLedgerEntryRequestParams(
                         checkRequired("amount", amount),
@@ -3214,6 +3297,11 @@ private constructor(
                         keys.forEach(::removeAdditionalProperty)
                     }
 
+                    /**
+                     * Returns an immutable instance of [Metadata].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
                     fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                 }
 
@@ -3674,6 +3762,20 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [AddAmendmentCreditLedgerEntryRequestParams].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .amount()
+                 * .blockId()
+                 * .entryType()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): AddAmendmentCreditLedgerEntryRequestParams =
                     AddAmendmentCreditLedgerEntryRequestParams(
                         checkRequired("amount", amount),
@@ -3851,6 +3953,11 @@ private constructor(
                         keys.forEach(::removeAdditionalProperty)
                     }
 
+                    /**
+                     * Returns an immutable instance of [Metadata].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
                     fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                 }
 
@@ -4140,6 +4247,19 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [CustomerCreditLedgerCreateEntryParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .customerId()
+         * .body()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): CustomerCreditLedgerCreateEntryParams =
             CustomerCreditLedgerCreateEntryParams(
                 checkRequired("customerId", customerId),

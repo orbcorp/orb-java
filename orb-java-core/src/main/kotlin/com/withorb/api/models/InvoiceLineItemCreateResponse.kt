@@ -1228,6 +1228,39 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [InvoiceLineItemCreateResponse].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * .adjustedSubtotal()
+         * .adjustments()
+         * .amount()
+         * .creditsApplied()
+         * .discount()
+         * .endDate()
+         * .filter()
+         * .grouping()
+         * .maximum()
+         * .maximumAmount()
+         * .minimum()
+         * .minimumAmount()
+         * .name()
+         * .partiallyInvoicedAmount()
+         * .price()
+         * .quantity()
+         * .startDate()
+         * .subLineItems()
+         * .subtotal()
+         * .taxAmounts()
+         * .usageCustomerIds()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): InvoiceLineItemCreateResponse =
             InvoiceLineItemCreateResponse(
                 checkRequired("id", id),
@@ -1885,6 +1918,24 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [MonetaryUsageDiscountAdjustment].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .adjustmentType()
+                 * .amount()
+                 * .appliesToPriceIds()
+                 * .isInvoiceLevel()
+                 * .reason()
+                 * .usageDiscount()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): MonetaryUsageDiscountAdjustment =
                     MonetaryUsageDiscountAdjustment(
                         checkRequired("id", id),
@@ -2380,6 +2431,24 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [MonetaryAmountDiscountAdjustment].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .adjustmentType()
+                 * .amount()
+                 * .amountDiscount()
+                 * .appliesToPriceIds()
+                 * .isInvoiceLevel()
+                 * .reason()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): MonetaryAmountDiscountAdjustment =
                     MonetaryAmountDiscountAdjustment(
                         checkRequired("id", id),
@@ -2875,6 +2944,24 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [MonetaryPercentageDiscountAdjustment].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .adjustmentType()
+                 * .amount()
+                 * .appliesToPriceIds()
+                 * .isInvoiceLevel()
+                 * .percentageDiscount()
+                 * .reason()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): MonetaryPercentageDiscountAdjustment =
                     MonetaryPercentageDiscountAdjustment(
                         checkRequired("id", id),
@@ -3401,6 +3488,25 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [MonetaryMinimumAdjustment].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .adjustmentType()
+                 * .amount()
+                 * .appliesToPriceIds()
+                 * .isInvoiceLevel()
+                 * .itemId()
+                 * .minimumAmount()
+                 * .reason()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): MonetaryMinimumAdjustment =
                     MonetaryMinimumAdjustment(
                         checkRequired("id", id),
@@ -3893,6 +3999,24 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [MonetaryMaximumAdjustment].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .adjustmentType()
+                 * .amount()
+                 * .appliesToPriceIds()
+                 * .isInvoiceLevel()
+                 * .maximumAmount()
+                 * .reason()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): MonetaryMaximumAdjustment =
                     MonetaryMaximumAdjustment(
                         checkRequired("id", id),
@@ -4191,6 +4315,19 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [Maximum].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .appliesToPriceIds()
+             * .maximumAmount()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): Maximum =
                 Maximum(
                     checkRequired("appliesToPriceIds", appliesToPriceIds).map { it.toImmutable() },
@@ -4380,6 +4517,19 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [Minimum].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .appliesToPriceIds()
+             * .minimumAmount()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): Minimum =
                 Minimum(
                     checkRequired("appliesToPriceIds", appliesToPriceIds).map { it.toImmutable() },
@@ -4849,6 +4999,23 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [MatrixSubLineItem].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .amount()
+                 * .grouping()
+                 * .matrixConfig()
+                 * .name()
+                 * .quantity()
+                 * .type()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): MatrixSubLineItem =
                     MatrixSubLineItem(
                         checkRequired("amount", amount),
@@ -4999,6 +5166,19 @@ private constructor(
                         keys.forEach(::removeAdditionalProperty)
                     }
 
+                    /**
+                     * Returns an immutable instance of [Grouping].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .key()
+                     * .value()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
                     fun build(): Grouping =
                         Grouping(
                             checkRequired("key", key),
@@ -5147,6 +5327,18 @@ private constructor(
                         keys.forEach(::removeAdditionalProperty)
                     }
 
+                    /**
+                     * Returns an immutable instance of [MatrixConfig].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .dimensionValues()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
                     fun build(): MatrixConfig =
                         MatrixConfig(
                             checkRequired("dimensionValues", dimensionValues).map {
@@ -5564,6 +5756,23 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [TierSubLineItem].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .amount()
+                 * .grouping()
+                 * .name()
+                 * .quantity()
+                 * .tierConfig()
+                 * .type()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): TierSubLineItem =
                     TierSubLineItem(
                         checkRequired("amount", amount),
@@ -5714,6 +5923,19 @@ private constructor(
                         keys.forEach(::removeAdditionalProperty)
                     }
 
+                    /**
+                     * Returns an immutable instance of [Grouping].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .key()
+                     * .value()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
                     fun build(): Grouping =
                         Grouping(
                             checkRequired("key", key),
@@ -5927,6 +6149,20 @@ private constructor(
                         keys.forEach(::removeAdditionalProperty)
                     }
 
+                    /**
+                     * Returns an immutable instance of [TierConfig].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .firstUnit()
+                     * .lastUnit()
+                     * .unitAmount()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
                     fun build(): TierConfig =
                         TierConfig(
                             checkRequired("firstUnit", firstUnit),
@@ -6307,6 +6543,22 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [OtherSubLineItem].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .amount()
+                 * .grouping()
+                 * .name()
+                 * .quantity()
+                 * .type()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): OtherSubLineItem =
                     OtherSubLineItem(
                         checkRequired("amount", amount),
@@ -6456,6 +6708,19 @@ private constructor(
                         keys.forEach(::removeAdditionalProperty)
                     }
 
+                    /**
+                     * Returns an immutable instance of [Grouping].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .key()
+                     * .value()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
                     fun build(): Grouping =
                         Grouping(
                             checkRequired("key", key),
@@ -6784,6 +7049,20 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [TaxAmount].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .amount()
+             * .taxRateDescription()
+             * .taxRatePercentage()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): TaxAmount =
                 TaxAmount(
                     checkRequired("amount", amount),

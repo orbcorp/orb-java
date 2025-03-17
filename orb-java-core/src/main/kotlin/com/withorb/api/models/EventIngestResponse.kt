@@ -178,6 +178,18 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [EventIngestResponse].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .validationFailed()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): EventIngestResponse =
             EventIngestResponse(
                 checkRequired("validationFailed", validationFailed).map { it.toImmutable() },
@@ -345,6 +357,19 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [ValidationFailed].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .idempotencyKey()
+             * .validationErrors()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): ValidationFailed =
                 ValidationFailed(
                     checkRequired("idempotencyKey", idempotencyKey),
@@ -534,6 +559,19 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [Debug].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .duplicate()
+             * .ingested()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): Debug =
                 Debug(
                     checkRequired("duplicate", duplicate).map { it.toImmutable() },

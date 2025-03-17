@@ -352,6 +352,24 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [CustomerCreditListByExternalIdResponse].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * .balance()
+         * .effectiveDate()
+         * .expiryDate()
+         * .maximumInitialBalance()
+         * .perUnitCostBasis()
+         * .status()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): CustomerCreditListByExternalIdResponse =
             CustomerCreditListByExternalIdResponse(
                 checkRequired("id", id),
