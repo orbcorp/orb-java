@@ -514,6 +514,27 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [EventBackfillFetchResponse].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * .closeTime()
+         * .createdAt()
+         * .customerId()
+         * .eventsIngested()
+         * .replaceExistingEvents()
+         * .revertedAt()
+         * .status()
+         * .timeframeEnd()
+         * .timeframeStart()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): EventBackfillFetchResponse =
             EventBackfillFetchResponse(
                 checkRequired("id", id),
