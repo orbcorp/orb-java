@@ -1231,6 +1231,41 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [Plan].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * .adjustments()
+         * .basePlan()
+         * .basePlanId()
+         * .createdAt()
+         * .currency()
+         * .defaultInvoiceMemo()
+         * .description()
+         * .discount()
+         * .externalPlanId()
+         * .invoicingCurrency()
+         * .maximum()
+         * .maximumAmount()
+         * .metadata()
+         * .minimum()
+         * .minimumAmount()
+         * .name()
+         * .netTerms()
+         * .planPhases()
+         * .prices()
+         * .product()
+         * .status()
+         * .trialConfig()
+         * .version()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): Plan =
             Plan(
                 checkRequired("id", id),
@@ -1916,6 +1951,24 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [PlanPhaseUsageDiscountAdjustment].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .adjustmentType()
+                 * .appliesToPriceIds()
+                 * .isInvoiceLevel()
+                 * .planPhaseOrder()
+                 * .reason()
+                 * .usageDiscount()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): PlanPhaseUsageDiscountAdjustment =
                     PlanPhaseUsageDiscountAdjustment(
                         checkRequired("id", id),
@@ -2430,6 +2483,24 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [PlanPhaseAmountDiscountAdjustment].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .adjustmentType()
+                 * .amountDiscount()
+                 * .appliesToPriceIds()
+                 * .isInvoiceLevel()
+                 * .planPhaseOrder()
+                 * .reason()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): PlanPhaseAmountDiscountAdjustment =
                     PlanPhaseAmountDiscountAdjustment(
                         checkRequired("id", id),
@@ -2944,6 +3015,24 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [PlanPhasePercentageDiscountAdjustment].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .adjustmentType()
+                 * .appliesToPriceIds()
+                 * .isInvoiceLevel()
+                 * .percentageDiscount()
+                 * .planPhaseOrder()
+                 * .reason()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): PlanPhasePercentageDiscountAdjustment =
                     PlanPhasePercentageDiscountAdjustment(
                         checkRequired("id", id),
@@ -3489,6 +3578,25 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [PlanPhaseMinimumAdjustment].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .adjustmentType()
+                 * .appliesToPriceIds()
+                 * .isInvoiceLevel()
+                 * .itemId()
+                 * .minimumAmount()
+                 * .planPhaseOrder()
+                 * .reason()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): PlanPhaseMinimumAdjustment =
                     PlanPhaseMinimumAdjustment(
                         checkRequired("id", id),
@@ -4000,6 +4108,24 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [PlanPhaseMaximumAdjustment].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .adjustmentType()
+                 * .appliesToPriceIds()
+                 * .isInvoiceLevel()
+                 * .maximumAmount()
+                 * .planPhaseOrder()
+                 * .reason()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): PlanPhaseMaximumAdjustment =
                     PlanPhaseMaximumAdjustment(
                         checkRequired("id", id),
@@ -4317,6 +4443,20 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [BasePlan].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .externalPlanId()
+             * .name()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): BasePlan =
                 BasePlan(
                     checkRequired("id", id),
@@ -4505,6 +4645,19 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [Maximum].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .appliesToPriceIds()
+             * .maximumAmount()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): Maximum =
                 Maximum(
                     checkRequired("appliesToPriceIds", appliesToPriceIds).map { it.toImmutable() },
@@ -4595,6 +4748,11 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [Metadata].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
             fun build(): Metadata = Metadata(additionalProperties.toImmutable())
         }
 
@@ -4776,6 +4934,19 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [Minimum].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .appliesToPriceIds()
+             * .minimumAmount()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): Minimum =
                 Minimum(
                     checkRequired("appliesToPriceIds", appliesToPriceIds).map { it.toImmutable() },
@@ -5306,6 +5477,28 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [PlanPhase].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .description()
+             * .discount()
+             * .duration()
+             * .durationUnit()
+             * .maximum()
+             * .maximumAmount()
+             * .minimum()
+             * .minimumAmount()
+             * .name()
+             * .order()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): PlanPhase =
                 PlanPhase(
                     checkRequired("id", id),
@@ -5610,6 +5803,19 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [Maximum].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .appliesToPriceIds()
+                 * .maximumAmount()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): Maximum =
                     Maximum(
                         checkRequired("appliesToPriceIds", appliesToPriceIds).map {
@@ -5805,6 +6011,19 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [Minimum].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .appliesToPriceIds()
+                 * .minimumAmount()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): Minimum =
                     Minimum(
                         checkRequired("appliesToPriceIds", appliesToPriceIds).map {
@@ -6011,6 +6230,20 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [Product].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .createdAt()
+             * .name()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): Product =
                 Product(
                     checkRequired("id", id),
@@ -6287,6 +6520,19 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [TrialConfig].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .trialPeriod()
+             * .trialPeriodUnit()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): TrialConfig =
                 TrialConfig(
                     checkRequired("trialPeriod", trialPeriod),

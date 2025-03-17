@@ -1277,6 +1277,42 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [Subscription].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * .activePlanPhaseOrder()
+         * .adjustmentIntervals()
+         * .autoCollection()
+         * .billingCycleAnchorConfiguration()
+         * .billingCycleDay()
+         * .createdAt()
+         * .currentBillingPeriodEndDate()
+         * .currentBillingPeriodStartDate()
+         * .customer()
+         * .defaultInvoiceMemo()
+         * .discountIntervals()
+         * .endDate()
+         * .fixedFeeQuantitySchedule()
+         * .invoicingThreshold()
+         * .maximumIntervals()
+         * .metadata()
+         * .minimumIntervals()
+         * .netTerms()
+         * .plan()
+         * .priceIntervals()
+         * .redeemedCoupon()
+         * .startDate()
+         * .status()
+         * .trialInfo()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): Subscription =
             Subscription(
                 checkRequired("id", id),
@@ -1609,6 +1645,22 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [AdjustmentInterval].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .adjustment()
+             * .appliesToPriceIntervalIds()
+             * .endDate()
+             * .startDate()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): AdjustmentInterval =
                 AdjustmentInterval(
                     checkRequired("id", id),
@@ -2293,6 +2345,24 @@ private constructor(
                         keys.forEach(::removeAdditionalProperty)
                     }
 
+                    /**
+                     * Returns an immutable instance of [PlanPhaseUsageDiscountAdjustment].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .id()
+                     * .adjustmentType()
+                     * .appliesToPriceIds()
+                     * .isInvoiceLevel()
+                     * .planPhaseOrder()
+                     * .reason()
+                     * .usageDiscount()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
                     fun build(): PlanPhaseUsageDiscountAdjustment =
                         PlanPhaseUsageDiscountAdjustment(
                             checkRequired("id", id),
@@ -2811,6 +2881,24 @@ private constructor(
                         keys.forEach(::removeAdditionalProperty)
                     }
 
+                    /**
+                     * Returns an immutable instance of [PlanPhaseAmountDiscountAdjustment].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .id()
+                     * .adjustmentType()
+                     * .amountDiscount()
+                     * .appliesToPriceIds()
+                     * .isInvoiceLevel()
+                     * .planPhaseOrder()
+                     * .reason()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
                     fun build(): PlanPhaseAmountDiscountAdjustment =
                         PlanPhaseAmountDiscountAdjustment(
                             checkRequired("id", id),
@@ -3332,6 +3420,24 @@ private constructor(
                         keys.forEach(::removeAdditionalProperty)
                     }
 
+                    /**
+                     * Returns an immutable instance of [PlanPhasePercentageDiscountAdjustment].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .id()
+                     * .adjustmentType()
+                     * .appliesToPriceIds()
+                     * .isInvoiceLevel()
+                     * .percentageDiscount()
+                     * .planPhaseOrder()
+                     * .reason()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
                     fun build(): PlanPhasePercentageDiscountAdjustment =
                         PlanPhasePercentageDiscountAdjustment(
                             checkRequired("id", id),
@@ -3885,6 +3991,25 @@ private constructor(
                         keys.forEach(::removeAdditionalProperty)
                     }
 
+                    /**
+                     * Returns an immutable instance of [PlanPhaseMinimumAdjustment].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .id()
+                     * .adjustmentType()
+                     * .appliesToPriceIds()
+                     * .isInvoiceLevel()
+                     * .itemId()
+                     * .minimumAmount()
+                     * .planPhaseOrder()
+                     * .reason()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
                     fun build(): PlanPhaseMinimumAdjustment =
                         PlanPhaseMinimumAdjustment(
                             checkRequired("id", id),
@@ -4403,6 +4528,24 @@ private constructor(
                         keys.forEach(::removeAdditionalProperty)
                     }
 
+                    /**
+                     * Returns an immutable instance of [PlanPhaseMaximumAdjustment].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .id()
+                     * .adjustmentType()
+                     * .appliesToPriceIds()
+                     * .isInvoiceLevel()
+                     * .maximumAmount()
+                     * .planPhaseOrder()
+                     * .reason()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
                     fun build(): PlanPhaseMaximumAdjustment =
                         PlanPhaseMaximumAdjustment(
                             checkRequired("id", id),
@@ -4757,6 +4900,18 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [BillingCycleAnchorConfiguration].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .day()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): BillingCycleAnchorConfiguration =
                 BillingCycleAnchorConfiguration(
                     checkRequired("day", day),
@@ -5303,6 +5458,23 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [AmountDiscountInterval].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .amountDiscount()
+                 * .appliesToPriceIds()
+                 * .appliesToPriceIntervalIds()
+                 * .discountType()
+                 * .endDate()
+                 * .startDate()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): AmountDiscountInterval =
                     AmountDiscountInterval(
                         checkRequired("amountDiscount", amountDiscount),
@@ -5783,6 +5955,23 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [PercentageDiscountInterval].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .appliesToPriceIds()
+                 * .appliesToPriceIntervalIds()
+                 * .discountType()
+                 * .endDate()
+                 * .percentageDiscount()
+                 * .startDate()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): PercentageDiscountInterval =
                     PercentageDiscountInterval(
                         checkRequired("appliesToPriceIds", appliesToPriceIds).map {
@@ -6262,6 +6451,23 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [UsageDiscountInterval].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .appliesToPriceIds()
+                 * .appliesToPriceIntervalIds()
+                 * .discountType()
+                 * .endDate()
+                 * .startDate()
+                 * .usageDiscount()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): UsageDiscountInterval =
                     UsageDiscountInterval(
                         checkRequired("appliesToPriceIds", appliesToPriceIds).map {
@@ -6596,6 +6802,21 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [FixedFeeQuantitySchedule].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .endDate()
+             * .priceId()
+             * .quantity()
+             * .startDate()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): FixedFeeQuantitySchedule =
                 FixedFeeQuantitySchedule(
                     checkRequired("endDate", endDate),
@@ -6919,6 +7140,22 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [MaximumInterval].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .appliesToPriceIds()
+             * .appliesToPriceIntervalIds()
+             * .endDate()
+             * .maximumAmount()
+             * .startDate()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): MaximumInterval =
                 MaximumInterval(
                     checkRequired("appliesToPriceIds", appliesToPriceIds).map { it.toImmutable() },
@@ -7014,6 +7251,11 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [Metadata].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
             fun build(): Metadata = Metadata(additionalProperties.toImmutable())
         }
 
@@ -7329,6 +7571,22 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [MinimumInterval].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .appliesToPriceIds()
+             * .appliesToPriceIntervalIds()
+             * .endDate()
+             * .minimumAmount()
+             * .startDate()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): MinimumInterval =
                 MinimumInterval(
                     checkRequired("appliesToPriceIds", appliesToPriceIds).map { it.toImmutable() },
@@ -8070,6 +8328,27 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [PriceInterval].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .billingCycleDay()
+             * .currentBillingPeriodEndDate()
+             * .currentBillingPeriodStartDate()
+             * .endDate()
+             * .filter()
+             * .fixedFeeQuantityTransitions()
+             * .price()
+             * .startDate()
+             * .usageCustomerIds()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): PriceInterval =
                 PriceInterval(
                     checkRequired("id", id),
@@ -8261,6 +8540,20 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [FixedFeeQuantityTransition].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .effectiveDate()
+                 * .priceId()
+                 * .quantity()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): FixedFeeQuantityTransition =
                     FixedFeeQuantityTransition(
                         checkRequired("effectiveDate", effectiveDate),
@@ -8474,6 +8767,20 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [RedeemedCoupon].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .couponId()
+             * .endDate()
+             * .startDate()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): RedeemedCoupon =
                 RedeemedCoupon(
                     checkRequired("couponId", couponId),
@@ -8706,6 +9013,18 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [TrialInfo].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .endDate()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): TrialInfo =
                 TrialInfo(checkRequired("endDate", endDate), additionalProperties.toImmutable())
         }

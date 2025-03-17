@@ -219,6 +219,20 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [EvaluatePriceGroup].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .amount()
+         * .groupingValues()
+         * .quantity()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): EvaluatePriceGroup =
             EvaluatePriceGroup(
                 checkRequired("amount", amount),

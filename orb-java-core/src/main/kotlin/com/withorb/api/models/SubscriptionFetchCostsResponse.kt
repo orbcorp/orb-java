@@ -131,6 +131,18 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [SubscriptionFetchCostsResponse].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .data()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): SubscriptionFetchCostsResponse =
             SubscriptionFetchCostsResponse(
                 checkRequired("data", data).map { it.toImmutable() },
@@ -394,6 +406,22 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [Data].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .perPriceCosts()
+             * .subtotal()
+             * .timeframeEnd()
+             * .timeframeStart()
+             * .total()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): Data =
                 Data(
                     checkRequired("perPriceCosts", perPriceCosts).map { it.toImmutable() },
@@ -813,6 +841,21 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [PerPriceCost].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .price()
+                 * .priceId()
+                 * .subtotal()
+                 * .total()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): PerPriceCost =
                     PerPriceCost(
                         checkRequired("price", price),
