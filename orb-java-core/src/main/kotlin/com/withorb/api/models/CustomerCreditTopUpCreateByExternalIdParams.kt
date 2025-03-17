@@ -587,6 +587,22 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [Body].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .amount()
+             * .currency()
+             * .invoiceSettings()
+             * .perUnitCostBasis()
+             * .threshold()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): Body =
                 Body(
                     checkRequired("amount", amount),
@@ -919,6 +935,23 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [CustomerCreditTopUpCreateByExternalIdParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .externalCustomerId()
+         * .amount()
+         * .currency()
+         * .invoiceSettings()
+         * .perUnitCostBasis()
+         * .threshold()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): CustomerCreditTopUpCreateByExternalIdParams =
             CustomerCreditTopUpCreateByExternalIdParams(
                 checkRequired("externalCustomerId", externalCustomerId),
@@ -1156,6 +1189,19 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [InvoiceSettings].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .autoCollection()
+             * .netTerms()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): InvoiceSettings =
                 InvoiceSettings(
                     checkRequired("autoCollection", autoCollection),
