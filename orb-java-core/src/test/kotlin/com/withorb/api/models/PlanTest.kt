@@ -4,6 +4,7 @@ package com.withorb.api.models
 
 import com.withorb.api.core.JsonValue
 import java.time.OffsetDateTime
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -267,7 +268,7 @@ internal class PlanTest {
         assertThat(plan.minimumAmount()).contains("minimum_amount")
         assertThat(plan.name()).isEqualTo("name")
         assertThat(plan.netTerms()).contains(0L)
-        assertThat(plan.planPhases().get())
+        assertThat(plan.planPhases().getOrNull())
             .containsExactly(
                 Plan.PlanPhase.builder()
                     .id("id")
