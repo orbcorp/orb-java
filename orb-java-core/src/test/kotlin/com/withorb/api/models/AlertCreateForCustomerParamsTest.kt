@@ -2,6 +2,7 @@
 
 package com.withorb.api.models
 
+import kotlin.jvm.optionals.getOrNull
 import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -19,6 +20,20 @@ internal class AlertCreateForCustomerParamsTest {
     }
 
     @Test
+    fun pathParams() {
+        val params =
+            AlertCreateForCustomerParams.builder()
+                .customerId("customer_id")
+                .currency("currency")
+                .type(AlertCreateForCustomerParams.Type.CREDIT_BALANCE_DEPLETED)
+                .build()
+
+        assertThat(params._pathParam(0)).isEqualTo("customer_id")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
     fun body() {
         val params =
             AlertCreateForCustomerParams.builder()
@@ -33,8 +48,8 @@ internal class AlertCreateForCustomerParamsTest {
         assertNotNull(body)
         assertThat(body.currency()).isEqualTo("currency")
         assertThat(body.type()).isEqualTo(AlertCreateForCustomerParams.Type.CREDIT_BALANCE_DEPLETED)
-        assertThat(body.thresholds())
-            .contains(listOf(AlertCreateForCustomerParams.Threshold.builder().value(0.0).build()))
+        assertThat(body.thresholds().getOrNull())
+            .containsExactly(AlertCreateForCustomerParams.Threshold.builder().value(0.0).build())
     }
 
     @Test
@@ -51,20 +66,5 @@ internal class AlertCreateForCustomerParamsTest {
         assertNotNull(body)
         assertThat(body.currency()).isEqualTo("currency")
         assertThat(body.type()).isEqualTo(AlertCreateForCustomerParams.Type.CREDIT_BALANCE_DEPLETED)
-    }
-
-    @Test
-    fun getPathParam() {
-        val params =
-            AlertCreateForCustomerParams.builder()
-                .customerId("customer_id")
-                .currency("currency")
-                .type(AlertCreateForCustomerParams.Type.CREDIT_BALANCE_DEPLETED)
-                .build()
-        assertThat(params).isNotNull
-        // path param "customerId"
-        assertThat(params.getPathParam(0)).isEqualTo("customer_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

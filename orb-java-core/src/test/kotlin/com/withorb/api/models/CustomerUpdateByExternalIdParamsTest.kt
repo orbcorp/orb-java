@@ -3,6 +3,7 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.JsonValue
+import kotlin.jvm.optionals.getOrNull
 import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -91,6 +92,15 @@ internal class CustomerUpdateByExternalIdParamsTest {
                     .build()
             )
             .build()
+    }
+
+    @Test
+    fun pathParams() {
+        val params = CustomerUpdateByExternalIdParams.builder().id("external_customer_id").build()
+
+        assertThat(params._pathParam(0)).isEqualTo("external_customer_id")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
     }
 
     @Test
@@ -195,7 +205,7 @@ internal class CustomerUpdateByExternalIdParamsTest {
                     .excluded(true)
                     .build()
             )
-        assertThat(body.additionalEmails()).contains(listOf("string"))
+        assertThat(body.additionalEmails().getOrNull()).containsExactly("string")
         assertThat(body.autoCollection()).contains(true)
         assertThat(body.billingAddress())
             .contains(
@@ -279,15 +289,5 @@ internal class CustomerUpdateByExternalIdParamsTest {
         val body = params._body()
 
         assertNotNull(body)
-    }
-
-    @Test
-    fun getPathParam() {
-        val params = CustomerUpdateByExternalIdParams.builder().id("external_customer_id").build()
-        assertThat(params).isNotNull
-        // path param "id"
-        assertThat(params.getPathParam(0)).isEqualTo("external_customer_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

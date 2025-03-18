@@ -219,7 +219,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
-                    .addPathSegments("subscriptions", params.getPathParam(0))
+                    .addPathSegments("subscriptions", params._pathParam(0))
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -287,7 +287,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
-                    .addPathSegments("subscriptions", params.getPathParam(0), "cancel")
+                    .addPathSegments("subscriptions", params._pathParam(0), "cancel")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -317,7 +317,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("subscriptions", params.getPathParam(0))
+                    .addPathSegments("subscriptions", params._pathParam(0))
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -347,7 +347,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("subscriptions", params.getPathParam(0), "costs")
+                    .addPathSegments("subscriptions", params._pathParam(0), "costs")
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -377,7 +377,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("subscriptions", params.getPathParam(0), "schedule")
+                    .addPathSegments("subscriptions", params._pathParam(0), "schedule")
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -413,7 +413,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("subscriptions", params.getPathParam(0), "usage")
+                    .addPathSegments("subscriptions", params._pathParam(0), "usage")
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -443,7 +443,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
-                    .addPathSegments("subscriptions", params.getPathParam(0), "price_intervals")
+                    .addPathSegments("subscriptions", params._pathParam(0), "price_intervals")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -474,11 +474,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
-                    .addPathSegments(
-                        "subscriptions",
-                        params.getPathParam(0),
-                        "schedule_plan_change",
-                    )
+                    .addPathSegments("subscriptions", params._pathParam(0), "schedule_plan_change")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -509,7 +505,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
-                    .addPathSegments("subscriptions", params.getPathParam(0), "trigger_phase")
+                    .addPathSegments("subscriptions", params._pathParam(0), "trigger_phase")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -543,7 +539,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
                     .method(HttpMethod.POST)
                     .addPathSegments(
                         "subscriptions",
-                        params.getPathParam(0),
+                        params._pathParam(0),
                         "unschedule_cancellation",
                     )
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
@@ -583,7 +579,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
                     .method(HttpMethod.POST)
                     .addPathSegments(
                         "subscriptions",
-                        params.getPathParam(0),
+                        params._pathParam(0),
                         "unschedule_fixed_fee_quantity_updates",
                     )
                     .body(json(clientOptions.jsonMapper, params._body()))
@@ -619,7 +615,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
                     .method(HttpMethod.POST)
                     .addPathSegments(
                         "subscriptions",
-                        params.getPathParam(0),
+                        params._pathParam(0),
                         "unschedule_pending_plan_changes",
                     )
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
@@ -655,7 +651,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
                     .method(HttpMethod.POST)
                     .addPathSegments(
                         "subscriptions",
-                        params.getPathParam(0),
+                        params._pathParam(0),
                         "update_fixed_fee_quantity",
                     )
                     .body(json(clientOptions.jsonMapper, params._body()))
@@ -688,7 +684,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
-                    .addPathSegments("subscriptions", params.getPathParam(0), "update_trial")
+                    .addPathSegments("subscriptions", params._pathParam(0), "update_trial")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepareAsync(clientOptions, params)

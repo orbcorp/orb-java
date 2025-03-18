@@ -4,6 +4,7 @@ package com.withorb.api.models
 
 import com.withorb.api.core.JsonValue
 import java.time.OffsetDateTime
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -347,6 +348,7 @@ internal class InvoiceLineItemCreateResponseTest {
                     .taxRatePercentage("tax_rate_percentage")
                     .build()
             )
-        assertThat(invoiceLineItemCreateResponse.usageCustomerIds().get()).containsExactly("string")
+        assertThat(invoiceLineItemCreateResponse.usageCustomerIds().getOrNull())
+            .containsExactly("string")
     }
 }
