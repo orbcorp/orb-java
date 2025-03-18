@@ -1,5 +1,33 @@
 # Changelog
 
+## 0.49.1 (2025-03-18)
+
+Full Changelog: [v0.49.0...v0.49.1](https://github.com/orbcorp/orb-java/compare/v0.49.0...v0.49.1)
+
+### Bug Fixes
+
+* **client:** support kotlin 1.8 runtime ([#352](https://github.com/orbcorp/orb-java/issues/352)) ([55893cb](https://github.com/orbcorp/orb-java/commit/55893cbb45d77cfff23961bffdd18d43423f8aee))
+
+
+### Chores
+
+* **internal:** add generated comment ([#346](https://github.com/orbcorp/orb-java/issues/346)) ([670dae5](https://github.com/orbcorp/orb-java/commit/670dae56117f901c72b1b925a3e350e2b59d2dc4))
+* **internal:** add some tests for union classes ([#351](https://github.com/orbcorp/orb-java/issues/351)) ([8daea2a](https://github.com/orbcorp/orb-java/commit/8daea2a50c34866564f1eb9e04cdae4bc6bbd2a2))
+* **internal:** delete duplicate tests ([a2ae257](https://github.com/orbcorp/orb-java/commit/a2ae25777f691b41232cb8a6e13aa8a502da1c8c))
+* **internal:** generate more tests ([399f1ce](https://github.com/orbcorp/orb-java/commit/399f1ce0a2efcc7846cc0c4783178f8529a36207))
+* **internal:** make test classes internal ([#345](https://github.com/orbcorp/orb-java/issues/345)) ([8566c48](https://github.com/orbcorp/orb-java/commit/8566c482616da4e427c0d1625f0585b3d796a628))
+* **internal:** refactor query param serialization impl and tests ([#348](https://github.com/orbcorp/orb-java/issues/348)) ([15e112d](https://github.com/orbcorp/orb-java/commit/15e112d3c1450ddfaa329cd921f052e3f34f37dc))
+* **internal:** refactor some test assertions ([a2ae257](https://github.com/orbcorp/orb-java/commit/a2ae25777f691b41232cb8a6e13aa8a502da1c8c))
+* **internal:** reformat some tests ([#350](https://github.com/orbcorp/orb-java/issues/350)) ([399f1ce](https://github.com/orbcorp/orb-java/commit/399f1ce0a2efcc7846cc0c4783178f8529a36207))
+* **internal:** rename `getPathParam` ([#349](https://github.com/orbcorp/orb-java/issues/349)) ([a2ae257](https://github.com/orbcorp/orb-java/commit/a2ae25777f691b41232cb8a6e13aa8a502da1c8c))
+* **internal:** reorder some params methodsc ([a2ae257](https://github.com/orbcorp/orb-java/commit/a2ae25777f691b41232cb8a6e13aa8a502da1c8c))
+
+
+### Documentation
+
+* add `build` method comments ([#347](https://github.com/orbcorp/orb-java/issues/347)) ([0dcf1be](https://github.com/orbcorp/orb-java/commit/0dcf1bebf6db9e9c5f2e0d3606a1acab2b85adce))
+* deduplicate and refine comments ([#343](https://github.com/orbcorp/orb-java/issues/343)) ([483df7c](https://github.com/orbcorp/orb-java/commit/483df7c06115b3a5584b939e1f640a1b618abd79))
+
 ## 0.49.0 (2025-03-14)
 
 Full Changelog: [v0.48.0...v0.49.0](https://github.com/orbcorp/orb-java/compare/v0.48.0...v0.49.0)
