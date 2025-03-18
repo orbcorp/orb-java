@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 internal class PlanTest {
 
     @Test
-    fun createPlan() {
+    fun create() {
         val plan =
             Plan.builder()
                 .id("id")
@@ -198,7 +198,7 @@ internal class PlanTest {
                 )
                 .version(0L)
                 .build()
-        assertThat(plan).isNotNull
+
         assertThat(plan.id()).isEqualTo("id")
         assertThat(plan.adjustments())
             .containsExactly(
