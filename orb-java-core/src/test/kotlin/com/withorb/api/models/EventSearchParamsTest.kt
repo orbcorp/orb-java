@@ -30,7 +30,7 @@ internal class EventSearchParamsTest {
         val body = params._body()
 
         assertNotNull(body)
-        assertThat(body.eventIds()).isEqualTo(listOf("string"))
+        assertThat(body.eventIds()).containsExactly("string")
         assertThat(body.timeframeEnd()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(body.timeframeStart()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
     }
@@ -42,6 +42,6 @@ internal class EventSearchParamsTest {
         val body = params._body()
 
         assertNotNull(body)
-        assertThat(body.eventIds()).isEqualTo(listOf("string"))
+        assertThat(body.eventIds()).containsExactly("string")
     }
 }

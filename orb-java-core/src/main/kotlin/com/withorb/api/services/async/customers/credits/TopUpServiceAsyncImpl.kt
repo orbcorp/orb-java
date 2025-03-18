@@ -96,7 +96,7 @@ class TopUpServiceAsyncImpl internal constructor(private val clientOptions: Clie
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
-                    .addPathSegments("customers", params.getPathParam(0), "credits", "top_ups")
+                    .addPathSegments("customers", params._pathParam(0), "credits", "top_ups")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -127,7 +127,7 @@ class TopUpServiceAsyncImpl internal constructor(private val clientOptions: Clie
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("customers", params.getPathParam(0), "credits", "top_ups")
+                    .addPathSegments("customers", params._pathParam(0), "credits", "top_ups")
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -164,10 +164,10 @@ class TopUpServiceAsyncImpl internal constructor(private val clientOptions: Clie
                     .method(HttpMethod.DELETE)
                     .addPathSegments(
                         "customers",
-                        params.getPathParam(0),
+                        params._pathParam(0),
                         "credits",
                         "top_ups",
-                        params.getPathParam(1),
+                        params._pathParam(1),
                     )
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
@@ -195,7 +195,7 @@ class TopUpServiceAsyncImpl internal constructor(private val clientOptions: Clie
                     .addPathSegments(
                         "customers",
                         "external_customer_id",
-                        params.getPathParam(0),
+                        params._pathParam(0),
                         "credits",
                         "top_ups",
                     )
@@ -231,10 +231,10 @@ class TopUpServiceAsyncImpl internal constructor(private val clientOptions: Clie
                     .addPathSegments(
                         "customers",
                         "external_customer_id",
-                        params.getPathParam(0),
+                        params._pathParam(0),
                         "credits",
                         "top_ups",
-                        params.getPathParam(1),
+                        params._pathParam(1),
                     )
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
@@ -264,7 +264,7 @@ class TopUpServiceAsyncImpl internal constructor(private val clientOptions: Clie
                     .addPathSegments(
                         "customers",
                         "external_customer_id",
-                        params.getPathParam(0),
+                        params._pathParam(0),
                         "credits",
                         "top_ups",
                     )
