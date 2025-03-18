@@ -282,14 +282,22 @@ interface SubscriptionService {
      * subscription's invoicing currency, when creating a subscription. E.g. pass in `10.00` to
      * issue an invoice when usage amounts hit $10.00 for a subscription that invoices in USD.
      */
-    fun create(params: SubscriptionCreateParams): SubscriptionCreateResponse =
-        create(params, RequestOptions.none())
+    fun create(): SubscriptionCreateResponse = create(SubscriptionCreateParams.none())
 
     /** @see [create] */
     fun create(
-        params: SubscriptionCreateParams,
+        params: SubscriptionCreateParams = SubscriptionCreateParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionCreateResponse
+
+    /** @see [create] */
+    fun create(
+        params: SubscriptionCreateParams = SubscriptionCreateParams.none()
+    ): SubscriptionCreateResponse = create(params, RequestOptions.none())
+
+    /** @see [create] */
+    fun create(requestOptions: RequestOptions): SubscriptionCreateResponse =
+        create(SubscriptionCreateParams.none(), requestOptions)
 
     /**
      * This endpoint can be used to update the `metadata`, `net terms`, `auto_collection`,
@@ -1000,15 +1008,26 @@ interface SubscriptionService {
          * [SubscriptionService.create].
          */
         @MustBeClosed
-        fun create(params: SubscriptionCreateParams): HttpResponseFor<SubscriptionCreateResponse> =
-            create(params, RequestOptions.none())
+        fun create(): HttpResponseFor<SubscriptionCreateResponse> =
+            create(SubscriptionCreateParams.none())
 
         /** @see [create] */
         @MustBeClosed
         fun create(
-            params: SubscriptionCreateParams,
+            params: SubscriptionCreateParams = SubscriptionCreateParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<SubscriptionCreateResponse>
+
+        /** @see [create] */
+        @MustBeClosed
+        fun create(
+            params: SubscriptionCreateParams = SubscriptionCreateParams.none()
+        ): HttpResponseFor<SubscriptionCreateResponse> = create(params, RequestOptions.none())
+
+        /** @see [create] */
+        @MustBeClosed
+        fun create(requestOptions: RequestOptions): HttpResponseFor<SubscriptionCreateResponse> =
+            create(SubscriptionCreateParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `put /subscriptions/{subscription_id}`, but is otherwise
