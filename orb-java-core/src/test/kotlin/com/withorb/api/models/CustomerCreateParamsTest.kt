@@ -3,6 +3,7 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.JsonValue
+import kotlin.jvm.optionals.getOrNull
 import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -186,7 +187,7 @@ internal class CustomerCreateParamsTest {
                     .excluded(true)
                     .build()
             )
-        assertThat(body.additionalEmails()).contains(listOf("dev@stainless.com"))
+        assertThat(body.additionalEmails().getOrNull()).containsExactly("dev@stainless.com")
         assertThat(body.autoCollection()).contains(true)
         assertThat(body.billingAddress())
             .contains(

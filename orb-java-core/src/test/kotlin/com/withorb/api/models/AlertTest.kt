@@ -3,6 +3,7 @@
 package com.withorb.api.models
 
 import java.time.OffsetDateTime
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -56,7 +57,7 @@ internal class AlertTest {
             )
         assertThat(alert.subscription())
             .contains(Alert.Subscription.builder().id("VDGsT23osdLb84KD").build())
-        assertThat(alert.thresholds().get())
+        assertThat(alert.thresholds().getOrNull())
             .containsExactly(Alert.Threshold.builder().value(0.0).build())
         assertThat(alert.type()).isEqualTo(Alert.Type.CREDIT_BALANCE_DEPLETED)
     }

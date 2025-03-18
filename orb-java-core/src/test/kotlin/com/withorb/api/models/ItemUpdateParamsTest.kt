@@ -2,6 +2,7 @@
 
 package com.withorb.api.models
 
+import kotlin.jvm.optionals.getOrNull
 import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -25,6 +26,15 @@ internal class ItemUpdateParamsTest {
     }
 
     @Test
+    fun pathParams() {
+        val params = ItemUpdateParams.builder().itemId("item_id").build()
+
+        assertThat(params._pathParam(0)).isEqualTo("item_id")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
     fun body() {
         val params =
             ItemUpdateParams.builder()
@@ -43,16 +53,14 @@ internal class ItemUpdateParamsTest {
         val body = params._body()
 
         assertNotNull(body)
-        assertThat(body.externalConnections())
-            .contains(
-                listOf(
-                    ItemUpdateParams.ExternalConnection.builder()
-                        .externalConnectionName(
-                            ItemUpdateParams.ExternalConnection.ExternalConnectionName.STRIPE
-                        )
-                        .externalEntityId("external_entity_id")
-                        .build()
-                )
+        assertThat(body.externalConnections().getOrNull())
+            .containsExactly(
+                ItemUpdateParams.ExternalConnection.builder()
+                    .externalConnectionName(
+                        ItemUpdateParams.ExternalConnection.ExternalConnectionName.STRIPE
+                    )
+                    .externalEntityId("external_entity_id")
+                    .build()
             )
         assertThat(body.name()).contains("name")
     }
@@ -64,15 +72,5 @@ internal class ItemUpdateParamsTest {
         val body = params._body()
 
         assertNotNull(body)
-    }
-
-    @Test
-    fun getPathParam() {
-        val params = ItemUpdateParams.builder().itemId("item_id").build()
-        assertThat(params).isNotNull
-        // path param "itemId"
-        assertThat(params.getPathParam(0)).isEqualTo("item_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }
