@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.50.0 (2025-03-19)
+
+Full Changelog: [v0.49.1...v0.50.0](https://github.com/orbcorp/orb-java/compare/v0.49.1...v0.50.0)
+
+### ⚠ BREAKING CHANGES
+
+* **client:** refactor exception structure and methods ([#357](https://github.com/orbcorp/orb-java/issues/357))
+
+### Bug Fixes
+
+* compilation error ([287236c](https://github.com/orbcorp/orb-java/commit/287236c510b6351aa98f68abce900ad40f824537))
+
+
+### Chores
+
+* **client:** refactor exception structure and methods ([#357](https://github.com/orbcorp/orb-java/issues/357)) ([adc2898](https://github.com/orbcorp/orb-java/commit/adc28986adf95bb668ba4b4176fcd3c4b3507ca6))
+* **internal:** codegen related update ([#356](https://github.com/orbcorp/orb-java/issues/356)) ([56e24bf](https://github.com/orbcorp/orb-java/commit/56e24bf8cdaf22d81e15d59bd0d5c2611729050e))
+* **internal:** refactor enum query param serialization ([#353](https://github.com/orbcorp/orb-java/issues/353)) ([06904bf](https://github.com/orbcorp/orb-java/commit/06904bf13668ca9cb0cc9713a12c1b21811dbaa1))
+* **internal:** version bump ([#354](https://github.com/orbcorp/orb-java/issues/354)) ([8d4d3e1](https://github.com/orbcorp/orb-java/commit/8d4d3e1e02c9547ad12254a8057294ff9c98de79))
+
 ## 0.49.1 (2025-03-18)
 
 Full Changelog: [v0.49.0...v0.49.1](https://github.com/orbcorp/orb-java/compare/v0.49.0...v0.49.1)
