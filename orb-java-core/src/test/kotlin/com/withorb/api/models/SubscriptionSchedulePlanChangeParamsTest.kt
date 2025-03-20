@@ -5,7 +5,6 @@ package com.withorb.api.models
 import com.withorb.api.core.JsonValue
 import java.time.OffsetDateTime
 import kotlin.jvm.optionals.getOrNull
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -641,7 +640,6 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.changeOption())
             .isEqualTo(SubscriptionSchedulePlanChangeParams.ChangeOption.REQUESTED_DATE)
         assertThat(body.addAdjustments().getOrNull())
@@ -960,7 +958,6 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.changeOption())
             .isEqualTo(SubscriptionSchedulePlanChangeParams.ChangeOption.REQUESTED_DATE)
     }

@@ -3,7 +3,6 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.JsonValue
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -52,7 +51,6 @@ internal class SubscriptionUpdateParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.autoCollection()).contains(true)
         assertThat(body.defaultInvoiceMemo()).contains("default_invoice_memo")
         assertThat(body.invoicingThreshold()).contains("10.00")
@@ -70,7 +68,5 @@ internal class SubscriptionUpdateParamsTest {
         val params = SubscriptionUpdateParams.builder().subscriptionId("subscription_id").build()
 
         val body = params._body()
-
-        assertNotNull(body)
     }
 }
