@@ -311,7 +311,7 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                     .priceId("h74gfhdjvn7ujokd")
                     .build()
             )
-            .trialDurationDays(999999L)
+            .trialDurationDays(0L)
             .addUsageCustomerId("string")
             .build()
     }
@@ -635,7 +635,7 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                         .priceId("h74gfhdjvn7ujokd")
                         .build()
                 )
-                .trialDurationDays(999999L)
+                .trialDurationDays(0L)
                 .addUsageCustomerId("string")
                 .build()
 
@@ -946,7 +946,7 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                     .priceId("h74gfhdjvn7ujokd")
                     .build()
             )
-        assertThat(body.trialDurationDays()).contains(999999L)
+        assertThat(body.trialDurationDays()).contains(0L)
         assertThat(body.usageCustomerIds().getOrNull()).containsExactly("string")
     }
 
