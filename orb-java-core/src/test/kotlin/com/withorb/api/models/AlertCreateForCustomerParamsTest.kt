@@ -3,7 +3,6 @@
 package com.withorb.api.models
 
 import kotlin.jvm.optionals.getOrNull
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -45,7 +44,6 @@ internal class AlertCreateForCustomerParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.currency()).isEqualTo("currency")
         assertThat(body.type()).isEqualTo(AlertCreateForCustomerParams.Type.CREDIT_BALANCE_DEPLETED)
         assertThat(body.thresholds().getOrNull())
@@ -63,7 +61,6 @@ internal class AlertCreateForCustomerParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.currency()).isEqualTo("currency")
         assertThat(body.type()).isEqualTo(AlertCreateForCustomerParams.Type.CREDIT_BALANCE_DEPLETED)
     }
