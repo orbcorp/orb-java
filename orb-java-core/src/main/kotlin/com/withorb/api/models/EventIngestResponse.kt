@@ -10,26 +10,29 @@ import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
 import com.withorb.api.core.checkKnown
 import com.withorb.api.core.checkRequired
-import com.withorb.api.core.immutableEmptyMap
 import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-@NoAutoDetect
 class EventIngestResponse
-@JsonCreator
 private constructor(
-    @JsonProperty("validation_failed")
-    @ExcludeMissing
-    private val validationFailed: JsonField<List<ValidationFailed>> = JsonMissing.of(),
-    @JsonProperty("debug") @ExcludeMissing private val debug: JsonField<Debug> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val validationFailed: JsonField<List<ValidationFailed>>,
+    private val debug: JsonField<Debug>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("validation_failed")
+        @ExcludeMissing
+        validationFailed: JsonField<List<ValidationFailed>> = JsonMissing.of(),
+        @JsonProperty("debug") @ExcludeMissing debug: JsonField<Debug> = JsonMissing.of(),
+    ) : this(validationFailed, debug, mutableMapOf())
 
     /**
      * Contains all failing validation events. In the case of a 200, this array will always be
@@ -67,21 +70,15 @@ private constructor(
      */
     @JsonProperty("debug") @ExcludeMissing fun _debug(): JsonField<Debug> = debug
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): EventIngestResponse = apply {
-        if (validated) {
-            return@apply
-        }
-
-        validationFailed().forEach { it.validate() }
-        debug().ifPresent { it.validate() }
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -194,23 +191,38 @@ private constructor(
             EventIngestResponse(
                 checkRequired("validationFailed", validationFailed).map { it.toImmutable() },
                 debug,
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
     }
 
-    @NoAutoDetect
+    private var validated: Boolean = false
+
+    fun validate(): EventIngestResponse = apply {
+        if (validated) {
+            return@apply
+        }
+
+        validationFailed().forEach { it.validate() }
+        debug().ifPresent { it.validate() }
+        validated = true
+    }
+
     class ValidationFailed
-    @JsonCreator
     private constructor(
-        @JsonProperty("idempotency_key")
-        @ExcludeMissing
-        private val idempotencyKey: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("validation_errors")
-        @ExcludeMissing
-        private val validationErrors: JsonField<List<String>> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val idempotencyKey: JsonField<String>,
+        private val validationErrors: JsonField<List<String>>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("idempotency_key")
+            @ExcludeMissing
+            idempotencyKey: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("validation_errors")
+            @ExcludeMissing
+            validationErrors: JsonField<List<String>> = JsonMissing.of(),
+        ) : this(idempotencyKey, validationErrors, mutableMapOf())
 
         /**
          * The passed idempotency_key corresponding to the validation_errors
@@ -248,21 +260,15 @@ private constructor(
         @ExcludeMissing
         fun _validationErrors(): JsonField<List<String>> = validationErrors
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): ValidationFailed = apply {
-            if (validated) {
-                return@apply
-            }
-
-            idempotencyKey()
-            validationErrors()
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -374,8 +380,20 @@ private constructor(
                 ValidationFailed(
                     checkRequired("idempotencyKey", idempotencyKey),
                     checkRequired("validationErrors", validationErrors).map { it.toImmutable() },
-                    additionalProperties.toImmutable(),
+                    additionalProperties.toMutableMap(),
                 )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): ValidationFailed = apply {
+            if (validated) {
+                return@apply
+            }
+
+            idempotencyKey()
+            validationErrors()
+            validated = true
         }
 
         override fun equals(other: Any?): Boolean {
@@ -400,19 +418,22 @@ private constructor(
      * Optional debug information (only present when debug=true is passed to the endpoint). Contains
      * ingested and duplicate event idempotency keys.
      */
-    @NoAutoDetect
     class Debug
-    @JsonCreator
     private constructor(
-        @JsonProperty("duplicate")
-        @ExcludeMissing
-        private val duplicate: JsonField<List<String>> = JsonMissing.of(),
-        @JsonProperty("ingested")
-        @ExcludeMissing
-        private val ingested: JsonField<List<String>> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val duplicate: JsonField<List<String>>,
+        private val ingested: JsonField<List<String>>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("duplicate")
+            @ExcludeMissing
+            duplicate: JsonField<List<String>> = JsonMissing.of(),
+            @JsonProperty("ingested")
+            @ExcludeMissing
+            ingested: JsonField<List<String>> = JsonMissing.of(),
+        ) : this(duplicate, ingested, mutableMapOf())
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
@@ -444,21 +465,15 @@ private constructor(
         @ExcludeMissing
         fun _ingested(): JsonField<List<String>> = ingested
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Debug = apply {
-            if (validated) {
-                return@apply
-            }
-
-            duplicate()
-            ingested()
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -576,8 +591,20 @@ private constructor(
                 Debug(
                     checkRequired("duplicate", duplicate).map { it.toImmutable() },
                     checkRequired("ingested", ingested).map { it.toImmutable() },
-                    additionalProperties.toImmutable(),
+                    additionalProperties.toMutableMap(),
                 )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Debug = apply {
+            if (validated) {
+                return@apply
+            }
+
+            duplicate()
+            ingested()
+            validated = true
         }
 
         override fun equals(other: Any?): Boolean {
