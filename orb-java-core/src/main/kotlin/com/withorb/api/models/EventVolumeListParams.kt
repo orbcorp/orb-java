@@ -2,7 +2,6 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.core.NoAutoDetect
 import com.withorb.api.core.Params
 import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
@@ -64,24 +63,6 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams =
-        QueryParams.builder()
-            .apply {
-                put(
-                    "timeframe_start",
-                    DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(timeframeStart),
-                )
-                cursor?.let { put("cursor", it) }
-                limit?.let { put("limit", it.toString()) }
-                timeframeEnd?.let {
-                    put("timeframe_end", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
-                }
-                putAll(additionalQueryParams)
-            }
-            .build()
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -98,7 +79,6 @@ private constructor(
     }
 
     /** A builder for [EventVolumeListParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var timeframeStart: OffsetDateTime? = null
@@ -281,6 +261,24 @@ private constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                put(
+                    "timeframe_start",
+                    DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(timeframeStart),
+                )
+                cursor?.let { put("cursor", it) }
+                limit?.let { put("limit", it.toString()) }
+                timeframeEnd?.let {
+                    put("timeframe_end", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

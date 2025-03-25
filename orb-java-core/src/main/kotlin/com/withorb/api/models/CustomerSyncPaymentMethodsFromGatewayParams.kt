@@ -2,13 +2,15 @@
 
 package com.withorb.api.models
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter
+import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
 import com.withorb.api.core.Params
 import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.core.toImmutable
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 
@@ -25,7 +27,7 @@ private constructor(
     private val externalCustomerId: String,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
+    private val additionalBodyProperties: MutableMap<String, JsonValue>,
 ) : Params {
 
     fun externalCustomerId(): String = externalCustomerId
@@ -34,21 +36,15 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    @JsonAnySetter
+    private fun putAdditionalBodyProperty(key: String, value: JsonValue) {
+        additionalBodyProperties.put(key, value)
+    }
 
-    @JvmSynthetic
-    internal fun _body(): Optional<Map<String, JsonValue>> =
-        Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
-
-    fun _pathParam(index: Int): String =
-        when (index) {
-            0 -> externalCustomerId
-            else -> ""
-        }
-
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams = additionalQueryParams
+    @JsonAnyGetter
+    @ExcludeMissing
+    fun _additionalBodyProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalBodyProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -67,7 +63,6 @@ private constructor(
     }
 
     /** A builder for [CustomerSyncPaymentMethodsFromGatewayParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var externalCustomerId: String? = null
@@ -229,9 +224,23 @@ private constructor(
                 checkRequired("externalCustomerId", externalCustomerId),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
+                additionalBodyProperties.toMutableMap(),
             )
     }
+
+    @JvmSynthetic
+    internal fun _body(): Optional<Map<String, JsonValue>> =
+        Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> externalCustomerId
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
