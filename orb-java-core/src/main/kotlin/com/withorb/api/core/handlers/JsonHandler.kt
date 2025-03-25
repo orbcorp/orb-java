@@ -4,9 +4,9 @@ package com.withorb.api.core.handlers
 
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
-import com.withorb.api.core.enhanceJacksonException
 import com.withorb.api.core.http.HttpResponse
 import com.withorb.api.core.http.HttpResponse.Handler
+import com.withorb.api.errors.OrbInvalidDataException
 
 @JvmSynthetic
 internal inline fun <reified T> jsonHandler(jsonMapper: JsonMapper): Handler<T> =
@@ -15,6 +15,6 @@ internal inline fun <reified T> jsonHandler(jsonMapper: JsonMapper): Handler<T> 
             try {
                 jsonMapper.readValue(response.body(), jacksonTypeRef())
             } catch (e: Exception) {
-                throw enhanceJacksonException("Error reading response", e)
+                throw OrbInvalidDataException("Error reading response", e)
             }
     }
