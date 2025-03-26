@@ -1,5 +1,35 @@
 # Changelog
 
+## 0.52.0 (2025-03-26)
+
+Full Changelog: [v0.51.0...v0.52.0](https://github.com/orbcorp/orb-java/compare/v0.51.0...v0.52.0)
+
+### Features
+
+* **client:** support a lower jackson version ([#368](https://github.com/orbcorp/orb-java/issues/368)) ([659e62b](https://github.com/orbcorp/orb-java/commit/659e62bfba72b4fbf261db18cbcc4ced30f7953d))
+* **client:** throw on incompatible jackson version ([659e62b](https://github.com/orbcorp/orb-java/commit/659e62bfba72b4fbf261db18cbcc4ced30f7953d))
+
+
+### Bug Fixes
+
+* **client:** map deserialization bug ([da01e21](https://github.com/orbcorp/orb-java/commit/da01e21aab23d7a6b429cbc1c96f48354ca2f0ca))
+
+
+### Chores
+
+* **internal:** delete unused methods and annotations ([#369](https://github.com/orbcorp/orb-java/issues/369)) ([da01e21](https://github.com/orbcorp/orb-java/commit/da01e21aab23d7a6b429cbc1c96f48354ca2f0ca))
+* **internal:** fix example formatting ([#364](https://github.com/orbcorp/orb-java/issues/364)) ([99e8b5b](https://github.com/orbcorp/orb-java/commit/99e8b5b46b1cba17b06d5fa92fcf8e084d64f6b3))
+* **internal:** make multipart assertions more robust ([4f4527e](https://github.com/orbcorp/orb-java/commit/4f4527eaa976d407948d20998b46bc1489c86b2c))
+* **internal:** remove unnecessary `assertNotNull` calls ([4f4527e](https://github.com/orbcorp/orb-java/commit/4f4527eaa976d407948d20998b46bc1489c86b2c))
+* **internal:** remove unnecessary import ([#365](https://github.com/orbcorp/orb-java/issues/365)) ([3a0fe1e](https://github.com/orbcorp/orb-java/commit/3a0fe1e9bf719ef3606c30ff48ba6a7dd06f7911))
+
+
+### Documentation
+
+* minor readme tweak ([#367](https://github.com/orbcorp/orb-java/issues/367)) ([bc3f6c3](https://github.com/orbcorp/orb-java/commit/bc3f6c3c810124041192a841b531039b27cfb840))
+* refine comments on multipart params ([#362](https://github.com/orbcorp/orb-java/issues/362)) ([4f4527e](https://github.com/orbcorp/orb-java/commit/4f4527eaa976d407948d20998b46bc1489c86b2c))
+* update readme exception docs ([#366](https://github.com/orbcorp/orb-java/issues/366)) ([9443b23](https://github.com/orbcorp/orb-java/commit/9443b239a271eb97bf16f5d8cd432f6c97db2aa4))
+
 ## 0.51.0 (2025-03-20)
 
 Full Changelog: [v0.50.0...v0.51.0](https://github.com/orbcorp/orb-java/compare/v0.50.0...v0.51.0)
