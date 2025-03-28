@@ -1,4 +1,4 @@
 allprojects {
     group = "com.withorb.api"
-    version = "0.52.0" // x-release-please-version
+    version = "0.52.1" // x-release-please-version
 }
