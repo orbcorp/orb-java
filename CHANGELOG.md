@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.52.1 (2025-03-31)
+
+Full Changelog: [v0.52.0...v0.52.1](https://github.com/orbcorp/orb-java/compare/v0.52.0...v0.52.1)
+
+### Bug Fixes
+
+* **client:** limit json deserialization coercion ([#373](https://github.com/orbcorp/orb-java/issues/373)) ([654e81c](https://github.com/orbcorp/orb-java/commit/654e81cf520631050936ae5cf9397c0e4a9cf02b))
+
+
+### Chores
+
+* **internal:** codegen related update ([#371](https://github.com/orbcorp/orb-java/issues/371)) ([28dbf0a](https://github.com/orbcorp/orb-java/commit/28dbf0a107b892656275633f3805eb2d3c7f93fa))
+
 ## 0.52.0 (2025-03-26)
 
 Full Changelog: [v0.51.0...v0.52.0](https://github.com/orbcorp/orb-java/compare/v0.51.0...v0.52.0)
