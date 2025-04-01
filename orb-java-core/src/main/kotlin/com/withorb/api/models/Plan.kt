@@ -1325,11 +1325,51 @@ private constructor(
         planPhases().ifPresent { it.forEach { it.validate() } }
         prices().forEach { it.validate() }
         product().validate()
-        status()
+        status().validate()
         trialConfig().validate()
         version()
         validated = true
     }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: OrbInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        (if (id.asKnown().isPresent) 1 else 0) +
+            (adjustments.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+            (basePlan.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (basePlanId.asKnown().isPresent) 1 else 0) +
+            (if (createdAt.asKnown().isPresent) 1 else 0) +
+            (if (currency.asKnown().isPresent) 1 else 0) +
+            (if (defaultInvoiceMemo.asKnown().isPresent) 1 else 0) +
+            (if (description.asKnown().isPresent) 1 else 0) +
+            (discount.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (externalPlanId.asKnown().isPresent) 1 else 0) +
+            (if (invoicingCurrency.asKnown().isPresent) 1 else 0) +
+            (maximum.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (maximumAmount.asKnown().isPresent) 1 else 0) +
+            (metadata.asKnown().getOrNull()?.validity() ?: 0) +
+            (minimum.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (minimumAmount.asKnown().isPresent) 1 else 0) +
+            (if (name.asKnown().isPresent) 1 else 0) +
+            (if (netTerms.asKnown().isPresent) 1 else 0) +
+            (planPhases.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+            (prices.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+            (product.asKnown().getOrNull()?.validity() ?: 0) +
+            (status.asKnown().getOrNull()?.validity() ?: 0) +
+            (trialConfig.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (version.asKnown().isPresent) 1 else 0)
 
     @JsonDeserialize(using = Adjustment.Deserializer::class)
     @JsonSerialize(using = Adjustment.Serializer::class)
@@ -1385,8 +1425,8 @@ private constructor(
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
-        fun <T> accept(visitor: Visitor<T>): T {
-            return when {
+        fun <T> accept(visitor: Visitor<T>): T =
+            when {
                 planPhaseUsageDiscount != null ->
                     visitor.visitPlanPhaseUsageDiscount(planPhaseUsageDiscount)
                 planPhaseAmountDiscount != null ->
@@ -1397,7 +1437,6 @@ private constructor(
                 planPhaseMaximum != null -> visitor.visitPlanPhaseMaximum(planPhaseMaximum)
                 else -> visitor.unknown(_json)
             }
-        }
 
         private var validated: Boolean = false
 
@@ -1441,6 +1480,48 @@ private constructor(
             )
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            accept(
+                object : Visitor<Int> {
+                    override fun visitPlanPhaseUsageDiscount(
+                        planPhaseUsageDiscount: PlanPhaseUsageDiscountAdjustment
+                    ) = planPhaseUsageDiscount.validity()
+
+                    override fun visitPlanPhaseAmountDiscount(
+                        planPhaseAmountDiscount: PlanPhaseAmountDiscountAdjustment
+                    ) = planPhaseAmountDiscount.validity()
+
+                    override fun visitPlanPhasePercentageDiscount(
+                        planPhasePercentageDiscount: PlanPhasePercentageDiscountAdjustment
+                    ) = planPhasePercentageDiscount.validity()
+
+                    override fun visitPlanPhaseMinimum(
+                        planPhaseMinimum: PlanPhaseMinimumAdjustment
+                    ) = planPhaseMinimum.validity()
+
+                    override fun visitPlanPhaseMaximum(
+                        planPhaseMaximum: PlanPhaseMaximumAdjustment
+                    ) = planPhaseMaximum.validity()
+
+                    override fun unknown(json: JsonValue?) = 0
+                }
+            )
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -1536,48 +1617,38 @@ private constructor(
 
                 when (adjustmentType) {
                     "usage_discount" -> {
-                        return Adjustment(
-                            planPhaseUsageDiscount =
-                                deserialize(
-                                    node,
-                                    jacksonTypeRef<PlanPhaseUsageDiscountAdjustment>(),
-                                ),
-                            _json = json,
-                        )
+                        return tryDeserialize(
+                                node,
+                                jacksonTypeRef<PlanPhaseUsageDiscountAdjustment>(),
+                            )
+                            ?.let { Adjustment(planPhaseUsageDiscount = it, _json = json) }
+                            ?: Adjustment(_json = json)
                     }
                     "amount_discount" -> {
-                        return Adjustment(
-                            planPhaseAmountDiscount =
-                                deserialize(
-                                    node,
-                                    jacksonTypeRef<PlanPhaseAmountDiscountAdjustment>(),
-                                ),
-                            _json = json,
-                        )
+                        return tryDeserialize(
+                                node,
+                                jacksonTypeRef<PlanPhaseAmountDiscountAdjustment>(),
+                            )
+                            ?.let { Adjustment(planPhaseAmountDiscount = it, _json = json) }
+                            ?: Adjustment(_json = json)
                     }
                     "percentage_discount" -> {
-                        return Adjustment(
-                            planPhasePercentageDiscount =
-                                deserialize(
-                                    node,
-                                    jacksonTypeRef<PlanPhasePercentageDiscountAdjustment>(),
-                                ),
-                            _json = json,
-                        )
+                        return tryDeserialize(
+                                node,
+                                jacksonTypeRef<PlanPhasePercentageDiscountAdjustment>(),
+                            )
+                            ?.let { Adjustment(planPhasePercentageDiscount = it, _json = json) }
+                            ?: Adjustment(_json = json)
                     }
                     "minimum" -> {
-                        return Adjustment(
-                            planPhaseMinimum =
-                                deserialize(node, jacksonTypeRef<PlanPhaseMinimumAdjustment>()),
-                            _json = json,
-                        )
+                        return tryDeserialize(node, jacksonTypeRef<PlanPhaseMinimumAdjustment>())
+                            ?.let { Adjustment(planPhaseMinimum = it, _json = json) }
+                            ?: Adjustment(_json = json)
                     }
                     "maximum" -> {
-                        return Adjustment(
-                            planPhaseMaximum =
-                                deserialize(node, jacksonTypeRef<PlanPhaseMaximumAdjustment>()),
-                            _json = json,
-                        )
+                        return tryDeserialize(node, jacksonTypeRef<PlanPhaseMaximumAdjustment>())
+                            ?.let { Adjustment(planPhaseMaximum = it, _json = json) }
+                            ?: Adjustment(_json = json)
                     }
                 }
 
@@ -2032,7 +2103,7 @@ private constructor(
                 }
 
                 id()
-                adjustmentType()
+                adjustmentType().validate()
                 appliesToPriceIds()
                 isInvoiceLevel()
                 planPhaseOrder()
@@ -2040,6 +2111,30 @@ private constructor(
                 usageDiscount()
                 validated = true
             }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (id.asKnown().isPresent) 1 else 0) +
+                    (adjustmentType.asKnown().getOrNull()?.validity() ?: 0) +
+                    (appliesToPriceIds.asKnown().getOrNull()?.size ?: 0) +
+                    (if (isInvoiceLevel.asKnown().isPresent) 1 else 0) +
+                    (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
+                    (if (reason.asKnown().isPresent) 1 else 0) +
+                    (if (usageDiscount.asKnown().isPresent) 1 else 0)
 
             class AdjustmentType
             @JsonCreator
@@ -2128,6 +2223,33 @@ private constructor(
                     _value().asString().orElseThrow {
                         OrbInvalidDataException("Value is not a String")
                     }
+
+                private var validated: Boolean = false
+
+                fun validate(): AdjustmentType = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: OrbInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
@@ -2583,7 +2705,7 @@ private constructor(
                 }
 
                 id()
-                adjustmentType()
+                adjustmentType().validate()
                 amountDiscount()
                 appliesToPriceIds()
                 isInvoiceLevel()
@@ -2591,6 +2713,30 @@ private constructor(
                 reason()
                 validated = true
             }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (id.asKnown().isPresent) 1 else 0) +
+                    (adjustmentType.asKnown().getOrNull()?.validity() ?: 0) +
+                    (if (amountDiscount.asKnown().isPresent) 1 else 0) +
+                    (appliesToPriceIds.asKnown().getOrNull()?.size ?: 0) +
+                    (if (isInvoiceLevel.asKnown().isPresent) 1 else 0) +
+                    (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
+                    (if (reason.asKnown().isPresent) 1 else 0)
 
             class AdjustmentType
             @JsonCreator
@@ -2679,6 +2825,33 @@ private constructor(
                     _value().asString().orElseThrow {
                         OrbInvalidDataException("Value is not a String")
                     }
+
+                private var validated: Boolean = false
+
+                fun validate(): AdjustmentType = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: OrbInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
@@ -3134,7 +3307,7 @@ private constructor(
                 }
 
                 id()
-                adjustmentType()
+                adjustmentType().validate()
                 appliesToPriceIds()
                 isInvoiceLevel()
                 percentageDiscount()
@@ -3142,6 +3315,30 @@ private constructor(
                 reason()
                 validated = true
             }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (id.asKnown().isPresent) 1 else 0) +
+                    (adjustmentType.asKnown().getOrNull()?.validity() ?: 0) +
+                    (appliesToPriceIds.asKnown().getOrNull()?.size ?: 0) +
+                    (if (isInvoiceLevel.asKnown().isPresent) 1 else 0) +
+                    (if (percentageDiscount.asKnown().isPresent) 1 else 0) +
+                    (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
+                    (if (reason.asKnown().isPresent) 1 else 0)
 
             class AdjustmentType
             @JsonCreator
@@ -3230,6 +3427,33 @@ private constructor(
                     _value().asString().orElseThrow {
                         OrbInvalidDataException("Value is not a String")
                     }
+
+                private var validated: Boolean = false
+
+                fun validate(): AdjustmentType = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: OrbInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
@@ -3719,7 +3943,7 @@ private constructor(
                 }
 
                 id()
-                adjustmentType()
+                adjustmentType().validate()
                 appliesToPriceIds()
                 isInvoiceLevel()
                 itemId()
@@ -3728,6 +3952,31 @@ private constructor(
                 reason()
                 validated = true
             }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (id.asKnown().isPresent) 1 else 0) +
+                    (adjustmentType.asKnown().getOrNull()?.validity() ?: 0) +
+                    (appliesToPriceIds.asKnown().getOrNull()?.size ?: 0) +
+                    (if (isInvoiceLevel.asKnown().isPresent) 1 else 0) +
+                    (if (itemId.asKnown().isPresent) 1 else 0) +
+                    (if (minimumAmount.asKnown().isPresent) 1 else 0) +
+                    (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
+                    (if (reason.asKnown().isPresent) 1 else 0)
 
             class AdjustmentType
             @JsonCreator
@@ -3816,6 +4065,33 @@ private constructor(
                     _value().asString().orElseThrow {
                         OrbInvalidDataException("Value is not a String")
                     }
+
+                private var validated: Boolean = false
+
+                fun validate(): AdjustmentType = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: OrbInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
@@ -4267,7 +4543,7 @@ private constructor(
                 }
 
                 id()
-                adjustmentType()
+                adjustmentType().validate()
                 appliesToPriceIds()
                 isInvoiceLevel()
                 maximumAmount()
@@ -4275,6 +4551,30 @@ private constructor(
                 reason()
                 validated = true
             }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (id.asKnown().isPresent) 1 else 0) +
+                    (adjustmentType.asKnown().getOrNull()?.validity() ?: 0) +
+                    (appliesToPriceIds.asKnown().getOrNull()?.size ?: 0) +
+                    (if (isInvoiceLevel.asKnown().isPresent) 1 else 0) +
+                    (if (maximumAmount.asKnown().isPresent) 1 else 0) +
+                    (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
+                    (if (reason.asKnown().isPresent) 1 else 0)
 
             class AdjustmentType
             @JsonCreator
@@ -4363,6 +4663,33 @@ private constructor(
                     _value().asString().orElseThrow {
                         OrbInvalidDataException("Value is not a String")
                     }
+
+                private var validated: Boolean = false
+
+                fun validate(): AdjustmentType = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: OrbInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
@@ -4609,6 +4936,26 @@ private constructor(
             validated = true
         }
 
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (id.asKnown().isPresent) 1 else 0) +
+                (if (externalPlanId.asKnown().isPresent) 1 else 0) +
+                (if (name.asKnown().isPresent) 1 else 0)
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
@@ -4818,6 +5165,25 @@ private constructor(
             validated = true
         }
 
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (appliesToPriceIds.asKnown().getOrNull()?.size ?: 0) +
+                (if (maximumAmount.asKnown().isPresent) 1 else 0)
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
@@ -4906,6 +5272,24 @@ private constructor(
 
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -5114,6 +5498,25 @@ private constructor(
             minimumAmount()
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (appliesToPriceIds.asKnown().getOrNull()?.size ?: 0) +
+                (if (minimumAmount.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -5687,7 +6090,7 @@ private constructor(
             description()
             discount().ifPresent { it.validate() }
             duration()
-            durationUnit()
+            durationUnit().ifPresent { it.validate() }
             maximum().ifPresent { it.validate() }
             maximumAmount()
             minimum().ifPresent { it.validate() }
@@ -5696,6 +6099,34 @@ private constructor(
             order()
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (id.asKnown().isPresent) 1 else 0) +
+                (if (description.asKnown().isPresent) 1 else 0) +
+                (discount.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (duration.asKnown().isPresent) 1 else 0) +
+                (durationUnit.asKnown().getOrNull()?.validity() ?: 0) +
+                (maximum.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (maximumAmount.asKnown().isPresent) 1 else 0) +
+                (minimum.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (minimumAmount.asKnown().isPresent) 1 else 0) +
+                (if (name.asKnown().isPresent) 1 else 0) +
+                (if (order.asKnown().isPresent) 1 else 0)
 
         class DurationUnit @JsonCreator private constructor(private val value: JsonField<String>) :
             Enum {
@@ -5803,6 +6234,33 @@ private constructor(
              */
             fun asString(): String =
                 _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
+
+            private var validated: Boolean = false
+
+            fun validate(): DurationUnit = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -6015,6 +6473,25 @@ private constructor(
                 maximumAmount()
                 validated = true
             }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (appliesToPriceIds.asKnown().getOrNull()?.size ?: 0) +
+                    (if (maximumAmount.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -6232,6 +6709,25 @@ private constructor(
                 minimumAmount()
                 validated = true
             }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (appliesToPriceIds.asKnown().getOrNull()?.size ?: 0) +
+                    (if (minimumAmount.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -6460,6 +6956,26 @@ private constructor(
             validated = true
         }
 
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (id.asKnown().isPresent) 1 else 0) +
+                (if (createdAt.asKnown().isPresent) 1 else 0) +
+                (if (name.asKnown().isPresent) 1 else 0)
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
@@ -6567,6 +7083,33 @@ private constructor(
          */
         fun asString(): String =
             _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
+
+        private var validated: Boolean = false
+
+        fun validate(): Status = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -6753,9 +7296,28 @@ private constructor(
             }
 
             trialPeriod()
-            trialPeriodUnit()
+            trialPeriodUnit().validate()
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (trialPeriod.asKnown().isPresent) 1 else 0) +
+                (trialPeriodUnit.asKnown().getOrNull()?.validity() ?: 0)
 
         class TrialPeriodUnit
         @JsonCreator
@@ -6840,6 +7402,33 @@ private constructor(
              */
             fun asString(): String =
                 _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
+
+            private var validated: Boolean = false
+
+            fun validate(): TrialPeriodUnit = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {

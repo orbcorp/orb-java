@@ -154,6 +154,23 @@ private constructor(
         validated = true
     }
 
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: OrbInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        (data.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+
     class Data
     private constructor(
         private val perPriceCosts: JsonField<List<PerPriceCost>>,
@@ -446,6 +463,28 @@ private constructor(
             total()
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (perPriceCosts.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                (if (subtotal.asKnown().isPresent) 1 else 0) +
+                (if (timeframeEnd.asKnown().isPresent) 1 else 0) +
+                (if (timeframeStart.asKnown().isPresent) 1 else 0) +
+                (if (total.asKnown().isPresent) 1 else 0)
 
         class PerPriceCost
         private constructor(
@@ -888,6 +927,28 @@ private constructor(
                 quantity()
                 validated = true
             }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (price.asKnown().getOrNull()?.validity() ?: 0) +
+                    (if (priceId.asKnown().isPresent) 1 else 0) +
+                    (if (subtotal.asKnown().isPresent) 1 else 0) +
+                    (if (total.asKnown().isPresent) 1 else 0) +
+                    (if (quantity.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {

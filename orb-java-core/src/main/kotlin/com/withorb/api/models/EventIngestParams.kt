@@ -610,6 +610,24 @@ private constructor(
             validated = true
         }
 
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (events.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
@@ -967,6 +985,28 @@ private constructor(
             externalCustomerId()
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (eventName.asKnown().isPresent) 1 else 0) +
+                (if (idempotencyKey.asKnown().isPresent) 1 else 0) +
+                (if (timestamp.asKnown().isPresent) 1 else 0) +
+                (if (customerId.asKnown().isPresent) 1 else 0) +
+                (if (externalCustomerId.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
