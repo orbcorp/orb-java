@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.52.2 (2025-04-01)
+
+Full Changelog: [v0.52.1...v0.52.2](https://github.com/orbcorp/orb-java/compare/v0.52.1...v0.52.2)
+
+### Bug Fixes
+
+* pluralize `list` response variables ([#377](https://github.com/orbcorp/orb-java/issues/377)) ([a5c3fd9](https://github.com/orbcorp/orb-java/commit/a5c3fd99651cab3397ec6233647e011a5468f3b7))
+
+
+### Chores
+
+* **internal:** codegen related update ([#376](https://github.com/orbcorp/orb-java/issues/376)) ([bb5383e](https://github.com/orbcorp/orb-java/commit/bb5383eca5483d294c9864d04fa767ae9de1d7e1))
+* **internal:** version bump ([#374](https://github.com/orbcorp/orb-java/issues/374)) ([1ae8e22](https://github.com/orbcorp/orb-java/commit/1ae8e22edff40a5be261fdc2d7ba71860f3a7d42))
+
 ## 0.52.1 (2025-03-31)
 
 Full Changelog: [v0.52.0...v0.52.1](https://github.com/orbcorp/orb-java/compare/v0.52.0...v0.52.1)
