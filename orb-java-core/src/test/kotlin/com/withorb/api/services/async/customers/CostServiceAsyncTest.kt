@@ -22,7 +22,7 @@ internal class CostServiceAsyncTest {
                 .build()
         val costServiceAsync = client.customers().costs()
 
-        val costFuture =
+        val costsFuture =
             costServiceAsync.list(
                 CustomerCostListParams.builder()
                     .customerId("customer_id")
@@ -33,8 +33,8 @@ internal class CostServiceAsyncTest {
                     .build()
             )
 
-        val cost = costFuture.get()
-        cost.validate()
+        val costs = costsFuture.get()
+        costs.validate()
     }
 
     @Test
