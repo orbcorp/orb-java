@@ -17,6 +17,7 @@ import com.withorb.api.errors.OrbInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
+import kotlin.jvm.optionals.getOrNull
 
 class EventVolumes
 private constructor(
@@ -151,6 +152,23 @@ private constructor(
         data().forEach { it.validate() }
         validated = true
     }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: OrbInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        (data.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
 
     /**
      * An EventVolume contains the event volume ingested in an hourly window. The timestamp used for
@@ -359,6 +377,26 @@ private constructor(
             timeframeStart()
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (count.asKnown().isPresent) 1 else 0) +
+                (if (timeframeEnd.asKnown().isPresent) 1 else 0) +
+                (if (timeframeStart.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {

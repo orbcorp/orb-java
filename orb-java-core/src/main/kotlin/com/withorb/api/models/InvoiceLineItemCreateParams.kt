@@ -694,6 +694,29 @@ private constructor(
             validated = true
         }
 
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (amount.asKnown().isPresent) 1 else 0) +
+                (if (endDate.asKnown().isPresent) 1 else 0) +
+                (if (invoiceId.asKnown().isPresent) 1 else 0) +
+                (if (name.asKnown().isPresent) 1 else 0) +
+                (if (quantity.asKnown().isPresent) 1 else 0) +
+                (if (startDate.asKnown().isPresent) 1 else 0)
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true

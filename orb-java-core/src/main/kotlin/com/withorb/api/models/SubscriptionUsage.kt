@@ -20,6 +20,7 @@ import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
+import com.withorb.api.core.allMaxBy
 import com.withorb.api.core.checkKnown
 import com.withorb.api.core.checkRequired
 import com.withorb.api.core.getOrThrow
@@ -54,13 +55,12 @@ private constructor(
 
     fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
-    fun <T> accept(visitor: Visitor<T>): T {
-        return when {
+    fun <T> accept(visitor: Visitor<T>): T =
+        when {
             ungrouped != null -> visitor.visitUngrouped(ungrouped)
             grouped != null -> visitor.visitGrouped(grouped)
             else -> visitor.unknown(_json)
         }
-    }
 
     private var validated: Boolean = false
 
@@ -82,6 +82,32 @@ private constructor(
         )
         validated = true
     }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: OrbInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        accept(
+            object : Visitor<Int> {
+                override fun visitUngrouped(ungrouped: UngroupedSubscriptionUsage) =
+                    ungrouped.validity()
+
+                override fun visitGrouped(grouped: GroupedSubscriptionUsage) = grouped.validity()
+
+                override fun unknown(json: JsonValue?) = 0
+            }
+        )
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -141,16 +167,27 @@ private constructor(
         override fun ObjectCodec.deserialize(node: JsonNode): SubscriptionUsage {
             val json = JsonValue.fromJsonNode(node)
 
-            tryDeserialize(node, jacksonTypeRef<UngroupedSubscriptionUsage>()) { it.validate() }
-                ?.let {
-                    return SubscriptionUsage(ungrouped = it, _json = json)
-                }
-            tryDeserialize(node, jacksonTypeRef<GroupedSubscriptionUsage>()) { it.validate() }
-                ?.let {
-                    return SubscriptionUsage(grouped = it, _json = json)
-                }
-
-            return SubscriptionUsage(_json = json)
+            val bestMatches =
+                sequenceOf(
+                        tryDeserialize(node, jacksonTypeRef<UngroupedSubscriptionUsage>())?.let {
+                            SubscriptionUsage(ungrouped = it, _json = json)
+                        },
+                        tryDeserialize(node, jacksonTypeRef<GroupedSubscriptionUsage>())?.let {
+                            SubscriptionUsage(grouped = it, _json = json)
+                        },
+                    )
+                    .filterNotNull()
+                    .allMaxBy { it.validity() }
+                    .toList()
+            return when (bestMatches.size) {
+                // This can happen if what we're deserializing is completely incompatible with all
+                // the possible variants (e.g. deserializing from boolean).
+                0 -> SubscriptionUsage(_json = json)
+                1 -> bestMatches.single()
+                // If there's more than one match with the highest validity, then use the first
+                // completely valid match, or simply the first match if none are completely valid.
+                else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
+            }
         }
     }
 
@@ -306,6 +343,24 @@ private constructor(
             data().forEach { it.validate() }
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (data.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
 
         class Data
         private constructor(
@@ -523,9 +578,29 @@ private constructor(
 
                 billableMetric().validate()
                 usage().forEach { it.validate() }
-                viewMode()
+                viewMode().validate()
                 validated = true
             }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
+                    (usage.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                    (viewMode.asKnown().getOrNull()?.validity() ?: 0)
 
             class BillableMetric
             private constructor(
@@ -685,6 +760,25 @@ private constructor(
                     name()
                     validated = true
                 }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: OrbInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic
+                internal fun validity(): Int =
+                    (if (id.asKnown().isPresent) 1 else 0) +
+                        (if (name.asKnown().isPresent) 1 else 0)
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
@@ -916,6 +1010,26 @@ private constructor(
                     validated = true
                 }
 
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: OrbInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic
+                internal fun validity(): Int =
+                    (if (quantity.asKnown().isPresent) 1 else 0) +
+                        (if (timeframeEnd.asKnown().isPresent) 1 else 0) +
+                        (if (timeframeStart.asKnown().isPresent) 1 else 0)
+
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
                         return true
@@ -1024,6 +1138,33 @@ private constructor(
                     _value().asString().orElseThrow {
                         OrbInvalidDataException("Value is not a String")
                     }
+
+                private var validated: Boolean = false
+
+                fun validate(): ViewMode = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: OrbInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
@@ -1254,6 +1395,25 @@ private constructor(
             paginationMetadata().ifPresent { it.validate() }
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (data.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                (paginationMetadata.asKnown().getOrNull()?.validity() ?: 0)
 
         class Data
         private constructor(
@@ -1511,9 +1671,30 @@ private constructor(
                 billableMetric().validate()
                 metricGroup().validate()
                 usage().forEach { it.validate() }
-                viewMode()
+                viewMode().validate()
                 validated = true
             }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
+                    (metricGroup.asKnown().getOrNull()?.validity() ?: 0) +
+                    (usage.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                    (viewMode.asKnown().getOrNull()?.validity() ?: 0)
 
             class BillableMetric
             private constructor(
@@ -1673,6 +1854,25 @@ private constructor(
                     name()
                     validated = true
                 }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: OrbInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic
+                internal fun validity(): Int =
+                    (if (id.asKnown().isPresent) 1 else 0) +
+                        (if (name.asKnown().isPresent) 1 else 0)
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
@@ -1864,6 +2064,25 @@ private constructor(
                     propertyValue()
                     validated = true
                 }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: OrbInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic
+                internal fun validity(): Int =
+                    (if (propertyKey.asKnown().isPresent) 1 else 0) +
+                        (if (propertyValue.asKnown().isPresent) 1 else 0)
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
@@ -2095,6 +2314,26 @@ private constructor(
                     validated = true
                 }
 
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: OrbInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic
+                internal fun validity(): Int =
+                    (if (quantity.asKnown().isPresent) 1 else 0) +
+                        (if (timeframeEnd.asKnown().isPresent) 1 else 0) +
+                        (if (timeframeStart.asKnown().isPresent) 1 else 0)
+
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
                         return true
@@ -2203,6 +2442,33 @@ private constructor(
                     _value().asString().orElseThrow {
                         OrbInvalidDataException("Value is not a String")
                     }
+
+                private var validated: Boolean = false
+
+                fun validate(): ViewMode = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: OrbInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {

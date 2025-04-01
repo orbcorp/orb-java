@@ -207,6 +207,24 @@ private constructor(
         validated = true
     }
 
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: OrbInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        (validationFailed.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+            (debug.asKnown().getOrNull()?.validity() ?: 0)
+
     class ValidationFailed
     private constructor(
         private val idempotencyKey: JsonField<String>,
@@ -395,6 +413,25 @@ private constructor(
             validationErrors()
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (idempotencyKey.asKnown().isPresent) 1 else 0) +
+                (validationErrors.asKnown().getOrNull()?.size ?: 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -606,6 +643,25 @@ private constructor(
             ingested()
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (duplicate.asKnown().getOrNull()?.size ?: 0) +
+                (ingested.asKnown().getOrNull()?.size ?: 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
