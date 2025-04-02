@@ -186,6 +186,20 @@ private constructor(
 
         fun priceId(priceId: String) = apply { this.priceId = priceId }
 
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [timeframeEnd]
+         * - [timeframeStart]
+         * - [customerId]
+         * - [externalCustomerId]
+         * - [filter]
+         * - etc.
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
         /** The exclusive upper bound for event timestamps */
         fun timeframeEnd(timeframeEnd: OffsetDateTime) = apply { body.timeframeEnd(timeframeEnd) }
 
@@ -435,7 +449,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     fun _pathParam(index: Int): String =
         when (index) {
