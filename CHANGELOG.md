@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.53.0 (2025-04-02)
+
+Full Changelog: [v0.52.2...v0.53.0](https://github.com/orbcorp/orb-java/compare/v0.52.2...v0.53.0)
+
+### Features
+
+* **client:** add enum validation method ([d6fdaa3](https://github.com/orbcorp/orb-java/commit/d6fdaa34309a8c1bcc4f2bd84beaae587f3a3e9d))
+* **client:** make union deserialization more robust ([#379](https://github.com/orbcorp/orb-java/issues/379)) ([d6fdaa3](https://github.com/orbcorp/orb-java/commit/d6fdaa34309a8c1bcc4f2bd84beaae587f3a3e9d))
+
+
+### Chores
+
+* **client:** remove unnecessary json state from some query param classes ([d6fdaa3](https://github.com/orbcorp/orb-java/commit/d6fdaa34309a8c1bcc4f2bd84beaae587f3a3e9d))
+* **internal:** add invalid json deserialization tests ([d6fdaa3](https://github.com/orbcorp/orb-java/commit/d6fdaa34309a8c1bcc4f2bd84beaae587f3a3e9d))
+* **internal:** add json roundtripping tests ([d6fdaa3](https://github.com/orbcorp/orb-java/commit/d6fdaa34309a8c1bcc4f2bd84beaae587f3a3e9d))
+* **internal:** codegen related update ([#381](https://github.com/orbcorp/orb-java/issues/381)) ([1373dc9](https://github.com/orbcorp/orb-java/commit/1373dc9c246351e40eb442e4af9af81c1b8cb881))
+
 ## 0.52.2 (2025-04-01)
 
 Full Changelog: [v0.52.1...v0.52.2](https://github.com/orbcorp/orb-java/compare/v0.52.1...v0.52.2)
