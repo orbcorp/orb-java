@@ -387,8 +387,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun timeframeEnd(): Optional<OffsetDateTime> =
-            Optional.ofNullable(timeframeEnd.getNullable("timeframe_end"))
+        fun timeframeEnd(): Optional<OffsetDateTime> = timeframeEnd.getOptional("timeframe_end")
 
         /**
          * The start of the timeframe, inclusive, in which to search events. If not specified, the
@@ -398,7 +397,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun timeframeStart(): Optional<OffsetDateTime> =
-            Optional.ofNullable(timeframeStart.getNullable("timeframe_start"))
+            timeframeStart.getOptional("timeframe_start")
 
         /**
          * Returns the raw JSON value of [eventIds].

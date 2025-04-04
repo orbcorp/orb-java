@@ -557,7 +557,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun quantity(): Optional<Double> = Optional.ofNullable(quantity.getNullable("quantity"))
+            fun quantity(): Optional<Double> = quantity.getOptional("quantity")
 
             /**
              * Returns the raw JSON value of [price].

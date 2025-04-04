@@ -18,6 +18,7 @@ import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint returns a list of all [`Invoice`](/core-concepts#invoice)s for an account in a list
@@ -111,7 +112,7 @@ private constructor(
             paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of(),
         ) : this(data, paginationMetadata, mutableMapOf())
 
-        fun data(): List<Invoice> = data.getNullable("data") ?: listOf()
+        fun data(): List<Invoice> = data.getOptional("data").getOrNull() ?: listOf()
 
         fun paginationMetadata(): PaginationMetadata =
             paginationMetadata.getRequired("pagination_metadata")

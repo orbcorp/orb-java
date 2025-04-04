@@ -383,8 +383,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun thresholds(): Optional<List<Threshold>> =
-            Optional.ofNullable(thresholds.getNullable("thresholds"))
+        fun thresholds(): Optional<List<Threshold>> = thresholds.getOptional("thresholds")
 
         /**
          * Returns the raw JSON value of [currency].

@@ -98,8 +98,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun closeTime(): Optional<OffsetDateTime> =
-        Optional.ofNullable(closeTime.getNullable("close_time"))
+    fun closeTime(): Optional<OffsetDateTime> = closeTime.getOptional("close_time")
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -114,7 +113,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun customerId(): Optional<String> = Optional.ofNullable(customerId.getNullable("customer_id"))
+    fun customerId(): Optional<String> = customerId.getOptional("customer_id")
 
     /**
      * The number of events ingested in this backfill.
@@ -141,8 +140,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun revertedAt(): Optional<OffsetDateTime> =
-        Optional.ofNullable(revertedAt.getNullable("reverted_at"))
+    fun revertedAt(): Optional<OffsetDateTime> = revertedAt.getOptional("reverted_at")
 
     /**
      * The status of the backfill.
@@ -171,8 +169,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun deprecationFilter(): Optional<String> =
-        Optional.ofNullable(deprecationFilter.getNullable("deprecation_filter"))
+    fun deprecationFilter(): Optional<String> = deprecationFilter.getOptional("deprecation_filter")
 
     /**
      * Returns the raw JSON value of [id].

@@ -362,8 +362,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun externalId(): Optional<String> =
-            Optional.ofNullable(externalId.getNullable("external_id"))
+        fun externalId(): Optional<String> = externalId.getOptional("external_id")
 
         /**
          * An optional note to associate with the payment.
@@ -371,7 +370,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun notes(): Optional<String> = Optional.ofNullable(notes.getNullable("notes"))
+        fun notes(): Optional<String> = notes.getOptional("notes")
 
         /**
          * Returns the raw JSON value of [paymentReceivedDate].

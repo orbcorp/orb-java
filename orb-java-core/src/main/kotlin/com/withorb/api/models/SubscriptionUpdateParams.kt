@@ -489,8 +489,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun autoCollection(): Optional<Boolean> =
-            Optional.ofNullable(autoCollection.getNullable("auto_collection"))
+        fun autoCollection(): Optional<Boolean> = autoCollection.getOptional("auto_collection")
 
         /**
          * Determines the default memo on this subscription's invoices. Note that if this is not
@@ -500,7 +499,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun defaultInvoiceMemo(): Optional<String> =
-            Optional.ofNullable(defaultInvoiceMemo.getNullable("default_invoice_memo"))
+            defaultInvoiceMemo.getOptional("default_invoice_memo")
 
         /**
          * When this subscription's accrued usage reaches this threshold, an invoice will be issued
@@ -511,7 +510,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun invoicingThreshold(): Optional<String> =
-            Optional.ofNullable(invoicingThreshold.getNullable("invoicing_threshold"))
+            invoicingThreshold.getOptional("invoicing_threshold")
 
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
@@ -521,7 +520,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata.getNullable("metadata"))
+        fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
         /**
          * Determines the difference between the invoice issue date for subscription invoices as the
@@ -531,7 +530,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun netTerms(): Optional<Long> = Optional.ofNullable(netTerms.getNullable("net_terms"))
+        fun netTerms(): Optional<Long> = netTerms.getOptional("net_terms")
 
         /**
          * Returns the raw JSON value of [autoCollection].
