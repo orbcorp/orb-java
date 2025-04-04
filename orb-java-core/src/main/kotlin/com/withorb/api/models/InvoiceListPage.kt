@@ -106,7 +106,7 @@ private constructor(
             paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of(),
         ) : this(data, paginationMetadata, mutableMapOf())
 
-        fun data(): List<Invoice> = data.getNullable("data") ?: listOf()
+        fun data(): List<Invoice> = data.getOptional("data").getOrNull() ?: listOf()
 
         fun paginationMetadata(): PaginationMetadata =
             paginationMetadata.getRequired("pagination_metadata")

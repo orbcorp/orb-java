@@ -172,8 +172,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun billingAddress(): Optional<BillingAddress> =
-        Optional.ofNullable(billingAddress.getNullable("billing_address"))
+    fun billingAddress(): Optional<BillingAddress> = billingAddress.getOptional("billing_address")
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -185,7 +184,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
+    fun currency(): Optional<String> = currency.getOptional("currency")
 
     /**
      * A valid customer email, to be used for notifications. When Orb triggers payment through a
@@ -207,7 +206,7 @@ private constructor(
      *   responded with an unexpected value).
      */
     fun exemptFromAutomatedTax(): Optional<Boolean> =
-        Optional.ofNullable(exemptFromAutomatedTax.getNullable("exempt_from_automated_tax"))
+        exemptFromAutomatedTax.getOptional("exempt_from_automated_tax")
 
     /**
      * An optional user-defined ID for this customer resource, used throughout the system as an
@@ -218,7 +217,7 @@ private constructor(
      *   responded with an unexpected value).
      */
     fun externalCustomerId(): Optional<String> =
-        Optional.ofNullable(externalCustomerId.getNullable("external_customer_id"))
+        externalCustomerId.getOptional("external_customer_id")
 
     /**
      * The hierarchical relationships for this customer.
@@ -254,7 +253,7 @@ private constructor(
      *   responded with an unexpected value).
      */
     fun paymentProvider(): Optional<PaymentProvider> =
-        Optional.ofNullable(paymentProvider.getNullable("payment_provider"))
+        paymentProvider.getOptional("payment_provider")
 
     /**
      * The ID of this customer in an external payments solution, such as Stripe. This is used for
@@ -263,21 +262,20 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun paymentProviderId(): Optional<String> =
-        Optional.ofNullable(paymentProviderId.getNullable("payment_provider_id"))
+    fun paymentProviderId(): Optional<String> = paymentProviderId.getOptional("payment_provider_id")
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun portalUrl(): Optional<String> = Optional.ofNullable(portalUrl.getNullable("portal_url"))
+    fun portalUrl(): Optional<String> = portalUrl.getOptional("portal_url")
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
     fun shippingAddress(): Optional<ShippingAddress> =
-        Optional.ofNullable(shippingAddress.getNullable("shipping_address"))
+        shippingAddress.getOptional("shipping_address")
 
     /**
      * Tax IDs are commonly required to be displayed on customer invoices, which are added to the
@@ -388,7 +386,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun taxId(): Optional<TaxId> = Optional.ofNullable(taxId.getNullable("tax_id"))
+    fun taxId(): Optional<TaxId> = taxId.getOptional("tax_id")
 
     /**
      * A timezone identifier from the IANA timezone database, such as "America/Los_Angeles". This
@@ -405,16 +403,14 @@ private constructor(
      *   responded with an unexpected value).
      */
     fun accountingSyncConfiguration(): Optional<AccountingSyncConfiguration> =
-        Optional.ofNullable(
-            accountingSyncConfiguration.getNullable("accounting_sync_configuration")
-        )
+        accountingSyncConfiguration.getOptional("accounting_sync_configuration")
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
     fun reportingConfiguration(): Optional<ReportingConfiguration> =
-        Optional.ofNullable(reportingConfiguration.getNullable("reporting_configuration"))
+        reportingConfiguration.getOptional("reporting_configuration")
 
     /**
      * Returns the raw JSON value of [id].
@@ -1351,38 +1347,37 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun city(): Optional<String> = Optional.ofNullable(city.getNullable("city"))
+        fun city(): Optional<String> = city.getOptional("city")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun country(): Optional<String> = Optional.ofNullable(country.getNullable("country"))
+        fun country(): Optional<String> = country.getOptional("country")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun line1(): Optional<String> = Optional.ofNullable(line1.getNullable("line1"))
+        fun line1(): Optional<String> = line1.getOptional("line1")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun line2(): Optional<String> = Optional.ofNullable(line2.getNullable("line2"))
+        fun line2(): Optional<String> = line2.getOptional("line2")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun postalCode(): Optional<String> =
-            Optional.ofNullable(postalCode.getNullable("postal_code"))
+        fun postalCode(): Optional<String> = postalCode.getOptional("postal_code")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun state(): Optional<String> = Optional.ofNullable(state.getNullable("state"))
+        fun state(): Optional<String> = state.getOptional("state")
 
         /**
          * Returns the raw JSON value of [city].
@@ -1695,7 +1690,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun parent(): Optional<Parent> = Optional.ofNullable(parent.getNullable("parent"))
+        fun parent(): Optional<Parent> = parent.getOptional("parent")
 
         /**
          * Returns the raw JSON value of [children].
@@ -1888,7 +1883,7 @@ private constructor(
              *   server responded with an unexpected value).
              */
             fun externalCustomerId(): Optional<String> =
-                Optional.ofNullable(externalCustomerId.getNullable("external_customer_id"))
+                externalCustomerId.getOptional("external_customer_id")
 
             /**
              * Returns the raw JSON value of [id].
@@ -2098,7 +2093,7 @@ private constructor(
              *   server responded with an unexpected value).
              */
             fun externalCustomerId(): Optional<String> =
-                Optional.ofNullable(externalCustomerId.getNullable("external_customer_id"))
+                externalCustomerId.getOptional("external_customer_id")
 
             /**
              * Returns the raw JSON value of [id].
@@ -2582,38 +2577,37 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun city(): Optional<String> = Optional.ofNullable(city.getNullable("city"))
+        fun city(): Optional<String> = city.getOptional("city")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun country(): Optional<String> = Optional.ofNullable(country.getNullable("country"))
+        fun country(): Optional<String> = country.getOptional("country")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun line1(): Optional<String> = Optional.ofNullable(line1.getNullable("line1"))
+        fun line1(): Optional<String> = line1.getOptional("line1")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun line2(): Optional<String> = Optional.ofNullable(line2.getNullable("line2"))
+        fun line2(): Optional<String> = line2.getOptional("line2")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun postalCode(): Optional<String> =
-            Optional.ofNullable(postalCode.getNullable("postal_code"))
+        fun postalCode(): Optional<String> = postalCode.getOptional("postal_code")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun state(): Optional<String> = Optional.ofNullable(state.getNullable("state"))
+        fun state(): Optional<String> = state.getOptional("state")
 
         /**
          * Returns the raw JSON value of [city].
@@ -4575,7 +4569,7 @@ private constructor(
              *   server responded with an unexpected value).
              */
             fun externalProviderId(): Optional<String> =
-                Optional.ofNullable(externalProviderId.getNullable("external_provider_id"))
+                externalProviderId.getOptional("external_provider_id")
 
             /**
              * @throws OrbInvalidDataException if the JSON field has an unexpected type or is

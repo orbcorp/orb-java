@@ -152,6 +152,20 @@ private constructor(
                     dimensionalPriceGroupCreateParams.additionalQueryParams.toBuilder()
             }
 
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [billableMetricId]
+         * - [dimensions]
+         * - [name]
+         * - [externalDimensionalPriceGroupId]
+         * - [metadata]
+         * - etc.
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
         fun billableMetricId(billableMetricId: String) = apply {
             body.billableMetricId(billableMetricId)
         }
@@ -377,7 +391,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -442,9 +456,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun externalDimensionalPriceGroupId(): Optional<String> =
-            Optional.ofNullable(
-                externalDimensionalPriceGroupId.getNullable("external_dimensional_price_group_id")
-            )
+            externalDimensionalPriceGroupId.getOptional("external_dimensional_price_group_id")
 
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
@@ -454,7 +466,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata.getNullable("metadata"))
+        fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
         /**
          * Returns the raw JSON value of [billableMetricId].

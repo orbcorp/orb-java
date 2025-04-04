@@ -129,6 +129,17 @@ private constructor(
         }
 
         /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [eventIds]
+         * - [timeframeEnd]
+         * - [timeframeStart]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
+        /**
          * This is an explicit array of IDs to filter by. Note that an event's ID is the
          * idempotency_key that was originally used for ingestion, and this only supports events
          * that have not been amended. Values in this array will be treated case sensitively.
@@ -332,7 +343,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -376,8 +387,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun timeframeEnd(): Optional<OffsetDateTime> =
-            Optional.ofNullable(timeframeEnd.getNullable("timeframe_end"))
+        fun timeframeEnd(): Optional<OffsetDateTime> = timeframeEnd.getOptional("timeframe_end")
 
         /**
          * The start of the timeframe, inclusive, in which to search events. If not specified, the
@@ -387,7 +397,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun timeframeStart(): Optional<OffsetDateTime> =
-            Optional.ofNullable(timeframeStart.getNullable("timeframe_start"))
+            timeframeStart.getOptional("timeframe_start")
 
         /**
          * Returns the raw JSON value of [eventIds].

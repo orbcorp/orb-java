@@ -75,29 +75,26 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun effectiveDate(): Optional<OffsetDateTime> =
-        Optional.ofNullable(effectiveDate.getNullable("effective_date"))
+    fun effectiveDate(): Optional<OffsetDateTime> = effectiveDate.getOptional("effective_date")
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun expiryDate(): Optional<OffsetDateTime> =
-        Optional.ofNullable(expiryDate.getNullable("expiry_date"))
+    fun expiryDate(): Optional<OffsetDateTime> = expiryDate.getOptional("expiry_date")
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
     fun maximumInitialBalance(): Optional<Double> =
-        Optional.ofNullable(maximumInitialBalance.getNullable("maximum_initial_balance"))
+        maximumInitialBalance.getOptional("maximum_initial_balance")
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun perUnitCostBasis(): Optional<String> =
-        Optional.ofNullable(perUnitCostBasis.getNullable("per_unit_cost_basis"))
+    fun perUnitCostBasis(): Optional<String> = perUnitCostBasis.getOptional("per_unit_cost_basis")
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly

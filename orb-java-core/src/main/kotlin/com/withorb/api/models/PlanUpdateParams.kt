@@ -109,6 +109,16 @@ private constructor(
         fun planId(planId: String) = apply { this.planId = planId }
 
         /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [externalPlanId]
+         * - [metadata]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
+        /**
          * An optional user-defined ID for this plan resource, used throughout the system as an
          * alias for this Plan. Use this field to identify a plan by an existing identifier in your
          * system.
@@ -287,7 +297,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     fun _pathParam(index: Int): String =
         when (index) {
@@ -324,8 +334,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun externalPlanId(): Optional<String> =
-            Optional.ofNullable(externalPlanId.getNullable("external_plan_id"))
+        fun externalPlanId(): Optional<String> = externalPlanId.getOptional("external_plan_id")
 
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
@@ -335,7 +344,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata.getNullable("metadata"))
+        fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
         /**
          * Returns the raw JSON value of [externalPlanId].

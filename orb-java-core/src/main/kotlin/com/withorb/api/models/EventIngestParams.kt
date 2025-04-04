@@ -303,6 +303,15 @@ private constructor(
         /** Alias for calling [Builder.debug] with `debug.orElse(null)`. */
         fun debug(debug: Optional<Boolean>) = debug(debug.getOrNull())
 
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [events]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
         fun events(events: List<Event>) = apply { body.events(events) }
 
         /**
@@ -460,7 +469,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -724,8 +733,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun customerId(): Optional<String> =
-            Optional.ofNullable(customerId.getNullable("customer_id"))
+        fun customerId(): Optional<String> = customerId.getOptional("customer_id")
 
         /**
          * An alias for the Orb customer, whose mapping is specified when creating the customer
@@ -734,7 +742,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun externalCustomerId(): Optional<String> =
-            Optional.ofNullable(externalCustomerId.getNullable("external_customer_id"))
+            externalCustomerId.getOptional("external_customer_id")
 
         /**
          * Returns the raw JSON value of [eventName].

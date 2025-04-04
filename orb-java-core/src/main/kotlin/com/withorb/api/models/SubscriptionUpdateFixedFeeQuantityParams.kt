@@ -172,6 +172,20 @@ private constructor(
 
         fun subscriptionId(subscriptionId: String) = apply { this.subscriptionId = subscriptionId }
 
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [priceId]
+         * - [quantity]
+         * - [allowInvoiceCreditOrVoid]
+         * - [changeOption]
+         * - [effectiveDate]
+         * - etc.
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
         /** Price for which the quantity should be updated. Must be a fixed fee. */
         fun priceId(priceId: String) = apply { body.priceId(priceId) }
 
@@ -408,7 +422,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     fun _pathParam(index: Int): String =
         when (index) {
@@ -477,9 +491,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun allowInvoiceCreditOrVoid(): Optional<Boolean> =
-            Optional.ofNullable(
-                allowInvoiceCreditOrVoid.getNullable("allow_invoice_credit_or_void")
-            )
+            allowInvoiceCreditOrVoid.getOptional("allow_invoice_credit_or_void")
 
         /**
          * Determines when the change takes effect. Note that if `effective_date` is specified, this
@@ -489,8 +501,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun changeOption(): Optional<ChangeOption> =
-            Optional.ofNullable(changeOption.getNullable("change_option"))
+        fun changeOption(): Optional<ChangeOption> = changeOption.getOptional("change_option")
 
         /**
          * The date that the quantity change should take effect, localized to the customer's
@@ -500,8 +511,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun effectiveDate(): Optional<LocalDate> =
-            Optional.ofNullable(effectiveDate.getNullable("effective_date"))
+        fun effectiveDate(): Optional<LocalDate> = effectiveDate.getOptional("effective_date")
 
         /**
          * Returns the raw JSON value of [priceId].

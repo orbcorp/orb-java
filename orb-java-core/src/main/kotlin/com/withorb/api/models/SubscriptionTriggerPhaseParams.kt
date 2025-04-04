@@ -107,6 +107,16 @@ private constructor(
         fun subscriptionId(subscriptionId: String) = apply { this.subscriptionId = subscriptionId }
 
         /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [allowInvoiceCreditOrVoid]
+         * - [effectiveDate]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
+        /**
          * If false, this request will fail if it would void an issued invoice or create a credit
          * note. Consider using this as a safety mechanism if you do not expect existing invoices to
          * be changed.
@@ -300,7 +310,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     fun _pathParam(index: Int): String =
         when (index) {
@@ -338,9 +348,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun allowInvoiceCreditOrVoid(): Optional<Boolean> =
-            Optional.ofNullable(
-                allowInvoiceCreditOrVoid.getNullable("allow_invoice_credit_or_void")
-            )
+            allowInvoiceCreditOrVoid.getOptional("allow_invoice_credit_or_void")
 
         /**
          * The date on which the phase change should take effect. If not provided, defaults to today
@@ -349,8 +357,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun effectiveDate(): Optional<LocalDate> =
-            Optional.ofNullable(effectiveDate.getNullable("effective_date"))
+        fun effectiveDate(): Optional<LocalDate> = effectiveDate.getOptional("effective_date")
 
         /**
          * Returns the raw JSON value of [allowInvoiceCreditOrVoid].

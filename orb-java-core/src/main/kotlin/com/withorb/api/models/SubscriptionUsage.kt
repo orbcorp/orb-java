@@ -1241,7 +1241,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun paginationMetadata(): Optional<PaginationMetadata> =
-            Optional.ofNullable(paginationMetadata.getNullable("pagination_metadata"))
+            paginationMetadata.getOptional("pagination_metadata")
 
         /**
          * Returns the raw JSON value of [data].

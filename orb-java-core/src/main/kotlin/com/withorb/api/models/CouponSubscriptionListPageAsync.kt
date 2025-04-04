@@ -18,6 +18,7 @@ import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint returns a list of all subscriptions that have redeemed a given coupon as a
@@ -103,7 +104,7 @@ private constructor(
             paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of(),
         ) : this(data, paginationMetadata, mutableMapOf())
 
-        fun data(): List<Subscription> = data.getNullable("data") ?: listOf()
+        fun data(): List<Subscription> = data.getOptional("data").getOrNull() ?: listOf()
 
         fun paginationMetadata(): PaginationMetadata =
             paginationMetadata.getRequired("pagination_metadata")

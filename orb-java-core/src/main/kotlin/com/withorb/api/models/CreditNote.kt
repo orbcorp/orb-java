@@ -130,8 +130,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun creditNotePdf(): Optional<String> =
-        Optional.ofNullable(creditNotePdf.getNullable("credit_note_pdf"))
+    fun creditNotePdf(): Optional<String> = creditNotePdf.getOptional("credit_note_pdf")
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -162,7 +161,7 @@ private constructor(
      *   responded with an unexpected value).
      */
     fun maximumAmountAdjustment(): Optional<MaximumAmountAdjustment> =
-        Optional.ofNullable(maximumAmountAdjustment.getNullable("maximum_amount_adjustment"))
+        maximumAmountAdjustment.getOptional("maximum_amount_adjustment")
 
     /**
      * An optional memo supplied on the credit note.
@@ -170,7 +169,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun memo(): Optional<String> = Optional.ofNullable(memo.getNullable("memo"))
+    fun memo(): Optional<String> = memo.getOptional("memo")
 
     /**
      * Any credited amount from the applied minimum on the invoice.
@@ -179,13 +178,13 @@ private constructor(
      *   responded with an unexpected value).
      */
     fun minimumAmountRefunded(): Optional<String> =
-        Optional.ofNullable(minimumAmountRefunded.getNullable("minimum_amount_refunded"))
+        minimumAmountRefunded.getOptional("minimum_amount_refunded")
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun reason(): Optional<Reason> = Optional.ofNullable(reason.getNullable("reason"))
+    fun reason(): Optional<Reason> = reason.getOptional("reason")
 
     /**
      * The total prior to any creditable invoice-level discounts or minimums.
@@ -215,8 +214,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun voidedAt(): Optional<OffsetDateTime> =
-        Optional.ofNullable(voidedAt.getNullable("voided_at"))
+    fun voidedAt(): Optional<OffsetDateTime> = voidedAt.getOptional("voided_at")
 
     /**
      * Any discounts applied on the original invoice.
@@ -224,8 +222,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun discounts(): Optional<List<Discount>> =
-        Optional.ofNullable(discounts.getNullable("discounts"))
+    fun discounts(): Optional<List<Discount>> = discounts.getOptional("discounts")
 
     /**
      * Returns the raw JSON value of [id].
@@ -839,7 +836,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun externalCustomerId(): Optional<String> =
-            Optional.ofNullable(externalCustomerId.getNullable("external_customer_id"))
+            externalCustomerId.getOptional("external_customer_id")
 
         /**
          * Returns the raw JSON value of [id].
@@ -1100,7 +1097,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun quantity(): Optional<Double> = Optional.ofNullable(quantity.getNullable("quantity"))
+        fun quantity(): Optional<Double> = quantity.getOptional("quantity")
 
         /**
          * The amount of the line item, excluding any line item minimums and discounts.
@@ -1124,8 +1121,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun discounts(): Optional<List<Discount>> =
-            Optional.ofNullable(discounts.getNullable("discounts"))
+        fun discounts(): Optional<List<Discount>> = discounts.getOptional("discounts")
 
         /**
          * Returns the raw JSON value of [id].
@@ -1519,7 +1515,7 @@ private constructor(
              *   server responded with an unexpected value).
              */
             fun taxRatePercentage(): Optional<String> =
-                Optional.ofNullable(taxRatePercentage.getNullable("tax_rate_percentage"))
+                taxRatePercentage.getOptional("tax_rate_percentage")
 
             /**
              * Returns the raw JSON value of [amount].
@@ -1818,14 +1814,13 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun amountDiscount(): Optional<String> =
-                Optional.ofNullable(amountDiscount.getNullable("amount_discount"))
+            fun amountDiscount(): Optional<String> = amountDiscount.getOptional("amount_discount")
 
             /**
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
+            fun reason(): Optional<String> = reason.getOptional("reason")
 
             /**
              * Returns the raw JSON value of [id].
@@ -2378,13 +2373,13 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun appliesToPrices(): Optional<List<AppliesToPrice>> =
-            Optional.ofNullable(appliesToPrices.getNullable("applies_to_prices"))
+            appliesToPrices.getOptional("applies_to_prices")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
+        fun reason(): Optional<String> = reason.getOptional("reason")
 
         /**
          * Returns the raw JSON value of [amountApplied].
@@ -3297,13 +3292,13 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun appliesToPrices(): Optional<List<AppliesToPrice>> =
-            Optional.ofNullable(appliesToPrices.getNullable("applies_to_prices"))
+            appliesToPrices.getOptional("applies_to_prices")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
+        fun reason(): Optional<String> = reason.getOptional("reason")
 
         /**
          * Returns the raw JSON value of [amountApplied].

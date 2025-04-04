@@ -18,6 +18,7 @@ import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint returns a [paginated](/api-reference/pagination) list of all plans associated with
@@ -103,7 +104,8 @@ private constructor(
             paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of(),
         ) : this(data, paginationMetadata, mutableMapOf())
 
-        fun data(): List<SubscriptionFetchScheduleResponse> = data.getNullable("data") ?: listOf()
+        fun data(): List<SubscriptionFetchScheduleResponse> =
+            data.getOptional("data").getOrNull() ?: listOf()
 
         fun paginationMetadata(): PaginationMetadata =
             paginationMetadata.getRequired("pagination_metadata")

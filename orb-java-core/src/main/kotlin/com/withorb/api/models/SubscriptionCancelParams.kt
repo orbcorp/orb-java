@@ -173,6 +173,17 @@ private constructor(
 
         fun subscriptionId(subscriptionId: String) = apply { this.subscriptionId = subscriptionId }
 
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [cancelOption]
+         * - [allowInvoiceCreditOrVoid]
+         * - [cancellationDate]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
         /** Determines the timing of subscription cancellation */
         fun cancelOption(cancelOption: CancelOption) = apply { body.cancelOption(cancelOption) }
 
@@ -384,7 +395,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     fun _pathParam(index: Int): String =
         when (index) {
@@ -434,9 +445,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun allowInvoiceCreditOrVoid(): Optional<Boolean> =
-            Optional.ofNullable(
-                allowInvoiceCreditOrVoid.getNullable("allow_invoice_credit_or_void")
-            )
+            allowInvoiceCreditOrVoid.getOptional("allow_invoice_credit_or_void")
 
         /**
          * The date that the cancellation should take effect. This parameter can only be passed if
@@ -446,7 +455,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun cancellationDate(): Optional<OffsetDateTime> =
-            Optional.ofNullable(cancellationDate.getNullable("cancellation_date"))
+            cancellationDate.getOptional("cancellation_date")
 
         /**
          * Returns the raw JSON value of [cancelOption].

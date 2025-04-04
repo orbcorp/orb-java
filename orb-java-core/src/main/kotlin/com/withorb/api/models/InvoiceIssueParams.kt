@@ -94,6 +94,15 @@ private constructor(
         fun invoiceId(invoiceId: String) = apply { this.invoiceId = invoiceId }
 
         /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [synchronous]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
+        /**
          * If true, the invoice will be issued synchronously. If false, the invoice will be issued
          * asynchronously. The synchronous option is only available for invoices that have no usage
          * fees. If the invoice is configured to sync to an external provider, a successful response
@@ -248,7 +257,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     fun _pathParam(index: Int): String =
         when (index) {
@@ -282,8 +291,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun synchronous(): Optional<Boolean> =
-            Optional.ofNullable(synchronous.getNullable("synchronous"))
+        fun synchronous(): Optional<Boolean> = synchronous.getOptional("synchronous")
 
         /**
          * Returns the raw JSON value of [synchronous].

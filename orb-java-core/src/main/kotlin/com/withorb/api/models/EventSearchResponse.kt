@@ -234,8 +234,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun customerId(): Optional<String> =
-            Optional.ofNullable(customerId.getNullable("customer_id"))
+        fun customerId(): Optional<String> = customerId.getOptional("customer_id")
 
         /**
          * A boolean indicating whether the event is currently deprecated.
@@ -260,7 +259,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun externalCustomerId(): Optional<String> =
-            Optional.ofNullable(externalCustomerId.getNullable("external_customer_id"))
+            externalCustomerId.getOptional("external_customer_id")
 
         /**
          * A dictionary of custom properties. Values in this dictionary must be numeric, boolean, or

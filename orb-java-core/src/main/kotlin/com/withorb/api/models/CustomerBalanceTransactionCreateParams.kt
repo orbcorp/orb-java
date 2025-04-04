@@ -121,6 +121,17 @@ private constructor(
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
 
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [amount]
+         * - [type]
+         * - [description]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
         fun amount(amount: String) = apply { body.amount(amount) }
 
         /**
@@ -296,7 +307,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     fun _pathParam(index: Int): String =
         when (index) {
@@ -343,8 +354,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun description(): Optional<String> =
-            Optional.ofNullable(description.getNullable("description"))
+        fun description(): Optional<String> = description.getOptional("description")
 
         /**
          * Returns the raw JSON value of [amount].

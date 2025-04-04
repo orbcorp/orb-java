@@ -98,7 +98,7 @@ private constructor(
         ) : this(data, paginationMetadata, mutableMapOf())
 
         fun data(): List<CustomerCreditTopUpListByExternalIdResponse> =
-            data.getNullable("data") ?: listOf()
+            data.getOptional("data").getOrNull() ?: listOf()
 
         fun paginationMetadata(): PaginationMetadata =
             paginationMetadata.getRequired("pagination_metadata")

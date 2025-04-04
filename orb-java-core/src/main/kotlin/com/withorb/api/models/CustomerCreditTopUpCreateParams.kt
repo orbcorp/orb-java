@@ -212,6 +212,20 @@ private constructor(
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
 
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [amount]
+         * - [currency]
+         * - [invoiceSettings]
+         * - [perUnitCostBasis]
+         * - [threshold]
+         * - etc.
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
         /** The amount to increment when the threshold is reached. */
         fun amount(amount: String) = apply { body.amount(amount) }
 
@@ -492,7 +506,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     fun _pathParam(index: Int): String =
         when (index) {
@@ -602,8 +616,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun activeFrom(): Optional<OffsetDateTime> =
-            Optional.ofNullable(activeFrom.getNullable("active_from"))
+        fun activeFrom(): Optional<OffsetDateTime> = activeFrom.getOptional("active_from")
 
         /**
          * The number of days or months after which the top-up expires. If unspecified, it does not
@@ -612,8 +625,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun expiresAfter(): Optional<Long> =
-            Optional.ofNullable(expiresAfter.getNullable("expires_after"))
+        fun expiresAfter(): Optional<Long> = expiresAfter.getOptional("expires_after")
 
         /**
          * The unit of expires_after.
@@ -622,7 +634,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun expiresAfterUnit(): Optional<ExpiresAfterUnit> =
-            Optional.ofNullable(expiresAfterUnit.getNullable("expires_after_unit"))
+            expiresAfterUnit.getOptional("expires_after_unit")
 
         /**
          * Returns the raw JSON value of [amount].
@@ -1047,7 +1059,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun memo(): Optional<String> = Optional.ofNullable(memo.getNullable("memo"))
+        fun memo(): Optional<String> = memo.getOptional("memo")
 
         /**
          * If true, new credit blocks created by this top-up will require that the corresponding
@@ -1057,7 +1069,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun requireSuccessfulPayment(): Optional<Boolean> =
-            Optional.ofNullable(requireSuccessfulPayment.getNullable("require_successful_payment"))
+            requireSuccessfulPayment.getOptional("require_successful_payment")
 
         /**
          * Returns the raw JSON value of [autoCollection].

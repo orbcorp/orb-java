@@ -91,8 +91,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun archivedAt(): Optional<OffsetDateTime> =
-        Optional.ofNullable(archivedAt.getNullable("archived_at"))
+    fun archivedAt(): Optional<OffsetDateTime> = archivedAt.getOptional("archived_at")
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -107,8 +106,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun durationInMonths(): Optional<Long> =
-        Optional.ofNullable(durationInMonths.getNullable("duration_in_months"))
+    fun durationInMonths(): Optional<Long> = durationInMonths.getOptional("duration_in_months")
 
     /**
      * The maximum number of redemptions allowed for this coupon before it is exhausted; `null` here
@@ -117,8 +115,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun maxRedemptions(): Optional<Long> =
-        Optional.ofNullable(maxRedemptions.getNullable("max_redemptions"))
+    fun maxRedemptions(): Optional<Long> = maxRedemptions.getOptional("max_redemptions")
 
     /**
      * This string can be used to redeem this coupon for a given subscription.

@@ -18,6 +18,7 @@ import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * The credits ledger provides _auditing_ functionality over Orb's credits system with a list of
@@ -176,7 +177,7 @@ private constructor(
         ) : this(data, paginationMetadata, mutableMapOf())
 
         fun data(): List<CustomerCreditLedgerListByExternalIdResponse> =
-            data.getNullable("data") ?: listOf()
+            data.getOptional("data").getOrNull() ?: listOf()
 
         fun paginationMetadata(): PaginationMetadata =
             paginationMetadata.getRequired("pagination_metadata")

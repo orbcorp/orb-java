@@ -96,7 +96,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
+    fun currency(): Optional<String> = currency.getOptional("currency")
 
     /**
      * The customer the alert applies to.
@@ -104,7 +104,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun customer(): Optional<Customer> = Optional.ofNullable(customer.getNullable("customer"))
+    fun customer(): Optional<Customer> = customer.getOptional("customer")
 
     /**
      * Whether the alert is enabled or disabled.
@@ -120,7 +120,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun metric(): Optional<Metric> = Optional.ofNullable(metric.getNullable("metric"))
+    fun metric(): Optional<Metric> = metric.getOptional("metric")
 
     /**
      * The plan the alert applies to.
@@ -128,7 +128,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun plan(): Optional<Plan> = Optional.ofNullable(plan.getNullable("plan"))
+    fun plan(): Optional<Plan> = plan.getOptional("plan")
 
     /**
      * The subscription the alert applies to.
@@ -136,8 +136,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun subscription(): Optional<Subscription> =
-        Optional.ofNullable(subscription.getNullable("subscription"))
+    fun subscription(): Optional<Subscription> = subscription.getOptional("subscription")
 
     /**
      * The thresholds that define the conditions under which the alert will be triggered.
@@ -145,8 +144,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun thresholds(): Optional<List<Threshold>> =
-        Optional.ofNullable(thresholds.getNullable("thresholds"))
+    fun thresholds(): Optional<List<Threshold>> = thresholds.getOptional("thresholds")
 
     /**
      * The type of alert. This must be a valid alert type.
@@ -575,7 +573,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun externalCustomerId(): Optional<String> =
-            Optional.ofNullable(externalCustomerId.getNullable("external_customer_id"))
+            externalCustomerId.getOptional("external_customer_id")
 
         /**
          * Returns the raw JSON value of [id].
@@ -933,7 +931,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun id(): Optional<String> = Optional.ofNullable(id.getNullable("id"))
+        fun id(): Optional<String> = id.getOptional("id")
 
         /**
          * An optional user-defined ID for this plan resource, used throughout the system as an
@@ -943,14 +941,13 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun externalPlanId(): Optional<String> =
-            Optional.ofNullable(externalPlanId.getNullable("external_plan_id"))
+        fun externalPlanId(): Optional<String> = externalPlanId.getOptional("external_plan_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
+        fun name(): Optional<String> = name.getOptional("name")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is

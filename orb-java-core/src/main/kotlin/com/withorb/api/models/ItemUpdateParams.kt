@@ -100,6 +100,16 @@ private constructor(
 
         fun itemId(itemId: String) = apply { this.itemId = itemId }
 
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [externalConnections]
+         * - [name]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
         fun externalConnections(externalConnections: List<ExternalConnection>?) = apply {
             body.externalConnections(externalConnections)
         }
@@ -281,7 +291,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     fun _pathParam(index: Int): String =
         when (index) {
@@ -318,13 +328,13 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun externalConnections(): Optional<List<ExternalConnection>> =
-            Optional.ofNullable(externalConnections.getNullable("external_connections"))
+            externalConnections.getOptional("external_connections")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
+        fun name(): Optional<String> = name.getOptional("name")
 
         /**
          * Returns the raw JSON value of [externalConnections].

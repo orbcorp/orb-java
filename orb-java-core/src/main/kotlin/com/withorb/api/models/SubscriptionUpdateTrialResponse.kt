@@ -169,7 +169,7 @@ private constructor(
      *   responded with an unexpected value).
      */
     fun activePlanPhaseOrder(): Optional<Long> =
-        Optional.ofNullable(activePlanPhaseOrder.getNullable("active_plan_phase_order"))
+        activePlanPhaseOrder.getOptional("active_plan_phase_order")
 
     /**
      * The adjustment intervals for this subscription sorted by the start_date of the adjustment
@@ -189,8 +189,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun autoCollection(): Optional<Boolean> =
-        Optional.ofNullable(autoCollection.getNullable("auto_collection"))
+    fun autoCollection(): Optional<Boolean> = autoCollection.getOptional("auto_collection")
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -224,9 +223,7 @@ private constructor(
      *   responded with an unexpected value).
      */
     fun currentBillingPeriodEndDate(): Optional<OffsetDateTime> =
-        Optional.ofNullable(
-            currentBillingPeriodEndDate.getNullable("current_billing_period_end_date")
-        )
+        currentBillingPeriodEndDate.getOptional("current_billing_period_end_date")
 
     /**
      * The start date of the current billing period. This is an inclusive timestamp; the instant
@@ -237,9 +234,7 @@ private constructor(
      *   responded with an unexpected value).
      */
     fun currentBillingPeriodStartDate(): Optional<OffsetDateTime> =
-        Optional.ofNullable(
-            currentBillingPeriodStartDate.getNullable("current_billing_period_start_date")
-        )
+        currentBillingPeriodStartDate.getOptional("current_billing_period_start_date")
 
     /**
      * A customer is a buyer of your products, and the other party to the billing relationship.
@@ -272,7 +267,7 @@ private constructor(
      *   responded with an unexpected value).
      */
     fun defaultInvoiceMemo(): Optional<String> =
-        Optional.ofNullable(defaultInvoiceMemo.getNullable("default_invoice_memo"))
+        defaultInvoiceMemo.getOptional("default_invoice_memo")
 
     /**
      * The discount intervals for this subscription sorted by the start_date.
@@ -289,7 +284,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun endDate(): Optional<OffsetDateTime> = Optional.ofNullable(endDate.getNullable("end_date"))
+    fun endDate(): Optional<OffsetDateTime> = endDate.getOptional("end_date")
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -303,7 +298,7 @@ private constructor(
      *   responded with an unexpected value).
      */
     fun invoicingThreshold(): Optional<String> =
-        Optional.ofNullable(invoicingThreshold.getNullable("invoicing_threshold"))
+        invoicingThreshold.getOptional("invoicing_threshold")
 
     /**
      * The maximum intervals for this subscription sorted by the start_date.
@@ -365,8 +360,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun redeemedCoupon(): Optional<RedeemedCoupon> =
-        Optional.ofNullable(redeemedCoupon.getNullable("redeemed_coupon"))
+    fun redeemedCoupon(): Optional<RedeemedCoupon> = redeemedCoupon.getOptional("redeemed_coupon")
 
     /**
      * The date Orb starts billing for this subscription.
@@ -1487,8 +1481,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun endDate(): Optional<OffsetDateTime> =
-            Optional.ofNullable(endDate.getNullable("end_date"))
+        fun endDate(): Optional<OffsetDateTime> = endDate.getOptional("end_date")
 
         /**
          * The start date of the adjustment interval.
@@ -2197,7 +2190,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun planPhaseOrder(): Optional<Long> =
-                    Optional.ofNullable(planPhaseOrder.getNullable("plan_phase_order"))
+                    planPhaseOrder.getOptional("plan_phase_order")
 
                 /**
                  * The reason for the adjustment.
@@ -2205,7 +2198,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
+                fun reason(): Optional<String> = reason.getOptional("reason")
 
                 /**
                  * The number of usage units by which to discount the price this adjustment applies
@@ -2816,7 +2809,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun planPhaseOrder(): Optional<Long> =
-                    Optional.ofNullable(planPhaseOrder.getNullable("plan_phase_order"))
+                    planPhaseOrder.getOptional("plan_phase_order")
 
                 /**
                  * The reason for the adjustment.
@@ -2824,7 +2817,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
+                fun reason(): Optional<String> = reason.getOptional("reason")
 
                 /**
                  * Returns the raw JSON value of [id].
@@ -3426,7 +3419,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun planPhaseOrder(): Optional<Long> =
-                    Optional.ofNullable(planPhaseOrder.getNullable("plan_phase_order"))
+                    planPhaseOrder.getOptional("plan_phase_order")
 
                 /**
                  * The reason for the adjustment.
@@ -3434,7 +3427,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
+                fun reason(): Optional<String> = reason.getOptional("reason")
 
                 /**
                  * Returns the raw JSON value of [id].
@@ -4051,7 +4044,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun planPhaseOrder(): Optional<Long> =
-                    Optional.ofNullable(planPhaseOrder.getNullable("plan_phase_order"))
+                    planPhaseOrder.getOptional("plan_phase_order")
 
                 /**
                  * The reason for the adjustment.
@@ -4059,7 +4052,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
+                fun reason(): Optional<String> = reason.getOptional("reason")
 
                 /**
                  * Returns the raw JSON value of [id].
@@ -4686,7 +4679,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun planPhaseOrder(): Optional<Long> =
-                    Optional.ofNullable(planPhaseOrder.getNullable("plan_phase_order"))
+                    planPhaseOrder.getOptional("plan_phase_order")
 
                 /**
                  * The reason for the adjustment.
@@ -4694,7 +4687,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
+                fun reason(): Optional<String> = reason.getOptional("reason")
 
                 /**
                  * Returns the raw JSON value of [id].
@@ -5251,7 +5244,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun month(): Optional<Long> = Optional.ofNullable(month.getNullable("month"))
+        fun month(): Optional<Long> = month.getOptional("month")
 
         /**
          * The year on which the billing cycle is anchored (e.g. a 2 year billing cycle anchored on
@@ -5260,7 +5253,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun year(): Optional<Long> = Optional.ofNullable(year.getNullable("year"))
+        fun year(): Optional<Long> = year.getOptional("year")
 
         /**
          * Returns the raw JSON value of [day].
@@ -5764,8 +5757,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun endDate(): Optional<OffsetDateTime> =
-                Optional.ofNullable(endDate.getNullable("end_date"))
+            fun endDate(): Optional<OffsetDateTime> = endDate.getOptional("end_date")
 
             /**
              * The start date of the discount interval.
@@ -6319,8 +6311,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun endDate(): Optional<OffsetDateTime> =
-                Optional.ofNullable(endDate.getNullable("end_date"))
+            fun endDate(): Optional<OffsetDateTime> = endDate.getOptional("end_date")
 
             /**
              * Only available if discount_type is `percentage`.This is a number between 0 and 1.
@@ -6887,8 +6878,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun endDate(): Optional<OffsetDateTime> =
-                Optional.ofNullable(endDate.getNullable("end_date"))
+            fun endDate(): Optional<OffsetDateTime> = endDate.getOptional("end_date")
 
             /**
              * The start date of the discount interval.
@@ -7408,8 +7398,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun endDate(): Optional<OffsetDateTime> =
-            Optional.ofNullable(endDate.getNullable("end_date"))
+        fun endDate(): Optional<OffsetDateTime> = endDate.getOptional("end_date")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
@@ -7713,8 +7702,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun endDate(): Optional<OffsetDateTime> =
-            Optional.ofNullable(endDate.getNullable("end_date"))
+        fun endDate(): Optional<OffsetDateTime> = endDate.getOptional("end_date")
 
         /**
          * The maximum amount to charge in a given billing period for the price intervals this
@@ -8202,8 +8190,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun endDate(): Optional<OffsetDateTime> =
-            Optional.ofNullable(endDate.getNullable("end_date"))
+        fun endDate(): Optional<OffsetDateTime> = endDate.getOptional("end_date")
 
         /**
          * The minimum amount to charge in a given billing period for the price intervals this
@@ -8608,9 +8595,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun currentBillingPeriodEndDate(): Optional<OffsetDateTime> =
-            Optional.ofNullable(
-                currentBillingPeriodEndDate.getNullable("current_billing_period_end_date")
-            )
+            currentBillingPeriodEndDate.getOptional("current_billing_period_end_date")
 
         /**
          * The start date of the current billing period. This is an inclusive timestamp; the instant
@@ -8621,9 +8606,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun currentBillingPeriodStartDate(): Optional<OffsetDateTime> =
-            Optional.ofNullable(
-                currentBillingPeriodStartDate.getNullable("current_billing_period_start_date")
-            )
+            currentBillingPeriodStartDate.getOptional("current_billing_period_start_date")
 
         /**
          * The end date of the price interval. This is the date that Orb stops billing for this
@@ -8632,8 +8615,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun endDate(): Optional<OffsetDateTime> =
-            Optional.ofNullable(endDate.getNullable("end_date"))
+        fun endDate(): Optional<OffsetDateTime> = endDate.getOptional("end_date")
 
         /**
          * An additional filter to apply to usage queries.
@@ -8641,7 +8623,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun filter(): Optional<String> = Optional.ofNullable(filter.getNullable("filter"))
+        fun filter(): Optional<String> = filter.getOptional("filter")
 
         /**
          * The fixed fee quantity transitions for this price interval. This is only relevant for
@@ -8651,9 +8633,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun fixedFeeQuantityTransitions(): Optional<List<FixedFeeQuantityTransition>> =
-            Optional.ofNullable(
-                fixedFeeQuantityTransitions.getNullable("fixed_fee_quantity_transitions")
-            )
+            fixedFeeQuantityTransitions.getOptional("fixed_fee_quantity_transitions")
 
         /**
          * The Price resource represents a price that can be billed on a subscription, resulting in
@@ -8689,7 +8669,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun usageCustomerIds(): Optional<List<String>> =
-            Optional.ofNullable(usageCustomerIds.getNullable("usage_customer_ids"))
+            usageCustomerIds.getOptional("usage_customer_ids")
 
         /**
          * Returns the raw JSON value of [id].
@@ -9620,8 +9600,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun endDate(): Optional<OffsetDateTime> =
-            Optional.ofNullable(endDate.getNullable("end_date"))
+        fun endDate(): Optional<OffsetDateTime> = endDate.getOptional("end_date")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
@@ -9975,8 +9954,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun endDate(): Optional<OffsetDateTime> =
-            Optional.ofNullable(endDate.getNullable("end_date"))
+        fun endDate(): Optional<OffsetDateTime> = endDate.getOptional("end_date")
 
         /**
          * Returns the raw JSON value of [endDate].

@@ -186,6 +186,20 @@ private constructor(
 
         fun priceId(priceId: String) = apply { this.priceId = priceId }
 
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [timeframeEnd]
+         * - [timeframeStart]
+         * - [customerId]
+         * - [externalCustomerId]
+         * - [filter]
+         * - etc.
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
         /** The exclusive upper bound for event timestamps */
         fun timeframeEnd(timeframeEnd: OffsetDateTime) = apply { body.timeframeEnd(timeframeEnd) }
 
@@ -435,7 +449,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     fun _pathParam(index: Int): String =
         when (index) {
@@ -508,8 +522,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun customerId(): Optional<String> =
-            Optional.ofNullable(customerId.getNullable("customer_id"))
+        fun customerId(): Optional<String> = customerId.getOptional("customer_id")
 
         /**
          * The external customer ID of the customer to which this evaluation is scoped.
@@ -518,7 +531,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun externalCustomerId(): Optional<String> =
-            Optional.ofNullable(externalCustomerId.getNullable("external_customer_id"))
+            externalCustomerId.getOptional("external_customer_id")
 
         /**
          * A boolean [computed property](/extensibility/advanced-metrics#computed-properties) used
@@ -527,7 +540,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun filter(): Optional<String> = Optional.ofNullable(filter.getNullable("filter"))
+        fun filter(): Optional<String> = filter.getOptional("filter")
 
         /**
          * Properties (or
@@ -537,8 +550,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun groupingKeys(): Optional<List<String>> =
-            Optional.ofNullable(groupingKeys.getNullable("grouping_keys"))
+        fun groupingKeys(): Optional<List<String>> = groupingKeys.getOptional("grouping_keys")
 
         /**
          * Returns the raw JSON value of [timeframeEnd].

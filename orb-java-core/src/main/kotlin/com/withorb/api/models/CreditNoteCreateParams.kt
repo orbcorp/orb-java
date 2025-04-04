@@ -109,6 +109,17 @@ private constructor(
             additionalQueryParams = creditNoteCreateParams.additionalQueryParams.toBuilder()
         }
 
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [lineItems]
+         * - [memo]
+         * - [reason]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
         fun lineItems(lineItems: List<LineItem>) = apply { body.lineItems(lineItems) }
 
         /**
@@ -292,7 +303,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -327,7 +338,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun memo(): Optional<String> = Optional.ofNullable(memo.getNullable("memo"))
+        fun memo(): Optional<String> = memo.getOptional("memo")
 
         /**
          * An optional reason for the credit note.
@@ -335,7 +346,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun reason(): Optional<Reason> = Optional.ofNullable(reason.getNullable("reason"))
+        fun reason(): Optional<Reason> = reason.getOptional("reason")
 
         /**
          * Returns the raw JSON value of [lineItems].

@@ -173,7 +173,8 @@ private constructor(
             paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of(),
         ) : this(data, paginationMetadata, mutableMapOf())
 
-        fun data(): List<CustomerCreditLedgerListResponse> = data.getNullable("data") ?: listOf()
+        fun data(): List<CustomerCreditLedgerListResponse> =
+            data.getOptional("data").getOrNull() ?: listOf()
 
         fun paginationMetadata(): PaginationMetadata =
             paginationMetadata.getRequired("pagination_metadata")

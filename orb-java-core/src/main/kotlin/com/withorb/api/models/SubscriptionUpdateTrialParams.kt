@@ -135,6 +135,16 @@ private constructor(
         fun subscriptionId(subscriptionId: String) = apply { this.subscriptionId = subscriptionId }
 
         /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [trialEndDate]
+         * - [shift]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
+        /**
          * The new date that the trial should end, or the literal string `immediate` to end the
          * trial immediately.
          */
@@ -316,7 +326,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     fun _pathParam(index: Int): String =
         when (index) {
@@ -359,7 +369,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun shift(): Optional<Boolean> = Optional.ofNullable(shift.getNullable("shift"))
+        fun shift(): Optional<Boolean> = shift.getOptional("shift")
 
         /**
          * Returns the raw JSON value of [trialEndDate].

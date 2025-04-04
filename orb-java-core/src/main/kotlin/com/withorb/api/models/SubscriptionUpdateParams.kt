@@ -160,6 +160,20 @@ private constructor(
         fun subscriptionId(subscriptionId: String) = apply { this.subscriptionId = subscriptionId }
 
         /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [autoCollection]
+         * - [defaultInvoiceMemo]
+         * - [invoicingThreshold]
+         * - [metadata]
+         * - [netTerms]
+         * - etc.
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
+        /**
          * Determines whether issued invoices for this subscription will automatically be charged
          * with the saved payment method on the due date. This property defaults to the plan's
          * behavior.
@@ -421,7 +435,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     fun _pathParam(index: Int): String =
         when (index) {
@@ -475,8 +489,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun autoCollection(): Optional<Boolean> =
-            Optional.ofNullable(autoCollection.getNullable("auto_collection"))
+        fun autoCollection(): Optional<Boolean> = autoCollection.getOptional("auto_collection")
 
         /**
          * Determines the default memo on this subscription's invoices. Note that if this is not
@@ -486,7 +499,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun defaultInvoiceMemo(): Optional<String> =
-            Optional.ofNullable(defaultInvoiceMemo.getNullable("default_invoice_memo"))
+            defaultInvoiceMemo.getOptional("default_invoice_memo")
 
         /**
          * When this subscription's accrued usage reaches this threshold, an invoice will be issued
@@ -497,7 +510,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun invoicingThreshold(): Optional<String> =
-            Optional.ofNullable(invoicingThreshold.getNullable("invoicing_threshold"))
+            invoicingThreshold.getOptional("invoicing_threshold")
 
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
@@ -507,7 +520,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata.getNullable("metadata"))
+        fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
         /**
          * Determines the difference between the invoice issue date for subscription invoices as the
@@ -517,7 +530,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun netTerms(): Optional<Long> = Optional.ofNullable(netTerms.getNullable("net_terms"))
+        fun netTerms(): Optional<Long> = netTerms.getOptional("net_terms")
 
         /**
          * Returns the raw JSON value of [autoCollection].

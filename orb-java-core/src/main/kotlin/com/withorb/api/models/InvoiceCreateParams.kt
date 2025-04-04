@@ -229,6 +229,20 @@ private constructor(
         }
 
         /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [currency]
+         * - [invoiceDate]
+         * - [lineItems]
+         * - [netTerms]
+         * - [customerId]
+         * - etc.
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
+        /**
          * An ISO 4217 currency string. Must be the same as the customer's currency if it is set.
          */
         fun currency(currency: String) = apply { body.currency(currency) }
@@ -564,7 +578,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -667,8 +681,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun customerId(): Optional<String> =
-            Optional.ofNullable(customerId.getNullable("customer_id"))
+        fun customerId(): Optional<String> = customerId.getOptional("customer_id")
 
         /**
          * An optional discount to attach to the invoice.
@@ -676,7 +689,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun discount(): Optional<Discount> = Optional.ofNullable(discount.getNullable("discount"))
+        fun discount(): Optional<Discount> = discount.getOptional("discount")
 
         /**
          * The `external_customer_id` of the `Customer` to create this invoice for. One of
@@ -686,7 +699,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun externalCustomerId(): Optional<String> =
-            Optional.ofNullable(externalCustomerId.getNullable("external_customer_id"))
+            externalCustomerId.getOptional("external_customer_id")
 
         /**
          * An optional memo to attach to the invoice.
@@ -694,7 +707,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun memo(): Optional<String> = Optional.ofNullable(memo.getNullable("memo"))
+        fun memo(): Optional<String> = memo.getOptional("memo")
 
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
@@ -704,7 +717,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata.getNullable("metadata"))
+        fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
         /**
          * When true, this invoice will automatically be issued upon creation. When false, the
@@ -713,8 +726,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun willAutoIssue(): Optional<Boolean> =
-            Optional.ofNullable(willAutoIssue.getNullable("will_auto_issue"))
+        fun willAutoIssue(): Optional<Boolean> = willAutoIssue.getOptional("will_auto_issue")
 
         /**
          * Returns the raw JSON value of [currency].

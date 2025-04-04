@@ -88,9 +88,7 @@ private constructor(
      *   responded with an unexpected value).
      */
     fun externalDimensionalPriceGroupId(): Optional<String> =
-        Optional.ofNullable(
-            externalDimensionalPriceGroupId.getNullable("external_dimensional_price_group_id")
-        )
+        externalDimensionalPriceGroupId.getOptional("external_dimensional_price_group_id")
 
     /**
      * User specified key-value pairs for the resource. If not present, this defaults to an empty

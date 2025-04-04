@@ -139,6 +139,18 @@ private constructor(
             additionalQueryParams = couponCreateParams.additionalQueryParams.toBuilder()
         }
 
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [discount]
+         * - [redemptionCode]
+         * - [durationInMonths]
+         * - [maxRedemptions]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
         fun discount(discount: Discount) = apply { body.discount(discount) }
 
         /**
@@ -398,7 +410,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -450,8 +462,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun durationInMonths(): Optional<Long> =
-            Optional.ofNullable(durationInMonths.getNullable("duration_in_months"))
+        fun durationInMonths(): Optional<Long> = durationInMonths.getOptional("duration_in_months")
 
         /**
          * The maximum number of redemptions allowed for this coupon before it is exhausted;`null`
@@ -460,8 +471,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun maxRedemptions(): Optional<Long> =
-            Optional.ofNullable(maxRedemptions.getNullable("max_redemptions"))
+        fun maxRedemptions(): Optional<Long> = maxRedemptions.getOptional("max_redemptions")
 
         /**
          * Returns the raw JSON value of [discount].

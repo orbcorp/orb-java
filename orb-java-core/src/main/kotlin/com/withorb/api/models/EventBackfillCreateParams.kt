@@ -213,6 +213,20 @@ private constructor(
         }
 
         /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [timeframeEnd]
+         * - [timeframeStart]
+         * - [closeTime]
+         * - [customerId]
+         * - [deprecationFilter]
+         * - etc.
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
+        /**
          * The (exclusive) end of the usage timeframe affected by this backfill. By default, Orb
          * allows backfills up to 10 days in duration at a time. Reach out to discuss extending this
          * limit and your use case.
@@ -492,7 +506,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -572,8 +586,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun closeTime(): Optional<OffsetDateTime> =
-            Optional.ofNullable(closeTime.getNullable("close_time"))
+        fun closeTime(): Optional<OffsetDateTime> = closeTime.getOptional("close_time")
 
         /**
          * The Orb-generated ID of the customer to which this backfill is scoped. Omitting this
@@ -582,8 +595,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun customerId(): Optional<String> =
-            Optional.ofNullable(customerId.getNullable("customer_id"))
+        fun customerId(): Optional<String> = customerId.getOptional("customer_id")
 
         /**
          * A boolean [computed property](/extensibility/advanced-metrics#computed-properties) used
@@ -593,7 +605,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun deprecationFilter(): Optional<String> =
-            Optional.ofNullable(deprecationFilter.getNullable("deprecation_filter"))
+            deprecationFilter.getOptional("deprecation_filter")
 
         /**
          * The external customer ID of the customer to which this backfill is scoped. Omitting this
@@ -603,7 +615,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun externalCustomerId(): Optional<String> =
-            Optional.ofNullable(externalCustomerId.getNullable("external_customer_id"))
+            externalCustomerId.getOptional("external_customer_id")
 
         /**
          * If true, replaces all existing events in the timeframe with the newly ingested events. If
@@ -613,7 +625,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun replaceExistingEvents(): Optional<Boolean> =
-            Optional.ofNullable(replaceExistingEvents.getNullable("replace_existing_events"))
+            replaceExistingEvents.getOptional("replace_existing_events")
 
         /**
          * Returns the raw JSON value of [timeframeEnd].

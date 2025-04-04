@@ -18,6 +18,7 @@ import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Returns a paginated list of unexpired, non-zero credit blocks for a customer.
@@ -108,7 +109,7 @@ private constructor(
         ) : this(data, paginationMetadata, mutableMapOf())
 
         fun data(): List<CustomerCreditListByExternalIdResponse> =
-            data.getNullable("data") ?: listOf()
+            data.getOptional("data").getOrNull() ?: listOf()
 
         fun paginationMetadata(): PaginationMetadata =
             paginationMetadata.getRequired("pagination_metadata")

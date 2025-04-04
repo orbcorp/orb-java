@@ -121,6 +121,17 @@ private constructor(
 
         fun invoiceId(invoiceId: String) = apply { this.invoiceId = invoiceId }
 
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [paymentReceivedDate]
+         * - [externalId]
+         * - [notes]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
         /** A date string to specify the date of the payment. */
         fun paymentReceivedDate(paymentReceivedDate: LocalDate) = apply {
             body.paymentReceivedDate(paymentReceivedDate)
@@ -305,7 +316,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     fun _pathParam(index: Int): String =
         when (index) {
@@ -351,8 +362,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun externalId(): Optional<String> =
-            Optional.ofNullable(externalId.getNullable("external_id"))
+        fun externalId(): Optional<String> = externalId.getOptional("external_id")
 
         /**
          * An optional note to associate with the payment.
@@ -360,7 +370,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun notes(): Optional<String> = Optional.ofNullable(notes.getNullable("notes"))
+        fun notes(): Optional<String> = notes.getOptional("notes")
 
         /**
          * Returns the raw JSON value of [paymentReceivedDate].
