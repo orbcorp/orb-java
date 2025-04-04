@@ -456,9 +456,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun externalDimensionalPriceGroupId(): Optional<String> =
-            Optional.ofNullable(
-                externalDimensionalPriceGroupId.getNullable("external_dimensional_price_group_id")
-            )
+            externalDimensionalPriceGroupId.getOptional("external_dimensional_price_group_id")
 
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
@@ -468,7 +466,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata.getNullable("metadata"))
+        fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
         /**
          * Returns the raw JSON value of [billableMetricId].

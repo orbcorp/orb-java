@@ -291,8 +291,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun synchronous(): Optional<Boolean> =
-            Optional.ofNullable(synchronous.getNullable("synchronous"))
+        fun synchronous(): Optional<Boolean> = synchronous.getOptional("synchronous")
 
         /**
          * Returns the raw JSON value of [synchronous].

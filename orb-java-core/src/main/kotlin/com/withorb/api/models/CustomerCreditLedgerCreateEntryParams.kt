@@ -922,7 +922,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
+            fun currency(): Optional<String> = currency.getOptional("currency")
 
             /**
              * Optional metadata that can be specified when adding ledger results via the API. For
@@ -932,8 +932,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun description(): Optional<String> =
-                Optional.ofNullable(description.getNullable("description"))
+            fun description(): Optional<String> = description.getOptional("description")
 
             /**
              * An ISO 8601 format date that denotes when this credit balance should become available
@@ -943,7 +942,7 @@ private constructor(
              *   server responded with an unexpected value).
              */
             fun effectiveDate(): Optional<OffsetDateTime> =
-                Optional.ofNullable(effectiveDate.getNullable("effective_date"))
+                effectiveDate.getOptional("effective_date")
 
             /**
              * An ISO 8601 format date that denotes when this credit balance should expire.
@@ -951,8 +950,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun expiryDate(): Optional<OffsetDateTime> =
-                Optional.ofNullable(expiryDate.getNullable("expiry_date"))
+            fun expiryDate(): Optional<OffsetDateTime> = expiryDate.getOptional("expiry_date")
 
             /**
              * Passing `invoice_settings` automatically generates an invoice for the newly added
@@ -963,7 +961,7 @@ private constructor(
              *   server responded with an unexpected value).
              */
             fun invoiceSettings(): Optional<InvoiceSettings> =
-                Optional.ofNullable(invoiceSettings.getNullable("invoice_settings"))
+                invoiceSettings.getOptional("invoice_settings")
 
             /**
              * User-specified key/value pairs for the resource. Individual keys can be removed by
@@ -973,8 +971,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun metadata(): Optional<Metadata> =
-                Optional.ofNullable(metadata.getNullable("metadata"))
+            fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
             /**
              * Can only be specified when entry_type=increment. How much, in the customer's
@@ -984,7 +981,7 @@ private constructor(
              *   server responded with an unexpected value).
              */
             fun perUnitCostBasis(): Optional<String> =
-                Optional.ofNullable(perUnitCostBasis.getNullable("per_unit_cost_basis"))
+                perUnitCostBasis.getOptional("per_unit_cost_basis")
 
             /**
              * Returns the raw JSON value of [amount].
@@ -1587,7 +1584,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun memo(): Optional<String> = Optional.ofNullable(memo.getNullable("memo"))
+                fun memo(): Optional<String> = memo.getOptional("memo")
 
                 /**
                  * If true, the new credit block will require that the corresponding invoice is paid
@@ -1597,9 +1594,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun requireSuccessfulPayment(): Optional<Boolean> =
-                    Optional.ofNullable(
-                        requireSuccessfulPayment.getNullable("require_successful_payment")
-                    )
+                    requireSuccessfulPayment.getOptional("require_successful_payment")
 
                 /**
                  * Returns the raw JSON value of [autoCollection].
@@ -2031,7 +2026,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
+            fun currency(): Optional<String> = currency.getOptional("currency")
 
             /**
              * Optional metadata that can be specified when adding ledger results via the API. For
@@ -2041,8 +2036,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun description(): Optional<String> =
-                Optional.ofNullable(description.getNullable("description"))
+            fun description(): Optional<String> = description.getOptional("description")
 
             /**
              * User-specified key/value pairs for the resource. Individual keys can be removed by
@@ -2052,8 +2046,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun metadata(): Optional<Metadata> =
-                Optional.ofNullable(metadata.getNullable("metadata"))
+            fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
             /**
              * Returns the raw JSON value of [amount].
@@ -2641,8 +2634,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun expiryDate(): Optional<OffsetDateTime> =
-                Optional.ofNullable(expiryDate.getNullable("expiry_date"))
+            fun expiryDate(): Optional<OffsetDateTime> = expiryDate.getOptional("expiry_date")
 
             /**
              * A future date (specified in YYYY-MM-DD format) used for expiration change, denoting
@@ -2661,7 +2653,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun amount(): Optional<Double> = Optional.ofNullable(amount.getNullable("amount"))
+            fun amount(): Optional<Double> = amount.getOptional("amount")
 
             /**
              * The ID of the block affected by an expiration_change, used to differentiate between
@@ -2670,7 +2662,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun blockId(): Optional<String> = Optional.ofNullable(blockId.getNullable("block_id"))
+            fun blockId(): Optional<String> = blockId.getOptional("block_id")
 
             /**
              * The currency or custom pricing unit to use for this ledger entry. If this is a
@@ -2679,7 +2671,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
+            fun currency(): Optional<String> = currency.getOptional("currency")
 
             /**
              * Optional metadata that can be specified when adding ledger results via the API. For
@@ -2689,8 +2681,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun description(): Optional<String> =
-                Optional.ofNullable(description.getNullable("description"))
+            fun description(): Optional<String> = description.getOptional("description")
 
             /**
              * User-specified key/value pairs for the resource. Individual keys can be removed by
@@ -2700,8 +2691,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun metadata(): Optional<Metadata> =
-                Optional.ofNullable(metadata.getNullable("metadata"))
+            fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
             /**
              * Returns the raw JSON value of [entryType].
@@ -3418,7 +3408,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
+            fun currency(): Optional<String> = currency.getOptional("currency")
 
             /**
              * Optional metadata that can be specified when adding ledger results via the API. For
@@ -3428,8 +3418,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun description(): Optional<String> =
-                Optional.ofNullable(description.getNullable("description"))
+            fun description(): Optional<String> = description.getOptional("description")
 
             /**
              * User-specified key/value pairs for the resource. Individual keys can be removed by
@@ -3439,8 +3428,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun metadata(): Optional<Metadata> =
-                Optional.ofNullable(metadata.getNullable("metadata"))
+            fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
             /**
              * Can only be specified when `entry_type=void`. The reason for the void.
@@ -3448,8 +3436,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun voidReason(): Optional<VoidReason> =
-                Optional.ofNullable(voidReason.getNullable("void_reason"))
+            fun voidReason(): Optional<VoidReason> = voidReason.getOptional("void_reason")
 
             /**
              * Returns the raw JSON value of [amount].
@@ -4224,7 +4211,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun currency(): Optional<String> = Optional.ofNullable(currency.getNullable("currency"))
+            fun currency(): Optional<String> = currency.getOptional("currency")
 
             /**
              * Optional metadata that can be specified when adding ledger results via the API. For
@@ -4234,8 +4221,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun description(): Optional<String> =
-                Optional.ofNullable(description.getNullable("description"))
+            fun description(): Optional<String> = description.getOptional("description")
 
             /**
              * User-specified key/value pairs for the resource. Individual keys can be removed by
@@ -4245,8 +4231,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun metadata(): Optional<Metadata> =
-                Optional.ofNullable(metadata.getNullable("metadata"))
+            fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
             /**
              * Returns the raw JSON value of [amount].

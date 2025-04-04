@@ -178,7 +178,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun discount(): Optional<Discount> = Optional.ofNullable(discount.getNullable("discount"))
+    fun discount(): Optional<Discount> = discount.getOptional("discount")
 
     /**
      * The end date of the range of time applied for this line item's price.
@@ -194,7 +194,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun filter(): Optional<String> = Optional.ofNullable(filter.getNullable("filter"))
+    fun filter(): Optional<String> = filter.getOptional("filter")
 
     /**
      * [DEPRECATED] For configured prices that are split by a grouping key, this will be populated
@@ -204,7 +204,15 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun grouping(): Optional<String> = Optional.ofNullable(grouping.getNullable("grouping"))
+    fun grouping(): Optional<String> = grouping.getOptional("grouping")
+
+    /**
+     * This field is deprecated in favor of `adjustments`.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    @Deprecated("deprecated") fun maximum(): Optional<Maximum> = maximum.getOptional("maximum")
 
     /**
      * This field is deprecated in favor of `adjustments`.
@@ -213,7 +221,15 @@ private constructor(
      *   responded with an unexpected value).
      */
     @Deprecated("deprecated")
-    fun maximum(): Optional<Maximum> = Optional.ofNullable(maximum.getNullable("maximum"))
+    fun maximumAmount(): Optional<String> = maximumAmount.getOptional("maximum_amount")
+
+    /**
+     * This field is deprecated in favor of `adjustments`.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    @Deprecated("deprecated") fun minimum(): Optional<Minimum> = minimum.getOptional("minimum")
 
     /**
      * This field is deprecated in favor of `adjustments`.
@@ -222,27 +238,7 @@ private constructor(
      *   responded with an unexpected value).
      */
     @Deprecated("deprecated")
-    fun maximumAmount(): Optional<String> =
-        Optional.ofNullable(maximumAmount.getNullable("maximum_amount"))
-
-    /**
-     * This field is deprecated in favor of `adjustments`.
-     *
-     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
-     *   responded with an unexpected value).
-     */
-    @Deprecated("deprecated")
-    fun minimum(): Optional<Minimum> = Optional.ofNullable(minimum.getNullable("minimum"))
-
-    /**
-     * This field is deprecated in favor of `adjustments`.
-     *
-     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
-     *   responded with an unexpected value).
-     */
-    @Deprecated("deprecated")
-    fun minimumAmount(): Optional<String> =
-        Optional.ofNullable(minimumAmount.getNullable("minimum_amount"))
+    fun minimumAmount(): Optional<String> = minimumAmount.getOptional("minimum_amount")
 
     /**
      * The name of the price associated with this line item.
@@ -276,7 +272,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun price(): Optional<Price> = Optional.ofNullable(price.getNullable("price"))
+    fun price(): Optional<Price> = price.getOptional("price")
 
     /**
      * Either the fixed fee quantity or the usage during the service period.
@@ -326,7 +322,7 @@ private constructor(
      *   responded with an unexpected value).
      */
     fun usageCustomerIds(): Optional<List<String>> =
-        Optional.ofNullable(usageCustomerIds.getNullable("usage_customer_ids"))
+        usageCustomerIds.getOptional("usage_customer_ids")
 
     /**
      * Returns the raw JSON value of [id].
@@ -1757,7 +1753,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
+            fun reason(): Optional<String> = reason.getOptional("reason")
 
             /**
              * The number of usage units by which to discount the price this adjustment applies to
@@ -2348,7 +2344,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
+            fun reason(): Optional<String> = reason.getOptional("reason")
 
             /**
              * Returns the raw JSON value of [id].
@@ -2931,7 +2927,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
+            fun reason(): Optional<String> = reason.getOptional("reason")
 
             /**
              * Returns the raw JSON value of [id].
@@ -3528,7 +3524,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
+            fun reason(): Optional<String> = reason.getOptional("reason")
 
             /**
              * Returns the raw JSON value of [id].
@@ -4133,7 +4129,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
+            fun reason(): Optional<String> = reason.getOptional("reason")
 
             /**
              * Returns the raw JSON value of [id].
@@ -5305,8 +5301,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun grouping(): Optional<Grouping> =
-                Optional.ofNullable(grouping.getNullable("grouping"))
+            fun grouping(): Optional<Grouping> = grouping.getOptional("grouping")
 
             /**
              * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
@@ -5628,7 +5623,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun value(): Optional<String> = Optional.ofNullable(value.getNullable("value"))
+                fun value(): Optional<String> = value.getOptional("value")
 
                 /**
                  * Returns the raw JSON value of [key].
@@ -6176,8 +6171,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun grouping(): Optional<Grouping> =
-                Optional.ofNullable(grouping.getNullable("grouping"))
+            fun grouping(): Optional<Grouping> = grouping.getOptional("grouping")
 
             /**
              * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
@@ -6498,7 +6492,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun value(): Optional<String> = Optional.ofNullable(value.getNullable("value"))
+                fun value(): Optional<String> = value.getOptional("value")
 
                 /**
                  * Returns the raw JSON value of [key].
@@ -6705,8 +6699,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun lastUnit(): Optional<Double> =
-                    Optional.ofNullable(lastUnit.getNullable("last_unit"))
+                fun lastUnit(): Optional<Double> = lastUnit.getOptional("last_unit")
 
                 /**
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
@@ -7111,8 +7104,7 @@ private constructor(
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
              *   server responded with an unexpected value).
              */
-            fun grouping(): Optional<Grouping> =
-                Optional.ofNullable(grouping.getNullable("grouping"))
+            fun grouping(): Optional<Grouping> = grouping.getOptional("grouping")
 
             /**
              * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
@@ -7396,7 +7388,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun value(): Optional<String> = Optional.ofNullable(value.getNullable("value"))
+                fun value(): Optional<String> = value.getOptional("value")
 
                 /**
                  * Returns the raw JSON value of [key].
@@ -7756,7 +7748,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun taxRatePercentage(): Optional<String> =
-            Optional.ofNullable(taxRatePercentage.getNullable("tax_rate_percentage"))
+            taxRatePercentage.getOptional("tax_rate_percentage")
 
         /**
          * Returns the raw JSON value of [amount].

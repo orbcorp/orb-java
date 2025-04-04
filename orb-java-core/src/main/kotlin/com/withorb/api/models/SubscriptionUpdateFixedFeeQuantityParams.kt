@@ -491,9 +491,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun allowInvoiceCreditOrVoid(): Optional<Boolean> =
-            Optional.ofNullable(
-                allowInvoiceCreditOrVoid.getNullable("allow_invoice_credit_or_void")
-            )
+            allowInvoiceCreditOrVoid.getOptional("allow_invoice_credit_or_void")
 
         /**
          * Determines when the change takes effect. Note that if `effective_date` is specified, this
@@ -503,8 +501,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun changeOption(): Optional<ChangeOption> =
-            Optional.ofNullable(changeOption.getNullable("change_option"))
+        fun changeOption(): Optional<ChangeOption> = changeOption.getOptional("change_option")
 
         /**
          * The date that the quantity change should take effect, localized to the customer's
@@ -514,8 +511,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun effectiveDate(): Optional<LocalDate> =
-            Optional.ofNullable(effectiveDate.getNullable("effective_date"))
+        fun effectiveDate(): Optional<LocalDate> = effectiveDate.getOptional("effective_date")
 
         /**
          * Returns the raw JSON value of [priceId].

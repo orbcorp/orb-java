@@ -51,7 +51,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun debug(): Optional<Debug> = Optional.ofNullable(debug.getNullable("debug"))
+    fun debug(): Optional<Debug> = debug.getOptional("debug")
 
     /**
      * Returns the raw JSON value of [validationFailed].

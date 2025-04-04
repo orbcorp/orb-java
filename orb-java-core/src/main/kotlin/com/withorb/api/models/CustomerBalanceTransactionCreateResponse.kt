@@ -104,8 +104,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun creditNote(): Optional<CreditNote> =
-        Optional.ofNullable(creditNote.getNullable("credit_note"))
+    fun creditNote(): Optional<CreditNote> = creditNote.getOptional("credit_note")
 
     /**
      * An optional description provided for manual customer balance adjustments.
@@ -113,8 +112,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun description(): Optional<String> =
-        Optional.ofNullable(description.getNullable("description"))
+    fun description(): Optional<String> = description.getOptional("description")
 
     /**
      * The new value of the customer's balance prior to the transaction, in the customer's currency.
@@ -128,7 +126,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun invoice(): Optional<Invoice> = Optional.ofNullable(invoice.getNullable("invoice"))
+    fun invoice(): Optional<Invoice> = invoice.getOptional("invoice")
 
     /**
      * The original value of the customer's balance prior to the transaction, in the customer's

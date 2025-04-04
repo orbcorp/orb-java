@@ -174,7 +174,7 @@ private constructor(
         ) : this(data, paginationMetadata, mutableMapOf())
 
         fun data(): List<CustomerCreditLedgerListByExternalIdResponse> =
-            data.getNullable("data") ?: listOf()
+            data.getOptional("data").getOrNull() ?: listOf()
 
         fun paginationMetadata(): PaginationMetadata =
             paginationMetadata.getRequired("pagination_metadata")

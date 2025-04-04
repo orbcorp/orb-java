@@ -18,6 +18,7 @@ import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
+import kotlin.jvm.optionals.getOrNull
 
 /** List top-ups by external ID */
 class CustomerCreditTopUpListByExternalIdPageAsync
@@ -100,7 +101,7 @@ private constructor(
         ) : this(data, paginationMetadata, mutableMapOf())
 
         fun data(): List<CustomerCreditTopUpListByExternalIdResponse> =
-            data.getNullable("data") ?: listOf()
+            data.getOptional("data").getOrNull() ?: listOf()
 
         fun paginationMetadata(): PaginationMetadata =
             paginationMetadata.getRequired("pagination_metadata")
