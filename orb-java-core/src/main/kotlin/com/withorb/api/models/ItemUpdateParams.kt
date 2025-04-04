@@ -328,13 +328,13 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun externalConnections(): Optional<List<ExternalConnection>> =
-            Optional.ofNullable(externalConnections.getNullable("external_connections"))
+            externalConnections.getOptional("external_connections")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
+        fun name(): Optional<String> = name.getOptional("name")
 
         /**
          * Returns the raw JSON value of [externalConnections].

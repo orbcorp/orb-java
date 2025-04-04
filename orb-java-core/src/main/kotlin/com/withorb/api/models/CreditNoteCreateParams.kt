@@ -338,7 +338,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun memo(): Optional<String> = Optional.ofNullable(memo.getNullable("memo"))
+        fun memo(): Optional<String> = memo.getOptional("memo")
 
         /**
          * An optional reason for the credit note.
@@ -346,7 +346,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun reason(): Optional<Reason> = Optional.ofNullable(reason.getNullable("reason"))
+        fun reason(): Optional<Reason> = reason.getOptional("reason")
 
         /**
          * Returns the raw JSON value of [lineItems].

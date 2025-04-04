@@ -462,8 +462,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun durationInMonths(): Optional<Long> =
-            Optional.ofNullable(durationInMonths.getNullable("duration_in_months"))
+        fun durationInMonths(): Optional<Long> = durationInMonths.getOptional("duration_in_months")
 
         /**
          * The maximum number of redemptions allowed for this coupon before it is exhausted;`null`
@@ -472,8 +471,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun maxRedemptions(): Optional<Long> =
-            Optional.ofNullable(maxRedemptions.getNullable("max_redemptions"))
+        fun maxRedemptions(): Optional<Long> = maxRedemptions.getOptional("max_redemptions")
 
         /**
          * Returns the raw JSON value of [discount].

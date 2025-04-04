@@ -70,7 +70,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
+    fun reason(): Optional<String> = reason.getOptional("reason")
 
     /**
      * Returns the raw JSON value of [appliesToPriceIds].

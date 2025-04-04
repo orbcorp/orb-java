@@ -73,7 +73,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
+    fun reason(): Optional<String> = reason.getOptional("reason")
 
     /**
      * Only available if discount_type is `trial`
@@ -82,7 +82,7 @@ private constructor(
      *   responded with an unexpected value).
      */
     fun trialAmountDiscount(): Optional<String> =
-        Optional.ofNullable(trialAmountDiscount.getNullable("trial_amount_discount"))
+        trialAmountDiscount.getOptional("trial_amount_discount")
 
     /**
      * Only available if discount_type is `trial`
@@ -91,7 +91,7 @@ private constructor(
      *   responded with an unexpected value).
      */
     fun trialPercentageDiscount(): Optional<Double> =
-        Optional.ofNullable(trialPercentageDiscount.getNullable("trial_percentage_discount"))
+        trialPercentageDiscount.getOptional("trial_percentage_discount")
 
     /**
      * Returns the raw JSON value of [appliesToPriceIds].

@@ -18,6 +18,7 @@ import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint is used to fetch [metric](/core-concepts##metric) details given a metric
@@ -98,7 +99,7 @@ private constructor(
             paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of(),
         ) : this(data, paginationMetadata, mutableMapOf())
 
-        fun data(): List<BillableMetric> = data.getNullable("data") ?: listOf()
+        fun data(): List<BillableMetric> = data.getOptional("data").getOrNull() ?: listOf()
 
         fun paginationMetadata(): PaginationMetadata =
             paginationMetadata.getRequired("pagination_metadata")
