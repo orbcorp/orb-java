@@ -42,7 +42,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun nextCursor(): Optional<String> = Optional.ofNullable(nextCursor.getNullable("next_cursor"))
+    fun nextCursor(): Optional<String> = nextCursor.getOptional("next_cursor")
 
     /**
      * Returns the raw JSON value of [hasMore].

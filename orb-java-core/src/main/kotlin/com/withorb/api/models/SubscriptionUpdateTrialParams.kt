@@ -369,7 +369,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun shift(): Optional<Boolean> = Optional.ofNullable(shift.getNullable("shift"))
+        fun shift(): Optional<Boolean> = shift.getOptional("shift")
 
         /**
          * Returns the raw JSON value of [trialEndDate].

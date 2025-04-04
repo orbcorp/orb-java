@@ -522,8 +522,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun customerId(): Optional<String> =
-            Optional.ofNullable(customerId.getNullable("customer_id"))
+        fun customerId(): Optional<String> = customerId.getOptional("customer_id")
 
         /**
          * The external customer ID of the customer to which this evaluation is scoped.
@@ -532,7 +531,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun externalCustomerId(): Optional<String> =
-            Optional.ofNullable(externalCustomerId.getNullable("external_customer_id"))
+            externalCustomerId.getOptional("external_customer_id")
 
         /**
          * A boolean [computed property](/extensibility/advanced-metrics#computed-properties) used
@@ -541,7 +540,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun filter(): Optional<String> = Optional.ofNullable(filter.getNullable("filter"))
+        fun filter(): Optional<String> = filter.getOptional("filter")
 
         /**
          * Properties (or
@@ -551,8 +550,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun groupingKeys(): Optional<List<String>> =
-            Optional.ofNullable(groupingKeys.getNullable("grouping_keys"))
+        fun groupingKeys(): Optional<List<String>> = groupingKeys.getOptional("grouping_keys")
 
         /**
          * Returns the raw JSON value of [timeframeEnd].

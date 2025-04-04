@@ -348,9 +348,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun allowInvoiceCreditOrVoid(): Optional<Boolean> =
-            Optional.ofNullable(
-                allowInvoiceCreditOrVoid.getNullable("allow_invoice_credit_or_void")
-            )
+            allowInvoiceCreditOrVoid.getOptional("allow_invoice_credit_or_void")
 
         /**
          * The date on which the phase change should take effect. If not provided, defaults to today
@@ -359,8 +357,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun effectiveDate(): Optional<LocalDate> =
-            Optional.ofNullable(effectiveDate.getNullable("effective_date"))
+        fun effectiveDate(): Optional<LocalDate> = effectiveDate.getOptional("effective_date")
 
         /**
          * Returns the raw JSON value of [allowInvoiceCreditOrVoid].

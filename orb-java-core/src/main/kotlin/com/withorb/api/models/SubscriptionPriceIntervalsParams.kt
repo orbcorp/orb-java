@@ -553,7 +553,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun add(): Optional<List<Add>> = Optional.ofNullable(add.getNullable("add"))
+        fun add(): Optional<List<Add>> = add.getOptional("add")
 
         /**
          * A list of adjustments to add to the subscription.
@@ -562,7 +562,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun addAdjustments(): Optional<List<AddAdjustment>> =
-            Optional.ofNullable(addAdjustments.getNullable("add_adjustments"))
+            addAdjustments.getOptional("add_adjustments")
 
         /**
          * If false, this request will fail if it would void an issued invoice or create a credit
@@ -573,9 +573,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun allowInvoiceCreditOrVoid(): Optional<Boolean> =
-            Optional.ofNullable(
-                allowInvoiceCreditOrVoid.getNullable("allow_invoice_credit_or_void")
-            )
+            allowInvoiceCreditOrVoid.getOptional("allow_invoice_credit_or_void")
 
         /**
          * A list of price intervals to edit on the subscription.
@@ -583,7 +581,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun edit(): Optional<List<Edit>> = Optional.ofNullable(edit.getNullable("edit"))
+        fun edit(): Optional<List<Edit>> = edit.getOptional("edit")
 
         /**
          * A list of adjustments to edit on the subscription.
@@ -592,7 +590,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun editAdjustments(): Optional<List<EditAdjustment>> =
-            Optional.ofNullable(editAdjustments.getNullable("edit_adjustments"))
+            editAdjustments.getOptional("edit_adjustments")
 
         /**
          * Returns the raw JSON value of [add].
@@ -986,7 +984,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun allocationPrice(): Optional<AllocationPrice> =
-            Optional.ofNullable(allocationPrice.getNullable("allocation_price"))
+            allocationPrice.getOptional("allocation_price")
 
         /**
          * A list of discounts to initialize on the price interval.
@@ -994,8 +992,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun discounts(): Optional<List<Discount>> =
-            Optional.ofNullable(discounts.getNullable("discounts"))
+        fun discounts(): Optional<List<Discount>> = discounts.getOptional("discounts")
 
         /**
          * The end date of the price interval. This is the date that the price will stop billing on
@@ -1004,7 +1001,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun endDate(): Optional<EndDate> = Optional.ofNullable(endDate.getNullable("end_date"))
+        fun endDate(): Optional<EndDate> = endDate.getOptional("end_date")
 
         /**
          * The external price id of the price to add to the subscription.
@@ -1012,8 +1009,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun externalPriceId(): Optional<String> =
-            Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+        fun externalPriceId(): Optional<String> = externalPriceId.getOptional("external_price_id")
 
         /**
          * An additional filter to apply to usage queries. This filter must be expressed as a
@@ -1023,7 +1019,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun filter(): Optional<String> = Optional.ofNullable(filter.getNullable("filter"))
+        fun filter(): Optional<String> = filter.getOptional("filter")
 
         /**
          * A list of fixed fee quantity transitions to initialize on the price interval.
@@ -1032,9 +1028,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun fixedFeeQuantityTransitions(): Optional<List<FixedFeeQuantityTransition>> =
-            Optional.ofNullable(
-                fixedFeeQuantityTransitions.getNullable("fixed_fee_quantity_transitions")
-            )
+            fixedFeeQuantityTransitions.getOptional("fixed_fee_quantity_transitions")
 
         /**
          * The maximum amount that will be billed for this price interval for a given billing
@@ -1043,8 +1037,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun maximumAmount(): Optional<Double> =
-            Optional.ofNullable(maximumAmount.getNullable("maximum_amount"))
+        fun maximumAmount(): Optional<Double> = maximumAmount.getOptional("maximum_amount")
 
         /**
          * The minimum amount that will be billed for this price interval for a given billing
@@ -1053,8 +1046,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun minimumAmount(): Optional<Double> =
-            Optional.ofNullable(minimumAmount.getNullable("minimum_amount"))
+        fun minimumAmount(): Optional<Double> = minimumAmount.getOptional("minimum_amount")
 
         /**
          * The definition of a new price to create and add to the subscription.
@@ -1062,7 +1054,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun price(): Optional<Price> = Optional.ofNullable(price.getNullable("price"))
+        fun price(): Optional<Price> = price.getOptional("price")
 
         /**
          * The id of the price to add to the subscription.
@@ -1070,7 +1062,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun priceId(): Optional<String> = Optional.ofNullable(priceId.getNullable("price_id"))
+        fun priceId(): Optional<String> = priceId.getOptional("price_id")
 
         /**
          * A list of customer IDs whose usage events will be aggregated and billed under this
@@ -1083,7 +1075,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun usageCustomerIds(): Optional<List<String>> =
-            Optional.ofNullable(usageCustomerIds.getNullable("usage_customer_ids"))
+            usageCustomerIds.getOptional("usage_customer_ids")
 
         /**
          * Returns the raw JSON value of [startDate].
@@ -5797,7 +5789,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -5807,7 +5799,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -5817,9 +5809,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -5828,7 +5818,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -5837,7 +5827,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -5847,7 +5837,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -5856,7 +5846,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -5866,9 +5856,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -5878,8 +5866,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [cadence].
@@ -7996,7 +7983,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -8006,7 +7993,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -8016,9 +8003,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -8027,7 +8012,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -8036,7 +8021,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -8046,7 +8031,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -8055,7 +8040,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -8065,9 +8050,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -8077,8 +8060,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [cadence].
@@ -10248,7 +10230,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -10258,7 +10240,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -10268,9 +10250,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -10279,7 +10259,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -10288,7 +10268,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -10298,7 +10278,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -10307,7 +10287,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -10317,9 +10297,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -10329,8 +10307,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [cadence].
@@ -12824,7 +12801,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -12834,7 +12811,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -12844,9 +12821,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -12855,7 +12830,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -12864,7 +12839,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -12874,7 +12849,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -12883,7 +12858,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -12893,9 +12868,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -12905,8 +12878,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [cadence].
@@ -15463,7 +15435,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -15473,7 +15445,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -15483,9 +15455,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -15494,7 +15464,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -15503,7 +15473,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -15513,7 +15483,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -15522,7 +15492,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -15532,9 +15502,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -15544,8 +15512,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [cadence].
@@ -16709,8 +16676,7 @@ private constructor(
                          * @throws OrbInvalidDataException if the JSON field has an unexpected type
                          *   (e.g. if the server responded with an unexpected value).
                          */
-                        fun lastUnit(): Optional<Double> =
-                            Optional.ofNullable(lastUnit.getNullable("last_unit"))
+                        fun lastUnit(): Optional<Double> = lastUnit.getOptional("last_unit")
 
                         /**
                          * Returns the raw JSON value of [firstUnit].
@@ -17957,7 +17923,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -17967,7 +17933,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -17977,9 +17943,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -17988,7 +17952,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -17997,7 +17961,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -18007,7 +17971,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -18016,7 +17980,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -18026,9 +17990,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -18038,8 +18000,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [cadence].
@@ -19214,7 +19175,7 @@ private constructor(
                          *   (e.g. if the server responded with an unexpected value).
                          */
                         fun maximumAmount(): Optional<String> =
-                            Optional.ofNullable(maximumAmount.getNullable("maximum_amount"))
+                            maximumAmount.getOptional("maximum_amount")
 
                         /**
                          * Per unit maximum to charge
@@ -19223,7 +19184,7 @@ private constructor(
                          *   (e.g. if the server responded with an unexpected value).
                          */
                         fun perUnitMaximum(): Optional<String> =
-                            Optional.ofNullable(perUnitMaximum.getNullable("per_unit_maximum"))
+                            perUnitMaximum.getOptional("per_unit_maximum")
 
                         /**
                          * Returns the raw JSON value of [bps].
@@ -20493,7 +20454,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -20503,7 +20464,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -20513,9 +20474,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -20524,7 +20483,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -20533,7 +20492,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -20543,7 +20502,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -20552,7 +20511,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -20562,9 +20521,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -20574,8 +20531,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [bpsConfig].
@@ -21269,7 +21225,7 @@ private constructor(
                      *   (e.g. if the server responded with an unexpected value).
                      */
                     fun perUnitMaximum(): Optional<String> =
-                        Optional.ofNullable(perUnitMaximum.getNullable("per_unit_maximum"))
+                        perUnitMaximum.getOptional("per_unit_maximum")
 
                     /**
                      * Returns the raw JSON value of [bps].
@@ -22739,7 +22695,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -22749,7 +22705,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -22759,9 +22715,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -22770,7 +22724,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -22779,7 +22733,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -22789,7 +22743,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -22798,7 +22752,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -22808,9 +22762,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -22820,8 +22772,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [bulkBpsConfig].
@@ -23693,7 +23644,7 @@ private constructor(
                          *   (e.g. if the server responded with an unexpected value).
                          */
                         fun maximumAmount(): Optional<String> =
-                            Optional.ofNullable(maximumAmount.getNullable("maximum_amount"))
+                            maximumAmount.getOptional("maximum_amount")
 
                         /**
                          * The maximum amount to charge for any one event
@@ -23702,7 +23653,7 @@ private constructor(
                          *   (e.g. if the server responded with an unexpected value).
                          */
                         fun perUnitMaximum(): Optional<String> =
-                            Optional.ofNullable(perUnitMaximum.getNullable("per_unit_maximum"))
+                            perUnitMaximum.getOptional("per_unit_maximum")
 
                         /**
                          * Returns the raw JSON value of [bps].
@@ -25228,7 +25179,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -25238,7 +25189,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -25248,9 +25199,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -25259,7 +25208,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -25268,7 +25217,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -25278,7 +25227,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -25287,7 +25236,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -25297,9 +25246,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -25309,8 +25256,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [bulkConfig].
@@ -26171,7 +26117,7 @@ private constructor(
                          *   (e.g. if the server responded with an unexpected value).
                          */
                         fun maximumUnits(): Optional<Double> =
-                            Optional.ofNullable(maximumUnits.getNullable("maximum_units"))
+                            maximumUnits.getOptional("maximum_units")
 
                         /**
                          * Returns the raw JSON value of [unitAmount].
@@ -27675,7 +27621,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -27685,7 +27631,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -27695,9 +27641,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -27706,7 +27650,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -27715,7 +27659,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -27725,7 +27669,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -27734,7 +27678,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -27744,9 +27688,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -27756,8 +27698,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [cadence].
@@ -29827,7 +29768,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -29837,7 +29778,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -29847,9 +29788,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -29858,7 +29797,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -29867,7 +29806,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -29877,7 +29816,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -29886,7 +29825,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -29896,9 +29835,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -29908,8 +29845,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [cadence].
@@ -31974,7 +31910,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -31984,7 +31920,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -31994,9 +31930,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -32005,7 +31939,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -32014,7 +31948,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -32024,7 +31958,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -32033,7 +31967,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -32043,9 +31977,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -32055,8 +31987,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [cadence].
@@ -34122,7 +34053,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -34132,7 +34063,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -34142,9 +34073,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -34153,7 +34082,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -34162,7 +34091,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -34172,7 +34101,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -34181,7 +34110,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -34191,9 +34120,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -34203,8 +34130,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [cadence].
@@ -36282,7 +36208,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -36292,7 +36218,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -36302,9 +36228,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -36313,7 +36237,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -36322,7 +36246,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -36332,7 +36256,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -36341,7 +36265,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -36351,9 +36275,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -36363,8 +36285,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [cadence].
@@ -38432,7 +38353,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -38442,7 +38363,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -38452,9 +38373,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -38463,7 +38382,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -38472,7 +38391,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -38482,7 +38401,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -38491,7 +38410,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -38501,9 +38420,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -38513,8 +38430,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [cadence].
@@ -40594,7 +40510,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -40604,7 +40520,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -40614,9 +40530,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -40625,7 +40539,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -40634,7 +40548,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -40644,7 +40558,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -40653,7 +40567,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -40663,9 +40577,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -40675,8 +40587,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [cadence].
@@ -42758,7 +42669,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -42768,7 +42679,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -42778,9 +42689,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -42789,7 +42698,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -42798,7 +42707,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -42808,7 +42717,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -42817,7 +42726,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -42827,9 +42736,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -42839,8 +42746,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [cadence].
@@ -44907,7 +44813,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -44917,7 +44823,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -44927,9 +44833,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -44938,7 +44842,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -44947,7 +44851,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -44957,7 +44861,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -44966,7 +44870,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -44976,9 +44880,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -44988,8 +44890,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [cadence].
@@ -47058,7 +46959,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -47068,7 +46969,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -47078,9 +46979,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -47089,7 +46988,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -47098,7 +46997,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -47108,7 +47007,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -47117,7 +47016,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -47127,9 +47026,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -47139,8 +47036,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [cadence].
@@ -49207,7 +49103,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -49217,7 +49113,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -49227,9 +49123,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -49238,7 +49132,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -49247,7 +49141,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -49257,7 +49151,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -49266,7 +49160,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -49276,9 +49170,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -49288,8 +49180,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [cadence].
@@ -51360,7 +51251,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -51370,7 +51261,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -51380,9 +51271,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -51391,7 +51280,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -51400,7 +51289,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -51410,7 +51299,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -51419,7 +51308,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -51429,9 +51318,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -51441,8 +51328,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [cadence].
@@ -53535,7 +53421,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -53545,7 +53431,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -53555,9 +53441,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -53566,7 +53450,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -53575,7 +53459,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -53585,7 +53469,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -53594,7 +53478,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -53604,9 +53488,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -53616,8 +53498,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [cadence].
@@ -55705,7 +55586,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -55715,7 +55596,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -55725,9 +55606,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -55736,7 +55615,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -55745,7 +55624,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -55755,7 +55634,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -55764,7 +55643,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -55774,9 +55653,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -55786,8 +55663,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [cadence].
@@ -57865,7 +57741,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -57875,7 +57751,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -57885,9 +57761,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -57896,7 +57770,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -57905,7 +57779,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -57915,7 +57789,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -57924,7 +57798,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -57934,9 +57808,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -57946,8 +57818,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [bulkWithProrationConfig].
@@ -60015,7 +59886,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -60025,7 +59896,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -60035,9 +59906,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -60046,7 +59915,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -60055,7 +59924,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -60065,7 +59934,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -60074,7 +59943,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -60084,9 +59953,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -60096,8 +59963,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [cadence].
@@ -62172,7 +62038,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -62182,7 +62048,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -62192,9 +62058,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -62203,7 +62067,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -62212,7 +62076,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -62222,7 +62086,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -62231,7 +62095,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -62241,9 +62105,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -62253,8 +62115,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [cadence].
@@ -64360,7 +64221,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -64370,7 +64231,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -64380,9 +64241,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -64391,7 +64250,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -64400,7 +64259,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -64410,7 +64269,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -64419,7 +64278,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -64429,9 +64288,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -64441,8 +64298,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [cadence].
@@ -66548,7 +66404,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billableMetricId(): Optional<String> =
-                    Optional.ofNullable(billableMetricId.getNullable("billable_metric_id"))
+                    billableMetricId.getOptional("billable_metric_id")
 
                 /**
                  * If the Price represents a fixed cost, the price will be billed in-advance if this
@@ -66558,7 +66414,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billedInAdvance(): Optional<Boolean> =
-                    Optional.ofNullable(billedInAdvance.getNullable("billed_in_advance"))
+                    billedInAdvance.getOptional("billed_in_advance")
 
                 /**
                  * For custom cadence: specifies the duration of the billing period in days or
@@ -66568,9 +66424,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun billingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-                    Optional.ofNullable(
-                        billingCycleConfiguration.getNullable("billing_cycle_configuration")
-                    )
+                    billingCycleConfiguration.getOptional("billing_cycle_configuration")
 
                 /**
                  * The per unit conversion rate of the price currency to the invoicing currency.
@@ -66579,7 +66433,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun conversionRate(): Optional<Double> =
-                    Optional.ofNullable(conversionRate.getNullable("conversion_rate"))
+                    conversionRate.getOptional("conversion_rate")
 
                 /**
                  * An alias for the price.
@@ -66588,7 +66442,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun externalPriceId(): Optional<String> =
-                    Optional.ofNullable(externalPriceId.getNullable("external_price_id"))
+                    externalPriceId.getOptional("external_price_id")
 
                 /**
                  * If the Price represents a fixed cost, this represents the quantity of units
@@ -66598,7 +66452,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun fixedPriceQuantity(): Optional<Double> =
-                    Optional.ofNullable(fixedPriceQuantity.getNullable("fixed_price_quantity"))
+                    fixedPriceQuantity.getOptional("fixed_price_quantity")
 
                 /**
                  * The property used to group this price on an invoice
@@ -66607,7 +66461,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoiceGroupingKey(): Optional<String> =
-                    Optional.ofNullable(invoiceGroupingKey.getNullable("invoice_grouping_key"))
+                    invoiceGroupingKey.getOptional("invoice_grouping_key")
 
                 /**
                  * Within each billing cycle, specifies the cadence at which invoices are produced.
@@ -66617,9 +66471,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun invoicingCycleConfiguration(): Optional<InvoicingCycleConfiguration> =
-                    Optional.ofNullable(
-                        invoicingCycleConfiguration.getNullable("invoicing_cycle_configuration")
-                    )
+                    invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
 
                 /**
                  * User-specified key/value pairs for the resource. Individual keys can be removed
@@ -66629,8 +66481,7 @@ private constructor(
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
-                fun metadata(): Optional<Metadata> =
-                    Optional.ofNullable(metadata.getNullable("metadata"))
+                fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
                 /**
                  * Returns the raw JSON value of [cadence].
@@ -68627,7 +68478,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun endDate(): Optional<EndDate> = Optional.ofNullable(endDate.getNullable("end_date"))
+        fun endDate(): Optional<EndDate> = endDate.getOptional("end_date")
 
         /**
          * Returns the raw JSON value of [adjustment].
@@ -69202,7 +69053,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun isInvoiceLevel(): Optional<Boolean> =
-                    Optional.ofNullable(isInvoiceLevel.getNullable("is_invoice_level"))
+                    isInvoiceLevel.getOptional("is_invoice_level")
 
                 /**
                  * Returns the raw JSON value of [adjustmentType].
@@ -69659,7 +69510,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun isInvoiceLevel(): Optional<Boolean> =
-                    Optional.ofNullable(isInvoiceLevel.getNullable("is_invoice_level"))
+                    isInvoiceLevel.getOptional("is_invoice_level")
 
                 /**
                  * Returns the raw JSON value of [adjustmentType].
@@ -70114,7 +69965,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun isInvoiceLevel(): Optional<Boolean> =
-                    Optional.ofNullable(isInvoiceLevel.getNullable("is_invoice_level"))
+                    isInvoiceLevel.getOptional("is_invoice_level")
 
                 /**
                  * Returns the raw JSON value of [adjustmentType].
@@ -70584,7 +70435,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun isInvoiceLevel(): Optional<Boolean> =
-                    Optional.ofNullable(isInvoiceLevel.getNullable("is_invoice_level"))
+                    isInvoiceLevel.getOptional("is_invoice_level")
 
                 /**
                  * Returns the raw JSON value of [adjustmentType].
@@ -71065,7 +70916,7 @@ private constructor(
                  *   the server responded with an unexpected value).
                  */
                 fun isInvoiceLevel(): Optional<Boolean> =
-                    Optional.ofNullable(isInvoiceLevel.getNullable("is_invoice_level"))
+                    isInvoiceLevel.getOptional("is_invoice_level")
 
                 /**
                  * Returns the raw JSON value of [adjustmentType].
@@ -71912,8 +71763,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun billingCycleDay(): Optional<Long> =
-            Optional.ofNullable(billingCycleDay.getNullable("billing_cycle_day"))
+        fun billingCycleDay(): Optional<Long> = billingCycleDay.getOptional("billing_cycle_day")
 
         /**
          * The updated end date of this price interval. If not specified, the start date will not be
@@ -71922,7 +71772,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun endDate(): Optional<EndDate> = Optional.ofNullable(endDate.getNullable("end_date"))
+        fun endDate(): Optional<EndDate> = endDate.getOptional("end_date")
 
         /**
          * An additional filter to apply to usage queries. This filter must be expressed as a
@@ -71932,7 +71782,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun filter(): Optional<String> = Optional.ofNullable(filter.getNullable("filter"))
+        fun filter(): Optional<String> = filter.getOptional("filter")
 
         /**
          * A list of fixed fee quantity transitions to use for this price interval. Note that this
@@ -71942,9 +71792,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun fixedFeeQuantityTransitions(): Optional<List<FixedFeeQuantityTransition>> =
-            Optional.ofNullable(
-                fixedFeeQuantityTransitions.getNullable("fixed_fee_quantity_transitions")
-            )
+            fixedFeeQuantityTransitions.getOptional("fixed_fee_quantity_transitions")
 
         /**
          * The updated start date of this price interval. If not specified, the start date will not
@@ -71953,8 +71801,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun startDate(): Optional<StartDate> =
-            Optional.ofNullable(startDate.getNullable("start_date"))
+        fun startDate(): Optional<StartDate> = startDate.getOptional("start_date")
 
         /**
          * A list of customer IDs whose usage events will be aggregated and billed under this
@@ -71967,7 +71814,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun usageCustomerIds(): Optional<List<String>> =
-            Optional.ofNullable(usageCustomerIds.getNullable("usage_customer_ids"))
+            usageCustomerIds.getOptional("usage_customer_ids")
 
         /**
          * Returns the raw JSON value of [priceIntervalId].
@@ -73015,7 +72862,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun endDate(): Optional<EndDate> = Optional.ofNullable(endDate.getNullable("end_date"))
+        fun endDate(): Optional<EndDate> = endDate.getOptional("end_date")
 
         /**
          * The updated start date of this adjustment interval. If not specified, the start date will
@@ -73024,8 +72871,7 @@ private constructor(
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun startDate(): Optional<StartDate> =
-            Optional.ofNullable(startDate.getNullable("start_date"))
+        fun startDate(): Optional<StartDate> = startDate.getOptional("start_date")
 
         /**
          * Returns the raw JSON value of [adjustmentIntervalId].
