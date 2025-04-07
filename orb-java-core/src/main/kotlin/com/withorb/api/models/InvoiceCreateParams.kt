@@ -111,8 +111,8 @@ private constructor(
     fun metadata(): Optional<Metadata> = body.metadata()
 
     /**
-     * When true, this invoice will automatically be issued upon creation. When false, the resulting
-     * invoice will require manual review to issue. Defaulted to false.
+     * When true, this invoice will be submitted for issuance upon creation. When false, the
+     * resulting invoice will require manual review to issue. Defaulted to false.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
@@ -422,7 +422,7 @@ private constructor(
         fun metadata(metadata: JsonField<Metadata>) = apply { body.metadata(metadata) }
 
         /**
-         * When true, this invoice will automatically be issued upon creation. When false, the
+         * When true, this invoice will be submitted for issuance upon creation. When false, the
          * resulting invoice will require manual review to issue. Defaulted to false.
          */
         fun willAutoIssue(willAutoIssue: Boolean) = apply { body.willAutoIssue(willAutoIssue) }
@@ -720,7 +720,7 @@ private constructor(
         fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
         /**
-         * When true, this invoice will automatically be issued upon creation. When false, the
+         * When true, this invoice will be submitted for issuance upon creation. When false, the
          * resulting invoice will require manual review to issue. Defaulted to false.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -1065,7 +1065,7 @@ private constructor(
             fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
             /**
-             * When true, this invoice will automatically be issued upon creation. When false, the
+             * When true, this invoice will be submitted for issuance upon creation. When false, the
              * resulting invoice will require manual review to issue. Defaulted to false.
              */
             fun willAutoIssue(willAutoIssue: Boolean) = willAutoIssue(JsonField.of(willAutoIssue))
