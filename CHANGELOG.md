@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.54.0 (2025-04-07)
+
+Full Changelog: [v0.53.0...v0.54.0](https://github.com/orbcorp/orb-java/compare/v0.53.0...v0.54.0)
+
+### Features
+
+* **client:** expose request body setter and getter ([#383](https://github.com/orbcorp/orb-java/issues/383)) ([60cce59](https://github.com/orbcorp/orb-java/commit/60cce59676f05bb6698fd215eddd6a443ef371de))
+
+
+### Bug Fixes
+
+* **api:** naming for sync_payment_methods methods ([#389](https://github.com/orbcorp/orb-java/issues/389)) ([47fccba](https://github.com/orbcorp/orb-java/commit/47fccbaa464aec02b7565f1a13de1290b8a7dc1c))
+
+
+### Chores
+
+* **internal:** codegen related update ([#385](https://github.com/orbcorp/orb-java/issues/385)) ([067d5dd](https://github.com/orbcorp/orb-java/commit/067d5ddb279fa50654b8d8fac4bfe65e8f6890fc))
+* **internal:** codegen related update ([#387](https://github.com/orbcorp/orb-java/issues/387)) ([9040df4](https://github.com/orbcorp/orb-java/commit/9040df44c2ecafd678ec8a7f6588d4309e853d0d))
+* **internal:** swap from `getNullable` to `getOptional` ([#386](https://github.com/orbcorp/orb-java/issues/386)) ([6a6bc6d](https://github.com/orbcorp/orb-java/commit/6a6bc6d7a59e06c0fd78f4abbcd40eca0c845117))
+
+
+### Documentation
+
+* document how to forcibly omit required field ([1090267](https://github.com/orbcorp/orb-java/commit/1090267178944bab500401a8b4f2f21ec2869324))
+* swap examples used in readme ([#388](https://github.com/orbcorp/orb-java/issues/388)) ([1090267](https://github.com/orbcorp/orb-java/commit/1090267178944bab500401a8b4f2f21ec2869324))
+
 ## 0.53.0 (2025-04-02)
 
 Full Changelog: [v0.52.2...v0.53.0](https://github.com/orbcorp/orb-java/compare/v0.52.2...v0.53.0)
