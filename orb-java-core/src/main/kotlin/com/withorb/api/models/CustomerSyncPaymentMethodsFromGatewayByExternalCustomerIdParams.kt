@@ -21,13 +21,13 @@ import java.util.Optional
  */
 class CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams
 private constructor(
-    private val customerId: String,
+    private val externalCustomerId: String,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
-    fun customerId(): String = customerId
+    fun externalCustomerId(): String = externalCustomerId
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
@@ -45,7 +45,7 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .customerId()
+         * .externalCustomerId()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -54,7 +54,7 @@ private constructor(
     /** A builder for [CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams]. */
     class Builder internal constructor() {
 
-        private var customerId: String? = null
+        private var externalCustomerId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
         private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -64,7 +64,8 @@ private constructor(
             customerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams:
                 CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams
         ) = apply {
-            customerId = customerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams.customerId
+            externalCustomerId =
+                customerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams.externalCustomerId
             additionalHeaders =
                 customerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams.additionalHeaders
                     .toBuilder()
@@ -78,7 +79,9 @@ private constructor(
                     .toMutableMap()
         }
 
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun externalCustomerId(externalCustomerId: String) = apply {
+            this.externalCustomerId = externalCustomerId
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -208,14 +211,14 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .customerId()
+         * .externalCustomerId()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
          */
         fun build(): CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams =
             CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams(
-                checkRequired("customerId", customerId),
+                checkRequired("externalCustomerId", externalCustomerId),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -227,7 +230,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> customerId
+            0 -> externalCustomerId
             else -> ""
         }
 
@@ -240,11 +243,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams && customerId == other.customerId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams && externalCustomerId == other.externalCustomerId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(externalCustomerId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
-        "CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams{customerId=$customerId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams{externalCustomerId=$externalCustomerId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }
