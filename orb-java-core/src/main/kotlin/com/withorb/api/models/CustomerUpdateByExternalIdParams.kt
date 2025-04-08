@@ -251,7 +251,7 @@ private constructor(
      * |Norway              |`no_voec`   |Norwegian VAT on e-commerce Number                                                                     |
      * |Oman                |`om_vat`    |Omani VAT Number                                                                                       |
      * |Peru                |`pe_ruc`    |Peruvian RUC Number                                                                                    |
-     * |Philippines         |`ph_tin `   |Philippines Tax Identification Number                                                                  |
+     * |Philippines         |`ph_tin   ` |Philippines Tax Identification Number                                                                  |
      * |Poland              |`eu_vat`    |European VAT Number                                                                                    |
      * |Portugal            |`eu_vat`    |European VAT Number                                                                                    |
      * |Romania             |`eu_vat`    |European VAT Number                                                                                    |
@@ -925,7 +925,7 @@ private constructor(
          * |Norway              |`no_voec`   |Norwegian VAT on e-commerce Number                                                                     |
          * |Oman                |`om_vat`    |Omani VAT Number                                                                                       |
          * |Peru                |`pe_ruc`    |Peruvian RUC Number                                                                                    |
-         * |Philippines         |`ph_tin `   |Philippines Tax Identification Number                                                                  |
+         * |Philippines         |`ph_tin   ` |Philippines Tax Identification Number                                                                  |
          * |Poland              |`eu_vat`    |European VAT Number                                                                                    |
          * |Portugal            |`eu_vat`    |European VAT Number                                                                                    |
          * |Romania             |`eu_vat`    |European VAT Number                                                                                    |
@@ -1421,7 +1421,7 @@ private constructor(
          * |Norway              |`no_voec`   |Norwegian VAT on e-commerce Number                                                                     |
          * |Oman                |`om_vat`    |Omani VAT Number                                                                                       |
          * |Peru                |`pe_ruc`    |Peruvian RUC Number                                                                                    |
-         * |Philippines         |`ph_tin `   |Philippines Tax Identification Number                                                                  |
+         * |Philippines         |`ph_tin   ` |Philippines Tax Identification Number                                                                  |
          * |Poland              |`eu_vat`    |European VAT Number                                                                                    |
          * |Portugal            |`eu_vat`    |European VAT Number                                                                                    |
          * |Romania             |`eu_vat`    |European VAT Number                                                                                    |
@@ -2155,7 +2155,7 @@ private constructor(
              * |Norway              |`no_voec`   |Norwegian VAT on e-commerce Number                                                                     |
              * |Oman                |`om_vat`    |Omani VAT Number                                                                                       |
              * |Peru                |`pe_ruc`    |Peruvian RUC Number                                                                                    |
-             * |Philippines         |`ph_tin `   |Philippines Tax Identification Number                                                                  |
+             * |Philippines         |`ph_tin   ` |Philippines Tax Identification Number                                                                  |
              * |Poland              |`eu_vat`    |European VAT Number                                                                                    |
              * |Portugal            |`eu_vat`    |European VAT Number                                                                                    |
              * |Romania             |`eu_vat`    |European VAT Number                                                                                    |
@@ -5002,7 +5002,7 @@ private constructor(
      * |Norway              |`no_voec`   |Norwegian VAT on e-commerce Number                                                                     |
      * |Oman                |`om_vat`    |Omani VAT Number                                                                                       |
      * |Peru                |`pe_ruc`    |Peruvian RUC Number                                                                                    |
-     * |Philippines         |`ph_tin `   |Philippines Tax Identification Number                                                                  |
+     * |Philippines         |`ph_tin   ` |Philippines Tax Identification Number                                                                  |
      * |Poland              |`eu_vat`    |European VAT Number                                                                                    |
      * |Portugal            |`eu_vat`    |European VAT Number                                                                                    |
      * |Romania             |`eu_vat`    |European VAT Number                                                                                    |
