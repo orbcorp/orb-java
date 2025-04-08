@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.55.0 (2025-04-08)
+
+Full Changelog: [v0.54.0...v0.55.0](https://github.com/orbcorp/orb-java/compare/v0.54.0...v0.55.0)
+
+### Features
+
+* **api:** api update ([#391](https://github.com/orbcorp/orb-java/issues/391)) ([7d1978f](https://github.com/orbcorp/orb-java/commit/7d1978fec3bc01cb0a02fff2433dcf4077469f58))
+
+
+### Chores
+
+* **internal:** codegen related update ([#393](https://github.com/orbcorp/orb-java/issues/393)) ([e941542](https://github.com/orbcorp/orb-java/commit/e941542e549401f37058816a428e6d334fa57d01))
+* **tests:** improve enum examples ([#394](https://github.com/orbcorp/orb-java/issues/394)) ([f1c810a](https://github.com/orbcorp/orb-java/commit/f1c810a7fd6a67722803f9baa6182a32d0644f1f))
+
 ## 0.54.0 (2025-04-07)
 
 Full Changelog: [v0.53.0...v0.54.0](https://github.com/orbcorp/orb-java/compare/v0.53.0...v0.54.0)
