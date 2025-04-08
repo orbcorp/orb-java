@@ -71,7 +71,7 @@ internal class SubscriptionServiceAsyncTest {
                                     .amount("10.00")
                                     .cadence(
                                         SubscriptionCreateParams.AddPrice.AllocationPrice.Cadence
-                                            .ONE_TIME
+                                            .MONTHLY
                                     )
                                     .currency("USD")
                                     .expiresAtEndOfCadence(true)
@@ -243,7 +243,7 @@ internal class SubscriptionServiceAsyncTest {
                                     .cadence(
                                         SubscriptionCreateParams.ReplacePrice.AllocationPrice
                                             .Cadence
-                                            .ONE_TIME
+                                            .MONTHLY
                                     )
                                     .currency("USD")
                                     .expiresAtEndOfCadence(true)
@@ -530,7 +530,7 @@ internal class SubscriptionServiceAsyncTest {
                                     .amount("10.00")
                                     .cadence(
                                         SubscriptionPriceIntervalsParams.Add.AllocationPrice.Cadence
-                                            .ONE_TIME
+                                            .MONTHLY
                                     )
                                     .currency("USD")
                                     .expiresAtEndOfCadence(true)
@@ -727,7 +727,7 @@ internal class SubscriptionServiceAsyncTest {
                                         SubscriptionSchedulePlanChangeParams.AddPrice
                                             .AllocationPrice
                                             .Cadence
-                                            .ONE_TIME
+                                            .MONTHLY
                                     )
                                     .currency("USD")
                                     .expiresAtEndOfCadence(true)
@@ -898,7 +898,7 @@ internal class SubscriptionServiceAsyncTest {
                                         SubscriptionSchedulePlanChangeParams.ReplacePrice
                                             .AllocationPrice
                                             .Cadence
-                                            .ONE_TIME
+                                            .MONTHLY
                                     )
                                     .currency("USD")
                                     .expiresAtEndOfCadence(true)
