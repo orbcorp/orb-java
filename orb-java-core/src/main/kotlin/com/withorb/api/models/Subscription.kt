@@ -69,6 +69,7 @@ private constructor(
     private val metadata: JsonField<Metadata>,
     private val minimumIntervals: JsonField<List<MinimumInterval>>,
     private val netTerms: JsonField<Long>,
+    private val pendingSubscriptionChange: JsonField<PendingSubscriptionChange>,
     private val plan: JsonField<Plan>,
     private val priceIntervals: JsonField<List<PriceInterval>>,
     private val redeemedCoupon: JsonField<RedeemedCoupon>,
@@ -130,6 +131,9 @@ private constructor(
         @ExcludeMissing
         minimumIntervals: JsonField<List<MinimumInterval>> = JsonMissing.of(),
         @JsonProperty("net_terms") @ExcludeMissing netTerms: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("pending_subscription_change")
+        @ExcludeMissing
+        pendingSubscriptionChange: JsonField<PendingSubscriptionChange> = JsonMissing.of(),
         @JsonProperty("plan") @ExcludeMissing plan: JsonField<Plan> = JsonMissing.of(),
         @JsonProperty("price_intervals")
         @ExcludeMissing
@@ -164,6 +168,7 @@ private constructor(
         metadata,
         minimumIntervals,
         netTerms,
+        pendingSubscriptionChange,
         plan,
         priceIntervals,
         redeemedCoupon,
@@ -354,6 +359,15 @@ private constructor(
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun netTerms(): Long = netTerms.getRequired("net_terms")
+
+    /**
+     * A pending subscription change if one exists on this subscription.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun pendingSubscriptionChange(): Optional<PendingSubscriptionChange> =
+        pendingSubscriptionChange.getOptional("pending_subscription_change")
 
     /**
      * The [Plan](/core-concepts#plan-and-price) resource represents a plan that can be subscribed
@@ -574,6 +588,17 @@ private constructor(
     @JsonProperty("net_terms") @ExcludeMissing fun _netTerms(): JsonField<Long> = netTerms
 
     /**
+     * Returns the raw JSON value of [pendingSubscriptionChange].
+     *
+     * Unlike [pendingSubscriptionChange], this method doesn't throw if the JSON field has an
+     * unexpected type.
+     */
+    @JsonProperty("pending_subscription_change")
+    @ExcludeMissing
+    fun _pendingSubscriptionChange(): JsonField<PendingSubscriptionChange> =
+        pendingSubscriptionChange
+
+    /**
      * Returns the raw JSON value of [plan].
      *
      * Unlike [plan], this method doesn't throw if the JSON field has an unexpected type.
@@ -659,6 +684,7 @@ private constructor(
          * .metadata()
          * .minimumIntervals()
          * .netTerms()
+         * .pendingSubscriptionChange()
          * .plan()
          * .priceIntervals()
          * .redeemedCoupon()
@@ -694,6 +720,7 @@ private constructor(
         private var metadata: JsonField<Metadata>? = null
         private var minimumIntervals: JsonField<MutableList<MinimumInterval>>? = null
         private var netTerms: JsonField<Long>? = null
+        private var pendingSubscriptionChange: JsonField<PendingSubscriptionChange>? = null
         private var plan: JsonField<Plan>? = null
         private var priceIntervals: JsonField<MutableList<PriceInterval>>? = null
         private var redeemedCoupon: JsonField<RedeemedCoupon>? = null
@@ -724,6 +751,7 @@ private constructor(
             metadata = subscription.metadata
             minimumIntervals = subscription.minimumIntervals.map { it.toMutableList() }
             netTerms = subscription.netTerms
+            pendingSubscriptionChange = subscription.pendingSubscriptionChange
             plan = subscription.plan
             priceIntervals = subscription.priceIntervals.map { it.toMutableList() }
             redeemedCoupon = subscription.redeemedCoupon
@@ -1174,6 +1202,29 @@ private constructor(
          */
         fun netTerms(netTerms: JsonField<Long>) = apply { this.netTerms = netTerms }
 
+        /** A pending subscription change if one exists on this subscription. */
+        fun pendingSubscriptionChange(pendingSubscriptionChange: PendingSubscriptionChange?) =
+            pendingSubscriptionChange(JsonField.ofNullable(pendingSubscriptionChange))
+
+        /**
+         * Alias for calling [Builder.pendingSubscriptionChange] with
+         * `pendingSubscriptionChange.orElse(null)`.
+         */
+        fun pendingSubscriptionChange(
+            pendingSubscriptionChange: Optional<PendingSubscriptionChange>
+        ) = pendingSubscriptionChange(pendingSubscriptionChange.getOrNull())
+
+        /**
+         * Sets [Builder.pendingSubscriptionChange] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.pendingSubscriptionChange] with a well-typed
+         * [PendingSubscriptionChange] value instead. This method is primarily for setting the field
+         * to an undocumented or not yet supported value.
+         */
+        fun pendingSubscriptionChange(
+            pendingSubscriptionChange: JsonField<PendingSubscriptionChange>
+        ) = apply { this.pendingSubscriptionChange = pendingSubscriptionChange }
+
         /**
          * The [Plan](/core-concepts#plan-and-price) resource represents a plan that can be
          * subscribed to by a customer. Plans define the billing behavior of the subscription. You
@@ -1312,6 +1363,7 @@ private constructor(
          * .metadata()
          * .minimumIntervals()
          * .netTerms()
+         * .pendingSubscriptionChange()
          * .plan()
          * .priceIntervals()
          * .redeemedCoupon()
@@ -1345,6 +1397,7 @@ private constructor(
                 checkRequired("metadata", metadata),
                 checkRequired("minimumIntervals", minimumIntervals).map { it.toImmutable() },
                 checkRequired("netTerms", netTerms),
+                checkRequired("pendingSubscriptionChange", pendingSubscriptionChange),
                 checkRequired("plan", plan),
                 checkRequired("priceIntervals", priceIntervals).map { it.toImmutable() },
                 checkRequired("redeemedCoupon", redeemedCoupon),
@@ -1381,6 +1434,7 @@ private constructor(
         metadata().validate()
         minimumIntervals().forEach { it.validate() }
         netTerms()
+        pendingSubscriptionChange().ifPresent { it.validate() }
         plan().validate()
         priceIntervals().forEach { it.validate() }
         redeemedCoupon().ifPresent { it.validate() }
@@ -1424,6 +1478,7 @@ private constructor(
             (metadata.asKnown().getOrNull()?.validity() ?: 0) +
             (minimumIntervals.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
             (if (netTerms.asKnown().isPresent) 1 else 0) +
+            (pendingSubscriptionChange.asKnown().getOrNull()?.validity() ?: 0) +
             (plan.asKnown().getOrNull()?.validity() ?: 0) +
             (priceIntervals.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
             (redeemedCoupon.asKnown().getOrNull()?.validity() ?: 0) +
@@ -8516,6 +8571,163 @@ private constructor(
             "MinimumInterval{appliesToPriceIds=$appliesToPriceIds, appliesToPriceIntervalIds=$appliesToPriceIntervalIds, endDate=$endDate, minimumAmount=$minimumAmount, startDate=$startDate, additionalProperties=$additionalProperties}"
     }
 
+    /** A pending subscription change if one exists on this subscription. */
+    class PendingSubscriptionChange
+    private constructor(
+        private val id: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of()
+        ) : this(id, mutableMapOf())
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun id(): String = id.getRequired("id")
+
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of
+             * [PendingSubscriptionChange].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * ```
+             */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [PendingSubscriptionChange]. */
+        class Builder internal constructor() {
+
+            private var id: JsonField<String>? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(pendingSubscriptionChange: PendingSubscriptionChange) = apply {
+                id = pendingSubscriptionChange.id
+                additionalProperties = pendingSubscriptionChange.additionalProperties.toMutableMap()
+            }
+
+            fun id(id: String) = id(JsonField.of(id))
+
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun id(id: JsonField<String>) = apply { this.id = id }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [PendingSubscriptionChange].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): PendingSubscriptionChange =
+                PendingSubscriptionChange(
+                    checkRequired("id", id),
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): PendingSubscriptionChange = apply {
+            if (validated) {
+                return@apply
+            }
+
+            id()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = (if (id.asKnown().isPresent) 1 else 0)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is PendingSubscriptionChange && id == other.id && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(id, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "PendingSubscriptionChange{id=$id, additionalProperties=$additionalProperties}"
+    }
+
     /**
      * The Price Interval resource represents a period of time for which a price will bill on a
      * subscription. A subscription’s price intervals define its billing behavior.
@@ -10105,15 +10317,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Subscription && id == other.id && activePlanPhaseOrder == other.activePlanPhaseOrder && adjustmentIntervals == other.adjustmentIntervals && autoCollection == other.autoCollection && billingCycleAnchorConfiguration == other.billingCycleAnchorConfiguration && billingCycleDay == other.billingCycleDay && createdAt == other.createdAt && currentBillingPeriodEndDate == other.currentBillingPeriodEndDate && currentBillingPeriodStartDate == other.currentBillingPeriodStartDate && customer == other.customer && defaultInvoiceMemo == other.defaultInvoiceMemo && discountIntervals == other.discountIntervals && endDate == other.endDate && fixedFeeQuantitySchedule == other.fixedFeeQuantitySchedule && invoicingThreshold == other.invoicingThreshold && maximumIntervals == other.maximumIntervals && metadata == other.metadata && minimumIntervals == other.minimumIntervals && netTerms == other.netTerms && plan == other.plan && priceIntervals == other.priceIntervals && redeemedCoupon == other.redeemedCoupon && startDate == other.startDate && status == other.status && trialInfo == other.trialInfo && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Subscription && id == other.id && activePlanPhaseOrder == other.activePlanPhaseOrder && adjustmentIntervals == other.adjustmentIntervals && autoCollection == other.autoCollection && billingCycleAnchorConfiguration == other.billingCycleAnchorConfiguration && billingCycleDay == other.billingCycleDay && createdAt == other.createdAt && currentBillingPeriodEndDate == other.currentBillingPeriodEndDate && currentBillingPeriodStartDate == other.currentBillingPeriodStartDate && customer == other.customer && defaultInvoiceMemo == other.defaultInvoiceMemo && discountIntervals == other.discountIntervals && endDate == other.endDate && fixedFeeQuantitySchedule == other.fixedFeeQuantitySchedule && invoicingThreshold == other.invoicingThreshold && maximumIntervals == other.maximumIntervals && metadata == other.metadata && minimumIntervals == other.minimumIntervals && netTerms == other.netTerms && pendingSubscriptionChange == other.pendingSubscriptionChange && plan == other.plan && priceIntervals == other.priceIntervals && redeemedCoupon == other.redeemedCoupon && startDate == other.startDate && status == other.status && trialInfo == other.trialInfo && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, activePlanPhaseOrder, adjustmentIntervals, autoCollection, billingCycleAnchorConfiguration, billingCycleDay, createdAt, currentBillingPeriodEndDate, currentBillingPeriodStartDate, customer, defaultInvoiceMemo, discountIntervals, endDate, fixedFeeQuantitySchedule, invoicingThreshold, maximumIntervals, metadata, minimumIntervals, netTerms, plan, priceIntervals, redeemedCoupon, startDate, status, trialInfo, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, activePlanPhaseOrder, adjustmentIntervals, autoCollection, billingCycleAnchorConfiguration, billingCycleDay, createdAt, currentBillingPeriodEndDate, currentBillingPeriodStartDate, customer, defaultInvoiceMemo, discountIntervals, endDate, fixedFeeQuantitySchedule, invoicingThreshold, maximumIntervals, metadata, minimumIntervals, netTerms, pendingSubscriptionChange, plan, priceIntervals, redeemedCoupon, startDate, status, trialInfo, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Subscription{id=$id, activePlanPhaseOrder=$activePlanPhaseOrder, adjustmentIntervals=$adjustmentIntervals, autoCollection=$autoCollection, billingCycleAnchorConfiguration=$billingCycleAnchorConfiguration, billingCycleDay=$billingCycleDay, createdAt=$createdAt, currentBillingPeriodEndDate=$currentBillingPeriodEndDate, currentBillingPeriodStartDate=$currentBillingPeriodStartDate, customer=$customer, defaultInvoiceMemo=$defaultInvoiceMemo, discountIntervals=$discountIntervals, endDate=$endDate, fixedFeeQuantitySchedule=$fixedFeeQuantitySchedule, invoicingThreshold=$invoicingThreshold, maximumIntervals=$maximumIntervals, metadata=$metadata, minimumIntervals=$minimumIntervals, netTerms=$netTerms, plan=$plan, priceIntervals=$priceIntervals, redeemedCoupon=$redeemedCoupon, startDate=$startDate, status=$status, trialInfo=$trialInfo, additionalProperties=$additionalProperties}"
+        "Subscription{id=$id, activePlanPhaseOrder=$activePlanPhaseOrder, adjustmentIntervals=$adjustmentIntervals, autoCollection=$autoCollection, billingCycleAnchorConfiguration=$billingCycleAnchorConfiguration, billingCycleDay=$billingCycleDay, createdAt=$createdAt, currentBillingPeriodEndDate=$currentBillingPeriodEndDate, currentBillingPeriodStartDate=$currentBillingPeriodStartDate, customer=$customer, defaultInvoiceMemo=$defaultInvoiceMemo, discountIntervals=$discountIntervals, endDate=$endDate, fixedFeeQuantitySchedule=$fixedFeeQuantitySchedule, invoicingThreshold=$invoicingThreshold, maximumIntervals=$maximumIntervals, metadata=$metadata, minimumIntervals=$minimumIntervals, netTerms=$netTerms, pendingSubscriptionChange=$pendingSubscriptionChange, plan=$plan, priceIntervals=$priceIntervals, redeemedCoupon=$redeemedCoupon, startDate=$startDate, status=$status, trialInfo=$trialInfo, additionalProperties=$additionalProperties}"
 }
