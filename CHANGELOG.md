@@ -1,5 +1,36 @@
 # Changelog
 
+## 0.56.0 (2025-04-09)
+
+Full Changelog: [v0.55.0...v0.56.0](https://github.com/orbcorp/orb-java/compare/v0.55.0...v0.56.0)
+
+### Features
+
+* **client:** make pagination robust to missing data ([bf8c89e](https://github.com/orbcorp/orb-java/commit/bf8c89e3e5148a99afd9b9e5f211dd3002c2d88e))
+* **client:** support setting base URL via env var ([#397](https://github.com/orbcorp/orb-java/issues/397)) ([4ac10b3](https://github.com/orbcorp/orb-java/commit/4ac10b3cf164a76c7da1e0c5fc12aeec0338d0d3))
+
+
+### Bug Fixes
+
+* **client:** bump to better jackson version ([#400](https://github.com/orbcorp/orb-java/issues/400)) ([b9c0a00](https://github.com/orbcorp/orb-java/commit/b9c0a00b0181bfbaf7a9a2f670b98000dfa4b996))
+
+
+### Chores
+
+* **internal:** expand CI branch coverage ([#399](https://github.com/orbcorp/orb-java/issues/399)) ([17d8399](https://github.com/orbcorp/orb-java/commit/17d8399351f5affa7a89fbc79df9e88c732c1330))
+* **internal:** reduce CI branch coverage ([06a8495](https://github.com/orbcorp/orb-java/commit/06a84957b55d697cbb0bd3a8c6f9a4a02f95d90c))
+
+
+### Documentation
+
+* add comments for page methods ([bf8c89e](https://github.com/orbcorp/orb-java/commit/bf8c89e3e5148a99afd9b9e5f211dd3002c2d88e))
+
+
+### Refactors
+
+* **client:** deduplicate page response classes ([#401](https://github.com/orbcorp/orb-java/issues/401)) ([bf8c89e](https://github.com/orbcorp/orb-java/commit/bf8c89e3e5148a99afd9b9e5f211dd3002c2d88e))
+* **client:** migrate pages to builder pattern ([#402](https://github.com/orbcorp/orb-java/issues/402)) ([bbcd954](https://github.com/orbcorp/orb-java/commit/bbcd9545d5fad36f5b241ecc5515b44454533265))
+
 ## 0.55.0 (2025-04-08)
 
 Full Changelog: [v0.54.0...v0.55.0](https://github.com/orbcorp/orb-java/compare/v0.54.0...v0.55.0)
