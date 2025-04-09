@@ -2,6 +2,7 @@
 
 package com.withorb.api.models
 
+import com.withorb.api.core.checkRequired
 import com.withorb.api.services.blocking.SubscriptionService
 import java.util.Objects
 import java.util.Optional
@@ -9,20 +10,13 @@ import java.util.stream.Stream
 import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
-/**
- * This endpoint returns a [paginated](/api-reference/pagination) list of all plans associated with
- * a subscription along with their start and end dates. This list contains the subscription's
- * initial plan along with past and future plan changes.
- */
+/** @see [SubscriptionService.fetchSchedule] */
 class SubscriptionFetchSchedulePage
 private constructor(
-    private val subscriptionsService: SubscriptionService,
+    private val service: SubscriptionService,
     private val params: SubscriptionFetchScheduleParams,
     private val response: SubscriptionFetchSchedulePageResponse,
 ) {
-
-    /** Returns the response that this page was parsed from. */
-    fun response(): SubscriptionFetchSchedulePageResponse = response
 
     /**
      * Delegates to [SubscriptionFetchSchedulePageResponse], but gracefully handles missing data.
@@ -39,19 +33,6 @@ private constructor(
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is SubscriptionFetchSchedulePage && subscriptionsService == other.subscriptionsService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionsService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "SubscriptionFetchSchedulePage{subscriptionsService=$subscriptionsService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean =
         data().isNotEmpty() &&
@@ -74,20 +55,79 @@ private constructor(
         )
     }
 
-    fun getNextPage(): Optional<SubscriptionFetchSchedulePage> {
-        return getNextPageParams().map { subscriptionsService.fetchSchedule(it) }
-    }
+    fun getNextPage(): Optional<SubscriptionFetchSchedulePage> =
+        getNextPageParams().map { service.fetchSchedule(it) }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): SubscriptionFetchScheduleParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): SubscriptionFetchSchedulePageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        @JvmStatic
-        fun of(
-            subscriptionsService: SubscriptionService,
-            params: SubscriptionFetchScheduleParams,
-            response: SubscriptionFetchSchedulePageResponse,
-        ) = SubscriptionFetchSchedulePage(subscriptionsService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [SubscriptionFetchSchedulePage].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [SubscriptionFetchSchedulePage]. */
+    class Builder internal constructor() {
+
+        private var service: SubscriptionService? = null
+        private var params: SubscriptionFetchScheduleParams? = null
+        private var response: SubscriptionFetchSchedulePageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(subscriptionFetchSchedulePage: SubscriptionFetchSchedulePage) = apply {
+            service = subscriptionFetchSchedulePage.service
+            params = subscriptionFetchSchedulePage.params
+            response = subscriptionFetchSchedulePage.response
+        }
+
+        fun service(service: SubscriptionService) = apply { this.service = service }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: SubscriptionFetchScheduleParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: SubscriptionFetchSchedulePageResponse) = apply {
+            this.response = response
+        }
+
+        /**
+         * Returns an immutable instance of [SubscriptionFetchSchedulePage].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): SubscriptionFetchSchedulePage =
+            SubscriptionFetchSchedulePage(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: SubscriptionFetchSchedulePage) :
@@ -109,4 +149,17 @@ private constructor(
             return StreamSupport.stream(spliterator(), false)
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is SubscriptionFetchSchedulePage && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() =
+        "SubscriptionFetchSchedulePage{service=$service, params=$params, response=$response}"
 }

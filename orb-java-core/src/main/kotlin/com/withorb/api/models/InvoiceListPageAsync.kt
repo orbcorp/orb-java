@@ -2,6 +2,7 @@
 
 package com.withorb.api.models
 
+import com.withorb.api.core.checkRequired
 import com.withorb.api.services.async.InvoiceServiceAsync
 import java.util.Objects
 import java.util.Optional
@@ -10,29 +11,13 @@ import java.util.concurrent.Executor
 import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
 
-/**
- * This endpoint returns a list of all [`Invoice`](/core-concepts#invoice)s for an account in a list
- * format.
- *
- * The list of invoices is ordered starting from the most recently issued invoice date. The response
- * also includes [`pagination_metadata`](/api-reference/pagination), which lets the caller retrieve
- * the next page of results if they exist.
- *
- * By default, this only returns invoices that are `issued`, `paid`, or `synced`.
- *
- * When fetching any `draft` invoices, this returns the last-computed invoice values for each draft
- * invoice, which may not always be up-to-date since Orb regularly refreshes invoices
- * asynchronously.
- */
+/** @see [InvoiceServiceAsync.list] */
 class InvoiceListPageAsync
 private constructor(
-    private val invoicesService: InvoiceServiceAsync,
+    private val service: InvoiceServiceAsync,
     private val params: InvoiceListParams,
     private val response: InvoiceListPageResponse,
 ) {
-
-    /** Returns the response that this page was parsed from. */
-    fun response(): InvoiceListPageResponse = response
 
     /**
      * Delegates to [InvoiceListPageResponse], but gracefully handles missing data.
@@ -48,19 +33,6 @@ private constructor(
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is InvoiceListPageAsync && invoicesService == other.invoicesService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(invoicesService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "InvoiceListPageAsync{invoicesService=$invoicesService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean =
         data().isNotEmpty() &&
@@ -83,22 +55,78 @@ private constructor(
         )
     }
 
-    fun getNextPage(): CompletableFuture<Optional<InvoiceListPageAsync>> {
-        return getNextPageParams()
-            .map { invoicesService.list(it).thenApply { Optional.of(it) } }
+    fun getNextPage(): CompletableFuture<Optional<InvoiceListPageAsync>> =
+        getNextPageParams()
+            .map { service.list(it).thenApply { Optional.of(it) } }
             .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
-    }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): InvoiceListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): InvoiceListPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        @JvmStatic
-        fun of(
-            invoicesService: InvoiceServiceAsync,
-            params: InvoiceListParams,
-            response: InvoiceListPageResponse,
-        ) = InvoiceListPageAsync(invoicesService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of [InvoiceListPageAsync].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [InvoiceListPageAsync]. */
+    class Builder internal constructor() {
+
+        private var service: InvoiceServiceAsync? = null
+        private var params: InvoiceListParams? = null
+        private var response: InvoiceListPageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(invoiceListPageAsync: InvoiceListPageAsync) = apply {
+            service = invoiceListPageAsync.service
+            params = invoiceListPageAsync.params
+            response = invoiceListPageAsync.response
+        }
+
+        fun service(service: InvoiceServiceAsync) = apply { this.service = service }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: InvoiceListParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: InvoiceListPageResponse) = apply { this.response = response }
+
+        /**
+         * Returns an immutable instance of [InvoiceListPageAsync].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): InvoiceListPageAsync =
+            InvoiceListPageAsync(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: InvoiceListPageAsync) {
@@ -126,4 +154,17 @@ private constructor(
             return forEach(values::add, executor).thenApply { values }
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is InvoiceListPageAsync && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() =
+        "InvoiceListPageAsync{service=$service, params=$params, response=$response}"
 }

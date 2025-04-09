@@ -267,11 +267,11 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
                                 }
                             }
                             .let {
-                                SubscriptionListPageAsync.of(
-                                    SubscriptionServiceAsyncImpl(clientOptions),
-                                    params,
-                                    it,
-                                )
+                                SubscriptionListPageAsync.builder()
+                                    .service(SubscriptionServiceAsyncImpl(clientOptions))
+                                    .params(params)
+                                    .response(it)
+                                    .build()
                             }
                     }
                 }
@@ -394,11 +394,11 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
                                 }
                             }
                             .let {
-                                SubscriptionFetchSchedulePageAsync.of(
-                                    SubscriptionServiceAsyncImpl(clientOptions),
-                                    params,
-                                    it,
-                                )
+                                SubscriptionFetchSchedulePageAsync.builder()
+                                    .service(SubscriptionServiceAsyncImpl(clientOptions))
+                                    .params(params)
+                                    .response(it)
+                                    .build()
                             }
                     }
                 }
