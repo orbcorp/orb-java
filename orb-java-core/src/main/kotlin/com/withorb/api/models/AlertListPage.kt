@@ -2,6 +2,7 @@
 
 package com.withorb.api.models
 
+import com.withorb.api.core.checkRequired
 import com.withorb.api.services.blocking.AlertService
 import java.util.Objects
 import java.util.Optional
@@ -9,26 +10,13 @@ import java.util.stream.Stream
 import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
-/**
- * This endpoint returns a list of alerts within Orb.
- *
- * The request must specify one of `customer_id`, `external_customer_id`, or `subscription_id`.
- *
- * If querying by subscripion_id, the endpoint will return the subscription level alerts as well as
- * the plan level alerts associated with the subscription.
- *
- * The list of alerts is ordered starting from the most recently created alert. This endpoint
- * follows Orb's [standardized pagination format](/api-reference/pagination).
- */
+/** @see [AlertService.list] */
 class AlertListPage
 private constructor(
-    private val alertsService: AlertService,
+    private val service: AlertService,
     private val params: AlertListParams,
     private val response: AlertListPageResponse,
 ) {
-
-    /** Returns the response that this page was parsed from. */
-    fun response(): AlertListPageResponse = response
 
     /**
      * Delegates to [AlertListPageResponse], but gracefully handles missing data.
@@ -44,19 +32,6 @@ private constructor(
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is AlertListPage && alertsService == other.alertsService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(alertsService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "AlertListPage{alertsService=$alertsService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean =
         data().isNotEmpty() &&
@@ -79,20 +54,75 @@ private constructor(
         )
     }
 
-    fun getNextPage(): Optional<AlertListPage> {
-        return getNextPageParams().map { alertsService.list(it) }
-    }
+    fun getNextPage(): Optional<AlertListPage> = getNextPageParams().map { service.list(it) }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): AlertListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): AlertListPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        @JvmStatic
-        fun of(
-            alertsService: AlertService,
-            params: AlertListParams,
-            response: AlertListPageResponse,
-        ) = AlertListPage(alertsService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of [AlertListPage].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [AlertListPage]. */
+    class Builder internal constructor() {
+
+        private var service: AlertService? = null
+        private var params: AlertListParams? = null
+        private var response: AlertListPageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(alertListPage: AlertListPage) = apply {
+            service = alertListPage.service
+            params = alertListPage.params
+            response = alertListPage.response
+        }
+
+        fun service(service: AlertService) = apply { this.service = service }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: AlertListParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: AlertListPageResponse) = apply { this.response = response }
+
+        /**
+         * Returns an immutable instance of [AlertListPage].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): AlertListPage =
+            AlertListPage(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: AlertListPage) : Iterable<Alert> {
@@ -113,4 +143,16 @@ private constructor(
             return StreamSupport.stream(spliterator(), false)
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is AlertListPage && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() = "AlertListPage{service=$service, params=$params, response=$response}"
 }

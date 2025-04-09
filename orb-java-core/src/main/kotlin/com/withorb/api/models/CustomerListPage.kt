@@ -2,6 +2,7 @@
 
 package com.withorb.api.models
 
+import com.withorb.api.core.checkRequired
 import com.withorb.api.services.blocking.CustomerService
 import java.util.Objects
 import java.util.Optional
@@ -9,22 +10,13 @@ import java.util.stream.Stream
 import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
-/**
- * This endpoint returns a list of all customers for an account. The list of customers is ordered
- * starting from the most recently created customer. This endpoint follows Orb's
- * [standardized pagination format](/api-reference/pagination).
- *
- * See [Customer](/core-concepts##customer) for an overview of the customer model.
- */
+/** @see [CustomerService.list] */
 class CustomerListPage
 private constructor(
-    private val customersService: CustomerService,
+    private val service: CustomerService,
     private val params: CustomerListParams,
     private val response: CustomerListPageResponse,
 ) {
-
-    /** Returns the response that this page was parsed from. */
-    fun response(): CustomerListPageResponse = response
 
     /**
      * Delegates to [CustomerListPageResponse], but gracefully handles missing data.
@@ -40,19 +32,6 @@ private constructor(
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerListPage && customersService == other.customersService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customersService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "CustomerListPage{customersService=$customersService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean =
         data().isNotEmpty() &&
@@ -75,20 +54,75 @@ private constructor(
         )
     }
 
-    fun getNextPage(): Optional<CustomerListPage> {
-        return getNextPageParams().map { customersService.list(it) }
-    }
+    fun getNextPage(): Optional<CustomerListPage> = getNextPageParams().map { service.list(it) }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): CustomerListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): CustomerListPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        @JvmStatic
-        fun of(
-            customersService: CustomerService,
-            params: CustomerListParams,
-            response: CustomerListPageResponse,
-        ) = CustomerListPage(customersService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of [CustomerListPage].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [CustomerListPage]. */
+    class Builder internal constructor() {
+
+        private var service: CustomerService? = null
+        private var params: CustomerListParams? = null
+        private var response: CustomerListPageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(customerListPage: CustomerListPage) = apply {
+            service = customerListPage.service
+            params = customerListPage.params
+            response = customerListPage.response
+        }
+
+        fun service(service: CustomerService) = apply { this.service = service }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: CustomerListParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: CustomerListPageResponse) = apply { this.response = response }
+
+        /**
+         * Returns an immutable instance of [CustomerListPage].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): CustomerListPage =
+            CustomerListPage(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: CustomerListPage) : Iterable<Customer> {
@@ -109,4 +143,17 @@ private constructor(
             return StreamSupport.stream(spliterator(), false)
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerListPage && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() =
+        "CustomerListPage{service=$service, params=$params, response=$response}"
 }

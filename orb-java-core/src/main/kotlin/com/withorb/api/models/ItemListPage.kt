@@ -2,6 +2,7 @@
 
 package com.withorb.api.models
 
+import com.withorb.api.core.checkRequired
 import com.withorb.api.services.blocking.ItemService
 import java.util.Objects
 import java.util.Optional
@@ -9,16 +10,13 @@ import java.util.stream.Stream
 import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
-/** This endpoint returns a list of all Items, ordered in descending order by creation time. */
+/** @see [ItemService.list] */
 class ItemListPage
 private constructor(
-    private val itemsService: ItemService,
+    private val service: ItemService,
     private val params: ItemListParams,
     private val response: ItemListPageResponse,
 ) {
-
-    /** Returns the response that this page was parsed from. */
-    fun response(): ItemListPageResponse = response
 
     /**
      * Delegates to [ItemListPageResponse], but gracefully handles missing data.
@@ -34,19 +32,6 @@ private constructor(
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ItemListPage && itemsService == other.itemsService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(itemsService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "ItemListPage{itemsService=$itemsService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean =
         data().isNotEmpty() &&
@@ -69,17 +54,75 @@ private constructor(
         )
     }
 
-    fun getNextPage(): Optional<ItemListPage> {
-        return getNextPageParams().map { itemsService.list(it) }
-    }
+    fun getNextPage(): Optional<ItemListPage> = getNextPageParams().map { service.list(it) }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): ItemListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): ItemListPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        @JvmStatic
-        fun of(itemsService: ItemService, params: ItemListParams, response: ItemListPageResponse) =
-            ItemListPage(itemsService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of [ItemListPage].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [ItemListPage]. */
+    class Builder internal constructor() {
+
+        private var service: ItemService? = null
+        private var params: ItemListParams? = null
+        private var response: ItemListPageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(itemListPage: ItemListPage) = apply {
+            service = itemListPage.service
+            params = itemListPage.params
+            response = itemListPage.response
+        }
+
+        fun service(service: ItemService) = apply { this.service = service }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: ItemListParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: ItemListPageResponse) = apply { this.response = response }
+
+        /**
+         * Returns an immutable instance of [ItemListPage].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): ItemListPage =
+            ItemListPage(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: ItemListPage) : Iterable<Item> {
@@ -100,4 +143,16 @@ private constructor(
             return StreamSupport.stream(spliterator(), false)
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ItemListPage && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() = "ItemListPage{service=$service, params=$params, response=$response}"
 }
