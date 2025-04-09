@@ -163,7 +163,13 @@ class InvoiceServiceImpl internal constructor(private val clientOptions: ClientO
                             it.validate()
                         }
                     }
-                    .let { InvoiceListPage.of(InvoiceServiceImpl(clientOptions), params, it) }
+                    .let {
+                        InvoiceListPage.builder()
+                            .service(InvoiceServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
             }
         }
 

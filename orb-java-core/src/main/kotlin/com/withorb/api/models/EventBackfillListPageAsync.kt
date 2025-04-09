@@ -2,6 +2,7 @@
 
 package com.withorb.api.models
 
+import com.withorb.api.core.checkRequired
 import com.withorb.api.services.async.events.BackfillServiceAsync
 import java.util.Objects
 import java.util.Optional
@@ -10,23 +11,13 @@ import java.util.concurrent.Executor
 import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
 
-/**
- * This endpoint returns a list of all backfills in a list format.
- *
- * The list of backfills is ordered starting from the most recently created backfill. The response
- * also includes [`pagination_metadata`](/api-reference/pagination), which lets the caller retrieve
- * the next page of results if they exist. More information about pagination can be found in the
- * [Pagination-metadata schema](pagination).
- */
+/** @see [BackfillServiceAsync.list] */
 class EventBackfillListPageAsync
 private constructor(
-    private val backfillsService: BackfillServiceAsync,
+    private val service: BackfillServiceAsync,
     private val params: EventBackfillListParams,
     private val response: EventBackfillListPageResponse,
 ) {
-
-    /** Returns the response that this page was parsed from. */
-    fun response(): EventBackfillListPageResponse = response
 
     /**
      * Delegates to [EventBackfillListPageResponse], but gracefully handles missing data.
@@ -43,19 +34,6 @@ private constructor(
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is EventBackfillListPageAsync && backfillsService == other.backfillsService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(backfillsService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "EventBackfillListPageAsync{backfillsService=$backfillsService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean =
         data().isNotEmpty() &&
@@ -78,22 +56,78 @@ private constructor(
         )
     }
 
-    fun getNextPage(): CompletableFuture<Optional<EventBackfillListPageAsync>> {
-        return getNextPageParams()
-            .map { backfillsService.list(it).thenApply { Optional.of(it) } }
+    fun getNextPage(): CompletableFuture<Optional<EventBackfillListPageAsync>> =
+        getNextPageParams()
+            .map { service.list(it).thenApply { Optional.of(it) } }
             .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
-    }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): EventBackfillListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): EventBackfillListPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        @JvmStatic
-        fun of(
-            backfillsService: BackfillServiceAsync,
-            params: EventBackfillListParams,
-            response: EventBackfillListPageResponse,
-        ) = EventBackfillListPageAsync(backfillsService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of [EventBackfillListPageAsync].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [EventBackfillListPageAsync]. */
+    class Builder internal constructor() {
+
+        private var service: BackfillServiceAsync? = null
+        private var params: EventBackfillListParams? = null
+        private var response: EventBackfillListPageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(eventBackfillListPageAsync: EventBackfillListPageAsync) = apply {
+            service = eventBackfillListPageAsync.service
+            params = eventBackfillListPageAsync.params
+            response = eventBackfillListPageAsync.response
+        }
+
+        fun service(service: BackfillServiceAsync) = apply { this.service = service }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: EventBackfillListParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: EventBackfillListPageResponse) = apply { this.response = response }
+
+        /**
+         * Returns an immutable instance of [EventBackfillListPageAsync].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): EventBackfillListPageAsync =
+            EventBackfillListPageAsync(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: EventBackfillListPageAsync) {
@@ -124,4 +158,17 @@ private constructor(
             return forEach(values::add, executor).thenApply { values }
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is EventBackfillListPageAsync && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() =
+        "EventBackfillListPageAsync{service=$service, params=$params, response=$response}"
 }

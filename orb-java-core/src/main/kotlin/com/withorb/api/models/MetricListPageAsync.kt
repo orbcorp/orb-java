@@ -2,6 +2,7 @@
 
 package com.withorb.api.models
 
+import com.withorb.api.core.checkRequired
 import com.withorb.api.services.async.MetricServiceAsync
 import java.util.Objects
 import java.util.Optional
@@ -10,19 +11,13 @@ import java.util.concurrent.Executor
 import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
 
-/**
- * This endpoint is used to fetch [metric](/core-concepts##metric) details given a metric
- * identifier. It returns information about the metrics including its name, description, and item.
- */
+/** @see [MetricServiceAsync.list] */
 class MetricListPageAsync
 private constructor(
-    private val metricsService: MetricServiceAsync,
+    private val service: MetricServiceAsync,
     private val params: MetricListParams,
     private val response: MetricListPageResponse,
 ) {
-
-    /** Returns the response that this page was parsed from. */
-    fun response(): MetricListPageResponse = response
 
     /**
      * Delegates to [MetricListPageResponse], but gracefully handles missing data.
@@ -39,19 +34,6 @@ private constructor(
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is MetricListPageAsync && metricsService == other.metricsService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(metricsService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "MetricListPageAsync{metricsService=$metricsService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean =
         data().isNotEmpty() &&
@@ -74,22 +56,78 @@ private constructor(
         )
     }
 
-    fun getNextPage(): CompletableFuture<Optional<MetricListPageAsync>> {
-        return getNextPageParams()
-            .map { metricsService.list(it).thenApply { Optional.of(it) } }
+    fun getNextPage(): CompletableFuture<Optional<MetricListPageAsync>> =
+        getNextPageParams()
+            .map { service.list(it).thenApply { Optional.of(it) } }
             .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
-    }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): MetricListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): MetricListPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        @JvmStatic
-        fun of(
-            metricsService: MetricServiceAsync,
-            params: MetricListParams,
-            response: MetricListPageResponse,
-        ) = MetricListPageAsync(metricsService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of [MetricListPageAsync].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [MetricListPageAsync]. */
+    class Builder internal constructor() {
+
+        private var service: MetricServiceAsync? = null
+        private var params: MetricListParams? = null
+        private var response: MetricListPageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(metricListPageAsync: MetricListPageAsync) = apply {
+            service = metricListPageAsync.service
+            params = metricListPageAsync.params
+            response = metricListPageAsync.response
+        }
+
+        fun service(service: MetricServiceAsync) = apply { this.service = service }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: MetricListParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: MetricListPageResponse) = apply { this.response = response }
+
+        /**
+         * Returns an immutable instance of [MetricListPageAsync].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): MetricListPageAsync =
+            MetricListPageAsync(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: MetricListPageAsync) {
@@ -120,4 +158,17 @@ private constructor(
             return forEach(values::add, executor).thenApply { values }
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is MetricListPageAsync && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() =
+        "MetricListPageAsync{service=$service, params=$params, response=$response}"
 }

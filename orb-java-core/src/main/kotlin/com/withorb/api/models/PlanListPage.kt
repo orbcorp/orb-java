@@ -2,6 +2,7 @@
 
 package com.withorb.api.models
 
+import com.withorb.api.core.checkRequired
 import com.withorb.api.services.blocking.PlanService
 import java.util.Objects
 import java.util.Optional
@@ -9,21 +10,13 @@ import java.util.stream.Stream
 import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
-/**
- * This endpoint returns a list of all [plans](/core-concepts#plan-and-price) for an account in a
- * list format. The list of plans is ordered starting from the most recently created plan. The
- * response also includes [`pagination_metadata`](/api-reference/pagination), which lets the caller
- * retrieve the next page of results if they exist.
- */
+/** @see [PlanService.list] */
 class PlanListPage
 private constructor(
-    private val plansService: PlanService,
+    private val service: PlanService,
     private val params: PlanListParams,
     private val response: PlanListPageResponse,
 ) {
-
-    /** Returns the response that this page was parsed from. */
-    fun response(): PlanListPageResponse = response
 
     /**
      * Delegates to [PlanListPageResponse], but gracefully handles missing data.
@@ -39,19 +32,6 @@ private constructor(
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is PlanListPage && plansService == other.plansService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(plansService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "PlanListPage{plansService=$plansService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean =
         data().isNotEmpty() &&
@@ -74,17 +54,75 @@ private constructor(
         )
     }
 
-    fun getNextPage(): Optional<PlanListPage> {
-        return getNextPageParams().map { plansService.list(it) }
-    }
+    fun getNextPage(): Optional<PlanListPage> = getNextPageParams().map { service.list(it) }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): PlanListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): PlanListPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        @JvmStatic
-        fun of(plansService: PlanService, params: PlanListParams, response: PlanListPageResponse) =
-            PlanListPage(plansService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of [PlanListPage].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [PlanListPage]. */
+    class Builder internal constructor() {
+
+        private var service: PlanService? = null
+        private var params: PlanListParams? = null
+        private var response: PlanListPageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(planListPage: PlanListPage) = apply {
+            service = planListPage.service
+            params = planListPage.params
+            response = planListPage.response
+        }
+
+        fun service(service: PlanService) = apply { this.service = service }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: PlanListParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: PlanListPageResponse) = apply { this.response = response }
+
+        /**
+         * Returns an immutable instance of [PlanListPage].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): PlanListPage =
+            PlanListPage(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: PlanListPage) : Iterable<Plan> {
@@ -105,4 +143,16 @@ private constructor(
             return StreamSupport.stream(spliterator(), false)
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is PlanListPage && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() = "PlanListPage{service=$service, params=$params, response=$response}"
 }

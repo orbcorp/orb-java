@@ -2,6 +2,7 @@
 
 package com.withorb.api.models
 
+import com.withorb.api.core.checkRequired
 import com.withorb.api.services.blocking.CouponService
 import java.util.Objects
 import java.util.Optional
@@ -9,22 +10,13 @@ import java.util.stream.Stream
 import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
-/**
- * This endpoint returns a list of all coupons for an account in a list format.
- *
- * The list of coupons is ordered starting from the most recently created coupon. The response also
- * includes `pagination_metadata`, which lets the caller retrieve the next page of results if they
- * exist. More information about pagination can be found in the Pagination-metadata schema.
- */
+/** @see [CouponService.list] */
 class CouponListPage
 private constructor(
-    private val couponsService: CouponService,
+    private val service: CouponService,
     private val params: CouponListParams,
     private val response: CouponListPageResponse,
 ) {
-
-    /** Returns the response that this page was parsed from. */
-    fun response(): CouponListPageResponse = response
 
     /**
      * Delegates to [CouponListPageResponse], but gracefully handles missing data.
@@ -40,19 +32,6 @@ private constructor(
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CouponListPage && couponsService == other.couponsService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(couponsService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "CouponListPage{couponsService=$couponsService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean =
         data().isNotEmpty() &&
@@ -75,20 +54,75 @@ private constructor(
         )
     }
 
-    fun getNextPage(): Optional<CouponListPage> {
-        return getNextPageParams().map { couponsService.list(it) }
-    }
+    fun getNextPage(): Optional<CouponListPage> = getNextPageParams().map { service.list(it) }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): CouponListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): CouponListPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        @JvmStatic
-        fun of(
-            couponsService: CouponService,
-            params: CouponListParams,
-            response: CouponListPageResponse,
-        ) = CouponListPage(couponsService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of [CouponListPage].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [CouponListPage]. */
+    class Builder internal constructor() {
+
+        private var service: CouponService? = null
+        private var params: CouponListParams? = null
+        private var response: CouponListPageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(couponListPage: CouponListPage) = apply {
+            service = couponListPage.service
+            params = couponListPage.params
+            response = couponListPage.response
+        }
+
+        fun service(service: CouponService) = apply { this.service = service }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: CouponListParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: CouponListPageResponse) = apply { this.response = response }
+
+        /**
+         * Returns an immutable instance of [CouponListPage].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): CouponListPage =
+            CouponListPage(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: CouponListPage) : Iterable<Coupon> {
@@ -109,4 +143,16 @@ private constructor(
             return StreamSupport.stream(spliterator(), false)
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CouponListPage && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() = "CouponListPage{service=$service, params=$params, response=$response}"
 }
