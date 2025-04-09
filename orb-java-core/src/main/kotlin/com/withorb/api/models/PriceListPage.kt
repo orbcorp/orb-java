@@ -2,6 +2,7 @@
 
 package com.withorb.api.models
 
+import com.withorb.api.core.checkRequired
 import com.withorb.api.services.blocking.PriceService
 import java.util.Objects
 import java.util.Optional
@@ -9,19 +10,13 @@ import java.util.stream.Stream
 import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
-/**
- * This endpoint is used to list all add-on prices created using the
- * [price creation endpoint](/api-reference/price/create-price).
- */
+/** @see [PriceService.list] */
 class PriceListPage
 private constructor(
-    private val pricesService: PriceService,
+    private val service: PriceService,
     private val params: PriceListParams,
     private val response: PriceListPageResponse,
 ) {
-
-    /** Returns the response that this page was parsed from. */
-    fun response(): PriceListPageResponse = response
 
     /**
      * Delegates to [PriceListPageResponse], but gracefully handles missing data.
@@ -37,19 +32,6 @@ private constructor(
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is PriceListPage && pricesService == other.pricesService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(pricesService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "PriceListPage{pricesService=$pricesService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean =
         data().isNotEmpty() &&
@@ -72,20 +54,75 @@ private constructor(
         )
     }
 
-    fun getNextPage(): Optional<PriceListPage> {
-        return getNextPageParams().map { pricesService.list(it) }
-    }
+    fun getNextPage(): Optional<PriceListPage> = getNextPageParams().map { service.list(it) }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): PriceListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): PriceListPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        @JvmStatic
-        fun of(
-            pricesService: PriceService,
-            params: PriceListParams,
-            response: PriceListPageResponse,
-        ) = PriceListPage(pricesService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of [PriceListPage].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [PriceListPage]. */
+    class Builder internal constructor() {
+
+        private var service: PriceService? = null
+        private var params: PriceListParams? = null
+        private var response: PriceListPageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(priceListPage: PriceListPage) = apply {
+            service = priceListPage.service
+            params = priceListPage.params
+            response = priceListPage.response
+        }
+
+        fun service(service: PriceService) = apply { this.service = service }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: PriceListParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: PriceListPageResponse) = apply { this.response = response }
+
+        /**
+         * Returns an immutable instance of [PriceListPage].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): PriceListPage =
+            PriceListPage(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: PriceListPage) : Iterable<Price> {
@@ -106,4 +143,16 @@ private constructor(
             return StreamSupport.stream(spliterator(), false)
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is PriceListPage && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() = "PriceListPage{service=$service, params=$params, response=$response}"
 }

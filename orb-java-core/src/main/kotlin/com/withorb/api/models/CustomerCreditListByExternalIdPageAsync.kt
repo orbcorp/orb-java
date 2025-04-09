@@ -2,6 +2,7 @@
 
 package com.withorb.api.models
 
+import com.withorb.api.core.checkRequired
 import com.withorb.api.services.async.customers.CreditServiceAsync
 import java.util.Objects
 import java.util.Optional
@@ -10,24 +11,13 @@ import java.util.concurrent.Executor
 import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
 
-/**
- * Returns a paginated list of unexpired, non-zero credit blocks for a customer.
- *
- * If `include_all_blocks` is set to `true`, all credit blocks (including expired and depleted
- * blocks) will be included in the response.
- *
- * Note that `currency` defaults to credits if not specified. To use a real world currency, set
- * `currency` to an ISO 4217 string.
- */
+/** @see [CreditServiceAsync.listByExternalId] */
 class CustomerCreditListByExternalIdPageAsync
 private constructor(
-    private val creditsService: CreditServiceAsync,
+    private val service: CreditServiceAsync,
     private val params: CustomerCreditListByExternalIdParams,
     private val response: CustomerCreditListByExternalIdPageResponse,
 ) {
-
-    /** Returns the response that this page was parsed from. */
-    fun response(): CustomerCreditListByExternalIdPageResponse = response
 
     /**
      * Delegates to [CustomerCreditListByExternalIdPageResponse], but gracefully handles missing
@@ -46,19 +36,6 @@ private constructor(
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerCreditListByExternalIdPageAsync && creditsService == other.creditsService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(creditsService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "CustomerCreditListByExternalIdPageAsync{creditsService=$creditsService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean =
         data().isNotEmpty() &&
@@ -81,22 +58,83 @@ private constructor(
         )
     }
 
-    fun getNextPage(): CompletableFuture<Optional<CustomerCreditListByExternalIdPageAsync>> {
-        return getNextPageParams()
-            .map { creditsService.listByExternalId(it).thenApply { Optional.of(it) } }
+    fun getNextPage(): CompletableFuture<Optional<CustomerCreditListByExternalIdPageAsync>> =
+        getNextPageParams()
+            .map { service.listByExternalId(it).thenApply { Optional.of(it) } }
             .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
-    }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): CustomerCreditListByExternalIdParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): CustomerCreditListByExternalIdPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        @JvmStatic
-        fun of(
-            creditsService: CreditServiceAsync,
-            params: CustomerCreditListByExternalIdParams,
-            response: CustomerCreditListByExternalIdPageResponse,
-        ) = CustomerCreditListByExternalIdPageAsync(creditsService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [CustomerCreditListByExternalIdPageAsync].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [CustomerCreditListByExternalIdPageAsync]. */
+    class Builder internal constructor() {
+
+        private var service: CreditServiceAsync? = null
+        private var params: CustomerCreditListByExternalIdParams? = null
+        private var response: CustomerCreditListByExternalIdPageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(
+            customerCreditListByExternalIdPageAsync: CustomerCreditListByExternalIdPageAsync
+        ) = apply {
+            service = customerCreditListByExternalIdPageAsync.service
+            params = customerCreditListByExternalIdPageAsync.params
+            response = customerCreditListByExternalIdPageAsync.response
+        }
+
+        fun service(service: CreditServiceAsync) = apply { this.service = service }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: CustomerCreditListByExternalIdParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: CustomerCreditListByExternalIdPageResponse) = apply {
+            this.response = response
+        }
+
+        /**
+         * Returns an immutable instance of [CustomerCreditListByExternalIdPageAsync].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): CustomerCreditListByExternalIdPageAsync =
+            CustomerCreditListByExternalIdPageAsync(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: CustomerCreditListByExternalIdPageAsync) {
@@ -129,4 +167,17 @@ private constructor(
             return forEach(values::add, executor).thenApply { values }
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerCreditListByExternalIdPageAsync && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() =
+        "CustomerCreditListByExternalIdPageAsync{service=$service, params=$params, response=$response}"
 }
