@@ -19,6 +19,7 @@ import com.withorb.api.models.Item
 import com.withorb.api.models.ItemCreateParams
 import com.withorb.api.models.ItemFetchParams
 import com.withorb.api.models.ItemListPageAsync
+import com.withorb.api.models.ItemListPageResponse
 import com.withorb.api.models.ItemListParams
 import com.withorb.api.models.ItemUpdateParams
 import java.util.concurrent.CompletableFuture
@@ -125,8 +126,8 @@ class ItemServiceAsyncImpl internal constructor(private val clientOptions: Clien
                 }
         }
 
-        private val listHandler: Handler<ItemListPageAsync.Response> =
-            jsonHandler<ItemListPageAsync.Response>(clientOptions.jsonMapper)
+        private val listHandler: Handler<ItemListPageResponse> =
+            jsonHandler<ItemListPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun list(
