@@ -24,8 +24,10 @@ import com.withorb.api.models.CustomerCreditTopUpCreateResponse
 import com.withorb.api.models.CustomerCreditTopUpDeleteByExternalIdParams
 import com.withorb.api.models.CustomerCreditTopUpDeleteParams
 import com.withorb.api.models.CustomerCreditTopUpListByExternalIdPageAsync
+import com.withorb.api.models.CustomerCreditTopUpListByExternalIdPageResponse
 import com.withorb.api.models.CustomerCreditTopUpListByExternalIdParams
 import com.withorb.api.models.CustomerCreditTopUpListPageAsync
+import com.withorb.api.models.CustomerCreditTopUpListPageResponse
 import com.withorb.api.models.CustomerCreditTopUpListParams
 import java.util.concurrent.CompletableFuture
 
@@ -116,8 +118,8 @@ class TopUpServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 }
         }
 
-        private val listHandler: Handler<CustomerCreditTopUpListPageAsync.Response> =
-            jsonHandler<CustomerCreditTopUpListPageAsync.Response>(clientOptions.jsonMapper)
+        private val listHandler: Handler<CustomerCreditTopUpListPageResponse> =
+            jsonHandler<CustomerCreditTopUpListPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun list(
@@ -248,10 +250,8 @@ class TopUpServiceAsyncImpl internal constructor(private val clientOptions: Clie
         }
 
         private val listByExternalIdHandler:
-            Handler<CustomerCreditTopUpListByExternalIdPageAsync.Response> =
-            jsonHandler<CustomerCreditTopUpListByExternalIdPageAsync.Response>(
-                    clientOptions.jsonMapper
-                )
+            Handler<CustomerCreditTopUpListByExternalIdPageResponse> =
+            jsonHandler<CustomerCreditTopUpListByExternalIdPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listByExternalId(
