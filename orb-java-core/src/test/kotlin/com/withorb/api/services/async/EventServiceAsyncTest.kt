@@ -5,7 +5,6 @@ package com.withorb.api.services.async
 import com.withorb.api.TestServerExtension
 import com.withorb.api.client.okhttp.OrbOkHttpClientAsync
 import com.withorb.api.core.JsonValue
-import com.withorb.api.models.EventDeprecateParams
 import com.withorb.api.models.EventIngestParams
 import com.withorb.api.models.EventSearchParams
 import com.withorb.api.models.EventUpdateParams
@@ -50,8 +49,7 @@ internal class EventServiceAsyncTest {
                 .build()
         val eventServiceAsync = client.events()
 
-        val responseFuture =
-            eventServiceAsync.deprecate(EventDeprecateParams.builder().eventId("event_id").build())
+        val responseFuture = eventServiceAsync.deprecate("event_id")
 
         val response = responseFuture.get()
         response.validate()

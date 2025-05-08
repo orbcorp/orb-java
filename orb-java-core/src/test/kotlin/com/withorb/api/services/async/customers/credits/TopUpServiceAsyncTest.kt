@@ -8,8 +8,6 @@ import com.withorb.api.models.CustomerCreditTopUpCreateByExternalIdParams
 import com.withorb.api.models.CustomerCreditTopUpCreateParams
 import com.withorb.api.models.CustomerCreditTopUpDeleteByExternalIdParams
 import com.withorb.api.models.CustomerCreditTopUpDeleteParams
-import com.withorb.api.models.CustomerCreditTopUpListByExternalIdParams
-import com.withorb.api.models.CustomerCreditTopUpListParams
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -61,10 +59,7 @@ internal class TopUpServiceAsyncTest {
                 .build()
         val topUpServiceAsync = client.customers().credits().topUps()
 
-        val pageFuture =
-            topUpServiceAsync.list(
-                CustomerCreditTopUpListParams.builder().customerId("customer_id").build()
-            )
+        val pageFuture = topUpServiceAsync.list("customer_id")
 
         val page = pageFuture.get()
         page.response().validate()
@@ -156,12 +151,7 @@ internal class TopUpServiceAsyncTest {
                 .build()
         val topUpServiceAsync = client.customers().credits().topUps()
 
-        val pageFuture =
-            topUpServiceAsync.listByExternalId(
-                CustomerCreditTopUpListByExternalIdParams.builder()
-                    .externalCustomerId("external_customer_id")
-                    .build()
-            )
+        val pageFuture = topUpServiceAsync.listByExternalId("external_customer_id")
 
         val page = pageFuture.get()
         page.response().validate()

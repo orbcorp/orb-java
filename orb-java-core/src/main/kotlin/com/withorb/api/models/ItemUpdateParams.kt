@@ -26,13 +26,13 @@ import kotlin.jvm.optionals.getOrNull
 /** This endpoint can be used to update properties on the Item. */
 class ItemUpdateParams
 private constructor(
-    private val itemId: String,
+    private val itemId: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun itemId(): String = itemId
+    fun itemId(): Optional<String> = Optional.ofNullable(itemId)
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
@@ -71,14 +71,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [ItemUpdateParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .itemId()
-         * ```
-         */
+        @JvmStatic fun none(): ItemUpdateParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [ItemUpdateParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -98,7 +93,10 @@ private constructor(
             additionalQueryParams = itemUpdateParams.additionalQueryParams.toBuilder()
         }
 
-        fun itemId(itemId: String) = apply { this.itemId = itemId }
+        fun itemId(itemId: String?) = apply { this.itemId = itemId }
+
+        /** Alias for calling [Builder.itemId] with `itemId.orElse(null)`. */
+        fun itemId(itemId: Optional<String>) = itemId(itemId.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -274,17 +272,10 @@ private constructor(
          * Returns an immutable instance of [ItemUpdateParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .itemId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): ItemUpdateParams =
             ItemUpdateParams(
-                checkRequired("itemId", itemId),
+                itemId,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -295,7 +286,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> itemId
+            0 -> itemId ?: ""
             else -> ""
         }
 

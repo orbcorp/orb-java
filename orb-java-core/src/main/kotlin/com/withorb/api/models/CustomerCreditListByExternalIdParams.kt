@@ -3,7 +3,6 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.Params
-import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import java.util.Objects
@@ -21,7 +20,7 @@ import kotlin.jvm.optionals.getOrNull
  */
 class CustomerCreditListByExternalIdParams
 private constructor(
-    private val externalCustomerId: String,
+    private val externalCustomerId: String?,
     private val currency: String?,
     private val cursor: String?,
     private val includeAllBlocks: Boolean?,
@@ -30,7 +29,7 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun externalCustomerId(): String = externalCustomerId
+    fun externalCustomerId(): Optional<String> = Optional.ofNullable(externalCustomerId)
 
     /** The ledger currency or custom pricing unit to use. */
     fun currency(): Optional<String> = Optional.ofNullable(currency)
@@ -57,14 +56,11 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): CustomerCreditListByExternalIdParams = builder().build()
+
         /**
          * Returns a mutable builder for constructing an instance of
          * [CustomerCreditListByExternalIdParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .externalCustomerId()
-         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
@@ -94,9 +90,15 @@ private constructor(
                 customerCreditListByExternalIdParams.additionalQueryParams.toBuilder()
         }
 
-        fun externalCustomerId(externalCustomerId: String) = apply {
+        fun externalCustomerId(externalCustomerId: String?) = apply {
             this.externalCustomerId = externalCustomerId
         }
+
+        /**
+         * Alias for calling [Builder.externalCustomerId] with `externalCustomerId.orElse(null)`.
+         */
+        fun externalCustomerId(externalCustomerId: Optional<String>) =
+            externalCustomerId(externalCustomerId.getOrNull())
 
         /** The ledger currency or custom pricing unit to use. */
         fun currency(currency: String?) = apply { this.currency = currency }
@@ -248,17 +250,10 @@ private constructor(
          * Returns an immutable instance of [CustomerCreditListByExternalIdParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .externalCustomerId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): CustomerCreditListByExternalIdParams =
             CustomerCreditListByExternalIdParams(
-                checkRequired("externalCustomerId", externalCustomerId),
+                externalCustomerId,
                 currency,
                 cursor,
                 includeAllBlocks,
@@ -270,7 +265,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> externalCustomerId
+            0 -> externalCustomerId ?: ""
             else -> ""
         }
 

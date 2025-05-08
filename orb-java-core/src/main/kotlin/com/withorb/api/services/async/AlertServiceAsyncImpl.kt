@@ -5,6 +5,7 @@ package com.withorb.api.services.async
 import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
 import com.withorb.api.core.handlers.withErrorHandler
@@ -27,6 +28,7 @@ import com.withorb.api.models.AlertListParams
 import com.withorb.api.models.AlertRetrieveParams
 import com.withorb.api.models.AlertUpdateParams
 import java.util.concurrent.CompletableFuture
+import kotlin.jvm.optionals.getOrNull
 
 class AlertServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     AlertServiceAsync {
@@ -105,6 +107,9 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: AlertRetrieveParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<Alert>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("alertId", params.alertId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -134,6 +139,9 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: AlertUpdateParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<Alert>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("alertConfigurationId", params.alertConfigurationId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -201,6 +209,9 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: AlertCreateForCustomerParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<Alert>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("customerId", params.customerId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -231,6 +242,9 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: AlertCreateForExternalCustomerParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<Alert>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("externalCustomerId", params.externalCustomerId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -261,6 +275,9 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: AlertCreateForSubscriptionParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<Alert>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("subscriptionId", params.subscriptionId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -291,6 +308,9 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: AlertDisableParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<Alert>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("alertConfigurationId", params.alertConfigurationId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -321,6 +341,9 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: AlertEnableParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<Alert>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("alertConfigurationId", params.alertConfigurationId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)

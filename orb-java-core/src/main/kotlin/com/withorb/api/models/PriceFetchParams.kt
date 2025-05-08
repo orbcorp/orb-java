@@ -3,20 +3,21 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.Params
-import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** This endpoint returns a price given an identifier. */
 class PriceFetchParams
 private constructor(
-    private val priceId: String,
+    private val priceId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun priceId(): String = priceId
+    fun priceId(): Optional<String> = Optional.ofNullable(priceId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -26,14 +27,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [PriceFetchParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .priceId()
-         * ```
-         */
+        @JvmStatic fun none(): PriceFetchParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [PriceFetchParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -51,7 +47,10 @@ private constructor(
             additionalQueryParams = priceFetchParams.additionalQueryParams.toBuilder()
         }
 
-        fun priceId(priceId: String) = apply { this.priceId = priceId }
+        fun priceId(priceId: String?) = apply { this.priceId = priceId }
+
+        /** Alias for calling [Builder.priceId] with `priceId.orElse(null)`. */
+        fun priceId(priceId: Optional<String>) = priceId(priceId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -155,25 +154,14 @@ private constructor(
          * Returns an immutable instance of [PriceFetchParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .priceId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): PriceFetchParams =
-            PriceFetchParams(
-                checkRequired("priceId", priceId),
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
-            )
+            PriceFetchParams(priceId, additionalHeaders.build(), additionalQueryParams.build())
     }
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> priceId
+            0 -> priceId ?: ""
             else -> ""
         }
 

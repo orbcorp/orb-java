@@ -69,6 +69,18 @@ interface EventServiceAsync {
      *   period. For higher volume updates, consider using the [event backfill](create-backfill)
      *   endpoint.
      */
+    fun update(eventId: String, params: EventUpdateParams): CompletableFuture<EventUpdateResponse> =
+        update(eventId, params, RequestOptions.none())
+
+    /** @see [update] */
+    fun update(
+        eventId: String,
+        params: EventUpdateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<EventUpdateResponse> =
+        update(params.toBuilder().eventId(eventId).build(), requestOptions)
+
+    /** @see [update] */
     fun update(params: EventUpdateParams): CompletableFuture<EventUpdateResponse> =
         update(params, RequestOptions.none())
 
@@ -114,14 +126,39 @@ interface EventServiceAsync {
      *   period. For higher volume updates, consider using the [event backfill](create-backfill)
      *   endpoint.
      */
-    fun deprecate(params: EventDeprecateParams): CompletableFuture<EventDeprecateResponse> =
-        deprecate(params, RequestOptions.none())
+    fun deprecate(eventId: String): CompletableFuture<EventDeprecateResponse> =
+        deprecate(eventId, EventDeprecateParams.none())
+
+    /** @see [deprecate] */
+    fun deprecate(
+        eventId: String,
+        params: EventDeprecateParams = EventDeprecateParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<EventDeprecateResponse> =
+        deprecate(params.toBuilder().eventId(eventId).build(), requestOptions)
+
+    /** @see [deprecate] */
+    fun deprecate(
+        eventId: String,
+        params: EventDeprecateParams = EventDeprecateParams.none(),
+    ): CompletableFuture<EventDeprecateResponse> = deprecate(eventId, params, RequestOptions.none())
 
     /** @see [deprecate] */
     fun deprecate(
         params: EventDeprecateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<EventDeprecateResponse>
+
+    /** @see [deprecate] */
+    fun deprecate(params: EventDeprecateParams): CompletableFuture<EventDeprecateResponse> =
+        deprecate(params, RequestOptions.none())
+
+    /** @see [deprecate] */
+    fun deprecate(
+        eventId: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<EventDeprecateResponse> =
+        deprecate(eventId, EventDeprecateParams.none(), requestOptions)
 
     /**
      * Orb's event ingestion model and API is designed around two core principles:
@@ -361,6 +398,23 @@ interface EventServiceAsync {
          */
         @MustBeClosed
         fun update(
+            eventId: String,
+            params: EventUpdateParams,
+        ): CompletableFuture<HttpResponseFor<EventUpdateResponse>> =
+            update(eventId, params, RequestOptions.none())
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
+            eventId: String,
+            params: EventUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<EventUpdateResponse>> =
+            update(params.toBuilder().eventId(eventId).build(), requestOptions)
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
             params: EventUpdateParams
         ): CompletableFuture<HttpResponseFor<EventUpdateResponse>> =
             update(params, RequestOptions.none())
@@ -377,6 +431,35 @@ interface EventServiceAsync {
          * same as [EventServiceAsync.deprecate].
          */
         @MustBeClosed
+        fun deprecate(eventId: String): CompletableFuture<HttpResponseFor<EventDeprecateResponse>> =
+            deprecate(eventId, EventDeprecateParams.none())
+
+        /** @see [deprecate] */
+        @MustBeClosed
+        fun deprecate(
+            eventId: String,
+            params: EventDeprecateParams = EventDeprecateParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<EventDeprecateResponse>> =
+            deprecate(params.toBuilder().eventId(eventId).build(), requestOptions)
+
+        /** @see [deprecate] */
+        @MustBeClosed
+        fun deprecate(
+            eventId: String,
+            params: EventDeprecateParams = EventDeprecateParams.none(),
+        ): CompletableFuture<HttpResponseFor<EventDeprecateResponse>> =
+            deprecate(eventId, params, RequestOptions.none())
+
+        /** @see [deprecate] */
+        @MustBeClosed
+        fun deprecate(
+            params: EventDeprecateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<EventDeprecateResponse>>
+
+        /** @see [deprecate] */
+        @MustBeClosed
         fun deprecate(
             params: EventDeprecateParams
         ): CompletableFuture<HttpResponseFor<EventDeprecateResponse>> =
@@ -385,9 +468,10 @@ interface EventServiceAsync {
         /** @see [deprecate] */
         @MustBeClosed
         fun deprecate(
-            params: EventDeprecateParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<EventDeprecateResponse>>
+            eventId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<EventDeprecateResponse>> =
+            deprecate(eventId, EventDeprecateParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /ingest`, but is otherwise the same as

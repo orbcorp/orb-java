@@ -5,6 +5,7 @@ package com.withorb.api.services.async.customers.credits
 import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
 import com.withorb.api.core.handlers.withErrorHandler
@@ -26,6 +27,7 @@ import com.withorb.api.models.CustomerCreditLedgerListPageAsync
 import com.withorb.api.models.CustomerCreditLedgerListPageResponse
 import com.withorb.api.models.CustomerCreditLedgerListParams
 import java.util.concurrent.CompletableFuture
+import kotlin.jvm.optionals.getOrNull
 
 class LedgerServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     LedgerServiceAsync {
@@ -77,6 +79,9 @@ class LedgerServiceAsyncImpl internal constructor(private val clientOptions: Cli
             params: CustomerCreditLedgerListParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerListPageAsync>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("customerId", params.customerId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -114,6 +119,9 @@ class LedgerServiceAsyncImpl internal constructor(private val clientOptions: Cli
             params: CustomerCreditLedgerCreateEntryParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerCreateEntryResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("customerId", params.customerId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -148,6 +156,9 @@ class LedgerServiceAsyncImpl internal constructor(private val clientOptions: Cli
             params: CustomerCreditLedgerCreateEntryByExternalIdParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerCreateEntryByExternalIdResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("externalCustomerId", params.externalCustomerId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -186,6 +197,9 @@ class LedgerServiceAsyncImpl internal constructor(private val clientOptions: Cli
             params: CustomerCreditLedgerListByExternalIdParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerListByExternalIdPageAsync>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("externalCustomerId", params.externalCustomerId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)

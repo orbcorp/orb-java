@@ -21,14 +21,36 @@ interface SubscriptionService {
      * subscription. For a full discussion of the subscription resource, see
      * [Subscription](/core-concepts#subscription).
      */
-    fun list(params: CouponSubscriptionListParams): CouponSubscriptionListPage =
-        list(params, RequestOptions.none())
+    fun list(couponId: String): CouponSubscriptionListPage =
+        list(couponId, CouponSubscriptionListParams.none())
+
+    /** @see [list] */
+    fun list(
+        couponId: String,
+        params: CouponSubscriptionListParams = CouponSubscriptionListParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CouponSubscriptionListPage =
+        list(params.toBuilder().couponId(couponId).build(), requestOptions)
+
+    /** @see [list] */
+    fun list(
+        couponId: String,
+        params: CouponSubscriptionListParams = CouponSubscriptionListParams.none(),
+    ): CouponSubscriptionListPage = list(couponId, params, RequestOptions.none())
 
     /** @see [list] */
     fun list(
         params: CouponSubscriptionListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CouponSubscriptionListPage
+
+    /** @see [list] */
+    fun list(params: CouponSubscriptionListParams): CouponSubscriptionListPage =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
+    fun list(couponId: String, requestOptions: RequestOptions): CouponSubscriptionListPage =
+        list(couponId, CouponSubscriptionListParams.none(), requestOptions)
 
     /**
      * A view of [SubscriptionService] that provides access to raw HTTP responses for each method.
@@ -40,9 +62,25 @@ interface SubscriptionService {
          * otherwise the same as [SubscriptionService.list].
          */
         @MustBeClosed
+        fun list(couponId: String): HttpResponseFor<CouponSubscriptionListPage> =
+            list(couponId, CouponSubscriptionListParams.none())
+
+        /** @see [list] */
+        @MustBeClosed
         fun list(
-            params: CouponSubscriptionListParams
-        ): HttpResponseFor<CouponSubscriptionListPage> = list(params, RequestOptions.none())
+            couponId: String,
+            params: CouponSubscriptionListParams = CouponSubscriptionListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CouponSubscriptionListPage> =
+            list(params.toBuilder().couponId(couponId).build(), requestOptions)
+
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            couponId: String,
+            params: CouponSubscriptionListParams = CouponSubscriptionListParams.none(),
+        ): HttpResponseFor<CouponSubscriptionListPage> =
+            list(couponId, params, RequestOptions.none())
 
         /** @see [list] */
         @MustBeClosed
@@ -50,5 +88,19 @@ interface SubscriptionService {
             params: CouponSubscriptionListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CouponSubscriptionListPage>
+
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            params: CouponSubscriptionListParams
+        ): HttpResponseFor<CouponSubscriptionListPage> = list(params, RequestOptions.none())
+
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            couponId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<CouponSubscriptionListPage> =
+            list(couponId, CouponSubscriptionListParams.none(), requestOptions)
     }
 }

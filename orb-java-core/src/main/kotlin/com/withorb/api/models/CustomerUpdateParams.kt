@@ -41,13 +41,13 @@ import kotlin.jvm.optionals.getOrNull
  */
 class CustomerUpdateParams
 private constructor(
-    private val customerId: String,
+    private val customerId: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun customerId(): String = customerId
+    fun customerId(): Optional<String> = Optional.ofNullable(customerId)
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
@@ -426,14 +426,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [CustomerUpdateParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .customerId()
-         * ```
-         */
+        @JvmStatic fun none(): CustomerUpdateParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [CustomerUpdateParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -453,7 +448,10 @@ private constructor(
             additionalQueryParams = customerUpdateParams.additionalQueryParams.toBuilder()
         }
 
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String?) = apply { this.customerId = customerId }
+
+        /** Alias for calling [Builder.customerId] with `customerId.orElse(null)`. */
+        fun customerId(customerId: Optional<String>) = customerId(customerId.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -1087,17 +1085,10 @@ private constructor(
          * Returns an immutable instance of [CustomerUpdateParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .customerId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): CustomerUpdateParams =
             CustomerUpdateParams(
-                checkRequired("customerId", customerId),
+                customerId,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -1108,7 +1099,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> customerId
+            0 -> customerId ?: ""
             else -> ""
         }
 

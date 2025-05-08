@@ -3,10 +3,11 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.Params
-import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint is used to list [metrics](/core-concepts#metric). It returns information about the
@@ -14,12 +15,12 @@ import java.util.Objects
  */
 class MetricFetchParams
 private constructor(
-    private val metricId: String,
+    private val metricId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun metricId(): String = metricId
+    fun metricId(): Optional<String> = Optional.ofNullable(metricId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -29,14 +30,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [MetricFetchParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .metricId()
-         * ```
-         */
+        @JvmStatic fun none(): MetricFetchParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [MetricFetchParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -54,7 +50,10 @@ private constructor(
             additionalQueryParams = metricFetchParams.additionalQueryParams.toBuilder()
         }
 
-        fun metricId(metricId: String) = apply { this.metricId = metricId }
+        fun metricId(metricId: String?) = apply { this.metricId = metricId }
+
+        /** Alias for calling [Builder.metricId] with `metricId.orElse(null)`. */
+        fun metricId(metricId: Optional<String>) = metricId(metricId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -158,25 +157,14 @@ private constructor(
          * Returns an immutable instance of [MetricFetchParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .metricId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): MetricFetchParams =
-            MetricFetchParams(
-                checkRequired("metricId", metricId),
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
-            )
+            MetricFetchParams(metricId, additionalHeaders.build(), additionalQueryParams.build())
     }
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> metricId
+            0 -> metricId ?: ""
             else -> ""
         }
 

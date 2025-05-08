@@ -66,8 +66,22 @@ interface CouponServiceAsync {
      * will be hidden from lists of active coupons. Additionally, once a coupon is archived, its
      * redemption code can be reused for a different coupon.
      */
-    fun archive(params: CouponArchiveParams): CompletableFuture<Coupon> =
-        archive(params, RequestOptions.none())
+    fun archive(couponId: String): CompletableFuture<Coupon> =
+        archive(couponId, CouponArchiveParams.none())
+
+    /** @see [archive] */
+    fun archive(
+        couponId: String,
+        params: CouponArchiveParams = CouponArchiveParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Coupon> =
+        archive(params.toBuilder().couponId(couponId).build(), requestOptions)
+
+    /** @see [archive] */
+    fun archive(
+        couponId: String,
+        params: CouponArchiveParams = CouponArchiveParams.none(),
+    ): CompletableFuture<Coupon> = archive(couponId, params, RequestOptions.none())
 
     /** @see [archive] */
     fun archive(
@@ -75,18 +89,48 @@ interface CouponServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Coupon>
 
+    /** @see [archive] */
+    fun archive(params: CouponArchiveParams): CompletableFuture<Coupon> =
+        archive(params, RequestOptions.none())
+
+    /** @see [archive] */
+    fun archive(couponId: String, requestOptions: RequestOptions): CompletableFuture<Coupon> =
+        archive(couponId, CouponArchiveParams.none(), requestOptions)
+
     /**
      * This endpoint retrieves a coupon by its ID. To fetch coupons by their redemption code, use
      * the [List coupons](list-coupons) endpoint with the redemption_code parameter.
      */
-    fun fetch(params: CouponFetchParams): CompletableFuture<Coupon> =
-        fetch(params, RequestOptions.none())
+    fun fetch(couponId: String): CompletableFuture<Coupon> =
+        fetch(couponId, CouponFetchParams.none())
+
+    /** @see [fetch] */
+    fun fetch(
+        couponId: String,
+        params: CouponFetchParams = CouponFetchParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Coupon> =
+        fetch(params.toBuilder().couponId(couponId).build(), requestOptions)
+
+    /** @see [fetch] */
+    fun fetch(
+        couponId: String,
+        params: CouponFetchParams = CouponFetchParams.none(),
+    ): CompletableFuture<Coupon> = fetch(couponId, params, RequestOptions.none())
 
     /** @see [fetch] */
     fun fetch(
         params: CouponFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Coupon>
+
+    /** @see [fetch] */
+    fun fetch(params: CouponFetchParams): CompletableFuture<Coupon> =
+        fetch(params, RequestOptions.none())
+
+    /** @see [fetch] */
+    fun fetch(couponId: String, requestOptions: RequestOptions): CompletableFuture<Coupon> =
+        fetch(couponId, CouponFetchParams.none(), requestOptions)
 
     /**
      * A view of [CouponServiceAsync] that provides access to raw HTTP responses for each method.
@@ -144,8 +188,25 @@ interface CouponServiceAsync {
          * same as [CouponServiceAsync.archive].
          */
         @MustBeClosed
-        fun archive(params: CouponArchiveParams): CompletableFuture<HttpResponseFor<Coupon>> =
-            archive(params, RequestOptions.none())
+        fun archive(couponId: String): CompletableFuture<HttpResponseFor<Coupon>> =
+            archive(couponId, CouponArchiveParams.none())
+
+        /** @see [archive] */
+        @MustBeClosed
+        fun archive(
+            couponId: String,
+            params: CouponArchiveParams = CouponArchiveParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Coupon>> =
+            archive(params.toBuilder().couponId(couponId).build(), requestOptions)
+
+        /** @see [archive] */
+        @MustBeClosed
+        fun archive(
+            couponId: String,
+            params: CouponArchiveParams = CouponArchiveParams.none(),
+        ): CompletableFuture<HttpResponseFor<Coupon>> =
+            archive(couponId, params, RequestOptions.none())
 
         /** @see [archive] */
         @MustBeClosed
@@ -154,13 +215,43 @@ interface CouponServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Coupon>>
 
+        /** @see [archive] */
+        @MustBeClosed
+        fun archive(params: CouponArchiveParams): CompletableFuture<HttpResponseFor<Coupon>> =
+            archive(params, RequestOptions.none())
+
+        /** @see [archive] */
+        @MustBeClosed
+        fun archive(
+            couponId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Coupon>> =
+            archive(couponId, CouponArchiveParams.none(), requestOptions)
+
         /**
          * Returns a raw HTTP response for `get /coupons/{coupon_id}`, but is otherwise the same as
          * [CouponServiceAsync.fetch].
          */
         @MustBeClosed
-        fun fetch(params: CouponFetchParams): CompletableFuture<HttpResponseFor<Coupon>> =
-            fetch(params, RequestOptions.none())
+        fun fetch(couponId: String): CompletableFuture<HttpResponseFor<Coupon>> =
+            fetch(couponId, CouponFetchParams.none())
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(
+            couponId: String,
+            params: CouponFetchParams = CouponFetchParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Coupon>> =
+            fetch(params.toBuilder().couponId(couponId).build(), requestOptions)
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(
+            couponId: String,
+            params: CouponFetchParams = CouponFetchParams.none(),
+        ): CompletableFuture<HttpResponseFor<Coupon>> =
+            fetch(couponId, params, RequestOptions.none())
 
         /** @see [fetch] */
         @MustBeClosed
@@ -168,5 +259,18 @@ interface CouponServiceAsync {
             params: CouponFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Coupon>>
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(params: CouponFetchParams): CompletableFuture<HttpResponseFor<Coupon>> =
+            fetch(params, RequestOptions.none())
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(
+            couponId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Coupon>> =
+            fetch(couponId, CouponFetchParams.none(), requestOptions)
     }
 }

@@ -4,23 +4,23 @@ package com.withorb.api.models
 
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.Params
-import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** This endpoint can be used to unschedule any pending plan changes on an existing subscription. */
 class SubscriptionUnschedulePendingPlanChangesParams
 private constructor(
-    private val subscriptionId: String,
+    private val subscriptionId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
-    fun subscriptionId(): String = subscriptionId
+    fun subscriptionId(): Optional<String> = Optional.ofNullable(subscriptionId)
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
@@ -32,14 +32,11 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): SubscriptionUnschedulePendingPlanChangesParams = builder().build()
+
         /**
          * Returns a mutable builder for constructing an instance of
          * [SubscriptionUnschedulePendingPlanChangesParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .subscriptionId()
-         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
@@ -67,7 +64,11 @@ private constructor(
                     .toMutableMap()
         }
 
-        fun subscriptionId(subscriptionId: String) = apply { this.subscriptionId = subscriptionId }
+        fun subscriptionId(subscriptionId: String?) = apply { this.subscriptionId = subscriptionId }
+
+        /** Alias for calling [Builder.subscriptionId] with `subscriptionId.orElse(null)`. */
+        fun subscriptionId(subscriptionId: Optional<String>) =
+            subscriptionId(subscriptionId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -193,17 +194,10 @@ private constructor(
          * Returns an immutable instance of [SubscriptionUnschedulePendingPlanChangesParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .subscriptionId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): SubscriptionUnschedulePendingPlanChangesParams =
             SubscriptionUnschedulePendingPlanChangesParams(
-                checkRequired("subscriptionId", subscriptionId),
+                subscriptionId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -215,7 +209,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> subscriptionId
+            0 -> subscriptionId ?: ""
             else -> ""
         }
 

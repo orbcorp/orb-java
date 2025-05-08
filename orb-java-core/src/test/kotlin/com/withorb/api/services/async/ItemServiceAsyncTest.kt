@@ -5,7 +5,6 @@ package com.withorb.api.services.async
 import com.withorb.api.TestServerExtension
 import com.withorb.api.client.okhttp.OrbOkHttpClientAsync
 import com.withorb.api.models.ItemCreateParams
-import com.withorb.api.models.ItemFetchParams
 import com.withorb.api.models.ItemUpdateParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -82,7 +81,7 @@ internal class ItemServiceAsyncTest {
                 .build()
         val itemServiceAsync = client.items()
 
-        val itemFuture = itemServiceAsync.fetch(ItemFetchParams.builder().itemId("item_id").build())
+        val itemFuture = itemServiceAsync.fetch("item_id")
 
         val item = itemFuture.get()
         item.validate()

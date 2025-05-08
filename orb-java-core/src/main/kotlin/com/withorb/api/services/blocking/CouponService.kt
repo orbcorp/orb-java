@@ -63,7 +63,20 @@ interface CouponService {
      * will be hidden from lists of active coupons. Additionally, once a coupon is archived, its
      * redemption code can be reused for a different coupon.
      */
-    fun archive(params: CouponArchiveParams): Coupon = archive(params, RequestOptions.none())
+    fun archive(couponId: String): Coupon = archive(couponId, CouponArchiveParams.none())
+
+    /** @see [archive] */
+    fun archive(
+        couponId: String,
+        params: CouponArchiveParams = CouponArchiveParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Coupon = archive(params.toBuilder().couponId(couponId).build(), requestOptions)
+
+    /** @see [archive] */
+    fun archive(
+        couponId: String,
+        params: CouponArchiveParams = CouponArchiveParams.none(),
+    ): Coupon = archive(couponId, params, RequestOptions.none())
 
     /** @see [archive] */
     fun archive(
@@ -71,17 +84,42 @@ interface CouponService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Coupon
 
+    /** @see [archive] */
+    fun archive(params: CouponArchiveParams): Coupon = archive(params, RequestOptions.none())
+
+    /** @see [archive] */
+    fun archive(couponId: String, requestOptions: RequestOptions): Coupon =
+        archive(couponId, CouponArchiveParams.none(), requestOptions)
+
     /**
      * This endpoint retrieves a coupon by its ID. To fetch coupons by their redemption code, use
      * the [List coupons](list-coupons) endpoint with the redemption_code parameter.
      */
-    fun fetch(params: CouponFetchParams): Coupon = fetch(params, RequestOptions.none())
+    fun fetch(couponId: String): Coupon = fetch(couponId, CouponFetchParams.none())
+
+    /** @see [fetch] */
+    fun fetch(
+        couponId: String,
+        params: CouponFetchParams = CouponFetchParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Coupon = fetch(params.toBuilder().couponId(couponId).build(), requestOptions)
+
+    /** @see [fetch] */
+    fun fetch(couponId: String, params: CouponFetchParams = CouponFetchParams.none()): Coupon =
+        fetch(couponId, params, RequestOptions.none())
 
     /** @see [fetch] */
     fun fetch(
         params: CouponFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Coupon
+
+    /** @see [fetch] */
+    fun fetch(params: CouponFetchParams): Coupon = fetch(params, RequestOptions.none())
+
+    /** @see [fetch] */
+    fun fetch(couponId: String, requestOptions: RequestOptions): Coupon =
+        fetch(couponId, CouponFetchParams.none(), requestOptions)
 
     /** A view of [CouponService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -132,8 +170,24 @@ interface CouponService {
          * same as [CouponService.archive].
          */
         @MustBeClosed
-        fun archive(params: CouponArchiveParams): HttpResponseFor<Coupon> =
-            archive(params, RequestOptions.none())
+        fun archive(couponId: String): HttpResponseFor<Coupon> =
+            archive(couponId, CouponArchiveParams.none())
+
+        /** @see [archive] */
+        @MustBeClosed
+        fun archive(
+            couponId: String,
+            params: CouponArchiveParams = CouponArchiveParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Coupon> =
+            archive(params.toBuilder().couponId(couponId).build(), requestOptions)
+
+        /** @see [archive] */
+        @MustBeClosed
+        fun archive(
+            couponId: String,
+            params: CouponArchiveParams = CouponArchiveParams.none(),
+        ): HttpResponseFor<Coupon> = archive(couponId, params, RequestOptions.none())
 
         /** @see [archive] */
         @MustBeClosed
@@ -142,13 +196,39 @@ interface CouponService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Coupon>
 
+        /** @see [archive] */
+        @MustBeClosed
+        fun archive(params: CouponArchiveParams): HttpResponseFor<Coupon> =
+            archive(params, RequestOptions.none())
+
+        /** @see [archive] */
+        @MustBeClosed
+        fun archive(couponId: String, requestOptions: RequestOptions): HttpResponseFor<Coupon> =
+            archive(couponId, CouponArchiveParams.none(), requestOptions)
+
         /**
          * Returns a raw HTTP response for `get /coupons/{coupon_id}`, but is otherwise the same as
          * [CouponService.fetch].
          */
         @MustBeClosed
-        fun fetch(params: CouponFetchParams): HttpResponseFor<Coupon> =
-            fetch(params, RequestOptions.none())
+        fun fetch(couponId: String): HttpResponseFor<Coupon> =
+            fetch(couponId, CouponFetchParams.none())
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(
+            couponId: String,
+            params: CouponFetchParams = CouponFetchParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Coupon> =
+            fetch(params.toBuilder().couponId(couponId).build(), requestOptions)
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(
+            couponId: String,
+            params: CouponFetchParams = CouponFetchParams.none(),
+        ): HttpResponseFor<Coupon> = fetch(couponId, params, RequestOptions.none())
 
         /** @see [fetch] */
         @MustBeClosed
@@ -156,5 +236,15 @@ interface CouponService {
             params: CouponFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Coupon>
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(params: CouponFetchParams): HttpResponseFor<Coupon> =
+            fetch(params, RequestOptions.none())
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(couponId: String, requestOptions: RequestOptions): HttpResponseFor<Coupon> =
+            fetch(couponId, CouponFetchParams.none(), requestOptions)
     }
 }

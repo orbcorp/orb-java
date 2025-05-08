@@ -3,20 +3,21 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.Params
-import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** This endpoint returns an item identified by its item_id. */
 class ItemFetchParams
 private constructor(
-    private val itemId: String,
+    private val itemId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun itemId(): String = itemId
+    fun itemId(): Optional<String> = Optional.ofNullable(itemId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -26,14 +27,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [ItemFetchParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .itemId()
-         * ```
-         */
+        @JvmStatic fun none(): ItemFetchParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [ItemFetchParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -51,7 +47,10 @@ private constructor(
             additionalQueryParams = itemFetchParams.additionalQueryParams.toBuilder()
         }
 
-        fun itemId(itemId: String) = apply { this.itemId = itemId }
+        fun itemId(itemId: String?) = apply { this.itemId = itemId }
+
+        /** Alias for calling [Builder.itemId] with `itemId.orElse(null)`. */
+        fun itemId(itemId: Optional<String>) = itemId(itemId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -155,25 +154,14 @@ private constructor(
          * Returns an immutable instance of [ItemFetchParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .itemId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): ItemFetchParams =
-            ItemFetchParams(
-                checkRequired("itemId", itemId),
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
-            )
+            ItemFetchParams(itemId, additionalHeaders.build(), additionalQueryParams.build())
     }
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> itemId
+            0 -> itemId ?: ""
             else -> ""
         }
 
