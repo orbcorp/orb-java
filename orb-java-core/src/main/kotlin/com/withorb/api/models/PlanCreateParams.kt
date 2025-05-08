@@ -2377,7 +2377,7 @@ private constructor(
         private constructor(
             private val cadence: JsonField<Cadence>,
             private val itemId: JsonField<String>,
-            private val modelType: JsonField<ModelType>,
+            private val modelType: JsonValue,
             private val name: JsonField<String>,
             private val unitConfig: JsonField<UnitConfig>,
             private val billableMetricId: JsonField<String>,
@@ -2401,9 +2401,7 @@ private constructor(
                 @JsonProperty("item_id")
                 @ExcludeMissing
                 itemId: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("model_type")
-                @ExcludeMissing
-                modelType: JsonField<ModelType> = JsonMissing.of(),
+                @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("unit_config")
                 @ExcludeMissing
@@ -2477,11 +2475,15 @@ private constructor(
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("unit")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun modelType(): ModelType = modelType.getRequired("model_type")
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
 
             /**
              * The name of the price.
@@ -2604,16 +2606,6 @@ private constructor(
              * Unlike [itemId], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("item_id") @ExcludeMissing fun _itemId(): JsonField<String> = itemId
-
-            /**
-             * Returns the raw JSON value of [modelType].
-             *
-             * Unlike [modelType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType(): JsonField<ModelType> = modelType
 
             /**
              * Returns the raw JSON value of [name].
@@ -2753,7 +2745,6 @@ private constructor(
                  * ```java
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * .unitConfig()
                  * ```
@@ -2766,7 +2757,7 @@ private constructor(
 
                 private var cadence: JsonField<Cadence>? = null
                 private var itemId: JsonField<String>? = null
-                private var modelType: JsonField<ModelType>? = null
+                private var modelType: JsonValue = JsonValue.from("unit")
                 private var name: JsonField<String>? = null
                 private var unitConfig: JsonField<UnitConfig>? = null
                 private var billableMetricId: JsonField<String> = JsonMissing.of()
@@ -2827,18 +2818,19 @@ private constructor(
                  */
                 fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
-                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
-
                 /**
-                 * Sets [Builder.modelType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.modelType] with a well-typed [ModelType] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("unit")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun modelType(modelType: JsonField<ModelType>) = apply {
-                    this.modelType = modelType
-                }
+                fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
 
                 /** The name of the price. */
                 fun name(name: String) = name(JsonField.of(name))
@@ -3149,7 +3141,6 @@ private constructor(
                  * ```java
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * .unitConfig()
                  * ```
@@ -3160,7 +3151,7 @@ private constructor(
                     NewPlanUnitPrice(
                         checkRequired("cadence", cadence),
                         checkRequired("itemId", itemId),
-                        checkRequired("modelType", modelType),
+                        modelType,
                         checkRequired("name", name),
                         checkRequired("unitConfig", unitConfig),
                         billableMetricId,
@@ -3186,7 +3177,11 @@ private constructor(
 
                 cadence().validate()
                 itemId()
-                modelType().validate()
+                _modelType().let {
+                    if (it != JsonValue.from("unit")) {
+                        throw OrbInvalidDataException("'modelType' is invalid, received $it")
+                    }
+                }
                 name()
                 unitConfig().validate()
                 billableMetricId()
@@ -3220,7 +3215,7 @@ private constructor(
             internal fun validity(): Int =
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (itemId.asKnown().isPresent) 1 else 0) +
-                    (modelType.asKnown().getOrNull()?.validity() ?: 0) +
+                    modelType.let { if (it == JsonValue.from("unit")) 1 else 0 } +
                     (if (name.asKnown().isPresent) 1 else 0) +
                     (unitConfig.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (billableMetricId.asKnown().isPresent) 1 else 0) +
@@ -3383,131 +3378,6 @@ private constructor(
                     }
 
                     return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
-
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField val UNIT = of("unit")
-
-                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
-                }
-
-                /** An enum containing [ModelType]'s known values. */
-                enum class Known {
-                    UNIT
-                }
-
-                /**
-                 * An enum containing [ModelType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [ModelType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    UNIT,
-                    /**
-                     * An enum member indicating that [ModelType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        UNIT -> Value.UNIT
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value is a not a known
-                 *   member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        UNIT -> Known.UNIT
-                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value does not have the
-                 *   expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        OrbInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                fun validate(): ModelType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: OrbInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return /* spotless:off */ other is ModelType && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -4533,7 +4403,7 @@ private constructor(
         private constructor(
             private val cadence: JsonField<Cadence>,
             private val itemId: JsonField<String>,
-            private val modelType: JsonField<ModelType>,
+            private val modelType: JsonValue,
             private val name: JsonField<String>,
             private val packageConfig: JsonField<PackageConfig>,
             private val billableMetricId: JsonField<String>,
@@ -4557,9 +4427,7 @@ private constructor(
                 @JsonProperty("item_id")
                 @ExcludeMissing
                 itemId: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("model_type")
-                @ExcludeMissing
-                modelType: JsonField<ModelType> = JsonMissing.of(),
+                @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("package_config")
                 @ExcludeMissing
@@ -4633,11 +4501,15 @@ private constructor(
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("package")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun modelType(): ModelType = modelType.getRequired("model_type")
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
 
             /**
              * The name of the price.
@@ -4760,16 +4632,6 @@ private constructor(
              * Unlike [itemId], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("item_id") @ExcludeMissing fun _itemId(): JsonField<String> = itemId
-
-            /**
-             * Returns the raw JSON value of [modelType].
-             *
-             * Unlike [modelType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType(): JsonField<ModelType> = modelType
 
             /**
              * Returns the raw JSON value of [name].
@@ -4909,7 +4771,6 @@ private constructor(
                  * ```java
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * .packageConfig()
                  * ```
@@ -4922,7 +4783,7 @@ private constructor(
 
                 private var cadence: JsonField<Cadence>? = null
                 private var itemId: JsonField<String>? = null
-                private var modelType: JsonField<ModelType>? = null
+                private var modelType: JsonValue = JsonValue.from("package")
                 private var name: JsonField<String>? = null
                 private var packageConfig: JsonField<PackageConfig>? = null
                 private var billableMetricId: JsonField<String> = JsonMissing.of()
@@ -4983,18 +4844,19 @@ private constructor(
                  */
                 fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
-                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
-
                 /**
-                 * Sets [Builder.modelType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.modelType] with a well-typed [ModelType] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("package")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun modelType(modelType: JsonField<ModelType>) = apply {
-                    this.modelType = modelType
-                }
+                fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
 
                 /** The name of the price. */
                 fun name(name: String) = name(JsonField.of(name))
@@ -5306,7 +5168,6 @@ private constructor(
                  * ```java
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * .packageConfig()
                  * ```
@@ -5317,7 +5178,7 @@ private constructor(
                     NewPlanPackagePrice(
                         checkRequired("cadence", cadence),
                         checkRequired("itemId", itemId),
-                        checkRequired("modelType", modelType),
+                        modelType,
                         checkRequired("name", name),
                         checkRequired("packageConfig", packageConfig),
                         billableMetricId,
@@ -5343,7 +5204,11 @@ private constructor(
 
                 cadence().validate()
                 itemId()
-                modelType().validate()
+                _modelType().let {
+                    if (it != JsonValue.from("package")) {
+                        throw OrbInvalidDataException("'modelType' is invalid, received $it")
+                    }
+                }
                 name()
                 packageConfig().validate()
                 billableMetricId()
@@ -5377,7 +5242,7 @@ private constructor(
             internal fun validity(): Int =
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (itemId.asKnown().isPresent) 1 else 0) +
-                    (modelType.asKnown().getOrNull()?.validity() ?: 0) +
+                    modelType.let { if (it == JsonValue.from("package")) 1 else 0 } +
                     (if (name.asKnown().isPresent) 1 else 0) +
                     (packageConfig.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (billableMetricId.asKnown().isPresent) 1 else 0) +
@@ -5540,131 +5405,6 @@ private constructor(
                     }
 
                     return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
-
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField val PACKAGE = of("package")
-
-                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
-                }
-
-                /** An enum containing [ModelType]'s known values. */
-                enum class Known {
-                    PACKAGE
-                }
-
-                /**
-                 * An enum containing [ModelType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [ModelType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    PACKAGE,
-                    /**
-                     * An enum member indicating that [ModelType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        PACKAGE -> Value.PACKAGE
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value is a not a known
-                 *   member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        PACKAGE -> Known.PACKAGE
-                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value does not have the
-                 *   expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        OrbInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                fun validate(): ModelType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: OrbInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return /* spotless:off */ other is ModelType && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -6741,7 +6481,7 @@ private constructor(
             private val cadence: JsonField<Cadence>,
             private val itemId: JsonField<String>,
             private val matrixConfig: JsonField<MatrixConfig>,
-            private val modelType: JsonField<ModelType>,
+            private val modelType: JsonValue,
             private val name: JsonField<String>,
             private val billableMetricId: JsonField<String>,
             private val billedInAdvance: JsonField<Boolean>,
@@ -6767,9 +6507,7 @@ private constructor(
                 @JsonProperty("matrix_config")
                 @ExcludeMissing
                 matrixConfig: JsonField<MatrixConfig> = JsonMissing.of(),
-                @JsonProperty("model_type")
-                @ExcludeMissing
-                modelType: JsonField<ModelType> = JsonMissing.of(),
+                @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("billable_metric_id")
                 @ExcludeMissing
@@ -6847,11 +6585,15 @@ private constructor(
             fun matrixConfig(): MatrixConfig = matrixConfig.getRequired("matrix_config")
 
             /**
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("matrix")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun modelType(): ModelType = modelType.getRequired("model_type")
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
 
             /**
              * The name of the price.
@@ -6977,16 +6719,6 @@ private constructor(
             @JsonProperty("matrix_config")
             @ExcludeMissing
             fun _matrixConfig(): JsonField<MatrixConfig> = matrixConfig
-
-            /**
-             * Returns the raw JSON value of [modelType].
-             *
-             * Unlike [modelType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType(): JsonField<ModelType> = modelType
 
             /**
              * Returns the raw JSON value of [name].
@@ -7117,7 +6849,6 @@ private constructor(
                  * .cadence()
                  * .itemId()
                  * .matrixConfig()
-                 * .modelType()
                  * .name()
                  * ```
                  */
@@ -7130,7 +6861,7 @@ private constructor(
                 private var cadence: JsonField<Cadence>? = null
                 private var itemId: JsonField<String>? = null
                 private var matrixConfig: JsonField<MatrixConfig>? = null
-                private var modelType: JsonField<ModelType>? = null
+                private var modelType: JsonValue = JsonValue.from("matrix")
                 private var name: JsonField<String>? = null
                 private var billableMetricId: JsonField<String> = JsonMissing.of()
                 private var billedInAdvance: JsonField<Boolean> = JsonMissing.of()
@@ -7204,18 +6935,19 @@ private constructor(
                     this.matrixConfig = matrixConfig
                 }
 
-                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
-
                 /**
-                 * Sets [Builder.modelType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.modelType] with a well-typed [ModelType] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("matrix")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun modelType(modelType: JsonField<ModelType>) = apply {
-                    this.modelType = modelType
-                }
+                fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
 
                 /** The name of the price. */
                 fun name(name: String) = name(JsonField.of(name))
@@ -7514,7 +7246,6 @@ private constructor(
                  * .cadence()
                  * .itemId()
                  * .matrixConfig()
-                 * .modelType()
                  * .name()
                  * ```
                  *
@@ -7525,7 +7256,7 @@ private constructor(
                         checkRequired("cadence", cadence),
                         checkRequired("itemId", itemId),
                         checkRequired("matrixConfig", matrixConfig),
-                        checkRequired("modelType", modelType),
+                        modelType,
                         checkRequired("name", name),
                         billableMetricId,
                         billedInAdvance,
@@ -7551,7 +7282,11 @@ private constructor(
                 cadence().validate()
                 itemId()
                 matrixConfig().validate()
-                modelType().validate()
+                _modelType().let {
+                    if (it != JsonValue.from("matrix")) {
+                        throw OrbInvalidDataException("'modelType' is invalid, received $it")
+                    }
+                }
                 name()
                 billableMetricId()
                 billedInAdvance()
@@ -7585,7 +7320,7 @@ private constructor(
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (itemId.asKnown().isPresent) 1 else 0) +
                     (matrixConfig.asKnown().getOrNull()?.validity() ?: 0) +
-                    (modelType.asKnown().getOrNull()?.validity() ?: 0) +
+                    modelType.let { if (it == JsonValue.from("matrix")) 1 else 0 } +
                     (if (name.asKnown().isPresent) 1 else 0) +
                     (if (billableMetricId.asKnown().isPresent) 1 else 0) +
                     (if (billedInAdvance.asKnown().isPresent) 1 else 0) +
@@ -8283,131 +8018,6 @@ private constructor(
 
                 override fun toString() =
                     "MatrixConfig{defaultUnitAmount=$defaultUnitAmount, dimensions=$dimensions, matrixValues=$matrixValues, additionalProperties=$additionalProperties}"
-            }
-
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField val MATRIX = of("matrix")
-
-                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
-                }
-
-                /** An enum containing [ModelType]'s known values. */
-                enum class Known {
-                    MATRIX
-                }
-
-                /**
-                 * An enum containing [ModelType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [ModelType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    MATRIX,
-                    /**
-                     * An enum member indicating that [ModelType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        MATRIX -> Value.MATRIX
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value is a not a known
-                 *   member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        MATRIX -> Known.MATRIX
-                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value does not have the
-                 *   expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        OrbInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                fun validate(): ModelType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: OrbInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return /* spotless:off */ other is ModelType && value == other.value /* spotless:on */
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
             }
 
             /**
@@ -9258,7 +8868,7 @@ private constructor(
         private constructor(
             private val cadence: JsonField<Cadence>,
             private val itemId: JsonField<String>,
-            private val modelType: JsonField<ModelType>,
+            private val modelType: JsonValue,
             private val name: JsonField<String>,
             private val tieredConfig: JsonField<TieredConfig>,
             private val billableMetricId: JsonField<String>,
@@ -9282,9 +8892,7 @@ private constructor(
                 @JsonProperty("item_id")
                 @ExcludeMissing
                 itemId: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("model_type")
-                @ExcludeMissing
-                modelType: JsonField<ModelType> = JsonMissing.of(),
+                @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("tiered_config")
                 @ExcludeMissing
@@ -9358,11 +8966,15 @@ private constructor(
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("tiered")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun modelType(): ModelType = modelType.getRequired("model_type")
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
 
             /**
              * The name of the price.
@@ -9485,16 +9097,6 @@ private constructor(
              * Unlike [itemId], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("item_id") @ExcludeMissing fun _itemId(): JsonField<String> = itemId
-
-            /**
-             * Returns the raw JSON value of [modelType].
-             *
-             * Unlike [modelType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType(): JsonField<ModelType> = modelType
 
             /**
              * Returns the raw JSON value of [name].
@@ -9634,7 +9236,6 @@ private constructor(
                  * ```java
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * .tieredConfig()
                  * ```
@@ -9647,7 +9248,7 @@ private constructor(
 
                 private var cadence: JsonField<Cadence>? = null
                 private var itemId: JsonField<String>? = null
-                private var modelType: JsonField<ModelType>? = null
+                private var modelType: JsonValue = JsonValue.from("tiered")
                 private var name: JsonField<String>? = null
                 private var tieredConfig: JsonField<TieredConfig>? = null
                 private var billableMetricId: JsonField<String> = JsonMissing.of()
@@ -9708,18 +9309,19 @@ private constructor(
                  */
                 fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
-                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
-
                 /**
-                 * Sets [Builder.modelType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.modelType] with a well-typed [ModelType] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("tiered")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun modelType(modelType: JsonField<ModelType>) = apply {
-                    this.modelType = modelType
-                }
+                fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
 
                 /** The name of the price. */
                 fun name(name: String) = name(JsonField.of(name))
@@ -10031,7 +9633,6 @@ private constructor(
                  * ```java
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * .tieredConfig()
                  * ```
@@ -10042,7 +9643,7 @@ private constructor(
                     NewPlanTieredPrice(
                         checkRequired("cadence", cadence),
                         checkRequired("itemId", itemId),
-                        checkRequired("modelType", modelType),
+                        modelType,
                         checkRequired("name", name),
                         checkRequired("tieredConfig", tieredConfig),
                         billableMetricId,
@@ -10068,7 +9669,11 @@ private constructor(
 
                 cadence().validate()
                 itemId()
-                modelType().validate()
+                _modelType().let {
+                    if (it != JsonValue.from("tiered")) {
+                        throw OrbInvalidDataException("'modelType' is invalid, received $it")
+                    }
+                }
                 name()
                 tieredConfig().validate()
                 billableMetricId()
@@ -10102,7 +9707,7 @@ private constructor(
             internal fun validity(): Int =
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (itemId.asKnown().isPresent) 1 else 0) +
-                    (modelType.asKnown().getOrNull()?.validity() ?: 0) +
+                    modelType.let { if (it == JsonValue.from("tiered")) 1 else 0 } +
                     (if (name.asKnown().isPresent) 1 else 0) +
                     (tieredConfig.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (billableMetricId.asKnown().isPresent) 1 else 0) +
@@ -10265,131 +9870,6 @@ private constructor(
                     }
 
                     return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
-
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField val TIERED = of("tiered")
-
-                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
-                }
-
-                /** An enum containing [ModelType]'s known values. */
-                enum class Known {
-                    TIERED
-                }
-
-                /**
-                 * An enum containing [ModelType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [ModelType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    TIERED,
-                    /**
-                     * An enum member indicating that [ModelType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        TIERED -> Value.TIERED
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value is a not a known
-                 *   member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        TIERED -> Known.TIERED
-                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value does not have the
-                 *   expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        OrbInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                fun validate(): ModelType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: OrbInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return /* spotless:off */ other is ModelType && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -11695,7 +11175,7 @@ private constructor(
         private constructor(
             private val cadence: JsonField<Cadence>,
             private val itemId: JsonField<String>,
-            private val modelType: JsonField<ModelType>,
+            private val modelType: JsonValue,
             private val name: JsonField<String>,
             private val tieredBpsConfig: JsonField<TieredBpsConfig>,
             private val billableMetricId: JsonField<String>,
@@ -11719,9 +11199,7 @@ private constructor(
                 @JsonProperty("item_id")
                 @ExcludeMissing
                 itemId: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("model_type")
-                @ExcludeMissing
-                modelType: JsonField<ModelType> = JsonMissing.of(),
+                @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("tiered_bps_config")
                 @ExcludeMissing
@@ -11795,11 +11273,15 @@ private constructor(
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("tiered_bps")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun modelType(): ModelType = modelType.getRequired("model_type")
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
 
             /**
              * The name of the price.
@@ -11923,16 +11405,6 @@ private constructor(
              * Unlike [itemId], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("item_id") @ExcludeMissing fun _itemId(): JsonField<String> = itemId
-
-            /**
-             * Returns the raw JSON value of [modelType].
-             *
-             * Unlike [modelType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType(): JsonField<ModelType> = modelType
 
             /**
              * Returns the raw JSON value of [name].
@@ -12073,7 +11545,6 @@ private constructor(
                  * ```java
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * .tieredBpsConfig()
                  * ```
@@ -12086,7 +11557,7 @@ private constructor(
 
                 private var cadence: JsonField<Cadence>? = null
                 private var itemId: JsonField<String>? = null
-                private var modelType: JsonField<ModelType>? = null
+                private var modelType: JsonValue = JsonValue.from("tiered_bps")
                 private var name: JsonField<String>? = null
                 private var tieredBpsConfig: JsonField<TieredBpsConfig>? = null
                 private var billableMetricId: JsonField<String> = JsonMissing.of()
@@ -12147,18 +11618,19 @@ private constructor(
                  */
                 fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
-                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
-
                 /**
-                 * Sets [Builder.modelType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.modelType] with a well-typed [ModelType] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("tiered_bps")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun modelType(modelType: JsonField<ModelType>) = apply {
-                    this.modelType = modelType
-                }
+                fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
 
                 /** The name of the price. */
                 fun name(name: String) = name(JsonField.of(name))
@@ -12470,7 +11942,6 @@ private constructor(
                  * ```java
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * .tieredBpsConfig()
                  * ```
@@ -12481,7 +11952,7 @@ private constructor(
                     NewPlanTieredBpsPrice(
                         checkRequired("cadence", cadence),
                         checkRequired("itemId", itemId),
-                        checkRequired("modelType", modelType),
+                        modelType,
                         checkRequired("name", name),
                         checkRequired("tieredBpsConfig", tieredBpsConfig),
                         billableMetricId,
@@ -12507,7 +11978,11 @@ private constructor(
 
                 cadence().validate()
                 itemId()
-                modelType().validate()
+                _modelType().let {
+                    if (it != JsonValue.from("tiered_bps")) {
+                        throw OrbInvalidDataException("'modelType' is invalid, received $it")
+                    }
+                }
                 name()
                 tieredBpsConfig().validate()
                 billableMetricId()
@@ -12541,7 +12016,7 @@ private constructor(
             internal fun validity(): Int =
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (itemId.asKnown().isPresent) 1 else 0) +
-                    (modelType.asKnown().getOrNull()?.validity() ?: 0) +
+                    modelType.let { if (it == JsonValue.from("tiered_bps")) 1 else 0 } +
                     (if (name.asKnown().isPresent) 1 else 0) +
                     (tieredBpsConfig.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (billableMetricId.asKnown().isPresent) 1 else 0) +
@@ -12704,131 +12179,6 @@ private constructor(
                     }
 
                     return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
-
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField val TIERED_BPS = of("tiered_bps")
-
-                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
-                }
-
-                /** An enum containing [ModelType]'s known values. */
-                enum class Known {
-                    TIERED_BPS
-                }
-
-                /**
-                 * An enum containing [ModelType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [ModelType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    TIERED_BPS,
-                    /**
-                     * An enum member indicating that [ModelType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        TIERED_BPS -> Value.TIERED_BPS
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value is a not a known
-                 *   member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        TIERED_BPS -> Known.TIERED_BPS
-                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value does not have the
-                 *   expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        OrbInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                fun validate(): ModelType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: OrbInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return /* spotless:off */ other is ModelType && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -14183,7 +13533,7 @@ private constructor(
             private val bpsConfig: JsonField<BpsConfig>,
             private val cadence: JsonField<Cadence>,
             private val itemId: JsonField<String>,
-            private val modelType: JsonField<ModelType>,
+            private val modelType: JsonValue,
             private val name: JsonField<String>,
             private val billableMetricId: JsonField<String>,
             private val billedInAdvance: JsonField<Boolean>,
@@ -14209,9 +13559,7 @@ private constructor(
                 @JsonProperty("item_id")
                 @ExcludeMissing
                 itemId: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("model_type")
-                @ExcludeMissing
-                modelType: JsonField<ModelType> = JsonMissing.of(),
+                @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("billable_metric_id")
                 @ExcludeMissing
@@ -14289,11 +13637,15 @@ private constructor(
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("bps")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun modelType(): ModelType = modelType.getRequired("model_type")
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
 
             /**
              * The name of the price.
@@ -14419,16 +13771,6 @@ private constructor(
              * Unlike [itemId], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("item_id") @ExcludeMissing fun _itemId(): JsonField<String> = itemId
-
-            /**
-             * Returns the raw JSON value of [modelType].
-             *
-             * Unlike [modelType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType(): JsonField<ModelType> = modelType
 
             /**
              * Returns the raw JSON value of [name].
@@ -14559,7 +13901,6 @@ private constructor(
                  * .bpsConfig()
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * ```
                  */
@@ -14572,7 +13913,7 @@ private constructor(
                 private var bpsConfig: JsonField<BpsConfig>? = null
                 private var cadence: JsonField<Cadence>? = null
                 private var itemId: JsonField<String>? = null
-                private var modelType: JsonField<ModelType>? = null
+                private var modelType: JsonValue = JsonValue.from("bps")
                 private var name: JsonField<String>? = null
                 private var billableMetricId: JsonField<String> = JsonMissing.of()
                 private var billedInAdvance: JsonField<Boolean> = JsonMissing.of()
@@ -14645,18 +13986,19 @@ private constructor(
                  */
                 fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
-                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
-
                 /**
-                 * Sets [Builder.modelType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.modelType] with a well-typed [ModelType] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("bps")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun modelType(modelType: JsonField<ModelType>) = apply {
-                    this.modelType = modelType
-                }
+                fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
 
                 /** The name of the price. */
                 fun name(name: String) = name(JsonField.of(name))
@@ -14955,7 +14297,6 @@ private constructor(
                  * .bpsConfig()
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * ```
                  *
@@ -14966,7 +14307,7 @@ private constructor(
                         checkRequired("bpsConfig", bpsConfig),
                         checkRequired("cadence", cadence),
                         checkRequired("itemId", itemId),
-                        checkRequired("modelType", modelType),
+                        modelType,
                         checkRequired("name", name),
                         billableMetricId,
                         billedInAdvance,
@@ -14992,7 +14333,11 @@ private constructor(
                 bpsConfig().validate()
                 cadence().validate()
                 itemId()
-                modelType().validate()
+                _modelType().let {
+                    if (it != JsonValue.from("bps")) {
+                        throw OrbInvalidDataException("'modelType' is invalid, received $it")
+                    }
+                }
                 name()
                 billableMetricId()
                 billedInAdvance()
@@ -15026,7 +14371,7 @@ private constructor(
                 (bpsConfig.asKnown().getOrNull()?.validity() ?: 0) +
                     (cadence.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (itemId.asKnown().isPresent) 1 else 0) +
-                    (modelType.asKnown().getOrNull()?.validity() ?: 0) +
+                    modelType.let { if (it == JsonValue.from("bps")) 1 else 0 } +
                     (if (name.asKnown().isPresent) 1 else 0) +
                     (if (billableMetricId.asKnown().isPresent) 1 else 0) +
                     (if (billedInAdvance.asKnown().isPresent) 1 else 0) +
@@ -15402,131 +14747,6 @@ private constructor(
                     }
 
                     return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
-
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField val BPS = of("bps")
-
-                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
-                }
-
-                /** An enum containing [ModelType]'s known values. */
-                enum class Known {
-                    BPS
-                }
-
-                /**
-                 * An enum containing [ModelType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [ModelType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    BPS,
-                    /**
-                     * An enum member indicating that [ModelType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        BPS -> Value.BPS
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value is a not a known
-                 *   member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        BPS -> Known.BPS
-                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value does not have the
-                 *   expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        OrbInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                fun validate(): ModelType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: OrbInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return /* spotless:off */ other is ModelType && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -16383,7 +15603,7 @@ private constructor(
             private val bulkBpsConfig: JsonField<BulkBpsConfig>,
             private val cadence: JsonField<Cadence>,
             private val itemId: JsonField<String>,
-            private val modelType: JsonField<ModelType>,
+            private val modelType: JsonValue,
             private val name: JsonField<String>,
             private val billableMetricId: JsonField<String>,
             private val billedInAdvance: JsonField<Boolean>,
@@ -16409,9 +15629,7 @@ private constructor(
                 @JsonProperty("item_id")
                 @ExcludeMissing
                 itemId: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("model_type")
-                @ExcludeMissing
-                modelType: JsonField<ModelType> = JsonMissing.of(),
+                @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("billable_metric_id")
                 @ExcludeMissing
@@ -16489,11 +15707,15 @@ private constructor(
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("bulk_bps")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun modelType(): ModelType = modelType.getRequired("model_type")
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
 
             /**
              * The name of the price.
@@ -16619,16 +15841,6 @@ private constructor(
              * Unlike [itemId], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("item_id") @ExcludeMissing fun _itemId(): JsonField<String> = itemId
-
-            /**
-             * Returns the raw JSON value of [modelType].
-             *
-             * Unlike [modelType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType(): JsonField<ModelType> = modelType
 
             /**
              * Returns the raw JSON value of [name].
@@ -16759,7 +15971,6 @@ private constructor(
                  * .bulkBpsConfig()
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * ```
                  */
@@ -16772,7 +15983,7 @@ private constructor(
                 private var bulkBpsConfig: JsonField<BulkBpsConfig>? = null
                 private var cadence: JsonField<Cadence>? = null
                 private var itemId: JsonField<String>? = null
-                private var modelType: JsonField<ModelType>? = null
+                private var modelType: JsonValue = JsonValue.from("bulk_bps")
                 private var name: JsonField<String>? = null
                 private var billableMetricId: JsonField<String> = JsonMissing.of()
                 private var billedInAdvance: JsonField<Boolean> = JsonMissing.of()
@@ -16846,18 +16057,19 @@ private constructor(
                  */
                 fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
-                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
-
                 /**
-                 * Sets [Builder.modelType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.modelType] with a well-typed [ModelType] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("bulk_bps")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun modelType(modelType: JsonField<ModelType>) = apply {
-                    this.modelType = modelType
-                }
+                fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
 
                 /** The name of the price. */
                 fun name(name: String) = name(JsonField.of(name))
@@ -17156,7 +16368,6 @@ private constructor(
                  * .bulkBpsConfig()
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * ```
                  *
@@ -17167,7 +16378,7 @@ private constructor(
                         checkRequired("bulkBpsConfig", bulkBpsConfig),
                         checkRequired("cadence", cadence),
                         checkRequired("itemId", itemId),
-                        checkRequired("modelType", modelType),
+                        modelType,
                         checkRequired("name", name),
                         billableMetricId,
                         billedInAdvance,
@@ -17193,7 +16404,11 @@ private constructor(
                 bulkBpsConfig().validate()
                 cadence().validate()
                 itemId()
-                modelType().validate()
+                _modelType().let {
+                    if (it != JsonValue.from("bulk_bps")) {
+                        throw OrbInvalidDataException("'modelType' is invalid, received $it")
+                    }
+                }
                 name()
                 billableMetricId()
                 billedInAdvance()
@@ -17227,7 +16442,7 @@ private constructor(
                 (bulkBpsConfig.asKnown().getOrNull()?.validity() ?: 0) +
                     (cadence.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (itemId.asKnown().isPresent) 1 else 0) +
-                    (modelType.asKnown().getOrNull()?.validity() ?: 0) +
+                    modelType.let { if (it == JsonValue.from("bulk_bps")) 1 else 0 } +
                     (if (name.asKnown().isPresent) 1 else 0) +
                     (if (billableMetricId.asKnown().isPresent) 1 else 0) +
                     (if (billedInAdvance.asKnown().isPresent) 1 else 0) +
@@ -17842,131 +17057,6 @@ private constructor(
                     }
 
                     return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
-
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField val BULK_BPS = of("bulk_bps")
-
-                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
-                }
-
-                /** An enum containing [ModelType]'s known values. */
-                enum class Known {
-                    BULK_BPS
-                }
-
-                /**
-                 * An enum containing [ModelType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [ModelType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    BULK_BPS,
-                    /**
-                     * An enum member indicating that [ModelType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        BULK_BPS -> Value.BULK_BPS
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value is a not a known
-                 *   member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        BULK_BPS -> Known.BULK_BPS
-                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value does not have the
-                 *   expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        OrbInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                fun validate(): ModelType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: OrbInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return /* spotless:off */ other is ModelType && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -18823,7 +17913,7 @@ private constructor(
             private val bulkConfig: JsonField<BulkConfig>,
             private val cadence: JsonField<Cadence>,
             private val itemId: JsonField<String>,
-            private val modelType: JsonField<ModelType>,
+            private val modelType: JsonValue,
             private val name: JsonField<String>,
             private val billableMetricId: JsonField<String>,
             private val billedInAdvance: JsonField<Boolean>,
@@ -18849,9 +17939,7 @@ private constructor(
                 @JsonProperty("item_id")
                 @ExcludeMissing
                 itemId: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("model_type")
-                @ExcludeMissing
-                modelType: JsonField<ModelType> = JsonMissing.of(),
+                @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("billable_metric_id")
                 @ExcludeMissing
@@ -18929,11 +18017,15 @@ private constructor(
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("bulk")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun modelType(): ModelType = modelType.getRequired("model_type")
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
 
             /**
              * The name of the price.
@@ -19059,16 +18151,6 @@ private constructor(
              * Unlike [itemId], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("item_id") @ExcludeMissing fun _itemId(): JsonField<String> = itemId
-
-            /**
-             * Returns the raw JSON value of [modelType].
-             *
-             * Unlike [modelType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType(): JsonField<ModelType> = modelType
 
             /**
              * Returns the raw JSON value of [name].
@@ -19199,7 +18281,6 @@ private constructor(
                  * .bulkConfig()
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * ```
                  */
@@ -19212,7 +18293,7 @@ private constructor(
                 private var bulkConfig: JsonField<BulkConfig>? = null
                 private var cadence: JsonField<Cadence>? = null
                 private var itemId: JsonField<String>? = null
-                private var modelType: JsonField<ModelType>? = null
+                private var modelType: JsonValue = JsonValue.from("bulk")
                 private var name: JsonField<String>? = null
                 private var billableMetricId: JsonField<String> = JsonMissing.of()
                 private var billedInAdvance: JsonField<Boolean> = JsonMissing.of()
@@ -19285,18 +18366,19 @@ private constructor(
                  */
                 fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
-                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
-
                 /**
-                 * Sets [Builder.modelType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.modelType] with a well-typed [ModelType] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("bulk")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun modelType(modelType: JsonField<ModelType>) = apply {
-                    this.modelType = modelType
-                }
+                fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
 
                 /** The name of the price. */
                 fun name(name: String) = name(JsonField.of(name))
@@ -19595,7 +18677,6 @@ private constructor(
                  * .bulkConfig()
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * ```
                  *
@@ -19606,7 +18687,7 @@ private constructor(
                         checkRequired("bulkConfig", bulkConfig),
                         checkRequired("cadence", cadence),
                         checkRequired("itemId", itemId),
-                        checkRequired("modelType", modelType),
+                        modelType,
                         checkRequired("name", name),
                         billableMetricId,
                         billedInAdvance,
@@ -19632,7 +18713,11 @@ private constructor(
                 bulkConfig().validate()
                 cadence().validate()
                 itemId()
-                modelType().validate()
+                _modelType().let {
+                    if (it != JsonValue.from("bulk")) {
+                        throw OrbInvalidDataException("'modelType' is invalid, received $it")
+                    }
+                }
                 name()
                 billableMetricId()
                 billedInAdvance()
@@ -19666,7 +18751,7 @@ private constructor(
                 (bulkConfig.asKnown().getOrNull()?.validity() ?: 0) +
                     (cadence.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (itemId.asKnown().isPresent) 1 else 0) +
-                    (modelType.asKnown().getOrNull()?.validity() ?: 0) +
+                    modelType.let { if (it == JsonValue.from("bulk")) 1 else 0 } +
                     (if (name.asKnown().isPresent) 1 else 0) +
                     (if (billableMetricId.asKnown().isPresent) 1 else 0) +
                     (if (billedInAdvance.asKnown().isPresent) 1 else 0) +
@@ -20238,131 +19323,6 @@ private constructor(
                     }
 
                     return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
-
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField val BULK = of("bulk")
-
-                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
-                }
-
-                /** An enum containing [ModelType]'s known values. */
-                enum class Known {
-                    BULK
-                }
-
-                /**
-                 * An enum containing [ModelType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [ModelType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    BULK,
-                    /**
-                     * An enum member indicating that [ModelType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        BULK -> Value.BULK
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value is a not a known
-                 *   member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        BULK -> Known.BULK
-                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value does not have the
-                 *   expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        OrbInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                fun validate(): ModelType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: OrbInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return /* spotless:off */ other is ModelType && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -21218,7 +20178,7 @@ private constructor(
         private constructor(
             private val cadence: JsonField<Cadence>,
             private val itemId: JsonField<String>,
-            private val modelType: JsonField<ModelType>,
+            private val modelType: JsonValue,
             private val name: JsonField<String>,
             private val thresholdTotalAmountConfig: JsonField<ThresholdTotalAmountConfig>,
             private val billableMetricId: JsonField<String>,
@@ -21242,9 +20202,7 @@ private constructor(
                 @JsonProperty("item_id")
                 @ExcludeMissing
                 itemId: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("model_type")
-                @ExcludeMissing
-                modelType: JsonField<ModelType> = JsonMissing.of(),
+                @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("threshold_total_amount_config")
                 @ExcludeMissing
@@ -21319,11 +20277,15 @@ private constructor(
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("threshold_total_amount")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun modelType(): ModelType = modelType.getRequired("model_type")
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
 
             /**
              * The name of the price.
@@ -21447,16 +20409,6 @@ private constructor(
              * Unlike [itemId], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("item_id") @ExcludeMissing fun _itemId(): JsonField<String> = itemId
-
-            /**
-             * Returns the raw JSON value of [modelType].
-             *
-             * Unlike [modelType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType(): JsonField<ModelType> = modelType
 
             /**
              * Returns the raw JSON value of [name].
@@ -21598,7 +20550,6 @@ private constructor(
                  * ```java
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * .thresholdTotalAmountConfig()
                  * ```
@@ -21611,7 +20562,7 @@ private constructor(
 
                 private var cadence: JsonField<Cadence>? = null
                 private var itemId: JsonField<String>? = null
-                private var modelType: JsonField<ModelType>? = null
+                private var modelType: JsonValue = JsonValue.from("threshold_total_amount")
                 private var name: JsonField<String>? = null
                 private var thresholdTotalAmountConfig: JsonField<ThresholdTotalAmountConfig>? =
                     null
@@ -21679,18 +20630,19 @@ private constructor(
                  */
                 fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
-                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
-
                 /**
-                 * Sets [Builder.modelType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.modelType] with a well-typed [ModelType] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("threshold_total_amount")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun modelType(modelType: JsonField<ModelType>) = apply {
-                    this.modelType = modelType
-                }
+                fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
 
                 /** The name of the price. */
                 fun name(name: String) = name(JsonField.of(name))
@@ -22003,7 +20955,6 @@ private constructor(
                  * ```java
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * .thresholdTotalAmountConfig()
                  * ```
@@ -22014,7 +20965,7 @@ private constructor(
                     NewPlanThresholdTotalAmountPrice(
                         checkRequired("cadence", cadence),
                         checkRequired("itemId", itemId),
-                        checkRequired("modelType", modelType),
+                        modelType,
                         checkRequired("name", name),
                         checkRequired("thresholdTotalAmountConfig", thresholdTotalAmountConfig),
                         billableMetricId,
@@ -22040,7 +20991,11 @@ private constructor(
 
                 cadence().validate()
                 itemId()
-                modelType().validate()
+                _modelType().let {
+                    if (it != JsonValue.from("threshold_total_amount")) {
+                        throw OrbInvalidDataException("'modelType' is invalid, received $it")
+                    }
+                }
                 name()
                 thresholdTotalAmountConfig().validate()
                 billableMetricId()
@@ -22074,7 +21029,7 @@ private constructor(
             internal fun validity(): Int =
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (itemId.asKnown().isPresent) 1 else 0) +
-                    (modelType.asKnown().getOrNull()?.validity() ?: 0) +
+                    modelType.let { if (it == JsonValue.from("threshold_total_amount")) 1 else 0 } +
                     (if (name.asKnown().isPresent) 1 else 0) +
                     (thresholdTotalAmountConfig.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (billableMetricId.asKnown().isPresent) 1 else 0) +
@@ -22237,131 +21192,6 @@ private constructor(
                     }
 
                     return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
-
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField val THRESHOLD_TOTAL_AMOUNT = of("threshold_total_amount")
-
-                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
-                }
-
-                /** An enum containing [ModelType]'s known values. */
-                enum class Known {
-                    THRESHOLD_TOTAL_AMOUNT
-                }
-
-                /**
-                 * An enum containing [ModelType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [ModelType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    THRESHOLD_TOTAL_AMOUNT,
-                    /**
-                     * An enum member indicating that [ModelType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        THRESHOLD_TOTAL_AMOUNT -> Value.THRESHOLD_TOTAL_AMOUNT
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value is a not a known
-                 *   member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        THRESHOLD_TOTAL_AMOUNT -> Known.THRESHOLD_TOTAL_AMOUNT
-                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value does not have the
-                 *   expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        OrbInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                fun validate(): ModelType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: OrbInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return /* spotless:off */ other is ModelType && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -23330,7 +22160,7 @@ private constructor(
         private constructor(
             private val cadence: JsonField<Cadence>,
             private val itemId: JsonField<String>,
-            private val modelType: JsonField<ModelType>,
+            private val modelType: JsonValue,
             private val name: JsonField<String>,
             private val tieredPackageConfig: JsonField<TieredPackageConfig>,
             private val billableMetricId: JsonField<String>,
@@ -23354,9 +22184,7 @@ private constructor(
                 @JsonProperty("item_id")
                 @ExcludeMissing
                 itemId: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("model_type")
-                @ExcludeMissing
-                modelType: JsonField<ModelType> = JsonMissing.of(),
+                @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("tiered_package_config")
                 @ExcludeMissing
@@ -23430,11 +22258,15 @@ private constructor(
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("tiered_package")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun modelType(): ModelType = modelType.getRequired("model_type")
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
 
             /**
              * The name of the price.
@@ -23558,16 +22390,6 @@ private constructor(
              * Unlike [itemId], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("item_id") @ExcludeMissing fun _itemId(): JsonField<String> = itemId
-
-            /**
-             * Returns the raw JSON value of [modelType].
-             *
-             * Unlike [modelType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType(): JsonField<ModelType> = modelType
 
             /**
              * Returns the raw JSON value of [name].
@@ -23708,7 +22530,6 @@ private constructor(
                  * ```java
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * .tieredPackageConfig()
                  * ```
@@ -23721,7 +22542,7 @@ private constructor(
 
                 private var cadence: JsonField<Cadence>? = null
                 private var itemId: JsonField<String>? = null
-                private var modelType: JsonField<ModelType>? = null
+                private var modelType: JsonValue = JsonValue.from("tiered_package")
                 private var name: JsonField<String>? = null
                 private var tieredPackageConfig: JsonField<TieredPackageConfig>? = null
                 private var billableMetricId: JsonField<String> = JsonMissing.of()
@@ -23784,18 +22605,19 @@ private constructor(
                  */
                 fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
-                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
-
                 /**
-                 * Sets [Builder.modelType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.modelType] with a well-typed [ModelType] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("tiered_package")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun modelType(modelType: JsonField<ModelType>) = apply {
-                    this.modelType = modelType
-                }
+                fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
 
                 /** The name of the price. */
                 fun name(name: String) = name(JsonField.of(name))
@@ -24108,7 +22930,6 @@ private constructor(
                  * ```java
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * .tieredPackageConfig()
                  * ```
@@ -24119,7 +22940,7 @@ private constructor(
                     NewPlanTieredPackagePrice(
                         checkRequired("cadence", cadence),
                         checkRequired("itemId", itemId),
-                        checkRequired("modelType", modelType),
+                        modelType,
                         checkRequired("name", name),
                         checkRequired("tieredPackageConfig", tieredPackageConfig),
                         billableMetricId,
@@ -24145,7 +22966,11 @@ private constructor(
 
                 cadence().validate()
                 itemId()
-                modelType().validate()
+                _modelType().let {
+                    if (it != JsonValue.from("tiered_package")) {
+                        throw OrbInvalidDataException("'modelType' is invalid, received $it")
+                    }
+                }
                 name()
                 tieredPackageConfig().validate()
                 billableMetricId()
@@ -24179,7 +23004,7 @@ private constructor(
             internal fun validity(): Int =
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (itemId.asKnown().isPresent) 1 else 0) +
-                    (modelType.asKnown().getOrNull()?.validity() ?: 0) +
+                    modelType.let { if (it == JsonValue.from("tiered_package")) 1 else 0 } +
                     (if (name.asKnown().isPresent) 1 else 0) +
                     (tieredPackageConfig.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (billableMetricId.asKnown().isPresent) 1 else 0) +
@@ -24342,131 +23167,6 @@ private constructor(
                     }
 
                     return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
-
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField val TIERED_PACKAGE = of("tiered_package")
-
-                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
-                }
-
-                /** An enum containing [ModelType]'s known values. */
-                enum class Known {
-                    TIERED_PACKAGE
-                }
-
-                /**
-                 * An enum containing [ModelType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [ModelType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    TIERED_PACKAGE,
-                    /**
-                     * An enum member indicating that [ModelType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        TIERED_PACKAGE -> Value.TIERED_PACKAGE
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value is a not a known
-                 *   member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        TIERED_PACKAGE -> Known.TIERED_PACKAGE
-                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value does not have the
-                 *   expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        OrbInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                fun validate(): ModelType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: OrbInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return /* spotless:off */ other is ModelType && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -25434,7 +24134,7 @@ private constructor(
         private constructor(
             private val cadence: JsonField<Cadence>,
             private val itemId: JsonField<String>,
-            private val modelType: JsonField<ModelType>,
+            private val modelType: JsonValue,
             private val name: JsonField<String>,
             private val tieredWithMinimumConfig: JsonField<TieredWithMinimumConfig>,
             private val billableMetricId: JsonField<String>,
@@ -25458,9 +24158,7 @@ private constructor(
                 @JsonProperty("item_id")
                 @ExcludeMissing
                 itemId: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("model_type")
-                @ExcludeMissing
-                modelType: JsonField<ModelType> = JsonMissing.of(),
+                @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("tiered_with_minimum_config")
                 @ExcludeMissing
@@ -25534,11 +24232,15 @@ private constructor(
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("tiered_with_minimum")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun modelType(): ModelType = modelType.getRequired("model_type")
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
 
             /**
              * The name of the price.
@@ -25662,16 +24364,6 @@ private constructor(
              * Unlike [itemId], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("item_id") @ExcludeMissing fun _itemId(): JsonField<String> = itemId
-
-            /**
-             * Returns the raw JSON value of [modelType].
-             *
-             * Unlike [modelType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType(): JsonField<ModelType> = modelType
 
             /**
              * Returns the raw JSON value of [name].
@@ -25813,7 +24505,6 @@ private constructor(
                  * ```java
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * .tieredWithMinimumConfig()
                  * ```
@@ -25826,7 +24517,7 @@ private constructor(
 
                 private var cadence: JsonField<Cadence>? = null
                 private var itemId: JsonField<String>? = null
-                private var modelType: JsonField<ModelType>? = null
+                private var modelType: JsonValue = JsonValue.from("tiered_with_minimum")
                 private var name: JsonField<String>? = null
                 private var tieredWithMinimumConfig: JsonField<TieredWithMinimumConfig>? = null
                 private var billableMetricId: JsonField<String> = JsonMissing.of()
@@ -25892,18 +24583,19 @@ private constructor(
                  */
                 fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
-                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
-
                 /**
-                 * Sets [Builder.modelType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.modelType] with a well-typed [ModelType] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("tiered_with_minimum")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun modelType(modelType: JsonField<ModelType>) = apply {
-                    this.modelType = modelType
-                }
+                fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
 
                 /** The name of the price. */
                 fun name(name: String) = name(JsonField.of(name))
@@ -26215,7 +24907,6 @@ private constructor(
                  * ```java
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * .tieredWithMinimumConfig()
                  * ```
@@ -26226,7 +24917,7 @@ private constructor(
                     NewPlanTieredWithMinimumPrice(
                         checkRequired("cadence", cadence),
                         checkRequired("itemId", itemId),
-                        checkRequired("modelType", modelType),
+                        modelType,
                         checkRequired("name", name),
                         checkRequired("tieredWithMinimumConfig", tieredWithMinimumConfig),
                         billableMetricId,
@@ -26252,7 +24943,11 @@ private constructor(
 
                 cadence().validate()
                 itemId()
-                modelType().validate()
+                _modelType().let {
+                    if (it != JsonValue.from("tiered_with_minimum")) {
+                        throw OrbInvalidDataException("'modelType' is invalid, received $it")
+                    }
+                }
                 name()
                 tieredWithMinimumConfig().validate()
                 billableMetricId()
@@ -26286,7 +24981,7 @@ private constructor(
             internal fun validity(): Int =
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (itemId.asKnown().isPresent) 1 else 0) +
-                    (modelType.asKnown().getOrNull()?.validity() ?: 0) +
+                    modelType.let { if (it == JsonValue.from("tiered_with_minimum")) 1 else 0 } +
                     (if (name.asKnown().isPresent) 1 else 0) +
                     (tieredWithMinimumConfig.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (billableMetricId.asKnown().isPresent) 1 else 0) +
@@ -26449,131 +25144,6 @@ private constructor(
                     }
 
                     return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
-
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField val TIERED_WITH_MINIMUM = of("tiered_with_minimum")
-
-                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
-                }
-
-                /** An enum containing [ModelType]'s known values. */
-                enum class Known {
-                    TIERED_WITH_MINIMUM
-                }
-
-                /**
-                 * An enum containing [ModelType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [ModelType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    TIERED_WITH_MINIMUM,
-                    /**
-                     * An enum member indicating that [ModelType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        TIERED_WITH_MINIMUM -> Value.TIERED_WITH_MINIMUM
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value is a not a known
-                 *   member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        TIERED_WITH_MINIMUM -> Known.TIERED_WITH_MINIMUM
-                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value does not have the
-                 *   expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        OrbInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                fun validate(): ModelType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: OrbInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return /* spotless:off */ other is ModelType && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -27541,7 +26111,7 @@ private constructor(
         private constructor(
             private val cadence: JsonField<Cadence>,
             private val itemId: JsonField<String>,
-            private val modelType: JsonField<ModelType>,
+            private val modelType: JsonValue,
             private val name: JsonField<String>,
             private val unitWithPercentConfig: JsonField<UnitWithPercentConfig>,
             private val billableMetricId: JsonField<String>,
@@ -27565,9 +26135,7 @@ private constructor(
                 @JsonProperty("item_id")
                 @ExcludeMissing
                 itemId: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("model_type")
-                @ExcludeMissing
-                modelType: JsonField<ModelType> = JsonMissing.of(),
+                @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("unit_with_percent_config")
                 @ExcludeMissing
@@ -27641,11 +26209,15 @@ private constructor(
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("unit_with_percent")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun modelType(): ModelType = modelType.getRequired("model_type")
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
 
             /**
              * The name of the price.
@@ -27769,16 +26341,6 @@ private constructor(
              * Unlike [itemId], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("item_id") @ExcludeMissing fun _itemId(): JsonField<String> = itemId
-
-            /**
-             * Returns the raw JSON value of [modelType].
-             *
-             * Unlike [modelType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType(): JsonField<ModelType> = modelType
 
             /**
              * Returns the raw JSON value of [name].
@@ -27919,7 +26481,6 @@ private constructor(
                  * ```java
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * .unitWithPercentConfig()
                  * ```
@@ -27932,7 +26493,7 @@ private constructor(
 
                 private var cadence: JsonField<Cadence>? = null
                 private var itemId: JsonField<String>? = null
-                private var modelType: JsonField<ModelType>? = null
+                private var modelType: JsonValue = JsonValue.from("unit_with_percent")
                 private var name: JsonField<String>? = null
                 private var unitWithPercentConfig: JsonField<UnitWithPercentConfig>? = null
                 private var billableMetricId: JsonField<String> = JsonMissing.of()
@@ -27997,18 +26558,19 @@ private constructor(
                  */
                 fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
-                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
-
                 /**
-                 * Sets [Builder.modelType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.modelType] with a well-typed [ModelType] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("unit_with_percent")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun modelType(modelType: JsonField<ModelType>) = apply {
-                    this.modelType = modelType
-                }
+                fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
 
                 /** The name of the price. */
                 fun name(name: String) = name(JsonField.of(name))
@@ -28321,7 +26883,6 @@ private constructor(
                  * ```java
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * .unitWithPercentConfig()
                  * ```
@@ -28332,7 +26893,7 @@ private constructor(
                     NewPlanUnitWithPercentPrice(
                         checkRequired("cadence", cadence),
                         checkRequired("itemId", itemId),
-                        checkRequired("modelType", modelType),
+                        modelType,
                         checkRequired("name", name),
                         checkRequired("unitWithPercentConfig", unitWithPercentConfig),
                         billableMetricId,
@@ -28358,7 +26919,11 @@ private constructor(
 
                 cadence().validate()
                 itemId()
-                modelType().validate()
+                _modelType().let {
+                    if (it != JsonValue.from("unit_with_percent")) {
+                        throw OrbInvalidDataException("'modelType' is invalid, received $it")
+                    }
+                }
                 name()
                 unitWithPercentConfig().validate()
                 billableMetricId()
@@ -28392,7 +26957,7 @@ private constructor(
             internal fun validity(): Int =
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (itemId.asKnown().isPresent) 1 else 0) +
-                    (modelType.asKnown().getOrNull()?.validity() ?: 0) +
+                    modelType.let { if (it == JsonValue.from("unit_with_percent")) 1 else 0 } +
                     (if (name.asKnown().isPresent) 1 else 0) +
                     (unitWithPercentConfig.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (billableMetricId.asKnown().isPresent) 1 else 0) +
@@ -28555,131 +27120,6 @@ private constructor(
                     }
 
                     return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
-
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField val UNIT_WITH_PERCENT = of("unit_with_percent")
-
-                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
-                }
-
-                /** An enum containing [ModelType]'s known values. */
-                enum class Known {
-                    UNIT_WITH_PERCENT
-                }
-
-                /**
-                 * An enum containing [ModelType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [ModelType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    UNIT_WITH_PERCENT,
-                    /**
-                     * An enum member indicating that [ModelType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        UNIT_WITH_PERCENT -> Value.UNIT_WITH_PERCENT
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value is a not a known
-                 *   member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        UNIT_WITH_PERCENT -> Known.UNIT_WITH_PERCENT
-                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value does not have the
-                 *   expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        OrbInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                fun validate(): ModelType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: OrbInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return /* spotless:off */ other is ModelType && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -29647,7 +28087,7 @@ private constructor(
         private constructor(
             private val cadence: JsonField<Cadence>,
             private val itemId: JsonField<String>,
-            private val modelType: JsonField<ModelType>,
+            private val modelType: JsonValue,
             private val name: JsonField<String>,
             private val packageWithAllocationConfig: JsonField<PackageWithAllocationConfig>,
             private val billableMetricId: JsonField<String>,
@@ -29671,9 +28111,7 @@ private constructor(
                 @JsonProperty("item_id")
                 @ExcludeMissing
                 itemId: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("model_type")
-                @ExcludeMissing
-                modelType: JsonField<ModelType> = JsonMissing.of(),
+                @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("package_with_allocation_config")
                 @ExcludeMissing
@@ -29748,11 +28186,15 @@ private constructor(
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("package_with_allocation")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun modelType(): ModelType = modelType.getRequired("model_type")
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
 
             /**
              * The name of the price.
@@ -29876,16 +28318,6 @@ private constructor(
              * Unlike [itemId], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("item_id") @ExcludeMissing fun _itemId(): JsonField<String> = itemId
-
-            /**
-             * Returns the raw JSON value of [modelType].
-             *
-             * Unlike [modelType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType(): JsonField<ModelType> = modelType
 
             /**
              * Returns the raw JSON value of [name].
@@ -30027,7 +28459,6 @@ private constructor(
                  * ```java
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * .packageWithAllocationConfig()
                  * ```
@@ -30040,7 +28471,7 @@ private constructor(
 
                 private var cadence: JsonField<Cadence>? = null
                 private var itemId: JsonField<String>? = null
-                private var modelType: JsonField<ModelType>? = null
+                private var modelType: JsonValue = JsonValue.from("package_with_allocation")
                 private var name: JsonField<String>? = null
                 private var packageWithAllocationConfig: JsonField<PackageWithAllocationConfig>? =
                     null
@@ -30108,18 +28539,19 @@ private constructor(
                  */
                 fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
-                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
-
                 /**
-                 * Sets [Builder.modelType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.modelType] with a well-typed [ModelType] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("package_with_allocation")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun modelType(modelType: JsonField<ModelType>) = apply {
-                    this.modelType = modelType
-                }
+                fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
 
                 /** The name of the price. */
                 fun name(name: String) = name(JsonField.of(name))
@@ -30432,7 +28864,6 @@ private constructor(
                  * ```java
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * .packageWithAllocationConfig()
                  * ```
@@ -30443,7 +28874,7 @@ private constructor(
                     NewPlanPackageWithAllocationPrice(
                         checkRequired("cadence", cadence),
                         checkRequired("itemId", itemId),
-                        checkRequired("modelType", modelType),
+                        modelType,
                         checkRequired("name", name),
                         checkRequired("packageWithAllocationConfig", packageWithAllocationConfig),
                         billableMetricId,
@@ -30469,7 +28900,11 @@ private constructor(
 
                 cadence().validate()
                 itemId()
-                modelType().validate()
+                _modelType().let {
+                    if (it != JsonValue.from("package_with_allocation")) {
+                        throw OrbInvalidDataException("'modelType' is invalid, received $it")
+                    }
+                }
                 name()
                 packageWithAllocationConfig().validate()
                 billableMetricId()
@@ -30503,7 +28938,9 @@ private constructor(
             internal fun validity(): Int =
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (itemId.asKnown().isPresent) 1 else 0) +
-                    (modelType.asKnown().getOrNull()?.validity() ?: 0) +
+                    modelType.let {
+                        if (it == JsonValue.from("package_with_allocation")) 1 else 0
+                    } +
                     (if (name.asKnown().isPresent) 1 else 0) +
                     (packageWithAllocationConfig.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (billableMetricId.asKnown().isPresent) 1 else 0) +
@@ -30666,131 +29103,6 @@ private constructor(
                     }
 
                     return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
-
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField val PACKAGE_WITH_ALLOCATION = of("package_with_allocation")
-
-                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
-                }
-
-                /** An enum containing [ModelType]'s known values. */
-                enum class Known {
-                    PACKAGE_WITH_ALLOCATION
-                }
-
-                /**
-                 * An enum containing [ModelType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [ModelType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    PACKAGE_WITH_ALLOCATION,
-                    /**
-                     * An enum member indicating that [ModelType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        PACKAGE_WITH_ALLOCATION -> Value.PACKAGE_WITH_ALLOCATION
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value is a not a known
-                 *   member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        PACKAGE_WITH_ALLOCATION -> Known.PACKAGE_WITH_ALLOCATION
-                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value does not have the
-                 *   expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        OrbInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                fun validate(): ModelType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: OrbInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return /* spotless:off */ other is ModelType && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -31759,7 +30071,7 @@ private constructor(
         private constructor(
             private val cadence: JsonField<Cadence>,
             private val itemId: JsonField<String>,
-            private val modelType: JsonField<ModelType>,
+            private val modelType: JsonValue,
             private val name: JsonField<String>,
             private val tieredWithProrationConfig: JsonField<TieredWithProrationConfig>,
             private val billableMetricId: JsonField<String>,
@@ -31783,9 +30095,7 @@ private constructor(
                 @JsonProperty("item_id")
                 @ExcludeMissing
                 itemId: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("model_type")
-                @ExcludeMissing
-                modelType: JsonField<ModelType> = JsonMissing.of(),
+                @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("tiered_with_proration_config")
                 @ExcludeMissing
@@ -31859,11 +30169,15 @@ private constructor(
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("tiered_with_proration")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun modelType(): ModelType = modelType.getRequired("model_type")
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
 
             /**
              * The name of the price.
@@ -31987,16 +30301,6 @@ private constructor(
              * Unlike [itemId], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("item_id") @ExcludeMissing fun _itemId(): JsonField<String> = itemId
-
-            /**
-             * Returns the raw JSON value of [modelType].
-             *
-             * Unlike [modelType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType(): JsonField<ModelType> = modelType
 
             /**
              * Returns the raw JSON value of [name].
@@ -32138,7 +30442,6 @@ private constructor(
                  * ```java
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * .tieredWithProrationConfig()
                  * ```
@@ -32151,7 +30454,7 @@ private constructor(
 
                 private var cadence: JsonField<Cadence>? = null
                 private var itemId: JsonField<String>? = null
-                private var modelType: JsonField<ModelType>? = null
+                private var modelType: JsonValue = JsonValue.from("tiered_with_proration")
                 private var name: JsonField<String>? = null
                 private var tieredWithProrationConfig: JsonField<TieredWithProrationConfig>? = null
                 private var billableMetricId: JsonField<String> = JsonMissing.of()
@@ -32217,18 +30520,19 @@ private constructor(
                  */
                 fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
-                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
-
                 /**
-                 * Sets [Builder.modelType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.modelType] with a well-typed [ModelType] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("tiered_with_proration")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun modelType(modelType: JsonField<ModelType>) = apply {
-                    this.modelType = modelType
-                }
+                fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
 
                 /** The name of the price. */
                 fun name(name: String) = name(JsonField.of(name))
@@ -32541,7 +30845,6 @@ private constructor(
                  * ```java
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * .tieredWithProrationConfig()
                  * ```
@@ -32552,7 +30855,7 @@ private constructor(
                     NewPlanTierWithProrationPrice(
                         checkRequired("cadence", cadence),
                         checkRequired("itemId", itemId),
-                        checkRequired("modelType", modelType),
+                        modelType,
                         checkRequired("name", name),
                         checkRequired("tieredWithProrationConfig", tieredWithProrationConfig),
                         billableMetricId,
@@ -32578,7 +30881,11 @@ private constructor(
 
                 cadence().validate()
                 itemId()
-                modelType().validate()
+                _modelType().let {
+                    if (it != JsonValue.from("tiered_with_proration")) {
+                        throw OrbInvalidDataException("'modelType' is invalid, received $it")
+                    }
+                }
                 name()
                 tieredWithProrationConfig().validate()
                 billableMetricId()
@@ -32612,7 +30919,7 @@ private constructor(
             internal fun validity(): Int =
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (itemId.asKnown().isPresent) 1 else 0) +
-                    (modelType.asKnown().getOrNull()?.validity() ?: 0) +
+                    modelType.let { if (it == JsonValue.from("tiered_with_proration")) 1 else 0 } +
                     (if (name.asKnown().isPresent) 1 else 0) +
                     (tieredWithProrationConfig.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (billableMetricId.asKnown().isPresent) 1 else 0) +
@@ -32775,131 +31082,6 @@ private constructor(
                     }
 
                     return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
-
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField val TIERED_WITH_PRORATION = of("tiered_with_proration")
-
-                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
-                }
-
-                /** An enum containing [ModelType]'s known values. */
-                enum class Known {
-                    TIERED_WITH_PRORATION
-                }
-
-                /**
-                 * An enum containing [ModelType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [ModelType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    TIERED_WITH_PRORATION,
-                    /**
-                     * An enum member indicating that [ModelType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        TIERED_WITH_PRORATION -> Value.TIERED_WITH_PRORATION
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value is a not a known
-                 *   member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        TIERED_WITH_PRORATION -> Known.TIERED_WITH_PRORATION
-                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value does not have the
-                 *   expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        OrbInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                fun validate(): ModelType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: OrbInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return /* spotless:off */ other is ModelType && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -33868,7 +32050,7 @@ private constructor(
         private constructor(
             private val cadence: JsonField<Cadence>,
             private val itemId: JsonField<String>,
-            private val modelType: JsonField<ModelType>,
+            private val modelType: JsonValue,
             private val name: JsonField<String>,
             private val unitWithProrationConfig: JsonField<UnitWithProrationConfig>,
             private val billableMetricId: JsonField<String>,
@@ -33892,9 +32074,7 @@ private constructor(
                 @JsonProperty("item_id")
                 @ExcludeMissing
                 itemId: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("model_type")
-                @ExcludeMissing
-                modelType: JsonField<ModelType> = JsonMissing.of(),
+                @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("unit_with_proration_config")
                 @ExcludeMissing
@@ -33968,11 +32148,15 @@ private constructor(
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("unit_with_proration")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun modelType(): ModelType = modelType.getRequired("model_type")
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
 
             /**
              * The name of the price.
@@ -34096,16 +32280,6 @@ private constructor(
              * Unlike [itemId], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("item_id") @ExcludeMissing fun _itemId(): JsonField<String> = itemId
-
-            /**
-             * Returns the raw JSON value of [modelType].
-             *
-             * Unlike [modelType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType(): JsonField<ModelType> = modelType
 
             /**
              * Returns the raw JSON value of [name].
@@ -34247,7 +32421,6 @@ private constructor(
                  * ```java
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * .unitWithProrationConfig()
                  * ```
@@ -34260,7 +32433,7 @@ private constructor(
 
                 private var cadence: JsonField<Cadence>? = null
                 private var itemId: JsonField<String>? = null
-                private var modelType: JsonField<ModelType>? = null
+                private var modelType: JsonValue = JsonValue.from("unit_with_proration")
                 private var name: JsonField<String>? = null
                 private var unitWithProrationConfig: JsonField<UnitWithProrationConfig>? = null
                 private var billableMetricId: JsonField<String> = JsonMissing.of()
@@ -34326,18 +32499,19 @@ private constructor(
                  */
                 fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
-                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
-
                 /**
-                 * Sets [Builder.modelType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.modelType] with a well-typed [ModelType] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("unit_with_proration")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun modelType(modelType: JsonField<ModelType>) = apply {
-                    this.modelType = modelType
-                }
+                fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
 
                 /** The name of the price. */
                 fun name(name: String) = name(JsonField.of(name))
@@ -34649,7 +32823,6 @@ private constructor(
                  * ```java
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * .unitWithProrationConfig()
                  * ```
@@ -34660,7 +32833,7 @@ private constructor(
                     NewPlanUnitWithProrationPrice(
                         checkRequired("cadence", cadence),
                         checkRequired("itemId", itemId),
-                        checkRequired("modelType", modelType),
+                        modelType,
                         checkRequired("name", name),
                         checkRequired("unitWithProrationConfig", unitWithProrationConfig),
                         billableMetricId,
@@ -34686,7 +32859,11 @@ private constructor(
 
                 cadence().validate()
                 itemId()
-                modelType().validate()
+                _modelType().let {
+                    if (it != JsonValue.from("unit_with_proration")) {
+                        throw OrbInvalidDataException("'modelType' is invalid, received $it")
+                    }
+                }
                 name()
                 unitWithProrationConfig().validate()
                 billableMetricId()
@@ -34720,7 +32897,7 @@ private constructor(
             internal fun validity(): Int =
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (itemId.asKnown().isPresent) 1 else 0) +
-                    (modelType.asKnown().getOrNull()?.validity() ?: 0) +
+                    modelType.let { if (it == JsonValue.from("unit_with_proration")) 1 else 0 } +
                     (if (name.asKnown().isPresent) 1 else 0) +
                     (unitWithProrationConfig.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (billableMetricId.asKnown().isPresent) 1 else 0) +
@@ -34883,131 +33060,6 @@ private constructor(
                     }
 
                     return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
-
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField val UNIT_WITH_PRORATION = of("unit_with_proration")
-
-                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
-                }
-
-                /** An enum containing [ModelType]'s known values. */
-                enum class Known {
-                    UNIT_WITH_PRORATION
-                }
-
-                /**
-                 * An enum containing [ModelType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [ModelType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    UNIT_WITH_PRORATION,
-                    /**
-                     * An enum member indicating that [ModelType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        UNIT_WITH_PRORATION -> Value.UNIT_WITH_PRORATION
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value is a not a known
-                 *   member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        UNIT_WITH_PRORATION -> Known.UNIT_WITH_PRORATION
-                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value does not have the
-                 *   expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        OrbInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                fun validate(): ModelType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: OrbInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return /* spotless:off */ other is ModelType && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -35976,7 +34028,7 @@ private constructor(
             private val cadence: JsonField<Cadence>,
             private val groupedAllocationConfig: JsonField<GroupedAllocationConfig>,
             private val itemId: JsonField<String>,
-            private val modelType: JsonField<ModelType>,
+            private val modelType: JsonValue,
             private val name: JsonField<String>,
             private val billableMetricId: JsonField<String>,
             private val billedInAdvance: JsonField<Boolean>,
@@ -36002,9 +34054,7 @@ private constructor(
                 @JsonProperty("item_id")
                 @ExcludeMissing
                 itemId: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("model_type")
-                @ExcludeMissing
-                modelType: JsonField<ModelType> = JsonMissing.of(),
+                @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("billable_metric_id")
                 @ExcludeMissing
@@ -36083,11 +34133,15 @@ private constructor(
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("grouped_allocation")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun modelType(): ModelType = modelType.getRequired("model_type")
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
 
             /**
              * The name of the price.
@@ -36214,16 +34268,6 @@ private constructor(
              * Unlike [itemId], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("item_id") @ExcludeMissing fun _itemId(): JsonField<String> = itemId
-
-            /**
-             * Returns the raw JSON value of [modelType].
-             *
-             * Unlike [modelType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType(): JsonField<ModelType> = modelType
 
             /**
              * Returns the raw JSON value of [name].
@@ -36355,7 +34399,6 @@ private constructor(
                  * .cadence()
                  * .groupedAllocationConfig()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * ```
                  */
@@ -36368,7 +34411,7 @@ private constructor(
                 private var cadence: JsonField<Cadence>? = null
                 private var groupedAllocationConfig: JsonField<GroupedAllocationConfig>? = null
                 private var itemId: JsonField<String>? = null
-                private var modelType: JsonField<ModelType>? = null
+                private var modelType: JsonValue = JsonValue.from("grouped_allocation")
                 private var name: JsonField<String>? = null
                 private var billableMetricId: JsonField<String> = JsonMissing.of()
                 private var billedInAdvance: JsonField<Boolean> = JsonMissing.of()
@@ -36447,18 +34490,19 @@ private constructor(
                  */
                 fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
-                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
-
                 /**
-                 * Sets [Builder.modelType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.modelType] with a well-typed [ModelType] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("grouped_allocation")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun modelType(modelType: JsonField<ModelType>) = apply {
-                    this.modelType = modelType
-                }
+                fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
 
                 /** The name of the price. */
                 fun name(name: String) = name(JsonField.of(name))
@@ -36757,7 +34801,6 @@ private constructor(
                  * .cadence()
                  * .groupedAllocationConfig()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * ```
                  *
@@ -36768,7 +34811,7 @@ private constructor(
                         checkRequired("cadence", cadence),
                         checkRequired("groupedAllocationConfig", groupedAllocationConfig),
                         checkRequired("itemId", itemId),
-                        checkRequired("modelType", modelType),
+                        modelType,
                         checkRequired("name", name),
                         billableMetricId,
                         billedInAdvance,
@@ -36794,7 +34837,11 @@ private constructor(
                 cadence().validate()
                 groupedAllocationConfig().validate()
                 itemId()
-                modelType().validate()
+                _modelType().let {
+                    if (it != JsonValue.from("grouped_allocation")) {
+                        throw OrbInvalidDataException("'modelType' is invalid, received $it")
+                    }
+                }
                 name()
                 billableMetricId()
                 billedInAdvance()
@@ -36828,7 +34875,7 @@ private constructor(
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
                     (groupedAllocationConfig.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (itemId.asKnown().isPresent) 1 else 0) +
-                    (modelType.asKnown().getOrNull()?.validity() ?: 0) +
+                    modelType.let { if (it == JsonValue.from("grouped_allocation")) 1 else 0 } +
                     (if (name.asKnown().isPresent) 1 else 0) +
                     (if (billableMetricId.asKnown().isPresent) 1 else 0) +
                     (if (billedInAdvance.asKnown().isPresent) 1 else 0) +
@@ -37107,131 +35154,6 @@ private constructor(
 
                 override fun toString() =
                     "GroupedAllocationConfig{additionalProperties=$additionalProperties}"
-            }
-
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField val GROUPED_ALLOCATION = of("grouped_allocation")
-
-                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
-                }
-
-                /** An enum containing [ModelType]'s known values. */
-                enum class Known {
-                    GROUPED_ALLOCATION
-                }
-
-                /**
-                 * An enum containing [ModelType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [ModelType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    GROUPED_ALLOCATION,
-                    /**
-                     * An enum member indicating that [ModelType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        GROUPED_ALLOCATION -> Value.GROUPED_ALLOCATION
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value is a not a known
-                 *   member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        GROUPED_ALLOCATION -> Known.GROUPED_ALLOCATION
-                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value does not have the
-                 *   expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        OrbInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                fun validate(): ModelType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: OrbInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return /* spotless:off */ other is ModelType && value == other.value /* spotless:on */
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
             }
 
             /**
@@ -38084,7 +36006,7 @@ private constructor(
             private val groupedWithProratedMinimumConfig:
                 JsonField<GroupedWithProratedMinimumConfig>,
             private val itemId: JsonField<String>,
-            private val modelType: JsonField<ModelType>,
+            private val modelType: JsonValue,
             private val name: JsonField<String>,
             private val billableMetricId: JsonField<String>,
             private val billedInAdvance: JsonField<Boolean>,
@@ -38111,9 +36033,7 @@ private constructor(
                 @JsonProperty("item_id")
                 @ExcludeMissing
                 itemId: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("model_type")
-                @ExcludeMissing
-                modelType: JsonField<ModelType> = JsonMissing.of(),
+                @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("billable_metric_id")
                 @ExcludeMissing
@@ -38192,11 +36112,15 @@ private constructor(
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("grouped_with_prorated_minimum")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun modelType(): ModelType = modelType.getRequired("model_type")
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
 
             /**
              * The name of the price.
@@ -38323,16 +36247,6 @@ private constructor(
              * Unlike [itemId], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("item_id") @ExcludeMissing fun _itemId(): JsonField<String> = itemId
-
-            /**
-             * Returns the raw JSON value of [modelType].
-             *
-             * Unlike [modelType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType(): JsonField<ModelType> = modelType
 
             /**
              * Returns the raw JSON value of [name].
@@ -38464,7 +36378,6 @@ private constructor(
                  * .cadence()
                  * .groupedWithProratedMinimumConfig()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * ```
                  */
@@ -38479,7 +36392,7 @@ private constructor(
                     JsonField<GroupedWithProratedMinimumConfig>? =
                     null
                 private var itemId: JsonField<String>? = null
-                private var modelType: JsonField<ModelType>? = null
+                private var modelType: JsonValue = JsonValue.from("grouped_with_prorated_minimum")
                 private var name: JsonField<String>? = null
                 private var billableMetricId: JsonField<String> = JsonMissing.of()
                 private var billedInAdvance: JsonField<Boolean> = JsonMissing.of()
@@ -38562,18 +36475,19 @@ private constructor(
                  */
                 fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
-                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
-
                 /**
-                 * Sets [Builder.modelType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.modelType] with a well-typed [ModelType] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("grouped_with_prorated_minimum")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun modelType(modelType: JsonField<ModelType>) = apply {
-                    this.modelType = modelType
-                }
+                fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
 
                 /** The name of the price. */
                 fun name(name: String) = name(JsonField.of(name))
@@ -38872,7 +36786,6 @@ private constructor(
                  * .cadence()
                  * .groupedWithProratedMinimumConfig()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * ```
                  *
@@ -38886,7 +36799,7 @@ private constructor(
                             groupedWithProratedMinimumConfig,
                         ),
                         checkRequired("itemId", itemId),
-                        checkRequired("modelType", modelType),
+                        modelType,
                         checkRequired("name", name),
                         billableMetricId,
                         billedInAdvance,
@@ -38912,7 +36825,11 @@ private constructor(
                 cadence().validate()
                 groupedWithProratedMinimumConfig().validate()
                 itemId()
-                modelType().validate()
+                _modelType().let {
+                    if (it != JsonValue.from("grouped_with_prorated_minimum")) {
+                        throw OrbInvalidDataException("'modelType' is invalid, received $it")
+                    }
+                }
                 name()
                 billableMetricId()
                 billedInAdvance()
@@ -38946,7 +36863,9 @@ private constructor(
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
                     (groupedWithProratedMinimumConfig.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (itemId.asKnown().isPresent) 1 else 0) +
-                    (modelType.asKnown().getOrNull()?.validity() ?: 0) +
+                    modelType.let {
+                        if (it == JsonValue.from("grouped_with_prorated_minimum")) 1 else 0
+                    } +
                     (if (name.asKnown().isPresent) 1 else 0) +
                     (if (billableMetricId.asKnown().isPresent) 1 else 0) +
                     (if (billedInAdvance.asKnown().isPresent) 1 else 0) +
@@ -39227,132 +37146,6 @@ private constructor(
 
                 override fun toString() =
                     "GroupedWithProratedMinimumConfig{additionalProperties=$additionalProperties}"
-            }
-
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField
-                    val GROUPED_WITH_PRORATED_MINIMUM = of("grouped_with_prorated_minimum")
-
-                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
-                }
-
-                /** An enum containing [ModelType]'s known values. */
-                enum class Known {
-                    GROUPED_WITH_PRORATED_MINIMUM
-                }
-
-                /**
-                 * An enum containing [ModelType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [ModelType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    GROUPED_WITH_PRORATED_MINIMUM,
-                    /**
-                     * An enum member indicating that [ModelType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        GROUPED_WITH_PRORATED_MINIMUM -> Value.GROUPED_WITH_PRORATED_MINIMUM
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value is a not a known
-                 *   member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        GROUPED_WITH_PRORATED_MINIMUM -> Known.GROUPED_WITH_PRORATED_MINIMUM
-                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value does not have the
-                 *   expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        OrbInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                fun validate(): ModelType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: OrbInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return /* spotless:off */ other is ModelType && value == other.value /* spotless:on */
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
             }
 
             /**
@@ -40204,7 +37997,7 @@ private constructor(
             private val cadence: JsonField<Cadence>,
             private val groupedWithMeteredMinimumConfig: JsonField<GroupedWithMeteredMinimumConfig>,
             private val itemId: JsonField<String>,
-            private val modelType: JsonField<ModelType>,
+            private val modelType: JsonValue,
             private val name: JsonField<String>,
             private val billableMetricId: JsonField<String>,
             private val billedInAdvance: JsonField<Boolean>,
@@ -40231,9 +38024,7 @@ private constructor(
                 @JsonProperty("item_id")
                 @ExcludeMissing
                 itemId: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("model_type")
-                @ExcludeMissing
-                modelType: JsonField<ModelType> = JsonMissing.of(),
+                @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("billable_metric_id")
                 @ExcludeMissing
@@ -40312,11 +38103,15 @@ private constructor(
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("grouped_with_metered_minimum")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun modelType(): ModelType = modelType.getRequired("model_type")
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
 
             /**
              * The name of the price.
@@ -40443,16 +38238,6 @@ private constructor(
              * Unlike [itemId], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("item_id") @ExcludeMissing fun _itemId(): JsonField<String> = itemId
-
-            /**
-             * Returns the raw JSON value of [modelType].
-             *
-             * Unlike [modelType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType(): JsonField<ModelType> = modelType
 
             /**
              * Returns the raw JSON value of [name].
@@ -40584,7 +38369,6 @@ private constructor(
                  * .cadence()
                  * .groupedWithMeteredMinimumConfig()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * ```
                  */
@@ -40599,7 +38383,7 @@ private constructor(
                     JsonField<GroupedWithMeteredMinimumConfig>? =
                     null
                 private var itemId: JsonField<String>? = null
-                private var modelType: JsonField<ModelType>? = null
+                private var modelType: JsonValue = JsonValue.from("grouped_with_metered_minimum")
                 private var name: JsonField<String>? = null
                 private var billableMetricId: JsonField<String> = JsonMissing.of()
                 private var billedInAdvance: JsonField<Boolean> = JsonMissing.of()
@@ -40680,18 +38464,19 @@ private constructor(
                  */
                 fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
-                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
-
                 /**
-                 * Sets [Builder.modelType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.modelType] with a well-typed [ModelType] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("grouped_with_metered_minimum")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun modelType(modelType: JsonField<ModelType>) = apply {
-                    this.modelType = modelType
-                }
+                fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
 
                 /** The name of the price. */
                 fun name(name: String) = name(JsonField.of(name))
@@ -40990,7 +38775,6 @@ private constructor(
                  * .cadence()
                  * .groupedWithMeteredMinimumConfig()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * ```
                  *
@@ -41004,7 +38788,7 @@ private constructor(
                             groupedWithMeteredMinimumConfig,
                         ),
                         checkRequired("itemId", itemId),
-                        checkRequired("modelType", modelType),
+                        modelType,
                         checkRequired("name", name),
                         billableMetricId,
                         billedInAdvance,
@@ -41030,7 +38814,11 @@ private constructor(
                 cadence().validate()
                 groupedWithMeteredMinimumConfig().validate()
                 itemId()
-                modelType().validate()
+                _modelType().let {
+                    if (it != JsonValue.from("grouped_with_metered_minimum")) {
+                        throw OrbInvalidDataException("'modelType' is invalid, received $it")
+                    }
+                }
                 name()
                 billableMetricId()
                 billedInAdvance()
@@ -41064,7 +38852,9 @@ private constructor(
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
                     (groupedWithMeteredMinimumConfig.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (itemId.asKnown().isPresent) 1 else 0) +
-                    (modelType.asKnown().getOrNull()?.validity() ?: 0) +
+                    modelType.let {
+                        if (it == JsonValue.from("grouped_with_metered_minimum")) 1 else 0
+                    } +
                     (if (name.asKnown().isPresent) 1 else 0) +
                     (if (billableMetricId.asKnown().isPresent) 1 else 0) +
                     (if (billedInAdvance.asKnown().isPresent) 1 else 0) +
@@ -41345,131 +39135,6 @@ private constructor(
 
                 override fun toString() =
                     "GroupedWithMeteredMinimumConfig{additionalProperties=$additionalProperties}"
-            }
-
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField val GROUPED_WITH_METERED_MINIMUM = of("grouped_with_metered_minimum")
-
-                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
-                }
-
-                /** An enum containing [ModelType]'s known values. */
-                enum class Known {
-                    GROUPED_WITH_METERED_MINIMUM
-                }
-
-                /**
-                 * An enum containing [ModelType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [ModelType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    GROUPED_WITH_METERED_MINIMUM,
-                    /**
-                     * An enum member indicating that [ModelType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        GROUPED_WITH_METERED_MINIMUM -> Value.GROUPED_WITH_METERED_MINIMUM
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value is a not a known
-                 *   member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        GROUPED_WITH_METERED_MINIMUM -> Known.GROUPED_WITH_METERED_MINIMUM
-                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value does not have the
-                 *   expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        OrbInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                fun validate(): ModelType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: OrbInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return /* spotless:off */ other is ModelType && value == other.value /* spotless:on */
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
             }
 
             /**
@@ -42321,7 +39986,7 @@ private constructor(
             private val cadence: JsonField<Cadence>,
             private val itemId: JsonField<String>,
             private val matrixWithDisplayNameConfig: JsonField<MatrixWithDisplayNameConfig>,
-            private val modelType: JsonField<ModelType>,
+            private val modelType: JsonValue,
             private val name: JsonField<String>,
             private val billableMetricId: JsonField<String>,
             private val billedInAdvance: JsonField<Boolean>,
@@ -42348,9 +40013,7 @@ private constructor(
                 @ExcludeMissing
                 matrixWithDisplayNameConfig: JsonField<MatrixWithDisplayNameConfig> =
                     JsonMissing.of(),
-                @JsonProperty("model_type")
-                @ExcludeMissing
-                modelType: JsonField<ModelType> = JsonMissing.of(),
+                @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("billable_metric_id")
                 @ExcludeMissing
@@ -42429,11 +40092,15 @@ private constructor(
                 matrixWithDisplayNameConfig.getRequired("matrix_with_display_name_config")
 
             /**
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("matrix_with_display_name")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun modelType(): ModelType = modelType.getRequired("model_type")
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
 
             /**
              * The name of the price.
@@ -42560,16 +40227,6 @@ private constructor(
             @ExcludeMissing
             fun _matrixWithDisplayNameConfig(): JsonField<MatrixWithDisplayNameConfig> =
                 matrixWithDisplayNameConfig
-
-            /**
-             * Returns the raw JSON value of [modelType].
-             *
-             * Unlike [modelType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType(): JsonField<ModelType> = modelType
 
             /**
              * Returns the raw JSON value of [name].
@@ -42701,7 +40358,6 @@ private constructor(
                  * .cadence()
                  * .itemId()
                  * .matrixWithDisplayNameConfig()
-                 * .modelType()
                  * .name()
                  * ```
                  */
@@ -42715,7 +40371,7 @@ private constructor(
                 private var itemId: JsonField<String>? = null
                 private var matrixWithDisplayNameConfig: JsonField<MatrixWithDisplayNameConfig>? =
                     null
-                private var modelType: JsonField<ModelType>? = null
+                private var modelType: JsonValue = JsonValue.from("matrix_with_display_name")
                 private var name: JsonField<String>? = null
                 private var billableMetricId: JsonField<String> = JsonMissing.of()
                 private var billedInAdvance: JsonField<Boolean> = JsonMissing.of()
@@ -42796,18 +40452,19 @@ private constructor(
                     matrixWithDisplayNameConfig: JsonField<MatrixWithDisplayNameConfig>
                 ) = apply { this.matrixWithDisplayNameConfig = matrixWithDisplayNameConfig }
 
-                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
-
                 /**
-                 * Sets [Builder.modelType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.modelType] with a well-typed [ModelType] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("matrix_with_display_name")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun modelType(modelType: JsonField<ModelType>) = apply {
-                    this.modelType = modelType
-                }
+                fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
 
                 /** The name of the price. */
                 fun name(name: String) = name(JsonField.of(name))
@@ -43106,7 +40763,6 @@ private constructor(
                  * .cadence()
                  * .itemId()
                  * .matrixWithDisplayNameConfig()
-                 * .modelType()
                  * .name()
                  * ```
                  *
@@ -43117,7 +40773,7 @@ private constructor(
                         checkRequired("cadence", cadence),
                         checkRequired("itemId", itemId),
                         checkRequired("matrixWithDisplayNameConfig", matrixWithDisplayNameConfig),
-                        checkRequired("modelType", modelType),
+                        modelType,
                         checkRequired("name", name),
                         billableMetricId,
                         billedInAdvance,
@@ -43143,7 +40799,11 @@ private constructor(
                 cadence().validate()
                 itemId()
                 matrixWithDisplayNameConfig().validate()
-                modelType().validate()
+                _modelType().let {
+                    if (it != JsonValue.from("matrix_with_display_name")) {
+                        throw OrbInvalidDataException("'modelType' is invalid, received $it")
+                    }
+                }
                 name()
                 billableMetricId()
                 billedInAdvance()
@@ -43177,7 +40837,9 @@ private constructor(
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (itemId.asKnown().isPresent) 1 else 0) +
                     (matrixWithDisplayNameConfig.asKnown().getOrNull()?.validity() ?: 0) +
-                    (modelType.asKnown().getOrNull()?.validity() ?: 0) +
+                    modelType.let {
+                        if (it == JsonValue.from("matrix_with_display_name")) 1 else 0
+                    } +
                     (if (name.asKnown().isPresent) 1 else 0) +
                     (if (billableMetricId.asKnown().isPresent) 1 else 0) +
                     (if (billedInAdvance.asKnown().isPresent) 1 else 0) +
@@ -43457,131 +41119,6 @@ private constructor(
 
                 override fun toString() =
                     "MatrixWithDisplayNameConfig{additionalProperties=$additionalProperties}"
-            }
-
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField val MATRIX_WITH_DISPLAY_NAME = of("matrix_with_display_name")
-
-                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
-                }
-
-                /** An enum containing [ModelType]'s known values. */
-                enum class Known {
-                    MATRIX_WITH_DISPLAY_NAME
-                }
-
-                /**
-                 * An enum containing [ModelType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [ModelType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    MATRIX_WITH_DISPLAY_NAME,
-                    /**
-                     * An enum member indicating that [ModelType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        MATRIX_WITH_DISPLAY_NAME -> Value.MATRIX_WITH_DISPLAY_NAME
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value is a not a known
-                 *   member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        MATRIX_WITH_DISPLAY_NAME -> Known.MATRIX_WITH_DISPLAY_NAME
-                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value does not have the
-                 *   expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        OrbInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                fun validate(): ModelType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: OrbInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return /* spotless:off */ other is ModelType && value == other.value /* spotless:on */
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
             }
 
             /**
@@ -44433,7 +41970,7 @@ private constructor(
             private val bulkWithProrationConfig: JsonField<BulkWithProrationConfig>,
             private val cadence: JsonField<Cadence>,
             private val itemId: JsonField<String>,
-            private val modelType: JsonField<ModelType>,
+            private val modelType: JsonValue,
             private val name: JsonField<String>,
             private val billableMetricId: JsonField<String>,
             private val billedInAdvance: JsonField<Boolean>,
@@ -44459,9 +41996,7 @@ private constructor(
                 @JsonProperty("item_id")
                 @ExcludeMissing
                 itemId: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("model_type")
-                @ExcludeMissing
-                modelType: JsonField<ModelType> = JsonMissing.of(),
+                @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("billable_metric_id")
                 @ExcludeMissing
@@ -44540,11 +42075,15 @@ private constructor(
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("bulk_with_proration")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun modelType(): ModelType = modelType.getRequired("model_type")
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
 
             /**
              * The name of the price.
@@ -44671,16 +42210,6 @@ private constructor(
              * Unlike [itemId], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("item_id") @ExcludeMissing fun _itemId(): JsonField<String> = itemId
-
-            /**
-             * Returns the raw JSON value of [modelType].
-             *
-             * Unlike [modelType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType(): JsonField<ModelType> = modelType
 
             /**
              * Returns the raw JSON value of [name].
@@ -44812,7 +42341,6 @@ private constructor(
                  * .bulkWithProrationConfig()
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * ```
                  */
@@ -44825,7 +42353,7 @@ private constructor(
                 private var bulkWithProrationConfig: JsonField<BulkWithProrationConfig>? = null
                 private var cadence: JsonField<Cadence>? = null
                 private var itemId: JsonField<String>? = null
-                private var modelType: JsonField<ModelType>? = null
+                private var modelType: JsonValue = JsonValue.from("bulk_with_proration")
                 private var name: JsonField<String>? = null
                 private var billableMetricId: JsonField<String> = JsonMissing.of()
                 private var billedInAdvance: JsonField<Boolean> = JsonMissing.of()
@@ -44904,18 +42432,19 @@ private constructor(
                  */
                 fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
-                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
-
                 /**
-                 * Sets [Builder.modelType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.modelType] with a well-typed [ModelType] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("bulk_with_proration")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun modelType(modelType: JsonField<ModelType>) = apply {
-                    this.modelType = modelType
-                }
+                fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
 
                 /** The name of the price. */
                 fun name(name: String) = name(JsonField.of(name))
@@ -45214,7 +42743,6 @@ private constructor(
                  * .bulkWithProrationConfig()
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * ```
                  *
@@ -45225,7 +42753,7 @@ private constructor(
                         checkRequired("bulkWithProrationConfig", bulkWithProrationConfig),
                         checkRequired("cadence", cadence),
                         checkRequired("itemId", itemId),
-                        checkRequired("modelType", modelType),
+                        modelType,
                         checkRequired("name", name),
                         billableMetricId,
                         billedInAdvance,
@@ -45251,7 +42779,11 @@ private constructor(
                 bulkWithProrationConfig().validate()
                 cadence().validate()
                 itemId()
-                modelType().validate()
+                _modelType().let {
+                    if (it != JsonValue.from("bulk_with_proration")) {
+                        throw OrbInvalidDataException("'modelType' is invalid, received $it")
+                    }
+                }
                 name()
                 billableMetricId()
                 billedInAdvance()
@@ -45285,7 +42817,7 @@ private constructor(
                 (bulkWithProrationConfig.asKnown().getOrNull()?.validity() ?: 0) +
                     (cadence.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (itemId.asKnown().isPresent) 1 else 0) +
-                    (modelType.asKnown().getOrNull()?.validity() ?: 0) +
+                    modelType.let { if (it == JsonValue.from("bulk_with_proration")) 1 else 0 } +
                     (if (name.asKnown().isPresent) 1 else 0) +
                     (if (billableMetricId.asKnown().isPresent) 1 else 0) +
                     (if (billedInAdvance.asKnown().isPresent) 1 else 0) +
@@ -45559,131 +43091,6 @@ private constructor(
                     }
 
                     return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
-
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField val BULK_WITH_PRORATION = of("bulk_with_proration")
-
-                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
-                }
-
-                /** An enum containing [ModelType]'s known values. */
-                enum class Known {
-                    BULK_WITH_PRORATION
-                }
-
-                /**
-                 * An enum containing [ModelType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [ModelType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    BULK_WITH_PRORATION,
-                    /**
-                     * An enum member indicating that [ModelType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        BULK_WITH_PRORATION -> Value.BULK_WITH_PRORATION
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value is a not a known
-                 *   member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        BULK_WITH_PRORATION -> Known.BULK_WITH_PRORATION
-                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value does not have the
-                 *   expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        OrbInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                fun validate(): ModelType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: OrbInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return /* spotless:off */ other is ModelType && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -46540,7 +43947,7 @@ private constructor(
             private val cadence: JsonField<Cadence>,
             private val groupedTieredPackageConfig: JsonField<GroupedTieredPackageConfig>,
             private val itemId: JsonField<String>,
-            private val modelType: JsonField<ModelType>,
+            private val modelType: JsonValue,
             private val name: JsonField<String>,
             private val billableMetricId: JsonField<String>,
             private val billedInAdvance: JsonField<Boolean>,
@@ -46567,9 +43974,7 @@ private constructor(
                 @JsonProperty("item_id")
                 @ExcludeMissing
                 itemId: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("model_type")
-                @ExcludeMissing
-                modelType: JsonField<ModelType> = JsonMissing.of(),
+                @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("billable_metric_id")
                 @ExcludeMissing
@@ -46648,11 +44053,15 @@ private constructor(
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("grouped_tiered_package")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun modelType(): ModelType = modelType.getRequired("model_type")
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
 
             /**
              * The name of the price.
@@ -46779,16 +44188,6 @@ private constructor(
              * Unlike [itemId], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("item_id") @ExcludeMissing fun _itemId(): JsonField<String> = itemId
-
-            /**
-             * Returns the raw JSON value of [modelType].
-             *
-             * Unlike [modelType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType(): JsonField<ModelType> = modelType
 
             /**
              * Returns the raw JSON value of [name].
@@ -46920,7 +44319,6 @@ private constructor(
                  * .cadence()
                  * .groupedTieredPackageConfig()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * ```
                  */
@@ -46934,7 +44332,7 @@ private constructor(
                 private var groupedTieredPackageConfig: JsonField<GroupedTieredPackageConfig>? =
                     null
                 private var itemId: JsonField<String>? = null
-                private var modelType: JsonField<ModelType>? = null
+                private var modelType: JsonValue = JsonValue.from("grouped_tiered_package")
                 private var name: JsonField<String>? = null
                 private var billableMetricId: JsonField<String> = JsonMissing.of()
                 private var billedInAdvance: JsonField<Boolean> = JsonMissing.of()
@@ -47015,18 +44413,19 @@ private constructor(
                  */
                 fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
-                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
-
                 /**
-                 * Sets [Builder.modelType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.modelType] with a well-typed [ModelType] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("grouped_tiered_package")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun modelType(modelType: JsonField<ModelType>) = apply {
-                    this.modelType = modelType
-                }
+                fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
 
                 /** The name of the price. */
                 fun name(name: String) = name(JsonField.of(name))
@@ -47325,7 +44724,6 @@ private constructor(
                  * .cadence()
                  * .groupedTieredPackageConfig()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * ```
                  *
@@ -47336,7 +44734,7 @@ private constructor(
                         checkRequired("cadence", cadence),
                         checkRequired("groupedTieredPackageConfig", groupedTieredPackageConfig),
                         checkRequired("itemId", itemId),
-                        checkRequired("modelType", modelType),
+                        modelType,
                         checkRequired("name", name),
                         billableMetricId,
                         billedInAdvance,
@@ -47362,7 +44760,11 @@ private constructor(
                 cadence().validate()
                 groupedTieredPackageConfig().validate()
                 itemId()
-                modelType().validate()
+                _modelType().let {
+                    if (it != JsonValue.from("grouped_tiered_package")) {
+                        throw OrbInvalidDataException("'modelType' is invalid, received $it")
+                    }
+                }
                 name()
                 billableMetricId()
                 billedInAdvance()
@@ -47396,7 +44798,7 @@ private constructor(
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
                     (groupedTieredPackageConfig.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (itemId.asKnown().isPresent) 1 else 0) +
-                    (modelType.asKnown().getOrNull()?.validity() ?: 0) +
+                    modelType.let { if (it == JsonValue.from("grouped_tiered_package")) 1 else 0 } +
                     (if (name.asKnown().isPresent) 1 else 0) +
                     (if (billableMetricId.asKnown().isPresent) 1 else 0) +
                     (if (billedInAdvance.asKnown().isPresent) 1 else 0) +
@@ -47676,131 +45078,6 @@ private constructor(
 
                 override fun toString() =
                     "GroupedTieredPackageConfig{additionalProperties=$additionalProperties}"
-            }
-
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField val GROUPED_TIERED_PACKAGE = of("grouped_tiered_package")
-
-                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
-                }
-
-                /** An enum containing [ModelType]'s known values. */
-                enum class Known {
-                    GROUPED_TIERED_PACKAGE
-                }
-
-                /**
-                 * An enum containing [ModelType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [ModelType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    GROUPED_TIERED_PACKAGE,
-                    /**
-                     * An enum member indicating that [ModelType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        GROUPED_TIERED_PACKAGE -> Value.GROUPED_TIERED_PACKAGE
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value is a not a known
-                 *   member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        GROUPED_TIERED_PACKAGE -> Known.GROUPED_TIERED_PACKAGE
-                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value does not have the
-                 *   expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        OrbInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                fun validate(): ModelType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: OrbInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return /* spotless:off */ other is ModelType && value == other.value /* spotless:on */
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
             }
 
             /**
@@ -48652,7 +45929,7 @@ private constructor(
             private val cadence: JsonField<Cadence>,
             private val itemId: JsonField<String>,
             private val maxGroupTieredPackageConfig: JsonField<MaxGroupTieredPackageConfig>,
-            private val modelType: JsonField<ModelType>,
+            private val modelType: JsonValue,
             private val name: JsonField<String>,
             private val billableMetricId: JsonField<String>,
             private val billedInAdvance: JsonField<Boolean>,
@@ -48679,9 +45956,7 @@ private constructor(
                 @ExcludeMissing
                 maxGroupTieredPackageConfig: JsonField<MaxGroupTieredPackageConfig> =
                     JsonMissing.of(),
-                @JsonProperty("model_type")
-                @ExcludeMissing
-                modelType: JsonField<ModelType> = JsonMissing.of(),
+                @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("billable_metric_id")
                 @ExcludeMissing
@@ -48760,11 +46035,15 @@ private constructor(
                 maxGroupTieredPackageConfig.getRequired("max_group_tiered_package_config")
 
             /**
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("max_group_tiered_package")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun modelType(): ModelType = modelType.getRequired("model_type")
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
 
             /**
              * The name of the price.
@@ -48891,16 +46170,6 @@ private constructor(
             @ExcludeMissing
             fun _maxGroupTieredPackageConfig(): JsonField<MaxGroupTieredPackageConfig> =
                 maxGroupTieredPackageConfig
-
-            /**
-             * Returns the raw JSON value of [modelType].
-             *
-             * Unlike [modelType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType(): JsonField<ModelType> = modelType
 
             /**
              * Returns the raw JSON value of [name].
@@ -49032,7 +46301,6 @@ private constructor(
                  * .cadence()
                  * .itemId()
                  * .maxGroupTieredPackageConfig()
-                 * .modelType()
                  * .name()
                  * ```
                  */
@@ -49046,7 +46314,7 @@ private constructor(
                 private var itemId: JsonField<String>? = null
                 private var maxGroupTieredPackageConfig: JsonField<MaxGroupTieredPackageConfig>? =
                     null
-                private var modelType: JsonField<ModelType>? = null
+                private var modelType: JsonValue = JsonValue.from("max_group_tiered_package")
                 private var name: JsonField<String>? = null
                 private var billableMetricId: JsonField<String> = JsonMissing.of()
                 private var billedInAdvance: JsonField<Boolean> = JsonMissing.of()
@@ -49127,18 +46395,19 @@ private constructor(
                     maxGroupTieredPackageConfig: JsonField<MaxGroupTieredPackageConfig>
                 ) = apply { this.maxGroupTieredPackageConfig = maxGroupTieredPackageConfig }
 
-                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
-
                 /**
-                 * Sets [Builder.modelType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.modelType] with a well-typed [ModelType] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("max_group_tiered_package")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun modelType(modelType: JsonField<ModelType>) = apply {
-                    this.modelType = modelType
-                }
+                fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
 
                 /** The name of the price. */
                 fun name(name: String) = name(JsonField.of(name))
@@ -49437,7 +46706,6 @@ private constructor(
                  * .cadence()
                  * .itemId()
                  * .maxGroupTieredPackageConfig()
-                 * .modelType()
                  * .name()
                  * ```
                  *
@@ -49448,7 +46716,7 @@ private constructor(
                         checkRequired("cadence", cadence),
                         checkRequired("itemId", itemId),
                         checkRequired("maxGroupTieredPackageConfig", maxGroupTieredPackageConfig),
-                        checkRequired("modelType", modelType),
+                        modelType,
                         checkRequired("name", name),
                         billableMetricId,
                         billedInAdvance,
@@ -49474,7 +46742,11 @@ private constructor(
                 cadence().validate()
                 itemId()
                 maxGroupTieredPackageConfig().validate()
-                modelType().validate()
+                _modelType().let {
+                    if (it != JsonValue.from("max_group_tiered_package")) {
+                        throw OrbInvalidDataException("'modelType' is invalid, received $it")
+                    }
+                }
                 name()
                 billableMetricId()
                 billedInAdvance()
@@ -49508,7 +46780,9 @@ private constructor(
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (itemId.asKnown().isPresent) 1 else 0) +
                     (maxGroupTieredPackageConfig.asKnown().getOrNull()?.validity() ?: 0) +
-                    (modelType.asKnown().getOrNull()?.validity() ?: 0) +
+                    modelType.let {
+                        if (it == JsonValue.from("max_group_tiered_package")) 1 else 0
+                    } +
                     (if (name.asKnown().isPresent) 1 else 0) +
                     (if (billableMetricId.asKnown().isPresent) 1 else 0) +
                     (if (billedInAdvance.asKnown().isPresent) 1 else 0) +
@@ -49788,131 +47062,6 @@ private constructor(
 
                 override fun toString() =
                     "MaxGroupTieredPackageConfig{additionalProperties=$additionalProperties}"
-            }
-
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField val MAX_GROUP_TIERED_PACKAGE = of("max_group_tiered_package")
-
-                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
-                }
-
-                /** An enum containing [ModelType]'s known values. */
-                enum class Known {
-                    MAX_GROUP_TIERED_PACKAGE
-                }
-
-                /**
-                 * An enum containing [ModelType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [ModelType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    MAX_GROUP_TIERED_PACKAGE,
-                    /**
-                     * An enum member indicating that [ModelType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        MAX_GROUP_TIERED_PACKAGE -> Value.MAX_GROUP_TIERED_PACKAGE
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value is a not a known
-                 *   member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        MAX_GROUP_TIERED_PACKAGE -> Known.MAX_GROUP_TIERED_PACKAGE
-                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value does not have the
-                 *   expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        OrbInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                fun validate(): ModelType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: OrbInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return /* spotless:off */ other is ModelType && value == other.value /* spotless:on */
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
             }
 
             /**
@@ -50763,7 +47912,7 @@ private constructor(
         private constructor(
             private val cadence: JsonField<Cadence>,
             private val itemId: JsonField<String>,
-            private val modelType: JsonField<ModelType>,
+            private val modelType: JsonValue,
             private val name: JsonField<String>,
             private val scalableMatrixWithUnitPricingConfig:
                 JsonField<ScalableMatrixWithUnitPricingConfig>,
@@ -50788,9 +47937,7 @@ private constructor(
                 @JsonProperty("item_id")
                 @ExcludeMissing
                 itemId: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("model_type")
-                @ExcludeMissing
-                modelType: JsonField<ModelType> = JsonMissing.of(),
+                @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("scalable_matrix_with_unit_pricing_config")
                 @ExcludeMissing
@@ -50866,11 +48013,15 @@ private constructor(
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("scalable_matrix_with_unit_pricing")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun modelType(): ModelType = modelType.getRequired("model_type")
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
 
             /**
              * The name of the price.
@@ -50996,16 +48147,6 @@ private constructor(
              * Unlike [itemId], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("item_id") @ExcludeMissing fun _itemId(): JsonField<String> = itemId
-
-            /**
-             * Returns the raw JSON value of [modelType].
-             *
-             * Unlike [modelType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType(): JsonField<ModelType> = modelType
 
             /**
              * Returns the raw JSON value of [name].
@@ -51147,7 +48288,6 @@ private constructor(
                  * ```java
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * .scalableMatrixWithUnitPricingConfig()
                  * ```
@@ -51160,7 +48300,8 @@ private constructor(
 
                 private var cadence: JsonField<Cadence>? = null
                 private var itemId: JsonField<String>? = null
-                private var modelType: JsonField<ModelType>? = null
+                private var modelType: JsonValue =
+                    JsonValue.from("scalable_matrix_with_unit_pricing")
                 private var name: JsonField<String>? = null
                 private var scalableMatrixWithUnitPricingConfig:
                     JsonField<ScalableMatrixWithUnitPricingConfig>? =
@@ -51234,18 +48375,19 @@ private constructor(
                  */
                 fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
-                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
-
                 /**
-                 * Sets [Builder.modelType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.modelType] with a well-typed [ModelType] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("scalable_matrix_with_unit_pricing")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun modelType(modelType: JsonField<ModelType>) = apply {
-                    this.modelType = modelType
-                }
+                fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
 
                 /** The name of the price. */
                 fun name(name: String) = name(JsonField.of(name))
@@ -51564,7 +48706,6 @@ private constructor(
                  * ```java
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * .scalableMatrixWithUnitPricingConfig()
                  * ```
@@ -51575,7 +48716,7 @@ private constructor(
                     NewPlanScalableMatrixWithUnitPricingPrice(
                         checkRequired("cadence", cadence),
                         checkRequired("itemId", itemId),
-                        checkRequired("modelType", modelType),
+                        modelType,
                         checkRequired("name", name),
                         checkRequired(
                             "scalableMatrixWithUnitPricingConfig",
@@ -51604,7 +48745,11 @@ private constructor(
 
                 cadence().validate()
                 itemId()
-                modelType().validate()
+                _modelType().let {
+                    if (it != JsonValue.from("scalable_matrix_with_unit_pricing")) {
+                        throw OrbInvalidDataException("'modelType' is invalid, received $it")
+                    }
+                }
                 name()
                 scalableMatrixWithUnitPricingConfig().validate()
                 billableMetricId()
@@ -51638,7 +48783,9 @@ private constructor(
             internal fun validity(): Int =
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (itemId.asKnown().isPresent) 1 else 0) +
-                    (modelType.asKnown().getOrNull()?.validity() ?: 0) +
+                    modelType.let {
+                        if (it == JsonValue.from("scalable_matrix_with_unit_pricing")) 1 else 0
+                    } +
                     (if (name.asKnown().isPresent) 1 else 0) +
                     (scalableMatrixWithUnitPricingConfig.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (billableMetricId.asKnown().isPresent) 1 else 0) +
@@ -51801,132 +48948,6 @@ private constructor(
                     }
 
                     return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
-
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField
-                    val SCALABLE_MATRIX_WITH_UNIT_PRICING = of("scalable_matrix_with_unit_pricing")
-
-                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
-                }
-
-                /** An enum containing [ModelType]'s known values. */
-                enum class Known {
-                    SCALABLE_MATRIX_WITH_UNIT_PRICING
-                }
-
-                /**
-                 * An enum containing [ModelType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [ModelType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    SCALABLE_MATRIX_WITH_UNIT_PRICING,
-                    /**
-                     * An enum member indicating that [ModelType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        SCALABLE_MATRIX_WITH_UNIT_PRICING -> Value.SCALABLE_MATRIX_WITH_UNIT_PRICING
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value is a not a known
-                 *   member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        SCALABLE_MATRIX_WITH_UNIT_PRICING -> Known.SCALABLE_MATRIX_WITH_UNIT_PRICING
-                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value does not have the
-                 *   expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        OrbInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                fun validate(): ModelType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: OrbInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return /* spotless:off */ other is ModelType && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -52896,7 +49917,7 @@ private constructor(
         private constructor(
             private val cadence: JsonField<Cadence>,
             private val itemId: JsonField<String>,
-            private val modelType: JsonField<ModelType>,
+            private val modelType: JsonValue,
             private val name: JsonField<String>,
             private val scalableMatrixWithTieredPricingConfig:
                 JsonField<ScalableMatrixWithTieredPricingConfig>,
@@ -52921,9 +49942,7 @@ private constructor(
                 @JsonProperty("item_id")
                 @ExcludeMissing
                 itemId: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("model_type")
-                @ExcludeMissing
-                modelType: JsonField<ModelType> = JsonMissing.of(),
+                @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("scalable_matrix_with_tiered_pricing_config")
                 @ExcludeMissing
@@ -52999,11 +50018,15 @@ private constructor(
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("scalable_matrix_with_tiered_pricing")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun modelType(): ModelType = modelType.getRequired("model_type")
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
 
             /**
              * The name of the price.
@@ -53129,16 +50152,6 @@ private constructor(
              * Unlike [itemId], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("item_id") @ExcludeMissing fun _itemId(): JsonField<String> = itemId
-
-            /**
-             * Returns the raw JSON value of [modelType].
-             *
-             * Unlike [modelType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType(): JsonField<ModelType> = modelType
 
             /**
              * Returns the raw JSON value of [name].
@@ -53281,7 +50294,6 @@ private constructor(
                  * ```java
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * .scalableMatrixWithTieredPricingConfig()
                  * ```
@@ -53294,7 +50306,8 @@ private constructor(
 
                 private var cadence: JsonField<Cadence>? = null
                 private var itemId: JsonField<String>? = null
-                private var modelType: JsonField<ModelType>? = null
+                private var modelType: JsonValue =
+                    JsonValue.from("scalable_matrix_with_tiered_pricing")
                 private var name: JsonField<String>? = null
                 private var scalableMatrixWithTieredPricingConfig:
                     JsonField<ScalableMatrixWithTieredPricingConfig>? =
@@ -53368,18 +50381,19 @@ private constructor(
                  */
                 fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
-                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
-
                 /**
-                 * Sets [Builder.modelType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.modelType] with a well-typed [ModelType] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("scalable_matrix_with_tiered_pricing")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun modelType(modelType: JsonField<ModelType>) = apply {
-                    this.modelType = modelType
-                }
+                fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
 
                 /** The name of the price. */
                 fun name(name: String) = name(JsonField.of(name))
@@ -53699,7 +50713,6 @@ private constructor(
                  * ```java
                  * .cadence()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * .scalableMatrixWithTieredPricingConfig()
                  * ```
@@ -53710,7 +50723,7 @@ private constructor(
                     NewPlanScalableMatrixWithTieredPricingPrice(
                         checkRequired("cadence", cadence),
                         checkRequired("itemId", itemId),
-                        checkRequired("modelType", modelType),
+                        modelType,
                         checkRequired("name", name),
                         checkRequired(
                             "scalableMatrixWithTieredPricingConfig",
@@ -53739,7 +50752,11 @@ private constructor(
 
                 cadence().validate()
                 itemId()
-                modelType().validate()
+                _modelType().let {
+                    if (it != JsonValue.from("scalable_matrix_with_tiered_pricing")) {
+                        throw OrbInvalidDataException("'modelType' is invalid, received $it")
+                    }
+                }
                 name()
                 scalableMatrixWithTieredPricingConfig().validate()
                 billableMetricId()
@@ -53773,7 +50790,9 @@ private constructor(
             internal fun validity(): Int =
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (itemId.asKnown().isPresent) 1 else 0) +
-                    (modelType.asKnown().getOrNull()?.validity() ?: 0) +
+                    modelType.let {
+                        if (it == JsonValue.from("scalable_matrix_with_tiered_pricing")) 1 else 0
+                    } +
                     (if (name.asKnown().isPresent) 1 else 0) +
                     (scalableMatrixWithTieredPricingConfig.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (billableMetricId.asKnown().isPresent) 1 else 0) +
@@ -53936,135 +50955,6 @@ private constructor(
                     }
 
                     return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
-
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField
-                    val SCALABLE_MATRIX_WITH_TIERED_PRICING =
-                        of("scalable_matrix_with_tiered_pricing")
-
-                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
-                }
-
-                /** An enum containing [ModelType]'s known values. */
-                enum class Known {
-                    SCALABLE_MATRIX_WITH_TIERED_PRICING
-                }
-
-                /**
-                 * An enum containing [ModelType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [ModelType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    SCALABLE_MATRIX_WITH_TIERED_PRICING,
-                    /**
-                     * An enum member indicating that [ModelType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        SCALABLE_MATRIX_WITH_TIERED_PRICING ->
-                            Value.SCALABLE_MATRIX_WITH_TIERED_PRICING
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value is a not a known
-                 *   member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        SCALABLE_MATRIX_WITH_TIERED_PRICING ->
-                            Known.SCALABLE_MATRIX_WITH_TIERED_PRICING
-                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value does not have the
-                 *   expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        OrbInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                fun validate(): ModelType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: OrbInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return /* spotless:off */ other is ModelType && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -55036,7 +51926,7 @@ private constructor(
             private val cadence: JsonField<Cadence>,
             private val cumulativeGroupedBulkConfig: JsonField<CumulativeGroupedBulkConfig>,
             private val itemId: JsonField<String>,
-            private val modelType: JsonField<ModelType>,
+            private val modelType: JsonValue,
             private val name: JsonField<String>,
             private val billableMetricId: JsonField<String>,
             private val billedInAdvance: JsonField<Boolean>,
@@ -55063,9 +51953,7 @@ private constructor(
                 @JsonProperty("item_id")
                 @ExcludeMissing
                 itemId: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("model_type")
-                @ExcludeMissing
-                modelType: JsonField<ModelType> = JsonMissing.of(),
+                @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("billable_metric_id")
                 @ExcludeMissing
@@ -55144,11 +52032,15 @@ private constructor(
             fun itemId(): String = itemId.getRequired("item_id")
 
             /**
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("cumulative_grouped_bulk")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun modelType(): ModelType = modelType.getRequired("model_type")
+            @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
 
             /**
              * The name of the price.
@@ -55275,16 +52167,6 @@ private constructor(
              * Unlike [itemId], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("item_id") @ExcludeMissing fun _itemId(): JsonField<String> = itemId
-
-            /**
-             * Returns the raw JSON value of [modelType].
-             *
-             * Unlike [modelType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("model_type")
-            @ExcludeMissing
-            fun _modelType(): JsonField<ModelType> = modelType
 
             /**
              * Returns the raw JSON value of [name].
@@ -55416,7 +52298,6 @@ private constructor(
                  * .cadence()
                  * .cumulativeGroupedBulkConfig()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * ```
                  */
@@ -55430,7 +52311,7 @@ private constructor(
                 private var cumulativeGroupedBulkConfig: JsonField<CumulativeGroupedBulkConfig>? =
                     null
                 private var itemId: JsonField<String>? = null
-                private var modelType: JsonField<ModelType>? = null
+                private var modelType: JsonValue = JsonValue.from("cumulative_grouped_bulk")
                 private var name: JsonField<String>? = null
                 private var billableMetricId: JsonField<String> = JsonMissing.of()
                 private var billedInAdvance: JsonField<Boolean> = JsonMissing.of()
@@ -55511,18 +52392,19 @@ private constructor(
                  */
                 fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
-                fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
-
                 /**
-                 * Sets [Builder.modelType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.modelType] with a well-typed [ModelType] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("cumulative_grouped_bulk")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun modelType(modelType: JsonField<ModelType>) = apply {
-                    this.modelType = modelType
-                }
+                fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
 
                 /** The name of the price. */
                 fun name(name: String) = name(JsonField.of(name))
@@ -55821,7 +52703,6 @@ private constructor(
                  * .cadence()
                  * .cumulativeGroupedBulkConfig()
                  * .itemId()
-                 * .modelType()
                  * .name()
                  * ```
                  *
@@ -55832,7 +52713,7 @@ private constructor(
                         checkRequired("cadence", cadence),
                         checkRequired("cumulativeGroupedBulkConfig", cumulativeGroupedBulkConfig),
                         checkRequired("itemId", itemId),
-                        checkRequired("modelType", modelType),
+                        modelType,
                         checkRequired("name", name),
                         billableMetricId,
                         billedInAdvance,
@@ -55858,7 +52739,11 @@ private constructor(
                 cadence().validate()
                 cumulativeGroupedBulkConfig().validate()
                 itemId()
-                modelType().validate()
+                _modelType().let {
+                    if (it != JsonValue.from("cumulative_grouped_bulk")) {
+                        throw OrbInvalidDataException("'modelType' is invalid, received $it")
+                    }
+                }
                 name()
                 billableMetricId()
                 billedInAdvance()
@@ -55892,7 +52777,9 @@ private constructor(
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
                     (cumulativeGroupedBulkConfig.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (itemId.asKnown().isPresent) 1 else 0) +
-                    (modelType.asKnown().getOrNull()?.validity() ?: 0) +
+                    modelType.let {
+                        if (it == JsonValue.from("cumulative_grouped_bulk")) 1 else 0
+                    } +
                     (if (name.asKnown().isPresent) 1 else 0) +
                     (if (billableMetricId.asKnown().isPresent) 1 else 0) +
                     (if (billedInAdvance.asKnown().isPresent) 1 else 0) +
@@ -56172,131 +53059,6 @@ private constructor(
 
                 override fun toString() =
                     "CumulativeGroupedBulkConfig{additionalProperties=$additionalProperties}"
-            }
-
-            class ModelType @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField val CUMULATIVE_GROUPED_BULK = of("cumulative_grouped_bulk")
-
-                    @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
-                }
-
-                /** An enum containing [ModelType]'s known values. */
-                enum class Known {
-                    CUMULATIVE_GROUPED_BULK
-                }
-
-                /**
-                 * An enum containing [ModelType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [ModelType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    CUMULATIVE_GROUPED_BULK,
-                    /**
-                     * An enum member indicating that [ModelType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        CUMULATIVE_GROUPED_BULK -> Value.CUMULATIVE_GROUPED_BULK
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value is a not a known
-                 *   member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        CUMULATIVE_GROUPED_BULK -> Known.CUMULATIVE_GROUPED_BULK
-                        else -> throw OrbInvalidDataException("Unknown ModelType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value does not have the
-                 *   expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        OrbInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                fun validate(): ModelType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: OrbInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return /* spotless:off */ other is ModelType && value == other.value /* spotless:on */
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
             }
 
             /**
