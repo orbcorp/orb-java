@@ -3,7 +3,6 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.Params
-import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import java.util.Objects
@@ -18,14 +17,14 @@ import kotlin.jvm.optionals.getOrNull
  */
 class CouponSubscriptionListParams
 private constructor(
-    private val couponId: String,
+    private val couponId: String?,
     private val cursor: String?,
     private val limit: Long?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun couponId(): String = couponId
+    fun couponId(): Optional<String> = Optional.ofNullable(couponId)
 
     /**
      * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
@@ -44,13 +43,10 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): CouponSubscriptionListParams = builder().build()
+
         /**
          * Returns a mutable builder for constructing an instance of [CouponSubscriptionListParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .couponId()
-         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
@@ -73,7 +69,10 @@ private constructor(
             additionalQueryParams = couponSubscriptionListParams.additionalQueryParams.toBuilder()
         }
 
-        fun couponId(couponId: String) = apply { this.couponId = couponId }
+        fun couponId(couponId: String?) = apply { this.couponId = couponId }
+
+        /** Alias for calling [Builder.couponId] with `couponId.orElse(null)`. */
+        fun couponId(couponId: Optional<String>) = couponId(couponId.getOrNull())
 
         /**
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
@@ -199,17 +198,10 @@ private constructor(
          * Returns an immutable instance of [CouponSubscriptionListParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .couponId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): CouponSubscriptionListParams =
             CouponSubscriptionListParams(
-                checkRequired("couponId", couponId),
+                couponId,
                 cursor,
                 limit,
                 additionalHeaders.build(),
@@ -219,7 +211,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> couponId
+            0 -> couponId ?: ""
             else -> ""
         }
 

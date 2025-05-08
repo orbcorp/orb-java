@@ -4,12 +4,12 @@ package com.withorb.api.models
 
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.Params
-import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Sync Orb's payment methods for the customer with their gateway.
@@ -21,13 +21,13 @@ import java.util.Optional
  */
 class CustomerSyncPaymentMethodsFromGatewayParams
 private constructor(
-    private val customerId: String,
+    private val customerId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
-    fun customerId(): String = customerId
+    fun customerId(): Optional<String> = Optional.ofNullable(customerId)
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
@@ -39,14 +39,11 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): CustomerSyncPaymentMethodsFromGatewayParams = builder().build()
+
         /**
          * Returns a mutable builder for constructing an instance of
          * [CustomerSyncPaymentMethodsFromGatewayParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .customerId()
-         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
@@ -72,7 +69,10 @@ private constructor(
                 customerSyncPaymentMethodsFromGatewayParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String?) = apply { this.customerId = customerId }
+
+        /** Alias for calling [Builder.customerId] with `customerId.orElse(null)`. */
+        fun customerId(customerId: Optional<String>) = customerId(customerId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -198,17 +198,10 @@ private constructor(
          * Returns an immutable instance of [CustomerSyncPaymentMethodsFromGatewayParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .customerId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): CustomerSyncPaymentMethodsFromGatewayParams =
             CustomerSyncPaymentMethodsFromGatewayParams(
-                checkRequired("customerId", customerId),
+                customerId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -220,7 +213,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> customerId
+            0 -> customerId ?: ""
             else -> ""
         }
 

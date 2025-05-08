@@ -5,6 +5,7 @@ package com.withorb.api.services.blocking
 import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.handlers.emptyHandler
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
@@ -35,6 +36,7 @@ import com.withorb.api.services.blocking.customers.CostService
 import com.withorb.api.services.blocking.customers.CostServiceImpl
 import com.withorb.api.services.blocking.customers.CreditService
 import com.withorb.api.services.blocking.customers.CreditServiceImpl
+import kotlin.jvm.optionals.getOrNull
 
 class CustomerServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     CustomerService {
@@ -172,6 +174,9 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
             params: CustomerUpdateParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Customer> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("customerId", params.customerId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -232,6 +237,9 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
             params: CustomerDeleteParams,
             requestOptions: RequestOptions,
         ): HttpResponse {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("customerId", params.customerId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
@@ -251,6 +259,9 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
             params: CustomerFetchParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Customer> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("customerId", params.customerId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -277,6 +288,9 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
             params: CustomerFetchByExternalIdParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Customer> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("externalCustomerId", params.externalCustomerId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -303,6 +317,9 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
             params: CustomerSyncPaymentMethodsFromGatewayParams,
             requestOptions: RequestOptions,
         ): HttpResponse {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("customerId", params.customerId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -328,6 +345,9 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
             params: CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams,
             requestOptions: RequestOptions,
         ): HttpResponse {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("externalCustomerId", params.externalCustomerId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -354,6 +374,9 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
             params: CustomerUpdateByExternalIdParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Customer> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)

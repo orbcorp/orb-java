@@ -27,13 +27,13 @@ import kotlin.jvm.optionals.getOrNull
  */
 class CustomerBalanceTransactionCreateParams
 private constructor(
-    private val customerId: String,
+    private val customerId: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun customerId(): String = customerId
+    fun customerId(): Optional<String> = Optional.ofNullable(customerId)
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -92,7 +92,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .customerId()
          * .amount()
          * .type()
          * ```
@@ -119,7 +118,10 @@ private constructor(
                 customerBalanceTransactionCreateParams.additionalQueryParams.toBuilder()
         }
 
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String?) = apply { this.customerId = customerId }
+
+        /** Alias for calling [Builder.customerId] with `customerId.orElse(null)`. */
+        fun customerId(customerId: Optional<String>) = customerId(customerId.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -291,7 +293,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .customerId()
          * .amount()
          * .type()
          * ```
@@ -300,7 +301,7 @@ private constructor(
          */
         fun build(): CustomerBalanceTransactionCreateParams =
             CustomerBalanceTransactionCreateParams(
-                checkRequired("customerId", customerId),
+                customerId,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -311,7 +312,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> customerId
+            0 -> customerId ?: ""
             else -> ""
         }
 

@@ -5,6 +5,7 @@ package com.withorb.api.services.blocking
 import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
 import com.withorb.api.core.handlers.withErrorHandler
@@ -28,6 +29,7 @@ import com.withorb.api.models.InvoiceMarkPaidParams
 import com.withorb.api.models.InvoicePayParams
 import com.withorb.api.models.InvoiceUpdateParams
 import com.withorb.api.models.InvoiceVoidInvoiceParams
+import kotlin.jvm.optionals.getOrNull
 
 class InvoiceServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     InvoiceService {
@@ -119,6 +121,9 @@ class InvoiceServiceImpl internal constructor(private val clientOptions: ClientO
             params: InvoiceUpdateParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Invoice> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("invoiceId", params.invoiceId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -180,6 +185,9 @@ class InvoiceServiceImpl internal constructor(private val clientOptions: ClientO
             params: InvoiceFetchParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Invoice> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("invoiceId", params.invoiceId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -233,6 +241,9 @@ class InvoiceServiceImpl internal constructor(private val clientOptions: ClientO
             params: InvoiceIssueParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Invoice> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("invoiceId", params.invoiceId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -260,6 +271,9 @@ class InvoiceServiceImpl internal constructor(private val clientOptions: ClientO
             params: InvoiceMarkPaidParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Invoice> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("invoiceId", params.invoiceId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -287,6 +301,9 @@ class InvoiceServiceImpl internal constructor(private val clientOptions: ClientO
             params: InvoicePayParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Invoice> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("invoiceId", params.invoiceId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -314,6 +331,9 @@ class InvoiceServiceImpl internal constructor(private val clientOptions: ClientO
             params: InvoiceVoidInvoiceParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Invoice> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("invoiceId", params.invoiceId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)

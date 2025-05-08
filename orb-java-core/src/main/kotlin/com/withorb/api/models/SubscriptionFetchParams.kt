@@ -3,10 +3,11 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.Params
-import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint is used to fetch a [Subscription](/core-concepts##subscription) given an
@@ -14,12 +15,12 @@ import java.util.Objects
  */
 class SubscriptionFetchParams
 private constructor(
-    private val subscriptionId: String,
+    private val subscriptionId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun subscriptionId(): String = subscriptionId
+    fun subscriptionId(): Optional<String> = Optional.ofNullable(subscriptionId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -29,14 +30,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [SubscriptionFetchParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .subscriptionId()
-         * ```
-         */
+        @JvmStatic fun none(): SubscriptionFetchParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [SubscriptionFetchParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -54,7 +50,11 @@ private constructor(
             additionalQueryParams = subscriptionFetchParams.additionalQueryParams.toBuilder()
         }
 
-        fun subscriptionId(subscriptionId: String) = apply { this.subscriptionId = subscriptionId }
+        fun subscriptionId(subscriptionId: String?) = apply { this.subscriptionId = subscriptionId }
+
+        /** Alias for calling [Builder.subscriptionId] with `subscriptionId.orElse(null)`. */
+        fun subscriptionId(subscriptionId: Optional<String>) =
+            subscriptionId(subscriptionId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -158,17 +158,10 @@ private constructor(
          * Returns an immutable instance of [SubscriptionFetchParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .subscriptionId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): SubscriptionFetchParams =
             SubscriptionFetchParams(
-                checkRequired("subscriptionId", subscriptionId),
+                subscriptionId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -176,7 +169,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> subscriptionId
+            0 -> subscriptionId ?: ""
             else -> ""
         }
 

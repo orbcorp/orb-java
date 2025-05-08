@@ -36,13 +36,33 @@ interface MetricService {
      * This endpoint allows you to update the `metadata` property on a metric. If you pass `null`
      * for the metadata value, it will clear any existing metadata for that invoice.
      */
-    fun update(params: MetricUpdateParams): BillableMetric = update(params, RequestOptions.none())
+    fun update(metricId: String): BillableMetric = update(metricId, MetricUpdateParams.none())
+
+    /** @see [update] */
+    fun update(
+        metricId: String,
+        params: MetricUpdateParams = MetricUpdateParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BillableMetric = update(params.toBuilder().metricId(metricId).build(), requestOptions)
+
+    /** @see [update] */
+    fun update(
+        metricId: String,
+        params: MetricUpdateParams = MetricUpdateParams.none(),
+    ): BillableMetric = update(metricId, params, RequestOptions.none())
 
     /** @see [update] */
     fun update(
         params: MetricUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BillableMetric
+
+    /** @see [update] */
+    fun update(params: MetricUpdateParams): BillableMetric = update(params, RequestOptions.none())
+
+    /** @see [update] */
+    fun update(metricId: String, requestOptions: RequestOptions): BillableMetric =
+        update(metricId, MetricUpdateParams.none(), requestOptions)
 
     /**
      * This endpoint is used to fetch [metric](/core-concepts##metric) details given a metric
@@ -69,13 +89,33 @@ interface MetricService {
      * This endpoint is used to list [metrics](/core-concepts#metric). It returns information about
      * the metrics including its name, description, and item.
      */
-    fun fetch(params: MetricFetchParams): BillableMetric = fetch(params, RequestOptions.none())
+    fun fetch(metricId: String): BillableMetric = fetch(metricId, MetricFetchParams.none())
+
+    /** @see [fetch] */
+    fun fetch(
+        metricId: String,
+        params: MetricFetchParams = MetricFetchParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BillableMetric = fetch(params.toBuilder().metricId(metricId).build(), requestOptions)
+
+    /** @see [fetch] */
+    fun fetch(
+        metricId: String,
+        params: MetricFetchParams = MetricFetchParams.none(),
+    ): BillableMetric = fetch(metricId, params, RequestOptions.none())
 
     /** @see [fetch] */
     fun fetch(
         params: MetricFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BillableMetric
+
+    /** @see [fetch] */
+    fun fetch(params: MetricFetchParams): BillableMetric = fetch(params, RequestOptions.none())
+
+    /** @see [fetch] */
+    fun fetch(metricId: String, requestOptions: RequestOptions): BillableMetric =
+        fetch(metricId, MetricFetchParams.none(), requestOptions)
 
     /** A view of [MetricService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -100,8 +140,24 @@ interface MetricService {
          * [MetricService.update].
          */
         @MustBeClosed
-        fun update(params: MetricUpdateParams): HttpResponseFor<BillableMetric> =
-            update(params, RequestOptions.none())
+        fun update(metricId: String): HttpResponseFor<BillableMetric> =
+            update(metricId, MetricUpdateParams.none())
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
+            metricId: String,
+            params: MetricUpdateParams = MetricUpdateParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BillableMetric> =
+            update(params.toBuilder().metricId(metricId).build(), requestOptions)
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
+            metricId: String,
+            params: MetricUpdateParams = MetricUpdateParams.none(),
+        ): HttpResponseFor<BillableMetric> = update(metricId, params, RequestOptions.none())
 
         /** @see [update] */
         @MustBeClosed
@@ -109,6 +165,19 @@ interface MetricService {
             params: MetricUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BillableMetric>
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(params: MetricUpdateParams): HttpResponseFor<BillableMetric> =
+            update(params, RequestOptions.none())
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
+            metricId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<BillableMetric> =
+            update(metricId, MetricUpdateParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /metrics`, but is otherwise the same as
@@ -139,8 +208,24 @@ interface MetricService {
          * [MetricService.fetch].
          */
         @MustBeClosed
-        fun fetch(params: MetricFetchParams): HttpResponseFor<BillableMetric> =
-            fetch(params, RequestOptions.none())
+        fun fetch(metricId: String): HttpResponseFor<BillableMetric> =
+            fetch(metricId, MetricFetchParams.none())
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(
+            metricId: String,
+            params: MetricFetchParams = MetricFetchParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BillableMetric> =
+            fetch(params.toBuilder().metricId(metricId).build(), requestOptions)
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(
+            metricId: String,
+            params: MetricFetchParams = MetricFetchParams.none(),
+        ): HttpResponseFor<BillableMetric> = fetch(metricId, params, RequestOptions.none())
 
         /** @see [fetch] */
         @MustBeClosed
@@ -148,5 +233,18 @@ interface MetricService {
             params: MetricFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BillableMetric>
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(params: MetricFetchParams): HttpResponseFor<BillableMetric> =
+            fetch(params, RequestOptions.none())
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(
+            metricId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<BillableMetric> =
+            fetch(metricId, MetricFetchParams.none(), requestOptions)
     }
 }

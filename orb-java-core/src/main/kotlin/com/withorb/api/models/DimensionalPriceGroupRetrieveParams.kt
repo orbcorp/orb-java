@@ -3,20 +3,21 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.Params
-import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Fetch dimensional price group */
 class DimensionalPriceGroupRetrieveParams
 private constructor(
-    private val dimensionalPriceGroupId: String,
+    private val dimensionalPriceGroupId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun dimensionalPriceGroupId(): String = dimensionalPriceGroupId
+    fun dimensionalPriceGroupId(): Optional<String> = Optional.ofNullable(dimensionalPriceGroupId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -26,14 +27,11 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): DimensionalPriceGroupRetrieveParams = builder().build()
+
         /**
          * Returns a mutable builder for constructing an instance of
          * [DimensionalPriceGroupRetrieveParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .dimensionalPriceGroupId()
-         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
@@ -55,9 +53,16 @@ private constructor(
                 dimensionalPriceGroupRetrieveParams.additionalQueryParams.toBuilder()
         }
 
-        fun dimensionalPriceGroupId(dimensionalPriceGroupId: String) = apply {
+        fun dimensionalPriceGroupId(dimensionalPriceGroupId: String?) = apply {
             this.dimensionalPriceGroupId = dimensionalPriceGroupId
         }
+
+        /**
+         * Alias for calling [Builder.dimensionalPriceGroupId] with
+         * `dimensionalPriceGroupId.orElse(null)`.
+         */
+        fun dimensionalPriceGroupId(dimensionalPriceGroupId: Optional<String>) =
+            dimensionalPriceGroupId(dimensionalPriceGroupId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -161,17 +166,10 @@ private constructor(
          * Returns an immutable instance of [DimensionalPriceGroupRetrieveParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .dimensionalPriceGroupId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): DimensionalPriceGroupRetrieveParams =
             DimensionalPriceGroupRetrieveParams(
-                checkRequired("dimensionalPriceGroupId", dimensionalPriceGroupId),
+                dimensionalPriceGroupId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -179,7 +177,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> dimensionalPriceGroupId
+            0 -> dimensionalPriceGroupId ?: ""
             else -> ""
         }
 

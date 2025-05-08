@@ -5,6 +5,7 @@ package com.withorb.api.services.async
 import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
 import com.withorb.api.core.handlers.withErrorHandler
@@ -25,6 +26,7 @@ import com.withorb.api.models.PlanUpdateParams
 import com.withorb.api.services.async.plans.ExternalPlanIdServiceAsync
 import com.withorb.api.services.async.plans.ExternalPlanIdServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
+import kotlin.jvm.optionals.getOrNull
 
 class PlanServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     PlanServiceAsync {
@@ -117,6 +119,9 @@ class PlanServiceAsyncImpl internal constructor(private val clientOptions: Clien
             params: PlanUpdateParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<Plan>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("planId", params.planId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -184,6 +189,9 @@ class PlanServiceAsyncImpl internal constructor(private val clientOptions: Clien
             params: PlanFetchParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<Plan>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("planId", params.planId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)

@@ -38,13 +38,13 @@ import kotlin.jvm.optionals.getOrNull
  */
 class SubscriptionUpdateFixedFeeQuantityParams
 private constructor(
-    private val subscriptionId: String,
+    private val subscriptionId: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun subscriptionId(): String = subscriptionId
+    fun subscriptionId(): Optional<String> = Optional.ofNullable(subscriptionId)
 
     /**
      * Price for which the quantity should be updated. Must be a fixed fee.
@@ -142,7 +142,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .subscriptionId()
          * .priceId()
          * .quantity()
          * ```
@@ -170,7 +169,11 @@ private constructor(
                 subscriptionUpdateFixedFeeQuantityParams.additionalQueryParams.toBuilder()
         }
 
-        fun subscriptionId(subscriptionId: String) = apply { this.subscriptionId = subscriptionId }
+        fun subscriptionId(subscriptionId: String?) = apply { this.subscriptionId = subscriptionId }
+
+        /** Alias for calling [Builder.subscriptionId] with `subscriptionId.orElse(null)`. */
+        fun subscriptionId(subscriptionId: Optional<String>) =
+            subscriptionId(subscriptionId.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -406,7 +409,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .subscriptionId()
          * .priceId()
          * .quantity()
          * ```
@@ -415,7 +417,7 @@ private constructor(
          */
         fun build(): SubscriptionUpdateFixedFeeQuantityParams =
             SubscriptionUpdateFixedFeeQuantityParams(
-                checkRequired("subscriptionId", subscriptionId),
+                subscriptionId,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -426,7 +428,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> subscriptionId
+            0 -> subscriptionId ?: ""
             else -> ""
         }
 

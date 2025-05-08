@@ -37,13 +37,31 @@ interface PlanService {
      *
      * Other fields on a customer are currently immutable.
      */
-    fun update(params: PlanUpdateParams): Plan = update(params, RequestOptions.none())
+    fun update(planId: String): Plan = update(planId, PlanUpdateParams.none())
+
+    /** @see [update] */
+    fun update(
+        planId: String,
+        params: PlanUpdateParams = PlanUpdateParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Plan = update(params.toBuilder().planId(planId).build(), requestOptions)
+
+    /** @see [update] */
+    fun update(planId: String, params: PlanUpdateParams = PlanUpdateParams.none()): Plan =
+        update(planId, params, RequestOptions.none())
 
     /** @see [update] */
     fun update(
         params: PlanUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Plan
+
+    /** @see [update] */
+    fun update(params: PlanUpdateParams): Plan = update(params, RequestOptions.none())
+
+    /** @see [update] */
+    fun update(planId: String, requestOptions: RequestOptions): Plan =
+        update(planId, PlanUpdateParams.none(), requestOptions)
 
     /**
      * This endpoint returns a list of all [plans](/core-concepts#plan-and-price) for an account in
@@ -85,10 +103,28 @@ interface PlanService {
      * Orb supports plan phases, also known as contract ramps. For plans with phases, the serialized
      * prices refer to all prices across all phases.
      */
-    fun fetch(params: PlanFetchParams): Plan = fetch(params, RequestOptions.none())
+    fun fetch(planId: String): Plan = fetch(planId, PlanFetchParams.none())
+
+    /** @see [fetch] */
+    fun fetch(
+        planId: String,
+        params: PlanFetchParams = PlanFetchParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Plan = fetch(params.toBuilder().planId(planId).build(), requestOptions)
+
+    /** @see [fetch] */
+    fun fetch(planId: String, params: PlanFetchParams = PlanFetchParams.none()): Plan =
+        fetch(planId, params, RequestOptions.none())
 
     /** @see [fetch] */
     fun fetch(params: PlanFetchParams, requestOptions: RequestOptions = RequestOptions.none()): Plan
+
+    /** @see [fetch] */
+    fun fetch(params: PlanFetchParams): Plan = fetch(params, RequestOptions.none())
+
+    /** @see [fetch] */
+    fun fetch(planId: String, requestOptions: RequestOptions): Plan =
+        fetch(planId, PlanFetchParams.none(), requestOptions)
 
     /** A view of [PlanService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -115,8 +151,22 @@ interface PlanService {
          * [PlanService.update].
          */
         @MustBeClosed
-        fun update(params: PlanUpdateParams): HttpResponseFor<Plan> =
-            update(params, RequestOptions.none())
+        fun update(planId: String): HttpResponseFor<Plan> = update(planId, PlanUpdateParams.none())
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
+            planId: String,
+            params: PlanUpdateParams = PlanUpdateParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Plan> = update(params.toBuilder().planId(planId).build(), requestOptions)
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
+            planId: String,
+            params: PlanUpdateParams = PlanUpdateParams.none(),
+        ): HttpResponseFor<Plan> = update(planId, params, RequestOptions.none())
 
         /** @see [update] */
         @MustBeClosed
@@ -124,6 +174,16 @@ interface PlanService {
             params: PlanUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Plan>
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(params: PlanUpdateParams): HttpResponseFor<Plan> =
+            update(params, RequestOptions.none())
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(planId: String, requestOptions: RequestOptions): HttpResponseFor<Plan> =
+            update(planId, PlanUpdateParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /plans`, but is otherwise the same as
@@ -153,8 +213,22 @@ interface PlanService {
          * [PlanService.fetch].
          */
         @MustBeClosed
-        fun fetch(params: PlanFetchParams): HttpResponseFor<Plan> =
-            fetch(params, RequestOptions.none())
+        fun fetch(planId: String): HttpResponseFor<Plan> = fetch(planId, PlanFetchParams.none())
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(
+            planId: String,
+            params: PlanFetchParams = PlanFetchParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Plan> = fetch(params.toBuilder().planId(planId).build(), requestOptions)
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(
+            planId: String,
+            params: PlanFetchParams = PlanFetchParams.none(),
+        ): HttpResponseFor<Plan> = fetch(planId, params, RequestOptions.none())
 
         /** @see [fetch] */
         @MustBeClosed
@@ -162,5 +236,15 @@ interface PlanService {
             params: PlanFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Plan>
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(params: PlanFetchParams): HttpResponseFor<Plan> =
+            fetch(params, RequestOptions.none())
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(planId: String, requestOptions: RequestOptions): HttpResponseFor<Plan> =
+            fetch(planId, PlanFetchParams.none(), requestOptions)
     }
 }

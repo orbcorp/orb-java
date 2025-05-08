@@ -4,12 +4,12 @@ package com.withorb.api.models
 
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.Params
-import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Cancel a subscription change. The change can no longer be applied. A subscription can only have
@@ -18,13 +18,13 @@ import java.util.Optional
  */
 class SubscriptionChangeCancelParams
 private constructor(
-    private val subscriptionChangeId: String,
+    private val subscriptionChangeId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
-    fun subscriptionChangeId(): String = subscriptionChangeId
+    fun subscriptionChangeId(): Optional<String> = Optional.ofNullable(subscriptionChangeId)
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
@@ -36,14 +36,11 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): SubscriptionChangeCancelParams = builder().build()
+
         /**
          * Returns a mutable builder for constructing an instance of
          * [SubscriptionChangeCancelParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .subscriptionChangeId()
-         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
@@ -65,9 +62,16 @@ private constructor(
                 subscriptionChangeCancelParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun subscriptionChangeId(subscriptionChangeId: String) = apply {
+        fun subscriptionChangeId(subscriptionChangeId: String?) = apply {
             this.subscriptionChangeId = subscriptionChangeId
         }
+
+        /**
+         * Alias for calling [Builder.subscriptionChangeId] with
+         * `subscriptionChangeId.orElse(null)`.
+         */
+        fun subscriptionChangeId(subscriptionChangeId: Optional<String>) =
+            subscriptionChangeId(subscriptionChangeId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -193,17 +197,10 @@ private constructor(
          * Returns an immutable instance of [SubscriptionChangeCancelParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .subscriptionChangeId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): SubscriptionChangeCancelParams =
             SubscriptionChangeCancelParams(
-                checkRequired("subscriptionChangeId", subscriptionChangeId),
+                subscriptionChangeId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -215,7 +212,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> subscriptionChangeId
+            0 -> subscriptionChangeId ?: ""
             else -> ""
         }
 

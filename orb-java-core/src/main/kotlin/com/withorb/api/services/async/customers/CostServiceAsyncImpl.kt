@@ -5,6 +5,7 @@ package com.withorb.api.services.async.customers
 import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
 import com.withorb.api.core.handlers.withErrorHandler
@@ -19,6 +20,7 @@ import com.withorb.api.models.CustomerCostListByExternalIdResponse
 import com.withorb.api.models.CustomerCostListParams
 import com.withorb.api.models.CustomerCostListResponse
 import java.util.concurrent.CompletableFuture
+import kotlin.jvm.optionals.getOrNull
 
 class CostServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     CostServiceAsync {
@@ -56,6 +58,9 @@ class CostServiceAsyncImpl internal constructor(private val clientOptions: Clien
             params: CustomerCostListParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<CustomerCostListResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("customerId", params.customerId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -86,6 +91,9 @@ class CostServiceAsyncImpl internal constructor(private val clientOptions: Clien
             params: CustomerCostListByExternalIdParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<CustomerCostListByExternalIdResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("externalCustomerId", params.externalCustomerId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)

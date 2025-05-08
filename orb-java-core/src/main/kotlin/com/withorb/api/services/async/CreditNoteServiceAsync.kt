@@ -55,14 +55,36 @@ interface CreditNoteServiceAsync {
      * This endpoint is used to fetch a single [`Credit Note`](/invoicing/credit-notes) given an
      * identifier.
      */
-    fun fetch(params: CreditNoteFetchParams): CompletableFuture<CreditNote> =
-        fetch(params, RequestOptions.none())
+    fun fetch(creditNoteId: String): CompletableFuture<CreditNote> =
+        fetch(creditNoteId, CreditNoteFetchParams.none())
+
+    /** @see [fetch] */
+    fun fetch(
+        creditNoteId: String,
+        params: CreditNoteFetchParams = CreditNoteFetchParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<CreditNote> =
+        fetch(params.toBuilder().creditNoteId(creditNoteId).build(), requestOptions)
+
+    /** @see [fetch] */
+    fun fetch(
+        creditNoteId: String,
+        params: CreditNoteFetchParams = CreditNoteFetchParams.none(),
+    ): CompletableFuture<CreditNote> = fetch(creditNoteId, params, RequestOptions.none())
 
     /** @see [fetch] */
     fun fetch(
         params: CreditNoteFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CreditNote>
+
+    /** @see [fetch] */
+    fun fetch(params: CreditNoteFetchParams): CompletableFuture<CreditNote> =
+        fetch(params, RequestOptions.none())
+
+    /** @see [fetch] */
+    fun fetch(creditNoteId: String, requestOptions: RequestOptions): CompletableFuture<CreditNote> =
+        fetch(creditNoteId, CreditNoteFetchParams.none(), requestOptions)
 
     /**
      * A view of [CreditNoteServiceAsync] that provides access to raw HTTP responses for each
@@ -119,8 +141,25 @@ interface CreditNoteServiceAsync {
          * the same as [CreditNoteServiceAsync.fetch].
          */
         @MustBeClosed
-        fun fetch(params: CreditNoteFetchParams): CompletableFuture<HttpResponseFor<CreditNote>> =
-            fetch(params, RequestOptions.none())
+        fun fetch(creditNoteId: String): CompletableFuture<HttpResponseFor<CreditNote>> =
+            fetch(creditNoteId, CreditNoteFetchParams.none())
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(
+            creditNoteId: String,
+            params: CreditNoteFetchParams = CreditNoteFetchParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CreditNote>> =
+            fetch(params.toBuilder().creditNoteId(creditNoteId).build(), requestOptions)
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(
+            creditNoteId: String,
+            params: CreditNoteFetchParams = CreditNoteFetchParams.none(),
+        ): CompletableFuture<HttpResponseFor<CreditNote>> =
+            fetch(creditNoteId, params, RequestOptions.none())
 
         /** @see [fetch] */
         @MustBeClosed
@@ -128,5 +167,18 @@ interface CreditNoteServiceAsync {
             params: CreditNoteFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<CreditNote>>
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(params: CreditNoteFetchParams): CompletableFuture<HttpResponseFor<CreditNote>> =
+            fetch(params, RequestOptions.none())
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(
+            creditNoteId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<CreditNote>> =
+            fetch(creditNoteId, CreditNoteFetchParams.none(), requestOptions)
     }
 }

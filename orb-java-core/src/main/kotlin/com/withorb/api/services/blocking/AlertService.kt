@@ -24,7 +24,18 @@ interface AlertService {
     fun withRawResponse(): WithRawResponse
 
     /** This endpoint retrieves an alert by its ID. */
-    fun retrieve(params: AlertRetrieveParams): Alert = retrieve(params, RequestOptions.none())
+    fun retrieve(alertId: String): Alert = retrieve(alertId, AlertRetrieveParams.none())
+
+    /** @see [retrieve] */
+    fun retrieve(
+        alertId: String,
+        params: AlertRetrieveParams = AlertRetrieveParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Alert = retrieve(params.toBuilder().alertId(alertId).build(), requestOptions)
+
+    /** @see [retrieve] */
+    fun retrieve(alertId: String, params: AlertRetrieveParams = AlertRetrieveParams.none()): Alert =
+        retrieve(alertId, params, RequestOptions.none())
 
     /** @see [retrieve] */
     fun retrieve(
@@ -32,7 +43,29 @@ interface AlertService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Alert
 
+    /** @see [retrieve] */
+    fun retrieve(params: AlertRetrieveParams): Alert = retrieve(params, RequestOptions.none())
+
+    /** @see [retrieve] */
+    fun retrieve(alertId: String, requestOptions: RequestOptions): Alert =
+        retrieve(alertId, AlertRetrieveParams.none(), requestOptions)
+
     /** This endpoint updates the thresholds of an alert. */
+    fun update(alertConfigurationId: String, params: AlertUpdateParams): Alert =
+        update(alertConfigurationId, params, RequestOptions.none())
+
+    /** @see [update] */
+    fun update(
+        alertConfigurationId: String,
+        params: AlertUpdateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Alert =
+        update(
+            params.toBuilder().alertConfigurationId(alertConfigurationId).build(),
+            requestOptions,
+        )
+
+    /** @see [update] */
     fun update(params: AlertUpdateParams): Alert = update(params, RequestOptions.none())
 
     /** @see [update] */
@@ -76,6 +109,17 @@ interface AlertService {
      * `credit_balance_dropped` alerts require a list of thresholds to be provided while
      * `credit_balance_depleted` and `credit_balance_recovered` alerts do not require thresholds.
      */
+    fun createForCustomer(customerId: String, params: AlertCreateForCustomerParams): Alert =
+        createForCustomer(customerId, params, RequestOptions.none())
+
+    /** @see [createForCustomer] */
+    fun createForCustomer(
+        customerId: String,
+        params: AlertCreateForCustomerParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Alert = createForCustomer(params.toBuilder().customerId(customerId).build(), requestOptions)
+
+    /** @see [createForCustomer] */
     fun createForCustomer(params: AlertCreateForCustomerParams): Alert =
         createForCustomer(params, RequestOptions.none())
 
@@ -93,6 +137,23 @@ interface AlertService {
      * `credit_balance_dropped` alerts require a list of thresholds to be provided while
      * `credit_balance_depleted` and `credit_balance_recovered` alerts do not require thresholds.
      */
+    fun createForExternalCustomer(
+        externalCustomerId: String,
+        params: AlertCreateForExternalCustomerParams,
+    ): Alert = createForExternalCustomer(externalCustomerId, params, RequestOptions.none())
+
+    /** @see [createForExternalCustomer] */
+    fun createForExternalCustomer(
+        externalCustomerId: String,
+        params: AlertCreateForExternalCustomerParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Alert =
+        createForExternalCustomer(
+            params.toBuilder().externalCustomerId(externalCustomerId).build(),
+            requestOptions,
+        )
+
+    /** @see [createForExternalCustomer] */
     fun createForExternalCustomer(params: AlertCreateForExternalCustomerParams): Alert =
         createForExternalCustomer(params, RequestOptions.none())
 
@@ -114,6 +175,23 @@ interface AlertService {
      * per metric that is a part of the subscription. Alerts are triggered based on usage or cost
      * conditions met during the current billing cycle.
      */
+    fun createForSubscription(
+        subscriptionId: String,
+        params: AlertCreateForSubscriptionParams,
+    ): Alert = createForSubscription(subscriptionId, params, RequestOptions.none())
+
+    /** @see [createForSubscription] */
+    fun createForSubscription(
+        subscriptionId: String,
+        params: AlertCreateForSubscriptionParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Alert =
+        createForSubscription(
+            params.toBuilder().subscriptionId(subscriptionId).build(),
+            requestOptions,
+        )
+
+    /** @see [createForSubscription] */
     fun createForSubscription(params: AlertCreateForSubscriptionParams): Alert =
         createForSubscription(params, RequestOptions.none())
 
@@ -128,7 +206,25 @@ interface AlertService {
      * subscription, you must include the `subscription_id`. The `subscription_id` is not required
      * for customer or subscription level alerts.
      */
-    fun disable(params: AlertDisableParams): Alert = disable(params, RequestOptions.none())
+    fun disable(alertConfigurationId: String): Alert =
+        disable(alertConfigurationId, AlertDisableParams.none())
+
+    /** @see [disable] */
+    fun disable(
+        alertConfigurationId: String,
+        params: AlertDisableParams = AlertDisableParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Alert =
+        disable(
+            params.toBuilder().alertConfigurationId(alertConfigurationId).build(),
+            requestOptions,
+        )
+
+    /** @see [disable] */
+    fun disable(
+        alertConfigurationId: String,
+        params: AlertDisableParams = AlertDisableParams.none(),
+    ): Alert = disable(alertConfigurationId, params, RequestOptions.none())
 
     /** @see [disable] */
     fun disable(
@@ -136,18 +232,50 @@ interface AlertService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Alert
 
+    /** @see [disable] */
+    fun disable(params: AlertDisableParams): Alert = disable(params, RequestOptions.none())
+
+    /** @see [disable] */
+    fun disable(alertConfigurationId: String, requestOptions: RequestOptions): Alert =
+        disable(alertConfigurationId, AlertDisableParams.none(), requestOptions)
+
     /**
      * This endpoint allows you to enable an alert. To enable a plan-level alert for a specific
      * subscription, you must include the `subscription_id`. The `subscription_id` is not required
      * for customer or subscription level alerts.
      */
-    fun enable(params: AlertEnableParams): Alert = enable(params, RequestOptions.none())
+    fun enable(alertConfigurationId: String): Alert =
+        enable(alertConfigurationId, AlertEnableParams.none())
+
+    /** @see [enable] */
+    fun enable(
+        alertConfigurationId: String,
+        params: AlertEnableParams = AlertEnableParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Alert =
+        enable(
+            params.toBuilder().alertConfigurationId(alertConfigurationId).build(),
+            requestOptions,
+        )
+
+    /** @see [enable] */
+    fun enable(
+        alertConfigurationId: String,
+        params: AlertEnableParams = AlertEnableParams.none(),
+    ): Alert = enable(alertConfigurationId, params, RequestOptions.none())
 
     /** @see [enable] */
     fun enable(
         params: AlertEnableParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Alert
+
+    /** @see [enable] */
+    fun enable(params: AlertEnableParams): Alert = enable(params, RequestOptions.none())
+
+    /** @see [enable] */
+    fun enable(alertConfigurationId: String, requestOptions: RequestOptions): Alert =
+        enable(alertConfigurationId, AlertEnableParams.none(), requestOptions)
 
     /** A view of [AlertService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -157,8 +285,24 @@ interface AlertService {
          * [AlertService.retrieve].
          */
         @MustBeClosed
-        fun retrieve(params: AlertRetrieveParams): HttpResponseFor<Alert> =
-            retrieve(params, RequestOptions.none())
+        fun retrieve(alertId: String): HttpResponseFor<Alert> =
+            retrieve(alertId, AlertRetrieveParams.none())
+
+        /** @see [retrieve] */
+        @MustBeClosed
+        fun retrieve(
+            alertId: String,
+            params: AlertRetrieveParams = AlertRetrieveParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Alert> =
+            retrieve(params.toBuilder().alertId(alertId).build(), requestOptions)
+
+        /** @see [retrieve] */
+        @MustBeClosed
+        fun retrieve(
+            alertId: String,
+            params: AlertRetrieveParams = AlertRetrieveParams.none(),
+        ): HttpResponseFor<Alert> = retrieve(alertId, params, RequestOptions.none())
 
         /** @see [retrieve] */
         @MustBeClosed
@@ -167,10 +311,39 @@ interface AlertService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Alert>
 
+        /** @see [retrieve] */
+        @MustBeClosed
+        fun retrieve(params: AlertRetrieveParams): HttpResponseFor<Alert> =
+            retrieve(params, RequestOptions.none())
+
+        /** @see [retrieve] */
+        @MustBeClosed
+        fun retrieve(alertId: String, requestOptions: RequestOptions): HttpResponseFor<Alert> =
+            retrieve(alertId, AlertRetrieveParams.none(), requestOptions)
+
         /**
          * Returns a raw HTTP response for `put /alerts/{alert_configuration_id}`, but is otherwise
          * the same as [AlertService.update].
          */
+        @MustBeClosed
+        fun update(
+            alertConfigurationId: String,
+            params: AlertUpdateParams,
+        ): HttpResponseFor<Alert> = update(alertConfigurationId, params, RequestOptions.none())
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
+            alertConfigurationId: String,
+            params: AlertUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Alert> =
+            update(
+                params.toBuilder().alertConfigurationId(alertConfigurationId).build(),
+                requestOptions,
+            )
+
+        /** @see [update] */
         @MustBeClosed
         fun update(params: AlertUpdateParams): HttpResponseFor<Alert> =
             update(params, RequestOptions.none())
@@ -210,6 +383,22 @@ interface AlertService {
          * otherwise the same as [AlertService.createForCustomer].
          */
         @MustBeClosed
+        fun createForCustomer(
+            customerId: String,
+            params: AlertCreateForCustomerParams,
+        ): HttpResponseFor<Alert> = createForCustomer(customerId, params, RequestOptions.none())
+
+        /** @see [createForCustomer] */
+        @MustBeClosed
+        fun createForCustomer(
+            customerId: String,
+            params: AlertCreateForCustomerParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Alert> =
+            createForCustomer(params.toBuilder().customerId(customerId).build(), requestOptions)
+
+        /** @see [createForCustomer] */
+        @MustBeClosed
         fun createForCustomer(params: AlertCreateForCustomerParams): HttpResponseFor<Alert> =
             createForCustomer(params, RequestOptions.none())
 
@@ -225,6 +414,26 @@ interface AlertService {
          * /alerts/external_customer_id/{external_customer_id}`, but is otherwise the same as
          * [AlertService.createForExternalCustomer].
          */
+        @MustBeClosed
+        fun createForExternalCustomer(
+            externalCustomerId: String,
+            params: AlertCreateForExternalCustomerParams,
+        ): HttpResponseFor<Alert> =
+            createForExternalCustomer(externalCustomerId, params, RequestOptions.none())
+
+        /** @see [createForExternalCustomer] */
+        @MustBeClosed
+        fun createForExternalCustomer(
+            externalCustomerId: String,
+            params: AlertCreateForExternalCustomerParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Alert> =
+            createForExternalCustomer(
+                params.toBuilder().externalCustomerId(externalCustomerId).build(),
+                requestOptions,
+            )
+
+        /** @see [createForExternalCustomer] */
         @MustBeClosed
         fun createForExternalCustomer(
             params: AlertCreateForExternalCustomerParams
@@ -243,6 +452,26 @@ interface AlertService {
          */
         @MustBeClosed
         fun createForSubscription(
+            subscriptionId: String,
+            params: AlertCreateForSubscriptionParams,
+        ): HttpResponseFor<Alert> =
+            createForSubscription(subscriptionId, params, RequestOptions.none())
+
+        /** @see [createForSubscription] */
+        @MustBeClosed
+        fun createForSubscription(
+            subscriptionId: String,
+            params: AlertCreateForSubscriptionParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Alert> =
+            createForSubscription(
+                params.toBuilder().subscriptionId(subscriptionId).build(),
+                requestOptions,
+            )
+
+        /** @see [createForSubscription] */
+        @MustBeClosed
+        fun createForSubscription(
             params: AlertCreateForSubscriptionParams
         ): HttpResponseFor<Alert> = createForSubscription(params, RequestOptions.none())
 
@@ -258,8 +487,27 @@ interface AlertService {
          * otherwise the same as [AlertService.disable].
          */
         @MustBeClosed
-        fun disable(params: AlertDisableParams): HttpResponseFor<Alert> =
-            disable(params, RequestOptions.none())
+        fun disable(alertConfigurationId: String): HttpResponseFor<Alert> =
+            disable(alertConfigurationId, AlertDisableParams.none())
+
+        /** @see [disable] */
+        @MustBeClosed
+        fun disable(
+            alertConfigurationId: String,
+            params: AlertDisableParams = AlertDisableParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Alert> =
+            disable(
+                params.toBuilder().alertConfigurationId(alertConfigurationId).build(),
+                requestOptions,
+            )
+
+        /** @see [disable] */
+        @MustBeClosed
+        fun disable(
+            alertConfigurationId: String,
+            params: AlertDisableParams = AlertDisableParams.none(),
+        ): HttpResponseFor<Alert> = disable(alertConfigurationId, params, RequestOptions.none())
 
         /** @see [disable] */
         @MustBeClosed
@@ -268,13 +516,45 @@ interface AlertService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Alert>
 
+        /** @see [disable] */
+        @MustBeClosed
+        fun disable(params: AlertDisableParams): HttpResponseFor<Alert> =
+            disable(params, RequestOptions.none())
+
+        /** @see [disable] */
+        @MustBeClosed
+        fun disable(
+            alertConfigurationId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<Alert> =
+            disable(alertConfigurationId, AlertDisableParams.none(), requestOptions)
+
         /**
          * Returns a raw HTTP response for `post /alerts/{alert_configuration_id}/enable`, but is
          * otherwise the same as [AlertService.enable].
          */
         @MustBeClosed
-        fun enable(params: AlertEnableParams): HttpResponseFor<Alert> =
-            enable(params, RequestOptions.none())
+        fun enable(alertConfigurationId: String): HttpResponseFor<Alert> =
+            enable(alertConfigurationId, AlertEnableParams.none())
+
+        /** @see [enable] */
+        @MustBeClosed
+        fun enable(
+            alertConfigurationId: String,
+            params: AlertEnableParams = AlertEnableParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Alert> =
+            enable(
+                params.toBuilder().alertConfigurationId(alertConfigurationId).build(),
+                requestOptions,
+            )
+
+        /** @see [enable] */
+        @MustBeClosed
+        fun enable(
+            alertConfigurationId: String,
+            params: AlertEnableParams = AlertEnableParams.none(),
+        ): HttpResponseFor<Alert> = enable(alertConfigurationId, params, RequestOptions.none())
 
         /** @see [enable] */
         @MustBeClosed
@@ -282,5 +562,18 @@ interface AlertService {
             params: AlertEnableParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Alert>
+
+        /** @see [enable] */
+        @MustBeClosed
+        fun enable(params: AlertEnableParams): HttpResponseFor<Alert> =
+            enable(params, RequestOptions.none())
+
+        /** @see [enable] */
+        @MustBeClosed
+        fun enable(
+            alertConfigurationId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<Alert> =
+            enable(alertConfigurationId, AlertEnableParams.none(), requestOptions)
     }
 }

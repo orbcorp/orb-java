@@ -4,7 +4,6 @@ package com.withorb.api.models
 
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.Params
-import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.toImmutable
@@ -19,14 +18,14 @@ import kotlin.jvm.optionals.getOrNull
  */
 class AlertEnableParams
 private constructor(
-    private val alertConfigurationId: String,
+    private val alertConfigurationId: String?,
     private val subscriptionId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
-    fun alertConfigurationId(): String = alertConfigurationId
+    fun alertConfigurationId(): Optional<String> = Optional.ofNullable(alertConfigurationId)
 
     /** Used to update the status of a plan alert scoped to this subscription_id */
     fun subscriptionId(): Optional<String> = Optional.ofNullable(subscriptionId)
@@ -41,14 +40,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [AlertEnableParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .alertConfigurationId()
-         * ```
-         */
+        @JvmStatic fun none(): AlertEnableParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [AlertEnableParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -70,9 +64,16 @@ private constructor(
             additionalBodyProperties = alertEnableParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun alertConfigurationId(alertConfigurationId: String) = apply {
+        fun alertConfigurationId(alertConfigurationId: String?) = apply {
             this.alertConfigurationId = alertConfigurationId
         }
+
+        /**
+         * Alias for calling [Builder.alertConfigurationId] with
+         * `alertConfigurationId.orElse(null)`.
+         */
+        fun alertConfigurationId(alertConfigurationId: Optional<String>) =
+            alertConfigurationId(alertConfigurationId.getOrNull())
 
         /** Used to update the status of a plan alert scoped to this subscription_id */
         fun subscriptionId(subscriptionId: String?) = apply { this.subscriptionId = subscriptionId }
@@ -205,17 +206,10 @@ private constructor(
          * Returns an immutable instance of [AlertEnableParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .alertConfigurationId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): AlertEnableParams =
             AlertEnableParams(
-                checkRequired("alertConfigurationId", alertConfigurationId),
+                alertConfigurationId,
                 subscriptionId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -228,7 +222,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> alertConfigurationId
+            0 -> alertConfigurationId ?: ""
             else -> ""
         }
 

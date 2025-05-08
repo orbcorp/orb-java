@@ -5,6 +5,7 @@ package com.withorb.api.services.async.customers
 import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
 import com.withorb.api.core.handlers.withErrorHandler
@@ -25,6 +26,7 @@ import com.withorb.api.services.async.customers.credits.LedgerServiceAsyncImpl
 import com.withorb.api.services.async.customers.credits.TopUpServiceAsync
 import com.withorb.api.services.async.customers.credits.TopUpServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
+import kotlin.jvm.optionals.getOrNull
 
 class CreditServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     CreditServiceAsync {
@@ -82,6 +84,9 @@ class CreditServiceAsyncImpl internal constructor(private val clientOptions: Cli
             params: CustomerCreditListParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<CustomerCreditListPageAsync>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("customerId", params.customerId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -119,6 +124,9 @@ class CreditServiceAsyncImpl internal constructor(private val clientOptions: Cli
             params: CustomerCreditListByExternalIdParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<CustomerCreditListByExternalIdPageAsync>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("externalCustomerId", params.externalCustomerId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)

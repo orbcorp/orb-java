@@ -62,13 +62,13 @@ import kotlin.jvm.optionals.getOrNull
  */
 class EventUpdateParams
 private constructor(
-    private val eventId: String,
+    private val eventId: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun eventId(): String = eventId
+    fun eventId(): Optional<String> = Optional.ofNullable(eventId)
 
     /**
      * A name to meaningfully identify the action or event type.
@@ -154,7 +154,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .eventId()
          * .eventName()
          * .properties()
          * .timestamp()
@@ -179,7 +178,10 @@ private constructor(
             additionalQueryParams = eventUpdateParams.additionalQueryParams.toBuilder()
         }
 
-        fun eventId(eventId: String) = apply { this.eventId = eventId }
+        fun eventId(eventId: String?) = apply { this.eventId = eventId }
+
+        /** Alias for calling [Builder.eventId] with `eventId.orElse(null)`. */
+        fun eventId(eventId: Optional<String>) = eventId(eventId.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -390,7 +392,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .eventId()
          * .eventName()
          * .properties()
          * .timestamp()
@@ -400,7 +401,7 @@ private constructor(
          */
         fun build(): EventUpdateParams =
             EventUpdateParams(
-                checkRequired("eventId", eventId),
+                eventId,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -411,7 +412,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> eventId
+            0 -> eventId ?: ""
             else -> ""
         }
 

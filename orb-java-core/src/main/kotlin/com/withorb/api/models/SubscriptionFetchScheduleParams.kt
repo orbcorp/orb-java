@@ -3,7 +3,6 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.Params
-import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import java.time.OffsetDateTime
@@ -19,7 +18,7 @@ import kotlin.jvm.optionals.getOrNull
  */
 class SubscriptionFetchScheduleParams
 private constructor(
-    private val subscriptionId: String,
+    private val subscriptionId: String?,
     private val cursor: String?,
     private val limit: Long?,
     private val startDateGt: OffsetDateTime?,
@@ -30,7 +29,7 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun subscriptionId(): String = subscriptionId
+    fun subscriptionId(): Optional<String> = Optional.ofNullable(subscriptionId)
 
     /**
      * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
@@ -57,14 +56,11 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): SubscriptionFetchScheduleParams = builder().build()
+
         /**
          * Returns a mutable builder for constructing an instance of
          * [SubscriptionFetchScheduleParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .subscriptionId()
-         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
@@ -97,7 +93,11 @@ private constructor(
                     subscriptionFetchScheduleParams.additionalQueryParams.toBuilder()
             }
 
-        fun subscriptionId(subscriptionId: String) = apply { this.subscriptionId = subscriptionId }
+        fun subscriptionId(subscriptionId: String?) = apply { this.subscriptionId = subscriptionId }
+
+        /** Alias for calling [Builder.subscriptionId] with `subscriptionId.orElse(null)`. */
+        fun subscriptionId(subscriptionId: Optional<String>) =
+            subscriptionId(subscriptionId.getOrNull())
 
         /**
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
@@ -247,17 +247,10 @@ private constructor(
          * Returns an immutable instance of [SubscriptionFetchScheduleParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .subscriptionId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): SubscriptionFetchScheduleParams =
             SubscriptionFetchScheduleParams(
-                checkRequired("subscriptionId", subscriptionId),
+                subscriptionId,
                 cursor,
                 limit,
                 startDateGt,
@@ -271,7 +264,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> subscriptionId
+            0 -> subscriptionId ?: ""
             else -> ""
         }
 

@@ -10,6 +10,7 @@ import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This deactivates the top-up and voids any invoices associated with pending credit blocks
@@ -18,7 +19,7 @@ import java.util.Optional
 class CustomerCreditTopUpDeleteParams
 private constructor(
     private val customerId: String,
-    private val topUpId: String,
+    private val topUpId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
@@ -26,7 +27,7 @@ private constructor(
 
     fun customerId(): String = customerId
 
-    fun topUpId(): String = topUpId
+    fun topUpId(): Optional<String> = Optional.ofNullable(topUpId)
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
@@ -45,7 +46,6 @@ private constructor(
          * The following fields are required:
          * ```java
          * .customerId()
-         * .topUpId()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -74,7 +74,10 @@ private constructor(
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
 
-        fun topUpId(topUpId: String) = apply { this.topUpId = topUpId }
+        fun topUpId(topUpId: String?) = apply { this.topUpId = topUpId }
+
+        /** Alias for calling [Builder.topUpId] with `topUpId.orElse(null)`. */
+        fun topUpId(topUpId: Optional<String>) = topUpId(topUpId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -204,7 +207,6 @@ private constructor(
          * The following fields are required:
          * ```java
          * .customerId()
-         * .topUpId()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
@@ -212,7 +214,7 @@ private constructor(
         fun build(): CustomerCreditTopUpDeleteParams =
             CustomerCreditTopUpDeleteParams(
                 checkRequired("customerId", customerId),
-                checkRequired("topUpId", topUpId),
+                topUpId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -225,7 +227,7 @@ private constructor(
     fun _pathParam(index: Int): String =
         when (index) {
             0 -> customerId
-            1 -> topUpId
+            1 -> topUpId ?: ""
             else -> ""
         }
 

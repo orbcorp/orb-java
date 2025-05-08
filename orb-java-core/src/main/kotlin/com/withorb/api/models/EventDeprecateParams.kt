@@ -4,12 +4,12 @@ package com.withorb.api.models
 
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.Params
-import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint is used to deprecate a single usage event with a given `event_id`. `event_id`
@@ -47,13 +47,13 @@ import java.util.Optional
  */
 class EventDeprecateParams
 private constructor(
-    private val eventId: String,
+    private val eventId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
-    fun eventId(): String = eventId
+    fun eventId(): Optional<String> = Optional.ofNullable(eventId)
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
@@ -65,14 +65,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [EventDeprecateParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .eventId()
-         * ```
-         */
+        @JvmStatic fun none(): EventDeprecateParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [EventDeprecateParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -92,7 +87,10 @@ private constructor(
             additionalBodyProperties = eventDeprecateParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun eventId(eventId: String) = apply { this.eventId = eventId }
+        fun eventId(eventId: String?) = apply { this.eventId = eventId }
+
+        /** Alias for calling [Builder.eventId] with `eventId.orElse(null)`. */
+        fun eventId(eventId: Optional<String>) = eventId(eventId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -218,17 +216,10 @@ private constructor(
          * Returns an immutable instance of [EventDeprecateParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .eventId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): EventDeprecateParams =
             EventDeprecateParams(
-                checkRequired("eventId", eventId),
+                eventId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -240,7 +231,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> eventId
+            0 -> eventId ?: ""
             else -> ""
         }
 

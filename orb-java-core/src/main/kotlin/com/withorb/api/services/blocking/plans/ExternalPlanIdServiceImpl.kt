@@ -5,6 +5,7 @@ package com.withorb.api.services.blocking.plans
 import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
 import com.withorb.api.core.handlers.withErrorHandler
@@ -18,6 +19,7 @@ import com.withorb.api.core.prepare
 import com.withorb.api.models.Plan
 import com.withorb.api.models.PlanExternalPlanIdFetchParams
 import com.withorb.api.models.PlanExternalPlanIdUpdateParams
+import kotlin.jvm.optionals.getOrNull
 
 class ExternalPlanIdServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     ExternalPlanIdService {
@@ -54,6 +56,9 @@ class ExternalPlanIdServiceImpl internal constructor(private val clientOptions: 
             params: PlanExternalPlanIdUpdateParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Plan> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("otherExternalPlanId", params.otherExternalPlanId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -81,6 +86,9 @@ class ExternalPlanIdServiceImpl internal constructor(private val clientOptions: 
             params: PlanExternalPlanIdFetchParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Plan> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("externalPlanId", params.externalPlanId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)

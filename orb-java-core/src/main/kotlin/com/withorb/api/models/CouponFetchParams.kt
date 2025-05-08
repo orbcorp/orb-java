@@ -3,10 +3,11 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.Params
-import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint retrieves a coupon by its ID. To fetch coupons by their redemption code, use the
@@ -14,12 +15,12 @@ import java.util.Objects
  */
 class CouponFetchParams
 private constructor(
-    private val couponId: String,
+    private val couponId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun couponId(): String = couponId
+    fun couponId(): Optional<String> = Optional.ofNullable(couponId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -29,14 +30,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [CouponFetchParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .couponId()
-         * ```
-         */
+        @JvmStatic fun none(): CouponFetchParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [CouponFetchParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -54,7 +50,10 @@ private constructor(
             additionalQueryParams = couponFetchParams.additionalQueryParams.toBuilder()
         }
 
-        fun couponId(couponId: String) = apply { this.couponId = couponId }
+        fun couponId(couponId: String?) = apply { this.couponId = couponId }
+
+        /** Alias for calling [Builder.couponId] with `couponId.orElse(null)`. */
+        fun couponId(couponId: Optional<String>) = couponId(couponId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -158,25 +157,14 @@ private constructor(
          * Returns an immutable instance of [CouponFetchParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .couponId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): CouponFetchParams =
-            CouponFetchParams(
-                checkRequired("couponId", couponId),
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
-            )
+            CouponFetchParams(couponId, additionalHeaders.build(), additionalQueryParams.build())
     }
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> couponId
+            0 -> couponId ?: ""
             else -> ""
         }
 

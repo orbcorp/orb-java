@@ -5,7 +5,6 @@ package com.withorb.api.services.async.prices
 import com.withorb.api.TestServerExtension
 import com.withorb.api.client.okhttp.OrbOkHttpClientAsync
 import com.withorb.api.core.JsonValue
-import com.withorb.api.models.PriceExternalPriceIdFetchParams
 import com.withorb.api.models.PriceExternalPriceIdUpdateParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -47,12 +46,7 @@ internal class ExternalPriceIdServiceAsyncTest {
                 .build()
         val externalPriceIdServiceAsync = client.prices().externalPriceId()
 
-        val priceFuture =
-            externalPriceIdServiceAsync.fetch(
-                PriceExternalPriceIdFetchParams.builder()
-                    .externalPriceId("external_price_id")
-                    .build()
-            )
+        val priceFuture = externalPriceIdServiceAsync.fetch("external_price_id")
 
         val price = priceFuture.get()
         price.validate()

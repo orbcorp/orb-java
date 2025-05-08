@@ -23,14 +23,39 @@ interface ExternalPlanIdServiceAsync {
      *
      * Other fields on a customer are currently immutable.
      */
-    fun update(params: PlanExternalPlanIdUpdateParams): CompletableFuture<Plan> =
-        update(params, RequestOptions.none())
+    fun update(otherExternalPlanId: String): CompletableFuture<Plan> =
+        update(otherExternalPlanId, PlanExternalPlanIdUpdateParams.none())
+
+    /** @see [update] */
+    fun update(
+        otherExternalPlanId: String,
+        params: PlanExternalPlanIdUpdateParams = PlanExternalPlanIdUpdateParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Plan> =
+        update(params.toBuilder().otherExternalPlanId(otherExternalPlanId).build(), requestOptions)
+
+    /** @see [update] */
+    fun update(
+        otherExternalPlanId: String,
+        params: PlanExternalPlanIdUpdateParams = PlanExternalPlanIdUpdateParams.none(),
+    ): CompletableFuture<Plan> = update(otherExternalPlanId, params, RequestOptions.none())
 
     /** @see [update] */
     fun update(
         params: PlanExternalPlanIdUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Plan>
+
+    /** @see [update] */
+    fun update(params: PlanExternalPlanIdUpdateParams): CompletableFuture<Plan> =
+        update(params, RequestOptions.none())
+
+    /** @see [update] */
+    fun update(
+        otherExternalPlanId: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Plan> =
+        update(otherExternalPlanId, PlanExternalPlanIdUpdateParams.none(), requestOptions)
 
     /**
      * This endpoint is used to fetch [plan](/core-concepts##plan-and-price) details given an
@@ -49,14 +74,36 @@ interface ExternalPlanIdServiceAsync {
      * detailed explanation of price types can be found in the
      * [Price schema](/core-concepts#plan-and-price). "
      */
-    fun fetch(params: PlanExternalPlanIdFetchParams): CompletableFuture<Plan> =
-        fetch(params, RequestOptions.none())
+    fun fetch(externalPlanId: String): CompletableFuture<Plan> =
+        fetch(externalPlanId, PlanExternalPlanIdFetchParams.none())
+
+    /** @see [fetch] */
+    fun fetch(
+        externalPlanId: String,
+        params: PlanExternalPlanIdFetchParams = PlanExternalPlanIdFetchParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Plan> =
+        fetch(params.toBuilder().externalPlanId(externalPlanId).build(), requestOptions)
+
+    /** @see [fetch] */
+    fun fetch(
+        externalPlanId: String,
+        params: PlanExternalPlanIdFetchParams = PlanExternalPlanIdFetchParams.none(),
+    ): CompletableFuture<Plan> = fetch(externalPlanId, params, RequestOptions.none())
 
     /** @see [fetch] */
     fun fetch(
         params: PlanExternalPlanIdFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Plan>
+
+    /** @see [fetch] */
+    fun fetch(params: PlanExternalPlanIdFetchParams): CompletableFuture<Plan> =
+        fetch(params, RequestOptions.none())
+
+    /** @see [fetch] */
+    fun fetch(externalPlanId: String, requestOptions: RequestOptions): CompletableFuture<Plan> =
+        fetch(externalPlanId, PlanExternalPlanIdFetchParams.none(), requestOptions)
 
     /**
      * A view of [ExternalPlanIdServiceAsync] that provides access to raw HTTP responses for each
@@ -69,9 +116,28 @@ interface ExternalPlanIdServiceAsync {
          * otherwise the same as [ExternalPlanIdServiceAsync.update].
          */
         @MustBeClosed
+        fun update(otherExternalPlanId: String): CompletableFuture<HttpResponseFor<Plan>> =
+            update(otherExternalPlanId, PlanExternalPlanIdUpdateParams.none())
+
+        /** @see [update] */
+        @MustBeClosed
         fun update(
-            params: PlanExternalPlanIdUpdateParams
-        ): CompletableFuture<HttpResponseFor<Plan>> = update(params, RequestOptions.none())
+            otherExternalPlanId: String,
+            params: PlanExternalPlanIdUpdateParams = PlanExternalPlanIdUpdateParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Plan>> =
+            update(
+                params.toBuilder().otherExternalPlanId(otherExternalPlanId).build(),
+                requestOptions,
+            )
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
+            otherExternalPlanId: String,
+            params: PlanExternalPlanIdUpdateParams = PlanExternalPlanIdUpdateParams.none(),
+        ): CompletableFuture<HttpResponseFor<Plan>> =
+            update(otherExternalPlanId, params, RequestOptions.none())
 
         /** @see [update] */
         @MustBeClosed
@@ -80,13 +146,44 @@ interface ExternalPlanIdServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Plan>>
 
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
+            params: PlanExternalPlanIdUpdateParams
+        ): CompletableFuture<HttpResponseFor<Plan>> = update(params, RequestOptions.none())
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
+            otherExternalPlanId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Plan>> =
+            update(otherExternalPlanId, PlanExternalPlanIdUpdateParams.none(), requestOptions)
+
         /**
          * Returns a raw HTTP response for `get /plans/external_plan_id/{external_plan_id}`, but is
          * otherwise the same as [ExternalPlanIdServiceAsync.fetch].
          */
         @MustBeClosed
-        fun fetch(params: PlanExternalPlanIdFetchParams): CompletableFuture<HttpResponseFor<Plan>> =
-            fetch(params, RequestOptions.none())
+        fun fetch(externalPlanId: String): CompletableFuture<HttpResponseFor<Plan>> =
+            fetch(externalPlanId, PlanExternalPlanIdFetchParams.none())
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(
+            externalPlanId: String,
+            params: PlanExternalPlanIdFetchParams = PlanExternalPlanIdFetchParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Plan>> =
+            fetch(params.toBuilder().externalPlanId(externalPlanId).build(), requestOptions)
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(
+            externalPlanId: String,
+            params: PlanExternalPlanIdFetchParams = PlanExternalPlanIdFetchParams.none(),
+        ): CompletableFuture<HttpResponseFor<Plan>> =
+            fetch(externalPlanId, params, RequestOptions.none())
 
         /** @see [fetch] */
         @MustBeClosed
@@ -94,5 +191,18 @@ interface ExternalPlanIdServiceAsync {
             params: PlanExternalPlanIdFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Plan>>
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(params: PlanExternalPlanIdFetchParams): CompletableFuture<HttpResponseFor<Plan>> =
+            fetch(params, RequestOptions.none())
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(
+            externalPlanId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Plan>> =
+            fetch(externalPlanId, PlanExternalPlanIdFetchParams.none(), requestOptions)
     }
 }

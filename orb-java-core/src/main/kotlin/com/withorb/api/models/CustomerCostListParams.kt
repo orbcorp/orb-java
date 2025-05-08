@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.withorb.api.core.Enum
 import com.withorb.api.core.JsonField
 import com.withorb.api.core.Params
-import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.errors.OrbInvalidDataException
@@ -126,7 +125,7 @@ import kotlin.jvm.optionals.getOrNull
  */
 class CustomerCostListParams
 private constructor(
-    private val customerId: String,
+    private val customerId: String?,
     private val currency: String?,
     private val timeframeEnd: OffsetDateTime?,
     private val timeframeStart: OffsetDateTime?,
@@ -135,7 +134,7 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun customerId(): String = customerId
+    fun customerId(): Optional<String> = Optional.ofNullable(customerId)
 
     /** The currency or custom pricing unit to use. */
     fun currency(): Optional<String> = Optional.ofNullable(currency)
@@ -161,14 +160,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [CustomerCostListParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .customerId()
-         * ```
-         */
+        @JvmStatic fun none(): CustomerCostListParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [CustomerCostListParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -194,7 +188,10 @@ private constructor(
             additionalQueryParams = customerCostListParams.additionalQueryParams.toBuilder()
         }
 
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String?) = apply { this.customerId = customerId }
+
+        /** Alias for calling [Builder.customerId] with `customerId.orElse(null)`. */
+        fun customerId(customerId: Optional<String>) = customerId(customerId.getOrNull())
 
         /** The currency or custom pricing unit to use. */
         fun currency(currency: String?) = apply { this.currency = currency }
@@ -330,17 +327,10 @@ private constructor(
          * Returns an immutable instance of [CustomerCostListParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .customerId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): CustomerCostListParams =
             CustomerCostListParams(
-                checkRequired("customerId", customerId),
+                customerId,
                 currency,
                 timeframeEnd,
                 timeframeStart,
@@ -352,7 +342,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> customerId
+            0 -> customerId ?: ""
             else -> ""
         }
 

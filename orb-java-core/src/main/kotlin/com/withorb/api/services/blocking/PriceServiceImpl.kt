@@ -5,6 +5,7 @@ package com.withorb.api.services.blocking
 import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
 import com.withorb.api.core.handlers.withErrorHandler
@@ -26,6 +27,7 @@ import com.withorb.api.models.PriceListParams
 import com.withorb.api.models.PriceUpdateParams
 import com.withorb.api.services.blocking.prices.ExternalPriceIdService
 import com.withorb.api.services.blocking.prices.ExternalPriceIdServiceImpl
+import kotlin.jvm.optionals.getOrNull
 
 class PriceServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     PriceService {
@@ -110,6 +112,9 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
             params: PriceUpdateParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Price> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("priceId", params.priceId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -172,6 +177,9 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
             params: PriceEvaluateParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<PriceEvaluateResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("priceId", params.priceId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -199,6 +207,9 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
             params: PriceFetchParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Price> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("priceId", params.priceId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)

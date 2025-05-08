@@ -5,6 +5,7 @@ package com.withorb.api.services.blocking
 import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
 import com.withorb.api.core.handlers.withErrorHandler
@@ -26,6 +27,7 @@ import com.withorb.api.models.AlertListPageResponse
 import com.withorb.api.models.AlertListParams
 import com.withorb.api.models.AlertRetrieveParams
 import com.withorb.api.models.AlertUpdateParams
+import kotlin.jvm.optionals.getOrNull
 
 class AlertServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     AlertService {
@@ -89,6 +91,9 @@ class AlertServiceImpl internal constructor(private val clientOptions: ClientOpt
             params: AlertRetrieveParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Alert> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("alertId", params.alertId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -115,6 +120,9 @@ class AlertServiceImpl internal constructor(private val clientOptions: ClientOpt
             params: AlertUpdateParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Alert> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("alertConfigurationId", params.alertConfigurationId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -176,6 +184,9 @@ class AlertServiceImpl internal constructor(private val clientOptions: ClientOpt
             params: AlertCreateForCustomerParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Alert> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("customerId", params.customerId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -203,6 +214,9 @@ class AlertServiceImpl internal constructor(private val clientOptions: ClientOpt
             params: AlertCreateForExternalCustomerParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Alert> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("externalCustomerId", params.externalCustomerId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -230,6 +244,9 @@ class AlertServiceImpl internal constructor(private val clientOptions: ClientOpt
             params: AlertCreateForSubscriptionParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Alert> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("subscriptionId", params.subscriptionId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -257,6 +274,9 @@ class AlertServiceImpl internal constructor(private val clientOptions: ClientOpt
             params: AlertDisableParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Alert> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("alertConfigurationId", params.alertConfigurationId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -284,6 +304,9 @@ class AlertServiceImpl internal constructor(private val clientOptions: ClientOpt
             params: AlertEnableParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Alert> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("alertConfigurationId", params.alertConfigurationId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)

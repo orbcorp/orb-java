@@ -5,6 +5,7 @@ package com.withorb.api.services.async
 import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
 import com.withorb.api.core.handlers.withErrorHandler
@@ -22,6 +23,7 @@ import com.withorb.api.models.SubscriptionChangeCancelResponse
 import com.withorb.api.models.SubscriptionChangeRetrieveParams
 import com.withorb.api.models.SubscriptionChangeRetrieveResponse
 import java.util.concurrent.CompletableFuture
+import kotlin.jvm.optionals.getOrNull
 
 class SubscriptionChangeServiceAsyncImpl
 internal constructor(private val clientOptions: ClientOptions) : SubscriptionChangeServiceAsync {
@@ -66,6 +68,9 @@ internal constructor(private val clientOptions: ClientOptions) : SubscriptionCha
             params: SubscriptionChangeRetrieveParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<SubscriptionChangeRetrieveResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("subscriptionChangeId", params.subscriptionChangeId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -96,6 +101,9 @@ internal constructor(private val clientOptions: ClientOptions) : SubscriptionCha
             params: SubscriptionChangeApplyParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<SubscriptionChangeApplyResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("subscriptionChangeId", params.subscriptionChangeId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -127,6 +135,9 @@ internal constructor(private val clientOptions: ClientOptions) : SubscriptionCha
             params: SubscriptionChangeCancelParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<SubscriptionChangeCancelResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("subscriptionChangeId", params.subscriptionChangeId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)

@@ -44,13 +44,13 @@ import kotlin.jvm.optionals.getOrNull
  */
 class PriceEvaluateParams
 private constructor(
-    private val priceId: String,
+    private val priceId: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun priceId(): String = priceId
+    fun priceId(): Optional<String> = Optional.ofNullable(priceId)
 
     /**
      * The exclusive upper bound for event timestamps
@@ -160,7 +160,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .priceId()
          * .timeframeEnd()
          * .timeframeStart()
          * ```
@@ -184,7 +183,10 @@ private constructor(
             additionalQueryParams = priceEvaluateParams.additionalQueryParams.toBuilder()
         }
 
-        fun priceId(priceId: String) = apply { this.priceId = priceId }
+        fun priceId(priceId: String?) = apply { this.priceId = priceId }
+
+        /** Alias for calling [Builder.priceId] with `priceId.orElse(null)`. */
+        fun priceId(priceId: Optional<String>) = priceId(priceId.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -433,7 +435,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .priceId()
          * .timeframeEnd()
          * .timeframeStart()
          * ```
@@ -442,7 +443,7 @@ private constructor(
          */
         fun build(): PriceEvaluateParams =
             PriceEvaluateParams(
-                checkRequired("priceId", priceId),
+                priceId,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -453,7 +454,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> priceId
+            0 -> priceId ?: ""
             else -> ""
         }
 

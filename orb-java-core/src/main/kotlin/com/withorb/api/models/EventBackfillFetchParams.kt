@@ -3,20 +3,21 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.Params
-import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** This endpoint is used to fetch a backfill given an identifier. */
 class EventBackfillFetchParams
 private constructor(
-    private val backfillId: String,
+    private val backfillId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun backfillId(): String = backfillId
+    fun backfillId(): Optional<String> = Optional.ofNullable(backfillId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -26,14 +27,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [EventBackfillFetchParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .backfillId()
-         * ```
-         */
+        @JvmStatic fun none(): EventBackfillFetchParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [EventBackfillFetchParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -51,7 +47,10 @@ private constructor(
             additionalQueryParams = eventBackfillFetchParams.additionalQueryParams.toBuilder()
         }
 
-        fun backfillId(backfillId: String) = apply { this.backfillId = backfillId }
+        fun backfillId(backfillId: String?) = apply { this.backfillId = backfillId }
+
+        /** Alias for calling [Builder.backfillId] with `backfillId.orElse(null)`. */
+        fun backfillId(backfillId: Optional<String>) = backfillId(backfillId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -155,17 +154,10 @@ private constructor(
          * Returns an immutable instance of [EventBackfillFetchParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .backfillId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): EventBackfillFetchParams =
             EventBackfillFetchParams(
-                checkRequired("backfillId", backfillId),
+                backfillId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -173,7 +165,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> backfillId
+            0 -> backfillId ?: ""
             else -> ""
         }
 

@@ -6,13 +6,10 @@ import com.withorb.api.TestServerExtension
 import com.withorb.api.client.okhttp.OrbOkHttpClientAsync
 import com.withorb.api.core.JsonValue
 import com.withorb.api.models.InvoiceCreateParams
-import com.withorb.api.models.InvoiceFetchParams
 import com.withorb.api.models.InvoiceFetchUpcomingParams
 import com.withorb.api.models.InvoiceIssueParams
 import com.withorb.api.models.InvoiceMarkPaidParams
-import com.withorb.api.models.InvoicePayParams
 import com.withorb.api.models.InvoiceUpdateParams
-import com.withorb.api.models.InvoiceVoidInvoiceParams
 import com.withorb.api.models.PercentageDiscount
 import java.time.LocalDate
 import java.time.OffsetDateTime
@@ -126,8 +123,7 @@ internal class InvoiceServiceAsyncTest {
                 .build()
         val invoiceServiceAsync = client.invoices()
 
-        val invoiceFuture =
-            invoiceServiceAsync.fetch(InvoiceFetchParams.builder().invoiceId("invoice_id").build())
+        val invoiceFuture = invoiceServiceAsync.fetch("invoice_id")
 
         val invoice = invoiceFuture.get()
         invoice.validate()
@@ -201,8 +197,7 @@ internal class InvoiceServiceAsyncTest {
                 .build()
         val invoiceServiceAsync = client.invoices()
 
-        val invoiceFuture =
-            invoiceServiceAsync.pay(InvoicePayParams.builder().invoiceId("invoice_id").build())
+        val invoiceFuture = invoiceServiceAsync.pay("invoice_id")
 
         val invoice = invoiceFuture.get()
         invoice.validate()
@@ -217,10 +212,7 @@ internal class InvoiceServiceAsyncTest {
                 .build()
         val invoiceServiceAsync = client.invoices()
 
-        val invoiceFuture =
-            invoiceServiceAsync.voidInvoice(
-                InvoiceVoidInvoiceParams.builder().invoiceId("invoice_id").build()
-            )
+        val invoiceFuture = invoiceServiceAsync.voidInvoice("invoice_id")
 
         val invoice = invoiceFuture.get()
         invoice.validate()

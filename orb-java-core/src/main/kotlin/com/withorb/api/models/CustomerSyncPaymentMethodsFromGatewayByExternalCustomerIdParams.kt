@@ -4,12 +4,12 @@ package com.withorb.api.models
 
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.Params
-import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Sync Orb's payment methods for the customer with their gateway.
@@ -21,13 +21,13 @@ import java.util.Optional
  */
 class CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams
 private constructor(
-    private val externalCustomerId: String,
+    private val externalCustomerId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
-    fun externalCustomerId(): String = externalCustomerId
+    fun externalCustomerId(): Optional<String> = Optional.ofNullable(externalCustomerId)
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
@@ -39,14 +39,13 @@ private constructor(
 
     companion object {
 
+        @JvmStatic
+        fun none(): CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams =
+            builder().build()
+
         /**
          * Returns a mutable builder for constructing an instance of
          * [CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .externalCustomerId()
-         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
@@ -79,9 +78,15 @@ private constructor(
                     .toMutableMap()
         }
 
-        fun externalCustomerId(externalCustomerId: String) = apply {
+        fun externalCustomerId(externalCustomerId: String?) = apply {
             this.externalCustomerId = externalCustomerId
         }
+
+        /**
+         * Alias for calling [Builder.externalCustomerId] with `externalCustomerId.orElse(null)`.
+         */
+        fun externalCustomerId(externalCustomerId: Optional<String>) =
+            externalCustomerId(externalCustomerId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -208,17 +213,10 @@ private constructor(
          * [CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .externalCustomerId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams =
             CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams(
-                checkRequired("externalCustomerId", externalCustomerId),
+                externalCustomerId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -230,7 +228,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> externalCustomerId
+            0 -> externalCustomerId ?: ""
             else -> ""
         }
 

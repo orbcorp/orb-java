@@ -31,14 +31,34 @@ interface ItemServiceAsync {
     ): CompletableFuture<Item>
 
     /** This endpoint can be used to update properties on the Item. */
-    fun update(params: ItemUpdateParams): CompletableFuture<Item> =
-        update(params, RequestOptions.none())
+    fun update(itemId: String): CompletableFuture<Item> = update(itemId, ItemUpdateParams.none())
+
+    /** @see [update] */
+    fun update(
+        itemId: String,
+        params: ItemUpdateParams = ItemUpdateParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Item> = update(params.toBuilder().itemId(itemId).build(), requestOptions)
+
+    /** @see [update] */
+    fun update(
+        itemId: String,
+        params: ItemUpdateParams = ItemUpdateParams.none(),
+    ): CompletableFuture<Item> = update(itemId, params, RequestOptions.none())
 
     /** @see [update] */
     fun update(
         params: ItemUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Item>
+
+    /** @see [update] */
+    fun update(params: ItemUpdateParams): CompletableFuture<Item> =
+        update(params, RequestOptions.none())
+
+    /** @see [update] */
+    fun update(itemId: String, requestOptions: RequestOptions): CompletableFuture<Item> =
+        update(itemId, ItemUpdateParams.none(), requestOptions)
 
     /** This endpoint returns a list of all Items, ordered in descending order by creation time. */
     fun list(): CompletableFuture<ItemListPageAsync> = list(ItemListParams.none())
@@ -58,14 +78,34 @@ interface ItemServiceAsync {
         list(ItemListParams.none(), requestOptions)
 
     /** This endpoint returns an item identified by its item_id. */
-    fun fetch(params: ItemFetchParams): CompletableFuture<Item> =
-        fetch(params, RequestOptions.none())
+    fun fetch(itemId: String): CompletableFuture<Item> = fetch(itemId, ItemFetchParams.none())
+
+    /** @see [fetch] */
+    fun fetch(
+        itemId: String,
+        params: ItemFetchParams = ItemFetchParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Item> = fetch(params.toBuilder().itemId(itemId).build(), requestOptions)
+
+    /** @see [fetch] */
+    fun fetch(
+        itemId: String,
+        params: ItemFetchParams = ItemFetchParams.none(),
+    ): CompletableFuture<Item> = fetch(itemId, params, RequestOptions.none())
 
     /** @see [fetch] */
     fun fetch(
         params: ItemFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Item>
+
+    /** @see [fetch] */
+    fun fetch(params: ItemFetchParams): CompletableFuture<Item> =
+        fetch(params, RequestOptions.none())
+
+    /** @see [fetch] */
+    fun fetch(itemId: String, requestOptions: RequestOptions): CompletableFuture<Item> =
+        fetch(itemId, ItemFetchParams.none(), requestOptions)
 
     /** A view of [ItemServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -90,8 +130,24 @@ interface ItemServiceAsync {
          * [ItemServiceAsync.update].
          */
         @MustBeClosed
-        fun update(params: ItemUpdateParams): CompletableFuture<HttpResponseFor<Item>> =
-            update(params, RequestOptions.none())
+        fun update(itemId: String): CompletableFuture<HttpResponseFor<Item>> =
+            update(itemId, ItemUpdateParams.none())
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
+            itemId: String,
+            params: ItemUpdateParams = ItemUpdateParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Item>> =
+            update(params.toBuilder().itemId(itemId).build(), requestOptions)
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
+            itemId: String,
+            params: ItemUpdateParams = ItemUpdateParams.none(),
+        ): CompletableFuture<HttpResponseFor<Item>> = update(itemId, params, RequestOptions.none())
 
         /** @see [update] */
         @MustBeClosed
@@ -99,6 +155,19 @@ interface ItemServiceAsync {
             params: ItemUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Item>>
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(params: ItemUpdateParams): CompletableFuture<HttpResponseFor<Item>> =
+            update(params, RequestOptions.none())
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
+            itemId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Item>> =
+            update(itemId, ItemUpdateParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /items`, but is otherwise the same as
@@ -134,8 +203,24 @@ interface ItemServiceAsync {
          * [ItemServiceAsync.fetch].
          */
         @MustBeClosed
-        fun fetch(params: ItemFetchParams): CompletableFuture<HttpResponseFor<Item>> =
-            fetch(params, RequestOptions.none())
+        fun fetch(itemId: String): CompletableFuture<HttpResponseFor<Item>> =
+            fetch(itemId, ItemFetchParams.none())
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(
+            itemId: String,
+            params: ItemFetchParams = ItemFetchParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Item>> =
+            fetch(params.toBuilder().itemId(itemId).build(), requestOptions)
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(
+            itemId: String,
+            params: ItemFetchParams = ItemFetchParams.none(),
+        ): CompletableFuture<HttpResponseFor<Item>> = fetch(itemId, params, RequestOptions.none())
 
         /** @see [fetch] */
         @MustBeClosed
@@ -143,5 +228,18 @@ interface ItemServiceAsync {
             params: ItemFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Item>>
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(params: ItemFetchParams): CompletableFuture<HttpResponseFor<Item>> =
+            fetch(params, RequestOptions.none())
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(
+            itemId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Item>> =
+            fetch(itemId, ItemFetchParams.none(), requestOptions)
     }
 }

@@ -5,6 +5,7 @@ package com.withorb.api.services.blocking
 import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
 import com.withorb.api.core.handlers.withErrorHandler
@@ -22,6 +23,7 @@ import com.withorb.api.models.MetricListPage
 import com.withorb.api.models.MetricListPageResponse
 import com.withorb.api.models.MetricListParams
 import com.withorb.api.models.MetricUpdateParams
+import kotlin.jvm.optionals.getOrNull
 
 class MetricServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     MetricService {
@@ -93,6 +95,9 @@ class MetricServiceImpl internal constructor(private val clientOptions: ClientOp
             params: MetricUpdateParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<BillableMetric> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("metricId", params.metricId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -154,6 +159,9 @@ class MetricServiceImpl internal constructor(private val clientOptions: ClientOp
             params: MetricFetchParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<BillableMetric> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("metricId", params.metricId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)

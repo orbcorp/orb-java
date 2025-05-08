@@ -3,7 +3,6 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.Params
-import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import java.time.OffsetDateTime
@@ -40,7 +39,7 @@ import kotlin.jvm.optionals.getOrNull
  */
 class CustomerBalanceTransactionListParams
 private constructor(
-    private val customerId: String,
+    private val customerId: String?,
     private val cursor: String?,
     private val limit: Long?,
     private val operationTimeGt: OffsetDateTime?,
@@ -51,7 +50,7 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun customerId(): String = customerId
+    fun customerId(): Optional<String> = Optional.ofNullable(customerId)
 
     /**
      * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
@@ -78,14 +77,11 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): CustomerBalanceTransactionListParams = builder().build()
+
         /**
          * Returns a mutable builder for constructing an instance of
          * [CustomerBalanceTransactionListParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .customerId()
-         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
@@ -119,7 +115,10 @@ private constructor(
                 customerBalanceTransactionListParams.additionalQueryParams.toBuilder()
         }
 
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String?) = apply { this.customerId = customerId }
+
+        /** Alias for calling [Builder.customerId] with `customerId.orElse(null)`. */
+        fun customerId(customerId: Optional<String>) = customerId(customerId.getOrNull())
 
         /**
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
@@ -277,17 +276,10 @@ private constructor(
          * Returns an immutable instance of [CustomerBalanceTransactionListParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .customerId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): CustomerBalanceTransactionListParams =
             CustomerBalanceTransactionListParams(
-                checkRequired("customerId", customerId),
+                customerId,
                 cursor,
                 limit,
                 operationTimeGt,
@@ -301,7 +293,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> customerId
+            0 -> customerId ?: ""
             else -> ""
         }
 
