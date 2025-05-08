@@ -18,12 +18,6 @@ internal class SubscriptionCreateParamsTest {
                     .adjustment(
                         SubscriptionCreateParams.AddAdjustment.Adjustment.NewPercentageDiscount
                             .builder()
-                            .adjustmentType(
-                                SubscriptionCreateParams.AddAdjustment.Adjustment
-                                    .NewPercentageDiscount
-                                    .AdjustmentType
-                                    .PERCENTAGE_DISCOUNT
-                            )
                             .addAppliesToPriceId("price_1")
                             .addAppliesToPriceId("price_2")
                             .percentageDiscount(0.0)
@@ -70,11 +64,6 @@ internal class SubscriptionCreateParamsTest {
                                     .ANNUAL
                             )
                             .itemId("item_id")
-                            .modelType(
-                                SubscriptionCreateParams.AddPrice.Price.NewSubscriptionUnitPrice
-                                    .ModelType
-                                    .UNIT
-                            )
                             .name("Annual fee")
                             .unitConfig(
                                 SubscriptionCreateParams.AddPrice.Price.NewSubscriptionUnitPrice
@@ -180,12 +169,6 @@ internal class SubscriptionCreateParamsTest {
                     .adjustment(
                         SubscriptionCreateParams.ReplaceAdjustment.Adjustment.NewPercentageDiscount
                             .builder()
-                            .adjustmentType(
-                                SubscriptionCreateParams.ReplaceAdjustment.Adjustment
-                                    .NewPercentageDiscount
-                                    .AdjustmentType
-                                    .PERCENTAGE_DISCOUNT
-                            )
                             .addAppliesToPriceId("price_1")
                             .addAppliesToPriceId("price_2")
                             .percentageDiscount(0.0)
@@ -233,11 +216,6 @@ internal class SubscriptionCreateParamsTest {
                                     .ANNUAL
                             )
                             .itemId("item_id")
-                            .modelType(
-                                SubscriptionCreateParams.ReplacePrice.Price.NewSubscriptionUnitPrice
-                                    .ModelType
-                                    .UNIT
-                            )
                             .name("Annual fee")
                             .unitConfig(
                                 SubscriptionCreateParams.ReplacePrice.Price.NewSubscriptionUnitPrice
@@ -309,12 +287,6 @@ internal class SubscriptionCreateParamsTest {
                         .adjustment(
                             SubscriptionCreateParams.AddAdjustment.Adjustment.NewPercentageDiscount
                                 .builder()
-                                .adjustmentType(
-                                    SubscriptionCreateParams.AddAdjustment.Adjustment
-                                        .NewPercentageDiscount
-                                        .AdjustmentType
-                                        .PERCENTAGE_DISCOUNT
-                                )
                                 .addAppliesToPriceId("price_1")
                                 .addAppliesToPriceId("price_2")
                                 .percentageDiscount(0.0)
@@ -364,11 +336,6 @@ internal class SubscriptionCreateParamsTest {
                                         .ANNUAL
                                 )
                                 .itemId("item_id")
-                                .modelType(
-                                    SubscriptionCreateParams.AddPrice.Price.NewSubscriptionUnitPrice
-                                        .ModelType
-                                        .UNIT
-                                )
                                 .name("Annual fee")
                                 .unitConfig(
                                     SubscriptionCreateParams.AddPrice.Price.NewSubscriptionUnitPrice
@@ -475,12 +442,6 @@ internal class SubscriptionCreateParamsTest {
                             SubscriptionCreateParams.ReplaceAdjustment.Adjustment
                                 .NewPercentageDiscount
                                 .builder()
-                                .adjustmentType(
-                                    SubscriptionCreateParams.ReplaceAdjustment.Adjustment
-                                        .NewPercentageDiscount
-                                        .AdjustmentType
-                                        .PERCENTAGE_DISCOUNT
-                                )
                                 .addAppliesToPriceId("price_1")
                                 .addAppliesToPriceId("price_2")
                                 .percentageDiscount(0.0)
@@ -529,12 +490,6 @@ internal class SubscriptionCreateParamsTest {
                                         .ANNUAL
                                 )
                                 .itemId("item_id")
-                                .modelType(
-                                    SubscriptionCreateParams.ReplacePrice.Price
-                                        .NewSubscriptionUnitPrice
-                                        .ModelType
-                                        .UNIT
-                                )
                                 .name("Annual fee")
                                 .unitConfig(
                                     SubscriptionCreateParams.ReplacePrice.Price
@@ -608,12 +563,6 @@ internal class SubscriptionCreateParamsTest {
                     .adjustment(
                         SubscriptionCreateParams.AddAdjustment.Adjustment.NewPercentageDiscount
                             .builder()
-                            .adjustmentType(
-                                SubscriptionCreateParams.AddAdjustment.Adjustment
-                                    .NewPercentageDiscount
-                                    .AdjustmentType
-                                    .PERCENTAGE_DISCOUNT
-                            )
                             .addAppliesToPriceId("price_1")
                             .addAppliesToPriceId("price_2")
                             .percentageDiscount(0.0)
@@ -661,11 +610,6 @@ internal class SubscriptionCreateParamsTest {
                                     .ANNUAL
                             )
                             .itemId("item_id")
-                            .modelType(
-                                SubscriptionCreateParams.AddPrice.Price.NewSubscriptionUnitPrice
-                                    .ModelType
-                                    .UNIT
-                            )
                             .name("Annual fee")
                             .unitConfig(
                                 SubscriptionCreateParams.AddPrice.Price.NewSubscriptionUnitPrice
@@ -779,12 +723,6 @@ internal class SubscriptionCreateParamsTest {
                     .adjustment(
                         SubscriptionCreateParams.ReplaceAdjustment.Adjustment.NewPercentageDiscount
                             .builder()
-                            .adjustmentType(
-                                SubscriptionCreateParams.ReplaceAdjustment.Adjustment
-                                    .NewPercentageDiscount
-                                    .AdjustmentType
-                                    .PERCENTAGE_DISCOUNT
-                            )
                             .addAppliesToPriceId("price_1")
                             .addAppliesToPriceId("price_2")
                             .percentageDiscount(0.0)
@@ -833,11 +771,6 @@ internal class SubscriptionCreateParamsTest {
                                     .ANNUAL
                             )
                             .itemId("item_id")
-                            .modelType(
-                                SubscriptionCreateParams.ReplacePrice.Price.NewSubscriptionUnitPrice
-                                    .ModelType
-                                    .UNIT
-                            )
                             .name("Annual fee")
                             .unitConfig(
                                 SubscriptionCreateParams.ReplacePrice.Price.NewSubscriptionUnitPrice
