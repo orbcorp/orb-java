@@ -48,11 +48,6 @@ internal class SubscriptionPriceIntervalsParamsTest {
                             )
                             .currency("currency")
                             .itemId("item_id")
-                            .modelType(
-                                SubscriptionPriceIntervalsParams.Add.Price.NewFloatingUnitPrice
-                                    .ModelType
-                                    .UNIT
-                            )
                             .name("Annual fee")
                             .unitConfig(
                                 SubscriptionPriceIntervalsParams.Add.Price.NewFloatingUnitPrice
@@ -114,12 +109,6 @@ internal class SubscriptionPriceIntervalsParamsTest {
                         SubscriptionPriceIntervalsParams.AddAdjustment.Adjustment
                             .NewPercentageDiscount
                             .builder()
-                            .adjustmentType(
-                                SubscriptionPriceIntervalsParams.AddAdjustment.Adjustment
-                                    .NewPercentageDiscount
-                                    .AdjustmentType
-                                    .PERCENTAGE_DISCOUNT
-                            )
                             .addAppliesToPriceId("price_1")
                             .addAppliesToPriceId("price_2")
                             .percentageDiscount(0.0)
@@ -209,11 +198,6 @@ internal class SubscriptionPriceIntervalsParamsTest {
                                 )
                                 .currency("currency")
                                 .itemId("item_id")
-                                .modelType(
-                                    SubscriptionPriceIntervalsParams.Add.Price.NewFloatingUnitPrice
-                                        .ModelType
-                                        .UNIT
-                                )
                                 .name("Annual fee")
                                 .unitConfig(
                                     SubscriptionPriceIntervalsParams.Add.Price.NewFloatingUnitPrice
@@ -275,12 +259,6 @@ internal class SubscriptionPriceIntervalsParamsTest {
                             SubscriptionPriceIntervalsParams.AddAdjustment.Adjustment
                                 .NewPercentageDiscount
                                 .builder()
-                                .adjustmentType(
-                                    SubscriptionPriceIntervalsParams.AddAdjustment.Adjustment
-                                        .NewPercentageDiscount
-                                        .AdjustmentType
-                                        .PERCENTAGE_DISCOUNT
-                                )
                                 .addAppliesToPriceId("price_1")
                                 .addAppliesToPriceId("price_2")
                                 .percentageDiscount(0.0)
@@ -355,11 +333,6 @@ internal class SubscriptionPriceIntervalsParamsTest {
                             )
                             .currency("currency")
                             .itemId("item_id")
-                            .modelType(
-                                SubscriptionPriceIntervalsParams.Add.Price.NewFloatingUnitPrice
-                                    .ModelType
-                                    .UNIT
-                            )
                             .name("Annual fee")
                             .unitConfig(
                                 SubscriptionPriceIntervalsParams.Add.Price.NewFloatingUnitPrice
@@ -422,12 +395,6 @@ internal class SubscriptionPriceIntervalsParamsTest {
                         SubscriptionPriceIntervalsParams.AddAdjustment.Adjustment
                             .NewPercentageDiscount
                             .builder()
-                            .adjustmentType(
-                                SubscriptionPriceIntervalsParams.AddAdjustment.Adjustment
-                                    .NewPercentageDiscount
-                                    .AdjustmentType
-                                    .PERCENTAGE_DISCOUNT
-                            )
                             .addAppliesToPriceId("price_1")
                             .addAppliesToPriceId("price_2")
                             .percentageDiscount(0.0)

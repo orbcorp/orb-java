@@ -824,7 +824,6 @@ private constructor(
          * Alias for calling [taxConfiguration] with the following:
          * ```java
          * TaxConfiguration.NewAvalaraTaxConfiguration.builder()
-         *     .taxProvider(CustomerUpdateByExternalIdParams.TaxConfiguration.NewAvalaraTaxConfiguration.TaxProvider.AVALARA)
          *     .taxExempt(taxExempt)
          *     .build()
          * ```
@@ -842,7 +841,6 @@ private constructor(
          * Alias for calling [taxConfiguration] with the following:
          * ```java
          * TaxConfiguration.NewTaxJarConfiguration.builder()
-         *     .taxProvider(CustomerUpdateByExternalIdParams.TaxConfiguration.NewTaxJarConfiguration.TaxProvider.TAXJAR)
          *     .taxExempt(taxExempt)
          *     .build()
          * ```
@@ -2036,7 +2034,6 @@ private constructor(
              * Alias for calling [taxConfiguration] with the following:
              * ```java
              * TaxConfiguration.NewAvalaraTaxConfiguration.builder()
-             *     .taxProvider(CustomerUpdateByExternalIdParams.TaxConfiguration.NewAvalaraTaxConfiguration.TaxProvider.AVALARA)
              *     .taxExempt(taxExempt)
              *     .build()
              * ```
@@ -2044,12 +2041,6 @@ private constructor(
             fun newAvalaraTaxConfiguration(taxExempt: Boolean) =
                 taxConfiguration(
                     TaxConfiguration.NewAvalaraTaxConfiguration.builder()
-                        .taxProvider(
-                            CustomerUpdateByExternalIdParams.TaxConfiguration
-                                .NewAvalaraTaxConfiguration
-                                .TaxProvider
-                                .AVALARA
-                        )
                         .taxExempt(taxExempt)
                         .build()
                 )
@@ -2064,21 +2055,13 @@ private constructor(
              * Alias for calling [taxConfiguration] with the following:
              * ```java
              * TaxConfiguration.NewTaxJarConfiguration.builder()
-             *     .taxProvider(CustomerUpdateByExternalIdParams.TaxConfiguration.NewTaxJarConfiguration.TaxProvider.TAXJAR)
              *     .taxExempt(taxExempt)
              *     .build()
              * ```
              */
             fun newTaxJarTaxConfiguration(taxExempt: Boolean) =
                 taxConfiguration(
-                    TaxConfiguration.NewTaxJarConfiguration.builder()
-                        .taxProvider(
-                            CustomerUpdateByExternalIdParams.TaxConfiguration.NewTaxJarConfiguration
-                                .TaxProvider
-                                .TAXJAR
-                        )
-                        .taxExempt(taxExempt)
-                        .build()
+                    TaxConfiguration.NewTaxJarConfiguration.builder().taxExempt(taxExempt).build()
                 )
 
             /**
@@ -4213,7 +4196,7 @@ private constructor(
         class NewAvalaraTaxConfiguration
         private constructor(
             private val taxExempt: JsonField<Boolean>,
-            private val taxProvider: JsonField<TaxProvider>,
+            private val taxProvider: JsonValue,
             private val taxExemptionCode: JsonField<String>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
@@ -4225,7 +4208,7 @@ private constructor(
                 taxExempt: JsonField<Boolean> = JsonMissing.of(),
                 @JsonProperty("tax_provider")
                 @ExcludeMissing
-                taxProvider: JsonField<TaxProvider> = JsonMissing.of(),
+                taxProvider: JsonValue = JsonMissing.of(),
                 @JsonProperty("tax_exemption_code")
                 @ExcludeMissing
                 taxExemptionCode: JsonField<String> = JsonMissing.of(),
@@ -4239,11 +4222,17 @@ private constructor(
             fun taxExempt(): Boolean = taxExempt.getRequired("tax_exempt")
 
             /**
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("avalara")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun taxProvider(): TaxProvider = taxProvider.getRequired("tax_provider")
+            @JsonProperty("tax_provider")
+            @ExcludeMissing
+            fun _taxProvider(): JsonValue = taxProvider
 
             /**
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -4261,16 +4250,6 @@ private constructor(
             @JsonProperty("tax_exempt")
             @ExcludeMissing
             fun _taxExempt(): JsonField<Boolean> = taxExempt
-
-            /**
-             * Returns the raw JSON value of [taxProvider].
-             *
-             * Unlike [taxProvider], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("tax_provider")
-            @ExcludeMissing
-            fun _taxProvider(): JsonField<TaxProvider> = taxProvider
 
             /**
              * Returns the raw JSON value of [taxExemptionCode].
@@ -4303,7 +4282,6 @@ private constructor(
                  * The following fields are required:
                  * ```java
                  * .taxExempt()
-                 * .taxProvider()
                  * ```
                  */
                 @JvmStatic fun builder() = Builder()
@@ -4313,7 +4291,7 @@ private constructor(
             class Builder internal constructor() {
 
                 private var taxExempt: JsonField<Boolean>? = null
-                private var taxProvider: JsonField<TaxProvider>? = null
+                private var taxProvider: JsonValue = JsonValue.from("avalara")
                 private var taxExemptionCode: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -4337,18 +4315,19 @@ private constructor(
                  */
                 fun taxExempt(taxExempt: JsonField<Boolean>) = apply { this.taxExempt = taxExempt }
 
-                fun taxProvider(taxProvider: TaxProvider) = taxProvider(JsonField.of(taxProvider))
-
                 /**
-                 * Sets [Builder.taxProvider] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.taxProvider] with a well-typed [TaxProvider]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("avalara")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun taxProvider(taxProvider: JsonField<TaxProvider>) = apply {
-                    this.taxProvider = taxProvider
-                }
+                fun taxProvider(taxProvider: JsonValue) = apply { this.taxProvider = taxProvider }
 
                 fun taxExemptionCode(taxExemptionCode: String?) =
                     taxExemptionCode(JsonField.ofNullable(taxExemptionCode))
@@ -4401,7 +4380,6 @@ private constructor(
                  * The following fields are required:
                  * ```java
                  * .taxExempt()
-                 * .taxProvider()
                  * ```
                  *
                  * @throws IllegalStateException if any required field is unset.
@@ -4409,7 +4387,7 @@ private constructor(
                 fun build(): NewAvalaraTaxConfiguration =
                     NewAvalaraTaxConfiguration(
                         checkRequired("taxExempt", taxExempt),
-                        checkRequired("taxProvider", taxProvider),
+                        taxProvider,
                         taxExemptionCode,
                         additionalProperties.toMutableMap(),
                     )
@@ -4423,7 +4401,11 @@ private constructor(
                 }
 
                 taxExempt()
-                taxProvider().validate()
+                _taxProvider().let {
+                    if (it != JsonValue.from("avalara")) {
+                        throw OrbInvalidDataException("'taxProvider' is invalid, received $it")
+                    }
+                }
                 taxExemptionCode()
                 validated = true
             }
@@ -4445,134 +4427,8 @@ private constructor(
             @JvmSynthetic
             internal fun validity(): Int =
                 (if (taxExempt.asKnown().isPresent) 1 else 0) +
-                    (taxProvider.asKnown().getOrNull()?.validity() ?: 0) +
+                    taxProvider.let { if (it == JsonValue.from("avalara")) 1 else 0 } +
                     (if (taxExemptionCode.asKnown().isPresent) 1 else 0)
-
-            class TaxProvider
-            @JsonCreator
-            private constructor(private val value: JsonField<String>) : Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField val AVALARA = of("avalara")
-
-                    @JvmStatic fun of(value: String) = TaxProvider(JsonField.of(value))
-                }
-
-                /** An enum containing [TaxProvider]'s known values. */
-                enum class Known {
-                    AVALARA
-                }
-
-                /**
-                 * An enum containing [TaxProvider]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [TaxProvider] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    AVALARA,
-                    /**
-                     * An enum member indicating that [TaxProvider] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        AVALARA -> Value.AVALARA
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value is a not a known
-                 *   member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        AVALARA -> Known.AVALARA
-                        else -> throw OrbInvalidDataException("Unknown TaxProvider: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value does not have the
-                 *   expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        OrbInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                fun validate(): TaxProvider = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: OrbInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return /* spotless:off */ other is TaxProvider && value == other.value /* spotless:on */
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -4595,7 +4451,7 @@ private constructor(
         class NewTaxJarConfiguration
         private constructor(
             private val taxExempt: JsonField<Boolean>,
-            private val taxProvider: JsonField<TaxProvider>,
+            private val taxProvider: JsonValue,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
@@ -4606,7 +4462,7 @@ private constructor(
                 taxExempt: JsonField<Boolean> = JsonMissing.of(),
                 @JsonProperty("tax_provider")
                 @ExcludeMissing
-                taxProvider: JsonField<TaxProvider> = JsonMissing.of(),
+                taxProvider: JsonValue = JsonMissing.of(),
             ) : this(taxExempt, taxProvider, mutableMapOf())
 
             /**
@@ -4617,11 +4473,17 @@ private constructor(
             fun taxExempt(): Boolean = taxExempt.getRequired("tax_exempt")
 
             /**
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("taxjar")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun taxProvider(): TaxProvider = taxProvider.getRequired("tax_provider")
+            @JsonProperty("tax_provider")
+            @ExcludeMissing
+            fun _taxProvider(): JsonValue = taxProvider
 
             /**
              * Returns the raw JSON value of [taxExempt].
@@ -4632,16 +4494,6 @@ private constructor(
             @JsonProperty("tax_exempt")
             @ExcludeMissing
             fun _taxExempt(): JsonField<Boolean> = taxExempt
-
-            /**
-             * Returns the raw JSON value of [taxProvider].
-             *
-             * Unlike [taxProvider], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("tax_provider")
-            @ExcludeMissing
-            fun _taxProvider(): JsonField<TaxProvider> = taxProvider
 
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -4664,7 +4516,6 @@ private constructor(
                  * The following fields are required:
                  * ```java
                  * .taxExempt()
-                 * .taxProvider()
                  * ```
                  */
                 @JvmStatic fun builder() = Builder()
@@ -4674,7 +4525,7 @@ private constructor(
             class Builder internal constructor() {
 
                 private var taxExempt: JsonField<Boolean>? = null
-                private var taxProvider: JsonField<TaxProvider>? = null
+                private var taxProvider: JsonValue = JsonValue.from("taxjar")
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -4696,18 +4547,19 @@ private constructor(
                  */
                 fun taxExempt(taxExempt: JsonField<Boolean>) = apply { this.taxExempt = taxExempt }
 
-                fun taxProvider(taxProvider: TaxProvider) = taxProvider(JsonField.of(taxProvider))
-
                 /**
-                 * Sets [Builder.taxProvider] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.taxProvider] with a well-typed [TaxProvider]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("taxjar")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun taxProvider(taxProvider: JsonField<TaxProvider>) = apply {
-                    this.taxProvider = taxProvider
-                }
+                fun taxProvider(taxProvider: JsonValue) = apply { this.taxProvider = taxProvider }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -4739,7 +4591,6 @@ private constructor(
                  * The following fields are required:
                  * ```java
                  * .taxExempt()
-                 * .taxProvider()
                  * ```
                  *
                  * @throws IllegalStateException if any required field is unset.
@@ -4747,7 +4598,7 @@ private constructor(
                 fun build(): NewTaxJarConfiguration =
                     NewTaxJarConfiguration(
                         checkRequired("taxExempt", taxExempt),
-                        checkRequired("taxProvider", taxProvider),
+                        taxProvider,
                         additionalProperties.toMutableMap(),
                     )
             }
@@ -4760,7 +4611,11 @@ private constructor(
                 }
 
                 taxExempt()
-                taxProvider().validate()
+                _taxProvider().let {
+                    if (it != JsonValue.from("taxjar")) {
+                        throw OrbInvalidDataException("'taxProvider' is invalid, received $it")
+                    }
+                }
                 validated = true
             }
 
@@ -4781,133 +4636,7 @@ private constructor(
             @JvmSynthetic
             internal fun validity(): Int =
                 (if (taxExempt.asKnown().isPresent) 1 else 0) +
-                    (taxProvider.asKnown().getOrNull()?.validity() ?: 0)
-
-            class TaxProvider
-            @JsonCreator
-            private constructor(private val value: JsonField<String>) : Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField val TAXJAR = of("taxjar")
-
-                    @JvmStatic fun of(value: String) = TaxProvider(JsonField.of(value))
-                }
-
-                /** An enum containing [TaxProvider]'s known values. */
-                enum class Known {
-                    TAXJAR
-                }
-
-                /**
-                 * An enum containing [TaxProvider]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [TaxProvider] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    TAXJAR,
-                    /**
-                     * An enum member indicating that [TaxProvider] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        TAXJAR -> Value.TAXJAR
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value is a not a known
-                 *   member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        TAXJAR -> Known.TAXJAR
-                        else -> throw OrbInvalidDataException("Unknown TaxProvider: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws OrbInvalidDataException if this class instance's value does not have the
-                 *   expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        OrbInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                fun validate(): TaxProvider = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: OrbInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return /* spotless:off */ other is TaxProvider && value == other.value /* spotless:on */
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
+                    taxProvider.let { if (it == JsonValue.from("taxjar")) 1 else 0 }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {

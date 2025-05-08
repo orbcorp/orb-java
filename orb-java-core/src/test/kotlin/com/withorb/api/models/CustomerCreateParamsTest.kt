@@ -70,10 +70,6 @@ internal class CustomerCreateParamsTest {
             .taxConfiguration(
                 CustomerCreateParams.TaxConfiguration.NewAvalaraTaxConfiguration.builder()
                     .taxExempt(true)
-                    .taxProvider(
-                        CustomerCreateParams.TaxConfiguration.NewAvalaraTaxConfiguration.TaxProvider
-                            .AVALARA
-                    )
                     .taxExemptionCode("tax_exemption_code")
                     .build()
             )
@@ -150,11 +146,6 @@ internal class CustomerCreateParamsTest {
                 .taxConfiguration(
                     CustomerCreateParams.TaxConfiguration.NewAvalaraTaxConfiguration.builder()
                         .taxExempt(true)
-                        .taxProvider(
-                            CustomerCreateParams.TaxConfiguration.NewAvalaraTaxConfiguration
-                                .TaxProvider
-                                .AVALARA
-                        )
                         .taxExemptionCode("tax_exemption_code")
                         .build()
                 )
@@ -234,11 +225,6 @@ internal class CustomerCreateParamsTest {
                 CustomerCreateParams.TaxConfiguration.ofNewAvalara(
                     CustomerCreateParams.TaxConfiguration.NewAvalaraTaxConfiguration.builder()
                         .taxExempt(true)
-                        .taxProvider(
-                            CustomerCreateParams.TaxConfiguration.NewAvalaraTaxConfiguration
-                                .TaxProvider
-                                .AVALARA
-                        )
                         .taxExemptionCode("tax_exemption_code")
                         .build()
                 )
