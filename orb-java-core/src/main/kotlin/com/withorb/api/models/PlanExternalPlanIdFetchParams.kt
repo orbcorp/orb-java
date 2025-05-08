@@ -3,10 +3,11 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.Params
-import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint is used to fetch [plan](/core-concepts##plan-and-price) details given an
@@ -26,12 +27,12 @@ import java.util.Objects
  */
 class PlanExternalPlanIdFetchParams
 private constructor(
-    private val externalPlanId: String,
+    private val externalPlanId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun externalPlanId(): String = externalPlanId
+    fun externalPlanId(): Optional<String> = Optional.ofNullable(externalPlanId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -41,14 +42,11 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): PlanExternalPlanIdFetchParams = builder().build()
+
         /**
          * Returns a mutable builder for constructing an instance of
          * [PlanExternalPlanIdFetchParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .externalPlanId()
-         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
@@ -67,7 +65,11 @@ private constructor(
             additionalQueryParams = planExternalPlanIdFetchParams.additionalQueryParams.toBuilder()
         }
 
-        fun externalPlanId(externalPlanId: String) = apply { this.externalPlanId = externalPlanId }
+        fun externalPlanId(externalPlanId: String?) = apply { this.externalPlanId = externalPlanId }
+
+        /** Alias for calling [Builder.externalPlanId] with `externalPlanId.orElse(null)`. */
+        fun externalPlanId(externalPlanId: Optional<String>) =
+            externalPlanId(externalPlanId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -171,17 +173,10 @@ private constructor(
          * Returns an immutable instance of [PlanExternalPlanIdFetchParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .externalPlanId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): PlanExternalPlanIdFetchParams =
             PlanExternalPlanIdFetchParams(
-                checkRequired("externalPlanId", externalPlanId),
+                externalPlanId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -189,7 +184,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> externalPlanId
+            0 -> externalPlanId ?: ""
             else -> ""
         }
 

@@ -22,15 +22,41 @@ interface SubscriptionServiceAsync {
      * subscription. For a full discussion of the subscription resource, see
      * [Subscription](/core-concepts#subscription).
      */
+    fun list(couponId: String): CompletableFuture<CouponSubscriptionListPageAsync> =
+        list(couponId, CouponSubscriptionListParams.none())
+
+    /** @see [list] */
     fun list(
-        params: CouponSubscriptionListParams
-    ): CompletableFuture<CouponSubscriptionListPageAsync> = list(params, RequestOptions.none())
+        couponId: String,
+        params: CouponSubscriptionListParams = CouponSubscriptionListParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<CouponSubscriptionListPageAsync> =
+        list(params.toBuilder().couponId(couponId).build(), requestOptions)
+
+    /** @see [list] */
+    fun list(
+        couponId: String,
+        params: CouponSubscriptionListParams = CouponSubscriptionListParams.none(),
+    ): CompletableFuture<CouponSubscriptionListPageAsync> =
+        list(couponId, params, RequestOptions.none())
 
     /** @see [list] */
     fun list(
         params: CouponSubscriptionListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CouponSubscriptionListPageAsync>
+
+    /** @see [list] */
+    fun list(
+        params: CouponSubscriptionListParams
+    ): CompletableFuture<CouponSubscriptionListPageAsync> = list(params, RequestOptions.none())
+
+    /** @see [list] */
+    fun list(
+        couponId: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<CouponSubscriptionListPageAsync> =
+        list(couponId, CouponSubscriptionListParams.none(), requestOptions)
 
     /**
      * A view of [SubscriptionServiceAsync] that provides access to raw HTTP responses for each
@@ -44,9 +70,26 @@ interface SubscriptionServiceAsync {
          */
         @MustBeClosed
         fun list(
-            params: CouponSubscriptionListParams
+            couponId: String
         ): CompletableFuture<HttpResponseFor<CouponSubscriptionListPageAsync>> =
-            list(params, RequestOptions.none())
+            list(couponId, CouponSubscriptionListParams.none())
+
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            couponId: String,
+            params: CouponSubscriptionListParams = CouponSubscriptionListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CouponSubscriptionListPageAsync>> =
+            list(params.toBuilder().couponId(couponId).build(), requestOptions)
+
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            couponId: String,
+            params: CouponSubscriptionListParams = CouponSubscriptionListParams.none(),
+        ): CompletableFuture<HttpResponseFor<CouponSubscriptionListPageAsync>> =
+            list(couponId, params, RequestOptions.none())
 
         /** @see [list] */
         @MustBeClosed
@@ -54,5 +97,20 @@ interface SubscriptionServiceAsync {
             params: CouponSubscriptionListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<CouponSubscriptionListPageAsync>>
+
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            params: CouponSubscriptionListParams
+        ): CompletableFuture<HttpResponseFor<CouponSubscriptionListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            couponId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<CouponSubscriptionListPageAsync>> =
+            list(couponId, CouponSubscriptionListParams.none(), requestOptions)
     }
 }

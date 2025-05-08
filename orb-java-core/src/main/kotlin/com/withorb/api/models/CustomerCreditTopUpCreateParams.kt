@@ -32,13 +32,13 @@ import kotlin.jvm.optionals.getOrNull
  */
 class CustomerCreditTopUpCreateParams
 private constructor(
-    private val customerId: String,
+    private val customerId: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun customerId(): String = customerId
+    fun customerId(): Optional<String> = Optional.ofNullable(customerId)
 
     /**
      * The amount to increment when the threshold is reached.
@@ -181,7 +181,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .customerId()
          * .amount()
          * .currency()
          * .invoiceSettings()
@@ -210,7 +209,10 @@ private constructor(
                     customerCreditTopUpCreateParams.additionalQueryParams.toBuilder()
             }
 
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String?) = apply { this.customerId = customerId }
+
+        /** Alias for calling [Builder.customerId] with `customerId.orElse(null)`. */
+        fun customerId(customerId: Optional<String>) = customerId(customerId.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -487,7 +489,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .customerId()
          * .amount()
          * .currency()
          * .invoiceSettings()
@@ -499,7 +500,7 @@ private constructor(
          */
         fun build(): CustomerCreditTopUpCreateParams =
             CustomerCreditTopUpCreateParams(
-                checkRequired("customerId", customerId),
+                customerId,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -510,7 +511,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> customerId
+            0 -> customerId ?: ""
             else -> ""
         }
 

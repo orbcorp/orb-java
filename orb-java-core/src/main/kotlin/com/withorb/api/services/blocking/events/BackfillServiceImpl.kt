@@ -5,6 +5,7 @@ package com.withorb.api.services.blocking.events
 import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
 import com.withorb.api.core.handlers.withErrorHandler
@@ -26,6 +27,7 @@ import com.withorb.api.models.EventBackfillListPageResponse
 import com.withorb.api.models.EventBackfillListParams
 import com.withorb.api.models.EventBackfillRevertParams
 import com.withorb.api.models.EventBackfillRevertResponse
+import kotlin.jvm.optionals.getOrNull
 
 class BackfillServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     BackfillService {
@@ -146,6 +148,9 @@ class BackfillServiceImpl internal constructor(private val clientOptions: Client
             params: EventBackfillCloseParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<EventBackfillCloseResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("backfillId", params.backfillId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -174,6 +179,9 @@ class BackfillServiceImpl internal constructor(private val clientOptions: Client
             params: EventBackfillFetchParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<EventBackfillFetchResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("backfillId", params.backfillId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -201,6 +209,9 @@ class BackfillServiceImpl internal constructor(private val clientOptions: Client
             params: EventBackfillRevertParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<EventBackfillRevertResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("backfillId", params.backfillId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)

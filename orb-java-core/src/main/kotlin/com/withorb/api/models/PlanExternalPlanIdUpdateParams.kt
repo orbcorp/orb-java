@@ -11,7 +11,6 @@ import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.Params
-import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.toImmutable
@@ -28,13 +27,13 @@ import kotlin.jvm.optionals.getOrNull
  */
 class PlanExternalPlanIdUpdateParams
 private constructor(
-    private val otherExternalPlanId: String,
+    private val otherExternalPlanId: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun otherExternalPlanId(): String = otherExternalPlanId
+    fun otherExternalPlanId(): Optional<String> = Optional.ofNullable(otherExternalPlanId)
 
     /**
      * An optional user-defined ID for this plan resource, used throughout the system as an alias
@@ -79,14 +78,11 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): PlanExternalPlanIdUpdateParams = builder().build()
+
         /**
          * Returns a mutable builder for constructing an instance of
          * [PlanExternalPlanIdUpdateParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .otherExternalPlanId()
-         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
@@ -107,9 +103,15 @@ private constructor(
             additionalQueryParams = planExternalPlanIdUpdateParams.additionalQueryParams.toBuilder()
         }
 
-        fun otherExternalPlanId(otherExternalPlanId: String) = apply {
+        fun otherExternalPlanId(otherExternalPlanId: String?) = apply {
             this.otherExternalPlanId = otherExternalPlanId
         }
+
+        /**
+         * Alias for calling [Builder.otherExternalPlanId] with `otherExternalPlanId.orElse(null)`.
+         */
+        fun otherExternalPlanId(otherExternalPlanId: Optional<String>) =
+            otherExternalPlanId(otherExternalPlanId.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -283,17 +285,10 @@ private constructor(
          * Returns an immutable instance of [PlanExternalPlanIdUpdateParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .otherExternalPlanId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): PlanExternalPlanIdUpdateParams =
             PlanExternalPlanIdUpdateParams(
-                checkRequired("otherExternalPlanId", otherExternalPlanId),
+                otherExternalPlanId,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -304,7 +299,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> otherExternalPlanId
+            0 -> otherExternalPlanId ?: ""
             else -> ""
         }
 

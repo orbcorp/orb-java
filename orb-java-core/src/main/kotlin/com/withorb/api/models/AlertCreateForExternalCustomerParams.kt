@@ -33,13 +33,13 @@ import kotlin.jvm.optionals.getOrNull
  */
 class AlertCreateForExternalCustomerParams
 private constructor(
-    private val externalCustomerId: String,
+    private val externalCustomerId: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun externalCustomerId(): String = externalCustomerId
+    fun externalCustomerId(): Optional<String> = Optional.ofNullable(externalCustomerId)
 
     /**
      * The case sensitive currency or custom pricing unit to use for this alert.
@@ -102,7 +102,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .externalCustomerId()
          * .currency()
          * .type()
          * ```
@@ -129,9 +128,15 @@ private constructor(
                 alertCreateForExternalCustomerParams.additionalQueryParams.toBuilder()
         }
 
-        fun externalCustomerId(externalCustomerId: String) = apply {
+        fun externalCustomerId(externalCustomerId: String?) = apply {
             this.externalCustomerId = externalCustomerId
         }
+
+        /**
+         * Alias for calling [Builder.externalCustomerId] with `externalCustomerId.orElse(null)`.
+         */
+        fun externalCustomerId(externalCustomerId: Optional<String>) =
+            externalCustomerId(externalCustomerId.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -314,7 +319,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .externalCustomerId()
          * .currency()
          * .type()
          * ```
@@ -323,7 +327,7 @@ private constructor(
          */
         fun build(): AlertCreateForExternalCustomerParams =
             AlertCreateForExternalCustomerParams(
-                checkRequired("externalCustomerId", externalCustomerId),
+                externalCustomerId,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -334,7 +338,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> externalCustomerId
+            0 -> externalCustomerId ?: ""
             else -> ""
         }
 

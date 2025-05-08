@@ -42,15 +42,48 @@ interface DimensionalPriceGroupServiceAsync {
     ): CompletableFuture<DimensionalPriceGroup>
 
     /** Fetch dimensional price group */
+    fun retrieve(dimensionalPriceGroupId: String): CompletableFuture<DimensionalPriceGroup> =
+        retrieve(dimensionalPriceGroupId, DimensionalPriceGroupRetrieveParams.none())
+
+    /** @see [retrieve] */
     fun retrieve(
-        params: DimensionalPriceGroupRetrieveParams
-    ): CompletableFuture<DimensionalPriceGroup> = retrieve(params, RequestOptions.none())
+        dimensionalPriceGroupId: String,
+        params: DimensionalPriceGroupRetrieveParams = DimensionalPriceGroupRetrieveParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<DimensionalPriceGroup> =
+        retrieve(
+            params.toBuilder().dimensionalPriceGroupId(dimensionalPriceGroupId).build(),
+            requestOptions,
+        )
+
+    /** @see [retrieve] */
+    fun retrieve(
+        dimensionalPriceGroupId: String,
+        params: DimensionalPriceGroupRetrieveParams = DimensionalPriceGroupRetrieveParams.none(),
+    ): CompletableFuture<DimensionalPriceGroup> =
+        retrieve(dimensionalPriceGroupId, params, RequestOptions.none())
 
     /** @see [retrieve] */
     fun retrieve(
         params: DimensionalPriceGroupRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<DimensionalPriceGroup>
+
+    /** @see [retrieve] */
+    fun retrieve(
+        params: DimensionalPriceGroupRetrieveParams
+    ): CompletableFuture<DimensionalPriceGroup> = retrieve(params, RequestOptions.none())
+
+    /** @see [retrieve] */
+    fun retrieve(
+        dimensionalPriceGroupId: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<DimensionalPriceGroup> =
+        retrieve(
+            dimensionalPriceGroupId,
+            DimensionalPriceGroupRetrieveParams.none(),
+            requestOptions,
+        )
 
     /** List dimensional price groups */
     fun list(): CompletableFuture<DimensionalPriceGroupListPageAsync> =
@@ -106,9 +139,30 @@ interface DimensionalPriceGroupServiceAsync {
          */
         @MustBeClosed
         fun retrieve(
-            params: DimensionalPriceGroupRetrieveParams
+            dimensionalPriceGroupId: String
         ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
-            retrieve(params, RequestOptions.none())
+            retrieve(dimensionalPriceGroupId, DimensionalPriceGroupRetrieveParams.none())
+
+        /** @see [retrieve] */
+        @MustBeClosed
+        fun retrieve(
+            dimensionalPriceGroupId: String,
+            params: DimensionalPriceGroupRetrieveParams =
+                DimensionalPriceGroupRetrieveParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
+            retrieve(
+                params.toBuilder().dimensionalPriceGroupId(dimensionalPriceGroupId).build(),
+                requestOptions,
+            )
+
+        /** @see [retrieve] */
+        @MustBeClosed
+        fun retrieve(
+            dimensionalPriceGroupId: String,
+            params: DimensionalPriceGroupRetrieveParams = DimensionalPriceGroupRetrieveParams.none(),
+        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
+            retrieve(dimensionalPriceGroupId, params, RequestOptions.none())
 
         /** @see [retrieve] */
         @MustBeClosed
@@ -116,6 +170,25 @@ interface DimensionalPriceGroupServiceAsync {
             params: DimensionalPriceGroupRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>>
+
+        /** @see [retrieve] */
+        @MustBeClosed
+        fun retrieve(
+            params: DimensionalPriceGroupRetrieveParams
+        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
+            retrieve(params, RequestOptions.none())
+
+        /** @see [retrieve] */
+        @MustBeClosed
+        fun retrieve(
+            dimensionalPriceGroupId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
+            retrieve(
+                dimensionalPriceGroupId,
+                DimensionalPriceGroupRetrieveParams.none(),
+                requestOptions,
+            )
 
         /**
          * Returns a raw HTTP response for `get /dimensional_price_groups`, but is otherwise the

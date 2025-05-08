@@ -5,6 +5,7 @@ package com.withorb.api.services.async
 import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
 import com.withorb.api.core.handlers.withErrorHandler
@@ -24,6 +25,7 @@ import com.withorb.api.models.DimensionalPriceGroups
 import com.withorb.api.services.async.dimensionalPriceGroups.ExternalDimensionalPriceGroupIdServiceAsync
 import com.withorb.api.services.async.dimensionalPriceGroups.ExternalDimensionalPriceGroupIdServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
+import kotlin.jvm.optionals.getOrNull
 
 class DimensionalPriceGroupServiceAsyncImpl
 internal constructor(private val clientOptions: ClientOptions) : DimensionalPriceGroupServiceAsync {
@@ -117,6 +119,9 @@ internal constructor(private val clientOptions: ClientOptions) : DimensionalPric
             params: DimensionalPriceGroupRetrieveParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("dimensionalPriceGroupId", params.dimensionalPriceGroupId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)

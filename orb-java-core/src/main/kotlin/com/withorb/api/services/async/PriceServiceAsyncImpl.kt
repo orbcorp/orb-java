@@ -5,6 +5,7 @@ package com.withorb.api.services.async
 import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
 import com.withorb.api.core.handlers.withErrorHandler
@@ -27,6 +28,7 @@ import com.withorb.api.models.PriceUpdateParams
 import com.withorb.api.services.async.prices.ExternalPriceIdServiceAsync
 import com.withorb.api.services.async.prices.ExternalPriceIdServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
+import kotlin.jvm.optionals.getOrNull
 
 class PriceServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     PriceServiceAsync {
@@ -127,6 +129,9 @@ class PriceServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: PriceUpdateParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<Price>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("priceId", params.priceId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -195,6 +200,9 @@ class PriceServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: PriceEvaluateParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<PriceEvaluateResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("priceId", params.priceId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -225,6 +233,9 @@ class PriceServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: PriceFetchParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<Price>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("priceId", params.priceId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)

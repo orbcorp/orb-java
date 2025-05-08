@@ -5,6 +5,7 @@ package com.withorb.api.services.async.customers.credits
 import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.handlers.emptyHandler
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
@@ -30,6 +31,7 @@ import com.withorb.api.models.CustomerCreditTopUpListPageAsync
 import com.withorb.api.models.CustomerCreditTopUpListPageResponse
 import com.withorb.api.models.CustomerCreditTopUpListParams
 import java.util.concurrent.CompletableFuture
+import kotlin.jvm.optionals.getOrNull
 
 class TopUpServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     TopUpServiceAsync {
@@ -95,6 +97,9 @@ class TopUpServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: CustomerCreditTopUpCreateParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<CustomerCreditTopUpCreateResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("customerId", params.customerId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -126,6 +131,9 @@ class TopUpServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: CustomerCreditTopUpListParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<CustomerCreditTopUpListPageAsync>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("customerId", params.customerId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -161,6 +169,9 @@ class TopUpServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: CustomerCreditTopUpDeleteParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("topUpId", params.topUpId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
@@ -191,6 +202,9 @@ class TopUpServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: CustomerCreditTopUpCreateByExternalIdParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<CustomerCreditTopUpCreateByExternalIdResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("externalCustomerId", params.externalCustomerId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -227,6 +241,9 @@ class TopUpServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: CustomerCreditTopUpDeleteByExternalIdParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("topUpId", params.topUpId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
@@ -258,6 +275,9 @@ class TopUpServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: CustomerCreditTopUpListByExternalIdParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<CustomerCreditTopUpListByExternalIdPageAsync>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("externalCustomerId", params.externalCustomerId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)

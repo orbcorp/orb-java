@@ -40,14 +40,46 @@ interface DimensionalPriceGroupService {
     ): DimensionalPriceGroup
 
     /** Fetch dimensional price group */
-    fun retrieve(params: DimensionalPriceGroupRetrieveParams): DimensionalPriceGroup =
-        retrieve(params, RequestOptions.none())
+    fun retrieve(dimensionalPriceGroupId: String): DimensionalPriceGroup =
+        retrieve(dimensionalPriceGroupId, DimensionalPriceGroupRetrieveParams.none())
+
+    /** @see [retrieve] */
+    fun retrieve(
+        dimensionalPriceGroupId: String,
+        params: DimensionalPriceGroupRetrieveParams = DimensionalPriceGroupRetrieveParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): DimensionalPriceGroup =
+        retrieve(
+            params.toBuilder().dimensionalPriceGroupId(dimensionalPriceGroupId).build(),
+            requestOptions,
+        )
+
+    /** @see [retrieve] */
+    fun retrieve(
+        dimensionalPriceGroupId: String,
+        params: DimensionalPriceGroupRetrieveParams = DimensionalPriceGroupRetrieveParams.none(),
+    ): DimensionalPriceGroup = retrieve(dimensionalPriceGroupId, params, RequestOptions.none())
 
     /** @see [retrieve] */
     fun retrieve(
         params: DimensionalPriceGroupRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): DimensionalPriceGroup
+
+    /** @see [retrieve] */
+    fun retrieve(params: DimensionalPriceGroupRetrieveParams): DimensionalPriceGroup =
+        retrieve(params, RequestOptions.none())
+
+    /** @see [retrieve] */
+    fun retrieve(
+        dimensionalPriceGroupId: String,
+        requestOptions: RequestOptions,
+    ): DimensionalPriceGroup =
+        retrieve(
+            dimensionalPriceGroupId,
+            DimensionalPriceGroupRetrieveParams.none(),
+            requestOptions,
+        )
 
     /** List dimensional price groups */
     fun list(): DimensionalPriceGroupListPage = list(DimensionalPriceGroupListParams.none())
@@ -98,9 +130,29 @@ interface DimensionalPriceGroupService {
          * [DimensionalPriceGroupService.retrieve].
          */
         @MustBeClosed
+        fun retrieve(dimensionalPriceGroupId: String): HttpResponseFor<DimensionalPriceGroup> =
+            retrieve(dimensionalPriceGroupId, DimensionalPriceGroupRetrieveParams.none())
+
+        /** @see [retrieve] */
+        @MustBeClosed
         fun retrieve(
-            params: DimensionalPriceGroupRetrieveParams
-        ): HttpResponseFor<DimensionalPriceGroup> = retrieve(params, RequestOptions.none())
+            dimensionalPriceGroupId: String,
+            params: DimensionalPriceGroupRetrieveParams =
+                DimensionalPriceGroupRetrieveParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<DimensionalPriceGroup> =
+            retrieve(
+                params.toBuilder().dimensionalPriceGroupId(dimensionalPriceGroupId).build(),
+                requestOptions,
+            )
+
+        /** @see [retrieve] */
+        @MustBeClosed
+        fun retrieve(
+            dimensionalPriceGroupId: String,
+            params: DimensionalPriceGroupRetrieveParams = DimensionalPriceGroupRetrieveParams.none(),
+        ): HttpResponseFor<DimensionalPriceGroup> =
+            retrieve(dimensionalPriceGroupId, params, RequestOptions.none())
 
         /** @see [retrieve] */
         @MustBeClosed
@@ -108,6 +160,24 @@ interface DimensionalPriceGroupService {
             params: DimensionalPriceGroupRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<DimensionalPriceGroup>
+
+        /** @see [retrieve] */
+        @MustBeClosed
+        fun retrieve(
+            params: DimensionalPriceGroupRetrieveParams
+        ): HttpResponseFor<DimensionalPriceGroup> = retrieve(params, RequestOptions.none())
+
+        /** @see [retrieve] */
+        @MustBeClosed
+        fun retrieve(
+            dimensionalPriceGroupId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<DimensionalPriceGroup> =
+            retrieve(
+                dimensionalPriceGroupId,
+                DimensionalPriceGroupRetrieveParams.none(),
+                requestOptions,
+            )
 
         /**
          * Returns a raw HTTP response for `get /dimensional_price_groups`, but is otherwise the

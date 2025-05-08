@@ -11,7 +11,6 @@ import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.Params
-import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.errors.OrbInvalidDataException
@@ -27,13 +26,13 @@ import kotlin.jvm.optionals.getOrNull
  */
 class SubscriptionChangeApplyParams
 private constructor(
-    private val subscriptionChangeId: String,
+    private val subscriptionChangeId: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun subscriptionChangeId(): String = subscriptionChangeId
+    fun subscriptionChangeId(): Optional<String> = Optional.ofNullable(subscriptionChangeId)
 
     /**
      * Description to apply to the balance transaction representing this credit.
@@ -76,14 +75,11 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): SubscriptionChangeApplyParams = builder().build()
+
         /**
          * Returns a mutable builder for constructing an instance of
          * [SubscriptionChangeApplyParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .subscriptionChangeId()
-         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
@@ -104,9 +100,16 @@ private constructor(
             additionalQueryParams = subscriptionChangeApplyParams.additionalQueryParams.toBuilder()
         }
 
-        fun subscriptionChangeId(subscriptionChangeId: String) = apply {
+        fun subscriptionChangeId(subscriptionChangeId: String?) = apply {
             this.subscriptionChangeId = subscriptionChangeId
         }
+
+        /**
+         * Alias for calling [Builder.subscriptionChangeId] with
+         * `subscriptionChangeId.orElse(null)`.
+         */
+        fun subscriptionChangeId(subscriptionChangeId: Optional<String>) =
+            subscriptionChangeId(subscriptionChangeId.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -277,17 +280,10 @@ private constructor(
          * Returns an immutable instance of [SubscriptionChangeApplyParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .subscriptionChangeId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): SubscriptionChangeApplyParams =
             SubscriptionChangeApplyParams(
-                checkRequired("subscriptionChangeId", subscriptionChangeId),
+                subscriptionChangeId,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -298,7 +294,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> subscriptionChangeId
+            0 -> subscriptionChangeId ?: ""
             else -> ""
         }
 

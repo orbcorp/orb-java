@@ -11,7 +11,6 @@ import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.Params
-import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.errors.OrbInvalidDataException
@@ -24,13 +23,13 @@ import kotlin.jvm.optionals.getOrNull
 /** Manually trigger a phase, effective the given date (or the current time, if not specified). */
 class SubscriptionTriggerPhaseParams
 private constructor(
-    private val subscriptionId: String,
+    private val subscriptionId: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun subscriptionId(): String = subscriptionId
+    fun subscriptionId(): Optional<String> = Optional.ofNullable(subscriptionId)
 
     /**
      * If false, this request will fail if it would void an issued invoice or create a credit note.
@@ -76,14 +75,11 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): SubscriptionTriggerPhaseParams = builder().build()
+
         /**
          * Returns a mutable builder for constructing an instance of
          * [SubscriptionTriggerPhaseParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .subscriptionId()
-         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
@@ -104,7 +100,11 @@ private constructor(
             additionalQueryParams = subscriptionTriggerPhaseParams.additionalQueryParams.toBuilder()
         }
 
-        fun subscriptionId(subscriptionId: String) = apply { this.subscriptionId = subscriptionId }
+        fun subscriptionId(subscriptionId: String?) = apply { this.subscriptionId = subscriptionId }
+
+        /** Alias for calling [Builder.subscriptionId] with `subscriptionId.orElse(null)`. */
+        fun subscriptionId(subscriptionId: Optional<String>) =
+            subscriptionId(subscriptionId.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -293,17 +293,10 @@ private constructor(
          * Returns an immutable instance of [SubscriptionTriggerPhaseParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .subscriptionId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): SubscriptionTriggerPhaseParams =
             SubscriptionTriggerPhaseParams(
-                checkRequired("subscriptionId", subscriptionId),
+                subscriptionId,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -314,7 +307,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> subscriptionId
+            0 -> subscriptionId ?: ""
             else -> ""
         }
 

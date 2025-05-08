@@ -4,10 +4,7 @@ package com.withorb.api.services.async.events
 
 import com.withorb.api.TestServerExtension
 import com.withorb.api.client.okhttp.OrbOkHttpClientAsync
-import com.withorb.api.models.EventBackfillCloseParams
 import com.withorb.api.models.EventBackfillCreateParams
-import com.withorb.api.models.EventBackfillFetchParams
-import com.withorb.api.models.EventBackfillRevertParams
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -65,10 +62,7 @@ internal class BackfillServiceAsyncTest {
                 .build()
         val backfillServiceAsync = client.events().backfills()
 
-        val responseFuture =
-            backfillServiceAsync.close(
-                EventBackfillCloseParams.builder().backfillId("backfill_id").build()
-            )
+        val responseFuture = backfillServiceAsync.close("backfill_id")
 
         val response = responseFuture.get()
         response.validate()
@@ -83,10 +77,7 @@ internal class BackfillServiceAsyncTest {
                 .build()
         val backfillServiceAsync = client.events().backfills()
 
-        val responseFuture =
-            backfillServiceAsync.fetch(
-                EventBackfillFetchParams.builder().backfillId("backfill_id").build()
-            )
+        val responseFuture = backfillServiceAsync.fetch("backfill_id")
 
         val response = responseFuture.get()
         response.validate()
@@ -101,10 +92,7 @@ internal class BackfillServiceAsyncTest {
                 .build()
         val backfillServiceAsync = client.events().backfills()
 
-        val responseFuture =
-            backfillServiceAsync.revert(
-                EventBackfillRevertParams.builder().backfillId("backfill_id").build()
-            )
+        val responseFuture = backfillServiceAsync.revert("backfill_id")
 
         val response = responseFuture.get()
         response.validate()

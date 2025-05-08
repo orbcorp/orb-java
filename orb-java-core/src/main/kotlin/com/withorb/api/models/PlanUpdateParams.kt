@@ -11,7 +11,6 @@ import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.Params
-import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.toImmutable
@@ -28,13 +27,13 @@ import kotlin.jvm.optionals.getOrNull
  */
 class PlanUpdateParams
 private constructor(
-    private val planId: String,
+    private val planId: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun planId(): String = planId
+    fun planId(): Optional<String> = Optional.ofNullable(planId)
 
     /**
      * An optional user-defined ID for this plan resource, used throughout the system as an alias
@@ -79,14 +78,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [PlanUpdateParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .planId()
-         * ```
-         */
+        @JvmStatic fun none(): PlanUpdateParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [PlanUpdateParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -106,7 +100,10 @@ private constructor(
             additionalQueryParams = planUpdateParams.additionalQueryParams.toBuilder()
         }
 
-        fun planId(planId: String) = apply { this.planId = planId }
+        fun planId(planId: String?) = apply { this.planId = planId }
+
+        /** Alias for calling [Builder.planId] with `planId.orElse(null)`. */
+        fun planId(planId: Optional<String>) = planId(planId.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -280,17 +277,10 @@ private constructor(
          * Returns an immutable instance of [PlanUpdateParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .planId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): PlanUpdateParams =
             PlanUpdateParams(
-                checkRequired("planId", planId),
+                planId,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -301,7 +291,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> planId
+            0 -> planId ?: ""
             else -> ""
         }
 

@@ -4,12 +4,12 @@ package com.withorb.api.models
 
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.Params
-import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Reverting a backfill undoes all the effects of closing the backfill. If the backfill is
@@ -21,13 +21,13 @@ import java.util.Optional
  */
 class EventBackfillRevertParams
 private constructor(
-    private val backfillId: String,
+    private val backfillId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
-    fun backfillId(): String = backfillId
+    fun backfillId(): Optional<String> = Optional.ofNullable(backfillId)
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
@@ -39,13 +39,10 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): EventBackfillRevertParams = builder().build()
+
         /**
          * Returns a mutable builder for constructing an instance of [EventBackfillRevertParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .backfillId()
-         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
@@ -67,7 +64,10 @@ private constructor(
                 eventBackfillRevertParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun backfillId(backfillId: String) = apply { this.backfillId = backfillId }
+        fun backfillId(backfillId: String?) = apply { this.backfillId = backfillId }
+
+        /** Alias for calling [Builder.backfillId] with `backfillId.orElse(null)`. */
+        fun backfillId(backfillId: Optional<String>) = backfillId(backfillId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -193,17 +193,10 @@ private constructor(
          * Returns an immutable instance of [EventBackfillRevertParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .backfillId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): EventBackfillRevertParams =
             EventBackfillRevertParams(
-                checkRequired("backfillId", backfillId),
+                backfillId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -215,7 +208,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> backfillId
+            0 -> backfillId ?: ""
             else -> ""
         }
 

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.withorb.api.core.Enum
 import com.withorb.api.core.JsonField
 import com.withorb.api.core.Params
-import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.errors.OrbInvalidDataException
@@ -29,7 +28,7 @@ import kotlin.jvm.optionals.getOrNull
  */
 class SubscriptionFetchCostsParams
 private constructor(
-    private val subscriptionId: String,
+    private val subscriptionId: String?,
     private val currency: String?,
     private val timeframeEnd: OffsetDateTime?,
     private val timeframeStart: OffsetDateTime?,
@@ -38,7 +37,7 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun subscriptionId(): String = subscriptionId
+    fun subscriptionId(): Optional<String> = Optional.ofNullable(subscriptionId)
 
     /** The currency or custom pricing unit to use. */
     fun currency(): Optional<String> = Optional.ofNullable(currency)
@@ -64,13 +63,10 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): SubscriptionFetchCostsParams = builder().build()
+
         /**
          * Returns a mutable builder for constructing an instance of [SubscriptionFetchCostsParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .subscriptionId()
-         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
@@ -97,7 +93,11 @@ private constructor(
             additionalQueryParams = subscriptionFetchCostsParams.additionalQueryParams.toBuilder()
         }
 
-        fun subscriptionId(subscriptionId: String) = apply { this.subscriptionId = subscriptionId }
+        fun subscriptionId(subscriptionId: String?) = apply { this.subscriptionId = subscriptionId }
+
+        /** Alias for calling [Builder.subscriptionId] with `subscriptionId.orElse(null)`. */
+        fun subscriptionId(subscriptionId: Optional<String>) =
+            subscriptionId(subscriptionId.getOrNull())
 
         /** The currency or custom pricing unit to use. */
         fun currency(currency: String?) = apply { this.currency = currency }
@@ -233,17 +233,10 @@ private constructor(
          * Returns an immutable instance of [SubscriptionFetchCostsParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .subscriptionId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): SubscriptionFetchCostsParams =
             SubscriptionFetchCostsParams(
-                checkRequired("subscriptionId", subscriptionId),
+                subscriptionId,
                 currency,
                 timeframeEnd,
                 timeframeStart,
@@ -255,7 +248,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> subscriptionId
+            0 -> subscriptionId ?: ""
             else -> ""
         }
 

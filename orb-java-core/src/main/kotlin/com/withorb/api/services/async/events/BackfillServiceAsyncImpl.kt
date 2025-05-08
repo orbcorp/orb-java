@@ -5,6 +5,7 @@ package com.withorb.api.services.async.events
 import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
 import com.withorb.api.core.handlers.withErrorHandler
@@ -27,6 +28,7 @@ import com.withorb.api.models.EventBackfillListParams
 import com.withorb.api.models.EventBackfillRevertParams
 import com.withorb.api.models.EventBackfillRevertResponse
 import java.util.concurrent.CompletableFuture
+import kotlin.jvm.optionals.getOrNull
 
 class BackfillServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     BackfillServiceAsync {
@@ -153,6 +155,9 @@ class BackfillServiceAsyncImpl internal constructor(private val clientOptions: C
             params: EventBackfillCloseParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<EventBackfillCloseResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("backfillId", params.backfillId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -184,6 +189,9 @@ class BackfillServiceAsyncImpl internal constructor(private val clientOptions: C
             params: EventBackfillFetchParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<EventBackfillFetchResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("backfillId", params.backfillId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -214,6 +222,9 @@ class BackfillServiceAsyncImpl internal constructor(private val clientOptions: C
             params: EventBackfillRevertParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<EventBackfillRevertResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("backfillId", params.backfillId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)

@@ -3,20 +3,21 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.Params
-import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** This endpoint retrieves an alert by its ID. */
 class AlertRetrieveParams
 private constructor(
-    private val alertId: String,
+    private val alertId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun alertId(): String = alertId
+    fun alertId(): Optional<String> = Optional.ofNullable(alertId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -26,14 +27,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [AlertRetrieveParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .alertId()
-         * ```
-         */
+        @JvmStatic fun none(): AlertRetrieveParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [AlertRetrieveParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -51,7 +47,10 @@ private constructor(
             additionalQueryParams = alertRetrieveParams.additionalQueryParams.toBuilder()
         }
 
-        fun alertId(alertId: String) = apply { this.alertId = alertId }
+        fun alertId(alertId: String?) = apply { this.alertId = alertId }
+
+        /** Alias for calling [Builder.alertId] with `alertId.orElse(null)`. */
+        fun alertId(alertId: Optional<String>) = alertId(alertId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -155,25 +154,14 @@ private constructor(
          * Returns an immutable instance of [AlertRetrieveParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .alertId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): AlertRetrieveParams =
-            AlertRetrieveParams(
-                checkRequired("alertId", alertId),
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
-            )
+            AlertRetrieveParams(alertId, additionalHeaders.build(), additionalQueryParams.build())
     }
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> alertId
+            0 -> alertId ?: ""
             else -> ""
         }
 

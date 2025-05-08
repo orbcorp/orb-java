@@ -5,6 +5,7 @@ package com.withorb.api.services.async.customers
 import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
 import com.withorb.api.core.handlers.withErrorHandler
@@ -21,6 +22,7 @@ import com.withorb.api.models.CustomerBalanceTransactionListPageAsync
 import com.withorb.api.models.CustomerBalanceTransactionListPageResponse
 import com.withorb.api.models.CustomerBalanceTransactionListParams
 import java.util.concurrent.CompletableFuture
+import kotlin.jvm.optionals.getOrNull
 
 class BalanceTransactionServiceAsyncImpl
 internal constructor(private val clientOptions: ClientOptions) : BalanceTransactionServiceAsync {
@@ -58,6 +60,9 @@ internal constructor(private val clientOptions: ClientOptions) : BalanceTransact
             params: CustomerBalanceTransactionCreateParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionCreateResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("customerId", params.customerId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -89,6 +94,9 @@ internal constructor(private val clientOptions: ClientOptions) : BalanceTransact
             params: CustomerBalanceTransactionListParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionListPageAsync>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("customerId", params.customerId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)

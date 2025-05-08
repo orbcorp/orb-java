@@ -19,18 +19,19 @@ import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import java.util.Collections
 import java.util.Objects
+import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** This endpoint updates the thresholds of an alert. */
 class AlertUpdateParams
 private constructor(
-    private val alertConfigurationId: String,
+    private val alertConfigurationId: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun alertConfigurationId(): String = alertConfigurationId
+    fun alertConfigurationId(): Optional<String> = Optional.ofNullable(alertConfigurationId)
 
     /**
      * The thresholds that define the values at which the alert will be triggered.
@@ -62,7 +63,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .alertConfigurationId()
          * .thresholds()
          * ```
          */
@@ -85,9 +85,16 @@ private constructor(
             additionalQueryParams = alertUpdateParams.additionalQueryParams.toBuilder()
         }
 
-        fun alertConfigurationId(alertConfigurationId: String) = apply {
+        fun alertConfigurationId(alertConfigurationId: String?) = apply {
             this.alertConfigurationId = alertConfigurationId
         }
+
+        /**
+         * Alias for calling [Builder.alertConfigurationId] with
+         * `alertConfigurationId.orElse(null)`.
+         */
+        fun alertConfigurationId(alertConfigurationId: Optional<String>) =
+            alertConfigurationId(alertConfigurationId.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -243,7 +250,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .alertConfigurationId()
          * .thresholds()
          * ```
          *
@@ -251,7 +257,7 @@ private constructor(
          */
         fun build(): AlertUpdateParams =
             AlertUpdateParams(
-                checkRequired("alertConfigurationId", alertConfigurationId),
+                alertConfigurationId,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -262,7 +268,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> alertConfigurationId
+            0 -> alertConfigurationId ?: ""
             else -> ""
         }
 

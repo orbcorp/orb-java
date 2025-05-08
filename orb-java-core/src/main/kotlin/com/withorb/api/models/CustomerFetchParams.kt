@@ -3,10 +3,11 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.Params
-import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint is used to fetch customer details given an identifier. If the `Customer` is in the
@@ -16,12 +17,12 @@ import java.util.Objects
  */
 class CustomerFetchParams
 private constructor(
-    private val customerId: String,
+    private val customerId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun customerId(): String = customerId
+    fun customerId(): Optional<String> = Optional.ofNullable(customerId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -31,14 +32,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [CustomerFetchParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .customerId()
-         * ```
-         */
+        @JvmStatic fun none(): CustomerFetchParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [CustomerFetchParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -56,7 +52,10 @@ private constructor(
             additionalQueryParams = customerFetchParams.additionalQueryParams.toBuilder()
         }
 
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String?) = apply { this.customerId = customerId }
+
+        /** Alias for calling [Builder.customerId] with `customerId.orElse(null)`. */
+        fun customerId(customerId: Optional<String>) = customerId(customerId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -160,17 +159,10 @@ private constructor(
          * Returns an immutable instance of [CustomerFetchParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .customerId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): CustomerFetchParams =
             CustomerFetchParams(
-                checkRequired("customerId", customerId),
+                customerId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -178,7 +170,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> customerId
+            0 -> customerId ?: ""
             else -> ""
         }
 

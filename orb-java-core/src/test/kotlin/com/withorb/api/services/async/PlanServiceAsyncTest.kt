@@ -6,7 +6,6 @@ import com.withorb.api.TestServerExtension
 import com.withorb.api.client.okhttp.OrbOkHttpClientAsync
 import com.withorb.api.core.JsonValue
 import com.withorb.api.models.PlanCreateParams
-import com.withorb.api.models.PlanFetchParams
 import com.withorb.api.models.PlanUpdateParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -142,7 +141,7 @@ internal class PlanServiceAsyncTest {
                 .build()
         val planServiceAsync = client.plans()
 
-        val planFuture = planServiceAsync.fetch(PlanFetchParams.builder().planId("plan_id").build())
+        val planFuture = planServiceAsync.fetch("plan_id")
 
         val plan = planFuture.get()
         plan.validate()
