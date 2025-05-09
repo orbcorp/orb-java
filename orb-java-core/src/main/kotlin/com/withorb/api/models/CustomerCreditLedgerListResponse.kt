@@ -38,84 +38,69 @@ import kotlin.jvm.optionals.getOrNull
 @JsonSerialize(using = CustomerCreditLedgerListResponse.Serializer::class)
 class CustomerCreditLedgerListResponse
 private constructor(
-    private val incrementLedgerEntry: IncrementLedgerEntry? = null,
-    private val decrementLedgerEntry: DecrementLedgerEntry? = null,
-    private val expirationChangeLedgerEntry: ExpirationChangeLedgerEntry? = null,
-    private val creditBlockExpiryLedgerEntry: CreditBlockExpiryLedgerEntry? = null,
-    private val voidLedgerEntry: VoidLedgerEntry? = null,
-    private val voidInitiatedLedgerEntry: VoidInitiatedLedgerEntry? = null,
-    private val amendmentLedgerEntry: AmendmentLedgerEntry? = null,
+    private val increment: Increment? = null,
+    private val decrement: Decrement? = null,
+    private val expirationChange: ExpirationChange? = null,
+    private val creditBlockExpiry: CreditBlockExpiry? = null,
+    private val void_: Void? = null,
+    private val voidInitiated: VoidInitiated? = null,
+    private val amendment: Amendment? = null,
     private val _json: JsonValue? = null,
 ) {
 
-    fun incrementLedgerEntry(): Optional<IncrementLedgerEntry> =
-        Optional.ofNullable(incrementLedgerEntry)
+    fun increment(): Optional<Increment> = Optional.ofNullable(increment)
 
-    fun decrementLedgerEntry(): Optional<DecrementLedgerEntry> =
-        Optional.ofNullable(decrementLedgerEntry)
+    fun decrement(): Optional<Decrement> = Optional.ofNullable(decrement)
 
-    fun expirationChangeLedgerEntry(): Optional<ExpirationChangeLedgerEntry> =
-        Optional.ofNullable(expirationChangeLedgerEntry)
+    fun expirationChange(): Optional<ExpirationChange> = Optional.ofNullable(expirationChange)
 
-    fun creditBlockExpiryLedgerEntry(): Optional<CreditBlockExpiryLedgerEntry> =
-        Optional.ofNullable(creditBlockExpiryLedgerEntry)
+    fun creditBlockExpiry(): Optional<CreditBlockExpiry> = Optional.ofNullable(creditBlockExpiry)
 
-    fun voidLedgerEntry(): Optional<VoidLedgerEntry> = Optional.ofNullable(voidLedgerEntry)
+    fun void_(): Optional<Void> = Optional.ofNullable(void_)
 
-    fun voidInitiatedLedgerEntry(): Optional<VoidInitiatedLedgerEntry> =
-        Optional.ofNullable(voidInitiatedLedgerEntry)
+    fun voidInitiated(): Optional<VoidInitiated> = Optional.ofNullable(voidInitiated)
 
-    fun amendmentLedgerEntry(): Optional<AmendmentLedgerEntry> =
-        Optional.ofNullable(amendmentLedgerEntry)
+    fun amendment(): Optional<Amendment> = Optional.ofNullable(amendment)
 
-    fun isIncrementLedgerEntry(): Boolean = incrementLedgerEntry != null
+    fun isIncrement(): Boolean = increment != null
 
-    fun isDecrementLedgerEntry(): Boolean = decrementLedgerEntry != null
+    fun isDecrement(): Boolean = decrement != null
 
-    fun isExpirationChangeLedgerEntry(): Boolean = expirationChangeLedgerEntry != null
+    fun isExpirationChange(): Boolean = expirationChange != null
 
-    fun isCreditBlockExpiryLedgerEntry(): Boolean = creditBlockExpiryLedgerEntry != null
+    fun isCreditBlockExpiry(): Boolean = creditBlockExpiry != null
 
-    fun isVoidLedgerEntry(): Boolean = voidLedgerEntry != null
+    fun isVoid(): Boolean = void_ != null
 
-    fun isVoidInitiatedLedgerEntry(): Boolean = voidInitiatedLedgerEntry != null
+    fun isVoidInitiated(): Boolean = voidInitiated != null
 
-    fun isAmendmentLedgerEntry(): Boolean = amendmentLedgerEntry != null
+    fun isAmendment(): Boolean = amendment != null
 
-    fun asIncrementLedgerEntry(): IncrementLedgerEntry =
-        incrementLedgerEntry.getOrThrow("incrementLedgerEntry")
+    fun asIncrement(): Increment = increment.getOrThrow("increment")
 
-    fun asDecrementLedgerEntry(): DecrementLedgerEntry =
-        decrementLedgerEntry.getOrThrow("decrementLedgerEntry")
+    fun asDecrement(): Decrement = decrement.getOrThrow("decrement")
 
-    fun asExpirationChangeLedgerEntry(): ExpirationChangeLedgerEntry =
-        expirationChangeLedgerEntry.getOrThrow("expirationChangeLedgerEntry")
+    fun asExpirationChange(): ExpirationChange = expirationChange.getOrThrow("expirationChange")
 
-    fun asCreditBlockExpiryLedgerEntry(): CreditBlockExpiryLedgerEntry =
-        creditBlockExpiryLedgerEntry.getOrThrow("creditBlockExpiryLedgerEntry")
+    fun asCreditBlockExpiry(): CreditBlockExpiry = creditBlockExpiry.getOrThrow("creditBlockExpiry")
 
-    fun asVoidLedgerEntry(): VoidLedgerEntry = voidLedgerEntry.getOrThrow("voidLedgerEntry")
+    fun asVoid(): Void = void_.getOrThrow("void_")
 
-    fun asVoidInitiatedLedgerEntry(): VoidInitiatedLedgerEntry =
-        voidInitiatedLedgerEntry.getOrThrow("voidInitiatedLedgerEntry")
+    fun asVoidInitiated(): VoidInitiated = voidInitiated.getOrThrow("voidInitiated")
 
-    fun asAmendmentLedgerEntry(): AmendmentLedgerEntry =
-        amendmentLedgerEntry.getOrThrow("amendmentLedgerEntry")
+    fun asAmendment(): Amendment = amendment.getOrThrow("amendment")
 
     fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
     fun <T> accept(visitor: Visitor<T>): T =
         when {
-            incrementLedgerEntry != null -> visitor.visitIncrementLedgerEntry(incrementLedgerEntry)
-            decrementLedgerEntry != null -> visitor.visitDecrementLedgerEntry(decrementLedgerEntry)
-            expirationChangeLedgerEntry != null ->
-                visitor.visitExpirationChangeLedgerEntry(expirationChangeLedgerEntry)
-            creditBlockExpiryLedgerEntry != null ->
-                visitor.visitCreditBlockExpiryLedgerEntry(creditBlockExpiryLedgerEntry)
-            voidLedgerEntry != null -> visitor.visitVoidLedgerEntry(voidLedgerEntry)
-            voidInitiatedLedgerEntry != null ->
-                visitor.visitVoidInitiatedLedgerEntry(voidInitiatedLedgerEntry)
-            amendmentLedgerEntry != null -> visitor.visitAmendmentLedgerEntry(amendmentLedgerEntry)
+            increment != null -> visitor.visitIncrement(increment)
+            decrement != null -> visitor.visitDecrement(decrement)
+            expirationChange != null -> visitor.visitExpirationChange(expirationChange)
+            creditBlockExpiry != null -> visitor.visitCreditBlockExpiry(creditBlockExpiry)
+            void_ != null -> visitor.visitVoid(void_)
+            voidInitiated != null -> visitor.visitVoidInitiated(voidInitiated)
+            amendment != null -> visitor.visitAmendment(amendment)
             else -> visitor.unknown(_json)
         }
 
@@ -128,38 +113,32 @@ private constructor(
 
         accept(
             object : Visitor<Unit> {
-                override fun visitIncrementLedgerEntry(incrementLedgerEntry: IncrementLedgerEntry) {
-                    incrementLedgerEntry.validate()
+                override fun visitIncrement(increment: Increment) {
+                    increment.validate()
                 }
 
-                override fun visitDecrementLedgerEntry(decrementLedgerEntry: DecrementLedgerEntry) {
-                    decrementLedgerEntry.validate()
+                override fun visitDecrement(decrement: Decrement) {
+                    decrement.validate()
                 }
 
-                override fun visitExpirationChangeLedgerEntry(
-                    expirationChangeLedgerEntry: ExpirationChangeLedgerEntry
-                ) {
-                    expirationChangeLedgerEntry.validate()
+                override fun visitExpirationChange(expirationChange: ExpirationChange) {
+                    expirationChange.validate()
                 }
 
-                override fun visitCreditBlockExpiryLedgerEntry(
-                    creditBlockExpiryLedgerEntry: CreditBlockExpiryLedgerEntry
-                ) {
-                    creditBlockExpiryLedgerEntry.validate()
+                override fun visitCreditBlockExpiry(creditBlockExpiry: CreditBlockExpiry) {
+                    creditBlockExpiry.validate()
                 }
 
-                override fun visitVoidLedgerEntry(voidLedgerEntry: VoidLedgerEntry) {
-                    voidLedgerEntry.validate()
+                override fun visitVoid(void_: Void) {
+                    void_.validate()
                 }
 
-                override fun visitVoidInitiatedLedgerEntry(
-                    voidInitiatedLedgerEntry: VoidInitiatedLedgerEntry
-                ) {
-                    voidInitiatedLedgerEntry.validate()
+                override fun visitVoidInitiated(voidInitiated: VoidInitiated) {
+                    voidInitiated.validate()
                 }
 
-                override fun visitAmendmentLedgerEntry(amendmentLedgerEntry: AmendmentLedgerEntry) {
-                    amendmentLedgerEntry.validate()
+                override fun visitAmendment(amendment: Amendment) {
+                    amendment.validate()
                 }
             }
         )
@@ -183,29 +162,22 @@ private constructor(
     internal fun validity(): Int =
         accept(
             object : Visitor<Int> {
-                override fun visitIncrementLedgerEntry(incrementLedgerEntry: IncrementLedgerEntry) =
-                    incrementLedgerEntry.validity()
+                override fun visitIncrement(increment: Increment) = increment.validity()
 
-                override fun visitDecrementLedgerEntry(decrementLedgerEntry: DecrementLedgerEntry) =
-                    decrementLedgerEntry.validity()
+                override fun visitDecrement(decrement: Decrement) = decrement.validity()
 
-                override fun visitExpirationChangeLedgerEntry(
-                    expirationChangeLedgerEntry: ExpirationChangeLedgerEntry
-                ) = expirationChangeLedgerEntry.validity()
+                override fun visitExpirationChange(expirationChange: ExpirationChange) =
+                    expirationChange.validity()
 
-                override fun visitCreditBlockExpiryLedgerEntry(
-                    creditBlockExpiryLedgerEntry: CreditBlockExpiryLedgerEntry
-                ) = creditBlockExpiryLedgerEntry.validity()
+                override fun visitCreditBlockExpiry(creditBlockExpiry: CreditBlockExpiry) =
+                    creditBlockExpiry.validity()
 
-                override fun visitVoidLedgerEntry(voidLedgerEntry: VoidLedgerEntry) =
-                    voidLedgerEntry.validity()
+                override fun visitVoid(void_: Void) = void_.validity()
 
-                override fun visitVoidInitiatedLedgerEntry(
-                    voidInitiatedLedgerEntry: VoidInitiatedLedgerEntry
-                ) = voidInitiatedLedgerEntry.validity()
+                override fun visitVoidInitiated(voidInitiated: VoidInitiated) =
+                    voidInitiated.validity()
 
-                override fun visitAmendmentLedgerEntry(amendmentLedgerEntry: AmendmentLedgerEntry) =
-                    amendmentLedgerEntry.validity()
+                override fun visitAmendment(amendment: Amendment) = amendment.validity()
 
                 override fun unknown(json: JsonValue?) = 0
             }
@@ -216,27 +188,23 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerCreditLedgerListResponse && incrementLedgerEntry == other.incrementLedgerEntry && decrementLedgerEntry == other.decrementLedgerEntry && expirationChangeLedgerEntry == other.expirationChangeLedgerEntry && creditBlockExpiryLedgerEntry == other.creditBlockExpiryLedgerEntry && voidLedgerEntry == other.voidLedgerEntry && voidInitiatedLedgerEntry == other.voidInitiatedLedgerEntry && amendmentLedgerEntry == other.amendmentLedgerEntry /* spotless:on */
+        return /* spotless:off */ other is CustomerCreditLedgerListResponse && increment == other.increment && decrement == other.decrement && expirationChange == other.expirationChange && creditBlockExpiry == other.creditBlockExpiry && void_ == other.void_ && voidInitiated == other.voidInitiated && amendment == other.amendment /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(incrementLedgerEntry, decrementLedgerEntry, expirationChangeLedgerEntry, creditBlockExpiryLedgerEntry, voidLedgerEntry, voidInitiatedLedgerEntry, amendmentLedgerEntry) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(increment, decrement, expirationChange, creditBlockExpiry, void_, voidInitiated, amendment) /* spotless:on */
 
     override fun toString(): String =
         when {
-            incrementLedgerEntry != null ->
-                "CustomerCreditLedgerListResponse{incrementLedgerEntry=$incrementLedgerEntry}"
-            decrementLedgerEntry != null ->
-                "CustomerCreditLedgerListResponse{decrementLedgerEntry=$decrementLedgerEntry}"
-            expirationChangeLedgerEntry != null ->
-                "CustomerCreditLedgerListResponse{expirationChangeLedgerEntry=$expirationChangeLedgerEntry}"
-            creditBlockExpiryLedgerEntry != null ->
-                "CustomerCreditLedgerListResponse{creditBlockExpiryLedgerEntry=$creditBlockExpiryLedgerEntry}"
-            voidLedgerEntry != null ->
-                "CustomerCreditLedgerListResponse{voidLedgerEntry=$voidLedgerEntry}"
-            voidInitiatedLedgerEntry != null ->
-                "CustomerCreditLedgerListResponse{voidInitiatedLedgerEntry=$voidInitiatedLedgerEntry}"
-            amendmentLedgerEntry != null ->
-                "CustomerCreditLedgerListResponse{amendmentLedgerEntry=$amendmentLedgerEntry}"
+            increment != null -> "CustomerCreditLedgerListResponse{increment=$increment}"
+            decrement != null -> "CustomerCreditLedgerListResponse{decrement=$decrement}"
+            expirationChange != null ->
+                "CustomerCreditLedgerListResponse{expirationChange=$expirationChange}"
+            creditBlockExpiry != null ->
+                "CustomerCreditLedgerListResponse{creditBlockExpiry=$creditBlockExpiry}"
+            void_ != null -> "CustomerCreditLedgerListResponse{void_=$void_}"
+            voidInitiated != null ->
+                "CustomerCreditLedgerListResponse{voidInitiated=$voidInitiated}"
+            amendment != null -> "CustomerCreditLedgerListResponse{amendment=$amendment}"
             _json != null -> "CustomerCreditLedgerListResponse{_unknown=$_json}"
             else -> throw IllegalStateException("Invalid CustomerCreditLedgerListResponse")
         }
@@ -244,40 +212,30 @@ private constructor(
     companion object {
 
         @JvmStatic
-        fun ofIncrementLedgerEntry(incrementLedgerEntry: IncrementLedgerEntry) =
-            CustomerCreditLedgerListResponse(incrementLedgerEntry = incrementLedgerEntry)
+        fun ofIncrement(increment: Increment) =
+            CustomerCreditLedgerListResponse(increment = increment)
 
         @JvmStatic
-        fun ofDecrementLedgerEntry(decrementLedgerEntry: DecrementLedgerEntry) =
-            CustomerCreditLedgerListResponse(decrementLedgerEntry = decrementLedgerEntry)
+        fun ofDecrement(decrement: Decrement) =
+            CustomerCreditLedgerListResponse(decrement = decrement)
 
         @JvmStatic
-        fun ofExpirationChangeLedgerEntry(
-            expirationChangeLedgerEntry: ExpirationChangeLedgerEntry
-        ) =
-            CustomerCreditLedgerListResponse(
-                expirationChangeLedgerEntry = expirationChangeLedgerEntry
-            )
+        fun ofExpirationChange(expirationChange: ExpirationChange) =
+            CustomerCreditLedgerListResponse(expirationChange = expirationChange)
 
         @JvmStatic
-        fun ofCreditBlockExpiryLedgerEntry(
-            creditBlockExpiryLedgerEntry: CreditBlockExpiryLedgerEntry
-        ) =
-            CustomerCreditLedgerListResponse(
-                creditBlockExpiryLedgerEntry = creditBlockExpiryLedgerEntry
-            )
+        fun ofCreditBlockExpiry(creditBlockExpiry: CreditBlockExpiry) =
+            CustomerCreditLedgerListResponse(creditBlockExpiry = creditBlockExpiry)
+
+        @JvmStatic fun ofVoid(void_: Void) = CustomerCreditLedgerListResponse(void_ = void_)
 
         @JvmStatic
-        fun ofVoidLedgerEntry(voidLedgerEntry: VoidLedgerEntry) =
-            CustomerCreditLedgerListResponse(voidLedgerEntry = voidLedgerEntry)
+        fun ofVoidInitiated(voidInitiated: VoidInitiated) =
+            CustomerCreditLedgerListResponse(voidInitiated = voidInitiated)
 
         @JvmStatic
-        fun ofVoidInitiatedLedgerEntry(voidInitiatedLedgerEntry: VoidInitiatedLedgerEntry) =
-            CustomerCreditLedgerListResponse(voidInitiatedLedgerEntry = voidInitiatedLedgerEntry)
-
-        @JvmStatic
-        fun ofAmendmentLedgerEntry(amendmentLedgerEntry: AmendmentLedgerEntry) =
-            CustomerCreditLedgerListResponse(amendmentLedgerEntry = amendmentLedgerEntry)
+        fun ofAmendment(amendment: Amendment) =
+            CustomerCreditLedgerListResponse(amendment = amendment)
     }
 
     /**
@@ -286,23 +244,19 @@ private constructor(
      */
     interface Visitor<out T> {
 
-        fun visitIncrementLedgerEntry(incrementLedgerEntry: IncrementLedgerEntry): T
+        fun visitIncrement(increment: Increment): T
 
-        fun visitDecrementLedgerEntry(decrementLedgerEntry: DecrementLedgerEntry): T
+        fun visitDecrement(decrement: Decrement): T
 
-        fun visitExpirationChangeLedgerEntry(
-            expirationChangeLedgerEntry: ExpirationChangeLedgerEntry
-        ): T
+        fun visitExpirationChange(expirationChange: ExpirationChange): T
 
-        fun visitCreditBlockExpiryLedgerEntry(
-            creditBlockExpiryLedgerEntry: CreditBlockExpiryLedgerEntry
-        ): T
+        fun visitCreditBlockExpiry(creditBlockExpiry: CreditBlockExpiry): T
 
-        fun visitVoidLedgerEntry(voidLedgerEntry: VoidLedgerEntry): T
+        fun visitVoid(void_: Void): T
 
-        fun visitVoidInitiatedLedgerEntry(voidInitiatedLedgerEntry: VoidInitiatedLedgerEntry): T
+        fun visitVoidInitiated(voidInitiated: VoidInitiated): T
 
-        fun visitAmendmentLedgerEntry(amendmentLedgerEntry: AmendmentLedgerEntry): T
+        fun visitAmendment(amendment: Amendment): T
 
         /**
          * Maps an unknown variant of [CustomerCreditLedgerListResponse] to a value of type [T].
@@ -330,49 +284,38 @@ private constructor(
 
             when (entryType) {
                 "increment" -> {
-                    return tryDeserialize(node, jacksonTypeRef<IncrementLedgerEntry>())?.let {
-                        CustomerCreditLedgerListResponse(incrementLedgerEntry = it, _json = json)
+                    return tryDeserialize(node, jacksonTypeRef<Increment>())?.let {
+                        CustomerCreditLedgerListResponse(increment = it, _json = json)
                     } ?: CustomerCreditLedgerListResponse(_json = json)
                 }
                 "decrement" -> {
-                    return tryDeserialize(node, jacksonTypeRef<DecrementLedgerEntry>())?.let {
-                        CustomerCreditLedgerListResponse(decrementLedgerEntry = it, _json = json)
+                    return tryDeserialize(node, jacksonTypeRef<Decrement>())?.let {
+                        CustomerCreditLedgerListResponse(decrement = it, _json = json)
                     } ?: CustomerCreditLedgerListResponse(_json = json)
                 }
                 "expiration_change" -> {
-                    return tryDeserialize(node, jacksonTypeRef<ExpirationChangeLedgerEntry>())
-                        ?.let {
-                            CustomerCreditLedgerListResponse(
-                                expirationChangeLedgerEntry = it,
-                                _json = json,
-                            )
-                        } ?: CustomerCreditLedgerListResponse(_json = json)
+                    return tryDeserialize(node, jacksonTypeRef<ExpirationChange>())?.let {
+                        CustomerCreditLedgerListResponse(expirationChange = it, _json = json)
+                    } ?: CustomerCreditLedgerListResponse(_json = json)
                 }
                 "credit_block_expiry" -> {
-                    return tryDeserialize(node, jacksonTypeRef<CreditBlockExpiryLedgerEntry>())
-                        ?.let {
-                            CustomerCreditLedgerListResponse(
-                                creditBlockExpiryLedgerEntry = it,
-                                _json = json,
-                            )
-                        } ?: CustomerCreditLedgerListResponse(_json = json)
+                    return tryDeserialize(node, jacksonTypeRef<CreditBlockExpiry>())?.let {
+                        CustomerCreditLedgerListResponse(creditBlockExpiry = it, _json = json)
+                    } ?: CustomerCreditLedgerListResponse(_json = json)
                 }
                 "void" -> {
-                    return tryDeserialize(node, jacksonTypeRef<VoidLedgerEntry>())?.let {
-                        CustomerCreditLedgerListResponse(voidLedgerEntry = it, _json = json)
+                    return tryDeserialize(node, jacksonTypeRef<Void>())?.let {
+                        CustomerCreditLedgerListResponse(void_ = it, _json = json)
                     } ?: CustomerCreditLedgerListResponse(_json = json)
                 }
                 "void_initiated" -> {
-                    return tryDeserialize(node, jacksonTypeRef<VoidInitiatedLedgerEntry>())?.let {
-                        CustomerCreditLedgerListResponse(
-                            voidInitiatedLedgerEntry = it,
-                            _json = json,
-                        )
+                    return tryDeserialize(node, jacksonTypeRef<VoidInitiated>())?.let {
+                        CustomerCreditLedgerListResponse(voidInitiated = it, _json = json)
                     } ?: CustomerCreditLedgerListResponse(_json = json)
                 }
                 "amendment" -> {
-                    return tryDeserialize(node, jacksonTypeRef<AmendmentLedgerEntry>())?.let {
-                        CustomerCreditLedgerListResponse(amendmentLedgerEntry = it, _json = json)
+                    return tryDeserialize(node, jacksonTypeRef<Amendment>())?.let {
+                        CustomerCreditLedgerListResponse(amendment = it, _json = json)
                     } ?: CustomerCreditLedgerListResponse(_json = json)
                 }
             }
@@ -390,26 +333,20 @@ private constructor(
             provider: SerializerProvider,
         ) {
             when {
-                value.incrementLedgerEntry != null ->
-                    generator.writeObject(value.incrementLedgerEntry)
-                value.decrementLedgerEntry != null ->
-                    generator.writeObject(value.decrementLedgerEntry)
-                value.expirationChangeLedgerEntry != null ->
-                    generator.writeObject(value.expirationChangeLedgerEntry)
-                value.creditBlockExpiryLedgerEntry != null ->
-                    generator.writeObject(value.creditBlockExpiryLedgerEntry)
-                value.voidLedgerEntry != null -> generator.writeObject(value.voidLedgerEntry)
-                value.voidInitiatedLedgerEntry != null ->
-                    generator.writeObject(value.voidInitiatedLedgerEntry)
-                value.amendmentLedgerEntry != null ->
-                    generator.writeObject(value.amendmentLedgerEntry)
+                value.increment != null -> generator.writeObject(value.increment)
+                value.decrement != null -> generator.writeObject(value.decrement)
+                value.expirationChange != null -> generator.writeObject(value.expirationChange)
+                value.creditBlockExpiry != null -> generator.writeObject(value.creditBlockExpiry)
+                value.void_ != null -> generator.writeObject(value.void_)
+                value.voidInitiated != null -> generator.writeObject(value.voidInitiated)
+                value.amendment != null -> generator.writeObject(value.amendment)
                 value._json != null -> generator.writeObject(value._json)
                 else -> throw IllegalStateException("Invalid CustomerCreditLedgerListResponse")
             }
         }
     }
 
-    class IncrementLedgerEntry
+    class Increment
     private constructor(
         private val id: JsonField<String>,
         private val amount: JsonField<Double>,
@@ -683,7 +620,7 @@ private constructor(
         companion object {
 
             /**
-             * Returns a mutable builder for constructing an instance of [IncrementLedgerEntry].
+             * Returns a mutable builder for constructing an instance of [Increment].
              *
              * The following fields are required:
              * ```java
@@ -704,7 +641,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [IncrementLedgerEntry]. */
+        /** A builder for [Increment]. */
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
@@ -723,21 +660,21 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(incrementLedgerEntry: IncrementLedgerEntry) = apply {
-                id = incrementLedgerEntry.id
-                amount = incrementLedgerEntry.amount
-                createdAt = incrementLedgerEntry.createdAt
-                creditBlock = incrementLedgerEntry.creditBlock
-                currency = incrementLedgerEntry.currency
-                customer = incrementLedgerEntry.customer
-                description = incrementLedgerEntry.description
-                endingBalance = incrementLedgerEntry.endingBalance
-                entryStatus = incrementLedgerEntry.entryStatus
-                entryType = incrementLedgerEntry.entryType
-                ledgerSequenceNumber = incrementLedgerEntry.ledgerSequenceNumber
-                metadata = incrementLedgerEntry.metadata
-                startingBalance = incrementLedgerEntry.startingBalance
-                additionalProperties = incrementLedgerEntry.additionalProperties.toMutableMap()
+            internal fun from(increment: Increment) = apply {
+                id = increment.id
+                amount = increment.amount
+                createdAt = increment.createdAt
+                creditBlock = increment.creditBlock
+                currency = increment.currency
+                customer = increment.customer
+                description = increment.description
+                endingBalance = increment.endingBalance
+                entryStatus = increment.entryStatus
+                entryType = increment.entryType
+                ledgerSequenceNumber = increment.ledgerSequenceNumber
+                metadata = increment.metadata
+                startingBalance = increment.startingBalance
+                additionalProperties = increment.additionalProperties.toMutableMap()
             }
 
             fun id(id: String) = id(JsonField.of(id))
@@ -930,7 +867,7 @@ private constructor(
             }
 
             /**
-             * Returns an immutable instance of [IncrementLedgerEntry].
+             * Returns an immutable instance of [Increment].
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              *
@@ -952,8 +889,8 @@ private constructor(
              *
              * @throws IllegalStateException if any required field is unset.
              */
-            fun build(): IncrementLedgerEntry =
-                IncrementLedgerEntry(
+            fun build(): Increment =
+                Increment(
                     checkRequired("id", id),
                     checkRequired("amount", amount),
                     checkRequired("createdAt", createdAt),
@@ -973,7 +910,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): IncrementLedgerEntry = apply {
+        fun validate(): Increment = apply {
             if (validated) {
                 return@apply
             }
@@ -1736,7 +1673,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is IncrementLedgerEntry && id == other.id && amount == other.amount && createdAt == other.createdAt && creditBlock == other.creditBlock && currency == other.currency && customer == other.customer && description == other.description && endingBalance == other.endingBalance && entryStatus == other.entryStatus && entryType == other.entryType && ledgerSequenceNumber == other.ledgerSequenceNumber && metadata == other.metadata && startingBalance == other.startingBalance && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Increment && id == other.id && amount == other.amount && createdAt == other.createdAt && creditBlock == other.creditBlock && currency == other.currency && customer == other.customer && description == other.description && endingBalance == other.endingBalance && entryStatus == other.entryStatus && entryType == other.entryType && ledgerSequenceNumber == other.ledgerSequenceNumber && metadata == other.metadata && startingBalance == other.startingBalance && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -1746,10 +1683,10 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "IncrementLedgerEntry{id=$id, amount=$amount, createdAt=$createdAt, creditBlock=$creditBlock, currency=$currency, customer=$customer, description=$description, endingBalance=$endingBalance, entryStatus=$entryStatus, entryType=$entryType, ledgerSequenceNumber=$ledgerSequenceNumber, metadata=$metadata, startingBalance=$startingBalance, additionalProperties=$additionalProperties}"
+            "Increment{id=$id, amount=$amount, createdAt=$createdAt, creditBlock=$creditBlock, currency=$currency, customer=$customer, description=$description, endingBalance=$endingBalance, entryStatus=$entryStatus, entryType=$entryType, ledgerSequenceNumber=$ledgerSequenceNumber, metadata=$metadata, startingBalance=$startingBalance, additionalProperties=$additionalProperties}"
     }
 
-    class DecrementLedgerEntry
+    class Decrement
     private constructor(
         private val id: JsonField<String>,
         private val amount: JsonField<Double>,
@@ -2073,7 +2010,7 @@ private constructor(
         companion object {
 
             /**
-             * Returns a mutable builder for constructing an instance of [DecrementLedgerEntry].
+             * Returns a mutable builder for constructing an instance of [Decrement].
              *
              * The following fields are required:
              * ```java
@@ -2094,7 +2031,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [DecrementLedgerEntry]. */
+        /** A builder for [Decrement]. */
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
@@ -2116,24 +2053,24 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(decrementLedgerEntry: DecrementLedgerEntry) = apply {
-                id = decrementLedgerEntry.id
-                amount = decrementLedgerEntry.amount
-                createdAt = decrementLedgerEntry.createdAt
-                creditBlock = decrementLedgerEntry.creditBlock
-                currency = decrementLedgerEntry.currency
-                customer = decrementLedgerEntry.customer
-                description = decrementLedgerEntry.description
-                endingBalance = decrementLedgerEntry.endingBalance
-                entryStatus = decrementLedgerEntry.entryStatus
-                entryType = decrementLedgerEntry.entryType
-                ledgerSequenceNumber = decrementLedgerEntry.ledgerSequenceNumber
-                metadata = decrementLedgerEntry.metadata
-                startingBalance = decrementLedgerEntry.startingBalance
-                eventId = decrementLedgerEntry.eventId
-                invoiceId = decrementLedgerEntry.invoiceId
-                priceId = decrementLedgerEntry.priceId
-                additionalProperties = decrementLedgerEntry.additionalProperties.toMutableMap()
+            internal fun from(decrement: Decrement) = apply {
+                id = decrement.id
+                amount = decrement.amount
+                createdAt = decrement.createdAt
+                creditBlock = decrement.creditBlock
+                currency = decrement.currency
+                customer = decrement.customer
+                description = decrement.description
+                endingBalance = decrement.endingBalance
+                entryStatus = decrement.entryStatus
+                entryType = decrement.entryType
+                ledgerSequenceNumber = decrement.ledgerSequenceNumber
+                metadata = decrement.metadata
+                startingBalance = decrement.startingBalance
+                eventId = decrement.eventId
+                invoiceId = decrement.invoiceId
+                priceId = decrement.priceId
+                additionalProperties = decrement.additionalProperties.toMutableMap()
             }
 
             fun id(id: String) = id(JsonField.of(id))
@@ -2368,7 +2305,7 @@ private constructor(
             }
 
             /**
-             * Returns an immutable instance of [DecrementLedgerEntry].
+             * Returns an immutable instance of [Decrement].
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              *
@@ -2390,8 +2327,8 @@ private constructor(
              *
              * @throws IllegalStateException if any required field is unset.
              */
-            fun build(): DecrementLedgerEntry =
-                DecrementLedgerEntry(
+            fun build(): Decrement =
+                Decrement(
                     checkRequired("id", id),
                     checkRequired("amount", amount),
                     checkRequired("createdAt", createdAt),
@@ -2414,7 +2351,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): DecrementLedgerEntry = apply {
+        fun validate(): Decrement = apply {
             if (validated) {
                 return@apply
             }
@@ -3183,7 +3120,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is DecrementLedgerEntry && id == other.id && amount == other.amount && createdAt == other.createdAt && creditBlock == other.creditBlock && currency == other.currency && customer == other.customer && description == other.description && endingBalance == other.endingBalance && entryStatus == other.entryStatus && entryType == other.entryType && ledgerSequenceNumber == other.ledgerSequenceNumber && metadata == other.metadata && startingBalance == other.startingBalance && eventId == other.eventId && invoiceId == other.invoiceId && priceId == other.priceId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Decrement && id == other.id && amount == other.amount && createdAt == other.createdAt && creditBlock == other.creditBlock && currency == other.currency && customer == other.customer && description == other.description && endingBalance == other.endingBalance && entryStatus == other.entryStatus && entryType == other.entryType && ledgerSequenceNumber == other.ledgerSequenceNumber && metadata == other.metadata && startingBalance == other.startingBalance && eventId == other.eventId && invoiceId == other.invoiceId && priceId == other.priceId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -3193,10 +3130,10 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "DecrementLedgerEntry{id=$id, amount=$amount, createdAt=$createdAt, creditBlock=$creditBlock, currency=$currency, customer=$customer, description=$description, endingBalance=$endingBalance, entryStatus=$entryStatus, entryType=$entryType, ledgerSequenceNumber=$ledgerSequenceNumber, metadata=$metadata, startingBalance=$startingBalance, eventId=$eventId, invoiceId=$invoiceId, priceId=$priceId, additionalProperties=$additionalProperties}"
+            "Decrement{id=$id, amount=$amount, createdAt=$createdAt, creditBlock=$creditBlock, currency=$currency, customer=$customer, description=$description, endingBalance=$endingBalance, entryStatus=$entryStatus, entryType=$entryType, ledgerSequenceNumber=$ledgerSequenceNumber, metadata=$metadata, startingBalance=$startingBalance, eventId=$eventId, invoiceId=$invoiceId, priceId=$priceId, additionalProperties=$additionalProperties}"
     }
 
-    class ExpirationChangeLedgerEntry
+    class ExpirationChange
     private constructor(
         private val id: JsonField<String>,
         private val amount: JsonField<Double>,
@@ -3492,8 +3429,7 @@ private constructor(
         companion object {
 
             /**
-             * Returns a mutable builder for constructing an instance of
-             * [ExpirationChangeLedgerEntry].
+             * Returns a mutable builder for constructing an instance of [ExpirationChange].
              *
              * The following fields are required:
              * ```java
@@ -3515,7 +3451,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [ExpirationChangeLedgerEntry]. */
+        /** A builder for [ExpirationChange]. */
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
@@ -3535,23 +3471,22 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(expirationChangeLedgerEntry: ExpirationChangeLedgerEntry) = apply {
-                id = expirationChangeLedgerEntry.id
-                amount = expirationChangeLedgerEntry.amount
-                createdAt = expirationChangeLedgerEntry.createdAt
-                creditBlock = expirationChangeLedgerEntry.creditBlock
-                currency = expirationChangeLedgerEntry.currency
-                customer = expirationChangeLedgerEntry.customer
-                description = expirationChangeLedgerEntry.description
-                endingBalance = expirationChangeLedgerEntry.endingBalance
-                entryStatus = expirationChangeLedgerEntry.entryStatus
-                entryType = expirationChangeLedgerEntry.entryType
-                ledgerSequenceNumber = expirationChangeLedgerEntry.ledgerSequenceNumber
-                metadata = expirationChangeLedgerEntry.metadata
-                newBlockExpiryDate = expirationChangeLedgerEntry.newBlockExpiryDate
-                startingBalance = expirationChangeLedgerEntry.startingBalance
-                additionalProperties =
-                    expirationChangeLedgerEntry.additionalProperties.toMutableMap()
+            internal fun from(expirationChange: ExpirationChange) = apply {
+                id = expirationChange.id
+                amount = expirationChange.amount
+                createdAt = expirationChange.createdAt
+                creditBlock = expirationChange.creditBlock
+                currency = expirationChange.currency
+                customer = expirationChange.customer
+                description = expirationChange.description
+                endingBalance = expirationChange.endingBalance
+                entryStatus = expirationChange.entryStatus
+                entryType = expirationChange.entryType
+                ledgerSequenceNumber = expirationChange.ledgerSequenceNumber
+                metadata = expirationChange.metadata
+                newBlockExpiryDate = expirationChange.newBlockExpiryDate
+                startingBalance = expirationChange.startingBalance
+                additionalProperties = expirationChange.additionalProperties.toMutableMap()
             }
 
             fun id(id: String) = id(JsonField.of(id))
@@ -3765,7 +3700,7 @@ private constructor(
             }
 
             /**
-             * Returns an immutable instance of [ExpirationChangeLedgerEntry].
+             * Returns an immutable instance of [ExpirationChange].
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              *
@@ -3788,8 +3723,8 @@ private constructor(
              *
              * @throws IllegalStateException if any required field is unset.
              */
-            fun build(): ExpirationChangeLedgerEntry =
-                ExpirationChangeLedgerEntry(
+            fun build(): ExpirationChange =
+                ExpirationChange(
                     checkRequired("id", id),
                     checkRequired("amount", amount),
                     checkRequired("createdAt", createdAt),
@@ -3810,7 +3745,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): ExpirationChangeLedgerEntry = apply {
+        fun validate(): ExpirationChange = apply {
             if (validated) {
                 return@apply
             }
@@ -4575,7 +4510,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ExpirationChangeLedgerEntry && id == other.id && amount == other.amount && createdAt == other.createdAt && creditBlock == other.creditBlock && currency == other.currency && customer == other.customer && description == other.description && endingBalance == other.endingBalance && entryStatus == other.entryStatus && entryType == other.entryType && ledgerSequenceNumber == other.ledgerSequenceNumber && metadata == other.metadata && newBlockExpiryDate == other.newBlockExpiryDate && startingBalance == other.startingBalance && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ExpirationChange && id == other.id && amount == other.amount && createdAt == other.createdAt && creditBlock == other.creditBlock && currency == other.currency && customer == other.customer && description == other.description && endingBalance == other.endingBalance && entryStatus == other.entryStatus && entryType == other.entryType && ledgerSequenceNumber == other.ledgerSequenceNumber && metadata == other.metadata && newBlockExpiryDate == other.newBlockExpiryDate && startingBalance == other.startingBalance && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -4585,10 +4520,10 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ExpirationChangeLedgerEntry{id=$id, amount=$amount, createdAt=$createdAt, creditBlock=$creditBlock, currency=$currency, customer=$customer, description=$description, endingBalance=$endingBalance, entryStatus=$entryStatus, entryType=$entryType, ledgerSequenceNumber=$ledgerSequenceNumber, metadata=$metadata, newBlockExpiryDate=$newBlockExpiryDate, startingBalance=$startingBalance, additionalProperties=$additionalProperties}"
+            "ExpirationChange{id=$id, amount=$amount, createdAt=$createdAt, creditBlock=$creditBlock, currency=$currency, customer=$customer, description=$description, endingBalance=$endingBalance, entryStatus=$entryStatus, entryType=$entryType, ledgerSequenceNumber=$ledgerSequenceNumber, metadata=$metadata, newBlockExpiryDate=$newBlockExpiryDate, startingBalance=$startingBalance, additionalProperties=$additionalProperties}"
     }
 
-    class CreditBlockExpiryLedgerEntry
+    class CreditBlockExpiry
     private constructor(
         private val id: JsonField<String>,
         private val amount: JsonField<Double>,
@@ -4862,8 +4797,7 @@ private constructor(
         companion object {
 
             /**
-             * Returns a mutable builder for constructing an instance of
-             * [CreditBlockExpiryLedgerEntry].
+             * Returns a mutable builder for constructing an instance of [CreditBlockExpiry].
              *
              * The following fields are required:
              * ```java
@@ -4884,7 +4818,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [CreditBlockExpiryLedgerEntry]. */
+        /** A builder for [CreditBlockExpiry]. */
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
@@ -4903,22 +4837,21 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(creditBlockExpiryLedgerEntry: CreditBlockExpiryLedgerEntry) = apply {
-                id = creditBlockExpiryLedgerEntry.id
-                amount = creditBlockExpiryLedgerEntry.amount
-                createdAt = creditBlockExpiryLedgerEntry.createdAt
-                creditBlock = creditBlockExpiryLedgerEntry.creditBlock
-                currency = creditBlockExpiryLedgerEntry.currency
-                customer = creditBlockExpiryLedgerEntry.customer
-                description = creditBlockExpiryLedgerEntry.description
-                endingBalance = creditBlockExpiryLedgerEntry.endingBalance
-                entryStatus = creditBlockExpiryLedgerEntry.entryStatus
-                entryType = creditBlockExpiryLedgerEntry.entryType
-                ledgerSequenceNumber = creditBlockExpiryLedgerEntry.ledgerSequenceNumber
-                metadata = creditBlockExpiryLedgerEntry.metadata
-                startingBalance = creditBlockExpiryLedgerEntry.startingBalance
-                additionalProperties =
-                    creditBlockExpiryLedgerEntry.additionalProperties.toMutableMap()
+            internal fun from(creditBlockExpiry: CreditBlockExpiry) = apply {
+                id = creditBlockExpiry.id
+                amount = creditBlockExpiry.amount
+                createdAt = creditBlockExpiry.createdAt
+                creditBlock = creditBlockExpiry.creditBlock
+                currency = creditBlockExpiry.currency
+                customer = creditBlockExpiry.customer
+                description = creditBlockExpiry.description
+                endingBalance = creditBlockExpiry.endingBalance
+                entryStatus = creditBlockExpiry.entryStatus
+                entryType = creditBlockExpiry.entryType
+                ledgerSequenceNumber = creditBlockExpiry.ledgerSequenceNumber
+                metadata = creditBlockExpiry.metadata
+                startingBalance = creditBlockExpiry.startingBalance
+                additionalProperties = creditBlockExpiry.additionalProperties.toMutableMap()
             }
 
             fun id(id: String) = id(JsonField.of(id))
@@ -5111,7 +5044,7 @@ private constructor(
             }
 
             /**
-             * Returns an immutable instance of [CreditBlockExpiryLedgerEntry].
+             * Returns an immutable instance of [CreditBlockExpiry].
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              *
@@ -5133,8 +5066,8 @@ private constructor(
              *
              * @throws IllegalStateException if any required field is unset.
              */
-            fun build(): CreditBlockExpiryLedgerEntry =
-                CreditBlockExpiryLedgerEntry(
+            fun build(): CreditBlockExpiry =
+                CreditBlockExpiry(
                     checkRequired("id", id),
                     checkRequired("amount", amount),
                     checkRequired("createdAt", createdAt),
@@ -5154,7 +5087,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): CreditBlockExpiryLedgerEntry = apply {
+        fun validate(): CreditBlockExpiry = apply {
             if (validated) {
                 return@apply
             }
@@ -5917,7 +5850,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CreditBlockExpiryLedgerEntry && id == other.id && amount == other.amount && createdAt == other.createdAt && creditBlock == other.creditBlock && currency == other.currency && customer == other.customer && description == other.description && endingBalance == other.endingBalance && entryStatus == other.entryStatus && entryType == other.entryType && ledgerSequenceNumber == other.ledgerSequenceNumber && metadata == other.metadata && startingBalance == other.startingBalance && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CreditBlockExpiry && id == other.id && amount == other.amount && createdAt == other.createdAt && creditBlock == other.creditBlock && currency == other.currency && customer == other.customer && description == other.description && endingBalance == other.endingBalance && entryStatus == other.entryStatus && entryType == other.entryType && ledgerSequenceNumber == other.ledgerSequenceNumber && metadata == other.metadata && startingBalance == other.startingBalance && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -5927,10 +5860,10 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CreditBlockExpiryLedgerEntry{id=$id, amount=$amount, createdAt=$createdAt, creditBlock=$creditBlock, currency=$currency, customer=$customer, description=$description, endingBalance=$endingBalance, entryStatus=$entryStatus, entryType=$entryType, ledgerSequenceNumber=$ledgerSequenceNumber, metadata=$metadata, startingBalance=$startingBalance, additionalProperties=$additionalProperties}"
+            "CreditBlockExpiry{id=$id, amount=$amount, createdAt=$createdAt, creditBlock=$creditBlock, currency=$currency, customer=$customer, description=$description, endingBalance=$endingBalance, entryStatus=$entryStatus, entryType=$entryType, ledgerSequenceNumber=$ledgerSequenceNumber, metadata=$metadata, startingBalance=$startingBalance, additionalProperties=$additionalProperties}"
     }
 
-    class VoidLedgerEntry
+    class Void
     private constructor(
         private val id: JsonField<String>,
         private val amount: JsonField<Double>,
@@ -6244,7 +6177,7 @@ private constructor(
         companion object {
 
             /**
-             * Returns a mutable builder for constructing an instance of [VoidLedgerEntry].
+             * Returns a mutable builder for constructing an instance of [Void].
              *
              * The following fields are required:
              * ```java
@@ -6267,7 +6200,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [VoidLedgerEntry]. */
+        /** A builder for [Void]. */
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
@@ -6288,23 +6221,23 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(voidLedgerEntry: VoidLedgerEntry) = apply {
-                id = voidLedgerEntry.id
-                amount = voidLedgerEntry.amount
-                createdAt = voidLedgerEntry.createdAt
-                creditBlock = voidLedgerEntry.creditBlock
-                currency = voidLedgerEntry.currency
-                customer = voidLedgerEntry.customer
-                description = voidLedgerEntry.description
-                endingBalance = voidLedgerEntry.endingBalance
-                entryStatus = voidLedgerEntry.entryStatus
-                entryType = voidLedgerEntry.entryType
-                ledgerSequenceNumber = voidLedgerEntry.ledgerSequenceNumber
-                metadata = voidLedgerEntry.metadata
-                startingBalance = voidLedgerEntry.startingBalance
-                voidAmount = voidLedgerEntry.voidAmount
-                voidReason = voidLedgerEntry.voidReason
-                additionalProperties = voidLedgerEntry.additionalProperties.toMutableMap()
+            internal fun from(void_: Void) = apply {
+                id = void_.id
+                amount = void_.amount
+                createdAt = void_.createdAt
+                creditBlock = void_.creditBlock
+                currency = void_.currency
+                customer = void_.customer
+                description = void_.description
+                endingBalance = void_.endingBalance
+                entryStatus = void_.entryStatus
+                entryType = void_.entryType
+                ledgerSequenceNumber = void_.ledgerSequenceNumber
+                metadata = void_.metadata
+                startingBalance = void_.startingBalance
+                voidAmount = void_.voidAmount
+                voidReason = void_.voidReason
+                additionalProperties = void_.additionalProperties.toMutableMap()
             }
 
             fun id(id: String) = id(JsonField.of(id))
@@ -6522,7 +6455,7 @@ private constructor(
             }
 
             /**
-             * Returns an immutable instance of [VoidLedgerEntry].
+             * Returns an immutable instance of [Void].
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              *
@@ -6546,8 +6479,8 @@ private constructor(
              *
              * @throws IllegalStateException if any required field is unset.
              */
-            fun build(): VoidLedgerEntry =
-                VoidLedgerEntry(
+            fun build(): Void =
+                Void(
                     checkRequired("id", id),
                     checkRequired("amount", amount),
                     checkRequired("createdAt", createdAt),
@@ -6569,7 +6502,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): VoidLedgerEntry = apply {
+        fun validate(): Void = apply {
             if (validated) {
                 return@apply
             }
@@ -7336,7 +7269,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is VoidLedgerEntry && id == other.id && amount == other.amount && createdAt == other.createdAt && creditBlock == other.creditBlock && currency == other.currency && customer == other.customer && description == other.description && endingBalance == other.endingBalance && entryStatus == other.entryStatus && entryType == other.entryType && ledgerSequenceNumber == other.ledgerSequenceNumber && metadata == other.metadata && startingBalance == other.startingBalance && voidAmount == other.voidAmount && voidReason == other.voidReason && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Void && id == other.id && amount == other.amount && createdAt == other.createdAt && creditBlock == other.creditBlock && currency == other.currency && customer == other.customer && description == other.description && endingBalance == other.endingBalance && entryStatus == other.entryStatus && entryType == other.entryType && ledgerSequenceNumber == other.ledgerSequenceNumber && metadata == other.metadata && startingBalance == other.startingBalance && voidAmount == other.voidAmount && voidReason == other.voidReason && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -7346,10 +7279,10 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "VoidLedgerEntry{id=$id, amount=$amount, createdAt=$createdAt, creditBlock=$creditBlock, currency=$currency, customer=$customer, description=$description, endingBalance=$endingBalance, entryStatus=$entryStatus, entryType=$entryType, ledgerSequenceNumber=$ledgerSequenceNumber, metadata=$metadata, startingBalance=$startingBalance, voidAmount=$voidAmount, voidReason=$voidReason, additionalProperties=$additionalProperties}"
+            "Void{id=$id, amount=$amount, createdAt=$createdAt, creditBlock=$creditBlock, currency=$currency, customer=$customer, description=$description, endingBalance=$endingBalance, entryStatus=$entryStatus, entryType=$entryType, ledgerSequenceNumber=$ledgerSequenceNumber, metadata=$metadata, startingBalance=$startingBalance, voidAmount=$voidAmount, voidReason=$voidReason, additionalProperties=$additionalProperties}"
     }
 
-    class VoidInitiatedLedgerEntry
+    class VoidInitiated
     private constructor(
         private val id: JsonField<String>,
         private val amount: JsonField<Double>,
@@ -7685,7 +7618,7 @@ private constructor(
         companion object {
 
             /**
-             * Returns a mutable builder for constructing an instance of [VoidInitiatedLedgerEntry].
+             * Returns a mutable builder for constructing an instance of [VoidInitiated].
              *
              * The following fields are required:
              * ```java
@@ -7709,7 +7642,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [VoidInitiatedLedgerEntry]. */
+        /** A builder for [VoidInitiated]. */
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
@@ -7731,24 +7664,24 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(voidInitiatedLedgerEntry: VoidInitiatedLedgerEntry) = apply {
-                id = voidInitiatedLedgerEntry.id
-                amount = voidInitiatedLedgerEntry.amount
-                createdAt = voidInitiatedLedgerEntry.createdAt
-                creditBlock = voidInitiatedLedgerEntry.creditBlock
-                currency = voidInitiatedLedgerEntry.currency
-                customer = voidInitiatedLedgerEntry.customer
-                description = voidInitiatedLedgerEntry.description
-                endingBalance = voidInitiatedLedgerEntry.endingBalance
-                entryStatus = voidInitiatedLedgerEntry.entryStatus
-                entryType = voidInitiatedLedgerEntry.entryType
-                ledgerSequenceNumber = voidInitiatedLedgerEntry.ledgerSequenceNumber
-                metadata = voidInitiatedLedgerEntry.metadata
-                newBlockExpiryDate = voidInitiatedLedgerEntry.newBlockExpiryDate
-                startingBalance = voidInitiatedLedgerEntry.startingBalance
-                voidAmount = voidInitiatedLedgerEntry.voidAmount
-                voidReason = voidInitiatedLedgerEntry.voidReason
-                additionalProperties = voidInitiatedLedgerEntry.additionalProperties.toMutableMap()
+            internal fun from(voidInitiated: VoidInitiated) = apply {
+                id = voidInitiated.id
+                amount = voidInitiated.amount
+                createdAt = voidInitiated.createdAt
+                creditBlock = voidInitiated.creditBlock
+                currency = voidInitiated.currency
+                customer = voidInitiated.customer
+                description = voidInitiated.description
+                endingBalance = voidInitiated.endingBalance
+                entryStatus = voidInitiated.entryStatus
+                entryType = voidInitiated.entryType
+                ledgerSequenceNumber = voidInitiated.ledgerSequenceNumber
+                metadata = voidInitiated.metadata
+                newBlockExpiryDate = voidInitiated.newBlockExpiryDate
+                startingBalance = voidInitiated.startingBalance
+                voidAmount = voidInitiated.voidAmount
+                voidReason = voidInitiated.voidReason
+                additionalProperties = voidInitiated.additionalProperties.toMutableMap()
             }
 
             fun id(id: String) = id(JsonField.of(id))
@@ -7980,7 +7913,7 @@ private constructor(
             }
 
             /**
-             * Returns an immutable instance of [VoidInitiatedLedgerEntry].
+             * Returns an immutable instance of [VoidInitiated].
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              *
@@ -8005,8 +7938,8 @@ private constructor(
              *
              * @throws IllegalStateException if any required field is unset.
              */
-            fun build(): VoidInitiatedLedgerEntry =
-                VoidInitiatedLedgerEntry(
+            fun build(): VoidInitiated =
+                VoidInitiated(
                     checkRequired("id", id),
                     checkRequired("amount", amount),
                     checkRequired("createdAt", createdAt),
@@ -8029,7 +7962,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): VoidInitiatedLedgerEntry = apply {
+        fun validate(): VoidInitiated = apply {
             if (validated) {
                 return@apply
             }
@@ -8798,7 +8731,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is VoidInitiatedLedgerEntry && id == other.id && amount == other.amount && createdAt == other.createdAt && creditBlock == other.creditBlock && currency == other.currency && customer == other.customer && description == other.description && endingBalance == other.endingBalance && entryStatus == other.entryStatus && entryType == other.entryType && ledgerSequenceNumber == other.ledgerSequenceNumber && metadata == other.metadata && newBlockExpiryDate == other.newBlockExpiryDate && startingBalance == other.startingBalance && voidAmount == other.voidAmount && voidReason == other.voidReason && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is VoidInitiated && id == other.id && amount == other.amount && createdAt == other.createdAt && creditBlock == other.creditBlock && currency == other.currency && customer == other.customer && description == other.description && endingBalance == other.endingBalance && entryStatus == other.entryStatus && entryType == other.entryType && ledgerSequenceNumber == other.ledgerSequenceNumber && metadata == other.metadata && newBlockExpiryDate == other.newBlockExpiryDate && startingBalance == other.startingBalance && voidAmount == other.voidAmount && voidReason == other.voidReason && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -8808,10 +8741,10 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "VoidInitiatedLedgerEntry{id=$id, amount=$amount, createdAt=$createdAt, creditBlock=$creditBlock, currency=$currency, customer=$customer, description=$description, endingBalance=$endingBalance, entryStatus=$entryStatus, entryType=$entryType, ledgerSequenceNumber=$ledgerSequenceNumber, metadata=$metadata, newBlockExpiryDate=$newBlockExpiryDate, startingBalance=$startingBalance, voidAmount=$voidAmount, voidReason=$voidReason, additionalProperties=$additionalProperties}"
+            "VoidInitiated{id=$id, amount=$amount, createdAt=$createdAt, creditBlock=$creditBlock, currency=$currency, customer=$customer, description=$description, endingBalance=$endingBalance, entryStatus=$entryStatus, entryType=$entryType, ledgerSequenceNumber=$ledgerSequenceNumber, metadata=$metadata, newBlockExpiryDate=$newBlockExpiryDate, startingBalance=$startingBalance, voidAmount=$voidAmount, voidReason=$voidReason, additionalProperties=$additionalProperties}"
     }
 
-    class AmendmentLedgerEntry
+    class Amendment
     private constructor(
         private val id: JsonField<String>,
         private val amount: JsonField<Double>,
@@ -9085,7 +9018,7 @@ private constructor(
         companion object {
 
             /**
-             * Returns a mutable builder for constructing an instance of [AmendmentLedgerEntry].
+             * Returns a mutable builder for constructing an instance of [Amendment].
              *
              * The following fields are required:
              * ```java
@@ -9106,7 +9039,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [AmendmentLedgerEntry]. */
+        /** A builder for [Amendment]. */
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
@@ -9125,21 +9058,21 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(amendmentLedgerEntry: AmendmentLedgerEntry) = apply {
-                id = amendmentLedgerEntry.id
-                amount = amendmentLedgerEntry.amount
-                createdAt = amendmentLedgerEntry.createdAt
-                creditBlock = amendmentLedgerEntry.creditBlock
-                currency = amendmentLedgerEntry.currency
-                customer = amendmentLedgerEntry.customer
-                description = amendmentLedgerEntry.description
-                endingBalance = amendmentLedgerEntry.endingBalance
-                entryStatus = amendmentLedgerEntry.entryStatus
-                entryType = amendmentLedgerEntry.entryType
-                ledgerSequenceNumber = amendmentLedgerEntry.ledgerSequenceNumber
-                metadata = amendmentLedgerEntry.metadata
-                startingBalance = amendmentLedgerEntry.startingBalance
-                additionalProperties = amendmentLedgerEntry.additionalProperties.toMutableMap()
+            internal fun from(amendment: Amendment) = apply {
+                id = amendment.id
+                amount = amendment.amount
+                createdAt = amendment.createdAt
+                creditBlock = amendment.creditBlock
+                currency = amendment.currency
+                customer = amendment.customer
+                description = amendment.description
+                endingBalance = amendment.endingBalance
+                entryStatus = amendment.entryStatus
+                entryType = amendment.entryType
+                ledgerSequenceNumber = amendment.ledgerSequenceNumber
+                metadata = amendment.metadata
+                startingBalance = amendment.startingBalance
+                additionalProperties = amendment.additionalProperties.toMutableMap()
             }
 
             fun id(id: String) = id(JsonField.of(id))
@@ -9332,7 +9265,7 @@ private constructor(
             }
 
             /**
-             * Returns an immutable instance of [AmendmentLedgerEntry].
+             * Returns an immutable instance of [Amendment].
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              *
@@ -9354,8 +9287,8 @@ private constructor(
              *
              * @throws IllegalStateException if any required field is unset.
              */
-            fun build(): AmendmentLedgerEntry =
-                AmendmentLedgerEntry(
+            fun build(): Amendment =
+                Amendment(
                     checkRequired("id", id),
                     checkRequired("amount", amount),
                     checkRequired("createdAt", createdAt),
@@ -9375,7 +9308,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): AmendmentLedgerEntry = apply {
+        fun validate(): Amendment = apply {
             if (validated) {
                 return@apply
             }
@@ -10138,7 +10071,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is AmendmentLedgerEntry && id == other.id && amount == other.amount && createdAt == other.createdAt && creditBlock == other.creditBlock && currency == other.currency && customer == other.customer && description == other.description && endingBalance == other.endingBalance && entryStatus == other.entryStatus && entryType == other.entryType && ledgerSequenceNumber == other.ledgerSequenceNumber && metadata == other.metadata && startingBalance == other.startingBalance && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Amendment && id == other.id && amount == other.amount && createdAt == other.createdAt && creditBlock == other.creditBlock && currency == other.currency && customer == other.customer && description == other.description && endingBalance == other.endingBalance && entryStatus == other.entryStatus && entryType == other.entryType && ledgerSequenceNumber == other.ledgerSequenceNumber && metadata == other.metadata && startingBalance == other.startingBalance && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -10148,6 +10081,6 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "AmendmentLedgerEntry{id=$id, amount=$amount, createdAt=$createdAt, creditBlock=$creditBlock, currency=$currency, customer=$customer, description=$description, endingBalance=$endingBalance, entryStatus=$entryStatus, entryType=$entryType, ledgerSequenceNumber=$ledgerSequenceNumber, metadata=$metadata, startingBalance=$startingBalance, additionalProperties=$additionalProperties}"
+            "Amendment{id=$id, amount=$amount, createdAt=$createdAt, creditBlock=$creditBlock, currency=$currency, customer=$customer, description=$description, endingBalance=$endingBalance, entryStatus=$entryStatus, entryType=$entryType, ledgerSequenceNumber=$ledgerSequenceNumber, metadata=$metadata, startingBalance=$startingBalance, additionalProperties=$additionalProperties}"
     }
 }

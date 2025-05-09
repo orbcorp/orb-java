@@ -809,40 +809,38 @@ private constructor(
             body.taxConfiguration(taxConfiguration)
         }
 
-        /**
-         * Alias for calling [taxConfiguration] with `TaxConfiguration.ofNewAvalara(newAvalara)`.
-         */
-        fun taxConfiguration(newAvalara: TaxConfiguration.NewAvalaraTaxConfiguration) = apply {
-            body.taxConfiguration(newAvalara)
+        /** Alias for calling [taxConfiguration] with `TaxConfiguration.ofAvalara(avalara)`. */
+        fun taxConfiguration(avalara: TaxConfiguration.Avalara) = apply {
+            body.taxConfiguration(avalara)
         }
 
         /**
          * Alias for calling [taxConfiguration] with the following:
          * ```java
-         * TaxConfiguration.NewAvalaraTaxConfiguration.builder()
+         * TaxConfiguration.Avalara.builder()
          *     .taxExempt(taxExempt)
          *     .build()
          * ```
          */
-        fun newAvalaraTaxConfiguration(taxExempt: Boolean) = apply {
-            body.newAvalaraTaxConfiguration(taxExempt)
+        fun avalaraTaxConfiguration(taxExempt: Boolean) = apply {
+            body.avalaraTaxConfiguration(taxExempt)
         }
 
-        /** Alias for calling [taxConfiguration] with `TaxConfiguration.ofNewTaxJar(newTaxJar)`. */
-        fun taxConfiguration(newTaxJar: TaxConfiguration.NewTaxJarConfiguration) = apply {
-            body.taxConfiguration(newTaxJar)
+        /** Alias for calling [taxConfiguration] with `TaxConfiguration.ofTaxjar(taxjar)`. */
+        fun taxConfiguration(taxjar: TaxConfiguration.Taxjar) = apply {
+            body.taxConfiguration(taxjar)
         }
 
         /**
          * Alias for calling [taxConfiguration] with the following:
          * ```java
-         * TaxConfiguration.NewTaxJarConfiguration.builder()
+         * TaxConfiguration.Taxjar.builder()
          *     .taxExempt(taxExempt)
          *     .build()
          * ```
          */
-        fun newTaxJarTaxConfiguration(taxExempt: Boolean) = apply {
-            body.newTaxJarTaxConfiguration(taxExempt)
+        fun taxjarTaxConfiguration(taxExempt: Boolean) = apply {
+            body.taxjarTaxConfiguration(taxExempt)
         }
 
         /**
@@ -2012,46 +2010,35 @@ private constructor(
                 this.taxConfiguration = taxConfiguration
             }
 
-            /**
-             * Alias for calling [taxConfiguration] with
-             * `TaxConfiguration.ofNewAvalara(newAvalara)`.
-             */
-            fun taxConfiguration(newAvalara: TaxConfiguration.NewAvalaraTaxConfiguration) =
-                taxConfiguration(TaxConfiguration.ofNewAvalara(newAvalara))
+            /** Alias for calling [taxConfiguration] with `TaxConfiguration.ofAvalara(avalara)`. */
+            fun taxConfiguration(avalara: TaxConfiguration.Avalara) =
+                taxConfiguration(TaxConfiguration.ofAvalara(avalara))
 
             /**
              * Alias for calling [taxConfiguration] with the following:
              * ```java
-             * TaxConfiguration.NewAvalaraTaxConfiguration.builder()
+             * TaxConfiguration.Avalara.builder()
              *     .taxExempt(taxExempt)
              *     .build()
              * ```
              */
-            fun newAvalaraTaxConfiguration(taxExempt: Boolean) =
-                taxConfiguration(
-                    TaxConfiguration.NewAvalaraTaxConfiguration.builder()
-                        .taxExempt(taxExempt)
-                        .build()
-                )
+            fun avalaraTaxConfiguration(taxExempt: Boolean) =
+                taxConfiguration(TaxConfiguration.Avalara.builder().taxExempt(taxExempt).build())
 
-            /**
-             * Alias for calling [taxConfiguration] with `TaxConfiguration.ofNewTaxJar(newTaxJar)`.
-             */
-            fun taxConfiguration(newTaxJar: TaxConfiguration.NewTaxJarConfiguration) =
-                taxConfiguration(TaxConfiguration.ofNewTaxJar(newTaxJar))
+            /** Alias for calling [taxConfiguration] with `TaxConfiguration.ofTaxjar(taxjar)`. */
+            fun taxConfiguration(taxjar: TaxConfiguration.Taxjar) =
+                taxConfiguration(TaxConfiguration.ofTaxjar(taxjar))
 
             /**
              * Alias for calling [taxConfiguration] with the following:
              * ```java
-             * TaxConfiguration.NewTaxJarConfiguration.builder()
+             * TaxConfiguration.Taxjar.builder()
              *     .taxExempt(taxExempt)
              *     .build()
              * ```
              */
-            fun newTaxJarTaxConfiguration(taxExempt: Boolean) =
-                taxConfiguration(
-                    TaxConfiguration.NewTaxJarConfiguration.builder().taxExempt(taxExempt).build()
-                )
+            fun taxjarTaxConfiguration(taxExempt: Boolean) =
+                taxConfiguration(TaxConfiguration.Taxjar.builder().taxExempt(taxExempt).build())
 
             /**
              * Tax IDs are commonly required to be displayed on customer invoices, which are added
@@ -4013,29 +4000,29 @@ private constructor(
     @JsonSerialize(using = TaxConfiguration.Serializer::class)
     class TaxConfiguration
     private constructor(
-        private val newAvalara: NewAvalaraTaxConfiguration? = null,
-        private val newTaxJar: NewTaxJarConfiguration? = null,
+        private val avalara: Avalara? = null,
+        private val taxjar: Taxjar? = null,
         private val _json: JsonValue? = null,
     ) {
 
-        fun newAvalara(): Optional<NewAvalaraTaxConfiguration> = Optional.ofNullable(newAvalara)
+        fun avalara(): Optional<Avalara> = Optional.ofNullable(avalara)
 
-        fun newTaxJar(): Optional<NewTaxJarConfiguration> = Optional.ofNullable(newTaxJar)
+        fun taxjar(): Optional<Taxjar> = Optional.ofNullable(taxjar)
 
-        fun isNewAvalara(): Boolean = newAvalara != null
+        fun isAvalara(): Boolean = avalara != null
 
-        fun isNewTaxJar(): Boolean = newTaxJar != null
+        fun isTaxjar(): Boolean = taxjar != null
 
-        fun asNewAvalara(): NewAvalaraTaxConfiguration = newAvalara.getOrThrow("newAvalara")
+        fun asAvalara(): Avalara = avalara.getOrThrow("avalara")
 
-        fun asNewTaxJar(): NewTaxJarConfiguration = newTaxJar.getOrThrow("newTaxJar")
+        fun asTaxjar(): Taxjar = taxjar.getOrThrow("taxjar")
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
         fun <T> accept(visitor: Visitor<T>): T =
             when {
-                newAvalara != null -> visitor.visitNewAvalara(newAvalara)
-                newTaxJar != null -> visitor.visitNewTaxJar(newTaxJar)
+                avalara != null -> visitor.visitAvalara(avalara)
+                taxjar != null -> visitor.visitTaxjar(taxjar)
                 else -> visitor.unknown(_json)
             }
 
@@ -4048,12 +4035,12 @@ private constructor(
 
             accept(
                 object : Visitor<Unit> {
-                    override fun visitNewAvalara(newAvalara: NewAvalaraTaxConfiguration) {
-                        newAvalara.validate()
+                    override fun visitAvalara(avalara: Avalara) {
+                        avalara.validate()
                     }
 
-                    override fun visitNewTaxJar(newTaxJar: NewTaxJarConfiguration) {
-                        newTaxJar.validate()
+                    override fun visitTaxjar(taxjar: Taxjar) {
+                        taxjar.validate()
                     }
                 }
             )
@@ -4078,11 +4065,9 @@ private constructor(
         internal fun validity(): Int =
             accept(
                 object : Visitor<Int> {
-                    override fun visitNewAvalara(newAvalara: NewAvalaraTaxConfiguration) =
-                        newAvalara.validity()
+                    override fun visitAvalara(avalara: Avalara) = avalara.validity()
 
-                    override fun visitNewTaxJar(newTaxJar: NewTaxJarConfiguration) =
-                        newTaxJar.validity()
+                    override fun visitTaxjar(taxjar: Taxjar) = taxjar.validity()
 
                     override fun unknown(json: JsonValue?) = 0
                 }
@@ -4093,28 +4078,24 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is TaxConfiguration && newAvalara == other.newAvalara && newTaxJar == other.newTaxJar /* spotless:on */
+            return /* spotless:off */ other is TaxConfiguration && avalara == other.avalara && taxjar == other.taxjar /* spotless:on */
         }
 
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(newAvalara, newTaxJar) /* spotless:on */
+        override fun hashCode(): Int = /* spotless:off */ Objects.hash(avalara, taxjar) /* spotless:on */
 
         override fun toString(): String =
             when {
-                newAvalara != null -> "TaxConfiguration{newAvalara=$newAvalara}"
-                newTaxJar != null -> "TaxConfiguration{newTaxJar=$newTaxJar}"
+                avalara != null -> "TaxConfiguration{avalara=$avalara}"
+                taxjar != null -> "TaxConfiguration{taxjar=$taxjar}"
                 _json != null -> "TaxConfiguration{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid TaxConfiguration")
             }
 
         companion object {
 
-            @JvmStatic
-            fun ofNewAvalara(newAvalara: NewAvalaraTaxConfiguration) =
-                TaxConfiguration(newAvalara = newAvalara)
+            @JvmStatic fun ofAvalara(avalara: Avalara) = TaxConfiguration(avalara = avalara)
 
-            @JvmStatic
-            fun ofNewTaxJar(newTaxJar: NewTaxJarConfiguration) =
-                TaxConfiguration(newTaxJar = newTaxJar)
+            @JvmStatic fun ofTaxjar(taxjar: Taxjar) = TaxConfiguration(taxjar = taxjar)
         }
 
         /**
@@ -4123,9 +4104,9 @@ private constructor(
          */
         interface Visitor<out T> {
 
-            fun visitNewAvalara(newAvalara: NewAvalaraTaxConfiguration): T
+            fun visitAvalara(avalara: Avalara): T
 
-            fun visitNewTaxJar(newTaxJar: NewTaxJarConfiguration): T
+            fun visitTaxjar(taxjar: Taxjar): T
 
             /**
              * Maps an unknown variant of [TaxConfiguration] to a value of type [T].
@@ -4151,13 +4132,13 @@ private constructor(
 
                 when (taxProvider) {
                     "avalara" -> {
-                        return tryDeserialize(node, jacksonTypeRef<NewAvalaraTaxConfiguration>())
-                            ?.let { TaxConfiguration(newAvalara = it, _json = json) }
-                            ?: TaxConfiguration(_json = json)
+                        return tryDeserialize(node, jacksonTypeRef<Avalara>())?.let {
+                            TaxConfiguration(avalara = it, _json = json)
+                        } ?: TaxConfiguration(_json = json)
                     }
                     "taxjar" -> {
-                        return tryDeserialize(node, jacksonTypeRef<NewTaxJarConfiguration>())?.let {
-                            TaxConfiguration(newTaxJar = it, _json = json)
+                        return tryDeserialize(node, jacksonTypeRef<Taxjar>())?.let {
+                            TaxConfiguration(taxjar = it, _json = json)
                         } ?: TaxConfiguration(_json = json)
                     }
                 }
@@ -4174,15 +4155,15 @@ private constructor(
                 provider: SerializerProvider,
             ) {
                 when {
-                    value.newAvalara != null -> generator.writeObject(value.newAvalara)
-                    value.newTaxJar != null -> generator.writeObject(value.newTaxJar)
+                    value.avalara != null -> generator.writeObject(value.avalara)
+                    value.taxjar != null -> generator.writeObject(value.taxjar)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid TaxConfiguration")
                 }
             }
         }
 
-        class NewAvalaraTaxConfiguration
+        class Avalara
         private constructor(
             private val taxExempt: JsonField<Boolean>,
             private val taxProvider: JsonValue,
@@ -4265,8 +4246,7 @@ private constructor(
             companion object {
 
                 /**
-                 * Returns a mutable builder for constructing an instance of
-                 * [NewAvalaraTaxConfiguration].
+                 * Returns a mutable builder for constructing an instance of [Avalara].
                  *
                  * The following fields are required:
                  * ```java
@@ -4276,7 +4256,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            /** A builder for [NewAvalaraTaxConfiguration]. */
+            /** A builder for [Avalara]. */
             class Builder internal constructor() {
 
                 private var taxExempt: JsonField<Boolean>? = null
@@ -4285,12 +4265,11 @@ private constructor(
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(newAvalaraTaxConfiguration: NewAvalaraTaxConfiguration) = apply {
-                    taxExempt = newAvalaraTaxConfiguration.taxExempt
-                    taxProvider = newAvalaraTaxConfiguration.taxProvider
-                    taxExemptionCode = newAvalaraTaxConfiguration.taxExemptionCode
-                    additionalProperties =
-                        newAvalaraTaxConfiguration.additionalProperties.toMutableMap()
+                internal fun from(avalara: Avalara) = apply {
+                    taxExempt = avalara.taxExempt
+                    taxProvider = avalara.taxProvider
+                    taxExemptionCode = avalara.taxExemptionCode
+                    additionalProperties = avalara.additionalProperties.toMutableMap()
                 }
 
                 fun taxExempt(taxExempt: Boolean) = taxExempt(JsonField.of(taxExempt))
@@ -4362,7 +4341,7 @@ private constructor(
                 }
 
                 /**
-                 * Returns an immutable instance of [NewAvalaraTaxConfiguration].
+                 * Returns an immutable instance of [Avalara].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
@@ -4373,8 +4352,8 @@ private constructor(
                  *
                  * @throws IllegalStateException if any required field is unset.
                  */
-                fun build(): NewAvalaraTaxConfiguration =
-                    NewAvalaraTaxConfiguration(
+                fun build(): Avalara =
+                    Avalara(
                         checkRequired("taxExempt", taxExempt),
                         taxProvider,
                         taxExemptionCode,
@@ -4384,7 +4363,7 @@ private constructor(
 
             private var validated: Boolean = false
 
-            fun validate(): NewAvalaraTaxConfiguration = apply {
+            fun validate(): Avalara = apply {
                 if (validated) {
                     return@apply
                 }
@@ -4424,7 +4403,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is NewAvalaraTaxConfiguration && taxExempt == other.taxExempt && taxProvider == other.taxProvider && taxExemptionCode == other.taxExemptionCode && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is Avalara && taxExempt == other.taxExempt && taxProvider == other.taxProvider && taxExemptionCode == other.taxExemptionCode && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
@@ -4434,10 +4413,10 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "NewAvalaraTaxConfiguration{taxExempt=$taxExempt, taxProvider=$taxProvider, taxExemptionCode=$taxExemptionCode, additionalProperties=$additionalProperties}"
+                "Avalara{taxExempt=$taxExempt, taxProvider=$taxProvider, taxExemptionCode=$taxExemptionCode, additionalProperties=$additionalProperties}"
         }
 
-        class NewTaxJarConfiguration
+        class Taxjar
         private constructor(
             private val taxExempt: JsonField<Boolean>,
             private val taxProvider: JsonValue,
@@ -4499,8 +4478,7 @@ private constructor(
             companion object {
 
                 /**
-                 * Returns a mutable builder for constructing an instance of
-                 * [NewTaxJarConfiguration].
+                 * Returns a mutable builder for constructing an instance of [Taxjar].
                  *
                  * The following fields are required:
                  * ```java
@@ -4510,7 +4488,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            /** A builder for [NewTaxJarConfiguration]. */
+            /** A builder for [Taxjar]. */
             class Builder internal constructor() {
 
                 private var taxExempt: JsonField<Boolean>? = null
@@ -4518,11 +4496,10 @@ private constructor(
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(newTaxJarConfiguration: NewTaxJarConfiguration) = apply {
-                    taxExempt = newTaxJarConfiguration.taxExempt
-                    taxProvider = newTaxJarConfiguration.taxProvider
-                    additionalProperties =
-                        newTaxJarConfiguration.additionalProperties.toMutableMap()
+                internal fun from(taxjar: Taxjar) = apply {
+                    taxExempt = taxjar.taxExempt
+                    taxProvider = taxjar.taxProvider
+                    additionalProperties = taxjar.additionalProperties.toMutableMap()
                 }
 
                 fun taxExempt(taxExempt: Boolean) = taxExempt(JsonField.of(taxExempt))
@@ -4573,7 +4550,7 @@ private constructor(
                 }
 
                 /**
-                 * Returns an immutable instance of [NewTaxJarConfiguration].
+                 * Returns an immutable instance of [Taxjar].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
@@ -4584,8 +4561,8 @@ private constructor(
                  *
                  * @throws IllegalStateException if any required field is unset.
                  */
-                fun build(): NewTaxJarConfiguration =
-                    NewTaxJarConfiguration(
+                fun build(): Taxjar =
+                    Taxjar(
                         checkRequired("taxExempt", taxExempt),
                         taxProvider,
                         additionalProperties.toMutableMap(),
@@ -4594,7 +4571,7 @@ private constructor(
 
             private var validated: Boolean = false
 
-            fun validate(): NewTaxJarConfiguration = apply {
+            fun validate(): Taxjar = apply {
                 if (validated) {
                     return@apply
                 }
@@ -4632,7 +4609,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is NewTaxJarConfiguration && taxExempt == other.taxExempt && taxProvider == other.taxProvider && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is Taxjar && taxExempt == other.taxExempt && taxProvider == other.taxProvider && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
@@ -4642,7 +4619,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "NewTaxJarConfiguration{taxExempt=$taxExempt, taxProvider=$taxProvider, additionalProperties=$additionalProperties}"
+                "Taxjar{taxExempt=$taxExempt, taxProvider=$taxProvider, additionalProperties=$additionalProperties}"
         }
     }
 
