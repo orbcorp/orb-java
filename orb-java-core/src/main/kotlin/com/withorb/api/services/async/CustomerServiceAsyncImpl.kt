@@ -244,6 +244,7 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
                             .let {
                                 CustomerListPageAsync.builder()
                                     .service(CustomerServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()
