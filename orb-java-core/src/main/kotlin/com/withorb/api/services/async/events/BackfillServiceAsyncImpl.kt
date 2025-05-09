@@ -139,6 +139,7 @@ class BackfillServiceAsyncImpl internal constructor(private val clientOptions: C
                             .let {
                                 EventBackfillListPageAsync.builder()
                                     .service(BackfillServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()

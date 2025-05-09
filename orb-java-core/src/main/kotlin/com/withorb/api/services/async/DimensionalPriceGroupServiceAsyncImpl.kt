@@ -173,6 +173,7 @@ internal constructor(private val clientOptions: ClientOptions) : DimensionalPric
                             .let {
                                 DimensionalPriceGroupListPageAsync.builder()
                                     .service(DimensionalPriceGroupServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()

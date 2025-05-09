@@ -2,22 +2,24 @@
 
 package com.withorb.api.models
 
+import com.withorb.api.core.AutoPagerAsync
+import com.withorb.api.core.PageAsync
 import com.withorb.api.core.checkRequired
 import com.withorb.api.services.async.customers.credits.TopUpServiceAsync
 import java.util.Objects
 import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
-import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
 
 /** @see [TopUpServiceAsync.list] */
 class CustomerCreditTopUpListPageAsync
 private constructor(
     private val service: TopUpServiceAsync,
+    private val streamHandlerExecutor: Executor,
     private val params: CustomerCreditTopUpListParams,
     private val response: CustomerCreditTopUpListPageResponse,
-) {
+) : PageAsync<CustomerCreditTopUpListResponse> {
 
     /**
      * Delegates to [CustomerCreditTopUpListPageResponse], but gracefully handles missing data.
@@ -35,33 +37,24 @@ private constructor(
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")
 
-    fun hasNextPage(): Boolean =
-        data().isNotEmpty() &&
+    override fun items(): List<CustomerCreditTopUpListResponse> = data()
+
+    override fun hasNextPage(): Boolean =
+        items().isNotEmpty() &&
             paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.isPresent
 
-    fun getNextPageParams(): Optional<CustomerCreditTopUpListParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
-
-        return Optional.of(
-            params
-                .toBuilder()
-                .apply {
-                    paginationMetadata()
-                        .flatMap { it._nextCursor().getOptional("next_cursor") }
-                        .ifPresent { cursor(it) }
-                }
-                .build()
-        )
+    fun nextPageParams(): CustomerCreditTopUpListParams {
+        val nextCursor =
+            paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().cursor(nextCursor).build()
     }
 
-    fun getNextPage(): CompletableFuture<Optional<CustomerCreditTopUpListPageAsync>> =
-        getNextPageParams()
-            .map { service.list(it).thenApply { Optional.of(it) } }
-            .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
+    override fun nextPage(): CompletableFuture<CustomerCreditTopUpListPageAsync> =
+        service.list(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPagerAsync<CustomerCreditTopUpListResponse> =
+        AutoPagerAsync.from(this, streamHandlerExecutor)
 
     /** The parameters that were used to request this page. */
     fun params(): CustomerCreditTopUpListParams = params
@@ -80,6 +73,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .service()
+         * .streamHandlerExecutor()
          * .params()
          * .response()
          * ```
@@ -91,6 +85,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var service: TopUpServiceAsync? = null
+        private var streamHandlerExecutor: Executor? = null
         private var params: CustomerCreditTopUpListParams? = null
         private var response: CustomerCreditTopUpListPageResponse? = null
 
@@ -98,11 +93,16 @@ private constructor(
         internal fun from(customerCreditTopUpListPageAsync: CustomerCreditTopUpListPageAsync) =
             apply {
                 service = customerCreditTopUpListPageAsync.service
+                streamHandlerExecutor = customerCreditTopUpListPageAsync.streamHandlerExecutor
                 params = customerCreditTopUpListPageAsync.params
                 response = customerCreditTopUpListPageAsync.response
             }
 
         fun service(service: TopUpServiceAsync) = apply { this.service = service }
+
+        fun streamHandlerExecutor(streamHandlerExecutor: Executor) = apply {
+            this.streamHandlerExecutor = streamHandlerExecutor
+        }
 
         /** The parameters that were used to request this page. */
         fun params(params: CustomerCreditTopUpListParams) = apply { this.params = params }
@@ -120,6 +120,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .service()
+         * .streamHandlerExecutor()
          * .params()
          * .response()
          * ```
@@ -129,38 +130,10 @@ private constructor(
         fun build(): CustomerCreditTopUpListPageAsync =
             CustomerCreditTopUpListPageAsync(
                 checkRequired("service", service),
+                checkRequired("streamHandlerExecutor", streamHandlerExecutor),
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: CustomerCreditTopUpListPageAsync) {
-
-        fun forEach(
-            action: Predicate<CustomerCreditTopUpListResponse>,
-            executor: Executor,
-        ): CompletableFuture<Void> {
-            fun CompletableFuture<Optional<CustomerCreditTopUpListPageAsync>>.forEach(
-                action: (CustomerCreditTopUpListResponse) -> Boolean,
-                executor: Executor,
-            ): CompletableFuture<Void> =
-                thenComposeAsync(
-                    { page ->
-                        page
-                            .filter { it.data().all(action) }
-                            .map { it.getNextPage().forEach(action, executor) }
-                            .orElseGet { CompletableFuture.completedFuture(null) }
-                    },
-                    executor,
-                )
-            return CompletableFuture.completedFuture(Optional.of(firstPage))
-                .forEach(action::test, executor)
-        }
-
-        fun toList(executor: Executor): CompletableFuture<List<CustomerCreditTopUpListResponse>> {
-            val values = mutableListOf<CustomerCreditTopUpListResponse>()
-            return forEach(values::add, executor).thenApply { values }
-        }
     }
 
     override fun equals(other: Any?): Boolean {
@@ -168,11 +141,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerCreditTopUpListPageAsync && service == other.service && params == other.params && response == other.response /* spotless:on */
+        return /* spotless:off */ other is CustomerCreditTopUpListPageAsync && service == other.service && streamHandlerExecutor == other.streamHandlerExecutor && params == other.params && response == other.response /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, streamHandlerExecutor, params, response) /* spotless:on */
 
     override fun toString() =
-        "CustomerCreditTopUpListPageAsync{service=$service, params=$params, response=$response}"
+        "CustomerCreditTopUpListPageAsync{service=$service, streamHandlerExecutor=$streamHandlerExecutor, params=$params, response=$response}"
 }

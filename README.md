@@ -215,53 +215,101 @@ The SDK throws custom unchecked exception types:
 
 ## Pagination
 
-For methods that return a paginated list of results, this library provides convenient ways access the results either one page at a time, or item-by-item across all pages.
+The SDK defines methods that return a paginated lists of results. It provides convenient ways to access the results either one page at a time or item-by-item across all pages.
 
 ### Auto-pagination
 
-To iterate through all results across all pages, you can use `autoPager`, which automatically handles fetching more pages for you:
+To iterate through all results across all pages, use the `autoPager()` method, which automatically fetches more pages as needed.
 
-### Synchronous
+When using the synchronous client, the method returns an [`Iterable`](https://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html)
 
 ```java
 import com.withorb.api.models.Coupon;
 import com.withorb.api.models.CouponListPage;
 
-// As an Iterable:
-CouponListPage page = client.coupons().list(params);
+CouponListPage page = client.coupons().list();
+
+// Process as an Iterable
 for (Coupon coupon : page.autoPager()) {
     System.out.println(coupon);
-};
+}
 
-// As a Stream:
-client.coupons().list(params).autoPager().stream()
+// Process as a Stream
+page.autoPager()
+    .stream()
     .limit(50)
     .forEach(coupon -> System.out.println(coupon));
 ```
 
-### Asynchronous
+When using the asynchronous client, the method returns an [`AsyncStreamResponse`](orb-java-core/src/main/kotlin/com/withorb/api/core/http/AsyncStreamResponse.kt):
 
 ```java
-// Using forEach, which returns CompletableFuture<Void>:
-asyncClient.coupons().list(params).autoPager()
-    .forEach(coupon -> System.out.println(coupon), executor);
+import com.withorb.api.core.http.AsyncStreamResponse;
+import com.withorb.api.models.Coupon;
+import com.withorb.api.models.CouponListPageAsync;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+
+CompletableFuture<CouponListPageAsync> pageFuture = client.async().coupons().list();
+
+pageFuture.thenRun(page -> page.autoPager().subscribe(coupon -> {
+    System.out.println(coupon);
+}));
+
+// If you need to handle errors or completion of the stream
+pageFuture.thenRun(page -> page.autoPager().subscribe(new AsyncStreamResponse.Handler<>() {
+    @Override
+    public void onNext(Coupon coupon) {
+        System.out.println(coupon);
+    }
+
+    @Override
+    public void onComplete(Optional<Throwable> error) {
+        if (error.isPresent()) {
+            System.out.println("Something went wrong!");
+            throw new RuntimeException(error.get());
+        } else {
+            System.out.println("No more!");
+        }
+    }
+}));
+
+// Or use futures
+pageFuture.thenRun(page -> page.autoPager()
+    .subscribe(coupon -> {
+        System.out.println(coupon);
+    })
+    .onCompleteFuture()
+    .whenComplete((unused, error) -> {
+        if (error != null) {
+            System.out.println("Something went wrong!");
+            throw new RuntimeException(error);
+        } else {
+            System.out.println("No more!");
+        }
+    }));
 ```
 
 ### Manual pagination
 
-If none of the above helpers meet your needs, you can also manually request pages one-by-one. A page of results has a `data()` method to fetch the list of objects, as well as top-level `response` and other methods to fetch top-level data about the page. It also has methods `hasNextPage`, `getNextPage`, and `getNextPageParams` methods to help with pagination.
+To access individual page items and manually request the next page, use the `items()`,
+`hasNextPage()`, and `nextPage()` methods:
 
 ```java
 import com.withorb.api.models.Coupon;
 import com.withorb.api.models.CouponListPage;
 
-CouponListPage page = client.coupons().list(params);
-while (page != null) {
-    for (Coupon coupon : page.data()) {
+CouponListPage page = client.coupons().list();
+while (true) {
+    for (Coupon coupon : page.items()) {
         System.out.println(coupon);
     }
 
-    page = page.getNextPage().orElse(null);
+    if (!page.hasNextPage()) {
+        break;
+    }
+
+    page = page.nextPage();
 }
 ```
 
@@ -338,7 +386,6 @@ To set a custom timeout, configure the method call using the `timeout` method:
 
 ```java
 import com.withorb.api.models.Customer;
-import com.withorb.api.models.CustomerCreateParams;
 
 Customer customer = client.customers().create(
   params, RequestOptions.builder().timeout(Duration.ofSeconds(30)).build()
@@ -587,7 +634,6 @@ Or configure the method call to validate the response using the `responseValidat
 
 ```java
 import com.withorb.api.models.Customer;
-import com.withorb.api.models.CustomerCreateParams;
 
 Customer customer = client.customers().create(
   params, RequestOptions.builder().responseValidation(true).build()

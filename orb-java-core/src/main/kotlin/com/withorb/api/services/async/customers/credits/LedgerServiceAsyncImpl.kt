@@ -103,6 +103,7 @@ class LedgerServiceAsyncImpl internal constructor(private val clientOptions: Cli
                             .let {
                                 CustomerCreditLedgerListPageAsync.builder()
                                     .service(LedgerServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()
@@ -227,6 +228,7 @@ class LedgerServiceAsyncImpl internal constructor(private val clientOptions: Cli
                             .let {
                                 CustomerCreditLedgerListByExternalIdPageAsync.builder()
                                     .service(LedgerServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()
