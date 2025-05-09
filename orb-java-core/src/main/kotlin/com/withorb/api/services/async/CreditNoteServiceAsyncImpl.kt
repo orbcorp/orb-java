@@ -119,6 +119,7 @@ class CreditNoteServiceAsyncImpl internal constructor(private val clientOptions:
                             .let {
                                 CreditNoteListPageAsync.builder()
                                     .service(CreditNoteServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()

@@ -2,22 +2,24 @@
 
 package com.withorb.api.models
 
+import com.withorb.api.core.AutoPagerAsync
+import com.withorb.api.core.PageAsync
 import com.withorb.api.core.checkRequired
 import com.withorb.api.services.async.InvoiceServiceAsync
 import java.util.Objects
 import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
-import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
 
 /** @see [InvoiceServiceAsync.list] */
 class InvoiceListPageAsync
 private constructor(
     private val service: InvoiceServiceAsync,
+    private val streamHandlerExecutor: Executor,
     private val params: InvoiceListParams,
     private val response: InvoiceListPageResponse,
-) {
+) : PageAsync<Invoice> {
 
     /**
      * Delegates to [InvoiceListPageResponse], but gracefully handles missing data.
@@ -34,33 +36,23 @@ private constructor(
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")
 
-    fun hasNextPage(): Boolean =
-        data().isNotEmpty() &&
+    override fun items(): List<Invoice> = data()
+
+    override fun hasNextPage(): Boolean =
+        items().isNotEmpty() &&
             paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.isPresent
 
-    fun getNextPageParams(): Optional<InvoiceListParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
-
-        return Optional.of(
-            params
-                .toBuilder()
-                .apply {
-                    paginationMetadata()
-                        .flatMap { it._nextCursor().getOptional("next_cursor") }
-                        .ifPresent { cursor(it) }
-                }
-                .build()
-        )
+    fun nextPageParams(): InvoiceListParams {
+        val nextCursor =
+            paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().cursor(nextCursor).build()
     }
 
-    fun getNextPage(): CompletableFuture<Optional<InvoiceListPageAsync>> =
-        getNextPageParams()
-            .map { service.list(it).thenApply { Optional.of(it) } }
-            .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
+    override fun nextPage(): CompletableFuture<InvoiceListPageAsync> =
+        service.list(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPagerAsync<Invoice> = AutoPagerAsync.from(this, streamHandlerExecutor)
 
     /** The parameters that were used to request this page. */
     fun params(): InvoiceListParams = params
@@ -78,6 +70,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .service()
+         * .streamHandlerExecutor()
          * .params()
          * .response()
          * ```
@@ -89,17 +82,23 @@ private constructor(
     class Builder internal constructor() {
 
         private var service: InvoiceServiceAsync? = null
+        private var streamHandlerExecutor: Executor? = null
         private var params: InvoiceListParams? = null
         private var response: InvoiceListPageResponse? = null
 
         @JvmSynthetic
         internal fun from(invoiceListPageAsync: InvoiceListPageAsync) = apply {
             service = invoiceListPageAsync.service
+            streamHandlerExecutor = invoiceListPageAsync.streamHandlerExecutor
             params = invoiceListPageAsync.params
             response = invoiceListPageAsync.response
         }
 
         fun service(service: InvoiceServiceAsync) = apply { this.service = service }
+
+        fun streamHandlerExecutor(streamHandlerExecutor: Executor) = apply {
+            this.streamHandlerExecutor = streamHandlerExecutor
+        }
 
         /** The parameters that were used to request this page. */
         fun params(params: InvoiceListParams) = apply { this.params = params }
@@ -115,6 +114,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .service()
+         * .streamHandlerExecutor()
          * .params()
          * .response()
          * ```
@@ -124,35 +124,10 @@ private constructor(
         fun build(): InvoiceListPageAsync =
             InvoiceListPageAsync(
                 checkRequired("service", service),
+                checkRequired("streamHandlerExecutor", streamHandlerExecutor),
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: InvoiceListPageAsync) {
-
-        fun forEach(action: Predicate<Invoice>, executor: Executor): CompletableFuture<Void> {
-            fun CompletableFuture<Optional<InvoiceListPageAsync>>.forEach(
-                action: (Invoice) -> Boolean,
-                executor: Executor,
-            ): CompletableFuture<Void> =
-                thenComposeAsync(
-                    { page ->
-                        page
-                            .filter { it.data().all(action) }
-                            .map { it.getNextPage().forEach(action, executor) }
-                            .orElseGet { CompletableFuture.completedFuture(null) }
-                    },
-                    executor,
-                )
-            return CompletableFuture.completedFuture(Optional.of(firstPage))
-                .forEach(action::test, executor)
-        }
-
-        fun toList(executor: Executor): CompletableFuture<List<Invoice>> {
-            val values = mutableListOf<Invoice>()
-            return forEach(values::add, executor).thenApply { values }
-        }
     }
 
     override fun equals(other: Any?): Boolean {
@@ -160,11 +135,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is InvoiceListPageAsync && service == other.service && params == other.params && response == other.response /* spotless:on */
+        return /* spotless:off */ other is InvoiceListPageAsync && service == other.service && streamHandlerExecutor == other.streamHandlerExecutor && params == other.params && response == other.response /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, streamHandlerExecutor, params, response) /* spotless:on */
 
     override fun toString() =
-        "InvoiceListPageAsync{service=$service, params=$params, response=$response}"
+        "InvoiceListPageAsync{service=$service, streamHandlerExecutor=$streamHandlerExecutor, params=$params, response=$response}"
 }

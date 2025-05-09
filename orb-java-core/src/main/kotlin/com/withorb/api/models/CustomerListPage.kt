@@ -2,12 +2,12 @@
 
 package com.withorb.api.models
 
+import com.withorb.api.core.AutoPager
+import com.withorb.api.core.Page
 import com.withorb.api.core.checkRequired
 import com.withorb.api.services.blocking.CustomerService
 import java.util.Objects
 import java.util.Optional
-import java.util.stream.Stream
-import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
 /** @see [CustomerService.list] */
@@ -16,7 +16,7 @@ private constructor(
     private val service: CustomerService,
     private val params: CustomerListParams,
     private val response: CustomerListPageResponse,
-) {
+) : Page<Customer> {
 
     /**
      * Delegates to [CustomerListPageResponse], but gracefully handles missing data.
@@ -33,30 +33,22 @@ private constructor(
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")
 
-    fun hasNextPage(): Boolean =
-        data().isNotEmpty() &&
+    override fun items(): List<Customer> = data()
+
+    override fun hasNextPage(): Boolean =
+        items().isNotEmpty() &&
             paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.isPresent
 
-    fun getNextPageParams(): Optional<CustomerListParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
-
-        return Optional.of(
-            params
-                .toBuilder()
-                .apply {
-                    paginationMetadata()
-                        .flatMap { it._nextCursor().getOptional("next_cursor") }
-                        .ifPresent { cursor(it) }
-                }
-                .build()
-        )
+    fun nextPageParams(): CustomerListParams {
+        val nextCursor =
+            paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().cursor(nextCursor).build()
     }
 
-    fun getNextPage(): Optional<CustomerListPage> = getNextPageParams().map { service.list(it) }
+    override fun nextPage(): CustomerListPage = service.list(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPager<Customer> = AutoPager.from(this)
 
     /** The parameters that were used to request this page. */
     fun params(): CustomerListParams = params
@@ -123,25 +115,6 @@ private constructor(
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: CustomerListPage) : Iterable<Customer> {
-
-        override fun iterator(): Iterator<Customer> = iterator {
-            var page = firstPage
-            var index = 0
-            while (true) {
-                while (index < page.data().size) {
-                    yield(page.data()[index++])
-                }
-                page = page.getNextPage().getOrNull() ?: break
-                index = 0
-            }
-        }
-
-        fun stream(): Stream<Customer> {
-            return StreamSupport.stream(spliterator(), false)
-        }
     }
 
     override fun equals(other: Any?): Boolean {

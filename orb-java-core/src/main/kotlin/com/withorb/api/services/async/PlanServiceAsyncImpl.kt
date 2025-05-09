@@ -174,6 +174,7 @@ class PlanServiceAsyncImpl internal constructor(private val clientOptions: Clien
                             .let {
                                 PlanListPageAsync.builder()
                                     .service(PlanServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()

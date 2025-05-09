@@ -160,6 +160,7 @@ class ItemServiceAsyncImpl internal constructor(private val clientOptions: Clien
                             .let {
                                 ItemListPageAsync.builder()
                                     .service(ItemServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()

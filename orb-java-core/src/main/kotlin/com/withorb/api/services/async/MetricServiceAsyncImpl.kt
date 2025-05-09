@@ -160,6 +160,7 @@ class MetricServiceAsyncImpl internal constructor(private val clientOptions: Cli
                             .let {
                                 MetricListPageAsync.builder()
                                     .service(MetricServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()

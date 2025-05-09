@@ -2,22 +2,24 @@
 
 package com.withorb.api.models
 
+import com.withorb.api.core.AutoPagerAsync
+import com.withorb.api.core.PageAsync
 import com.withorb.api.core.checkRequired
 import com.withorb.api.services.async.ItemServiceAsync
 import java.util.Objects
 import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
-import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
 
 /** @see [ItemServiceAsync.list] */
 class ItemListPageAsync
 private constructor(
     private val service: ItemServiceAsync,
+    private val streamHandlerExecutor: Executor,
     private val params: ItemListParams,
     private val response: ItemListPageResponse,
-) {
+) : PageAsync<Item> {
 
     /**
      * Delegates to [ItemListPageResponse], but gracefully handles missing data.
@@ -34,33 +36,22 @@ private constructor(
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")
 
-    fun hasNextPage(): Boolean =
-        data().isNotEmpty() &&
+    override fun items(): List<Item> = data()
+
+    override fun hasNextPage(): Boolean =
+        items().isNotEmpty() &&
             paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.isPresent
 
-    fun getNextPageParams(): Optional<ItemListParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
-
-        return Optional.of(
-            params
-                .toBuilder()
-                .apply {
-                    paginationMetadata()
-                        .flatMap { it._nextCursor().getOptional("next_cursor") }
-                        .ifPresent { cursor(it) }
-                }
-                .build()
-        )
+    fun nextPageParams(): ItemListParams {
+        val nextCursor =
+            paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().cursor(nextCursor).build()
     }
 
-    fun getNextPage(): CompletableFuture<Optional<ItemListPageAsync>> =
-        getNextPageParams()
-            .map { service.list(it).thenApply { Optional.of(it) } }
-            .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
+    override fun nextPage(): CompletableFuture<ItemListPageAsync> = service.list(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPagerAsync<Item> = AutoPagerAsync.from(this, streamHandlerExecutor)
 
     /** The parameters that were used to request this page. */
     fun params(): ItemListParams = params
@@ -78,6 +69,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .service()
+         * .streamHandlerExecutor()
          * .params()
          * .response()
          * ```
@@ -89,17 +81,23 @@ private constructor(
     class Builder internal constructor() {
 
         private var service: ItemServiceAsync? = null
+        private var streamHandlerExecutor: Executor? = null
         private var params: ItemListParams? = null
         private var response: ItemListPageResponse? = null
 
         @JvmSynthetic
         internal fun from(itemListPageAsync: ItemListPageAsync) = apply {
             service = itemListPageAsync.service
+            streamHandlerExecutor = itemListPageAsync.streamHandlerExecutor
             params = itemListPageAsync.params
             response = itemListPageAsync.response
         }
 
         fun service(service: ItemServiceAsync) = apply { this.service = service }
+
+        fun streamHandlerExecutor(streamHandlerExecutor: Executor) = apply {
+            this.streamHandlerExecutor = streamHandlerExecutor
+        }
 
         /** The parameters that were used to request this page. */
         fun params(params: ItemListParams) = apply { this.params = params }
@@ -115,6 +113,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .service()
+         * .streamHandlerExecutor()
          * .params()
          * .response()
          * ```
@@ -124,35 +123,10 @@ private constructor(
         fun build(): ItemListPageAsync =
             ItemListPageAsync(
                 checkRequired("service", service),
+                checkRequired("streamHandlerExecutor", streamHandlerExecutor),
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: ItemListPageAsync) {
-
-        fun forEach(action: Predicate<Item>, executor: Executor): CompletableFuture<Void> {
-            fun CompletableFuture<Optional<ItemListPageAsync>>.forEach(
-                action: (Item) -> Boolean,
-                executor: Executor,
-            ): CompletableFuture<Void> =
-                thenComposeAsync(
-                    { page ->
-                        page
-                            .filter { it.data().all(action) }
-                            .map { it.getNextPage().forEach(action, executor) }
-                            .orElseGet { CompletableFuture.completedFuture(null) }
-                    },
-                    executor,
-                )
-            return CompletableFuture.completedFuture(Optional.of(firstPage))
-                .forEach(action::test, executor)
-        }
-
-        fun toList(executor: Executor): CompletableFuture<List<Item>> {
-            val values = mutableListOf<Item>()
-            return forEach(values::add, executor).thenApply { values }
-        }
     }
 
     override fun equals(other: Any?): Boolean {
@@ -160,11 +134,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ItemListPageAsync && service == other.service && params == other.params && response == other.response /* spotless:on */
+        return /* spotless:off */ other is ItemListPageAsync && service == other.service && streamHandlerExecutor == other.streamHandlerExecutor && params == other.params && response == other.response /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, streamHandlerExecutor, params, response) /* spotless:on */
 
     override fun toString() =
-        "ItemListPageAsync{service=$service, params=$params, response=$response}"
+        "ItemListPageAsync{service=$service, streamHandlerExecutor=$streamHandlerExecutor, params=$params, response=$response}"
 }

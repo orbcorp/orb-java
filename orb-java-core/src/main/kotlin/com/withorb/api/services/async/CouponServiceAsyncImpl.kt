@@ -141,6 +141,7 @@ class CouponServiceAsyncImpl internal constructor(private val clientOptions: Cli
                             .let {
                                 CouponListPageAsync.builder()
                                     .service(CouponServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()

@@ -108,6 +108,7 @@ class CreditServiceAsyncImpl internal constructor(private val clientOptions: Cli
                             .let {
                                 CustomerCreditListPageAsync.builder()
                                     .service(CreditServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()
@@ -153,6 +154,7 @@ class CreditServiceAsyncImpl internal constructor(private val clientOptions: Cli
                             .let {
                                 CustomerCreditListByExternalIdPageAsync.builder()
                                     .service(CreditServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()

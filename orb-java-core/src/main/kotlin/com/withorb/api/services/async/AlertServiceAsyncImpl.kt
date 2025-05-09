@@ -194,6 +194,7 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
                             .let {
                                 AlertListPageAsync.builder()
                                     .service(AlertServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()

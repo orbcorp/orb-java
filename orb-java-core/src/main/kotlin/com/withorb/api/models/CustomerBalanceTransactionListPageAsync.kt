@@ -2,22 +2,24 @@
 
 package com.withorb.api.models
 
+import com.withorb.api.core.AutoPagerAsync
+import com.withorb.api.core.PageAsync
 import com.withorb.api.core.checkRequired
 import com.withorb.api.services.async.customers.BalanceTransactionServiceAsync
 import java.util.Objects
 import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
-import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
 
 /** @see [BalanceTransactionServiceAsync.list] */
 class CustomerBalanceTransactionListPageAsync
 private constructor(
     private val service: BalanceTransactionServiceAsync,
+    private val streamHandlerExecutor: Executor,
     private val params: CustomerBalanceTransactionListParams,
     private val response: CustomerBalanceTransactionListPageResponse,
-) {
+) : PageAsync<CustomerBalanceTransactionListResponse> {
 
     /**
      * Delegates to [CustomerBalanceTransactionListPageResponse], but gracefully handles missing
@@ -37,33 +39,24 @@ private constructor(
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")
 
-    fun hasNextPage(): Boolean =
-        data().isNotEmpty() &&
+    override fun items(): List<CustomerBalanceTransactionListResponse> = data()
+
+    override fun hasNextPage(): Boolean =
+        items().isNotEmpty() &&
             paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.isPresent
 
-    fun getNextPageParams(): Optional<CustomerBalanceTransactionListParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
-
-        return Optional.of(
-            params
-                .toBuilder()
-                .apply {
-                    paginationMetadata()
-                        .flatMap { it._nextCursor().getOptional("next_cursor") }
-                        .ifPresent { cursor(it) }
-                }
-                .build()
-        )
+    fun nextPageParams(): CustomerBalanceTransactionListParams {
+        val nextCursor =
+            paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().cursor(nextCursor).build()
     }
 
-    fun getNextPage(): CompletableFuture<Optional<CustomerBalanceTransactionListPageAsync>> =
-        getNextPageParams()
-            .map { service.list(it).thenApply { Optional.of(it) } }
-            .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
+    override fun nextPage(): CompletableFuture<CustomerBalanceTransactionListPageAsync> =
+        service.list(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPagerAsync<CustomerBalanceTransactionListResponse> =
+        AutoPagerAsync.from(this, streamHandlerExecutor)
 
     /** The parameters that were used to request this page. */
     fun params(): CustomerBalanceTransactionListParams = params
@@ -82,6 +75,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .service()
+         * .streamHandlerExecutor()
          * .params()
          * .response()
          * ```
@@ -93,6 +87,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var service: BalanceTransactionServiceAsync? = null
+        private var streamHandlerExecutor: Executor? = null
         private var params: CustomerBalanceTransactionListParams? = null
         private var response: CustomerBalanceTransactionListPageResponse? = null
 
@@ -101,11 +96,16 @@ private constructor(
             customerBalanceTransactionListPageAsync: CustomerBalanceTransactionListPageAsync
         ) = apply {
             service = customerBalanceTransactionListPageAsync.service
+            streamHandlerExecutor = customerBalanceTransactionListPageAsync.streamHandlerExecutor
             params = customerBalanceTransactionListPageAsync.params
             response = customerBalanceTransactionListPageAsync.response
         }
 
         fun service(service: BalanceTransactionServiceAsync) = apply { this.service = service }
+
+        fun streamHandlerExecutor(streamHandlerExecutor: Executor) = apply {
+            this.streamHandlerExecutor = streamHandlerExecutor
+        }
 
         /** The parameters that were used to request this page. */
         fun params(params: CustomerBalanceTransactionListParams) = apply { this.params = params }
@@ -123,6 +123,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .service()
+         * .streamHandlerExecutor()
          * .params()
          * .response()
          * ```
@@ -132,40 +133,10 @@ private constructor(
         fun build(): CustomerBalanceTransactionListPageAsync =
             CustomerBalanceTransactionListPageAsync(
                 checkRequired("service", service),
+                checkRequired("streamHandlerExecutor", streamHandlerExecutor),
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: CustomerBalanceTransactionListPageAsync) {
-
-        fun forEach(
-            action: Predicate<CustomerBalanceTransactionListResponse>,
-            executor: Executor,
-        ): CompletableFuture<Void> {
-            fun CompletableFuture<Optional<CustomerBalanceTransactionListPageAsync>>.forEach(
-                action: (CustomerBalanceTransactionListResponse) -> Boolean,
-                executor: Executor,
-            ): CompletableFuture<Void> =
-                thenComposeAsync(
-                    { page ->
-                        page
-                            .filter { it.data().all(action) }
-                            .map { it.getNextPage().forEach(action, executor) }
-                            .orElseGet { CompletableFuture.completedFuture(null) }
-                    },
-                    executor,
-                )
-            return CompletableFuture.completedFuture(Optional.of(firstPage))
-                .forEach(action::test, executor)
-        }
-
-        fun toList(
-            executor: Executor
-        ): CompletableFuture<List<CustomerBalanceTransactionListResponse>> {
-            val values = mutableListOf<CustomerBalanceTransactionListResponse>()
-            return forEach(values::add, executor).thenApply { values }
-        }
     }
 
     override fun equals(other: Any?): Boolean {
@@ -173,11 +144,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerBalanceTransactionListPageAsync && service == other.service && params == other.params && response == other.response /* spotless:on */
+        return /* spotless:off */ other is CustomerBalanceTransactionListPageAsync && service == other.service && streamHandlerExecutor == other.streamHandlerExecutor && params == other.params && response == other.response /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, streamHandlerExecutor, params, response) /* spotless:on */
 
     override fun toString() =
-        "CustomerBalanceTransactionListPageAsync{service=$service, params=$params, response=$response}"
+        "CustomerBalanceTransactionListPageAsync{service=$service, streamHandlerExecutor=$streamHandlerExecutor, params=$params, response=$response}"
 }

@@ -118,6 +118,7 @@ internal constructor(private val clientOptions: ClientOptions) : BalanceTransact
                             .let {
                                 CustomerBalanceTransactionListPageAsync.builder()
                                     .service(BalanceTransactionServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()

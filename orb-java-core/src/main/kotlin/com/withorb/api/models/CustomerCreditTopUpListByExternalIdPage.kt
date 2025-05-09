@@ -2,12 +2,12 @@
 
 package com.withorb.api.models
 
+import com.withorb.api.core.AutoPager
+import com.withorb.api.core.Page
 import com.withorb.api.core.checkRequired
 import com.withorb.api.services.blocking.customers.credits.TopUpService
 import java.util.Objects
 import java.util.Optional
-import java.util.stream.Stream
-import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
 /** @see [TopUpService.listByExternalId] */
@@ -16,7 +16,7 @@ private constructor(
     private val service: TopUpService,
     private val params: CustomerCreditTopUpListByExternalIdParams,
     private val response: CustomerCreditTopUpListByExternalIdPageResponse,
-) {
+) : Page<CustomerCreditTopUpListByExternalIdResponse> {
 
     /**
      * Delegates to [CustomerCreditTopUpListByExternalIdPageResponse], but gracefully handles
@@ -36,31 +36,23 @@ private constructor(
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")
 
-    fun hasNextPage(): Boolean =
-        data().isNotEmpty() &&
+    override fun items(): List<CustomerCreditTopUpListByExternalIdResponse> = data()
+
+    override fun hasNextPage(): Boolean =
+        items().isNotEmpty() &&
             paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.isPresent
 
-    fun getNextPageParams(): Optional<CustomerCreditTopUpListByExternalIdParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
-
-        return Optional.of(
-            params
-                .toBuilder()
-                .apply {
-                    paginationMetadata()
-                        .flatMap { it._nextCursor().getOptional("next_cursor") }
-                        .ifPresent { cursor(it) }
-                }
-                .build()
-        )
+    fun nextPageParams(): CustomerCreditTopUpListByExternalIdParams {
+        val nextCursor =
+            paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().cursor(nextCursor).build()
     }
 
-    fun getNextPage(): Optional<CustomerCreditTopUpListByExternalIdPage> =
-        getNextPageParams().map { service.listByExternalId(it) }
+    override fun nextPage(): CustomerCreditTopUpListByExternalIdPage =
+        service.listByExternalId(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPager<CustomerCreditTopUpListByExternalIdResponse> = AutoPager.from(this)
 
     /** The parameters that were used to request this page. */
     fun params(): CustomerCreditTopUpListByExternalIdParams = params
@@ -134,26 +126,6 @@ private constructor(
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: CustomerCreditTopUpListByExternalIdPage) :
-        Iterable<CustomerCreditTopUpListByExternalIdResponse> {
-
-        override fun iterator(): Iterator<CustomerCreditTopUpListByExternalIdResponse> = iterator {
-            var page = firstPage
-            var index = 0
-            while (true) {
-                while (index < page.data().size) {
-                    yield(page.data()[index++])
-                }
-                page = page.getNextPage().getOrNull() ?: break
-                index = 0
-            }
-        }
-
-        fun stream(): Stream<CustomerCreditTopUpListByExternalIdResponse> {
-            return StreamSupport.stream(spliterator(), false)
-        }
     }
 
     override fun equals(other: Any?): Boolean {

@@ -155,6 +155,7 @@ class TopUpServiceAsyncImpl internal constructor(private val clientOptions: Clie
                             .let {
                                 CustomerCreditTopUpListPageAsync.builder()
                                     .service(TopUpServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()
@@ -305,6 +306,7 @@ class TopUpServiceAsyncImpl internal constructor(private val clientOptions: Clie
                             .let {
                                 CustomerCreditTopUpListByExternalIdPageAsync.builder()
                                     .service(TopUpServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()
