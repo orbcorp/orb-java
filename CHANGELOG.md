@@ -1,5 +1,58 @@
 # Changelog
 
+## 0.57.0 (2025-05-22)
+
+Full Changelog: [v0.56.0...v0.57.0](https://github.com/orbcorp/orb-java/compare/v0.56.0...v0.57.0)
+
+### ⚠ BREAKING CHANGES
+
+* **client:** improve some class names
+* **client:** extract auto pagination to shared classes
+* **client:** **Migration:** - If you were referencing the `AutoPager` class on a specific `*Page` or `*PageAsync` type, then you should instead reference the shared `AutoPager` and `AutoPagerAsync` types, under the `core` package
+    - `AutoPagerAsync` now has different usage. You can call `.subscribe(...)` on the returned object instead to get called back each page item. You can also call `onCompleteFuture()` to get a future that completes when all items have been processed. Finally, you can call `.close()` on the returned object to stop auto-paginating early
+    - If you were referencing `getNextPage` or `getNextPageParams`:
+       - Swap to `nextPage()` and `nextPageParams()`
+       - Note that these both now return non-optional types (use `hasNextPage()` before calling these, since they will throw if it's impossible to get another page)
+
+### Features
+
+* **client:** allow providing some params positionally ([7ddd872](https://github.com/orbcorp/orb-java/commit/7ddd872ee4fb49e2e3f4b6d5938bc9a5ed0e2342))
+* **client:** extract auto pagination to shared classes ([9affbde](https://github.com/orbcorp/orb-java/commit/9affbdee875bdf75fa150d58ed8de23b9d51eaf2))
+
+
+### Bug Fixes
+
+* **internal:** fix name collision errors from Unit import ([1f7beef](https://github.com/orbcorp/orb-java/commit/1f7beefa05c6cb1356d1973bbcb0955f7eb65fbd))
+
+
+### Performance Improvements
+
+* **internal:** improve compilation+test speed ([f72c4ad](https://github.com/orbcorp/orb-java/commit/f72c4ad7c4604330f2ff972b517b2e3f03f5356f))
+
+
+### Chores
+
+* **ci:** only use depot for staging repos ([68dcdd8](https://github.com/orbcorp/orb-java/commit/68dcdd85f1eac797fae1136e383afae1ad5c0e28))
+* **ci:** run on more branches and use depot runners ([ddcc77e](https://github.com/orbcorp/orb-java/commit/ddcc77e1835fe8ec200fbfeb5d0427ef19fb6d25))
+* **docs:** grammar improvements ([7b5fb07](https://github.com/orbcorp/orb-java/commit/7b5fb07cdbe4b1ac8f41d95de243b913fce60a13))
+* **internal:** codegen related update ([9df208b](https://github.com/orbcorp/orb-java/commit/9df208bf6cf18c90cc09bf1f3eba9ba1e5b4c767))
+* **internal:** codegen related update ([7db8db6](https://github.com/orbcorp/orb-java/commit/7db8db63862be728dc201e36aa3ff164307c5e4e))
+* **internal:** java 17 -&gt; 21 on ci ([7f2fb10](https://github.com/orbcorp/orb-java/commit/7f2fb1063cd794a4c46fb88203944d4262a0a1db))
+* **internal:** remove flaky `-Xbackend-threads=0` option ([b085373](https://github.com/orbcorp/orb-java/commit/b085373fc56676f510a0b0900e8cecd2af633313))
+* **internal:** update java toolchain ([2b4abdf](https://github.com/orbcorp/orb-java/commit/2b4abdff056e4bd158c6a2bc605c4ba09e4760d0))
+
+
+### Documentation
+
+* **client:** update jackson compat error message ([b3ceb27](https://github.com/orbcorp/orb-java/commit/b3ceb2741476209419bd210d7caebec7fbb5eaa7))
+* explain http client customization ([31827ac](https://github.com/orbcorp/orb-java/commit/31827acf060986c871832a7619f09dae7aab1640))
+* explain jackson compat in readme ([fb2505d](https://github.com/orbcorp/orb-java/commit/fb2505d8cdf9fb61589715396da17d424de5f7c0))
+
+
+### Refactors
+
+* **client:** improve some class names ([9460c52](https://github.com/orbcorp/orb-java/commit/9460c523ec5235f4b8b6335336be8e3b82b8527f))
+
 ## 0.56.0 (2025-04-09)
 
 Full Changelog: [v0.55.0...v0.56.0](https://github.com/orbcorp/orb-java/compare/v0.55.0...v0.56.0)
