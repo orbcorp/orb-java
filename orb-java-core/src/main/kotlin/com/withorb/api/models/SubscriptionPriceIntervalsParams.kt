@@ -33,6 +33,7 @@ import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
+import kotlin.Unit as KUnit
 import kotlin.jvm.optionals.getOrNull
 
 /**
@@ -1879,7 +1880,7 @@ private constructor(
                 }
 
                 accept(
-                    object : Visitor<Unit> {
+                    object : Visitor<KUnit> {
                         override fun visitDateTime(dateTime: OffsetDateTime) {}
 
                         override fun visitBillingCycleRelative(
@@ -2524,7 +2525,7 @@ private constructor(
                 }
 
                 accept(
-                    object : Visitor<Unit> {
+                    object : Visitor<KUnit> {
                         override fun visitAmount(amount: Amount) {
                             amount.validate()
                         }
@@ -3368,7 +3369,7 @@ private constructor(
                 }
 
                 accept(
-                    object : Visitor<Unit> {
+                    object : Visitor<KUnit> {
                         override fun visitDateTime(dateTime: OffsetDateTime) {}
 
                         override fun visitBillingCycleRelative(
@@ -4020,7 +4021,7 @@ private constructor(
                 }
 
                 accept(
-                    object : Visitor<Unit> {
+                    object : Visitor<KUnit> {
                         override fun visitUnit(unit: Unit) {
                             unit.validate()
                         }
@@ -64055,7 +64056,7 @@ private constructor(
                 }
 
                 accept(
-                    object : Visitor<Unit> {
+                    object : Visitor<KUnit> {
                         override fun visitPercentageDiscount(
                             percentageDiscount: PercentageDiscount
                         ) {
@@ -65976,7 +65977,7 @@ private constructor(
                 }
 
                 accept(
-                    object : Visitor<Unit> {
+                    object : Visitor<KUnit> {
                         override fun visitDateTime(dateTime: OffsetDateTime) {}
 
                         override fun visitBillingCycleRelative(
@@ -66164,7 +66165,7 @@ private constructor(
                 }
 
                 accept(
-                    object : Visitor<Unit> {
+                    object : Visitor<KUnit> {
                         override fun visitDateTime(dateTime: OffsetDateTime) {}
 
                         override fun visitBillingCycleRelative(
@@ -66887,7 +66888,7 @@ private constructor(
                 }
 
                 accept(
-                    object : Visitor<Unit> {
+                    object : Visitor<KUnit> {
                         override fun visitDateTime(dateTime: OffsetDateTime) {}
 
                         override fun visitBillingCycleRelative(
@@ -67287,7 +67288,7 @@ private constructor(
                 }
 
                 accept(
-                    object : Visitor<Unit> {
+                    object : Visitor<KUnit> {
                         override fun visitDateTime(dateTime: OffsetDateTime) {}
 
                         override fun visitBillingCycleRelative(
@@ -67747,7 +67748,7 @@ private constructor(
                 }
 
                 accept(
-                    object : Visitor<Unit> {
+                    object : Visitor<KUnit> {
                         override fun visitDateTime(dateTime: OffsetDateTime) {}
 
                         override fun visitBillingCycleRelative(
@@ -67933,7 +67934,7 @@ private constructor(
                 }
 
                 accept(
-                    object : Visitor<Unit> {
+                    object : Visitor<KUnit> {
                         override fun visitDateTime(dateTime: OffsetDateTime) {}
 
                         override fun visitBillingCycleRelative(
