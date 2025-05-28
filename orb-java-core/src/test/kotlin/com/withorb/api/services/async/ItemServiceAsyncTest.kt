@@ -4,6 +4,7 @@ package com.withorb.api.services.async
 
 import com.withorb.api.TestServerExtension
 import com.withorb.api.client.okhttp.OrbOkHttpClientAsync
+import com.withorb.api.core.JsonValue
 import com.withorb.api.models.ItemCreateParams
 import com.withorb.api.models.ItemUpdateParams
 import org.junit.jupiter.api.Test
@@ -22,7 +23,16 @@ internal class ItemServiceAsyncTest {
         val itemServiceAsync = client.items()
 
         val itemFuture =
-            itemServiceAsync.create(ItemCreateParams.builder().name("API requests").build())
+            itemServiceAsync.create(
+                ItemCreateParams.builder()
+                    .name("API requests")
+                    .metadata(
+                        ItemCreateParams.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
+                    .build()
+            )
 
         val item = itemFuture.get()
         item.validate()
@@ -49,6 +59,11 @@ internal class ItemServiceAsyncTest {
                             .externalEntityId("external_entity_id")
                             .build()
                     )
+                    .metadata(
+                        ItemUpdateParams.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .name("name")
                     .build()
             )
@@ -70,6 +85,21 @@ internal class ItemServiceAsyncTest {
 
         val page = pageFuture.get()
         page.response().validate()
+    }
+
+    @Test
+    fun archive() {
+        val client =
+            OrbOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val itemServiceAsync = client.items()
+
+        val itemFuture = itemServiceAsync.archive("item_id")
+
+        val item = itemFuture.get()
+        item.validate()
     }
 
     @Test

@@ -37,7 +37,7 @@ interface PlanServiceAsync {
      * This endpoint can be used to update the `external_plan_id`, and `metadata` of an existing
      * plan.
      *
-     * Other fields on a customer are currently immutable.
+     * Other fields on a plan are currently immutable.
      */
     fun update(planId: String): CompletableFuture<Plan> = update(planId, PlanUpdateParams.none())
 

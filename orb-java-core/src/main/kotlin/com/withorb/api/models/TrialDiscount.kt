@@ -22,8 +22,8 @@ import kotlin.jvm.optionals.getOrNull
 
 class TrialDiscount
 private constructor(
-    private val appliesToPriceIds: JsonField<List<String>>,
     private val discountType: JsonField<DiscountType>,
+    private val appliesToPriceIds: JsonField<List<String>>,
     private val reason: JsonField<String>,
     private val trialAmountDiscount: JsonField<String>,
     private val trialPercentageDiscount: JsonField<Double>,
@@ -32,12 +32,12 @@ private constructor(
 
     @JsonCreator
     private constructor(
-        @JsonProperty("applies_to_price_ids")
-        @ExcludeMissing
-        appliesToPriceIds: JsonField<List<String>> = JsonMissing.of(),
         @JsonProperty("discount_type")
         @ExcludeMissing
         discountType: JsonField<DiscountType> = JsonMissing.of(),
+        @JsonProperty("applies_to_price_ids")
+        @ExcludeMissing
+        appliesToPriceIds: JsonField<List<String>> = JsonMissing.of(),
         @JsonProperty("reason") @ExcludeMissing reason: JsonField<String> = JsonMissing.of(),
         @JsonProperty("trial_amount_discount")
         @ExcludeMissing
@@ -46,8 +46,8 @@ private constructor(
         @ExcludeMissing
         trialPercentageDiscount: JsonField<Double> = JsonMissing.of(),
     ) : this(
-        appliesToPriceIds,
         discountType,
+        appliesToPriceIds,
         reason,
         trialAmountDiscount,
         trialPercentageDiscount,
@@ -55,19 +55,20 @@ private constructor(
     )
 
     /**
-     * List of price_ids that this discount applies to. For plan/plan phase discounts, this can be a
-     * subset of prices.
-     *
-     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
-     *   missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun appliesToPriceIds(): List<String> = appliesToPriceIds.getRequired("applies_to_price_ids")
-
-    /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun discountType(): DiscountType = discountType.getRequired("discount_type")
+
+    /**
+     * List of price_ids that this discount applies to. For plan/plan phase discounts, this can be a
+     * subset of prices.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun appliesToPriceIds(): Optional<List<String>> =
+        appliesToPriceIds.getOptional("applies_to_price_ids")
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
@@ -94,6 +95,15 @@ private constructor(
         trialPercentageDiscount.getOptional("trial_percentage_discount")
 
     /**
+     * Returns the raw JSON value of [discountType].
+     *
+     * Unlike [discountType], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("discount_type")
+    @ExcludeMissing
+    fun _discountType(): JsonField<DiscountType> = discountType
+
+    /**
      * Returns the raw JSON value of [appliesToPriceIds].
      *
      * Unlike [appliesToPriceIds], this method doesn't throw if the JSON field has an unexpected
@@ -102,15 +112,6 @@ private constructor(
     @JsonProperty("applies_to_price_ids")
     @ExcludeMissing
     fun _appliesToPriceIds(): JsonField<List<String>> = appliesToPriceIds
-
-    /**
-     * Returns the raw JSON value of [discountType].
-     *
-     * Unlike [discountType], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("discount_type")
-    @ExcludeMissing
-    fun _discountType(): JsonField<DiscountType> = discountType
 
     /**
      * Returns the raw JSON value of [reason].
@@ -158,7 +159,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .appliesToPriceIds()
          * .discountType()
          * ```
          */
@@ -168,8 +168,8 @@ private constructor(
     /** A builder for [TrialDiscount]. */
     class Builder internal constructor() {
 
-        private var appliesToPriceIds: JsonField<MutableList<String>>? = null
         private var discountType: JsonField<DiscountType>? = null
+        private var appliesToPriceIds: JsonField<MutableList<String>>? = null
         private var reason: JsonField<String> = JsonMissing.of()
         private var trialAmountDiscount: JsonField<String> = JsonMissing.of()
         private var trialPercentageDiscount: JsonField<Double> = JsonMissing.of()
@@ -177,20 +177,37 @@ private constructor(
 
         @JvmSynthetic
         internal fun from(trialDiscount: TrialDiscount) = apply {
-            appliesToPriceIds = trialDiscount.appliesToPriceIds.map { it.toMutableList() }
             discountType = trialDiscount.discountType
+            appliesToPriceIds = trialDiscount.appliesToPriceIds.map { it.toMutableList() }
             reason = trialDiscount.reason
             trialAmountDiscount = trialDiscount.trialAmountDiscount
             trialPercentageDiscount = trialDiscount.trialPercentageDiscount
             additionalProperties = trialDiscount.additionalProperties.toMutableMap()
         }
 
+        fun discountType(discountType: DiscountType) = discountType(JsonField.of(discountType))
+
+        /**
+         * Sets [Builder.discountType] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.discountType] with a well-typed [DiscountType] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun discountType(discountType: JsonField<DiscountType>) = apply {
+            this.discountType = discountType
+        }
+
         /**
          * List of price_ids that this discount applies to. For plan/plan phase discounts, this can
          * be a subset of prices.
          */
-        fun appliesToPriceIds(appliesToPriceIds: List<String>) =
-            appliesToPriceIds(JsonField.of(appliesToPriceIds))
+        fun appliesToPriceIds(appliesToPriceIds: List<String>?) =
+            appliesToPriceIds(JsonField.ofNullable(appliesToPriceIds))
+
+        /** Alias for calling [Builder.appliesToPriceIds] with `appliesToPriceIds.orElse(null)`. */
+        fun appliesToPriceIds(appliesToPriceIds: Optional<List<String>>) =
+            appliesToPriceIds(appliesToPriceIds.getOrNull())
 
         /**
          * Sets [Builder.appliesToPriceIds] to an arbitrary JSON value.
@@ -213,19 +230,6 @@ private constructor(
                 (appliesToPriceIds ?: JsonField.of(mutableListOf())).also {
                     checkKnown("appliesToPriceIds", it).add(appliesToPriceId)
                 }
-        }
-
-        fun discountType(discountType: DiscountType) = discountType(JsonField.of(discountType))
-
-        /**
-         * Sets [Builder.discountType] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.discountType] with a well-typed [DiscountType] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun discountType(discountType: JsonField<DiscountType>) = apply {
-            this.discountType = discountType
         }
 
         fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
@@ -318,7 +322,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .appliesToPriceIds()
          * .discountType()
          * ```
          *
@@ -326,8 +329,8 @@ private constructor(
          */
         fun build(): TrialDiscount =
             TrialDiscount(
-                checkRequired("appliesToPriceIds", appliesToPriceIds).map { it.toImmutable() },
                 checkRequired("discountType", discountType),
+                (appliesToPriceIds ?: JsonMissing.of()).map { it.toImmutable() },
                 reason,
                 trialAmountDiscount,
                 trialPercentageDiscount,
@@ -342,8 +345,8 @@ private constructor(
             return@apply
         }
 
-        appliesToPriceIds()
         discountType().validate()
+        appliesToPriceIds()
         reason()
         trialAmountDiscount()
         trialPercentageDiscount()
@@ -365,8 +368,8 @@ private constructor(
      */
     @JvmSynthetic
     internal fun validity(): Int =
-        (appliesToPriceIds.asKnown().getOrNull()?.size ?: 0) +
-            (discountType.asKnown().getOrNull()?.validity() ?: 0) +
+        (discountType.asKnown().getOrNull()?.validity() ?: 0) +
+            (appliesToPriceIds.asKnown().getOrNull()?.size ?: 0) +
             (if (reason.asKnown().isPresent) 1 else 0) +
             (if (trialAmountDiscount.asKnown().isPresent) 1 else 0) +
             (if (trialPercentageDiscount.asKnown().isPresent) 1 else 0)
@@ -497,15 +500,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is TrialDiscount && appliesToPriceIds == other.appliesToPriceIds && discountType == other.discountType && reason == other.reason && trialAmountDiscount == other.trialAmountDiscount && trialPercentageDiscount == other.trialPercentageDiscount && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is TrialDiscount && discountType == other.discountType && appliesToPriceIds == other.appliesToPriceIds && reason == other.reason && trialAmountDiscount == other.trialAmountDiscount && trialPercentageDiscount == other.trialPercentageDiscount && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(appliesToPriceIds, discountType, reason, trialAmountDiscount, trialPercentageDiscount, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(discountType, appliesToPriceIds, reason, trialAmountDiscount, trialPercentageDiscount, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "TrialDiscount{appliesToPriceIds=$appliesToPriceIds, discountType=$discountType, reason=$reason, trialAmountDiscount=$trialAmountDiscount, trialPercentageDiscount=$trialPercentageDiscount, additionalProperties=$additionalProperties}"
+        "TrialDiscount{discountType=$discountType, appliesToPriceIds=$appliesToPriceIds, reason=$reason, trialAmountDiscount=$trialAmountDiscount, trialPercentageDiscount=$trialPercentageDiscount, additionalProperties=$additionalProperties}"
 }

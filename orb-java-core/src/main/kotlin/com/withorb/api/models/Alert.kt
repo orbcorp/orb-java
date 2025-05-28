@@ -39,6 +39,7 @@ private constructor(
     private val subscription: JsonField<Subscription>,
     private val thresholds: JsonField<List<Threshold>>,
     private val type: JsonField<Type>,
+    private val balanceAlertStatus: JsonField<List<BalanceAlertStatus>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -60,6 +61,9 @@ private constructor(
         @ExcludeMissing
         thresholds: JsonField<List<Threshold>> = JsonMissing.of(),
         @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
+        @JsonProperty("balance_alert_status")
+        @ExcludeMissing
+        balanceAlertStatus: JsonField<List<BalanceAlertStatus>> = JsonMissing.of(),
     ) : this(
         id,
         createdAt,
@@ -71,6 +75,7 @@ private constructor(
         subscription,
         thresholds,
         type,
+        balanceAlertStatus,
         mutableMapOf(),
     )
 
@@ -155,6 +160,15 @@ private constructor(
     fun type(): Type = type.getRequired("type")
 
     /**
+     * The current status of the alert. This field is only present for credit balance alerts.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun balanceAlertStatus(): Optional<List<BalanceAlertStatus>> =
+        balanceAlertStatus.getOptional("balance_alert_status")
+
+    /**
      * Returns the raw JSON value of [id].
      *
      * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
@@ -230,6 +244,16 @@ private constructor(
      */
     @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
+    /**
+     * Returns the raw JSON value of [balanceAlertStatus].
+     *
+     * Unlike [balanceAlertStatus], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("balance_alert_status")
+    @ExcludeMissing
+    fun _balanceAlertStatus(): JsonField<List<BalanceAlertStatus>> = balanceAlertStatus
+
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -277,6 +301,7 @@ private constructor(
         private var subscription: JsonField<Subscription>? = null
         private var thresholds: JsonField<MutableList<Threshold>>? = null
         private var type: JsonField<Type>? = null
+        private var balanceAlertStatus: JsonField<MutableList<BalanceAlertStatus>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -291,6 +316,7 @@ private constructor(
             subscription = alert.subscription
             thresholds = alert.thresholds.map { it.toMutableList() }
             type = alert.type
+            balanceAlertStatus = alert.balanceAlertStatus.map { it.toMutableList() }
             additionalProperties = alert.additionalProperties.toMutableMap()
         }
 
@@ -444,6 +470,41 @@ private constructor(
          */
         fun type(type: JsonField<Type>) = apply { this.type = type }
 
+        /**
+         * The current status of the alert. This field is only present for credit balance alerts.
+         */
+        fun balanceAlertStatus(balanceAlertStatus: List<BalanceAlertStatus>?) =
+            balanceAlertStatus(JsonField.ofNullable(balanceAlertStatus))
+
+        /**
+         * Alias for calling [Builder.balanceAlertStatus] with `balanceAlertStatus.orElse(null)`.
+         */
+        fun balanceAlertStatus(balanceAlertStatus: Optional<List<BalanceAlertStatus>>) =
+            balanceAlertStatus(balanceAlertStatus.getOrNull())
+
+        /**
+         * Sets [Builder.balanceAlertStatus] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.balanceAlertStatus] with a well-typed
+         * `List<BalanceAlertStatus>` value instead. This method is primarily for setting the field
+         * to an undocumented or not yet supported value.
+         */
+        fun balanceAlertStatus(balanceAlertStatus: JsonField<List<BalanceAlertStatus>>) = apply {
+            this.balanceAlertStatus = balanceAlertStatus.map { it.toMutableList() }
+        }
+
+        /**
+         * Adds a single [BalanceAlertStatus] to [Builder.balanceAlertStatus].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addBalanceAlertStatus(balanceAlertStatus: BalanceAlertStatus) = apply {
+            this.balanceAlertStatus =
+                (this.balanceAlertStatus ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("balanceAlertStatus", it).add(balanceAlertStatus)
+                }
+        }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -496,6 +557,7 @@ private constructor(
                 checkRequired("subscription", subscription),
                 checkRequired("thresholds", thresholds).map { it.toImmutable() },
                 checkRequired("type", type),
+                (balanceAlertStatus ?: JsonMissing.of()).map { it.toImmutable() },
                 additionalProperties.toMutableMap(),
             )
     }
@@ -517,6 +579,7 @@ private constructor(
         subscription().ifPresent { it.validate() }
         thresholds().ifPresent { it.forEach { it.validate() } }
         type().validate()
+        balanceAlertStatus().ifPresent { it.forEach { it.validate() } }
         validated = true
     }
 
@@ -544,7 +607,8 @@ private constructor(
             (plan.asKnown().getOrNull()?.validity() ?: 0) +
             (subscription.asKnown().getOrNull()?.validity() ?: 0) +
             (thresholds.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
-            (type.asKnown().getOrNull()?.validity() ?: 0)
+            (type.asKnown().getOrNull()?.validity() ?: 0) +
+            (balanceAlertStatus.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
 
     /** The customer the alert applies to. */
     class Customer
@@ -1652,20 +1716,227 @@ private constructor(
         override fun toString() = value.toString()
     }
 
+    /** Alert status is used to determine if an alert is currently in-alert or not. */
+    class BalanceAlertStatus
+    private constructor(
+        private val inAlert: JsonField<Boolean>,
+        private val thresholdValue: JsonField<Double>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("in_alert")
+            @ExcludeMissing
+            inAlert: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("threshold_value")
+            @ExcludeMissing
+            thresholdValue: JsonField<Double> = JsonMissing.of(),
+        ) : this(inAlert, thresholdValue, mutableMapOf())
+
+        /**
+         * Whether the alert is currently in-alert or not.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun inAlert(): Boolean = inAlert.getRequired("in_alert")
+
+        /**
+         * The value of the threshold that defines the alert status.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun thresholdValue(): Double = thresholdValue.getRequired("threshold_value")
+
+        /**
+         * Returns the raw JSON value of [inAlert].
+         *
+         * Unlike [inAlert], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("in_alert") @ExcludeMissing fun _inAlert(): JsonField<Boolean> = inAlert
+
+        /**
+         * Returns the raw JSON value of [thresholdValue].
+         *
+         * Unlike [thresholdValue], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("threshold_value")
+        @ExcludeMissing
+        fun _thresholdValue(): JsonField<Double> = thresholdValue
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [BalanceAlertStatus].
+             *
+             * The following fields are required:
+             * ```java
+             * .inAlert()
+             * .thresholdValue()
+             * ```
+             */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [BalanceAlertStatus]. */
+        class Builder internal constructor() {
+
+            private var inAlert: JsonField<Boolean>? = null
+            private var thresholdValue: JsonField<Double>? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(balanceAlertStatus: BalanceAlertStatus) = apply {
+                inAlert = balanceAlertStatus.inAlert
+                thresholdValue = balanceAlertStatus.thresholdValue
+                additionalProperties = balanceAlertStatus.additionalProperties.toMutableMap()
+            }
+
+            /** Whether the alert is currently in-alert or not. */
+            fun inAlert(inAlert: Boolean) = inAlert(JsonField.of(inAlert))
+
+            /**
+             * Sets [Builder.inAlert] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.inAlert] with a well-typed [Boolean] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun inAlert(inAlert: JsonField<Boolean>) = apply { this.inAlert = inAlert }
+
+            /** The value of the threshold that defines the alert status. */
+            fun thresholdValue(thresholdValue: Double) =
+                thresholdValue(JsonField.of(thresholdValue))
+
+            /**
+             * Sets [Builder.thresholdValue] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.thresholdValue] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun thresholdValue(thresholdValue: JsonField<Double>) = apply {
+                this.thresholdValue = thresholdValue
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [BalanceAlertStatus].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .inAlert()
+             * .thresholdValue()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): BalanceAlertStatus =
+                BalanceAlertStatus(
+                    checkRequired("inAlert", inAlert),
+                    checkRequired("thresholdValue", thresholdValue),
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): BalanceAlertStatus = apply {
+            if (validated) {
+                return@apply
+            }
+
+            inAlert()
+            thresholdValue()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (inAlert.asKnown().isPresent) 1 else 0) +
+                (if (thresholdValue.asKnown().isPresent) 1 else 0)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is BalanceAlertStatus && inAlert == other.inAlert && thresholdValue == other.thresholdValue && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(inAlert, thresholdValue, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "BalanceAlertStatus{inAlert=$inAlert, thresholdValue=$thresholdValue, additionalProperties=$additionalProperties}"
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is Alert && id == other.id && createdAt == other.createdAt && currency == other.currency && customer == other.customer && enabled == other.enabled && metric == other.metric && plan == other.plan && subscription == other.subscription && thresholds == other.thresholds && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Alert && id == other.id && createdAt == other.createdAt && currency == other.currency && customer == other.customer && enabled == other.enabled && metric == other.metric && plan == other.plan && subscription == other.subscription && thresholds == other.thresholds && type == other.type && balanceAlertStatus == other.balanceAlertStatus && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, createdAt, currency, customer, enabled, metric, plan, subscription, thresholds, type, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, createdAt, currency, customer, enabled, metric, plan, subscription, thresholds, type, balanceAlertStatus, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Alert{id=$id, createdAt=$createdAt, currency=$currency, customer=$customer, enabled=$enabled, metric=$metric, plan=$plan, subscription=$subscription, thresholds=$thresholds, type=$type, additionalProperties=$additionalProperties}"
+        "Alert{id=$id, createdAt=$createdAt, currency=$currency, customer=$customer, enabled=$enabled, metric=$metric, plan=$plan, subscription=$subscription, thresholds=$thresholds, type=$type, balanceAlertStatus=$balanceAlertStatus, additionalProperties=$additionalProperties}"
 }

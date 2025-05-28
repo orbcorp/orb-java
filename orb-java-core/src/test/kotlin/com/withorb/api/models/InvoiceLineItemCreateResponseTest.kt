@@ -23,6 +23,21 @@ internal class InvoiceLineItemCreateResponseTest {
                         .id("id")
                         .amount("amount")
                         .addAppliesToPriceId("string")
+                        .addFilter(
+                            InvoiceLineItemCreateResponse.Adjustment.UsageDiscount.Filter.builder()
+                                .field(
+                                    InvoiceLineItemCreateResponse.Adjustment.UsageDiscount.Filter
+                                        .Field
+                                        .PRICE_ID
+                                )
+                                .operator(
+                                    InvoiceLineItemCreateResponse.Adjustment.UsageDiscount.Filter
+                                        .Operator
+                                        .INCLUDES
+                                )
+                                .addValue("string")
+                                .build()
+                        )
                         .isInvoiceLevel(true)
                         .reason("reason")
                         .usageDiscount(0.0)
@@ -32,10 +47,10 @@ internal class InvoiceLineItemCreateResponseTest {
                 .creditsApplied("6.00")
                 .discount(
                     PercentageDiscount.builder()
-                        .addAppliesToPriceId("h74gfhdjvn7ujokd")
-                        .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
                         .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
                         .percentageDiscount(0.15)
+                        .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                        .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
                         .reason("reason")
                         .build()
                 )
@@ -45,6 +60,15 @@ internal class InvoiceLineItemCreateResponseTest {
                 .maximum(
                     InvoiceLineItemCreateResponse.Maximum.builder()
                         .addAppliesToPriceId("string")
+                        .addFilter(
+                            InvoiceLineItemCreateResponse.Maximum.Filter.builder()
+                                .field(InvoiceLineItemCreateResponse.Maximum.Filter.Field.PRICE_ID)
+                                .operator(
+                                    InvoiceLineItemCreateResponse.Maximum.Filter.Operator.INCLUDES
+                                )
+                                .addValue("string")
+                                .build()
+                        )
                         .maximumAmount("maximum_amount")
                         .build()
                 )
@@ -52,6 +76,15 @@ internal class InvoiceLineItemCreateResponseTest {
                 .minimum(
                     InvoiceLineItemCreateResponse.Minimum.builder()
                         .addAppliesToPriceId("string")
+                        .addFilter(
+                            InvoiceLineItemCreateResponse.Minimum.Filter.builder()
+                                .field(InvoiceLineItemCreateResponse.Minimum.Filter.Field.PRICE_ID)
+                                .operator(
+                                    InvoiceLineItemCreateResponse.Minimum.Filter.Operator.INCLUDES
+                                )
+                                .addValue("string")
+                                .build()
+                        )
                         .minimumAmount("minimum_amount")
                         .build()
                 )
@@ -80,10 +113,10 @@ internal class InvoiceLineItemCreateResponseTest {
                         .currency("currency")
                         .discount(
                             PercentageDiscount.builder()
-                                .addAppliesToPriceId("h74gfhdjvn7ujokd")
-                                .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
                                 .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
                                 .percentageDiscount(0.15)
+                                .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                                .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
                                 .reason("reason")
                                 .build()
                         )
@@ -101,6 +134,13 @@ internal class InvoiceLineItemCreateResponseTest {
                         .maximum(
                             Price.Unit.Maximum.builder()
                                 .addAppliesToPriceId("string")
+                                .addFilter(
+                                    Price.Unit.Maximum.Filter.builder()
+                                        .field(Price.Unit.Maximum.Filter.Field.PRICE_ID)
+                                        .operator(Price.Unit.Maximum.Filter.Operator.INCLUDES)
+                                        .addValue("string")
+                                        .build()
+                                )
                                 .maximumAmount("maximum_amount")
                                 .build()
                         )
@@ -113,6 +153,13 @@ internal class InvoiceLineItemCreateResponseTest {
                         .minimum(
                             Price.Unit.Minimum.builder()
                                 .addAppliesToPriceId("string")
+                                .addFilter(
+                                    Price.Unit.Minimum.Filter.builder()
+                                        .field(Price.Unit.Minimum.Filter.Field.PRICE_ID)
+                                        .operator(Price.Unit.Minimum.Filter.Operator.INCLUDES)
+                                        .addValue("string")
+                                        .build()
+                                )
                                 .minimumAmount("minimum_amount")
                                 .build()
                         )
@@ -171,6 +218,21 @@ internal class InvoiceLineItemCreateResponseTest {
                         .id("id")
                         .amount("amount")
                         .addAppliesToPriceId("string")
+                        .addFilter(
+                            InvoiceLineItemCreateResponse.Adjustment.UsageDiscount.Filter.builder()
+                                .field(
+                                    InvoiceLineItemCreateResponse.Adjustment.UsageDiscount.Filter
+                                        .Field
+                                        .PRICE_ID
+                                )
+                                .operator(
+                                    InvoiceLineItemCreateResponse.Adjustment.UsageDiscount.Filter
+                                        .Operator
+                                        .INCLUDES
+                                )
+                                .addValue("string")
+                                .build()
+                        )
                         .isInvoiceLevel(true)
                         .reason("reason")
                         .usageDiscount(0.0)
@@ -183,10 +245,10 @@ internal class InvoiceLineItemCreateResponseTest {
             .contains(
                 Discount.ofPercentage(
                     PercentageDiscount.builder()
-                        .addAppliesToPriceId("h74gfhdjvn7ujokd")
-                        .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
                         .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
                         .percentageDiscount(0.15)
+                        .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                        .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
                         .reason("reason")
                         .build()
                 )
@@ -199,6 +261,15 @@ internal class InvoiceLineItemCreateResponseTest {
             .contains(
                 InvoiceLineItemCreateResponse.Maximum.builder()
                     .addAppliesToPriceId("string")
+                    .addFilter(
+                        InvoiceLineItemCreateResponse.Maximum.Filter.builder()
+                            .field(InvoiceLineItemCreateResponse.Maximum.Filter.Field.PRICE_ID)
+                            .operator(
+                                InvoiceLineItemCreateResponse.Maximum.Filter.Operator.INCLUDES
+                            )
+                            .addValue("string")
+                            .build()
+                    )
                     .maximumAmount("maximum_amount")
                     .build()
             )
@@ -207,6 +278,15 @@ internal class InvoiceLineItemCreateResponseTest {
             .contains(
                 InvoiceLineItemCreateResponse.Minimum.builder()
                     .addAppliesToPriceId("string")
+                    .addFilter(
+                        InvoiceLineItemCreateResponse.Minimum.Filter.builder()
+                            .field(InvoiceLineItemCreateResponse.Minimum.Filter.Field.PRICE_ID)
+                            .operator(
+                                InvoiceLineItemCreateResponse.Minimum.Filter.Operator.INCLUDES
+                            )
+                            .addValue("string")
+                            .build()
+                    )
                     .minimumAmount("minimum_amount")
                     .build()
             )
@@ -237,10 +317,10 @@ internal class InvoiceLineItemCreateResponseTest {
                         .currency("currency")
                         .discount(
                             PercentageDiscount.builder()
-                                .addAppliesToPriceId("h74gfhdjvn7ujokd")
-                                .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
                                 .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
                                 .percentageDiscount(0.15)
+                                .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                                .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
                                 .reason("reason")
                                 .build()
                         )
@@ -258,6 +338,13 @@ internal class InvoiceLineItemCreateResponseTest {
                         .maximum(
                             Price.Unit.Maximum.builder()
                                 .addAppliesToPriceId("string")
+                                .addFilter(
+                                    Price.Unit.Maximum.Filter.builder()
+                                        .field(Price.Unit.Maximum.Filter.Field.PRICE_ID)
+                                        .operator(Price.Unit.Maximum.Filter.Operator.INCLUDES)
+                                        .addValue("string")
+                                        .build()
+                                )
                                 .maximumAmount("maximum_amount")
                                 .build()
                         )
@@ -270,6 +357,13 @@ internal class InvoiceLineItemCreateResponseTest {
                         .minimum(
                             Price.Unit.Minimum.builder()
                                 .addAppliesToPriceId("string")
+                                .addFilter(
+                                    Price.Unit.Minimum.Filter.builder()
+                                        .field(Price.Unit.Minimum.Filter.Field.PRICE_ID)
+                                        .operator(Price.Unit.Minimum.Filter.Operator.INCLUDES)
+                                        .addValue("string")
+                                        .build()
+                                )
                                 .minimumAmount("minimum_amount")
                                 .build()
                         )
@@ -338,6 +432,21 @@ internal class InvoiceLineItemCreateResponseTest {
                         .id("id")
                         .amount("amount")
                         .addAppliesToPriceId("string")
+                        .addFilter(
+                            InvoiceLineItemCreateResponse.Adjustment.UsageDiscount.Filter.builder()
+                                .field(
+                                    InvoiceLineItemCreateResponse.Adjustment.UsageDiscount.Filter
+                                        .Field
+                                        .PRICE_ID
+                                )
+                                .operator(
+                                    InvoiceLineItemCreateResponse.Adjustment.UsageDiscount.Filter
+                                        .Operator
+                                        .INCLUDES
+                                )
+                                .addValue("string")
+                                .build()
+                        )
                         .isInvoiceLevel(true)
                         .reason("reason")
                         .usageDiscount(0.0)
@@ -347,10 +456,10 @@ internal class InvoiceLineItemCreateResponseTest {
                 .creditsApplied("6.00")
                 .discount(
                     PercentageDiscount.builder()
-                        .addAppliesToPriceId("h74gfhdjvn7ujokd")
-                        .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
                         .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
                         .percentageDiscount(0.15)
+                        .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                        .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
                         .reason("reason")
                         .build()
                 )
@@ -360,6 +469,15 @@ internal class InvoiceLineItemCreateResponseTest {
                 .maximum(
                     InvoiceLineItemCreateResponse.Maximum.builder()
                         .addAppliesToPriceId("string")
+                        .addFilter(
+                            InvoiceLineItemCreateResponse.Maximum.Filter.builder()
+                                .field(InvoiceLineItemCreateResponse.Maximum.Filter.Field.PRICE_ID)
+                                .operator(
+                                    InvoiceLineItemCreateResponse.Maximum.Filter.Operator.INCLUDES
+                                )
+                                .addValue("string")
+                                .build()
+                        )
                         .maximumAmount("maximum_amount")
                         .build()
                 )
@@ -367,6 +485,15 @@ internal class InvoiceLineItemCreateResponseTest {
                 .minimum(
                     InvoiceLineItemCreateResponse.Minimum.builder()
                         .addAppliesToPriceId("string")
+                        .addFilter(
+                            InvoiceLineItemCreateResponse.Minimum.Filter.builder()
+                                .field(InvoiceLineItemCreateResponse.Minimum.Filter.Field.PRICE_ID)
+                                .operator(
+                                    InvoiceLineItemCreateResponse.Minimum.Filter.Operator.INCLUDES
+                                )
+                                .addValue("string")
+                                .build()
+                        )
                         .minimumAmount("minimum_amount")
                         .build()
                 )
@@ -395,10 +522,10 @@ internal class InvoiceLineItemCreateResponseTest {
                         .currency("currency")
                         .discount(
                             PercentageDiscount.builder()
-                                .addAppliesToPriceId("h74gfhdjvn7ujokd")
-                                .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
                                 .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
                                 .percentageDiscount(0.15)
+                                .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                                .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
                                 .reason("reason")
                                 .build()
                         )
@@ -416,6 +543,13 @@ internal class InvoiceLineItemCreateResponseTest {
                         .maximum(
                             Price.Unit.Maximum.builder()
                                 .addAppliesToPriceId("string")
+                                .addFilter(
+                                    Price.Unit.Maximum.Filter.builder()
+                                        .field(Price.Unit.Maximum.Filter.Field.PRICE_ID)
+                                        .operator(Price.Unit.Maximum.Filter.Operator.INCLUDES)
+                                        .addValue("string")
+                                        .build()
+                                )
                                 .maximumAmount("maximum_amount")
                                 .build()
                         )
@@ -428,6 +562,13 @@ internal class InvoiceLineItemCreateResponseTest {
                         .minimum(
                             Price.Unit.Minimum.builder()
                                 .addAppliesToPriceId("string")
+                                .addFilter(
+                                    Price.Unit.Minimum.Filter.builder()
+                                        .field(Price.Unit.Minimum.Filter.Field.PRICE_ID)
+                                        .operator(Price.Unit.Minimum.Filter.Operator.INCLUDES)
+                                        .addValue("string")
+                                        .build()
+                                )
                                 .minimumAmount("minimum_amount")
                                 .build()
                         )

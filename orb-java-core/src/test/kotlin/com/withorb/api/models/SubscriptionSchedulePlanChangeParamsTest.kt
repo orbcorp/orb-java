@@ -21,9 +21,9 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                         SubscriptionSchedulePlanChangeParams.AddAdjustment.Adjustment
                             .PercentageDiscount
                             .builder()
+                            .percentageDiscount(0.0)
                             .addAppliesToPriceId("price_1")
                             .addAppliesToPriceId("price_2")
-                            .percentageDiscount(0.0)
                             .isInvoiceLevel(true)
                             .build()
                     )
@@ -93,9 +93,20 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                             )
                             .conversionRate(0.0)
                             .currency("currency")
+                            .dimensionalPriceConfiguration(
+                                SubscriptionSchedulePlanChangeParams.AddPrice.Price.Unit
+                                    .DimensionalPriceConfiguration
+                                    .builder()
+                                    .addDimensionValue("string")
+                                    .dimensionalPriceGroupId("dimensional_price_group_id")
+                                    .externalDimensionalPriceGroupId(
+                                        "external_dimensional_price_group_id"
+                                    )
+                                    .build()
+                            )
                             .externalPriceId("external_price_id")
                             .fixedPriceQuantity(0.0)
-                            .invoiceGroupingKey("invoice_grouping_key")
+                            .invoiceGroupingKey("x")
                             .invoicingCycleConfiguration(
                                 SubscriptionSchedulePlanChangeParams.AddPrice.Price.Unit
                                     .InvoicingCycleConfiguration
@@ -164,9 +175,9 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                         SubscriptionSchedulePlanChangeParams.ReplaceAdjustment.Adjustment
                             .PercentageDiscount
                             .builder()
+                            .percentageDiscount(0.0)
                             .addAppliesToPriceId("price_1")
                             .addAppliesToPriceId("price_2")
-                            .percentageDiscount(0.0)
                             .isInvoiceLevel(true)
                             .build()
                     )
@@ -236,9 +247,20 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                             )
                             .conversionRate(0.0)
                             .currency("currency")
+                            .dimensionalPriceConfiguration(
+                                SubscriptionSchedulePlanChangeParams.ReplacePrice.Price.Unit
+                                    .DimensionalPriceConfiguration
+                                    .builder()
+                                    .addDimensionValue("string")
+                                    .dimensionalPriceGroupId("dimensional_price_group_id")
+                                    .externalDimensionalPriceGroupId(
+                                        "external_dimensional_price_group_id"
+                                    )
+                                    .build()
+                            )
                             .externalPriceId("external_price_id")
                             .fixedPriceQuantity(0.0)
-                            .invoiceGroupingKey("invoice_grouping_key")
+                            .invoiceGroupingKey("x")
                             .invoicingCycleConfiguration(
                                 SubscriptionSchedulePlanChangeParams.ReplacePrice.Price.Unit
                                     .InvoicingCycleConfiguration
@@ -295,9 +317,9 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                             SubscriptionSchedulePlanChangeParams.AddAdjustment.Adjustment
                                 .PercentageDiscount
                                 .builder()
+                                .percentageDiscount(0.0)
                                 .addAppliesToPriceId("price_1")
                                 .addAppliesToPriceId("price_2")
-                                .percentageDiscount(0.0)
                                 .isInvoiceLevel(true)
                                 .build()
                         )
@@ -369,9 +391,20 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                                 )
                                 .conversionRate(0.0)
                                 .currency("currency")
+                                .dimensionalPriceConfiguration(
+                                    SubscriptionSchedulePlanChangeParams.AddPrice.Price.Unit
+                                        .DimensionalPriceConfiguration
+                                        .builder()
+                                        .addDimensionValue("string")
+                                        .dimensionalPriceGroupId("dimensional_price_group_id")
+                                        .externalDimensionalPriceGroupId(
+                                            "external_dimensional_price_group_id"
+                                        )
+                                        .build()
+                                )
                                 .externalPriceId("external_price_id")
                                 .fixedPriceQuantity(0.0)
-                                .invoiceGroupingKey("invoice_grouping_key")
+                                .invoiceGroupingKey("x")
                                 .invoicingCycleConfiguration(
                                     SubscriptionSchedulePlanChangeParams.AddPrice.Price.Unit
                                         .InvoicingCycleConfiguration
@@ -441,9 +474,9 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                             SubscriptionSchedulePlanChangeParams.ReplaceAdjustment.Adjustment
                                 .PercentageDiscount
                                 .builder()
+                                .percentageDiscount(0.0)
                                 .addAppliesToPriceId("price_1")
                                 .addAppliesToPriceId("price_2")
-                                .percentageDiscount(0.0)
                                 .isInvoiceLevel(true)
                                 .build()
                         )
@@ -517,9 +550,20 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                                 )
                                 .conversionRate(0.0)
                                 .currency("currency")
+                                .dimensionalPriceConfiguration(
+                                    SubscriptionSchedulePlanChangeParams.ReplacePrice.Price.Unit
+                                        .DimensionalPriceConfiguration
+                                        .builder()
+                                        .addDimensionValue("string")
+                                        .dimensionalPriceGroupId("dimensional_price_group_id")
+                                        .externalDimensionalPriceGroupId(
+                                            "external_dimensional_price_group_id"
+                                        )
+                                        .build()
+                                )
                                 .externalPriceId("external_price_id")
                                 .fixedPriceQuantity(0.0)
-                                .invoiceGroupingKey("invoice_grouping_key")
+                                .invoiceGroupingKey("x")
                                 .invoicingCycleConfiguration(
                                     SubscriptionSchedulePlanChangeParams.ReplacePrice.Price.Unit
                                         .InvoicingCycleConfiguration
@@ -562,9 +606,9 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                         SubscriptionSchedulePlanChangeParams.AddAdjustment.Adjustment
                             .PercentageDiscount
                             .builder()
+                            .percentageDiscount(0.0)
                             .addAppliesToPriceId("price_1")
                             .addAppliesToPriceId("price_2")
-                            .percentageDiscount(0.0)
                             .isInvoiceLevel(true)
                             .build()
                     )
@@ -635,9 +679,20 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                             )
                             .conversionRate(0.0)
                             .currency("currency")
+                            .dimensionalPriceConfiguration(
+                                SubscriptionSchedulePlanChangeParams.AddPrice.Price.Unit
+                                    .DimensionalPriceConfiguration
+                                    .builder()
+                                    .addDimensionValue("string")
+                                    .dimensionalPriceGroupId("dimensional_price_group_id")
+                                    .externalDimensionalPriceGroupId(
+                                        "external_dimensional_price_group_id"
+                                    )
+                                    .build()
+                            )
                             .externalPriceId("external_price_id")
                             .fixedPriceQuantity(0.0)
-                            .invoiceGroupingKey("invoice_grouping_key")
+                            .invoiceGroupingKey("x")
                             .invoicingCycleConfiguration(
                                 SubscriptionSchedulePlanChangeParams.AddPrice.Price.Unit
                                     .InvoicingCycleConfiguration
@@ -710,9 +765,9 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                         SubscriptionSchedulePlanChangeParams.ReplaceAdjustment.Adjustment
                             .PercentageDiscount
                             .builder()
+                            .percentageDiscount(0.0)
                             .addAppliesToPriceId("price_1")
                             .addAppliesToPriceId("price_2")
-                            .percentageDiscount(0.0)
                             .isInvoiceLevel(true)
                             .build()
                     )
@@ -783,9 +838,20 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                             )
                             .conversionRate(0.0)
                             .currency("currency")
+                            .dimensionalPriceConfiguration(
+                                SubscriptionSchedulePlanChangeParams.ReplacePrice.Price.Unit
+                                    .DimensionalPriceConfiguration
+                                    .builder()
+                                    .addDimensionValue("string")
+                                    .dimensionalPriceGroupId("dimensional_price_group_id")
+                                    .externalDimensionalPriceGroupId(
+                                        "external_dimensional_price_group_id"
+                                    )
+                                    .build()
+                            )
                             .externalPriceId("external_price_id")
                             .fixedPriceQuantity(0.0)
-                            .invoiceGroupingKey("invoice_grouping_key")
+                            .invoiceGroupingKey("x")
                             .invoicingCycleConfiguration(
                                 SubscriptionSchedulePlanChangeParams.ReplacePrice.Price.Unit
                                     .InvoicingCycleConfiguration

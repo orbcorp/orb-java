@@ -6,6 +6,7 @@ import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Item
+import com.withorb.api.models.ItemArchiveParams
 import com.withorb.api.models.ItemCreateParams
 import com.withorb.api.models.ItemFetchParams
 import com.withorb.api.models.ItemListPageAsync
@@ -76,6 +77,36 @@ interface ItemServiceAsync {
     /** @see [list] */
     fun list(requestOptions: RequestOptions): CompletableFuture<ItemListPageAsync> =
         list(ItemListParams.none(), requestOptions)
+
+    /** Archive item */
+    fun archive(itemId: String): CompletableFuture<Item> = archive(itemId, ItemArchiveParams.none())
+
+    /** @see [archive] */
+    fun archive(
+        itemId: String,
+        params: ItemArchiveParams = ItemArchiveParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Item> = archive(params.toBuilder().itemId(itemId).build(), requestOptions)
+
+    /** @see [archive] */
+    fun archive(
+        itemId: String,
+        params: ItemArchiveParams = ItemArchiveParams.none(),
+    ): CompletableFuture<Item> = archive(itemId, params, RequestOptions.none())
+
+    /** @see [archive] */
+    fun archive(
+        params: ItemArchiveParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Item>
+
+    /** @see [archive] */
+    fun archive(params: ItemArchiveParams): CompletableFuture<Item> =
+        archive(params, RequestOptions.none())
+
+    /** @see [archive] */
+    fun archive(itemId: String, requestOptions: RequestOptions): CompletableFuture<Item> =
+        archive(itemId, ItemArchiveParams.none(), requestOptions)
 
     /** This endpoint returns an item identified by its item_id. */
     fun fetch(itemId: String): CompletableFuture<Item> = fetch(itemId, ItemFetchParams.none())
@@ -197,6 +228,50 @@ interface ItemServiceAsync {
             requestOptions: RequestOptions
         ): CompletableFuture<HttpResponseFor<ItemListPageAsync>> =
             list(ItemListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /items/{item_id}/archive`, but is otherwise the
+         * same as [ItemServiceAsync.archive].
+         */
+        @MustBeClosed
+        fun archive(itemId: String): CompletableFuture<HttpResponseFor<Item>> =
+            archive(itemId, ItemArchiveParams.none())
+
+        /** @see [archive] */
+        @MustBeClosed
+        fun archive(
+            itemId: String,
+            params: ItemArchiveParams = ItemArchiveParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Item>> =
+            archive(params.toBuilder().itemId(itemId).build(), requestOptions)
+
+        /** @see [archive] */
+        @MustBeClosed
+        fun archive(
+            itemId: String,
+            params: ItemArchiveParams = ItemArchiveParams.none(),
+        ): CompletableFuture<HttpResponseFor<Item>> = archive(itemId, params, RequestOptions.none())
+
+        /** @see [archive] */
+        @MustBeClosed
+        fun archive(
+            params: ItemArchiveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Item>>
+
+        /** @see [archive] */
+        @MustBeClosed
+        fun archive(params: ItemArchiveParams): CompletableFuture<HttpResponseFor<Item>> =
+            archive(params, RequestOptions.none())
+
+        /** @see [archive] */
+        @MustBeClosed
+        fun archive(
+            itemId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Item>> =
+            archive(itemId, ItemArchiveParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /items/{item_id}`, but is otherwise the same as

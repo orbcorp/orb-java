@@ -2,6 +2,7 @@
 
 package com.withorb.api.models
 
+import com.withorb.api.core.JsonValue
 import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -18,6 +19,11 @@ internal class ItemUpdateParamsTest {
                         ItemUpdateParams.ExternalConnection.ExternalConnectionName.STRIPE
                     )
                     .externalEntityId("external_entity_id")
+                    .build()
+            )
+            .metadata(
+                ItemUpdateParams.Metadata.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
             .name("name")
@@ -46,6 +52,11 @@ internal class ItemUpdateParamsTest {
                         .externalEntityId("external_entity_id")
                         .build()
                 )
+                .metadata(
+                    ItemUpdateParams.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .name("name")
                 .build()
 
@@ -58,6 +69,12 @@ internal class ItemUpdateParamsTest {
                         ItemUpdateParams.ExternalConnection.ExternalConnectionName.STRIPE
                     )
                     .externalEntityId("external_entity_id")
+                    .build()
+            )
+        assertThat(body.metadata())
+            .contains(
+                ItemUpdateParams.Metadata.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
         assertThat(body.name()).contains("name")

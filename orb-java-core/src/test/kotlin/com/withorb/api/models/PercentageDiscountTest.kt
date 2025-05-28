@@ -4,6 +4,7 @@ package com.withorb.api.models
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.withorb.api.core.jsonMapper
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -13,18 +14,18 @@ internal class PercentageDiscountTest {
     fun create() {
         val percentageDiscount =
             PercentageDiscount.builder()
-                .addAppliesToPriceId("h74gfhdjvn7ujokd")
-                .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
                 .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
                 .percentageDiscount(0.15)
+                .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
                 .reason("reason")
                 .build()
 
-        assertThat(percentageDiscount.appliesToPriceIds())
-            .containsExactly("h74gfhdjvn7ujokd", "7hfgtgjnbvc3ujkl")
         assertThat(percentageDiscount.discountType())
             .isEqualTo(PercentageDiscount.DiscountType.PERCENTAGE)
         assertThat(percentageDiscount.percentageDiscount()).isEqualTo(0.15)
+        assertThat(percentageDiscount.appliesToPriceIds().getOrNull())
+            .containsExactly("h74gfhdjvn7ujokd", "7hfgtgjnbvc3ujkl")
         assertThat(percentageDiscount.reason()).contains("reason")
     }
 
@@ -33,10 +34,10 @@ internal class PercentageDiscountTest {
         val jsonMapper = jsonMapper()
         val percentageDiscount =
             PercentageDiscount.builder()
-                .addAppliesToPriceId("h74gfhdjvn7ujokd")
-                .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
                 .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
                 .percentageDiscount(0.15)
+                .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
                 .reason("reason")
                 .build()
 

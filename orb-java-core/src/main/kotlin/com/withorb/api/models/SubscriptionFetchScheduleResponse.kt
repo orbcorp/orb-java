@@ -54,10 +54,10 @@ private constructor(
     fun endDate(): Optional<OffsetDateTime> = endDate.getOptional("end_date")
 
     /**
-     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
-     *   missing or null (e.g. if the server responded with an unexpected value).
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
      */
-    fun plan(): Plan = plan.getRequired("plan")
+    fun plan(): Optional<Plan> = plan.getOptional("plan")
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -171,7 +171,10 @@ private constructor(
          */
         fun endDate(endDate: JsonField<OffsetDateTime>) = apply { this.endDate = endDate }
 
-        fun plan(plan: Plan) = plan(JsonField.of(plan))
+        fun plan(plan: Plan?) = plan(JsonField.ofNullable(plan))
+
+        /** Alias for calling [Builder.plan] with `plan.orElse(null)`. */
+        fun plan(plan: Optional<Plan>) = plan(plan.getOrNull())
 
         /**
          * Sets [Builder.plan] to an arbitrary JSON value.
@@ -245,7 +248,7 @@ private constructor(
 
         createdAt()
         endDate()
-        plan().validate()
+        plan().ifPresent { it.validate() }
         startDate()
         validated = true
     }

@@ -17,6 +17,7 @@ import com.withorb.api.core.http.json
 import com.withorb.api.core.http.parseable
 import com.withorb.api.core.prepareAsync
 import com.withorb.api.models.Item
+import com.withorb.api.models.ItemArchiveParams
 import com.withorb.api.models.ItemCreateParams
 import com.withorb.api.models.ItemFetchParams
 import com.withorb.api.models.ItemListPageAsync
@@ -55,6 +56,13 @@ class ItemServiceAsyncImpl internal constructor(private val clientOptions: Clien
     ): CompletableFuture<ItemListPageAsync> =
         // get /items
         withRawResponse().list(params, requestOptions).thenApply { it.parse() }
+
+    override fun archive(
+        params: ItemArchiveParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Item> =
+        // post /items/{item_id}/archive
+        withRawResponse().archive(params, requestOptions).thenApply { it.parse() }
 
     override fun fetch(
         params: ItemFetchParams,
@@ -164,6 +172,39 @@ class ItemServiceAsyncImpl internal constructor(private val clientOptions: Clien
                                     .params(params)
                                     .response(it)
                                     .build()
+                            }
+                    }
+                }
+        }
+
+        private val archiveHandler: Handler<Item> =
+            jsonHandler<Item>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
+        override fun archive(
+            params: ItemArchiveParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Item>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("itemId", params.itemId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments("items", params._pathParam(0), "archive")
+                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { archiveHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
                             }
                     }
                 }
