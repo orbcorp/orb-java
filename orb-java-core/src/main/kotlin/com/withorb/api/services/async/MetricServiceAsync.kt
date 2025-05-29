@@ -2,7 +2,6 @@
 
 package com.withorb.api.services.async
 
-import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.BillableMetric
@@ -138,12 +137,10 @@ interface MetricServiceAsync {
          * Returns a raw HTTP response for `post /metrics`, but is otherwise the same as
          * [MetricServiceAsync.create].
          */
-        @MustBeClosed
         fun create(params: MetricCreateParams): CompletableFuture<HttpResponseFor<BillableMetric>> =
             create(params, RequestOptions.none())
 
         /** @see [create] */
-        @MustBeClosed
         fun create(
             params: MetricCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -153,12 +150,10 @@ interface MetricServiceAsync {
          * Returns a raw HTTP response for `put /metrics/{metric_id}`, but is otherwise the same as
          * [MetricServiceAsync.update].
          */
-        @MustBeClosed
         fun update(metricId: String): CompletableFuture<HttpResponseFor<BillableMetric>> =
             update(metricId, MetricUpdateParams.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             metricId: String,
             params: MetricUpdateParams = MetricUpdateParams.none(),
@@ -167,7 +162,6 @@ interface MetricServiceAsync {
             update(params.toBuilder().metricId(metricId).build(), requestOptions)
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             metricId: String,
             params: MetricUpdateParams = MetricUpdateParams.none(),
@@ -175,19 +169,16 @@ interface MetricServiceAsync {
             update(metricId, params, RequestOptions.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             params: MetricUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<BillableMetric>>
 
         /** @see [update] */
-        @MustBeClosed
         fun update(params: MetricUpdateParams): CompletableFuture<HttpResponseFor<BillableMetric>> =
             update(params, RequestOptions.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             metricId: String,
             requestOptions: RequestOptions,
@@ -198,26 +189,22 @@ interface MetricServiceAsync {
          * Returns a raw HTTP response for `get /metrics`, but is otherwise the same as
          * [MetricServiceAsync.list].
          */
-        @MustBeClosed
         fun list(): CompletableFuture<HttpResponseFor<MetricListPageAsync>> =
             list(MetricListParams.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: MetricListParams = MetricListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<MetricListPageAsync>>
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: MetricListParams = MetricListParams.none()
         ): CompletableFuture<HttpResponseFor<MetricListPageAsync>> =
             list(params, RequestOptions.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             requestOptions: RequestOptions
         ): CompletableFuture<HttpResponseFor<MetricListPageAsync>> =
@@ -227,12 +214,10 @@ interface MetricServiceAsync {
          * Returns a raw HTTP response for `get /metrics/{metric_id}`, but is otherwise the same as
          * [MetricServiceAsync.fetch].
          */
-        @MustBeClosed
         fun fetch(metricId: String): CompletableFuture<HttpResponseFor<BillableMetric>> =
             fetch(metricId, MetricFetchParams.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             metricId: String,
             params: MetricFetchParams = MetricFetchParams.none(),
@@ -241,7 +226,6 @@ interface MetricServiceAsync {
             fetch(params.toBuilder().metricId(metricId).build(), requestOptions)
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             metricId: String,
             params: MetricFetchParams = MetricFetchParams.none(),
@@ -249,19 +233,16 @@ interface MetricServiceAsync {
             fetch(metricId, params, RequestOptions.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             params: MetricFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<BillableMetric>>
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(params: MetricFetchParams): CompletableFuture<HttpResponseFor<BillableMetric>> =
             fetch(params, RequestOptions.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             metricId: String,
             requestOptions: RequestOptions,

@@ -2,7 +2,6 @@
 
 package com.withorb.api.services.async
 
-import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Plan
@@ -146,12 +145,10 @@ interface PlanServiceAsync {
          * Returns a raw HTTP response for `post /plans`, but is otherwise the same as
          * [PlanServiceAsync.create].
          */
-        @MustBeClosed
         fun create(params: PlanCreateParams): CompletableFuture<HttpResponseFor<Plan>> =
             create(params, RequestOptions.none())
 
         /** @see [create] */
-        @MustBeClosed
         fun create(
             params: PlanCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -161,12 +158,10 @@ interface PlanServiceAsync {
          * Returns a raw HTTP response for `put /plans/{plan_id}`, but is otherwise the same as
          * [PlanServiceAsync.update].
          */
-        @MustBeClosed
         fun update(planId: String): CompletableFuture<HttpResponseFor<Plan>> =
             update(planId, PlanUpdateParams.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             planId: String,
             params: PlanUpdateParams = PlanUpdateParams.none(),
@@ -175,26 +170,22 @@ interface PlanServiceAsync {
             update(params.toBuilder().planId(planId).build(), requestOptions)
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             planId: String,
             params: PlanUpdateParams = PlanUpdateParams.none(),
         ): CompletableFuture<HttpResponseFor<Plan>> = update(planId, params, RequestOptions.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             params: PlanUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Plan>>
 
         /** @see [update] */
-        @MustBeClosed
         fun update(params: PlanUpdateParams): CompletableFuture<HttpResponseFor<Plan>> =
             update(params, RequestOptions.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             planId: String,
             requestOptions: RequestOptions,
@@ -205,26 +196,22 @@ interface PlanServiceAsync {
          * Returns a raw HTTP response for `get /plans`, but is otherwise the same as
          * [PlanServiceAsync.list].
          */
-        @MustBeClosed
         fun list(): CompletableFuture<HttpResponseFor<PlanListPageAsync>> =
             list(PlanListParams.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: PlanListParams = PlanListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<PlanListPageAsync>>
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: PlanListParams = PlanListParams.none()
         ): CompletableFuture<HttpResponseFor<PlanListPageAsync>> =
             list(params, RequestOptions.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             requestOptions: RequestOptions
         ): CompletableFuture<HttpResponseFor<PlanListPageAsync>> =
@@ -234,12 +221,10 @@ interface PlanServiceAsync {
          * Returns a raw HTTP response for `get /plans/{plan_id}`, but is otherwise the same as
          * [PlanServiceAsync.fetch].
          */
-        @MustBeClosed
         fun fetch(planId: String): CompletableFuture<HttpResponseFor<Plan>> =
             fetch(planId, PlanFetchParams.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             planId: String,
             params: PlanFetchParams = PlanFetchParams.none(),
@@ -248,26 +233,22 @@ interface PlanServiceAsync {
             fetch(params.toBuilder().planId(planId).build(), requestOptions)
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             planId: String,
             params: PlanFetchParams = PlanFetchParams.none(),
         ): CompletableFuture<HttpResponseFor<Plan>> = fetch(planId, params, RequestOptions.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             params: PlanFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Plan>>
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(params: PlanFetchParams): CompletableFuture<HttpResponseFor<Plan>> =
             fetch(params, RequestOptions.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             planId: String,
             requestOptions: RequestOptions,

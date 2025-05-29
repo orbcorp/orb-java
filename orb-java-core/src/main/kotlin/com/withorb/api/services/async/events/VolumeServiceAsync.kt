@@ -2,7 +2,6 @@
 
 package com.withorb.api.services.async.events
 
-import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.EventVolumeListParams
@@ -47,12 +46,10 @@ interface VolumeServiceAsync {
          * Returns a raw HTTP response for `get /events/volume`, but is otherwise the same as
          * [VolumeServiceAsync.list].
          */
-        @MustBeClosed
         fun list(params: EventVolumeListParams): CompletableFuture<HttpResponseFor<EventVolumes>> =
             list(params, RequestOptions.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: EventVolumeListParams,
             requestOptions: RequestOptions = RequestOptions.none(),

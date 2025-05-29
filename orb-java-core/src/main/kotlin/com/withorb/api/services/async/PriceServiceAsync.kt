@@ -2,7 +2,6 @@
 
 package com.withorb.api.services.async
 
-import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Price
@@ -224,12 +223,10 @@ interface PriceServiceAsync {
          * Returns a raw HTTP response for `post /prices`, but is otherwise the same as
          * [PriceServiceAsync.create].
          */
-        @MustBeClosed
         fun create(params: PriceCreateParams): CompletableFuture<HttpResponseFor<Price>> =
             create(params, RequestOptions.none())
 
         /** @see [create] */
-        @MustBeClosed
         fun create(
             params: PriceCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -239,12 +236,10 @@ interface PriceServiceAsync {
          * Returns a raw HTTP response for `put /prices/{price_id}`, but is otherwise the same as
          * [PriceServiceAsync.update].
          */
-        @MustBeClosed
         fun update(priceId: String): CompletableFuture<HttpResponseFor<Price>> =
             update(priceId, PriceUpdateParams.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             priceId: String,
             params: PriceUpdateParams = PriceUpdateParams.none(),
@@ -253,7 +248,6 @@ interface PriceServiceAsync {
             update(params.toBuilder().priceId(priceId).build(), requestOptions)
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             priceId: String,
             params: PriceUpdateParams = PriceUpdateParams.none(),
@@ -261,19 +255,16 @@ interface PriceServiceAsync {
             update(priceId, params, RequestOptions.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             params: PriceUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Price>>
 
         /** @see [update] */
-        @MustBeClosed
         fun update(params: PriceUpdateParams): CompletableFuture<HttpResponseFor<Price>> =
             update(params, RequestOptions.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             priceId: String,
             requestOptions: RequestOptions,
@@ -284,26 +275,22 @@ interface PriceServiceAsync {
          * Returns a raw HTTP response for `get /prices`, but is otherwise the same as
          * [PriceServiceAsync.list].
          */
-        @MustBeClosed
         fun list(): CompletableFuture<HttpResponseFor<PriceListPageAsync>> =
             list(PriceListParams.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: PriceListParams = PriceListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<PriceListPageAsync>>
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: PriceListParams = PriceListParams.none()
         ): CompletableFuture<HttpResponseFor<PriceListPageAsync>> =
             list(params, RequestOptions.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             requestOptions: RequestOptions
         ): CompletableFuture<HttpResponseFor<PriceListPageAsync>> =
@@ -313,7 +300,6 @@ interface PriceServiceAsync {
          * Returns a raw HTTP response for `post /prices/{price_id}/evaluate`, but is otherwise the
          * same as [PriceServiceAsync.evaluate].
          */
-        @MustBeClosed
         fun evaluate(
             priceId: String,
             params: PriceEvaluateParams,
@@ -321,7 +307,6 @@ interface PriceServiceAsync {
             evaluate(priceId, params, RequestOptions.none())
 
         /** @see [evaluate] */
-        @MustBeClosed
         fun evaluate(
             priceId: String,
             params: PriceEvaluateParams,
@@ -330,14 +315,12 @@ interface PriceServiceAsync {
             evaluate(params.toBuilder().priceId(priceId).build(), requestOptions)
 
         /** @see [evaluate] */
-        @MustBeClosed
         fun evaluate(
             params: PriceEvaluateParams
         ): CompletableFuture<HttpResponseFor<PriceEvaluateResponse>> =
             evaluate(params, RequestOptions.none())
 
         /** @see [evaluate] */
-        @MustBeClosed
         fun evaluate(
             params: PriceEvaluateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -347,14 +330,12 @@ interface PriceServiceAsync {
          * Returns a raw HTTP response for `post /prices/evaluate`, but is otherwise the same as
          * [PriceServiceAsync.evaluateMultiple].
          */
-        @MustBeClosed
         fun evaluateMultiple(
             params: PriceEvaluateMultipleParams
         ): CompletableFuture<HttpResponseFor<PriceEvaluateMultipleResponse>> =
             evaluateMultiple(params, RequestOptions.none())
 
         /** @see [evaluateMultiple] */
-        @MustBeClosed
         fun evaluateMultiple(
             params: PriceEvaluateMultipleParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -364,12 +345,10 @@ interface PriceServiceAsync {
          * Returns a raw HTTP response for `get /prices/{price_id}`, but is otherwise the same as
          * [PriceServiceAsync.fetch].
          */
-        @MustBeClosed
         fun fetch(priceId: String): CompletableFuture<HttpResponseFor<Price>> =
             fetch(priceId, PriceFetchParams.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             priceId: String,
             params: PriceFetchParams = PriceFetchParams.none(),
@@ -378,26 +357,22 @@ interface PriceServiceAsync {
             fetch(params.toBuilder().priceId(priceId).build(), requestOptions)
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             priceId: String,
             params: PriceFetchParams = PriceFetchParams.none(),
         ): CompletableFuture<HttpResponseFor<Price>> = fetch(priceId, params, RequestOptions.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             params: PriceFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Price>>
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(params: PriceFetchParams): CompletableFuture<HttpResponseFor<Price>> =
             fetch(params, RequestOptions.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             priceId: String,
             requestOptions: RequestOptions,

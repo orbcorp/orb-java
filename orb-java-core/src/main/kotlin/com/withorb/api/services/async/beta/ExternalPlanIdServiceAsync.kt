@@ -2,7 +2,6 @@
 
 package com.withorb.api.services.async.beta
 
-import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.BetaExternalPlanIdCreatePlanVersionParams
@@ -126,7 +125,6 @@ interface ExternalPlanIdServiceAsync {
          * /plans/external_plan_id/{external_plan_id}/versions`, but is otherwise the same as
          * [ExternalPlanIdServiceAsync.createPlanVersion].
          */
-        @MustBeClosed
         fun createPlanVersion(
             externalPlanId: String,
             params: BetaExternalPlanIdCreatePlanVersionParams,
@@ -134,7 +132,6 @@ interface ExternalPlanIdServiceAsync {
             createPlanVersion(externalPlanId, params, RequestOptions.none())
 
         /** @see [createPlanVersion] */
-        @MustBeClosed
         fun createPlanVersion(
             externalPlanId: String,
             params: BetaExternalPlanIdCreatePlanVersionParams,
@@ -146,14 +143,12 @@ interface ExternalPlanIdServiceAsync {
             )
 
         /** @see [createPlanVersion] */
-        @MustBeClosed
         fun createPlanVersion(
             params: BetaExternalPlanIdCreatePlanVersionParams
         ): CompletableFuture<HttpResponseFor<PlanVersion>> =
             createPlanVersion(params, RequestOptions.none())
 
         /** @see [createPlanVersion] */
-        @MustBeClosed
         fun createPlanVersion(
             params: BetaExternalPlanIdCreatePlanVersionParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -164,7 +159,6 @@ interface ExternalPlanIdServiceAsync {
          * /plans/external_plan_id/{external_plan_id}/versions/{version}`, but is otherwise the same
          * as [ExternalPlanIdServiceAsync.fetchPlanVersion].
          */
-        @MustBeClosed
         fun fetchPlanVersion(
             version: String,
             params: BetaExternalPlanIdFetchPlanVersionParams,
@@ -172,7 +166,6 @@ interface ExternalPlanIdServiceAsync {
             fetchPlanVersion(version, params, RequestOptions.none())
 
         /** @see [fetchPlanVersion] */
-        @MustBeClosed
         fun fetchPlanVersion(
             version: String,
             params: BetaExternalPlanIdFetchPlanVersionParams,
@@ -181,14 +174,12 @@ interface ExternalPlanIdServiceAsync {
             fetchPlanVersion(params.toBuilder().version(version).build(), requestOptions)
 
         /** @see [fetchPlanVersion] */
-        @MustBeClosed
         fun fetchPlanVersion(
             params: BetaExternalPlanIdFetchPlanVersionParams
         ): CompletableFuture<HttpResponseFor<PlanVersion>> =
             fetchPlanVersion(params, RequestOptions.none())
 
         /** @see [fetchPlanVersion] */
-        @MustBeClosed
         fun fetchPlanVersion(
             params: BetaExternalPlanIdFetchPlanVersionParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -199,7 +190,6 @@ interface ExternalPlanIdServiceAsync {
          * /plans/external_plan_id/{external_plan_id}/set_default_version`, but is otherwise the
          * same as [ExternalPlanIdServiceAsync.setDefaultPlanVersion].
          */
-        @MustBeClosed
         fun setDefaultPlanVersion(
             externalPlanId: String,
             params: BetaExternalPlanIdSetDefaultPlanVersionParams,
@@ -207,7 +197,6 @@ interface ExternalPlanIdServiceAsync {
             setDefaultPlanVersion(externalPlanId, params, RequestOptions.none())
 
         /** @see [setDefaultPlanVersion] */
-        @MustBeClosed
         fun setDefaultPlanVersion(
             externalPlanId: String,
             params: BetaExternalPlanIdSetDefaultPlanVersionParams,
@@ -219,14 +208,12 @@ interface ExternalPlanIdServiceAsync {
             )
 
         /** @see [setDefaultPlanVersion] */
-        @MustBeClosed
         fun setDefaultPlanVersion(
             params: BetaExternalPlanIdSetDefaultPlanVersionParams
         ): CompletableFuture<HttpResponseFor<Plan>> =
             setDefaultPlanVersion(params, RequestOptions.none())
 
         /** @see [setDefaultPlanVersion] */
-        @MustBeClosed
         fun setDefaultPlanVersion(
             params: BetaExternalPlanIdSetDefaultPlanVersionParams,
             requestOptions: RequestOptions = RequestOptions.none(),

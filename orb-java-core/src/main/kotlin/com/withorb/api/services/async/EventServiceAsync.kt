@@ -2,7 +2,6 @@
 
 package com.withorb.api.services.async
 
-import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.EventDeprecateParams
@@ -396,7 +395,6 @@ interface EventServiceAsync {
          * Returns a raw HTTP response for `put /events/{event_id}`, but is otherwise the same as
          * [EventServiceAsync.update].
          */
-        @MustBeClosed
         fun update(
             eventId: String,
             params: EventUpdateParams,
@@ -404,7 +402,6 @@ interface EventServiceAsync {
             update(eventId, params, RequestOptions.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             eventId: String,
             params: EventUpdateParams,
@@ -413,14 +410,12 @@ interface EventServiceAsync {
             update(params.toBuilder().eventId(eventId).build(), requestOptions)
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             params: EventUpdateParams
         ): CompletableFuture<HttpResponseFor<EventUpdateResponse>> =
             update(params, RequestOptions.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             params: EventUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -430,12 +425,10 @@ interface EventServiceAsync {
          * Returns a raw HTTP response for `put /events/{event_id}/deprecate`, but is otherwise the
          * same as [EventServiceAsync.deprecate].
          */
-        @MustBeClosed
         fun deprecate(eventId: String): CompletableFuture<HttpResponseFor<EventDeprecateResponse>> =
             deprecate(eventId, EventDeprecateParams.none())
 
         /** @see [deprecate] */
-        @MustBeClosed
         fun deprecate(
             eventId: String,
             params: EventDeprecateParams = EventDeprecateParams.none(),
@@ -444,7 +437,6 @@ interface EventServiceAsync {
             deprecate(params.toBuilder().eventId(eventId).build(), requestOptions)
 
         /** @see [deprecate] */
-        @MustBeClosed
         fun deprecate(
             eventId: String,
             params: EventDeprecateParams = EventDeprecateParams.none(),
@@ -452,21 +444,18 @@ interface EventServiceAsync {
             deprecate(eventId, params, RequestOptions.none())
 
         /** @see [deprecate] */
-        @MustBeClosed
         fun deprecate(
             params: EventDeprecateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<EventDeprecateResponse>>
 
         /** @see [deprecate] */
-        @MustBeClosed
         fun deprecate(
             params: EventDeprecateParams
         ): CompletableFuture<HttpResponseFor<EventDeprecateResponse>> =
             deprecate(params, RequestOptions.none())
 
         /** @see [deprecate] */
-        @MustBeClosed
         fun deprecate(
             eventId: String,
             requestOptions: RequestOptions,
@@ -477,14 +466,12 @@ interface EventServiceAsync {
          * Returns a raw HTTP response for `post /ingest`, but is otherwise the same as
          * [EventServiceAsync.ingest].
          */
-        @MustBeClosed
         fun ingest(
             params: EventIngestParams
         ): CompletableFuture<HttpResponseFor<EventIngestResponse>> =
             ingest(params, RequestOptions.none())
 
         /** @see [ingest] */
-        @MustBeClosed
         fun ingest(
             params: EventIngestParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -494,14 +481,12 @@ interface EventServiceAsync {
          * Returns a raw HTTP response for `post /events/search`, but is otherwise the same as
          * [EventServiceAsync.search].
          */
-        @MustBeClosed
         fun search(
             params: EventSearchParams
         ): CompletableFuture<HttpResponseFor<EventSearchResponse>> =
             search(params, RequestOptions.none())
 
         /** @see [search] */
-        @MustBeClosed
         fun search(
             params: EventSearchParams,
             requestOptions: RequestOptions = RequestOptions.none(),

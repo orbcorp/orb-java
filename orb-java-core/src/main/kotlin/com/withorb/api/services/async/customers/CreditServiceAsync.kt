@@ -2,7 +2,6 @@
 
 package com.withorb.api.services.async.customers
 
-import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.CustomerCreditListByExternalIdPageAsync
@@ -136,14 +135,12 @@ interface CreditServiceAsync {
          * Returns a raw HTTP response for `get /customers/{customer_id}/credits`, but is otherwise
          * the same as [CreditServiceAsync.list].
          */
-        @MustBeClosed
         fun list(
             customerId: String
         ): CompletableFuture<HttpResponseFor<CustomerCreditListPageAsync>> =
             list(customerId, CustomerCreditListParams.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             customerId: String,
             params: CustomerCreditListParams = CustomerCreditListParams.none(),
@@ -152,7 +149,6 @@ interface CreditServiceAsync {
             list(params.toBuilder().customerId(customerId).build(), requestOptions)
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             customerId: String,
             params: CustomerCreditListParams = CustomerCreditListParams.none(),
@@ -160,21 +156,18 @@ interface CreditServiceAsync {
             list(customerId, params, RequestOptions.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: CustomerCreditListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<CustomerCreditListPageAsync>>
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: CustomerCreditListParams
         ): CompletableFuture<HttpResponseFor<CustomerCreditListPageAsync>> =
             list(params, RequestOptions.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             customerId: String,
             requestOptions: RequestOptions,
@@ -186,14 +179,12 @@ interface CreditServiceAsync {
          * /customers/external_customer_id/{external_customer_id}/credits`, but is otherwise the
          * same as [CreditServiceAsync.listByExternalId].
          */
-        @MustBeClosed
         fun listByExternalId(
             externalCustomerId: String
         ): CompletableFuture<HttpResponseFor<CustomerCreditListByExternalIdPageAsync>> =
             listByExternalId(externalCustomerId, CustomerCreditListByExternalIdParams.none())
 
         /** @see [listByExternalId] */
-        @MustBeClosed
         fun listByExternalId(
             externalCustomerId: String,
             params: CustomerCreditListByExternalIdParams =
@@ -206,7 +197,6 @@ interface CreditServiceAsync {
             )
 
         /** @see [listByExternalId] */
-        @MustBeClosed
         fun listByExternalId(
             externalCustomerId: String,
             params: CustomerCreditListByExternalIdParams =
@@ -215,21 +205,18 @@ interface CreditServiceAsync {
             listByExternalId(externalCustomerId, params, RequestOptions.none())
 
         /** @see [listByExternalId] */
-        @MustBeClosed
         fun listByExternalId(
             params: CustomerCreditListByExternalIdParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<CustomerCreditListByExternalIdPageAsync>>
 
         /** @see [listByExternalId] */
-        @MustBeClosed
         fun listByExternalId(
             params: CustomerCreditListByExternalIdParams
         ): CompletableFuture<HttpResponseFor<CustomerCreditListByExternalIdPageAsync>> =
             listByExternalId(params, RequestOptions.none())
 
         /** @see [listByExternalId] */
-        @MustBeClosed
         fun listByExternalId(
             externalCustomerId: String,
             requestOptions: RequestOptions,

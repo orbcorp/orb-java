@@ -2,7 +2,6 @@
 
 package com.withorb.api.services.async
 
-import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponse
 import com.withorb.api.core.http.HttpResponseFor
@@ -421,12 +420,10 @@ interface CustomerServiceAsync {
          * Returns a raw HTTP response for `post /customers`, but is otherwise the same as
          * [CustomerServiceAsync.create].
          */
-        @MustBeClosed
         fun create(params: CustomerCreateParams): CompletableFuture<HttpResponseFor<Customer>> =
             create(params, RequestOptions.none())
 
         /** @see [create] */
-        @MustBeClosed
         fun create(
             params: CustomerCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -436,12 +433,10 @@ interface CustomerServiceAsync {
          * Returns a raw HTTP response for `put /customers/{customer_id}`, but is otherwise the same
          * as [CustomerServiceAsync.update].
          */
-        @MustBeClosed
         fun update(customerId: String): CompletableFuture<HttpResponseFor<Customer>> =
             update(customerId, CustomerUpdateParams.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             customerId: String,
             params: CustomerUpdateParams = CustomerUpdateParams.none(),
@@ -450,7 +445,6 @@ interface CustomerServiceAsync {
             update(params.toBuilder().customerId(customerId).build(), requestOptions)
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             customerId: String,
             params: CustomerUpdateParams = CustomerUpdateParams.none(),
@@ -458,19 +452,16 @@ interface CustomerServiceAsync {
             update(customerId, params, RequestOptions.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             params: CustomerUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Customer>>
 
         /** @see [update] */
-        @MustBeClosed
         fun update(params: CustomerUpdateParams): CompletableFuture<HttpResponseFor<Customer>> =
             update(params, RequestOptions.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             customerId: String,
             requestOptions: RequestOptions,
@@ -481,26 +472,22 @@ interface CustomerServiceAsync {
          * Returns a raw HTTP response for `get /customers`, but is otherwise the same as
          * [CustomerServiceAsync.list].
          */
-        @MustBeClosed
         fun list(): CompletableFuture<HttpResponseFor<CustomerListPageAsync>> =
             list(CustomerListParams.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: CustomerListParams = CustomerListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<CustomerListPageAsync>>
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: CustomerListParams = CustomerListParams.none()
         ): CompletableFuture<HttpResponseFor<CustomerListPageAsync>> =
             list(params, RequestOptions.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             requestOptions: RequestOptions
         ): CompletableFuture<HttpResponseFor<CustomerListPageAsync>> =
@@ -510,12 +497,10 @@ interface CustomerServiceAsync {
          * Returns a raw HTTP response for `delete /customers/{customer_id}`, but is otherwise the
          * same as [CustomerServiceAsync.delete].
          */
-        @MustBeClosed
         fun delete(customerId: String): CompletableFuture<HttpResponse> =
             delete(customerId, CustomerDeleteParams.none())
 
         /** @see [delete] */
-        @MustBeClosed
         fun delete(
             customerId: String,
             params: CustomerDeleteParams = CustomerDeleteParams.none(),
@@ -524,26 +509,22 @@ interface CustomerServiceAsync {
             delete(params.toBuilder().customerId(customerId).build(), requestOptions)
 
         /** @see [delete] */
-        @MustBeClosed
         fun delete(
             customerId: String,
             params: CustomerDeleteParams = CustomerDeleteParams.none(),
         ): CompletableFuture<HttpResponse> = delete(customerId, params, RequestOptions.none())
 
         /** @see [delete] */
-        @MustBeClosed
         fun delete(
             params: CustomerDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponse>
 
         /** @see [delete] */
-        @MustBeClosed
         fun delete(params: CustomerDeleteParams): CompletableFuture<HttpResponse> =
             delete(params, RequestOptions.none())
 
         /** @see [delete] */
-        @MustBeClosed
         fun delete(
             customerId: String,
             requestOptions: RequestOptions,
@@ -554,12 +535,10 @@ interface CustomerServiceAsync {
          * Returns a raw HTTP response for `get /customers/{customer_id}`, but is otherwise the same
          * as [CustomerServiceAsync.fetch].
          */
-        @MustBeClosed
         fun fetch(customerId: String): CompletableFuture<HttpResponseFor<Customer>> =
             fetch(customerId, CustomerFetchParams.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             customerId: String,
             params: CustomerFetchParams = CustomerFetchParams.none(),
@@ -568,7 +547,6 @@ interface CustomerServiceAsync {
             fetch(params.toBuilder().customerId(customerId).build(), requestOptions)
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             customerId: String,
             params: CustomerFetchParams = CustomerFetchParams.none(),
@@ -576,19 +554,16 @@ interface CustomerServiceAsync {
             fetch(customerId, params, RequestOptions.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             params: CustomerFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Customer>>
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(params: CustomerFetchParams): CompletableFuture<HttpResponseFor<Customer>> =
             fetch(params, RequestOptions.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             customerId: String,
             requestOptions: RequestOptions,
@@ -600,14 +575,12 @@ interface CustomerServiceAsync {
          * /customers/external_customer_id/{external_customer_id}`, but is otherwise the same as
          * [CustomerServiceAsync.fetchByExternalId].
          */
-        @MustBeClosed
         fun fetchByExternalId(
             externalCustomerId: String
         ): CompletableFuture<HttpResponseFor<Customer>> =
             fetchByExternalId(externalCustomerId, CustomerFetchByExternalIdParams.none())
 
         /** @see [fetchByExternalId] */
-        @MustBeClosed
         fun fetchByExternalId(
             externalCustomerId: String,
             params: CustomerFetchByExternalIdParams = CustomerFetchByExternalIdParams.none(),
@@ -619,7 +592,6 @@ interface CustomerServiceAsync {
             )
 
         /** @see [fetchByExternalId] */
-        @MustBeClosed
         fun fetchByExternalId(
             externalCustomerId: String,
             params: CustomerFetchByExternalIdParams = CustomerFetchByExternalIdParams.none(),
@@ -627,21 +599,18 @@ interface CustomerServiceAsync {
             fetchByExternalId(externalCustomerId, params, RequestOptions.none())
 
         /** @see [fetchByExternalId] */
-        @MustBeClosed
         fun fetchByExternalId(
             params: CustomerFetchByExternalIdParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Customer>>
 
         /** @see [fetchByExternalId] */
-        @MustBeClosed
         fun fetchByExternalId(
             params: CustomerFetchByExternalIdParams
         ): CompletableFuture<HttpResponseFor<Customer>> =
             fetchByExternalId(params, RequestOptions.none())
 
         /** @see [fetchByExternalId] */
-        @MustBeClosed
         fun fetchByExternalId(
             externalCustomerId: String,
             requestOptions: RequestOptions,
@@ -657,7 +626,6 @@ interface CustomerServiceAsync {
          * /customers/{customer_id}/sync_payment_methods_from_gateway`, but is otherwise the same as
          * [CustomerServiceAsync.syncPaymentMethodsFromGateway].
          */
-        @MustBeClosed
         fun syncPaymentMethodsFromGateway(customerId: String): CompletableFuture<HttpResponse> =
             syncPaymentMethodsFromGateway(
                 customerId,
@@ -665,7 +633,6 @@ interface CustomerServiceAsync {
             )
 
         /** @see [syncPaymentMethodsFromGateway] */
-        @MustBeClosed
         fun syncPaymentMethodsFromGateway(
             customerId: String,
             params: CustomerSyncPaymentMethodsFromGatewayParams =
@@ -678,7 +645,6 @@ interface CustomerServiceAsync {
             )
 
         /** @see [syncPaymentMethodsFromGateway] */
-        @MustBeClosed
         fun syncPaymentMethodsFromGateway(
             customerId: String,
             params: CustomerSyncPaymentMethodsFromGatewayParams =
@@ -687,21 +653,18 @@ interface CustomerServiceAsync {
             syncPaymentMethodsFromGateway(customerId, params, RequestOptions.none())
 
         /** @see [syncPaymentMethodsFromGateway] */
-        @MustBeClosed
         fun syncPaymentMethodsFromGateway(
             params: CustomerSyncPaymentMethodsFromGatewayParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponse>
 
         /** @see [syncPaymentMethodsFromGateway] */
-        @MustBeClosed
         fun syncPaymentMethodsFromGateway(
             params: CustomerSyncPaymentMethodsFromGatewayParams
         ): CompletableFuture<HttpResponse> =
             syncPaymentMethodsFromGateway(params, RequestOptions.none())
 
         /** @see [syncPaymentMethodsFromGateway] */
-        @MustBeClosed
         fun syncPaymentMethodsFromGateway(
             customerId: String,
             requestOptions: RequestOptions,
@@ -718,7 +681,6 @@ interface CustomerServiceAsync {
          * but is otherwise the same as
          * [CustomerServiceAsync.syncPaymentMethodsFromGatewayByExternalCustomerId].
          */
-        @MustBeClosed
         fun syncPaymentMethodsFromGatewayByExternalCustomerId(
             externalCustomerId: String
         ): CompletableFuture<HttpResponse> =
@@ -728,7 +690,6 @@ interface CustomerServiceAsync {
             )
 
         /** @see [syncPaymentMethodsFromGatewayByExternalCustomerId] */
-        @MustBeClosed
         fun syncPaymentMethodsFromGatewayByExternalCustomerId(
             externalCustomerId: String,
             params: CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams =
@@ -741,7 +702,6 @@ interface CustomerServiceAsync {
             )
 
         /** @see [syncPaymentMethodsFromGatewayByExternalCustomerId] */
-        @MustBeClosed
         fun syncPaymentMethodsFromGatewayByExternalCustomerId(
             externalCustomerId: String,
             params: CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams =
@@ -754,21 +714,18 @@ interface CustomerServiceAsync {
             )
 
         /** @see [syncPaymentMethodsFromGatewayByExternalCustomerId] */
-        @MustBeClosed
         fun syncPaymentMethodsFromGatewayByExternalCustomerId(
             params: CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponse>
 
         /** @see [syncPaymentMethodsFromGatewayByExternalCustomerId] */
-        @MustBeClosed
         fun syncPaymentMethodsFromGatewayByExternalCustomerId(
             params: CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams
         ): CompletableFuture<HttpResponse> =
             syncPaymentMethodsFromGatewayByExternalCustomerId(params, RequestOptions.none())
 
         /** @see [syncPaymentMethodsFromGatewayByExternalCustomerId] */
-        @MustBeClosed
         fun syncPaymentMethodsFromGatewayByExternalCustomerId(
             externalCustomerId: String,
             requestOptions: RequestOptions,
@@ -784,12 +741,10 @@ interface CustomerServiceAsync {
          * /customers/external_customer_id/{external_customer_id}`, but is otherwise the same as
          * [CustomerServiceAsync.updateByExternalId].
          */
-        @MustBeClosed
         fun updateByExternalId(id: String): CompletableFuture<HttpResponseFor<Customer>> =
             updateByExternalId(id, CustomerUpdateByExternalIdParams.none())
 
         /** @see [updateByExternalId] */
-        @MustBeClosed
         fun updateByExternalId(
             id: String,
             params: CustomerUpdateByExternalIdParams = CustomerUpdateByExternalIdParams.none(),
@@ -798,7 +753,6 @@ interface CustomerServiceAsync {
             updateByExternalId(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see [updateByExternalId] */
-        @MustBeClosed
         fun updateByExternalId(
             id: String,
             params: CustomerUpdateByExternalIdParams = CustomerUpdateByExternalIdParams.none(),
@@ -806,21 +760,18 @@ interface CustomerServiceAsync {
             updateByExternalId(id, params, RequestOptions.none())
 
         /** @see [updateByExternalId] */
-        @MustBeClosed
         fun updateByExternalId(
             params: CustomerUpdateByExternalIdParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Customer>>
 
         /** @see [updateByExternalId] */
-        @MustBeClosed
         fun updateByExternalId(
             params: CustomerUpdateByExternalIdParams
         ): CompletableFuture<HttpResponseFor<Customer>> =
             updateByExternalId(params, RequestOptions.none())
 
         /** @see [updateByExternalId] */
-        @MustBeClosed
         fun updateByExternalId(
             id: String,
             requestOptions: RequestOptions,

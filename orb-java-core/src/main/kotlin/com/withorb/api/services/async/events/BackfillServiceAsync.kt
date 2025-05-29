@@ -2,7 +2,6 @@
 
 package com.withorb.api.services.async.events
 
-import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.EventBackfillCloseParams
@@ -216,14 +215,12 @@ interface BackfillServiceAsync {
          * Returns a raw HTTP response for `post /events/backfills`, but is otherwise the same as
          * [BackfillServiceAsync.create].
          */
-        @MustBeClosed
         fun create(
             params: EventBackfillCreateParams
         ): CompletableFuture<HttpResponseFor<EventBackfillCreateResponse>> =
             create(params, RequestOptions.none())
 
         /** @see [create] */
-        @MustBeClosed
         fun create(
             params: EventBackfillCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -233,26 +230,22 @@ interface BackfillServiceAsync {
          * Returns a raw HTTP response for `get /events/backfills`, but is otherwise the same as
          * [BackfillServiceAsync.list].
          */
-        @MustBeClosed
         fun list(): CompletableFuture<HttpResponseFor<EventBackfillListPageAsync>> =
             list(EventBackfillListParams.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: EventBackfillListParams = EventBackfillListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<EventBackfillListPageAsync>>
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: EventBackfillListParams = EventBackfillListParams.none()
         ): CompletableFuture<HttpResponseFor<EventBackfillListPageAsync>> =
             list(params, RequestOptions.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             requestOptions: RequestOptions
         ): CompletableFuture<HttpResponseFor<EventBackfillListPageAsync>> =
@@ -262,14 +255,12 @@ interface BackfillServiceAsync {
          * Returns a raw HTTP response for `post /events/backfills/{backfill_id}/close`, but is
          * otherwise the same as [BackfillServiceAsync.close].
          */
-        @MustBeClosed
         fun close(
             backfillId: String
         ): CompletableFuture<HttpResponseFor<EventBackfillCloseResponse>> =
             close(backfillId, EventBackfillCloseParams.none())
 
         /** @see [close] */
-        @MustBeClosed
         fun close(
             backfillId: String,
             params: EventBackfillCloseParams = EventBackfillCloseParams.none(),
@@ -278,7 +269,6 @@ interface BackfillServiceAsync {
             close(params.toBuilder().backfillId(backfillId).build(), requestOptions)
 
         /** @see [close] */
-        @MustBeClosed
         fun close(
             backfillId: String,
             params: EventBackfillCloseParams = EventBackfillCloseParams.none(),
@@ -286,21 +276,18 @@ interface BackfillServiceAsync {
             close(backfillId, params, RequestOptions.none())
 
         /** @see [close] */
-        @MustBeClosed
         fun close(
             params: EventBackfillCloseParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<EventBackfillCloseResponse>>
 
         /** @see [close] */
-        @MustBeClosed
         fun close(
             params: EventBackfillCloseParams
         ): CompletableFuture<HttpResponseFor<EventBackfillCloseResponse>> =
             close(params, RequestOptions.none())
 
         /** @see [close] */
-        @MustBeClosed
         fun close(
             backfillId: String,
             requestOptions: RequestOptions,
@@ -311,14 +298,12 @@ interface BackfillServiceAsync {
          * Returns a raw HTTP response for `get /events/backfills/{backfill_id}`, but is otherwise
          * the same as [BackfillServiceAsync.fetch].
          */
-        @MustBeClosed
         fun fetch(
             backfillId: String
         ): CompletableFuture<HttpResponseFor<EventBackfillFetchResponse>> =
             fetch(backfillId, EventBackfillFetchParams.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             backfillId: String,
             params: EventBackfillFetchParams = EventBackfillFetchParams.none(),
@@ -327,7 +312,6 @@ interface BackfillServiceAsync {
             fetch(params.toBuilder().backfillId(backfillId).build(), requestOptions)
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             backfillId: String,
             params: EventBackfillFetchParams = EventBackfillFetchParams.none(),
@@ -335,21 +319,18 @@ interface BackfillServiceAsync {
             fetch(backfillId, params, RequestOptions.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             params: EventBackfillFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<EventBackfillFetchResponse>>
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             params: EventBackfillFetchParams
         ): CompletableFuture<HttpResponseFor<EventBackfillFetchResponse>> =
             fetch(params, RequestOptions.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             backfillId: String,
             requestOptions: RequestOptions,
@@ -360,14 +341,12 @@ interface BackfillServiceAsync {
          * Returns a raw HTTP response for `post /events/backfills/{backfill_id}/revert`, but is
          * otherwise the same as [BackfillServiceAsync.revert].
          */
-        @MustBeClosed
         fun revert(
             backfillId: String
         ): CompletableFuture<HttpResponseFor<EventBackfillRevertResponse>> =
             revert(backfillId, EventBackfillRevertParams.none())
 
         /** @see [revert] */
-        @MustBeClosed
         fun revert(
             backfillId: String,
             params: EventBackfillRevertParams = EventBackfillRevertParams.none(),
@@ -376,7 +355,6 @@ interface BackfillServiceAsync {
             revert(params.toBuilder().backfillId(backfillId).build(), requestOptions)
 
         /** @see [revert] */
-        @MustBeClosed
         fun revert(
             backfillId: String,
             params: EventBackfillRevertParams = EventBackfillRevertParams.none(),
@@ -384,21 +362,18 @@ interface BackfillServiceAsync {
             revert(backfillId, params, RequestOptions.none())
 
         /** @see [revert] */
-        @MustBeClosed
         fun revert(
             params: EventBackfillRevertParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<EventBackfillRevertResponse>>
 
         /** @see [revert] */
-        @MustBeClosed
         fun revert(
             params: EventBackfillRevertParams
         ): CompletableFuture<HttpResponseFor<EventBackfillRevertResponse>> =
             revert(params, RequestOptions.none())
 
         /** @see [revert] */
-        @MustBeClosed
         fun revert(
             backfillId: String,
             requestOptions: RequestOptions,

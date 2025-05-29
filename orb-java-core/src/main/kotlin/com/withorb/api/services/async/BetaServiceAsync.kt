@@ -2,7 +2,6 @@
 
 package com.withorb.api.services.async
 
-import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.BetaCreatePlanVersionParams
@@ -119,7 +118,6 @@ interface BetaServiceAsync {
          * Returns a raw HTTP response for `post /plans/{plan_id}/versions`, but is otherwise the
          * same as [BetaServiceAsync.createPlanVersion].
          */
-        @MustBeClosed
         fun createPlanVersion(
             planId: String,
             params: BetaCreatePlanVersionParams,
@@ -127,7 +125,6 @@ interface BetaServiceAsync {
             createPlanVersion(planId, params, RequestOptions.none())
 
         /** @see [createPlanVersion] */
-        @MustBeClosed
         fun createPlanVersion(
             planId: String,
             params: BetaCreatePlanVersionParams,
@@ -136,14 +133,12 @@ interface BetaServiceAsync {
             createPlanVersion(params.toBuilder().planId(planId).build(), requestOptions)
 
         /** @see [createPlanVersion] */
-        @MustBeClosed
         fun createPlanVersion(
             params: BetaCreatePlanVersionParams
         ): CompletableFuture<HttpResponseFor<PlanVersion>> =
             createPlanVersion(params, RequestOptions.none())
 
         /** @see [createPlanVersion] */
-        @MustBeClosed
         fun createPlanVersion(
             params: BetaCreatePlanVersionParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -153,7 +148,6 @@ interface BetaServiceAsync {
          * Returns a raw HTTP response for `get /plans/{plan_id}/versions/{version}`, but is
          * otherwise the same as [BetaServiceAsync.fetchPlanVersion].
          */
-        @MustBeClosed
         fun fetchPlanVersion(
             version: String,
             params: BetaFetchPlanVersionParams,
@@ -161,7 +155,6 @@ interface BetaServiceAsync {
             fetchPlanVersion(version, params, RequestOptions.none())
 
         /** @see [fetchPlanVersion] */
-        @MustBeClosed
         fun fetchPlanVersion(
             version: String,
             params: BetaFetchPlanVersionParams,
@@ -170,14 +163,12 @@ interface BetaServiceAsync {
             fetchPlanVersion(params.toBuilder().version(version).build(), requestOptions)
 
         /** @see [fetchPlanVersion] */
-        @MustBeClosed
         fun fetchPlanVersion(
             params: BetaFetchPlanVersionParams
         ): CompletableFuture<HttpResponseFor<PlanVersion>> =
             fetchPlanVersion(params, RequestOptions.none())
 
         /** @see [fetchPlanVersion] */
-        @MustBeClosed
         fun fetchPlanVersion(
             params: BetaFetchPlanVersionParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -187,7 +178,6 @@ interface BetaServiceAsync {
          * Returns a raw HTTP response for `post /plans/{plan_id}/set_default_version`, but is
          * otherwise the same as [BetaServiceAsync.setDefaultPlanVersion].
          */
-        @MustBeClosed
         fun setDefaultPlanVersion(
             planId: String,
             params: BetaSetDefaultPlanVersionParams,
@@ -195,7 +185,6 @@ interface BetaServiceAsync {
             setDefaultPlanVersion(planId, params, RequestOptions.none())
 
         /** @see [setDefaultPlanVersion] */
-        @MustBeClosed
         fun setDefaultPlanVersion(
             planId: String,
             params: BetaSetDefaultPlanVersionParams,
@@ -204,14 +193,12 @@ interface BetaServiceAsync {
             setDefaultPlanVersion(params.toBuilder().planId(planId).build(), requestOptions)
 
         /** @see [setDefaultPlanVersion] */
-        @MustBeClosed
         fun setDefaultPlanVersion(
             params: BetaSetDefaultPlanVersionParams
         ): CompletableFuture<HttpResponseFor<Plan>> =
             setDefaultPlanVersion(params, RequestOptions.none())
 
         /** @see [setDefaultPlanVersion] */
-        @MustBeClosed
         fun setDefaultPlanVersion(
             params: BetaSetDefaultPlanVersionParams,
             requestOptions: RequestOptions = RequestOptions.none(),

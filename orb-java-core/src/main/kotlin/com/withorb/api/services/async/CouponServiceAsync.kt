@@ -2,7 +2,6 @@
 
 package com.withorb.api.services.async
 
-import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Coupon
@@ -143,12 +142,10 @@ interface CouponServiceAsync {
          * Returns a raw HTTP response for `post /coupons`, but is otherwise the same as
          * [CouponServiceAsync.create].
          */
-        @MustBeClosed
         fun create(params: CouponCreateParams): CompletableFuture<HttpResponseFor<Coupon>> =
             create(params, RequestOptions.none())
 
         /** @see [create] */
-        @MustBeClosed
         fun create(
             params: CouponCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -158,26 +155,22 @@ interface CouponServiceAsync {
          * Returns a raw HTTP response for `get /coupons`, but is otherwise the same as
          * [CouponServiceAsync.list].
          */
-        @MustBeClosed
         fun list(): CompletableFuture<HttpResponseFor<CouponListPageAsync>> =
             list(CouponListParams.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: CouponListParams = CouponListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<CouponListPageAsync>>
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: CouponListParams = CouponListParams.none()
         ): CompletableFuture<HttpResponseFor<CouponListPageAsync>> =
             list(params, RequestOptions.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             requestOptions: RequestOptions
         ): CompletableFuture<HttpResponseFor<CouponListPageAsync>> =
@@ -187,12 +180,10 @@ interface CouponServiceAsync {
          * Returns a raw HTTP response for `post /coupons/{coupon_id}/archive`, but is otherwise the
          * same as [CouponServiceAsync.archive].
          */
-        @MustBeClosed
         fun archive(couponId: String): CompletableFuture<HttpResponseFor<Coupon>> =
             archive(couponId, CouponArchiveParams.none())
 
         /** @see [archive] */
-        @MustBeClosed
         fun archive(
             couponId: String,
             params: CouponArchiveParams = CouponArchiveParams.none(),
@@ -201,7 +192,6 @@ interface CouponServiceAsync {
             archive(params.toBuilder().couponId(couponId).build(), requestOptions)
 
         /** @see [archive] */
-        @MustBeClosed
         fun archive(
             couponId: String,
             params: CouponArchiveParams = CouponArchiveParams.none(),
@@ -209,19 +199,16 @@ interface CouponServiceAsync {
             archive(couponId, params, RequestOptions.none())
 
         /** @see [archive] */
-        @MustBeClosed
         fun archive(
             params: CouponArchiveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Coupon>>
 
         /** @see [archive] */
-        @MustBeClosed
         fun archive(params: CouponArchiveParams): CompletableFuture<HttpResponseFor<Coupon>> =
             archive(params, RequestOptions.none())
 
         /** @see [archive] */
-        @MustBeClosed
         fun archive(
             couponId: String,
             requestOptions: RequestOptions,
@@ -232,12 +219,10 @@ interface CouponServiceAsync {
          * Returns a raw HTTP response for `get /coupons/{coupon_id}`, but is otherwise the same as
          * [CouponServiceAsync.fetch].
          */
-        @MustBeClosed
         fun fetch(couponId: String): CompletableFuture<HttpResponseFor<Coupon>> =
             fetch(couponId, CouponFetchParams.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             couponId: String,
             params: CouponFetchParams = CouponFetchParams.none(),
@@ -246,7 +231,6 @@ interface CouponServiceAsync {
             fetch(params.toBuilder().couponId(couponId).build(), requestOptions)
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             couponId: String,
             params: CouponFetchParams = CouponFetchParams.none(),
@@ -254,19 +238,16 @@ interface CouponServiceAsync {
             fetch(couponId, params, RequestOptions.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             params: CouponFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Coupon>>
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(params: CouponFetchParams): CompletableFuture<HttpResponseFor<Coupon>> =
             fetch(params, RequestOptions.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             couponId: String,
             requestOptions: RequestOptions,

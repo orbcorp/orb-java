@@ -2,7 +2,6 @@
 
 package com.withorb.api.services.async
 
-import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.TopLevelPingParams
@@ -50,26 +49,22 @@ interface TopLevelServiceAsync {
          * Returns a raw HTTP response for `get /ping`, but is otherwise the same as
          * [TopLevelServiceAsync.ping].
          */
-        @MustBeClosed
         fun ping(): CompletableFuture<HttpResponseFor<TopLevelPingResponse>> =
             ping(TopLevelPingParams.none())
 
         /** @see [ping] */
-        @MustBeClosed
         fun ping(
             params: TopLevelPingParams = TopLevelPingParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<TopLevelPingResponse>>
 
         /** @see [ping] */
-        @MustBeClosed
         fun ping(
             params: TopLevelPingParams = TopLevelPingParams.none()
         ): CompletableFuture<HttpResponseFor<TopLevelPingResponse>> =
             ping(params, RequestOptions.none())
 
         /** @see [ping] */
-        @MustBeClosed
         fun ping(
             requestOptions: RequestOptions
         ): CompletableFuture<HttpResponseFor<TopLevelPingResponse>> =

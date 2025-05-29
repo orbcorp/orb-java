@@ -2,7 +2,6 @@
 
 package com.withorb.api.services.async.dimensionalPriceGroups
 
-import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.DimensionalPriceGroup
@@ -81,7 +80,6 @@ interface ExternalDimensionalPriceGroupIdServiceAsync {
          * /dimensional_price_groups/external_dimensional_price_group_id/{external_dimensional_price_group_id}`,
          * but is otherwise the same as [ExternalDimensionalPriceGroupIdServiceAsync.retrieve].
          */
-        @MustBeClosed
         fun retrieve(
             externalDimensionalPriceGroupId: String
         ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
@@ -91,7 +89,6 @@ interface ExternalDimensionalPriceGroupIdServiceAsync {
             )
 
         /** @see [retrieve] */
-        @MustBeClosed
         fun retrieve(
             externalDimensionalPriceGroupId: String,
             params: DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams =
@@ -107,7 +104,6 @@ interface ExternalDimensionalPriceGroupIdServiceAsync {
             )
 
         /** @see [retrieve] */
-        @MustBeClosed
         fun retrieve(
             externalDimensionalPriceGroupId: String,
             params: DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams =
@@ -116,21 +112,18 @@ interface ExternalDimensionalPriceGroupIdServiceAsync {
             retrieve(externalDimensionalPriceGroupId, params, RequestOptions.none())
 
         /** @see [retrieve] */
-        @MustBeClosed
         fun retrieve(
             params: DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>>
 
         /** @see [retrieve] */
-        @MustBeClosed
         fun retrieve(
             params: DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams
         ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
             retrieve(params, RequestOptions.none())
 
         /** @see [retrieve] */
-        @MustBeClosed
         fun retrieve(
             externalDimensionalPriceGroupId: String,
             requestOptions: RequestOptions,

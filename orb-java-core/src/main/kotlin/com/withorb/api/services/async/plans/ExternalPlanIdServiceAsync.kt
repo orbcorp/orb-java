@@ -2,7 +2,6 @@
 
 package com.withorb.api.services.async.plans
 
-import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Plan
@@ -115,12 +114,10 @@ interface ExternalPlanIdServiceAsync {
          * Returns a raw HTTP response for `put /plans/external_plan_id/{external_plan_id}`, but is
          * otherwise the same as [ExternalPlanIdServiceAsync.update].
          */
-        @MustBeClosed
         fun update(otherExternalPlanId: String): CompletableFuture<HttpResponseFor<Plan>> =
             update(otherExternalPlanId, PlanExternalPlanIdUpdateParams.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             otherExternalPlanId: String,
             params: PlanExternalPlanIdUpdateParams = PlanExternalPlanIdUpdateParams.none(),
@@ -132,7 +129,6 @@ interface ExternalPlanIdServiceAsync {
             )
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             otherExternalPlanId: String,
             params: PlanExternalPlanIdUpdateParams = PlanExternalPlanIdUpdateParams.none(),
@@ -140,20 +136,17 @@ interface ExternalPlanIdServiceAsync {
             update(otherExternalPlanId, params, RequestOptions.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             params: PlanExternalPlanIdUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Plan>>
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             params: PlanExternalPlanIdUpdateParams
         ): CompletableFuture<HttpResponseFor<Plan>> = update(params, RequestOptions.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             otherExternalPlanId: String,
             requestOptions: RequestOptions,
@@ -164,12 +157,10 @@ interface ExternalPlanIdServiceAsync {
          * Returns a raw HTTP response for `get /plans/external_plan_id/{external_plan_id}`, but is
          * otherwise the same as [ExternalPlanIdServiceAsync.fetch].
          */
-        @MustBeClosed
         fun fetch(externalPlanId: String): CompletableFuture<HttpResponseFor<Plan>> =
             fetch(externalPlanId, PlanExternalPlanIdFetchParams.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             externalPlanId: String,
             params: PlanExternalPlanIdFetchParams = PlanExternalPlanIdFetchParams.none(),
@@ -178,7 +169,6 @@ interface ExternalPlanIdServiceAsync {
             fetch(params.toBuilder().externalPlanId(externalPlanId).build(), requestOptions)
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             externalPlanId: String,
             params: PlanExternalPlanIdFetchParams = PlanExternalPlanIdFetchParams.none(),
@@ -186,19 +176,16 @@ interface ExternalPlanIdServiceAsync {
             fetch(externalPlanId, params, RequestOptions.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             params: PlanExternalPlanIdFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Plan>>
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(params: PlanExternalPlanIdFetchParams): CompletableFuture<HttpResponseFor<Plan>> =
             fetch(params, RequestOptions.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             externalPlanId: String,
             requestOptions: RequestOptions,

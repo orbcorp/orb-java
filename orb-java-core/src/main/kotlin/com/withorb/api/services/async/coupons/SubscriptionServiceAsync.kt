@@ -2,7 +2,6 @@
 
 package com.withorb.api.services.async.coupons
 
-import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.CouponSubscriptionListPageAsync
@@ -68,14 +67,12 @@ interface SubscriptionServiceAsync {
          * Returns a raw HTTP response for `get /coupons/{coupon_id}/subscriptions`, but is
          * otherwise the same as [SubscriptionServiceAsync.list].
          */
-        @MustBeClosed
         fun list(
             couponId: String
         ): CompletableFuture<HttpResponseFor<CouponSubscriptionListPageAsync>> =
             list(couponId, CouponSubscriptionListParams.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             couponId: String,
             params: CouponSubscriptionListParams = CouponSubscriptionListParams.none(),
@@ -84,7 +81,6 @@ interface SubscriptionServiceAsync {
             list(params.toBuilder().couponId(couponId).build(), requestOptions)
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             couponId: String,
             params: CouponSubscriptionListParams = CouponSubscriptionListParams.none(),
@@ -92,21 +88,18 @@ interface SubscriptionServiceAsync {
             list(couponId, params, RequestOptions.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: CouponSubscriptionListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<CouponSubscriptionListPageAsync>>
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: CouponSubscriptionListParams
         ): CompletableFuture<HttpResponseFor<CouponSubscriptionListPageAsync>> =
             list(params, RequestOptions.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             couponId: String,
             requestOptions: RequestOptions,

@@ -2,7 +2,6 @@
 
 package com.withorb.api.services.async
 
-import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.DimensionalPriceGroup
@@ -119,14 +118,12 @@ interface DimensionalPriceGroupServiceAsync {
          * Returns a raw HTTP response for `post /dimensional_price_groups`, but is otherwise the
          * same as [DimensionalPriceGroupServiceAsync.create].
          */
-        @MustBeClosed
         fun create(
             params: DimensionalPriceGroupCreateParams
         ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
             create(params, RequestOptions.none())
 
         /** @see [create] */
-        @MustBeClosed
         fun create(
             params: DimensionalPriceGroupCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -137,14 +134,12 @@ interface DimensionalPriceGroupServiceAsync {
          * /dimensional_price_groups/{dimensional_price_group_id}`, but is otherwise the same as
          * [DimensionalPriceGroupServiceAsync.retrieve].
          */
-        @MustBeClosed
         fun retrieve(
             dimensionalPriceGroupId: String
         ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
             retrieve(dimensionalPriceGroupId, DimensionalPriceGroupRetrieveParams.none())
 
         /** @see [retrieve] */
-        @MustBeClosed
         fun retrieve(
             dimensionalPriceGroupId: String,
             params: DimensionalPriceGroupRetrieveParams =
@@ -157,7 +152,6 @@ interface DimensionalPriceGroupServiceAsync {
             )
 
         /** @see [retrieve] */
-        @MustBeClosed
         fun retrieve(
             dimensionalPriceGroupId: String,
             params: DimensionalPriceGroupRetrieveParams = DimensionalPriceGroupRetrieveParams.none(),
@@ -165,21 +159,18 @@ interface DimensionalPriceGroupServiceAsync {
             retrieve(dimensionalPriceGroupId, params, RequestOptions.none())
 
         /** @see [retrieve] */
-        @MustBeClosed
         fun retrieve(
             params: DimensionalPriceGroupRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>>
 
         /** @see [retrieve] */
-        @MustBeClosed
         fun retrieve(
             params: DimensionalPriceGroupRetrieveParams
         ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
             retrieve(params, RequestOptions.none())
 
         /** @see [retrieve] */
-        @MustBeClosed
         fun retrieve(
             dimensionalPriceGroupId: String,
             requestOptions: RequestOptions,
@@ -194,26 +185,22 @@ interface DimensionalPriceGroupServiceAsync {
          * Returns a raw HTTP response for `get /dimensional_price_groups`, but is otherwise the
          * same as [DimensionalPriceGroupServiceAsync.list].
          */
-        @MustBeClosed
         fun list(): CompletableFuture<HttpResponseFor<DimensionalPriceGroupListPageAsync>> =
             list(DimensionalPriceGroupListParams.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: DimensionalPriceGroupListParams = DimensionalPriceGroupListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<DimensionalPriceGroupListPageAsync>>
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: DimensionalPriceGroupListParams = DimensionalPriceGroupListParams.none()
         ): CompletableFuture<HttpResponseFor<DimensionalPriceGroupListPageAsync>> =
             list(params, RequestOptions.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             requestOptions: RequestOptions
         ): CompletableFuture<HttpResponseFor<DimensionalPriceGroupListPageAsync>> =
