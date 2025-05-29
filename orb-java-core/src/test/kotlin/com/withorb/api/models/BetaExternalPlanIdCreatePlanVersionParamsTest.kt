@@ -40,6 +40,20 @@ internal class BetaExternalPlanIdCreatePlanVersionParamsTest {
                                     .MONTHLY
                             )
                             .currency("USD")
+                            .customExpiration(
+                                BetaExternalPlanIdCreatePlanVersionParams.AddPrice.AllocationPrice
+                                    .CustomExpiration
+                                    .builder()
+                                    .duration(0L)
+                                    .durationUnit(
+                                        BetaExternalPlanIdCreatePlanVersionParams.AddPrice
+                                            .AllocationPrice
+                                            .CustomExpiration
+                                            .DurationUnit
+                                            .DAY
+                                    )
+                                    .build()
+                            )
                             .expiresAtEndOfCadence(true)
                             .build()
                     )
@@ -159,6 +173,21 @@ internal class BetaExternalPlanIdCreatePlanVersionParamsTest {
                                     .MONTHLY
                             )
                             .currency("USD")
+                            .customExpiration(
+                                BetaExternalPlanIdCreatePlanVersionParams.ReplacePrice
+                                    .AllocationPrice
+                                    .CustomExpiration
+                                    .builder()
+                                    .duration(0L)
+                                    .durationUnit(
+                                        BetaExternalPlanIdCreatePlanVersionParams.ReplacePrice
+                                            .AllocationPrice
+                                            .CustomExpiration
+                                            .DurationUnit
+                                            .DAY
+                                    )
+                                    .build()
+                            )
                             .expiresAtEndOfCadence(true)
                             .build()
                     )
@@ -287,6 +316,21 @@ internal class BetaExternalPlanIdCreatePlanVersionParamsTest {
                                         .MONTHLY
                                 )
                                 .currency("USD")
+                                .customExpiration(
+                                    BetaExternalPlanIdCreatePlanVersionParams.AddPrice
+                                        .AllocationPrice
+                                        .CustomExpiration
+                                        .builder()
+                                        .duration(0L)
+                                        .durationUnit(
+                                            BetaExternalPlanIdCreatePlanVersionParams.AddPrice
+                                                .AllocationPrice
+                                                .CustomExpiration
+                                                .DurationUnit
+                                                .DAY
+                                        )
+                                        .build()
+                                )
                                 .expiresAtEndOfCadence(true)
                                 .build()
                         )
@@ -406,6 +450,21 @@ internal class BetaExternalPlanIdCreatePlanVersionParamsTest {
                                         .MONTHLY
                                 )
                                 .currency("USD")
+                                .customExpiration(
+                                    BetaExternalPlanIdCreatePlanVersionParams.ReplacePrice
+                                        .AllocationPrice
+                                        .CustomExpiration
+                                        .builder()
+                                        .duration(0L)
+                                        .durationUnit(
+                                            BetaExternalPlanIdCreatePlanVersionParams.ReplacePrice
+                                                .AllocationPrice
+                                                .CustomExpiration
+                                                .DurationUnit
+                                                .DAY
+                                        )
+                                        .build()
+                                )
                                 .expiresAtEndOfCadence(true)
                                 .build()
                         )
@@ -526,6 +585,20 @@ internal class BetaExternalPlanIdCreatePlanVersionParamsTest {
                                     .MONTHLY
                             )
                             .currency("USD")
+                            .customExpiration(
+                                BetaExternalPlanIdCreatePlanVersionParams.AddPrice.AllocationPrice
+                                    .CustomExpiration
+                                    .builder()
+                                    .duration(0L)
+                                    .durationUnit(
+                                        BetaExternalPlanIdCreatePlanVersionParams.AddPrice
+                                            .AllocationPrice
+                                            .CustomExpiration
+                                            .DurationUnit
+                                            .DAY
+                                    )
+                                    .build()
+                            )
                             .expiresAtEndOfCadence(true)
                             .build()
                     )
@@ -649,6 +722,21 @@ internal class BetaExternalPlanIdCreatePlanVersionParamsTest {
                                     .MONTHLY
                             )
                             .currency("USD")
+                            .customExpiration(
+                                BetaExternalPlanIdCreatePlanVersionParams.ReplacePrice
+                                    .AllocationPrice
+                                    .CustomExpiration
+                                    .builder()
+                                    .duration(0L)
+                                    .durationUnit(
+                                        BetaExternalPlanIdCreatePlanVersionParams.ReplacePrice
+                                            .AllocationPrice
+                                            .CustomExpiration
+                                            .DurationUnit
+                                            .DAY
+                                    )
+                                    .build()
+                            )
                             .expiresAtEndOfCadence(true)
                             .build()
                     )

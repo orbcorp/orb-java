@@ -24,6 +24,19 @@ internal class SubscriptionPriceIntervalsParamsTest {
                                 SubscriptionPriceIntervalsParams.Add.AllocationPrice.Cadence.MONTHLY
                             )
                             .currency("USD")
+                            .customExpiration(
+                                SubscriptionPriceIntervalsParams.Add.AllocationPrice
+                                    .CustomExpiration
+                                    .builder()
+                                    .duration(0L)
+                                    .durationUnit(
+                                        SubscriptionPriceIntervalsParams.Add.AllocationPrice
+                                            .CustomExpiration
+                                            .DurationUnit
+                                            .DAY
+                                    )
+                                    .build()
+                            )
                             .expiresAtEndOfCadence(true)
                             .build()
                     )
@@ -172,6 +185,19 @@ internal class SubscriptionPriceIntervalsParamsTest {
                                         .MONTHLY
                                 )
                                 .currency("USD")
+                                .customExpiration(
+                                    SubscriptionPriceIntervalsParams.Add.AllocationPrice
+                                        .CustomExpiration
+                                        .builder()
+                                        .duration(0L)
+                                        .durationUnit(
+                                            SubscriptionPriceIntervalsParams.Add.AllocationPrice
+                                                .CustomExpiration
+                                                .DurationUnit
+                                                .DAY
+                                        )
+                                        .build()
+                                )
                                 .expiresAtEndOfCadence(true)
                                 .build()
                         )
@@ -313,6 +339,19 @@ internal class SubscriptionPriceIntervalsParamsTest {
                                 SubscriptionPriceIntervalsParams.Add.AllocationPrice.Cadence.MONTHLY
                             )
                             .currency("USD")
+                            .customExpiration(
+                                SubscriptionPriceIntervalsParams.Add.AllocationPrice
+                                    .CustomExpiration
+                                    .builder()
+                                    .duration(0L)
+                                    .durationUnit(
+                                        SubscriptionPriceIntervalsParams.Add.AllocationPrice
+                                            .CustomExpiration
+                                            .DurationUnit
+                                            .DAY
+                                    )
+                                    .build()
+                            )
                             .expiresAtEndOfCadence(true)
                             .build()
                     )

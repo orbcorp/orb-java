@@ -37,6 +37,19 @@ internal class BetaCreatePlanVersionParamsTest {
                                 BetaCreatePlanVersionParams.AddPrice.AllocationPrice.Cadence.MONTHLY
                             )
                             .currency("USD")
+                            .customExpiration(
+                                BetaCreatePlanVersionParams.AddPrice.AllocationPrice
+                                    .CustomExpiration
+                                    .builder()
+                                    .duration(0L)
+                                    .durationUnit(
+                                        BetaCreatePlanVersionParams.AddPrice.AllocationPrice
+                                            .CustomExpiration
+                                            .DurationUnit
+                                            .DAY
+                                    )
+                                    .build()
+                            )
                             .expiresAtEndOfCadence(true)
                             .build()
                     )
@@ -142,6 +155,19 @@ internal class BetaCreatePlanVersionParamsTest {
                                     .MONTHLY
                             )
                             .currency("USD")
+                            .customExpiration(
+                                BetaCreatePlanVersionParams.ReplacePrice.AllocationPrice
+                                    .CustomExpiration
+                                    .builder()
+                                    .duration(0L)
+                                    .durationUnit(
+                                        BetaCreatePlanVersionParams.ReplacePrice.AllocationPrice
+                                            .CustomExpiration
+                                            .DurationUnit
+                                            .DAY
+                                    )
+                                    .build()
+                            )
                             .expiresAtEndOfCadence(true)
                             .build()
                     )
@@ -256,6 +282,19 @@ internal class BetaCreatePlanVersionParamsTest {
                                         .MONTHLY
                                 )
                                 .currency("USD")
+                                .customExpiration(
+                                    BetaCreatePlanVersionParams.AddPrice.AllocationPrice
+                                        .CustomExpiration
+                                        .builder()
+                                        .duration(0L)
+                                        .durationUnit(
+                                            BetaCreatePlanVersionParams.AddPrice.AllocationPrice
+                                                .CustomExpiration
+                                                .DurationUnit
+                                                .DAY
+                                        )
+                                        .build()
+                                )
                                 .expiresAtEndOfCadence(true)
                                 .build()
                         )
@@ -366,6 +405,19 @@ internal class BetaCreatePlanVersionParamsTest {
                                         .MONTHLY
                                 )
                                 .currency("USD")
+                                .customExpiration(
+                                    BetaCreatePlanVersionParams.ReplacePrice.AllocationPrice
+                                        .CustomExpiration
+                                        .builder()
+                                        .duration(0L)
+                                        .durationUnit(
+                                            BetaCreatePlanVersionParams.ReplacePrice.AllocationPrice
+                                                .CustomExpiration
+                                                .DurationUnit
+                                                .DAY
+                                        )
+                                        .build()
+                                )
                                 .expiresAtEndOfCadence(true)
                                 .build()
                         )
@@ -469,6 +521,19 @@ internal class BetaCreatePlanVersionParamsTest {
                                 BetaCreatePlanVersionParams.AddPrice.AllocationPrice.Cadence.MONTHLY
                             )
                             .currency("USD")
+                            .customExpiration(
+                                BetaCreatePlanVersionParams.AddPrice.AllocationPrice
+                                    .CustomExpiration
+                                    .builder()
+                                    .duration(0L)
+                                    .durationUnit(
+                                        BetaCreatePlanVersionParams.AddPrice.AllocationPrice
+                                            .CustomExpiration
+                                            .DurationUnit
+                                            .DAY
+                                    )
+                                    .build()
+                            )
                             .expiresAtEndOfCadence(true)
                             .build()
                     )
@@ -578,6 +643,19 @@ internal class BetaCreatePlanVersionParamsTest {
                                     .MONTHLY
                             )
                             .currency("USD")
+                            .customExpiration(
+                                BetaCreatePlanVersionParams.ReplacePrice.AllocationPrice
+                                    .CustomExpiration
+                                    .builder()
+                                    .duration(0L)
+                                    .durationUnit(
+                                        BetaCreatePlanVersionParams.ReplacePrice.AllocationPrice
+                                            .CustomExpiration
+                                            .DurationUnit
+                                            .DAY
+                                    )
+                                    .build()
+                            )
                             .expiresAtEndOfCadence(true)
                             .build()
                     )

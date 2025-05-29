@@ -63,6 +63,19 @@ internal class SubscriptionServiceAsyncTest {
                                             .MONTHLY
                                     )
                                     .currency("USD")
+                                    .customExpiration(
+                                        SubscriptionCreateParams.AddPrice.AllocationPrice
+                                            .CustomExpiration
+                                            .builder()
+                                            .duration(0L)
+                                            .durationUnit(
+                                                SubscriptionCreateParams.AddPrice.AllocationPrice
+                                                    .CustomExpiration
+                                                    .DurationUnit
+                                                    .DAY
+                                            )
+                                            .build()
+                                    )
                                     .expiresAtEndOfCadence(true)
                                     .build()
                             )
@@ -224,6 +237,20 @@ internal class SubscriptionServiceAsyncTest {
                                             .MONTHLY
                                     )
                                     .currency("USD")
+                                    .customExpiration(
+                                        SubscriptionCreateParams.ReplacePrice.AllocationPrice
+                                            .CustomExpiration
+                                            .builder()
+                                            .duration(0L)
+                                            .durationUnit(
+                                                SubscriptionCreateParams.ReplacePrice
+                                                    .AllocationPrice
+                                                    .CustomExpiration
+                                                    .DurationUnit
+                                                    .DAY
+                                            )
+                                            .build()
+                                    )
                                     .expiresAtEndOfCadence(true)
                                     .build()
                             )
@@ -499,6 +526,19 @@ internal class SubscriptionServiceAsyncTest {
                                             .MONTHLY
                                     )
                                     .currency("USD")
+                                    .customExpiration(
+                                        SubscriptionPriceIntervalsParams.Add.AllocationPrice
+                                            .CustomExpiration
+                                            .builder()
+                                            .duration(0L)
+                                            .durationUnit(
+                                                SubscriptionPriceIntervalsParams.Add.AllocationPrice
+                                                    .CustomExpiration
+                                                    .DurationUnit
+                                                    .DAY
+                                            )
+                                            .build()
+                                    )
                                     .expiresAtEndOfCadence(true)
                                     .build()
                             )
@@ -677,6 +717,21 @@ internal class SubscriptionServiceAsyncTest {
                                             .MONTHLY
                                     )
                                     .currency("USD")
+                                    .customExpiration(
+                                        SubscriptionSchedulePlanChangeParams.AddPrice
+                                            .AllocationPrice
+                                            .CustomExpiration
+                                            .builder()
+                                            .duration(0L)
+                                            .durationUnit(
+                                                SubscriptionSchedulePlanChangeParams.AddPrice
+                                                    .AllocationPrice
+                                                    .CustomExpiration
+                                                    .DurationUnit
+                                                    .DAY
+                                            )
+                                            .build()
+                                    )
                                     .expiresAtEndOfCadence(true)
                                     .build()
                             )
@@ -839,6 +894,21 @@ internal class SubscriptionServiceAsyncTest {
                                             .MONTHLY
                                     )
                                     .currency("USD")
+                                    .customExpiration(
+                                        SubscriptionSchedulePlanChangeParams.ReplacePrice
+                                            .AllocationPrice
+                                            .CustomExpiration
+                                            .builder()
+                                            .duration(0L)
+                                            .durationUnit(
+                                                SubscriptionSchedulePlanChangeParams.ReplacePrice
+                                                    .AllocationPrice
+                                                    .CustomExpiration
+                                                    .DurationUnit
+                                                    .DAY
+                                            )
+                                            .build()
+                                    )
                                     .expiresAtEndOfCadence(true)
                                     .build()
                             )
