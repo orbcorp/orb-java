@@ -304,7 +304,7 @@ internal class InvoiceLineItemCreateResponseTest {
         assertThat(invoiceLineItemCreateResponse.name()).isEqualTo("Fixed Fee")
         assertThat(invoiceLineItemCreateResponse.partiallyInvoicedAmount()).isEqualTo("4.00")
         assertThat(invoiceLineItemCreateResponse.price())
-            .contains(
+            .isEqualTo(
                 Price.ofUnit(
                     Price.Unit.builder()
                         .id("id")

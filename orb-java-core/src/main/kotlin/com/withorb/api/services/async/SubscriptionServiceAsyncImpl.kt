@@ -32,6 +32,8 @@ import com.withorb.api.models.SubscriptionListPageAsync
 import com.withorb.api.models.SubscriptionListParams
 import com.withorb.api.models.SubscriptionPriceIntervalsParams
 import com.withorb.api.models.SubscriptionPriceIntervalsResponse
+import com.withorb.api.models.SubscriptionRedeemCouponParams
+import com.withorb.api.models.SubscriptionRedeemCouponResponse
 import com.withorb.api.models.SubscriptionSchedulePlanChangeParams
 import com.withorb.api.models.SubscriptionSchedulePlanChangeResponse
 import com.withorb.api.models.SubscriptionTriggerPhaseParams
@@ -123,6 +125,13 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
     ): CompletableFuture<SubscriptionPriceIntervalsResponse> =
         // post /subscriptions/{subscription_id}/price_intervals
         withRawResponse().priceIntervals(params, requestOptions).thenApply { it.parse() }
+
+    override fun redeemCoupon(
+        params: SubscriptionRedeemCouponParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<SubscriptionRedeemCouponResponse> =
+        // post /subscriptions/{subscription_id}/redeem_coupon
+        withRawResponse().redeemCoupon(params, requestOptions).thenApply { it.parse() }
 
     override fun schedulePlanChange(
         params: SubscriptionSchedulePlanChangeParams,
@@ -480,6 +489,40 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
                     response.parseable {
                         response
                             .use { priceIntervalsHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val redeemCouponHandler: Handler<SubscriptionRedeemCouponResponse> =
+            jsonHandler<SubscriptionRedeemCouponResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
+
+        override fun redeemCoupon(
+            params: SubscriptionRedeemCouponParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<SubscriptionRedeemCouponResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("subscriptionId", params.subscriptionId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments("subscriptions", params._pathParam(0), "redeem_coupon")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { redeemCouponHandler.handle(it) }
                             .also {
                                 if (requestOptions.responseValidation!!) {
                                     it.validate()

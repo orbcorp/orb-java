@@ -6494,10 +6494,10 @@ private constructor(
          * For more on the types of prices, see
          * [the core concepts documentation](/core-concepts#plan-and-price)
          *
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun price(): Optional<Price> = price.getOptional("price")
+        fun price(): Price = price.getRequired("price")
 
         /**
          * Either the fixed fee quantity or the usage during the service period.
@@ -7201,10 +7201,7 @@ private constructor(
              * For more on the types of prices, see
              * [the core concepts documentation](/core-concepts#plan-and-price)
              */
-            fun price(price: Price?) = price(JsonField.ofNullable(price))
-
-            /** Alias for calling [Builder.price] with `price.orElse(null)`. */
-            fun price(price: Optional<Price>) = price(price.getOrNull())
+            fun price(price: Price) = price(JsonField.of(price))
 
             /**
              * Sets [Builder.price] to an arbitrary JSON value.
@@ -7596,7 +7593,7 @@ private constructor(
             minimumAmount()
             name()
             partiallyInvoicedAmount()
-            price().ifPresent { it.validate() }
+            price().validate()
             quantity()
             startDate()
             subLineItems().forEach { it.validate() }

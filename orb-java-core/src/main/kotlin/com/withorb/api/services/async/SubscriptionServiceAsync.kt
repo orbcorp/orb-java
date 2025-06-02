@@ -19,6 +19,8 @@ import com.withorb.api.models.SubscriptionListPageAsync
 import com.withorb.api.models.SubscriptionListParams
 import com.withorb.api.models.SubscriptionPriceIntervalsParams
 import com.withorb.api.models.SubscriptionPriceIntervalsResponse
+import com.withorb.api.models.SubscriptionRedeemCouponParams
+import com.withorb.api.models.SubscriptionRedeemCouponResponse
 import com.withorb.api.models.SubscriptionSchedulePlanChangeParams
 import com.withorb.api.models.SubscriptionSchedulePlanChangeResponse
 import com.withorb.api.models.SubscriptionTriggerPhaseParams
@@ -889,6 +891,33 @@ interface SubscriptionServiceAsync {
     ): CompletableFuture<SubscriptionPriceIntervalsResponse> =
         priceIntervals(subscriptionId, SubscriptionPriceIntervalsParams.none(), requestOptions)
 
+    /** Redeem a coupon effective at a given time. */
+    fun redeemCoupon(
+        subscriptionId: String,
+        params: SubscriptionRedeemCouponParams,
+    ): CompletableFuture<SubscriptionRedeemCouponResponse> =
+        redeemCoupon(subscriptionId, params, RequestOptions.none())
+
+    /** @see [redeemCoupon] */
+    fun redeemCoupon(
+        subscriptionId: String,
+        params: SubscriptionRedeemCouponParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<SubscriptionRedeemCouponResponse> =
+        redeemCoupon(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
+
+    /** @see [redeemCoupon] */
+    fun redeemCoupon(
+        params: SubscriptionRedeemCouponParams
+    ): CompletableFuture<SubscriptionRedeemCouponResponse> =
+        redeemCoupon(params, RequestOptions.none())
+
+    /** @see [redeemCoupon] */
+    fun redeemCoupon(
+        params: SubscriptionRedeemCouponParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<SubscriptionRedeemCouponResponse>
+
     /**
      * This endpoint can be used to change an existing subscription's plan. It returns the
      * serialized updated subscription object.
@@ -1695,6 +1724,36 @@ interface SubscriptionServiceAsync {
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<SubscriptionPriceIntervalsResponse>> =
             priceIntervals(subscriptionId, SubscriptionPriceIntervalsParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /subscriptions/{subscription_id}/redeem_coupon`,
+         * but is otherwise the same as [SubscriptionServiceAsync.redeemCoupon].
+         */
+        fun redeemCoupon(
+            subscriptionId: String,
+            params: SubscriptionRedeemCouponParams,
+        ): CompletableFuture<HttpResponseFor<SubscriptionRedeemCouponResponse>> =
+            redeemCoupon(subscriptionId, params, RequestOptions.none())
+
+        /** @see [redeemCoupon] */
+        fun redeemCoupon(
+            subscriptionId: String,
+            params: SubscriptionRedeemCouponParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<SubscriptionRedeemCouponResponse>> =
+            redeemCoupon(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
+
+        /** @see [redeemCoupon] */
+        fun redeemCoupon(
+            params: SubscriptionRedeemCouponParams
+        ): CompletableFuture<HttpResponseFor<SubscriptionRedeemCouponResponse>> =
+            redeemCoupon(params, RequestOptions.none())
+
+        /** @see [redeemCoupon] */
+        fun redeemCoupon(
+            params: SubscriptionRedeemCouponParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<SubscriptionRedeemCouponResponse>>
 
         /**
          * Returns a raw HTTP response for `post
