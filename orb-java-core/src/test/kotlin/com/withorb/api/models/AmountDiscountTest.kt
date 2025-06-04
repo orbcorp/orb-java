@@ -18,6 +18,13 @@ internal class AmountDiscountTest {
                 .discountType(AmountDiscount.DiscountType.AMOUNT)
                 .addAppliesToPriceId("h74gfhdjvn7ujokd")
                 .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                .addFilter(
+                    AmountDiscount.Filter.builder()
+                        .field(AmountDiscount.Filter.Field.PRICE_ID)
+                        .operator(AmountDiscount.Filter.Operator.INCLUDES)
+                        .addValue("string")
+                        .build()
+                )
                 .reason("reason")
                 .build()
 
@@ -25,6 +32,14 @@ internal class AmountDiscountTest {
         assertThat(amountDiscount.discountType()).isEqualTo(AmountDiscount.DiscountType.AMOUNT)
         assertThat(amountDiscount.appliesToPriceIds().getOrNull())
             .containsExactly("h74gfhdjvn7ujokd", "7hfgtgjnbvc3ujkl")
+        assertThat(amountDiscount.filters().getOrNull())
+            .containsExactly(
+                AmountDiscount.Filter.builder()
+                    .field(AmountDiscount.Filter.Field.PRICE_ID)
+                    .operator(AmountDiscount.Filter.Operator.INCLUDES)
+                    .addValue("string")
+                    .build()
+            )
         assertThat(amountDiscount.reason()).contains("reason")
     }
 
@@ -37,6 +52,13 @@ internal class AmountDiscountTest {
                 .discountType(AmountDiscount.DiscountType.AMOUNT)
                 .addAppliesToPriceId("h74gfhdjvn7ujokd")
                 .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                .addFilter(
+                    AmountDiscount.Filter.builder()
+                        .field(AmountDiscount.Filter.Field.PRICE_ID)
+                        .operator(AmountDiscount.Filter.Operator.INCLUDES)
+                        .addValue("string")
+                        .build()
+                )
                 .reason("reason")
                 .build()
 

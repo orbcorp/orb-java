@@ -21,9 +21,48 @@ internal class BetaExternalPlanIdCreatePlanVersionParamsTest {
                             .PercentageDiscount
                             .builder()
                             .percentageDiscount(0.0)
+                            .appliesToAll(
+                                BetaExternalPlanIdCreatePlanVersionParams.AddAdjustment.Adjustment
+                                    .PercentageDiscount
+                                    .AppliesToAll
+                                    .TRUE
+                            )
+                            .addAppliesToItemId("item_1")
+                            .addAppliesToItemId("item_2")
                             .addAppliesToPriceId("price_1")
                             .addAppliesToPriceId("price_2")
+                            .currency("currency")
+                            .addFilter(
+                                BetaExternalPlanIdCreatePlanVersionParams.AddAdjustment.Adjustment
+                                    .PercentageDiscount
+                                    .Filter
+                                    .builder()
+                                    .field(
+                                        BetaExternalPlanIdCreatePlanVersionParams.AddAdjustment
+                                            .Adjustment
+                                            .PercentageDiscount
+                                            .Filter
+                                            .Field
+                                            .PRICE_ID
+                                    )
+                                    .operator(
+                                        BetaExternalPlanIdCreatePlanVersionParams.AddAdjustment
+                                            .Adjustment
+                                            .PercentageDiscount
+                                            .Filter
+                                            .Operator
+                                            .INCLUDES
+                                    )
+                                    .addValue("string")
+                                    .build()
+                            )
                             .isInvoiceLevel(true)
+                            .priceType(
+                                BetaExternalPlanIdCreatePlanVersionParams.AddAdjustment.Adjustment
+                                    .PercentageDiscount
+                                    .PriceType
+                                    .USAGE
+                            )
                             .build()
                     )
                     .planPhaseOrder(0L)
@@ -150,9 +189,51 @@ internal class BetaExternalPlanIdCreatePlanVersionParamsTest {
                             .PercentageDiscount
                             .builder()
                             .percentageDiscount(0.0)
+                            .appliesToAll(
+                                BetaExternalPlanIdCreatePlanVersionParams.ReplaceAdjustment
+                                    .Adjustment
+                                    .PercentageDiscount
+                                    .AppliesToAll
+                                    .TRUE
+                            )
+                            .addAppliesToItemId("item_1")
+                            .addAppliesToItemId("item_2")
                             .addAppliesToPriceId("price_1")
                             .addAppliesToPriceId("price_2")
+                            .currency("currency")
+                            .addFilter(
+                                BetaExternalPlanIdCreatePlanVersionParams.ReplaceAdjustment
+                                    .Adjustment
+                                    .PercentageDiscount
+                                    .Filter
+                                    .builder()
+                                    .field(
+                                        BetaExternalPlanIdCreatePlanVersionParams.ReplaceAdjustment
+                                            .Adjustment
+                                            .PercentageDiscount
+                                            .Filter
+                                            .Field
+                                            .PRICE_ID
+                                    )
+                                    .operator(
+                                        BetaExternalPlanIdCreatePlanVersionParams.ReplaceAdjustment
+                                            .Adjustment
+                                            .PercentageDiscount
+                                            .Filter
+                                            .Operator
+                                            .INCLUDES
+                                    )
+                                    .addValue("string")
+                                    .build()
+                            )
                             .isInvoiceLevel(true)
+                            .priceType(
+                                BetaExternalPlanIdCreatePlanVersionParams.ReplaceAdjustment
+                                    .Adjustment
+                                    .PercentageDiscount
+                                    .PriceType
+                                    .USAGE
+                            )
                             .build()
                     )
                     .replacesAdjustmentId("replaces_adjustment_id")
@@ -295,9 +376,51 @@ internal class BetaExternalPlanIdCreatePlanVersionParamsTest {
                                 .PercentageDiscount
                                 .builder()
                                 .percentageDiscount(0.0)
+                                .appliesToAll(
+                                    BetaExternalPlanIdCreatePlanVersionParams.AddAdjustment
+                                        .Adjustment
+                                        .PercentageDiscount
+                                        .AppliesToAll
+                                        .TRUE
+                                )
+                                .addAppliesToItemId("item_1")
+                                .addAppliesToItemId("item_2")
                                 .addAppliesToPriceId("price_1")
                                 .addAppliesToPriceId("price_2")
+                                .currency("currency")
+                                .addFilter(
+                                    BetaExternalPlanIdCreatePlanVersionParams.AddAdjustment
+                                        .Adjustment
+                                        .PercentageDiscount
+                                        .Filter
+                                        .builder()
+                                        .field(
+                                            BetaExternalPlanIdCreatePlanVersionParams.AddAdjustment
+                                                .Adjustment
+                                                .PercentageDiscount
+                                                .Filter
+                                                .Field
+                                                .PRICE_ID
+                                        )
+                                        .operator(
+                                            BetaExternalPlanIdCreatePlanVersionParams.AddAdjustment
+                                                .Adjustment
+                                                .PercentageDiscount
+                                                .Filter
+                                                .Operator
+                                                .INCLUDES
+                                        )
+                                        .addValue("string")
+                                        .build()
+                                )
                                 .isInvoiceLevel(true)
+                                .priceType(
+                                    BetaExternalPlanIdCreatePlanVersionParams.AddAdjustment
+                                        .Adjustment
+                                        .PercentageDiscount
+                                        .PriceType
+                                        .USAGE
+                                )
                                 .build()
                         )
                         .planPhaseOrder(0L)
@@ -427,9 +550,53 @@ internal class BetaExternalPlanIdCreatePlanVersionParamsTest {
                                 .PercentageDiscount
                                 .builder()
                                 .percentageDiscount(0.0)
+                                .appliesToAll(
+                                    BetaExternalPlanIdCreatePlanVersionParams.ReplaceAdjustment
+                                        .Adjustment
+                                        .PercentageDiscount
+                                        .AppliesToAll
+                                        .TRUE
+                                )
+                                .addAppliesToItemId("item_1")
+                                .addAppliesToItemId("item_2")
                                 .addAppliesToPriceId("price_1")
                                 .addAppliesToPriceId("price_2")
+                                .currency("currency")
+                                .addFilter(
+                                    BetaExternalPlanIdCreatePlanVersionParams.ReplaceAdjustment
+                                        .Adjustment
+                                        .PercentageDiscount
+                                        .Filter
+                                        .builder()
+                                        .field(
+                                            BetaExternalPlanIdCreatePlanVersionParams
+                                                .ReplaceAdjustment
+                                                .Adjustment
+                                                .PercentageDiscount
+                                                .Filter
+                                                .Field
+                                                .PRICE_ID
+                                        )
+                                        .operator(
+                                            BetaExternalPlanIdCreatePlanVersionParams
+                                                .ReplaceAdjustment
+                                                .Adjustment
+                                                .PercentageDiscount
+                                                .Filter
+                                                .Operator
+                                                .INCLUDES
+                                        )
+                                        .addValue("string")
+                                        .build()
+                                )
                                 .isInvoiceLevel(true)
+                                .priceType(
+                                    BetaExternalPlanIdCreatePlanVersionParams.ReplaceAdjustment
+                                        .Adjustment
+                                        .PercentageDiscount
+                                        .PriceType
+                                        .USAGE
+                                )
                                 .build()
                         )
                         .replacesAdjustmentId("replaces_adjustment_id")
@@ -565,9 +732,48 @@ internal class BetaExternalPlanIdCreatePlanVersionParamsTest {
                             .PercentageDiscount
                             .builder()
                             .percentageDiscount(0.0)
+                            .appliesToAll(
+                                BetaExternalPlanIdCreatePlanVersionParams.AddAdjustment.Adjustment
+                                    .PercentageDiscount
+                                    .AppliesToAll
+                                    .TRUE
+                            )
+                            .addAppliesToItemId("item_1")
+                            .addAppliesToItemId("item_2")
                             .addAppliesToPriceId("price_1")
                             .addAppliesToPriceId("price_2")
+                            .currency("currency")
+                            .addFilter(
+                                BetaExternalPlanIdCreatePlanVersionParams.AddAdjustment.Adjustment
+                                    .PercentageDiscount
+                                    .Filter
+                                    .builder()
+                                    .field(
+                                        BetaExternalPlanIdCreatePlanVersionParams.AddAdjustment
+                                            .Adjustment
+                                            .PercentageDiscount
+                                            .Filter
+                                            .Field
+                                            .PRICE_ID
+                                    )
+                                    .operator(
+                                        BetaExternalPlanIdCreatePlanVersionParams.AddAdjustment
+                                            .Adjustment
+                                            .PercentageDiscount
+                                            .Filter
+                                            .Operator
+                                            .INCLUDES
+                                    )
+                                    .addValue("string")
+                                    .build()
+                            )
                             .isInvoiceLevel(true)
+                            .priceType(
+                                BetaExternalPlanIdCreatePlanVersionParams.AddAdjustment.Adjustment
+                                    .PercentageDiscount
+                                    .PriceType
+                                    .USAGE
+                            )
                             .build()
                     )
                     .planPhaseOrder(0L)
@@ -698,9 +904,51 @@ internal class BetaExternalPlanIdCreatePlanVersionParamsTest {
                             .PercentageDiscount
                             .builder()
                             .percentageDiscount(0.0)
+                            .appliesToAll(
+                                BetaExternalPlanIdCreatePlanVersionParams.ReplaceAdjustment
+                                    .Adjustment
+                                    .PercentageDiscount
+                                    .AppliesToAll
+                                    .TRUE
+                            )
+                            .addAppliesToItemId("item_1")
+                            .addAppliesToItemId("item_2")
                             .addAppliesToPriceId("price_1")
                             .addAppliesToPriceId("price_2")
+                            .currency("currency")
+                            .addFilter(
+                                BetaExternalPlanIdCreatePlanVersionParams.ReplaceAdjustment
+                                    .Adjustment
+                                    .PercentageDiscount
+                                    .Filter
+                                    .builder()
+                                    .field(
+                                        BetaExternalPlanIdCreatePlanVersionParams.ReplaceAdjustment
+                                            .Adjustment
+                                            .PercentageDiscount
+                                            .Filter
+                                            .Field
+                                            .PRICE_ID
+                                    )
+                                    .operator(
+                                        BetaExternalPlanIdCreatePlanVersionParams.ReplaceAdjustment
+                                            .Adjustment
+                                            .PercentageDiscount
+                                            .Filter
+                                            .Operator
+                                            .INCLUDES
+                                    )
+                                    .addValue("string")
+                                    .build()
+                            )
                             .isInvoiceLevel(true)
+                            .priceType(
+                                BetaExternalPlanIdCreatePlanVersionParams.ReplaceAdjustment
+                                    .Adjustment
+                                    .PercentageDiscount
+                                    .PriceType
+                                    .USAGE
+                            )
                             .build()
                     )
                     .replacesAdjustmentId("replaces_adjustment_id")

@@ -22,9 +22,48 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                             .PercentageDiscount
                             .builder()
                             .percentageDiscount(0.0)
+                            .appliesToAll(
+                                SubscriptionSchedulePlanChangeParams.AddAdjustment.Adjustment
+                                    .PercentageDiscount
+                                    .AppliesToAll
+                                    .TRUE
+                            )
+                            .addAppliesToItemId("item_1")
+                            .addAppliesToItemId("item_2")
                             .addAppliesToPriceId("price_1")
                             .addAppliesToPriceId("price_2")
+                            .currency("currency")
+                            .addFilter(
+                                SubscriptionSchedulePlanChangeParams.AddAdjustment.Adjustment
+                                    .PercentageDiscount
+                                    .Filter
+                                    .builder()
+                                    .field(
+                                        SubscriptionSchedulePlanChangeParams.AddAdjustment
+                                            .Adjustment
+                                            .PercentageDiscount
+                                            .Filter
+                                            .Field
+                                            .PRICE_ID
+                                    )
+                                    .operator(
+                                        SubscriptionSchedulePlanChangeParams.AddAdjustment
+                                            .Adjustment
+                                            .PercentageDiscount
+                                            .Filter
+                                            .Operator
+                                            .INCLUDES
+                                    )
+                                    .addValue("string")
+                                    .build()
+                            )
                             .isInvoiceLevel(true)
+                            .priceType(
+                                SubscriptionSchedulePlanChangeParams.AddAdjustment.Adjustment
+                                    .PercentageDiscount
+                                    .PriceType
+                                    .USAGE
+                            )
                             .build()
                     )
                     .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -190,9 +229,48 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                             .PercentageDiscount
                             .builder()
                             .percentageDiscount(0.0)
+                            .appliesToAll(
+                                SubscriptionSchedulePlanChangeParams.ReplaceAdjustment.Adjustment
+                                    .PercentageDiscount
+                                    .AppliesToAll
+                                    .TRUE
+                            )
+                            .addAppliesToItemId("item_1")
+                            .addAppliesToItemId("item_2")
                             .addAppliesToPriceId("price_1")
                             .addAppliesToPriceId("price_2")
+                            .currency("currency")
+                            .addFilter(
+                                SubscriptionSchedulePlanChangeParams.ReplaceAdjustment.Adjustment
+                                    .PercentageDiscount
+                                    .Filter
+                                    .builder()
+                                    .field(
+                                        SubscriptionSchedulePlanChangeParams.ReplaceAdjustment
+                                            .Adjustment
+                                            .PercentageDiscount
+                                            .Filter
+                                            .Field
+                                            .PRICE_ID
+                                    )
+                                    .operator(
+                                        SubscriptionSchedulePlanChangeParams.ReplaceAdjustment
+                                            .Adjustment
+                                            .PercentageDiscount
+                                            .Filter
+                                            .Operator
+                                            .INCLUDES
+                                    )
+                                    .addValue("string")
+                                    .build()
+                            )
                             .isInvoiceLevel(true)
+                            .priceType(
+                                SubscriptionSchedulePlanChangeParams.ReplaceAdjustment.Adjustment
+                                    .PercentageDiscount
+                                    .PriceType
+                                    .USAGE
+                            )
                             .build()
                     )
                     .replacesAdjustmentId("replaces_adjustment_id")
@@ -346,9 +424,48 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                                 .PercentageDiscount
                                 .builder()
                                 .percentageDiscount(0.0)
+                                .appliesToAll(
+                                    SubscriptionSchedulePlanChangeParams.AddAdjustment.Adjustment
+                                        .PercentageDiscount
+                                        .AppliesToAll
+                                        .TRUE
+                                )
+                                .addAppliesToItemId("item_1")
+                                .addAppliesToItemId("item_2")
                                 .addAppliesToPriceId("price_1")
                                 .addAppliesToPriceId("price_2")
+                                .currency("currency")
+                                .addFilter(
+                                    SubscriptionSchedulePlanChangeParams.AddAdjustment.Adjustment
+                                        .PercentageDiscount
+                                        .Filter
+                                        .builder()
+                                        .field(
+                                            SubscriptionSchedulePlanChangeParams.AddAdjustment
+                                                .Adjustment
+                                                .PercentageDiscount
+                                                .Filter
+                                                .Field
+                                                .PRICE_ID
+                                        )
+                                        .operator(
+                                            SubscriptionSchedulePlanChangeParams.AddAdjustment
+                                                .Adjustment
+                                                .PercentageDiscount
+                                                .Filter
+                                                .Operator
+                                                .INCLUDES
+                                        )
+                                        .addValue("string")
+                                        .build()
+                                )
                                 .isInvoiceLevel(true)
+                                .priceType(
+                                    SubscriptionSchedulePlanChangeParams.AddAdjustment.Adjustment
+                                        .PercentageDiscount
+                                        .PriceType
+                                        .USAGE
+                                )
                                 .build()
                         )
                         .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -517,9 +634,51 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                                 .PercentageDiscount
                                 .builder()
                                 .percentageDiscount(0.0)
+                                .appliesToAll(
+                                    SubscriptionSchedulePlanChangeParams.ReplaceAdjustment
+                                        .Adjustment
+                                        .PercentageDiscount
+                                        .AppliesToAll
+                                        .TRUE
+                                )
+                                .addAppliesToItemId("item_1")
+                                .addAppliesToItemId("item_2")
                                 .addAppliesToPriceId("price_1")
                                 .addAppliesToPriceId("price_2")
+                                .currency("currency")
+                                .addFilter(
+                                    SubscriptionSchedulePlanChangeParams.ReplaceAdjustment
+                                        .Adjustment
+                                        .PercentageDiscount
+                                        .Filter
+                                        .builder()
+                                        .field(
+                                            SubscriptionSchedulePlanChangeParams.ReplaceAdjustment
+                                                .Adjustment
+                                                .PercentageDiscount
+                                                .Filter
+                                                .Field
+                                                .PRICE_ID
+                                        )
+                                        .operator(
+                                            SubscriptionSchedulePlanChangeParams.ReplaceAdjustment
+                                                .Adjustment
+                                                .PercentageDiscount
+                                                .Filter
+                                                .Operator
+                                                .INCLUDES
+                                        )
+                                        .addValue("string")
+                                        .build()
+                                )
                                 .isInvoiceLevel(true)
+                                .priceType(
+                                    SubscriptionSchedulePlanChangeParams.ReplaceAdjustment
+                                        .Adjustment
+                                        .PercentageDiscount
+                                        .PriceType
+                                        .USAGE
+                                )
                                 .build()
                         )
                         .replacesAdjustmentId("replaces_adjustment_id")
@@ -664,9 +823,48 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                             .PercentageDiscount
                             .builder()
                             .percentageDiscount(0.0)
+                            .appliesToAll(
+                                SubscriptionSchedulePlanChangeParams.AddAdjustment.Adjustment
+                                    .PercentageDiscount
+                                    .AppliesToAll
+                                    .TRUE
+                            )
+                            .addAppliesToItemId("item_1")
+                            .addAppliesToItemId("item_2")
                             .addAppliesToPriceId("price_1")
                             .addAppliesToPriceId("price_2")
+                            .currency("currency")
+                            .addFilter(
+                                SubscriptionSchedulePlanChangeParams.AddAdjustment.Adjustment
+                                    .PercentageDiscount
+                                    .Filter
+                                    .builder()
+                                    .field(
+                                        SubscriptionSchedulePlanChangeParams.AddAdjustment
+                                            .Adjustment
+                                            .PercentageDiscount
+                                            .Filter
+                                            .Field
+                                            .PRICE_ID
+                                    )
+                                    .operator(
+                                        SubscriptionSchedulePlanChangeParams.AddAdjustment
+                                            .Adjustment
+                                            .PercentageDiscount
+                                            .Filter
+                                            .Operator
+                                            .INCLUDES
+                                    )
+                                    .addValue("string")
+                                    .build()
+                            )
                             .isInvoiceLevel(true)
+                            .priceType(
+                                SubscriptionSchedulePlanChangeParams.AddAdjustment.Adjustment
+                                    .PercentageDiscount
+                                    .PriceType
+                                    .USAGE
+                            )
                             .build()
                     )
                     .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -837,9 +1035,48 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                             .PercentageDiscount
                             .builder()
                             .percentageDiscount(0.0)
+                            .appliesToAll(
+                                SubscriptionSchedulePlanChangeParams.ReplaceAdjustment.Adjustment
+                                    .PercentageDiscount
+                                    .AppliesToAll
+                                    .TRUE
+                            )
+                            .addAppliesToItemId("item_1")
+                            .addAppliesToItemId("item_2")
                             .addAppliesToPriceId("price_1")
                             .addAppliesToPriceId("price_2")
+                            .currency("currency")
+                            .addFilter(
+                                SubscriptionSchedulePlanChangeParams.ReplaceAdjustment.Adjustment
+                                    .PercentageDiscount
+                                    .Filter
+                                    .builder()
+                                    .field(
+                                        SubscriptionSchedulePlanChangeParams.ReplaceAdjustment
+                                            .Adjustment
+                                            .PercentageDiscount
+                                            .Filter
+                                            .Field
+                                            .PRICE_ID
+                                    )
+                                    .operator(
+                                        SubscriptionSchedulePlanChangeParams.ReplaceAdjustment
+                                            .Adjustment
+                                            .PercentageDiscount
+                                            .Filter
+                                            .Operator
+                                            .INCLUDES
+                                    )
+                                    .addValue("string")
+                                    .build()
+                            )
                             .isInvoiceLevel(true)
+                            .priceType(
+                                SubscriptionSchedulePlanChangeParams.ReplaceAdjustment.Adjustment
+                                    .PercentageDiscount
+                                    .PriceType
+                                    .USAGE
+                            )
                             .build()
                     )
                     .replacesAdjustmentId("replaces_adjustment_id")

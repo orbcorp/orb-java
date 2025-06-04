@@ -18,6 +18,13 @@ internal class PercentageDiscountTest {
                 .percentageDiscount(0.15)
                 .addAppliesToPriceId("h74gfhdjvn7ujokd")
                 .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                .addFilter(
+                    PercentageDiscount.Filter.builder()
+                        .field(PercentageDiscount.Filter.Field.PRICE_ID)
+                        .operator(PercentageDiscount.Filter.Operator.INCLUDES)
+                        .addValue("string")
+                        .build()
+                )
                 .reason("reason")
                 .build()
 
@@ -26,6 +33,14 @@ internal class PercentageDiscountTest {
         assertThat(percentageDiscount.percentageDiscount()).isEqualTo(0.15)
         assertThat(percentageDiscount.appliesToPriceIds().getOrNull())
             .containsExactly("h74gfhdjvn7ujokd", "7hfgtgjnbvc3ujkl")
+        assertThat(percentageDiscount.filters().getOrNull())
+            .containsExactly(
+                PercentageDiscount.Filter.builder()
+                    .field(PercentageDiscount.Filter.Field.PRICE_ID)
+                    .operator(PercentageDiscount.Filter.Operator.INCLUDES)
+                    .addValue("string")
+                    .build()
+            )
         assertThat(percentageDiscount.reason()).contains("reason")
     }
 
@@ -38,6 +53,13 @@ internal class PercentageDiscountTest {
                 .percentageDiscount(0.15)
                 .addAppliesToPriceId("h74gfhdjvn7ujokd")
                 .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                .addFilter(
+                    PercentageDiscount.Filter.builder()
+                        .field(PercentageDiscount.Filter.Field.PRICE_ID)
+                        .operator(PercentageDiscount.Filter.Operator.INCLUDES)
+                        .addValue("string")
+                        .build()
+                )
                 .reason("reason")
                 .build()
 

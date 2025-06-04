@@ -18,6 +18,13 @@ internal class UsageDiscountTest {
                 .usageDiscount(0.0)
                 .addAppliesToPriceId("h74gfhdjvn7ujokd")
                 .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                .addFilter(
+                    UsageDiscount.Filter.builder()
+                        .field(UsageDiscount.Filter.Field.PRICE_ID)
+                        .operator(UsageDiscount.Filter.Operator.INCLUDES)
+                        .addValue("string")
+                        .build()
+                )
                 .reason("reason")
                 .build()
 
@@ -25,6 +32,14 @@ internal class UsageDiscountTest {
         assertThat(usageDiscount.usageDiscount()).isEqualTo(0.0)
         assertThat(usageDiscount.appliesToPriceIds().getOrNull())
             .containsExactly("h74gfhdjvn7ujokd", "7hfgtgjnbvc3ujkl")
+        assertThat(usageDiscount.filters().getOrNull())
+            .containsExactly(
+                UsageDiscount.Filter.builder()
+                    .field(UsageDiscount.Filter.Field.PRICE_ID)
+                    .operator(UsageDiscount.Filter.Operator.INCLUDES)
+                    .addValue("string")
+                    .build()
+            )
         assertThat(usageDiscount.reason()).contains("reason")
     }
 
@@ -37,6 +52,13 @@ internal class UsageDiscountTest {
                 .usageDiscount(0.0)
                 .addAppliesToPriceId("h74gfhdjvn7ujokd")
                 .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                .addFilter(
+                    UsageDiscount.Filter.builder()
+                        .field(UsageDiscount.Filter.Field.PRICE_ID)
+                        .operator(UsageDiscount.Filter.Operator.INCLUDES)
+                        .addValue("string")
+                        .build()
+                )
                 .reason("reason")
                 .build()
 
