@@ -34,6 +34,9 @@ internal class NewPlanGroupedWithMeteredMinimumPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
@@ -81,6 +84,17 @@ internal class NewPlanGroupedWithMeteredMinimumPriceTest {
                     .build()
             )
         assertThat(newPlanGroupedWithMeteredMinimumPrice.conversionRate()).contains(0.0)
+        assertThat(newPlanGroupedWithMeteredMinimumPrice.conversionRateConfig())
+            .contains(
+                NewPlanGroupedWithMeteredMinimumPrice.ConversionRateConfig.ofUnit(
+                    UnitConversionRateConfig.builder()
+                        .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
+                        .unitConfig(
+                            ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                        )
+                        .build()
+                )
+            )
         assertThat(newPlanGroupedWithMeteredMinimumPrice.currency()).contains("currency")
         assertThat(newPlanGroupedWithMeteredMinimumPrice.dimensionalPriceConfiguration())
             .contains(
@@ -134,6 +148,9 @@ internal class NewPlanGroupedWithMeteredMinimumPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()

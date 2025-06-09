@@ -36,6 +36,9 @@ internal class NewSubscriptionTieredPackageWithMinimumPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
@@ -87,6 +90,17 @@ internal class NewSubscriptionTieredPackageWithMinimumPriceTest {
                     .build()
             )
         assertThat(newSubscriptionTieredPackageWithMinimumPrice.conversionRate()).contains(0.0)
+        assertThat(newSubscriptionTieredPackageWithMinimumPrice.conversionRateConfig())
+            .contains(
+                NewSubscriptionTieredPackageWithMinimumPrice.ConversionRateConfig.ofUnit(
+                    UnitConversionRateConfig.builder()
+                        .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
+                        .unitConfig(
+                            ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                        )
+                        .build()
+                )
+            )
         assertThat(newSubscriptionTieredPackageWithMinimumPrice.currency()).contains("currency")
         assertThat(newSubscriptionTieredPackageWithMinimumPrice.dimensionalPriceConfiguration())
             .contains(
@@ -144,6 +158,9 @@ internal class NewSubscriptionTieredPackageWithMinimumPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()

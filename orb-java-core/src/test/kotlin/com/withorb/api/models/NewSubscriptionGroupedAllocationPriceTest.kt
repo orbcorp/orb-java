@@ -32,6 +32,9 @@ internal class NewSubscriptionGroupedAllocationPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
@@ -80,6 +83,17 @@ internal class NewSubscriptionGroupedAllocationPriceTest {
                     .build()
             )
         assertThat(newSubscriptionGroupedAllocationPrice.conversionRate()).contains(0.0)
+        assertThat(newSubscriptionGroupedAllocationPrice.conversionRateConfig())
+            .contains(
+                NewSubscriptionGroupedAllocationPrice.ConversionRateConfig.ofUnit(
+                    UnitConversionRateConfig.builder()
+                        .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
+                        .unitConfig(
+                            ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                        )
+                        .build()
+                )
+            )
         assertThat(newSubscriptionGroupedAllocationPrice.currency()).contains("currency")
         assertThat(newSubscriptionGroupedAllocationPrice.dimensionalPriceConfiguration())
             .contains(
@@ -132,6 +146,9 @@ internal class NewSubscriptionGroupedAllocationPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()

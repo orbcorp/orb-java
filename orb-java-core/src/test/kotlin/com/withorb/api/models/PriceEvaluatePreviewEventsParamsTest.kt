@@ -8,17 +8,30 @@ import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class PriceEvaluateMultipleParamsTest {
+internal class PriceEvaluatePreviewEventsParamsTest {
 
     @Test
     fun create() {
-        PriceEvaluateMultipleParams.builder()
+        PriceEvaluatePreviewEventsParams.builder()
             .timeframeEnd(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .timeframeStart(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .customerId("customer_id")
+            .addEvent(
+                PriceEvaluatePreviewEventsParams.Event.builder()
+                    .eventName("event_name")
+                    .properties(
+                        PriceEvaluatePreviewEventsParams.Event.Properties.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
+                    .timestamp(OffsetDateTime.parse("2020-12-09T16:09:53Z"))
+                    .customerId("customer_id")
+                    .externalCustomerId("external_customer_id")
+                    .build()
+            )
             .externalCustomerId("external_customer_id")
             .addPriceEvaluation(
-                PriceEvaluateMultipleParams.PriceEvaluation.builder()
+                PriceEvaluatePreviewEventsParams.PriceEvaluation.builder()
                     .filter("my_numeric_property > 100 AND my_other_property = 'bar'")
                     .addGroupingKey("case when my_event_type = 'foo' then true else false end")
                     .price(
@@ -75,13 +88,26 @@ internal class PriceEvaluateMultipleParamsTest {
     @Test
     fun body() {
         val params =
-            PriceEvaluateMultipleParams.builder()
+            PriceEvaluatePreviewEventsParams.builder()
                 .timeframeEnd(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .timeframeStart(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .customerId("customer_id")
+                .addEvent(
+                    PriceEvaluatePreviewEventsParams.Event.builder()
+                        .eventName("event_name")
+                        .properties(
+                            PriceEvaluatePreviewEventsParams.Event.Properties.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
+                        .timestamp(OffsetDateTime.parse("2020-12-09T16:09:53Z"))
+                        .customerId("customer_id")
+                        .externalCustomerId("external_customer_id")
+                        .build()
+                )
                 .externalCustomerId("external_customer_id")
                 .addPriceEvaluation(
-                    PriceEvaluateMultipleParams.PriceEvaluation.builder()
+                    PriceEvaluatePreviewEventsParams.PriceEvaluation.builder()
                         .filter("my_numeric_property > 100 AND my_other_property = 'bar'")
                         .addGroupingKey("case when my_event_type = 'foo' then true else false end")
                         .price(
@@ -142,10 +168,24 @@ internal class PriceEvaluateMultipleParamsTest {
         assertThat(body.timeframeStart())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(body.customerId()).contains("customer_id")
+        assertThat(body.events().getOrNull())
+            .containsExactly(
+                PriceEvaluatePreviewEventsParams.Event.builder()
+                    .eventName("event_name")
+                    .properties(
+                        PriceEvaluatePreviewEventsParams.Event.Properties.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
+                    .timestamp(OffsetDateTime.parse("2020-12-09T16:09:53Z"))
+                    .customerId("customer_id")
+                    .externalCustomerId("external_customer_id")
+                    .build()
+            )
         assertThat(body.externalCustomerId()).contains("external_customer_id")
         assertThat(body.priceEvaluations().getOrNull())
             .containsExactly(
-                PriceEvaluateMultipleParams.PriceEvaluation.builder()
+                PriceEvaluatePreviewEventsParams.PriceEvaluation.builder()
                     .filter("my_numeric_property > 100 AND my_other_property = 'bar'")
                     .addGroupingKey("case when my_event_type = 'foo' then true else false end")
                     .price(
@@ -201,7 +241,7 @@ internal class PriceEvaluateMultipleParamsTest {
     @Test
     fun bodyWithoutOptionalFields() {
         val params =
-            PriceEvaluateMultipleParams.builder()
+            PriceEvaluatePreviewEventsParams.builder()
                 .timeframeEnd(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .timeframeStart(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()

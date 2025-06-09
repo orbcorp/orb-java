@@ -32,6 +32,9 @@ internal class NewPlanPackageWithAllocationPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
@@ -79,6 +82,17 @@ internal class NewPlanPackageWithAllocationPriceTest {
                     .build()
             )
         assertThat(newPlanPackageWithAllocationPrice.conversionRate()).contains(0.0)
+        assertThat(newPlanPackageWithAllocationPrice.conversionRateConfig())
+            .contains(
+                NewPlanPackageWithAllocationPrice.ConversionRateConfig.ofUnit(
+                    UnitConversionRateConfig.builder()
+                        .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
+                        .unitConfig(
+                            ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                        )
+                        .build()
+                )
+            )
         assertThat(newPlanPackageWithAllocationPrice.currency()).contains("currency")
         assertThat(newPlanPackageWithAllocationPrice.dimensionalPriceConfiguration())
             .contains(
@@ -130,6 +144,9 @@ internal class NewPlanPackageWithAllocationPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()

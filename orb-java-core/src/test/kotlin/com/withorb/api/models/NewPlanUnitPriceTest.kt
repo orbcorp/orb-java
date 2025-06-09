@@ -28,6 +28,9 @@ internal class NewPlanUnitPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
@@ -68,6 +71,17 @@ internal class NewPlanUnitPriceTest {
                     .build()
             )
         assertThat(newPlanUnitPrice.conversionRate()).contains(0.0)
+        assertThat(newPlanUnitPrice.conversionRateConfig())
+            .contains(
+                NewPlanUnitPrice.ConversionRateConfig.ofUnit(
+                    UnitConversionRateConfig.builder()
+                        .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
+                        .unitConfig(
+                            ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                        )
+                        .build()
+                )
+            )
         assertThat(newPlanUnitPrice.currency()).contains("currency")
         assertThat(newPlanUnitPrice.dimensionalPriceConfiguration())
             .contains(
@@ -114,6 +128,9 @@ internal class NewPlanUnitPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
