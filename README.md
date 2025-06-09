@@ -486,10 +486,11 @@ To set undocumented parameters on _nested_ headers, query params, or body classe
 
 ```java
 import com.withorb.api.core.JsonValue;
+import com.withorb.api.models.AddressInput;
 import com.withorb.api.models.CustomerCreateParams;
 
 CustomerCreateParams params = CustomerCreateParams.builder()
-    .billingAddress(CustomerCreateParams.BillingAddress.builder()
+    .billingAddress(AddressInput.builder()
         .putAdditionalProperty("secretProperty", JsonValue.from("42"))
         .build())
     .build();

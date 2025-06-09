@@ -1,0 +1,468 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package com.withorb.api.models
+
+import com.fasterxml.jackson.annotation.JsonAnyGetter
+import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.withorb.api.core.Enum
+import com.withorb.api.core.ExcludeMissing
+import com.withorb.api.core.JsonField
+import com.withorb.api.core.JsonMissing
+import com.withorb.api.core.JsonValue
+import com.withorb.api.core.checkRequired
+import com.withorb.api.errors.OrbInvalidDataException
+import java.util.Collections
+import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
+
+class TierSubLineItem
+private constructor(
+    private val amount: JsonField<String>,
+    private val grouping: JsonField<SubLineItemGrouping>,
+    private val name: JsonField<String>,
+    private val quantity: JsonField<Double>,
+    private val tierConfig: JsonField<TierConfig>,
+    private val type: JsonField<Type>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
+) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("amount") @ExcludeMissing amount: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("grouping")
+        @ExcludeMissing
+        grouping: JsonField<SubLineItemGrouping> = JsonMissing.of(),
+        @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("quantity") @ExcludeMissing quantity: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("tier_config")
+        @ExcludeMissing
+        tierConfig: JsonField<TierConfig> = JsonMissing.of(),
+        @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
+    ) : this(amount, grouping, name, quantity, tierConfig, type, mutableMapOf())
+
+    /**
+     * The total amount for this sub line item.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun amount(): String = amount.getRequired("amount")
+
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun grouping(): Optional<SubLineItemGrouping> = grouping.getOptional("grouping")
+
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun name(): String = name.getRequired("name")
+
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun quantity(): Double = quantity.getRequired("quantity")
+
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun tierConfig(): TierConfig = tierConfig.getRequired("tier_config")
+
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun type(): Type = type.getRequired("type")
+
+    /**
+     * Returns the raw JSON value of [amount].
+     *
+     * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<String> = amount
+
+    /**
+     * Returns the raw JSON value of [grouping].
+     *
+     * Unlike [grouping], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("grouping")
+    @ExcludeMissing
+    fun _grouping(): JsonField<SubLineItemGrouping> = grouping
+
+    /**
+     * Returns the raw JSON value of [name].
+     *
+     * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+    /**
+     * Returns the raw JSON value of [quantity].
+     *
+     * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
+
+    /**
+     * Returns the raw JSON value of [tierConfig].
+     *
+     * Unlike [tierConfig], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("tier_config")
+    @ExcludeMissing
+    fun _tierConfig(): JsonField<TierConfig> = tierConfig
+
+    /**
+     * Returns the raw JSON value of [type].
+     *
+     * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
+
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
+    @JsonAnyGetter
+    @ExcludeMissing
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
+
+    fun toBuilder() = Builder().from(this)
+
+    companion object {
+
+        /**
+         * Returns a mutable builder for constructing an instance of [TierSubLineItem].
+         *
+         * The following fields are required:
+         * ```java
+         * .amount()
+         * .grouping()
+         * .name()
+         * .quantity()
+         * .tierConfig()
+         * .type()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [TierSubLineItem]. */
+    class Builder internal constructor() {
+
+        private var amount: JsonField<String>? = null
+        private var grouping: JsonField<SubLineItemGrouping>? = null
+        private var name: JsonField<String>? = null
+        private var quantity: JsonField<Double>? = null
+        private var tierConfig: JsonField<TierConfig>? = null
+        private var type: JsonField<Type>? = null
+        private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+        @JvmSynthetic
+        internal fun from(tierSubLineItem: TierSubLineItem) = apply {
+            amount = tierSubLineItem.amount
+            grouping = tierSubLineItem.grouping
+            name = tierSubLineItem.name
+            quantity = tierSubLineItem.quantity
+            tierConfig = tierSubLineItem.tierConfig
+            type = tierSubLineItem.type
+            additionalProperties = tierSubLineItem.additionalProperties.toMutableMap()
+        }
+
+        /** The total amount for this sub line item. */
+        fun amount(amount: String) = amount(JsonField.of(amount))
+
+        /**
+         * Sets [Builder.amount] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.amount] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun amount(amount: JsonField<String>) = apply { this.amount = amount }
+
+        fun grouping(grouping: SubLineItemGrouping?) = grouping(JsonField.ofNullable(grouping))
+
+        /** Alias for calling [Builder.grouping] with `grouping.orElse(null)`. */
+        fun grouping(grouping: Optional<SubLineItemGrouping>) = grouping(grouping.getOrNull())
+
+        /**
+         * Sets [Builder.grouping] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.grouping] with a well-typed [SubLineItemGrouping] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun grouping(grouping: JsonField<SubLineItemGrouping>) = apply { this.grouping = grouping }
+
+        fun name(name: String) = name(JsonField.of(name))
+
+        /**
+         * Sets [Builder.name] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.name] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun name(name: JsonField<String>) = apply { this.name = name }
+
+        fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
+
+        /**
+         * Sets [Builder.quantity] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.quantity] with a well-typed [Double] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
+
+        fun tierConfig(tierConfig: TierConfig) = tierConfig(JsonField.of(tierConfig))
+
+        /**
+         * Sets [Builder.tierConfig] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.tierConfig] with a well-typed [TierConfig] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun tierConfig(tierConfig: JsonField<TierConfig>) = apply { this.tierConfig = tierConfig }
+
+        fun type(type: Type) = type(JsonField.of(type))
+
+        /**
+         * Sets [Builder.type] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.type] with a well-typed [Type] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun type(type: JsonField<Type>) = apply { this.type = type }
+
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            putAllAdditionalProperties(additionalProperties)
+        }
+
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            additionalProperties.put(key, value)
+        }
+
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
+
+        /**
+         * Returns an immutable instance of [TierSubLineItem].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .amount()
+         * .grouping()
+         * .name()
+         * .quantity()
+         * .tierConfig()
+         * .type()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): TierSubLineItem =
+            TierSubLineItem(
+                checkRequired("amount", amount),
+                checkRequired("grouping", grouping),
+                checkRequired("name", name),
+                checkRequired("quantity", quantity),
+                checkRequired("tierConfig", tierConfig),
+                checkRequired("type", type),
+                additionalProperties.toMutableMap(),
+            )
+    }
+
+    private var validated: Boolean = false
+
+    fun validate(): TierSubLineItem = apply {
+        if (validated) {
+            return@apply
+        }
+
+        amount()
+        grouping().ifPresent { it.validate() }
+        name()
+        quantity()
+        tierConfig().validate()
+        type().validate()
+        validated = true
+    }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: OrbInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        (if (amount.asKnown().isPresent) 1 else 0) +
+            (grouping.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (name.asKnown().isPresent) 1 else 0) +
+            (if (quantity.asKnown().isPresent) 1 else 0) +
+            (tierConfig.asKnown().getOrNull()?.validity() ?: 0) +
+            (type.asKnown().getOrNull()?.validity() ?: 0)
+
+    class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            @JvmField val TIER = of("tier")
+
+            @JvmStatic fun of(value: String) = Type(JsonField.of(value))
+        }
+
+        /** An enum containing [Type]'s known values. */
+        enum class Known {
+            TIER
+        }
+
+        /**
+         * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [Type] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            TIER,
+            /** An enum member indicating that [Type] was instantiated with an unknown value. */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
+        fun value(): Value =
+            when (this) {
+                TIER -> Value.TIER
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws OrbInvalidDataException if this class instance's value is a not a known member.
+         */
+        fun known(): Known =
+            when (this) {
+                TIER -> Known.TIER
+                else -> throw OrbInvalidDataException("Unknown Type: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws OrbInvalidDataException if this class instance's value does not have the expected
+         *   primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
+
+        private var validated: Boolean = false
+
+        fun validate(): Type = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Type && value == other.value /* spotless:on */
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is TierSubLineItem && amount == other.amount && grouping == other.grouping && name == other.name && quantity == other.quantity && tierConfig == other.tierConfig && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+    }
+
+    /* spotless:off */
+    private val hashCode: Int by lazy { Objects.hash(amount, grouping, name, quantity, tierConfig, type, additionalProperties) }
+    /* spotless:on */
+
+    override fun hashCode(): Int = hashCode
+
+    override fun toString() =
+        "TierSubLineItem{amount=$amount, grouping=$grouping, name=$name, quantity=$quantity, tierConfig=$tierConfig, type=$type, additionalProperties=$additionalProperties}"
+}
