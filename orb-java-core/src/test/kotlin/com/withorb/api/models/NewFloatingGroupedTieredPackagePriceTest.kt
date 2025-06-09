@@ -33,6 +33,12 @@ internal class NewFloatingGroupedTieredPackagePriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    NewFloatingGroupedTieredPackagePrice.ConversionRateConfig.Unit.UnitConfig
+                        .builder()
+                        .unitAmount("unit_amount")
+                        .build()
+                )
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
                         .addDimensionValue("string")
@@ -80,6 +86,20 @@ internal class NewFloatingGroupedTieredPackagePriceTest {
                     .build()
             )
         assertThat(newFloatingGroupedTieredPackagePrice.conversionRate()).contains(0.0)
+        assertThat(newFloatingGroupedTieredPackagePrice.conversionRateConfig())
+            .contains(
+                NewFloatingGroupedTieredPackagePrice.ConversionRateConfig.ofUnit(
+                    NewFloatingGroupedTieredPackagePrice.ConversionRateConfig.Unit.builder()
+                        .unitConfig(
+                            NewFloatingGroupedTieredPackagePrice.ConversionRateConfig.Unit
+                                .UnitConfig
+                                .builder()
+                                .unitAmount("unit_amount")
+                                .build()
+                        )
+                        .build()
+                )
+            )
         assertThat(newFloatingGroupedTieredPackagePrice.dimensionalPriceConfiguration())
             .contains(
                 NewDimensionalPriceConfiguration.builder()
@@ -131,6 +151,12 @@ internal class NewFloatingGroupedTieredPackagePriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    NewFloatingGroupedTieredPackagePrice.ConversionRateConfig.Unit.UnitConfig
+                        .builder()
+                        .unitAmount("unit_amount")
+                        .build()
+                )
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
                         .addDimensionValue("string")

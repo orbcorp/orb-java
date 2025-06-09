@@ -32,6 +32,11 @@ internal class NewPlanGroupedTieredPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    NewPlanGroupedTieredPrice.ConversionRateConfig.Unit.UnitConfig.builder()
+                        .unitAmount("unit_amount")
+                        .build()
+                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
@@ -78,6 +83,18 @@ internal class NewPlanGroupedTieredPriceTest {
                     .build()
             )
         assertThat(newPlanGroupedTieredPrice.conversionRate()).contains(0.0)
+        assertThat(newPlanGroupedTieredPrice.conversionRateConfig())
+            .contains(
+                NewPlanGroupedTieredPrice.ConversionRateConfig.ofUnit(
+                    NewPlanGroupedTieredPrice.ConversionRateConfig.Unit.builder()
+                        .unitConfig(
+                            NewPlanGroupedTieredPrice.ConversionRateConfig.Unit.UnitConfig.builder()
+                                .unitAmount("unit_amount")
+                                .build()
+                        )
+                        .build()
+                )
+            )
         assertThat(newPlanGroupedTieredPrice.currency()).contains("currency")
         assertThat(newPlanGroupedTieredPrice.dimensionalPriceConfiguration())
             .contains(
@@ -128,6 +145,11 @@ internal class NewPlanGroupedTieredPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    NewPlanGroupedTieredPrice.ConversionRateConfig.Unit.UnitConfig.builder()
+                        .unitAmount("unit_amount")
+                        .build()
+                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()

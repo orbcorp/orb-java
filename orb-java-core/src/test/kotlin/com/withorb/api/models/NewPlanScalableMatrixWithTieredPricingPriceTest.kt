@@ -37,6 +37,12 @@ internal class NewPlanScalableMatrixWithTieredPricingPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    NewPlanScalableMatrixWithTieredPricingPrice.ConversionRateConfig.Unit.UnitConfig
+                        .builder()
+                        .unitAmount("unit_amount")
+                        .build()
+                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
@@ -90,6 +96,20 @@ internal class NewPlanScalableMatrixWithTieredPricingPriceTest {
                     .build()
             )
         assertThat(newPlanScalableMatrixWithTieredPricingPrice.conversionRate()).contains(0.0)
+        assertThat(newPlanScalableMatrixWithTieredPricingPrice.conversionRateConfig())
+            .contains(
+                NewPlanScalableMatrixWithTieredPricingPrice.ConversionRateConfig.ofUnit(
+                    NewPlanScalableMatrixWithTieredPricingPrice.ConversionRateConfig.Unit.builder()
+                        .unitConfig(
+                            NewPlanScalableMatrixWithTieredPricingPrice.ConversionRateConfig.Unit
+                                .UnitConfig
+                                .builder()
+                                .unitAmount("unit_amount")
+                                .build()
+                        )
+                        .build()
+                )
+            )
         assertThat(newPlanScalableMatrixWithTieredPricingPrice.currency()).contains("currency")
         assertThat(newPlanScalableMatrixWithTieredPricingPrice.dimensionalPriceConfiguration())
             .contains(
@@ -146,6 +166,12 @@ internal class NewPlanScalableMatrixWithTieredPricingPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    NewPlanScalableMatrixWithTieredPricingPrice.ConversionRateConfig.Unit.UnitConfig
+                        .builder()
+                        .unitAmount("unit_amount")
+                        .build()
+                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()

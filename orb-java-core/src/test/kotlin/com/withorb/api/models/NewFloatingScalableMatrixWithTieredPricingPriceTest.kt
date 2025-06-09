@@ -38,6 +38,13 @@ internal class NewFloatingScalableMatrixWithTieredPricingPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    NewFloatingScalableMatrixWithTieredPricingPrice.ConversionRateConfig.Unit
+                        .UnitConfig
+                        .builder()
+                        .unitAmount("unit_amount")
+                        .build()
+                )
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
                         .addDimensionValue("string")
@@ -93,6 +100,22 @@ internal class NewFloatingScalableMatrixWithTieredPricingPriceTest {
                     .build()
             )
         assertThat(newFloatingScalableMatrixWithTieredPricingPrice.conversionRate()).contains(0.0)
+        assertThat(newFloatingScalableMatrixWithTieredPricingPrice.conversionRateConfig())
+            .contains(
+                NewFloatingScalableMatrixWithTieredPricingPrice.ConversionRateConfig.ofUnit(
+                    NewFloatingScalableMatrixWithTieredPricingPrice.ConversionRateConfig.Unit
+                        .builder()
+                        .unitConfig(
+                            NewFloatingScalableMatrixWithTieredPricingPrice.ConversionRateConfig
+                                .Unit
+                                .UnitConfig
+                                .builder()
+                                .unitAmount("unit_amount")
+                                .build()
+                        )
+                        .build()
+                )
+            )
         assertThat(newFloatingScalableMatrixWithTieredPricingPrice.dimensionalPriceConfiguration())
             .contains(
                 NewDimensionalPriceConfiguration.builder()
@@ -151,6 +174,13 @@ internal class NewFloatingScalableMatrixWithTieredPricingPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    NewFloatingScalableMatrixWithTieredPricingPrice.ConversionRateConfig.Unit
+                        .UnitConfig
+                        .builder()
+                        .unitAmount("unit_amount")
+                        .build()
+                )
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
                         .addDimensionValue("string")
