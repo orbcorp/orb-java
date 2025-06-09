@@ -55,8 +55,8 @@ import kotlin.jvm.optionals.getOrNull
  * customer's usage for a specific property value, you can do so with the following `filter`:
  * `my_property = 'foo' AND my_other_property = 'bar'`.
  *
- * Note that this is a POST endpoint rather than a GET endpoint because it employs a JSON body
- * rather than query parameters.
+ * The length of the results must be no greater than 1000. Note that this is a POST endpoint rather
+ * than a GET endpoint because it employs a JSON body rather than query parameters.
  */
 class PriceEvaluateMultipleParams
 private constructor(
@@ -90,7 +90,7 @@ private constructor(
     fun customerId(): Optional<String> = body.customerId()
 
     /**
-     * Optional list of preview events to use instead of actual usage data
+     * Optional list of preview events to use instead of actual usage data (max 500)
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
@@ -252,7 +252,7 @@ private constructor(
          */
         fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
 
-        /** Optional list of preview events to use instead of actual usage data */
+        /** Optional list of preview events to use instead of actual usage data (max 500) */
         fun events(events: List<Event>?) = apply { body.events(events) }
 
         /** Alias for calling [Builder.events] with `events.orElse(null)`. */
@@ -531,7 +531,7 @@ private constructor(
         fun customerId(): Optional<String> = customerId.getOptional("customer_id")
 
         /**
-         * Optional list of preview events to use instead of actual usage data
+         * Optional list of preview events to use instead of actual usage data (max 500)
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -705,7 +705,7 @@ private constructor(
              */
             fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
-            /** Optional list of preview events to use instead of actual usage data */
+            /** Optional list of preview events to use instead of actual usage data (max 500) */
             fun events(events: List<Event>?) = events(JsonField.ofNullable(events))
 
             /** Alias for calling [Builder.events] with `events.orElse(null)`. */

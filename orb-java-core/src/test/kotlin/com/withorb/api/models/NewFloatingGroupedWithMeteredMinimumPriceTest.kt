@@ -36,12 +36,6 @@ internal class NewFloatingGroupedWithMeteredMinimumPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
-                .unitConversionRateConfig(
-                    NewFloatingGroupedWithMeteredMinimumPrice.ConversionRateConfig.Unit.UnitConfig
-                        .builder()
-                        .unitAmount("unit_amount")
-                        .build()
-                )
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
                         .addDimensionValue("string")
@@ -91,20 +85,6 @@ internal class NewFloatingGroupedWithMeteredMinimumPriceTest {
                     .build()
             )
         assertThat(newFloatingGroupedWithMeteredMinimumPrice.conversionRate()).contains(0.0)
-        assertThat(newFloatingGroupedWithMeteredMinimumPrice.conversionRateConfig())
-            .contains(
-                NewFloatingGroupedWithMeteredMinimumPrice.ConversionRateConfig.ofUnit(
-                    NewFloatingGroupedWithMeteredMinimumPrice.ConversionRateConfig.Unit.builder()
-                        .unitConfig(
-                            NewFloatingGroupedWithMeteredMinimumPrice.ConversionRateConfig.Unit
-                                .UnitConfig
-                                .builder()
-                                .unitAmount("unit_amount")
-                                .build()
-                        )
-                        .build()
-                )
-            )
         assertThat(newFloatingGroupedWithMeteredMinimumPrice.dimensionalPriceConfiguration())
             .contains(
                 NewDimensionalPriceConfiguration.builder()
@@ -159,12 +139,6 @@ internal class NewFloatingGroupedWithMeteredMinimumPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
-                .unitConversionRateConfig(
-                    NewFloatingGroupedWithMeteredMinimumPrice.ConversionRateConfig.Unit.UnitConfig
-                        .builder()
-                        .unitAmount("unit_amount")
-                        .build()
-                )
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
                         .addDimensionValue("string")
