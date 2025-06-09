@@ -20,7 +20,6 @@ import com.withorb.api.core.http.QueryParams
 import com.withorb.api.errors.OrbInvalidDataException
 import java.util.Objects
 import java.util.Optional
-import kotlin.Unit
 import kotlin.jvm.optionals.getOrNull
 
 /**
@@ -625,7 +624,7 @@ private constructor(
             }
 
             accept(
-                object : Visitor<KUnit> {
+                object : Visitor<Unit> {
                     override fun visitUnit(unit: NewFloatingUnitPrice) {
                         unit.validate()
                     }

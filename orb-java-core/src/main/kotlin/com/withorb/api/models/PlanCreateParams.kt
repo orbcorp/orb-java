@@ -31,7 +31,6 @@ import com.withorb.api.errors.OrbInvalidDataException
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
-import kotlin.Unit
 import kotlin.jvm.optionals.getOrNull
 
 /** This endpoint allows creation of plans including their prices. */
@@ -1577,7 +1576,7 @@ private constructor(
             }
 
             accept(
-                object : Visitor<KUnit> {
+                object : Visitor<Unit> {
                     override fun visitUnit(unit: NewPlanUnitPrice) {
                         unit.validate()
                     }

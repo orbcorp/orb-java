@@ -32,7 +32,6 @@ import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
-import kotlin.Unit as KUnit
 import kotlin.jvm.optionals.getOrNull
 
 /**
@@ -4171,7 +4170,7 @@ private constructor(
                 }
 
                 accept(
-                    object : Visitor<KUnit> {
+                    object : Visitor<Unit> {
                         override fun visitPercentageDiscount(
                             percentageDiscount: NewPercentageDiscount
                         ) {
@@ -5439,7 +5438,7 @@ private constructor(
                 }
 
                 accept(
-                    object : Visitor<KUnit> {
+                    object : Visitor<Unit> {
                         override fun visitUnit(unit: NewSubscriptionUnitPrice) {
                             unit.validate()
                         }
@@ -7262,7 +7261,7 @@ private constructor(
                 }
 
                 accept(
-                    object : Visitor<KUnit> {
+                    object : Visitor<Unit> {
                         override fun visitPercentageDiscount(
                             percentageDiscount: NewPercentageDiscount
                         ) {
@@ -8498,7 +8497,7 @@ private constructor(
                 }
 
                 accept(
-                    object : Visitor<KUnit> {
+                    object : Visitor<Unit> {
                         override fun visitUnit(unit: NewSubscriptionUnitPrice) {
                             unit.validate()
                         }
